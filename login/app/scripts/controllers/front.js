@@ -40,7 +40,12 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth',function($scope,$fir
 			if(cpass === pass){
 				reguserObj.$createUserWithEmailAndPassword(email, pass)
 			  .then(function(firebaseUser) {
-					var reguserdbObj = firebase.database();
+                                firebaseUser.sendEmailVerification().then(function() {
+                                    console.log("Email Sent");
+                                }).catch(function(error) {
+                                    console.log("Error in sending email");
+                                });
+				var reguserdbObj = firebase.database();
 					reguserdbObj.ref('users/' + firebaseUser.uid).set({
 					firstname: first,
 					lastname: last,
