@@ -18,11 +18,10 @@ var vcancyApp = angular
     'oc.lazyLoad',
     'nouislider',
     'ngTable',
-	'firebase',
-	'BotDetectCaptcha'
+	'firebase'
   ]);
 vcancyApp 
- .config(function ($stateProvider, $urlRouterProvider, captchaSettingsProvider){	
+ .config(function ($stateProvider, $urlRouterProvider){	
 	  // Initialize Firebase
 	  var config = {
 		apiKey: "AIzaSyAM5ga-meRv9xYWKsCjDj-qYv3TD1ivLCA",
@@ -45,9 +44,9 @@ vcancyApp
 			templateUrl: 'views/login.html',
 			
 		}) 
-		.state ('register', {
-			url: '/register',
-			templateUrl: 'views/register.html',
+		.state ('emailverification', {
+			url: '/emailverification',
+			templateUrl: 'views/emailverification.html',
 			
 		})
 		.state ('dashboard', {
