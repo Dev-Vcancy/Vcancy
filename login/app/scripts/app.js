@@ -45,9 +45,9 @@ vcancyApp
 			templateUrl: 'views/login.html',
 			
 		}) 
-		.state ('register', {
-			url: '/register',
-			templateUrl: 'views/register.html',
+		.state ('emailverification', {
+			url: '/emailverification',
+			templateUrl: 'views/emailverification.html',
 			
 		})
 		.state ('dashboard', {

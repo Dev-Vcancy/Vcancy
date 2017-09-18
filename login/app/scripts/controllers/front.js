@@ -5,13 +5,12 @@
 //=================================================
 
 vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth',function($scope,$firebaseAuth) {
-        
-		//console.log("1");
+	
         //Status
         this.login = 1;
         this.register = 0;
         this.forgot = 0;
-		//console.log(this.login);
+		
 		this.loginUser = function($user){
 			var email = $user.email;
 			var password = $user.password;
@@ -19,15 +18,37 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth',function($scope,$fir
 			
 			var authObj = $firebaseAuth();
 			authObj.$signInWithEmailAndPassword(email, password).then(function(firebaseUser) {
-			  console.log("Signed in as:", firebaseUser.uid);
+			 
+				 console.log(firebase.auth().currentUser);
+				 // if(!firebaseUser.emailVerified){				 
+					// firebase.auth().signOut()
+					// $('.loginmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">Please verify your email.</div>');
+				 // } 
+
+				 console.log("Signed in as:", firebaseUser.uid);
+				 
 			}).catch(function(error) {
-			  console.error("Authentication failed:", error.message);
+				if(error.message){
+					$('.loginmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">'+error.message+'</div>');
+				} 
+				
+				$('form input').removeClass('invalidField');		
+				
+				if(error.code === "auth/invalid-email"){
+					$('#loginemail').addClass('invalidField');
+				} else if(error.code === "auth/wrong-password"){
+					$('#loginpwd').addClass('invalidField');					
+				} else if(error.code === "auth/user-not-found"){
+					$('#loginpwd,#loginemail').addClass('invalidField');					
+				} else {
+					$('#loginpwd,#loginemail').removeClass('invalidField');					
+				}
+			 console.error("Authentication failed:", error);
 			});
 			
 		}
 		
 		this.registerUser = function($reguser){
-			console.log($reguser);
 			var first = $reguser.first;
 			var last = $reguser.last;
 			var email = $reguser.email;
@@ -39,25 +60,44 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth',function($scope,$fir
 			
 			if(cpass === pass){
 				reguserObj.$createUserWithEmailAndPassword(email, pass)
-			  .then(function(firebaseUser) {
-                                firebaseUser.sendEmailVerification().then(function() {
-                                    console.log("Email Sent");
-                                }).catch(function(error) {
-                                    console.log("Error in sending email");
-                                });
-				var reguserdbObj = firebase.database();
-					reguserdbObj.ref('users/' + firebaseUser.uid).set({
-					firstname: first,
-					lastname: last,
-					usertype : usertype
+					.then(function(firebaseUser) {
+						
+						console.log(firebaseUser);
+						firebaseUser.sendEmailVerification().then(function() {
+							console.log("Email Sent");
+						}).catch(function(error) {
+							console.log("Error in sending email"+error);
+						});
+												
+						var reguserdbObj = firebase.database();
+						reguserdbObj.ref('users/' + firebaseUser.uid).set({
+						firstname: first,
+						lastname: last,
+						usertype : usertype
+					  });				  
+					$('.regmsgvalidate').html('<div class="alert alert-success alert-dismissable fade in">User created successfully!</div>');
+					//console.log("User " + firebaseUser.uid + " created successfully!");
+				  }).catch(function(error) {
+					if(error.message){
+						$('.regmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">'+error.message+'</div>');
+					} 		
+
+					$('form input').removeClass('invalidField');	
+					
+					if(error.code === "auth/invalid-email"){
+						$('#regemail').addClass('invalidField');
+					} else if(error.code === "auth/weak-password"){
+						$('#regpwd').addClass('invalidField');					
+					} else {
+						$('#regemail,#regpwd').removeClass('invalidField');					
+					}  
+					// console.error("Error: ", error);
 				  });
-				
-				console.log("User " + firebaseUser.uid + " created successfully!");
-			  }).catch(function(error) {
-				console.error("Error: ", error);
-			  });
 			} else {
-				console.error("Error: ","Confirm password doesnot match password");
+				$('form input').removeClass('invalidField');	
+				$('#regcpwd').addClass('invalidField');		
+				$('.regmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">Confirm password doesnot match password.</div>');
+				//console.error("Error: ","Confirm password doesnot match password");
 			}
 			
 			
