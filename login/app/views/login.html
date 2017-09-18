@@ -7,17 +7,18 @@
 				<h2> Log In </h2>
 			</div>
 			<form name="loginForm" ng-submit="lctrl.loginUser(user)" role="form" novalidate>
+				<div class='loginmsgvalidate'></div>
 				<div class="input-group m-b-20">
 					<span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
 					<div class="fg-line">
-						<input type="text" required ng-model="user.email" name="email" class="form-control" placeholder="Email">
+						<input type="text" id="loginemail" required ng-model="user.email" name="email" class="form-control" placeholder="Email">
 					</div>
 				</div>
 
 				<div class="input-group m-b-20">
 					<span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
 					<div class="fg-line">
-						<input type="password" required ng-model="user.password" name="password" class="form-control" placeholder="Password">
+						<input type="password" id="loginpwd" required ng-model="user.password" name="password" class="form-control" placeholder="Password">
 					</div>
 				</div>
 				
@@ -60,7 +61,8 @@
 				<h2>Signup, it's free </h2>
 			</div>
 			<form name="regForm" ng-submit="lctrl.registerUser(reguser)" role="form" novalidate>
-		   <div class="">
+				<div class='regmsgvalidate'></div>
+		   <div class="form-group">
                 <label>
                     <input type="radio" required ng-model="reguser.usertype" ng-value="1"  name="usertype" value="1">
                     Landlord
@@ -68,31 +70,35 @@
                     Tenant
                 </label>
             </div>
-		   <div class="form-group m-b-20">                
-                <div class="fg-line">
-                    <input type="text" required ng-model="reguser.first" name="first" class="form-control" placeholder="First Name"> 
-					<input type="text" required ng-model="reguser.last" name="last" class="form-control" placeholder="Last Name"> 					
+		   <div class="form-group m-b-20 ">                
+                <div class="col-sm-6">
+                    <input type="text" id="fname" required ng-model="reguser.first" name="first" class="form-control" placeholder="First Name"> 
+				</div>
+				<div class="col-sm-6">
+					<input type="text" id="lname" required ng-model="reguser.last" name="last" class="form-control" placeholder="Last Name"> 					
                 </div>
             </div>
 
             <div class="form-group m-b-20">
-                <div class="fg-line">
-                    <input type="text" required ng-model="reguser.email" name="email" class="form-control" placeholder="Email Address">
+                <div class="col-sm-12">
+                    <input type="text" id="regemail" required ng-model="reguser.email" name="email" class="form-control" placeholder="Email Address">
                 </div>
             </div>
 
             <div class="form-group m-b-20">
-                <div class="fg-line">
-                    <input type="password" required ng-model="reguser.pass" name="pass" class="form-control" placeholder="Password">
-                    <input type="password" required ng-model="reguser.cpass" name="cpass" class="form-control" placeholder="Confirm Password">
+				<div class="col-sm-6">
+                    <input type="password" id="regpwd" required ng-model="reguser.pass" name="pass" class="form-control" placeholder="Password">
+				</div>
+				<div class="col-sm-6">
+                    <input type="password" id="regcpwd" required ng-model="reguser.cpass" name="cpass" class="form-control" placeholder="Confirm Password">
                 </div>
             </div>
-			<div class="form-group m-b-20">
+			<div class="form-group col-sm-12 m-b-20">
 				<span>By creating an account, you agree to <a href='#'>Terms of use</a></span> 
 			</div>
             <div class="clearfix"></div>
 			
-			<div class="form-group m-b-20">
+			<div class="form-group col-sm-12 m-b-20">
 				<span>Already have an account? <a href="" data-block="#l-login"  ng-click="lctrl.register = 0; lctrl.login = 1">Login</a></span> 
 			</div>
 			

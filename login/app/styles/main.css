@@ -81,3 +81,20 @@ body {
     border-bottom: 0;
   }
 }
+
+.col-2.fg-line{
+	width:50% !important;
+	float:left;
+}
+.m-b-20{
+	display:-webkit-box;
+}
+
+.col-2.fg-line .form-control{
+	display:inline-block !important;	
+}
+
+.invalidField{
+	border-color: red !important;
+    color: red !important;
+}

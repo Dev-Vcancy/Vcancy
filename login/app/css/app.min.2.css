@@ -370,7 +370,7 @@
   bottom: -45px;
 }
 
-.login-navigation > li {
+/* .login-navigation > li {
   display: inline-block;
   margin: 0 2px;
   -webkit-transition: all;
@@ -395,18 +395,26 @@
   filter: alpha(opacity=0);
 }
 
-.login-navigation > li:not(:hover) {
+  .login-navigation > li:not(:hover) {
   font-size: 0px;
   border-radius: 100%;
+} */
+
+.login-navigation > li {
+    border-radius: 3px;
+    padding: 8px 16px;
+    font-size: 14px;
+	display: inline-block;
+  cursor: pointer;
+  vertical-align: top;
+  color: #fff;
+  line-height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  text-transform: uppercase;
 }
 
-.login-navigation > li:hover {
-  border-radius: 10px;
-  padding: 0 5px;
-  font-size: 8px;
-}
-
-.login-navigation > li:hover > span {
+.login-navigation > li > span {
   opacity: 1;
   filter: alpha(opacity=100);
 }
