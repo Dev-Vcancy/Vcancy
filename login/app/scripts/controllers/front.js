@@ -1,12 +1,13 @@
 'use strict';
 
 //=================================================
-// LOGIN
+// LOGIN, REGISTER
 //=================================================
 
-vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth',function($scope,$firebaseAuth) {
+vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state',function($scope,$firebaseAuth,$state) {
 	
         //Status
+		this.head = 1;
         this.login = 1;
         this.register = 0;
         this.forgot = 0;
@@ -25,6 +26,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth',function($scope,$fir
 					// $('.loginmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">Please verify your email.</div>');
 				 // } 
 
+				 $state.go("landlorddashboard");
 				 console.log("Signed in as:", firebaseUser.uid);
 				 
 			}).catch(function(error) {
