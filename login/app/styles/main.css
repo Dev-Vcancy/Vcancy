@@ -86,9 +86,6 @@ body {
 	width:50% !important;
 	float:left;
 }
-.m-b-20{
-	display:-webkit-box;
-}
 
 .col-2.fg-line .form-control{
 	display:inline-block !important;	
@@ -110,47 +107,57 @@ body {
     z-index: 0;
 }
 
-.login-content .header {
+.header {
     position: relative;
     text-align: left;
-    background-color: #5bd0e4 !important;
+    background-color: #1f2833 !important;
     color: #fff;
+	padding: 3px 20px;
 }
-/*************** Dashboard ***************/
-
 .header .logo{
 	color: #fff;
-	width: 40%;
+	width: auto;
 	float: left;
 }
-.nav{
+.header .logo img {
+    width: 110px;
+}
+.login-menu{
 	width: auto;
 	float: right;
     list-style: none;
-    margin: 5px 0;
+    margin: 14px 0;
 }
-.nav ul {
+.login-menu ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-.nav ul li{
+.login-menu ul li{
     display: inline-block; 
 }
-.nav ul li a{
+.login-menu ul li a{
 	padding: 10px;
     display: block;
 	color: #fff;
-	font-size: 14px;
+	font-size: 13px;
+	letter-spacing: 3px;
+	font-weight: 600;
 }
-.nav ul li a .notification {
-    font-size: 16px;
+.login-menu ul li a:hover {
+    opacity: .7;
+    -webkit-transition: all .4s ease-in-out;
+    -moz-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+.login-menu ul li a .notification {
+    font-size: 18px;
     position: relative;
 }
-.nav ul li a .notification .value {
-    width: 18px;
-    height: 18px;
-    line-height: 18px;
+.login-menu ul li a .notification .value {
+    min-width: 15px;
+    height: 15px;
+    line-height: 15px;
     background-color: #fff;
     text-align: center;
     position: absolute;
@@ -160,6 +167,46 @@ body {
     border-radius: 50px;
     right: -13px;
 }
+.login-menu ul li a.button {
+    margin-top: 0px;
+    font-size: inherit;
+    font-weight: inherit;
+    background: #009999;
+    border: 2px solid;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font-weight: 500;
+    line-height: 1.7em!important;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    transition: all .2s;
+	padding: 5px 15px;
+	position: relative;
+	margin-left: 20px;
+}
+.login-menu ul li a.button:before {
+	content: '\f2fb';
+    font-family: 'Material-Design-Iconic-Font';
+    position: absolute;
+    top: 50%;
+    font-size: 23px;
+    left: 20%;
+    transform: translate(-20%, -50%);
+	opacity: 0;
+}
+.login-menu ul li a.button:hover{
+	border-color: #009999;
+	padding: 5px 20px;
+}
+.login-menu ul li a:hover.button:before{
+	opacity: 1;
+    transform: translate(0%, -50%);
+    left: 7px;
+    transition: all 0.3s linear;
+}
+/*************** Dashboard ***************/
+
 .sidebar_menu {
     background-color: #ddd;
     padding: 20px;

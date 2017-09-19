@@ -1,9 +1,19 @@
 <div class="login-content">
 <div class="header">
+	<div class="container-fluid">
 		<div class="logo">
-			<h2>Vcancy</h2>
+			<img src="img/vcancy_logo.png">
 		</div>
+		<div class="login-menu">
+			<ul>
+				<li><a href="#">Home</a></li>
+				<li><a href="#">Blog</a></li>
+				<li><a href="#">Contact</a></li>
+				<li><a class="button" href="#">Log in</a></li>
+			</ul>
+		</div>	
 	</div>
+</div>
     <div class="container">
 
         <!-- Login -->
@@ -61,67 +71,71 @@
         </div>
 
         <!-- Register -->
-        <div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1">
-			<div class="form-group m-b-20">
+        <div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1">			
+			<div class="form-group m-b-20"  style='display:-webkit-box;'>
 				<h2>Signup, it's free </h2>
 			</div>
 			<form name="regForm" ng-submit="lctrl.registerUser(reguser)" role="form" novalidate>
-				<div class='regmsgvalidate'></div>
-		   <div class="form-group">
-                <label>
-                    <input type="radio" required ng-model="reguser.usertype" ng-value="1"  name="usertype" value="1">
-                    Landlord
-					<input type="radio" required ng-model="reguser.usertype" ng-value="0"  name="usertype" value="">
-                    Tenant
-                </label>
-            </div>
-		   <div class="form-group m-b-20 ">                
-                <div class="col-sm-6">
-                    <input type="text" id="fname" required ng-model="reguser.first" name="first" class="form-control" placeholder="First Name"> 
+				<div class='regmsgvalidate'></div>				
+			   <div class="form-group text-center" >
+					<label class="radio radio-inline m-r-20">
+						 <input type="radio" required ng-model="reguser.usertype" ng-value="1"  name="usertype" value="1">
+						<i class="input-helper"></i>
+						Landlord
+					</label>
+					<label class="radio radio-inline m-r-20">
+						<input type="radio" required ng-model="reguser.usertype" ng-value="0"  name="usertype" value="0">
+						<i class="input-helper"></i>
+						Tenant
+					</label>
 				</div>
-				<div class="col-sm-6">
-					<input type="text" id="lname" required ng-model="reguser.last" name="last" class="form-control" placeholder="Last Name"> 					
-                </div>
-            </div>
-
-            <div class="form-group m-b-20">
-                <div class="col-sm-12">
-                    <input type="text" id="regemail" required ng-model="reguser.email" name="email" class="form-control" placeholder="Email Address">
-                </div>
-            </div>
-
-            <div class="form-group m-b-20">
-				<div class="col-sm-6">
-                    <input type="password" id="regpwd" required ng-model="reguser.pass" name="pass" class="form-control" placeholder="Password">
+			   <div class="form-group m-b-20" style='display:-webkit-box;'>                
+					<div class="col-sm-6">
+						<input type="text" id="fname" required ng-model="reguser.first" name="first" class="form-control" placeholder="First Name"> 
+					</div>
+					<div class="col-sm-6">
+						<input type="text" id="lname" required ng-model="reguser.last" name="last" class="form-control" placeholder="Last Name"> 					
+					</div>
 				</div>
-				<div class="col-sm-6">
-                    <input type="password" id="regcpwd" required ng-model="reguser.cpass" name="cpass" class="form-control" placeholder="Confirm Password">
-                </div>
-            </div>
-			<div class="form-group col-sm-12 m-b-20">
-				<span>By creating an account, you agree to <a href='#'>Terms of use</a></span> 
-			</div>
-            <div class="clearfix"></div>
-			
-			<div class="form-group col-sm-12 m-b-20">
-				<span>Already have an account? <a href="" data-block="#l-login"  ng-click="lctrl.register = 0; lctrl.login = 1">Login</a></span> 
-			</div>
-			
-            <!-- <div class="checkbox">
-                <label>
-                    <input type="checkbox" value="">
-                    <i class="input-helper"></i>
-                    Accept the license agreement
-                </label>
-            </div>  -->
 
-            <button type="submit" ng-disabled="regForm.$invalid"  class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></button>
+				<div class="form-group m-b-20"  style='display:-webkit-box;'>
+					<div class="col-sm-12">
+						<input type="text" id="regemail" required ng-model="reguser.email" name="email" class="form-control" placeholder="Email Address">
+					</div>
+				</div>
 
-            <ul class="login-navigation">
-                <li data-block="#l-login" class="bgm-green" data-ng-click="lctrl.register = 0; lctrl.login = 1">Login</li>
-                <li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">Forgot Password?</li>
-            </ul>
-        </div>
+				<div class="form-group m-b-20"  style='display:-webkit-box;'>
+					<div class="col-sm-6">
+						<input type="password" id="regpwd" required ng-model="reguser.pass" name="pass" class="form-control" placeholder="Password">
+					</div>
+					<div class="col-sm-6">
+						<input type="password" id="regcpwd" required ng-model="reguser.cpass" name="cpass" class="form-control" placeholder="Confirm Password">
+					</div>
+				</div>
+				<div class="form-group col-sm-12 m-b-20"  style='display:-webkit-box;'>
+					<span>By creating an account, you agree to <a href='#'>Terms of use</a></span> 
+				</div>
+				<div class="clearfix"></div>
+				
+				<div class="form-group col-sm-12 m-b-20"  style='display:-webkit-box;'>
+					<span>Already have an account? <a href="" data-block="#l-login"  ng-click="lctrl.register = 0; lctrl.login = 1">Login</a></span> 
+				</div>
+			
+				<!-- <div class="checkbox">
+					<label>
+						<input type="checkbox" value="">
+						<i class="input-helper"></i>
+						Accept the license agreement
+					</label>
+				</div>  -->
+
+				<button type="submit" ng-disabled="regForm.$invalid"  class="btn btn-login btn-danger btn-float"><i class="zmdi zmdi-arrow-forward"></i></button>
+			</form>
+			<ul class="login-navigation">
+				<li data-block="#l-login" class="bgm-green" data-ng-click="lctrl.register = 0; lctrl.login = 1">Login</li>
+				<li data-block="#l-forget-password" class="bgm-orange" data-ng-click="lctrl.register = 0; lctrl.forgot = 1">Forgot Password?</li>
+			</ul>
+			</div>
 
         <!-- Forgot Password -->
         <div class="lc-block" id="l-forget-password" data-ng-class="{ 'toggled': lctrl.forgot === 1 }" data-ng-if="lctrl.forgot === 1">
