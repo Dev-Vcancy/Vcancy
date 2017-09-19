@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="login-content">
+<html>
   <head>
     <meta charset="utf-8">
     <title></title>
@@ -8,84 +8,49 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
+    <link href="bower_components/animate.css/animate.min.css" rel="stylesheet">
+	<link href="bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css" rel="stylesheet">
+	<link href="bower_components/bootstrap-sweetalert/lib/sweet-alert.css" rel="stylesheet">
+	<link href="bower_components/angular-loading-bar/src/loading-bar.css" rel="stylesheet">
+	<link href="bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet">
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-	<!-- Vendor CSS -->
-	<link href="../bower_components/animate.css/animate.min.css" rel="stylesheet">
-	<link href="../bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css" rel="stylesheet">
-	<link href="../bower_components/bootstrap-sweetalert/lib/sweet-alert.css" rel="stylesheet">
-	<link href="../bower_components/angular-loading-bar/src/loading-bar.css" rel="stylesheet">
-	<link href="../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet">
-
-	<!-- CSS -->
-	<link href="styles/app.min.1.css" rel="stylesheet" >
+    <link href="styles/app.min.1.css" rel="stylesheet" >
 	<link href="styles/app.min.2.css" rel="stylesheet">
 	<link href="styles/demo.css" rel="stylesheet">
-	
-<!-- Core -->
-	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
-
-	<!-- Angular -->
-	<script src="../bower_components/angular/angular.min.js"></script>
-	<script src="../bower_components/angular-resource/angular-resource.min.js"></script>
-	
-	<!-- Angular Modules -->
-	<script src="../bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-	<script src="../bower_components/angular-loading-bar/src/loading-bar.js"></script>
-	<script src="../bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
-
-	<!-- Common Vendors -->
-	<script src="../bower_components/ng-table-bundle/ng-table.min.js"></script>
-   
-	<script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-	
-	<!-- Firebase -->
-	<script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
-	<script src="../bower_components/angularfire/dist/angularfire.min.js"></script>
-	
-
-	<!-- Placeholder for IE9 -->
-	<!--[if IE 9 ]>
-		<script src="vendors/bower_components/jquery-placeholder/jquery.placeholder.min.js"></script>
-	<![endif]-->
-
-	<!-- Using below vendors in order to avoid misloading on resolve -->
-	<script src="../bower_components/angular-nouislider/src/nouislider.min.js"></script>
-	
+    <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+    
   </head>
-  <body class="login-content" ng-app="vcancyApp">
+  <body ng-app="vcancyApp">
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    
-	<div class="header">
-		<div class="logo">
-			<h2>Vcancy</h2>
-		</div>
-	</div>
-    <div class="container">
     <data ui-view></data>
-    </div>
-
-   
-
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     
-
+	
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/angular-resource/angular-resource.min.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="bower_components/angular-loading-bar/src/loading-bar.js"></script>
+	<script src="bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
+	<script src="bower_components/ng-table-bundle/ng-table.min.js"></script>
+   	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+	<script src="bower_components/angularfire/dist/angularfire.min.js"></script>
+	<script src="bower_components/angular-nouislider/src/nouislider.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
-
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-		<script src="scripts/controllers/front.js"></script>
-        <!-- endbuild -->
+    <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
+	
+	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+	<script src="scripts/app.js"></script>
+	<script src="scripts/controllers/front.js"></script>
+	<script src="scripts/controllers/landlord.js"></script>
+	<!-- endbuild -->
 </body>
 </html>

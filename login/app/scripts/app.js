@@ -33,7 +33,6 @@ vcancyApp
 	  };
 	  firebase.initializeApp(config);
 	  
-	 
 	  
 	$urlRouterProvider.otherwise("/login");
 	$stateProvider			
@@ -41,17 +40,31 @@ vcancyApp
 			url: '/login',
 			controller: 'loginCtrl',
 			controllerAs: 'lctrl',
-			templateUrl: 'views/login.html',
-			
+			templateUrl: 'views/login.html',	
 		}) 
 		.state ('emailverification', {
 			url: '/emailverification',
 			templateUrl: 'views/emailverification.html',
-			
 		})
-		.state ('dashboard', {
-			url: '/dashboard',
-			templateUrl: 'views/dboard.html'
-			
+		.state ('landlorddashboard', {
+			url: '/landlorddboard',
+			controller: 'dboardCtrl',
+			templateUrl: 'views/landlord.html'
+		})
+		.state ('faq', {
+			url: '/faq',
+			templateUrl: 'views/faq.html',
+		}) 
+		.state ('contact', {
+			url: '/contact',
+			templateUrl: 'views/contact.html',
+		}) 
+		.state ('security', {
+			url: '/security',
+			templateUrl: 'views/security.html',
+		}) 
+		.state ('terms', {
+			url: '/terms',
+			templateUrl: 'views/terms.html',
 		});
   });
