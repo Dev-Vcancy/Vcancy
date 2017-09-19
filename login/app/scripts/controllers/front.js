@@ -4,10 +4,9 @@
 // LOGIN, REGISTER
 //=================================================
 
-vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state',function($scope,$firebaseAuth,$state) {
+vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope',function($scope,$firebaseAuth,$state,$rootScope) {
 	
         //Status
-		this.head = 1;
         this.login = 1;
         this.register = 0;
         this.forgot = 0;
@@ -18,16 +17,13 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state',function($s
 			//var firebaseObj = new Firebase("https://vcancy-5e3b4.firebaseio.com"); 
 			
 			var authObj = $firebaseAuth();
+			$firebaseAuth = authObj;
 			authObj.$signInWithEmailAndPassword(email, password).then(function(firebaseUser) {
 			 
 				 console.log(firebase.auth().currentUser);
-				 // if(!firebaseUser.emailVerified){				 
-					// firebase.auth().signOut()
-					// $('.loginmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">Please verify your email.</div>');
-				 // } 
-
-				 $state.go("landlorddashboard");
+				 $rootScope.user = firebase.auth().currentUser;
 				 console.log("Signed in as:", firebaseUser.uid);
+				 $state.go("landlorddashboard");
 				 
 			}).catch(function(error) {
 				if(error.message){

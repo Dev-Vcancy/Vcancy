@@ -20,6 +20,7 @@ var vcancyApp = angular
     'ngTable',
 	'firebase'
   ]);
+  
 vcancyApp 
  .config(function ($stateProvider, $urlRouterProvider){	
 	  // Initialize Firebase
@@ -34,37 +35,73 @@ vcancyApp
 	  firebase.initializeApp(config);
 	  
 	  
-	$urlRouterProvider.otherwise("/login");
+	$urlRouterProvider.otherwise("/");
 	$stateProvider			
 	   .state ('login', {
-			url: '/login',
+			url: '/',
 			controller: 'loginCtrl',
 			controllerAs: 'lctrl',
 			templateUrl: 'views/login.html',	
 		}) 
-		.state ('emailverification', {
-			url: '/emailverification',
-			templateUrl: 'views/emailverification.html',
-		})
+		
+		.state ('termsofuse', {
+			url: '/termsofuse',
+			templateUrl: 'views/termspublic.html',	
+		}) 
+		
 		.state ('landlorddashboard', {
 			url: '/landlorddboard',
-			controller: 'dboardCtrl',
-			templateUrl: 'views/landlord.html'
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/landlord.html',
+			resolve: { authenticate: authenticate }
 		})
 		.state ('faq', {
 			url: '/faq',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
 			templateUrl: 'views/faq.html',
+			resolve: { authenticate: authenticate }
 		}) 
 		.state ('contact', {
 			url: '/contact',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
 			templateUrl: 'views/contact.html',
+			resolve: { authenticate: authenticate }
 		}) 
 		.state ('security', {
 			url: '/security',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
 			templateUrl: 'views/security.html',
+			resolve: { authenticate: authenticate }
 		}) 
 		.state ('terms', {
 			url: '/terms',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
 			templateUrl: 'views/terms.html',
+			resolve: { authenticate: authenticate }
 		});
+		
+		
+		function authenticate($q,$state, $timeout, $rootScope) {
+			// console.log($rootScope.user.emailVerified);
+		  if ($rootScope.user.uid && $rootScope.user.emailVerified) {
+			// Resolve the promise successfully
+			return $q.when()
+		  } else {
+			// The next bit of code is asynchronously tricky.
+
+			$timeout(function() {
+			  // This code runs after the authentication promise has been rejected.
+			  // Go to the log-in page
+			  $state.go('login')
+			})
+
+			// Reject the authentication promise to prevent the state from loading
+			return $q.reject()
+		  }
+		}
   });
