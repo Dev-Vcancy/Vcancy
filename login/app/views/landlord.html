@@ -1,86 +1,98 @@
-<div class="header">
-	<div class="container-fluid">
-		<div class="logo">
-			<img src="images/vcancy_logo.png">
-		</div>
-		<div class="login-menu">
-			<ul>
-				<li><a href="#"><i class="notification zmdi zmdi-email"></i></a></li>
-				<li><a class="button" href="#">Sign out</a></li>
-			</ul>
-		</div>
-	</div>
-</div>
+<header id="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'template/header.html'" data-ng-controller="headerCtrl as hctrl"></header>
 
+<section id="main">
+    <aside id="sidebar" data-ng-include="'template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
 
-<div class="content">
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-12">
-				<div class="col-sm-4">
-					<div class="sidebar">
-						<div class="sidebar_menu">
-							<div class="menu">
-								<ul>
-									<li><a href="#/landlorddboard">Dashboard</a></li>
-									<li><a href="#">My Properties</a></li>
-									<li><a href="#">Schedule</a></li>
-									<li><a href="#">Appointments</a></li>
-								</ul>
+    <section id="content">
+
+        <div class="container">
+            <div class="block-header">
+                <h2>Dashboard</h2>
+            </div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div id="pie-charts" class="dash-widget-item">
+						<div class="bgm-bluegray">
+							<div class="dash-widget-header">
+								<div class="dash-widget-title"></div>
 							</div>
-							<div class="bottom_menu">
-								<ul>
-									<li><a href="#/faq">FAQs</a></li>
-									<li><a href="#/contact">Contact</a></li>
-									<li><a href="#/terms">Terms of use</a></li>
-									<li><a href="#/security">Security Policy</a></li>
-								</ul>
+
+							<div class="clearfix"></div>
+
+							<div class="text-center p-20 m-t-25">
+								<div class="easy-pie main-pie" data-percent="30" data-easypie-chart="">
+									<div class="percent">30</div>
+									<div class="pie-title">Properties Live</div>
+								<canvas height="148" width="148"></canvas></div>
 							</div>
-						</div>
+						</div>				
 					</div>
 				</div>
-				
-				<div class="col-sm-8">
-					<div class="page_content">
-						<div class="col-sm-6">
-							<div class="content_block text-center">
-								<h2>3</h2>
-								<p>Properties Live</p>
+				<div class="col-sm-6">
+					<div id="pie-charts" class="dash-widget-item">
+						<div class="bgm-cyan">
+							<div class="dash-widget-header">
+								<div class="dash-widget-title"></div>
 							</div>
-						</div>
-						<div class="col-sm-6 text-center">
-							<div class="content_block text-center">
-								<h2>40</h2>
-								<p>Viewings Schedule</p>
+
+							<div class="clearfix"></div>
+
+							<div class="text-center p-20 m-t-25">
+								<div class="easy-pie main-pie" data-percent="10" data-easypie-chart="">
+									<div class="percent">10</div>
+									<div class="pie-title">Viewings Schedule</div>
+								<canvas height="148" width="148"></canvas></div>
 							</div>
-						</div>
-						<div class="col-sm-6 text-center">
-							<div class="content_block text-center">
-								<h2>10</h2>
-								<p>Viewed</p>
-							</div>
-						</div>
-						<div class="col-sm-6 text-center">
-							<div class="content_block text-center">
-								<h2>20</h2>
-								<p>Submitted Apps</p>
-							</div>
-						</div>
-						
-						<div class="col-sm-12">
-							<h2>Your Showings</h2>
-							<ul>
-								<li>Sat, Nov 26,2017: 2pm - 4pm</li>
-								<li>Fri, Nov 21,2017: 1pm - 5pm</li>
-							</ul>
-						</div>
+						</div>				
 					</div>
 				</div>
+				<div class="col-sm-6">
+					<div id="pie-charts" class="dash-widget-item">
+						<div class="bgm-lightgreen">
+							<div class="dash-widget-header">
+								<div class="dash-widget-title"></div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div class="text-center p-20 m-t-25">
+								<div class="easy-pie main-pie" data-percent="40" data-easypie-chart="">
+									<div class="percent">40</div>
+									<div class="pie-title">Viewed</div>
+								<canvas height="148" width="148"></canvas></div>
+							</div>
+						</div>				
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div id="pie-charts" class="dash-widget-item">
+						<div class="bgm-orange">
+							<div class="dash-widget-header">
+								<div class="dash-widget-title"></div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div class="text-center p-20 m-t-25">
+								<div class="easy-pie main-pie" data-percent="20" data-easypie-chart="">
+									<div class="percent">20</div>
+									<div class="pie-title">Submitted Apps</div>
+								<canvas height="148" width="148"></canvas></div>
+							</div>
+						</div>				
+					</div>
+				</div>
+				<!-- <div class="col-sm-12"> -->
+					<!-- <h2>Your Showings</h2> -->
+					<!-- <ul> -->
+						<!-- <li>Sat, Nov 26,2017: 2pm - 4pm</li> -->
+						<!-- <li>Fri, Nov 21,2017: 1pm - 5pm</li> -->
+					<!-- </ul> -->
+				<!-- </div> -->
 			</div>
-		</div>
-	</div>
-</div>
-				
-					
-				
-				
+            
+        </div>
+    </section>
+</section>
+
+<footer id="footer" data-ng-include="'template/footer.html'"></footer>

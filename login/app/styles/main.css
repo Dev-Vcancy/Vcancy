@@ -102,7 +102,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    background: #00bcd4;
+    background: #edecec;
     content: "";
     z-index: 0;
 }
@@ -113,6 +113,7 @@ body {
     background-color: #1f2833 !important;
     color: #fff;
 	padding: 3px 20px;
+	z-index: 999;
 }
 .header .logo{
 	color: #fff;
@@ -121,6 +122,7 @@ body {
 }
 .header .logo img {
     width: 110px;
+	image-rendering: -webkit-optimize-contrast;
 }
 .login-menu{
 	width: auto;
@@ -149,6 +151,7 @@ body {
     -webkit-transition: all .4s ease-in-out;
     -moz-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
+	background-color: transparent;
 }
 .login-menu ul li a .notification {
     font-size: 18px;
@@ -185,7 +188,7 @@ body {
 	position: relative;
 	margin-left: 20px;
 }
-.login-menu ul li a.button:before {
+.login-menu ul li a.button:before{
 	content: '\f2fb';
     font-family: 'Material-Design-Iconic-Font';
     position: absolute;
@@ -204,6 +207,9 @@ body {
     transform: translate(0%, -50%);
     left: 7px;
     transition: all 0.3s linear;
+}
+.navbar-toggle .icon-bar{
+	background-color: #fff;
 }
 /*************** Dashboard ***************/
 
@@ -241,4 +247,50 @@ body {
 	border: 2px solid #000;
 	border-radius: 10px;
 	margin-bottom: 20px;
+}
+@media screen and (max-width: 767px){
+	.login-menu {
+		width: 100%;
+		float: initial;
+		padding: 0;
+	}
+	.login-menu ul li {
+		display: flex;
+	}
+	.login-menu ul li a.button{
+		margin-left: 10px;
+	}
+	.header .logo img {
+		width: 70px;
+	}
+}
+
+
+.dash-widget-item{
+	 min-height: 227px !important;
+}
+
+.easy-pie .percent:after {
+    content: "" !important;
+}
+
+.login-navigation > li {
+    text-transform: capitalize;
+}  
+
+.header-inner ul li button.button {
+    margin-top: 0px;
+    font-size: inherit;
+    font-weight: inherit;
+    background: #009999;
+    border: 2px solid;
+	color:#fff;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font-weight: 500;
+    line-height: 1.7em!important;
+	padding: 5px 15px;
+	position: relative;
+	margin-left: 20px;
 }
