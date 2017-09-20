@@ -100,7 +100,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 						lastname: last,
 						usertype : usertype
 					  });				  
-					$rootScope.success = 'Your account has been created and an email has been send to your ID. Please verify your email to Log In!';
+					$rootScope.success = 'Your account has been created and an email has been sent. Please verify your email to Log In!';
 					$rootScope.error = '';
 					//console.log("User " + firebaseUser.uid + " created successfully!");
 				  }).catch(function(error) {
