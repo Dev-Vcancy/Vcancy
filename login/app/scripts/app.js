@@ -32,8 +32,7 @@ vcancyApp
 		storageBucket: "vcancy-5e3b4.appspot.com",
 		messagingSenderId: "330892868858"
 	  };
-	  firebase.initializeApp(config);
-	  
+	  firebase.initializeApp(config);	  
 	  
 	$urlRouterProvider.otherwise("/");
 	$stateProvider			
@@ -56,6 +55,20 @@ vcancyApp
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
 		})
+		.state ('viewprop', {
+			url: '/myprop',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/viewproperties.html',
+			resolve: { authenticate: authenticate }
+		}) 
+		.state ('addprop', {
+			url: '/addprop',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/addproperties.html',
+			resolve: { authenticate: authenticate }
+		}) 
 		.state ('faq', {
 			url: '/faq',
 			controller: 'maCtrl',
@@ -87,28 +100,22 @@ vcancyApp
 		
 		
 		function authenticate($q,$state, $timeout, $rootScope) {
-			// console.log($rootScope.user.emailVerified);			
-						
-			if ($rootScope.user.uid) {
-				if(!$rootScope.user.emailVerified){
-					console.log("Please verify your email and login again");
-					
-					// The next bit of code is asynchronously tricky.
+			// console.log($rootScope.user.emailVerified);
+			
+			if( $rootScope.user != null){
+				 var user =  $rootScope.user;
+			 } else if(localStorage.getItem('currentUser')){
+				 var user = localStorage.getItem('currentUser');
+			 } else {
+				 var user = null;
+			 }	
 
-					$timeout(function() {
-						// This code runs after the authentication promise has been rejected.
-						// Go to the log-in page
-						$state.go('login')
-						$('.loginmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">Your new email is not verified. Please try again after verifying your email.</div>');
-					})
-
-					// Reject the authentication promise to prevent the state from loading
-					return $q.reject()
-				} else {
-					// Resolve the promise successfully
-					return $q.when()
-				}
-				
+			$rootScope.user = user;
+			console.log($rootScope.user);
+			 
+			if ($rootScope.user.uid && $rootScope.user.emailVerified) {				
+				// Resolve the promise successfully
+				return $q.when()			
 				
 			} else {
 				  // The next bit of code is asynchronously tricky.

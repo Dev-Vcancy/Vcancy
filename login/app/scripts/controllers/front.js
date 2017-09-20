@@ -4,12 +4,15 @@
 // LOGIN, REGISTER
 //=================================================
 
-vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope',function($scope,$firebaseAuth,$state,$rootScope) {
+vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$sce',function($scope,$firebaseAuth,$state,$rootScope,$sce) {
 	
         //Status
         this.login = 1;
         this.register = 0;
         this.forgot = 0;
+		$rootScope.invalid = '';
+		$rootScope.error = '';
+		$rootScope.success = '';
 		
 		this.loginUser = function($user){
 			var email = $user.email;
@@ -20,29 +23,52 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			authObj.$signInWithEmailAndPassword(email, password).then(function(firebaseUser) {
 			 
 				 console.log(firebase.auth().currentUser);
-				 $rootScope.user = firebase.auth().currentUser;
-				 console.log("Signed in as:", firebaseUser.uid);
-				 $state.go("landlorddashboard");
+				 if(firebase.auth().currentUser != null){
+					 localStorage.setItem('currentUser', firebase.auth().currentUser);
+				 } 
+				 
+				 if(firebase.auth().currentUser != null){
+					 $rootScope.user = firebase.auth().currentUser;
+				 } else if(localStorage.getItem('currentUser')){
+					 $rootScope.user = localStorage.getItem('currentUser');
+				 } else {
+					 $rootScope.user = null;
+				 }
+				 
+				 if(!$rootScope.user.emailVerified){
+					$rootScope.error = 'Your new email is not verified. Please try again after verifying your email.';
+					$rootScope.invalid = '';
+					authObj.$signOut();
+					$rootScope.user = null;
+					localStorage.clear();
+					$state.go('login');
+				 } else {			 
+					 // $rootScope.user = firebase.auth().currentUser;
+					 console.log("Signed in as:", firebaseUser.uid);
+					 $state.go("landlorddashboard");
+				 }
 				 
 			}).catch(function(error) {
 				if(error.message){
-					$('.loginmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">'+error.message+'</div>');
+					$rootScope.error = error.message;
 				} 
-				
-				$('form input').removeClass('invalidField');		
-				
+								
 				if(error.code === "auth/invalid-email"){
-					$('#loginemail').addClass('invalidField');
+					$rootScope.invalid = 'loginemail';
 				} else if(error.code === "auth/wrong-password"){
-					$('#loginpwd').addClass('invalidField');					
+					$rootScope.invalid = 'loginpwd';				
 				} else if(error.code === "auth/user-not-found"){
-					$('#loginpwd,#loginemail').addClass('invalidField');					
+					$rootScope.invalid = 'all';					
 				} else {
-					$('#loginpwd,#loginemail').removeClass('invalidField');					
+					console.log('hre');
+					$rootScope.invalid = '';
 				}
 			 console.error("Authentication failed:", error);
 			});
-			
+			 
+			 // $scope.deliberatelyTrustDangerousSnippet = function() {
+               // return $sce.trustAsHtml($rootScope.error);
+             // };
 		}
 		
 		this.registerUser = function($reguser){
@@ -52,6 +78,9 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			var pass = $reguser.pass; 
 			var cpass = $reguser.cpass; 
 			var usertype = $reguser.usertype;
+			$rootScope.invalid = '';
+			$rootScope.success = '';
+			$rootScope.error = '';
 			
 			var reguserObj = $firebaseAuth();
 			
@@ -72,31 +101,33 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 						lastname: last,
 						usertype : usertype
 					  });				  
-					$('.regmsgvalidate').html('<div class="alert alert-success alert-dismissable fade in">User created successfully!</div>');
+					$rootScope.success = 'User created successfully!';
+					$rootScope.error = '';
 					//console.log("User " + firebaseUser.uid + " created successfully!");
 				  }).catch(function(error) {
 					if(error.message){
-						$('.regmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">'+error.message+'</div>');
+						$rootScope.error = error.message;
+						$rootScope.success = '';
 					} 		
-
-					$('form input').removeClass('invalidField');	
 					
 					if(error.code === "auth/invalid-email"){
-						$('#regemail').addClass('invalidField');
+						$rootScope.invalid = 'regemail';
 					} else if(error.code === "auth/weak-password"){
-						$('#regpwd').addClass('invalidField');					
-					} else {
-						$('#regemail,#regpwd').removeClass('invalidField');					
-					}  
+						$rootScope.invalid = 'regpwd';					
+					}  else {
+						$rootScope.invalid = '';
+					}
 					// console.error("Error: ", error);
 				  });
 			} else {
-				$('form input').removeClass('invalidField');	
-				$('#regcpwd').addClass('invalidField');		
-				$('.regmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">Confirm password doesnot match password.</div>');
+				$rootScope.invalid = 'regcpwd';			
+				$rootScope.error = 'Confirm password doesnot match password.';
+				$rootScope.success = '';
 				//console.error("Error: ","Confirm password doesnot match password");
 			}
 			
-			
+			$scope.deliberatelyTrustDangerousSnippet = function() {
+               return $sce.trustAsHtml($rootScope.error);
+             };
 		}
 }]);
