@@ -24,18 +24,17 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			 
 				 console.log(firebase.auth().currentUser);
 				 if(firebase.auth().currentUser != null){
-					 localStorage.setItem('currentUser', firebase.auth().currentUser);
+					 localStorage.setItem('userID', firebase.auth().currentUser.uid);
+					 localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
+				 } 
+				 console.log(localStorage.getItem('currentUser'));
+
+				 if(firebase.auth().currentUser != null){
+					 $rootScope.uid = firebase.auth().currentUser.uid;
+					 $rootScope.emailVerified = firebase.auth().currentUser.emailVerified;
 				 } 
 				 
-				 if(firebase.auth().currentUser != null){
-					 $rootScope.user = firebase.auth().currentUser;
-				 } else if(localStorage.getItem('currentUser')){
-					 $rootScope.user = localStorage.getItem('currentUser');
-				 } else {
-					 $rootScope.user = null;
-				 }
-				 
-				 if(!$rootScope.user.emailVerified){
+				 if(!firebase.auth().currentUser.emailVerified){
 					$rootScope.error = 'Your new email is not verified. Please try again after verifying your email.';
 					$rootScope.invalid = '';
 					authObj.$signOut();

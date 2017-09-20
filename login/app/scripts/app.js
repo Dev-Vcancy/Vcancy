@@ -21,6 +21,24 @@ var vcancyApp = angular
 	'firebase'
   ]);
   
+vcancyApp  
+ .directive('loginHeader', function() {
+  return {
+    controller: 'headerCtrl',
+	controllerAs: 'hctrl',
+	templateUrl: 'views/template/header.html',
+  };
+}); 
+
+vcancyApp  
+ .directive('loginSidebar', function() {
+  return {
+    controller: 'maCtrl',
+	controllerAs: 'mactrl',
+	templateUrl: 'views/template/sidebar-left.html',
+  };
+}); 
+  
 vcancyApp 
  .config(function ($stateProvider, $urlRouterProvider){	
 	  // Initialize Firebase
@@ -64,8 +82,8 @@ vcancyApp
 		}) 
 		.state ('addprop', {
 			url: '/addprop',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
+			controller: 'propertyCtrl',
+			controllerAs: 'propctrl',
 			templateUrl: 'views/addproperties.html',
 			resolve: { authenticate: authenticate }
 		}) 
@@ -102,18 +120,12 @@ vcancyApp
 		function authenticate($q,$state, $timeout, $rootScope) {
 			// console.log($rootScope.user.emailVerified);
 			
-			if( $rootScope.user != null){
-				 var user =  $rootScope.user;
-			 } else if(localStorage.getItem('currentUser')){
-				 var user = localStorage.getItem('currentUser');
-			 } else {
-				 var user = null;
-			 }	
-
-			$rootScope.user = user;
-			console.log($rootScope.user);
-			 
-			if ($rootScope.user.uid && $rootScope.user.emailVerified) {				
+			if(localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified')!== "null"){
+				 $rootScope.uid  = localStorage.getItem('userID');
+				 $rootScope.emailVerified  = localStorage.getItem('userEmailVerified');
+			 } 
+			  
+			if ($rootScope.uid && $rootScope.emailVerified) {				
 				// Resolve the promise successfully
 				return $q.when()			
 				
