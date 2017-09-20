@@ -87,21 +87,40 @@ vcancyApp
 		
 		
 		function authenticate($q,$state, $timeout, $rootScope) {
-			// console.log($rootScope.user.emailVerified);
-		  if ($rootScope.user.uid && $rootScope.user.emailVerified) {
-			// Resolve the promise successfully
-			return $q.when()
-		  } else {
-			// The next bit of code is asynchronously tricky.
+			// console.log($rootScope.user.emailVerified);			
+						
+			if ($rootScope.user.uid) {
+				if(!$rootScope.user.emailVerified){
+					console.log("Please verify your email and login again");
+					
+					// The next bit of code is asynchronously tricky.
 
-			$timeout(function() {
-			  // This code runs after the authentication promise has been rejected.
-			  // Go to the log-in page
-			  $state.go('login')
-			})
+					$timeout(function() {
+						// This code runs after the authentication promise has been rejected.
+						// Go to the log-in page
+						$state.go('login')
+						$('.loginmsgvalidate').html('<div class="alert alert-danger alert-dismissable fade in">Your new email is not verified. Please try again after verifying your email.</div>');
+					})
 
-			// Reject the authentication promise to prevent the state from loading
-			return $q.reject()
-		  }
+					// Reject the authentication promise to prevent the state from loading
+					return $q.reject()
+				} else {
+					// Resolve the promise successfully
+					return $q.when()
+				}
+				
+				
+			} else {
+				  // The next bit of code is asynchronously tricky.
+
+				  $timeout(function() {
+				  // This code runs after the authentication promise has been rejected.
+				  // Go to the log-in page
+				  $state.go('login')
+				})
+
+				// Reject the authentication promise to prevent the state from loading
+				return $q.reject()
+			}
 		}
   });

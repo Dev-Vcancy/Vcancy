@@ -17,7 +17,6 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			//var firebaseObj = new Firebase("https://vcancy-5e3b4.firebaseio.com"); 
 			
 			var authObj = $firebaseAuth();
-			$firebaseAuth = authObj;
 			authObj.$signInWithEmailAndPassword(email, password).then(function(firebaseUser) {
 			 
 				 console.log(firebase.auth().currentUser);
