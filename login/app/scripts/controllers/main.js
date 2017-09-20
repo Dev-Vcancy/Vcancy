@@ -10,22 +10,28 @@ vcancyApp
         // Detact Mobile Browser
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
            angular.element('html').addClass('ismobile');
-        }
+		   this.sidebarToggle = {
+				left: false,
+				right: false
+			}
+        } else {
+			// By default Sidbars are hidden in boxed layout and in wide layout only the right sidebar is hidden.
+			this.sidebarToggle = {
+				left: true,
+				right: false
+			}
+		}
 		
-		var authObj = $firebaseAuth();
+		var authObj = $firebaseAuth();		
 		
 		this.userLogout = function(){
-			console.log('signout');
 			authObj.$signOut();
 			$rootScope.user = null;
+			localStorage.clear();
 			$state.go('login');
 		}
 		
-        // By default Sidbars are hidden in boxed layout and in wide layout only the right sidebar is hidden.
-        this.sidebarToggle = {
-            left: false,
-            right: false
-        }
+        
 
         // By default template has a boxed layout
         this.layoutType = localStorage.getItem('ma-layout-status');

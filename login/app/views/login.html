@@ -1,49 +1,27 @@
-<div class="login-content">
-<nav class="navbar header">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="logo" href="#"><img src="images/vcancy_logo.png"></a>
-    </div>
-    <div class="collapse navbar-collapse login-menu" id="myNavbar">
-      <ul class="nav navbar-nav">
-		<li><a href="http://vcancy.ca/">Home</a></li>
-		<li><a href="http://vcancy.ca/blog/">Blog</a></li>
-		<li><a href="http://vcancy.ca/contact/">Contact</a></li>
-		<li><a class="button" href="#/">Log in</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
-    <div class="container">
-        
+ <header data-ng-include="'views/template/publicheader.html'" ></header>       
       
         <!-- Login -->
         <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1">
-            <div class='text-center m-b-20'>
-                <a href='javascript:void(0);' data-block="#l-login" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.login = 1">Sign In</a>
-                <a href='javascript:void(0);' data-block="#l-register" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1">Sign Up</a>
+            <div class='text-center m-b-20 form_btns'>
+                <a href='javascript:void(0);' class="btn bgm-cyan waves-effect" data-block="#l-login"  data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In</a>
+                <a href='javascript:void(0);' data-block="#l-register" class="btn bgm-bluegray waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1;lctrl.login = 0">Sign Up</a>
             </div>
             <div class="input-group m-b-20">
 			</div>
 			<form name="loginForm" ng-submit="lctrl.loginUser(user)" role="form" novalidate>
-				<div class='loginmsgvalidate'></div>
+				<div class='loginmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>
 				<div class="input-group m-b-20">
 					<span class="input-group-addon"><i class="zmdi zmdi-account"></i></span>
 					<div class="fg-line">
-						<input type="text" id="loginemail" required ng-model="user.email" name="email" class="form-control" placeholder="Email">
+						<input type="text" id="loginemail" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'loginemail' || $root.invalid === 'all')) }" required ng-model="user.email" name="email" class="form-control" placeholder="Email">
 					</div>
 				</div>
 
 				<div class="input-group m-b-20">
 					<span class="input-group-addon"><i class="zmdi zmdi-male"></i></span>
 					<div class="fg-line">
-						<input type="password" id="loginpwd" required ng-model="user.password" name="password" class="form-control" placeholder="Password">
+						<input type="password" id="loginpwd" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'loginpwd' || $root.invalid === 'all')) }" required ng-model="user.password" name="password" class="form-control" placeholder="Password">
 					</div>
 				</div>
 				
@@ -80,12 +58,13 @@
 
         <!-- Register -->
         <div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1">			
-			<div class='text-center m-b-20'>
-                <a href='javascript:void(0);' data-block="#l-login" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.login = 1">Sign In</a>
-                <a href='javascript:void(0);' data-block="#l-register" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1">Sign Up</a>
+			<div class='text-center m-b-20 form_btns'>
+               <a href='javascript:void(0);'  data-block="#l-login" class="btn bgm-bluegray waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In</a>
+                <a href='javascript:void(0);'  data-block="#l-register" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1;lctrl.login = 0">Sign Up</a>
             </div>
 			<form name="regForm" ng-submit="lctrl.registerUser(reguser)" role="form" novalidate>
-				<div class='regmsgvalidate'></div>				
+				<div class='regmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>	
+				<div class='regmsgvalidate' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div></div>				
 			   <div class="form-group text-center" >
 					<label class="radio radio-inline">
 						 <input type="radio" required ng-model="reguser.usertype" ng-value="1"  name="usertype" value="1">
@@ -109,16 +88,16 @@
 
 				<div class="form-group"  style='display:inherit;float: left;width: 100%;'>
 					<div class="col-sm-12">
-						<input type="text" id="regemail" required ng-model="reguser.email" name="email" class="form-control" placeholder="Email Address">
+						<input type="text" id="regemail" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'regemail')) }" required ng-model="reguser.email" name="email" class="form-control" placeholder="Email Address">
 					</div>
 				</div>
 
 				<div class="form-group m-b-20"  style='display: inherit;float: left;width: 100%;'>
 					<div class="col-sm-6 col-xs-12 m-b-10">
-						<input type="password" id="regpwd" required ng-model="reguser.pass" name="pass" class="form-control" placeholder="Password">
+						<input type="password" id="regpwd" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'regpwd')) }"  required ng-model="reguser.pass" name="pass" class="form-control" placeholder="Password">
 					</div>
 					<div class="col-sm-6 col-xs-12 m-b-10">
-						<input type="password" id="regcpwd" required ng-model="reguser.cpass" name="cpass" class="form-control" placeholder="Confirm Password">
+						<input type="password" id="regcpwd" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'regcpwd')) }"  required ng-model="reguser.cpass" name="cpass" class="form-control" placeholder="Confirm Password">
 					</div>
 				</div>
 				<div class="form-group col-sm-12 m-b-20"  style='display: inherit;float: left;'>
@@ -145,9 +124,9 @@
 
         <!-- Forgot Password -->
         <div class="lc-block" id="l-forget-password" data-ng-class="{ 'toggled': lctrl.forgot === 1 }" data-ng-if="lctrl.forgot === 1">
-            <div class='text-center m-b-20'>
-                <a href='javascript:void(0);' data-block="#l-login" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.login = 1">Sign In</a>
-                <a href='javascript:void(0);' data-block="#l-register" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1">Sign Up</a>
+            <div class='text-center m-b-20 form_btns'>
+                <a href='javascript:void(0);'  data-block="#l-login" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In</a>
+                <a href='javascript:void(0);'  data-block="#l-register" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1;lctrl.login = 0">Sign Up</a>
             </div>
             <p class="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu risus. Curabitur commodo lorem fringilla enim feugiat commodo sed ac lacus.</p>
 
@@ -161,4 +140,4 @@
             <a href="" class="btn btn-success pull-right">Submit <i class="zmdi zmdi-arrow-forward"></i></a>
         </div>
 
-        </div></div>
+<footer data-ng-include="'views/template/publicfooter.html'"></footer>
