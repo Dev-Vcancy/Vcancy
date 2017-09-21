@@ -61,9 +61,6 @@ body {
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
-  .container {
-    max-width: 730px;
-  }
 
   /* Remove the padding we set earlier */
   .header,
@@ -108,12 +105,23 @@ body {
 }
 
 .header {
-    position: relative;
-    text-align: left;
-    background-color: #1f2833 !important;
-    color: #fff;
-	padding: 3px 20px;
+  text-align: left;
+  background-color: #1f2833 !important;
+  color: #fff;
+  padding: 3px 20px;
 	z-index: 999;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
+  min-height: 70px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
 }
 .header .logo{
 	color: #fff;
@@ -130,15 +138,15 @@ body {
     list-style: none;
     margin: 14px 0;
 }
-.login-menu ul {
+.header ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-.login-menu ul li{
+.header ul li{
     display: inline-block; 
 }
-.login-menu ul li a{
+.header ul li a{
 	padding: 10px;
     display: block;
 	color: #fff;
@@ -146,18 +154,18 @@ body {
 	letter-spacing: 3px;
 	font-weight: 600;
 }
-.login-menu ul li a:hover {
+.header ul li a:hover {
     opacity: .7;
     -webkit-transition: all .4s ease-in-out;
     -moz-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
 	background-color: transparent;
 }
-.login-menu ul li a .notification {
+.header ul li a .notification {
     font-size: 18px;
     position: relative;
 }
-.login-menu ul li a .notification .value {
+.header ul li a .notification .value {
     min-width: 15px;
     height: 15px;
     line-height: 15px;
@@ -170,7 +178,7 @@ body {
     border-radius: 50px;
     right: -13px;
 }
-.login-menu ul li a.button {
+.header ul li a.button {
     margin-top: 0px;
     font-size: inherit;
     font-weight: inherit;
@@ -188,7 +196,7 @@ body {
 	position: relative;
 	margin-left: 20px;
 }
-.login-menu ul li a.button:before{
+.header ul li a.button:before{
 	content: '\f2fb';
     font-family: 'Material-Design-Iconic-Font';
     position: absolute;
@@ -198,18 +206,58 @@ body {
     transform: translate(-20%, -50%);
 	opacity: 0;
 }
-.login-menu ul li a.button:hover{
+.header ul li a.button:hover{
 	border-color: #009999;
 	padding: 5px 20px;
 }
-.login-menu ul li a:hover.button:before{
+.header ul li a:hover.button:before{
 	opacity: 1;
     transform: translate(0%, -50%);
     left: 7px;
     transition: all 0.3s linear;
 }
+ul.header-inner{
+    padding: 17px 0;
+}
+ul.header-inner .logo img {
+    position: absolute;
+    top: 50%;
+    transform: translate(0,-50%);
+}
+ul.header-inner li a {
+    padding: 0;
+}
+ul.header-inner li a.button {
+    margin-top: 0px;
+    font-size: inherit;
+    font-weight: inherit;
+    background: #009999;
+    border: 2px solid;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font-weight: 500;
+    line-height: 1.7em!important;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    transition: all .2s;
+  padding: 5px 15px;
+  position: relative;
+  margin-left: 20px;
+  cursor: pointer;
+}
+ul.header-inner li a.button:hover{
+  border-color: #009999;
+  padding: 5px 20px;
+}
+ul.header-inner li a:hover.button:before{
+  opacity: 1;
+    transform: translate(0%, -50%);
+    left: 7px;
+    transition: all 0.3s linear;
+}
 .navbar-toggle .icon-bar{
-	background-color: #fff;
+  background-color: #fff;
 }
 .form_btns{
 	width: 100%;
@@ -218,42 +266,28 @@ body {
     left: 50%;
     transform: translate(-50%);
 }
+.sidebar-inner .main-menu:last-child{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.block-header > h2 {
+    font-size: 20px;
+}
 /*************** Dashboard ***************/
-
-.sidebar_menu {
-    background-color: #ddd;
-    padding: 20px;
-    position: relative;
-    height: 100vh;
+.home_block{
+	padding: 0px 0;
 }
-.menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.home_block i {
+  font-size: 80px;
+  color: rgba(255,255,255,0.7);
 }
-.menu ul li a{
-	padding: 10px;
-    display: block;
+.home_block h1{
+  font-size: 50px;
+  color: rgba(255, 255, 255, 0.7);
 }
-.bottom_menu{
-	position: absolute;
-	bottom: 0;
-	width: 90%;
-}
-.bottom_menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.bottom_menu ul li a{
-	padding: 10px;
-    display: block;
-}
-.content_block{
-	padding: 20px 0;
-	border: 2px solid #000;
-	border-radius: 10px;
-	margin-bottom: 20px;
+.home_block .ptih-title{
+  font-size: 16px;
 }
 @media screen and (max-width: 767px){
 	.login-menu {
