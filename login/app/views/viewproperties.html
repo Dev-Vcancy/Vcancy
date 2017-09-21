@@ -1,17 +1,28 @@
-<header id="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'views/template/header.html'" data-ng-controller="headerCtrl as hctrl"></header>
+<header id="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
 
 <section id="main">
-    <aside id="sidebar" data-ng-include="'views/template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
-
+    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
     <section id="content">
 
         <div class="container">
 			<div class="block-header">
-				<h2><i class="zmdi zmdi-balance zmdi-hc-fw"></i> Your Properties</h2>
+				<h2><i class="zmdi zmdi-balance zmdi-hc-fw"></i> Your Properties <a href="#/addprop" class="btn bgm-green waves-effect pull-right"> Add Property </a></h2>				
+				
             </div>	
 			<div class="row">
-				<div class="col-sm-12">
-					<a href="#/addprop" class="btn bgm-green waves-effect"> Add Property </a>
+				<div class="col-sm-12 ">
+					<div class="col-sm-5 card m-r-10 m-l-10 p-10" style="max-height:200px; height:100px;box-shadow:5px" ng-repeat="x in propctrl.viewprops" >
+						<div class="col-sm-6 img-responsive">
+							<img src="{{x.propimg}}" style="width:100%;max-height:auto;" >
+						</div>
+						<div class="col-sm-6">						
+						<span style="font-weight:700 !important;text-transform:capitalize !important;">{{x.address}} </span><br/>
+						<a href="#/editprop/">Edit</a>
+						</div>
+						
+						
+					</div>
+				
 				</div>
 			</div>
 		</div>				
@@ -19,5 +30,6 @@
 </section>
 
 <footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+
 
         

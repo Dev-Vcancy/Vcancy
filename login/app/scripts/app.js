@@ -75,8 +75,8 @@ vcancyApp
 		})
 		.state ('viewprop', {
 			url: '/myprop',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
+			controller: 'propertyCtrl',
+			controllerAs: 'propctrl',
 			templateUrl: 'views/viewproperties.html',
 			resolve: { authenticate: authenticate }
 		}) 
