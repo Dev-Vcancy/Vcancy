@@ -1,13 +1,13 @@
-<header id="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'views/template/header.html'" data-ng-controller="headerCtrl as hctrl"></header>
+<header class="header" data-current-skin={{mactrl.currentSkin}} data-ng-include="'views/template/header.html'" data-ng-controller="headerCtrl as hctrl"></header>
 
 <section id="main">
     <aside id="sidebar" data-ng-include="'views/template/sidebar-left.html'" data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
 
-    <section id="content">
+    <section id="content" class="text-center">
 
         <div class="container">
 			<div class="block-header">
-				<h2><i class="zmdi zmdi-balance zmdi-hc-fw"></i> Your Properties</h2>
+				<h2>Your Properties</h2>
             </div>	
 			<div class="row">
 				<div class="col-sm-12">
