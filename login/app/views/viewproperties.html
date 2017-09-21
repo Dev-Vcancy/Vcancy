@@ -12,13 +12,13 @@
             </div>	
 			<div class="row">
 				<div class="col-sm-12 ">
-					<div class="col-sm-5 card m-r-10 m-l-10 p-10" style="max-height:200px; height:100px;box-shadow:5px" ng-repeat="x in propctrl.viewprops" >
+					<div class="col-sm-5 card m-r-10 m-l-10 p-10" style="max-height:200px; height:100px;box-shadow:5px" ng-repeat="(key, x) in propctrl.viewprops" >
 						<div class="col-sm-6 img-responsive">
 							<img src="{{x.propimg}}" style="width:100%;max-height:auto;" >
 						</div>
 						<div class="col-sm-6">						
 						<span style="font-weight:700 !important;text-transform:capitalize !important;">{{x.address}} </span><br/>
-						<a href="#/editprop/">Edit</a>
+						<a href="#/editprop/{{key}}">Edit</a>
 						</div>
 						
 						

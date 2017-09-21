@@ -7,11 +7,11 @@
 
         <div class="container">
 			<div class="block-header text-center">
-				<h2>Add Property</h2>
+				<h2>{{propctrl.mode}} Property</h2>
             </div>	
 			<div class="row">
 				<div class="col-sm-12 card">
-					<form name="addpropForm" ng-submit="propctrl.submitProp(prop)" role="form" novalidate>	
+					<form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" role="form" novalidate>	
 						<div class="card-header" style="overflow:auto;"><h1  class="pull-left" >Add Property</h1>
 						
 						<div class="pull-right fileinput fileinput-new" data-provides="fileinput">
@@ -20,7 +20,7 @@
 								<span class="btn btn-info btn-file waves-effect">
 									<span class="fileinput-new">Select image</span>
 									<span class="fileinput-exists">Change</span>
-									<input type="hidden" ng-model="prop.propimg" name="propimg" id="propimg" >
+									<input type="hidden" ng-model="propctrl.prop.propimg" name="propimg" id="propimg" value="{{propctrl.prop.propimg}}">
 									<input type="file" >
 								</span>
 								<a href="#" class="btn btn-danger fileinput-exists waves-effect" data-dismiss="fileinput">Remove</a>
@@ -34,12 +34,12 @@
 							<div class="col-sm-2 m-b-20">
 								<div class="toggle-switch" data-ts-color="blue">
 									<label for="ts3" class="ts-label"></label>
-									<input name="onoff" ng-model="prop.onoff" id="ts3" type="checkbox" ng-required hidden="hidden">
+									<input name="onoff" ng-model="propctrl.prop.onoff" id="ts3" type="checkbox" ng-required hidden="hidden">
 									<label for="ts3" class="ts-helper"></label>
 								</div>
 							</div>
 						   <div class="col-sm-4 m-b-20" >                
-								<select chosen="" class="form-control" name="proptype" ng-model="prop.proptype" ng-required data-placeholder="Prop type" class="w-100 localytics-chosen" >
+								<select chosen="" class="form-control" name="proptype" ng-model="propctrl.prop.proptype" ng-required data-placeholder="Prop type" class="w-100 localytics-chosen" >
 									<option value="">Property type</option>
 									<option value="house">House</option>
 									<option value="townhouse">Town House</option>
@@ -50,19 +50,19 @@
 							</div>
 
 							<div class="col-sm-4 m-b-20">
-								<input type="text" id="units" name="units" ng-model="prop.units" ng-required class="form-control" placeholder="# of units">
+								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" ng-required class="form-control" placeholder="# of units">
 							</div>
 
 							<div class="col-sm-2 m-b-20">
 								<div class="toggle-switch" data-ts-color="blue">
 									<label for="ts1" class="ts-label">Shared</label>
-									<input name="shared" ng-model="prop.shared" id="ts1"  ng-required type="checkbox" hidden="hidden" style="display:inline">
+									<input name="shared" ng-model="propctrl.prop.shared" id="ts1"  ng-required type="checkbox" hidden="hidden" style="display:inline">
 									<label for="ts1" class="ts-helper"></label>
 								</div>
 							</div>
 							
 							<div class="col-sm-12 m-b-20">
-								<input type="text" id="address" ng-model="prop.address" ng-required="true" name="address" class="form-control" placeholder="Address">
+								<input type="text" id="address" ng-model="propctrl.prop.address" ng-required="true" name="address" class="form-control" placeholder="Address">
 							</div>
 							
 							<div class="col-sm-12 m-b-20">
@@ -73,34 +73,34 @@
 										<div class="date-picker input-group" ng-class="{ 'is-opened': x.opened == true }">
 											<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 											<div class="fg-line" ng-class="{ 'fg-toggled': x.opened == true }">
-												<input ng-click="propctrl.open($event, x)" type="text" class="form-control" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="prop.date[$index]" name = "date[]" is-open="x.opened" min-date="minDate" datepicker-options="propctrl.dateOptions" ng-required="true" close-text="Close" placeholder="Select Date" />
+												<input ng-click="propctrl.open($event, x)" type="text" class="form-control" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="propctrl.prop.date[$index]" name = "date[]" is-open="x.opened" min-date="minDate" datepicker-options="propctrl.dateOptions" ng-required="true" close-text="Close" placeholder="Select Date" />
 											</div>
 										</div>
 									</div>
 									<div class="col-sm-3">
 										<div class="time-picker input-group">
 											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
-											 <div uib-timepicker ng-model="prop.fromtime[$index]" name = "fromtime[]" ng-change="propctrl.changed()" ng-click="" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
+											 <div uib-timepicker ng-model="propctrl.prop.fromtime[$index]" name = "fromtime[]" ng-change="propctrl.changed()" ng-click="" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
 											<!-- <div class="fg-line" ng-class="{ 'fg-toggled': x.timeopened == true }"> -->
-												<!-- <input ng-click="propctrl.timeopen($event, x)" type="text" class="form-control" uib-timepicker ng-model="prop.time" hour-step="1" minute-step="1" show-meridian="ismeridian" name = "time[]" is-open="x.timeopened" ng-required="true" close-text="Close" placeholder="Select Time" /> -->
+												<!-- <input ng-click="propctrl.timeopen($event, x)" type="text" class="form-control" uib-timepicker ng-model="propctrl.propctrl.prop.time" hour-step="1" minute-step="1" show-meridian="ismeridian" name = "time[]" is-open="x.timeopened" ng-required="true" close-text="Close" placeholder="Select Time" /> -->
 											<!-- </div> -->
 										</div>
 									</div>
 									<div class="col-sm-3">
 										<div class="time-picker input-group">
 											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
-											 <div uib-timepicker ng-model="prop.to[$index]" name = "to[]" ng-change="propctrl.changed()" ng-click="" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
+											 <div uib-timepicker ng-model="propctrl.prop.to[$index]" name = "to[]" ng-change="propctrl.changed()" ng-click="" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
 											<!-- <div class="fg-line" ng-class="{ 'fg-toggled': x.timeopened == true }"> -->
-												<!-- <input ng-click="propctrl.timeopen($event, x)" type="text" class="form-control" uib-timepicker ng-model="prop.time" hour-step="1" minute-step="1" show-meridian="ismeridian" name = "time[]" is-open="x.timeopened" ng-required="true" close-text="Close" placeholder="Select Time" /> -->
+												<!-- <input ng-click="propctrl.timeopen($event, x)" type="text" class="form-control" uib-timepicker ng-model="propctrl.propctrl.prop.time" hour-step="1" minute-step="1" show-meridian="ismeridian" name = "time[]" is-open="x.timeopened" ng-required="true" close-text="Close" placeholder="Select Time" /> -->
 											<!-- </div> -->
 										</div>
 										<!-- <div class="time-picker input-group" >  -->
 											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
-											<!-- <input ng-click="open($event)" ps-input-time sy-timepicker-popup="HH:mm:ss" class="form-control" ng-model="prop.to" show-meridian="false" is-open="opened" ng-controller="syTimepickerController"/> -->
+											<!-- <input ng-click="open($event)" ps-input-time sy-timepicker-popup="HH:mm:ss" class="form-control" ng-model="propctrl.prop.to" show-meridian="false" is-open="opened" ng-controller="syTimepickerController"/> -->
 										<!-- </div> -->
 									</div>
 									<div class="col-sm-2">
-										<input type="text" ng-required="true" id="limit" ng-model="prop.limit[$index]" name="limit[]" class="form-control" placeholder="Person Limit">
+										<input type="text" ng-required="true" id="limit" ng-model="propctrl.prop.limit[$index]" name="limit[]" class="form-control" placeholder="Person Limit">
 									</div>
 								</div>
 							</div>

@@ -4,10 +4,9 @@
 // PROPERTY
 //=================================================
 
-vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope',function($scope,$firebaseAuth,$state,$rootScope) {
+vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams) {
 	var today = new Date();
 	var vm = this;
-	vm.timeSlot = [{date:today}];
 	
 	// DATEPICKER
 		vm.today = function() {
@@ -116,9 +115,12 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			var limit = [];
 			
 			angular.forEach(property.date, function(d, key) {
-				date[key] = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
+				date[key] = d.toString();
+				fromtime[key] = property.fromtime[key].toString();
+				to[key] = property.to[key].toString();
+				limit[key] = property.limit[key];
 			});
-			angular.forEach(property.fromtime, function(f, key) {
+			/*angular.forEach(property.fromtime, function(f, key) {
 				fromtime[key] = f.getHours() + ":" + f.getMinutes();
 			});
 			angular.forEach(property.to, function(t, key) {
@@ -126,7 +128,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			});
 			angular.forEach(property.limit, function(value, key) {
 				limit[key] = value;
-			});
+			});*/
 				
 			console.log(date,fromtime,to);
 			
@@ -165,6 +167,61 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			});
 		   
 		});
+	}
+
+	if($state.current.name == 'editprop') {
+		vm.mode = 'Edit';
+		console.log('here'+$stateParams.propId)
+		var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snapshot) {
+		  var propData = snapshot.val();
+		  vm.timeSlot = [];
+		  $scope.$apply(function(){
+				vm.prop = {
+					propimg : propData.propimg,
+					onoff : propData.onoff,
+					proptype : propData.proptype,
+					units : propData.units,
+					shared : propData.shared,
+					address : propData.address,
+					date : [],
+					fromtime : [],
+					to : [],
+					limit : []
+				}
+				angular.forEach(propData.date, function(value, key) {
+					console.log(value);
+				  vm.timeSlot.push({date: new Date(value)});
+				  vm.prop.date.push(new Date(value));
+				  vm.prop.fromtime.push(new Date(propData.fromtime[key]));
+				  vm.prop.to.push(new Date(propData.to[key]));
+				  vm.prop.limit.push(propData.limit[key]);
+				});
+				/*angular.forEach(propData.fromtime, function(value, key) {
+					console.log(value);
+				  vm.prop.fromtime.push(new Date(value));
+				});
+				angular.forEach(propData.to, function(value, key) {
+					console.log(value);
+				  vm.prop.to.push(new Date(value));
+				});*/
+				console.log(vm.timeSlot)
+			});
+		});
+	} else {
+		vm.mode = 'Add';
+		vm.timeSlot = [{date:today}];
+		vm.prop = {
+			propimg : '',
+			onoff : '',
+			proptype : '',
+			units : '',
+			shared : '',
+			address : '',
+			//date : vm.timeSlot,
+			//fromtime : vm.timeSlot,
+			//to : vm.timeSlot,
+			limit : []
+		}
 	}
 	
 	

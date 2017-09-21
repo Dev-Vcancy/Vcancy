@@ -80,7 +80,14 @@ vcancyApp
 			templateUrl: 'views/viewproperties.html',
 			resolve: { authenticate: authenticate }
 		}) 
-		.state ('addprop', {
+		.state ('editprop', {
+			url: '/editprop/{propId}',
+			controller: 'propertyCtrl',
+			controllerAs: 'propctrl',
+			templateUrl: 'views/addproperties.html',
+			resolve: { authenticate: authenticate }
+		})
+		 .state ('addprop', {
 			url: '/addprop',
 			controller: 'propertyCtrl',
 			controllerAs: 'propctrl',
