@@ -274,6 +274,7 @@ ul.header-inner li a:hover.button:before{
 .block-header > h2 {
     font-size: 20px;
 }
+
 /*************** Dashboard ***************/
 .home_block{
 	padding: 0px 0;
@@ -288,6 +289,12 @@ ul.header-inner li a:hover.button:before{
 }
 .home_block .ptih-title{
   font-size: 16px;
+}
+@media screen and (min-width: 767px){
+	.toggled ~ #content{
+		padding-left: 268px;
+		transition: all 0.3s linear;
+	}
 }
 @media screen and (max-width: 767px){
 	.login-menu {
@@ -352,5 +359,11 @@ ul.header-inner li a:hover.button:before{
 		position: relative;
 		left: 10%;
 		transform: translate(0%, 20%);
+	}
+	#sidebar{
+		width: 200px;
+	}
+	#sidebar .sidebar-inner {
+		width: 200px;
 	}
 }
