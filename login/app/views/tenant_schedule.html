@@ -1,0 +1,77 @@
+
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
+
+<section id="main">
+    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+    <section id="content">
+
+        <div class="container">
+			<div class="block-header text-center">
+				<h2>Viewing Schedule</h2>				
+				
+            </div>
+			<div class="card white-block">
+				<div class="card-body">
+		            <div class="table-responsive">
+		                <table class="table table-striped table-vmiddle ng-scope ng-table">
+		                	<thead class="ng-scope">
+		                		<tr>
+			                		<th><span class="ng-binding sort-indicator">Address</span></th>
+			                		<th><span class="ng-binding sort-indicator">Date</span></th>
+			                		<th><span class="ng-binding sort-indicator">Time</span></th>
+			                		<th><span class="ng-binding sort-indicator">Status</span></th>
+                                                        <th><span class="ng-binding sort-indicator">Action</span></th>
+		                		</tr>
+		                	</thead>
+		                    <tbody>
+		                    	<tr class="ng-scope">
+			                        <td data-title="'Address'" data-title-text="Address" class="ng-binding">
+			                            123 ABC St.
+			                        </td>
+			                        <td data-title="'Date'" data-title-text="Date" class="ng-binding">
+			                            Nov 24, 2017
+			                        </td>
+			                        <td data-title="'Time'" data-title-text="Time" class="ng-binding">
+			                            2:00 PM - 3:00 PM
+			                        </td>
+			                        <td data-title="'Status'" data-title-text="Status" class="ng-binding">
+			                            Pending
+			                        </td>
+                                                <td data-title="'Action'" data-title-text="Action" class="ng-binding">
+			                            Cancel
+			                        </td>
+		                  	</tr>
+		                    	<tr class="ng-scope">
+			                        <td data-title="'Address'" data-title-text="Address" class="ng-binding">
+			                            123 ABC St.
+			                        </td>
+			                        <td data-title="'Date'" data-title-text="Date" class="ng-binding">
+			                            Nov 24, 2017
+			                        </td>
+			                        <td data-title="'Time'" data-title-text="Time" class="ng-binding">
+			                            2:00 PM - 3:00 PM
+			                        </td>
+			                        <td data-title="'Status'" data-title-text="Status" class="ng-binding">
+			                            Pending
+			                        </td>
+                                                <td data-title="'Action'" data-title-text="Action" class="ng-binding">
+			                            Cancel
+			                        </td>
+		                  	</tr>
+		                	</tbody>
+		                </table>
+		            </div>
+        		</div>
+			</div>
+
+			<!-- Calendar -->
+                <div id="calendar-widget" data-full-calendar></div>
+		</div>				
+    </section>
+    
+</section>
+
+<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+
+
+        
