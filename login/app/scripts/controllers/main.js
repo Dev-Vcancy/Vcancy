@@ -24,8 +24,9 @@ vcancyApp
 			}
 		}
 		
-		
-
+		// For Mainmenu Active Class
+        this.$state = $state;    
+        
         // By default template has a boxed layout
         this.layoutType = localStorage.getItem('ma-layout-status');
         
