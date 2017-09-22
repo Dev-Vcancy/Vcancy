@@ -73,6 +73,13 @@ vcancyApp
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
 		})
+                .state ('tenantdashboard', {
+			url: '/tenantdashboard',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/tenant.html',
+			resolve: { authenticate: authenticate }
+		})
 		.state ('viewprop', {
 			url: '/myprop',
 			controller: 'propertyCtrl',
@@ -80,7 +87,14 @@ vcancyApp
 			templateUrl: 'views/viewproperties.html',
 			resolve: { authenticate: authenticate }
 		}) 
-		.state ('addprop', {
+		.state ('editprop', {
+			url: '/editprop/{propId}',
+			controller: 'propertyCtrl',
+			controllerAs: 'propctrl',
+			templateUrl: 'views/addproperties.html',
+			resolve: { authenticate: authenticate }
+		})
+		 .state ('addprop', {
 			url: '/addprop',
 			controller: 'propertyCtrl',
 			controllerAs: 'propctrl',

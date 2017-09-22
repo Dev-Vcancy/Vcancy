@@ -42,9 +42,17 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 					localStorage.clear();
 					$state.go('login');
 				 } else {			 
-					 // $rootScope.user = firebase.auth().currentUser;
-					 console.log("Signed in as:", firebaseUser.uid);
-					 $state.go("landlorddashboard");
+                                         firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function(userdata) {
+                                           if(userdata.val().usertype === 0){
+                                                $rootScope.usertype = 0;
+                                                console.log("Signed in as tenant:", firebaseUser.uid);
+                                                $state.go("tenantdashboard");   
+                                           } else {    
+                                                $rootScope.usertype = 1;
+                                                console.log("Signed in as landlord:", firebaseUser.uid);
+                                                $state.go("landlorddashboard");
+                                           }
+                                         });
 				 }
 				 
 			}).catch(function(error) {
