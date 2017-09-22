@@ -45,10 +45,12 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 					 firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function(userdata) {
 					   if(userdata.val().usertype === 0){
 							$rootScope.usertype = 0;
+							localStorage.setItem('usertype', 0);
 							console.log("Signed in as tenant:", firebaseUser.uid);
 							$state.go("tenantdashboard");   
 					   } else {    
 							$rootScope.usertype = 1;
+							localStorage.setItem('usertype', 1);
 							console.log("Signed in as landlord:", firebaseUser.uid);
 							$state.go("landlorddashboard");
 					   }
