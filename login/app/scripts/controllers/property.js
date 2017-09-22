@@ -5,6 +5,10 @@
 //=================================================
 
 vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams) {
+	$rootScope.invalid = '';
+	$rootScope.success = '';
+	$rootScope.error = '';
+		
 	var today = new Date();
 	var vm = this;
 	
@@ -76,39 +80,28 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		vm.mytime = null;
 	  };
 	
-	
+	// timeSlot for Date and Timepicker
 	vm.addTimeSlot = function(slotlen){
 		vm.timeSlot.push({date:today});
 	}
-	vm.propForm = function(){
-		// var propimg = '';
-		// var onoff = '';
-		// var proptype = '';
-		// var units = '';
-		// var shared = ''; 
-		// var address = ''; 
-		// var date = '';
-		// var from = '';
-		// var to = '';
-		// var limit = '';
-	}
-		
+	
+	// Go Back To View Property
+	vm.backtoviewprop = function(){
+		$state.go('viewprop');
+	}	
+	
+	// Add/Edit Property		
 	vm.submitProp = function(property){
-			console.log(property);
+			// console.log(property);
+			
+			var propID = property.propID;
 			var propimg = $('#propimg').val();	
-			var onoff = property.onoff;
+			var propstatus = property.propstatus  == '' ? false : property.propstatus ; 
 			var proptype = property.proptype;
 			var units = property.units;
-			var shared = property.shared; 
+			var shared = property.shared  == '' ? false : property.shared ; 
 			var address = property.address; 
-			// var d = property.date;
-			// var date = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
-			// var f = property.fromtime;
-			// var fromtime = f.getHours() + ":" + f.getMinutes();
-			// var t = property.to	;		
-			// var to = t.getHours() + ":" + t.getMinutes();
-			// var limit = property.limit;		
-			
+			var landlordID = localStorage.getItem('userID');
 			var date = [];
 			var fromtime = [];
 			var to = [];
@@ -120,18 +113,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				to[key] = property.to[key].toString();
 				limit[key] = property.limit[key];
 			});
-			/*angular.forEach(property.fromtime, function(f, key) {
-				fromtime[key] = f.getHours() + ":" + f.getMinutes();
-			});
-			angular.forEach(property.to, function(t, key) {
-				to[key] = t.getHours() + ":" + t.getMinutes();
-			});
-			angular.forEach(property.limit, function(value, key) {
-				limit[key] = value;
-			});*/
-				
-			console.log(date,fromtime,to);
-			
+
 			$rootScope.invalid = '';
 			$rootScope.success = '';
 			$rootScope.error = '';
@@ -139,11 +121,11 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			var propertyObj = $firebaseAuth();
 			
 			var propdbObj = firebase.database();
-			// var newPostRef = postListRef.push();
-				
-			propdbObj.ref('properties/').push().set({					
+		if(propID == ''){	
+			propdbObj.ref('properties/').push().set({	
+				landlordID: landlordID,
 				propimg: propimg,
-				onoff: onoff,
+				propstatus: propstatus,
 				proptype: proptype,
 				units: units,
 				shared: shared, 
@@ -152,15 +134,64 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				fromtime: fromtime,
 				to: to,
 				limit: limit
-		}).then(function onSuccess(res) {
-			$state.go('viewprop');
-		  })	;	
+			}).then(function(){
+			  //Generate the property link
+			  propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
+				// console.log(snapshot.key);
+				var propertylink = "http://35.182.211.61/login/dist/#/applyproperty/"+snapshot.key;
+				$('#propertylink').val(propertylink);
+											
+				// update the property link to property table
+				propdbObj.ref('properties/'+snapshot.key).update({	
+					propertylink: propertylink
+				})	
+			  })				
+				
+				// link generated and property added message
+				$rootScope.success = 'Property added successfully. Property Link is also generated.';
+				
+				// reset the add property form
+				vm.timeSlot = [{date:today}];
+				vm.prop = {
+					propimg : '',
+					propstatus : '',
+					proptype : '',
+					units : '',
+					shared : '',
+					address : '',
+					date : vm.timeSlot,
+					fromtime : vm.timeSlot,
+					to : vm.timeSlot,
+					limit : [],
+					propertylink: ''
+				}
+				
+			  });
+		} else {
+			propdbObj.ref('properties/'+propID).update({
+					propimg: propimg,
+					propstatus: propstatus,
+					proptype: proptype,
+					units: units,
+					shared: shared, 
+					address: address, 
+					date: date,
+					fromtime: fromtime,
+					to: to,
+					limit: limit
+			}).then(function(){
+				// link generated and property added message
+				$rootScope.success = 'Property edited successfully.';
+			})
+		}
 	}
+	
+	
+	// View Property
 	//vm.viewprops = {};
 	if($state.current.name == 'viewprop') {
-		
-		var propdbObj = firebase.database().ref('properties/').on("value", function(snapshot) {
-			
+		var landlordID = localStorage.getItem('userID');
+		var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
 			console.log(snapshot.val())
 			$scope.$apply(function(){
 			  vm.viewprops = snapshot.val();
@@ -169,16 +200,20 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		});
 	}
 
+	// Edit Property
 	if($state.current.name == 'editprop') {
 		vm.mode = 'Edit';
+		vm.submitaction = "Update";
 		console.log('here'+$stateParams.propId)
 		var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snapshot) {
 		  var propData = snapshot.val();
 		  vm.timeSlot = [];
 		  $scope.$apply(function(){
 				vm.prop = {
+					propID: snapshot.key,
+					landlordID: propData.landlordID,
 					propimg : propData.propimg,
-					onoff : propData.onoff,
+					propstatus : propData.propstatus,
 					proptype : propData.proptype,
 					units : propData.units,
 					shared : propData.shared,
@@ -186,7 +221,8 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					date : [],
 					fromtime : [],
 					to : [],
-					limit : []
+					limit : [],
+					propertylink: propData.propertylink
 				}
 				angular.forEach(propData.date, function(value, key) {
 					console.log(value);
@@ -196,23 +232,17 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				  vm.prop.to.push(new Date(propData.to[key]));
 				  vm.prop.limit.push(propData.limit[key]);
 				});
-				/*angular.forEach(propData.fromtime, function(value, key) {
-					console.log(value);
-				  vm.prop.fromtime.push(new Date(value));
-				});
-				angular.forEach(propData.to, function(value, key) {
-					console.log(value);
-				  vm.prop.to.push(new Date(value));
-				});*/
+				
 				console.log(vm.timeSlot)
 			});
 		});
 	} else {
 		vm.mode = 'Add';
+		vm.submitaction = "Save";
 		vm.timeSlot = [{date:today}];
 		vm.prop = {
 			propimg : '',
-			onoff : '',
+			propstatus : '',
 			proptype : '',
 			units : '',
 			shared : '',

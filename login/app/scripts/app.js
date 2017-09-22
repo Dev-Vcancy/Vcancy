@@ -18,7 +18,8 @@ var vcancyApp = angular
     'oc.lazyLoad',
     'nouislider',
     'ngTable',
-	'firebase'
+	'firebase',
+	'ngclipboard'
   ]);
   
 vcancyApp  
