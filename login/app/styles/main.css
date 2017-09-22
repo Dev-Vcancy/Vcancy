@@ -274,7 +274,36 @@ ul.header-inner li a:hover.button:before{
 .block-header > h2 {
     font-size: 20px;
 }
-
+.white_block{
+  float: left;
+  width: 100%;
+}
+.property_view{
+  max-height: 200px;
+}
+.property_view .white_block {
+    border-radius: 5px;
+    border-bottom: 2px solid #ccc;
+}
+.property_thumb {
+  float: left;
+  width: 100px;
+  height: 100%;
+  margin-right: 20px;
+}
+.property_thumb img {
+    width: auto;
+    height: 100px;
+    margin: 0 auto;
+}
+.property_detail {
+    display: grid;
+}
+.property_detail h3 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #1aa1ab;
+}
 /*************** Dashboard ***************/
 .home_block{
 	padding: 0px 0;
