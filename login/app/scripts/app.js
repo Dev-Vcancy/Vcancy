@@ -18,7 +18,8 @@ var vcancyApp = angular
     'oc.lazyLoad',
     'nouislider',
     'ngTable',
-	'firebase'
+	'firebase',
+	'ngclipboard'
   ]);
   
 vcancyApp  
@@ -115,7 +116,7 @@ vcancyApp
 		storageBucket: "vcancy-5e3b4.appspot.com",
 		messagingSenderId: "330892868858"
 	  };
-	  firebase.initializeApp(config);	  
+	  var app = firebase.initializeApp(config);	  
 	  
 	$urlRouterProvider.otherwise("/");
 	$stateProvider			
@@ -138,7 +139,7 @@ vcancyApp
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
 		})
-                .state ('tenantdashboard', {
+        .state ('tenantdashboard', {
 			url: '/tenantdashboard',
 			controller: 'maCtrl',
 			controllerAs: 'mactrl',
@@ -158,6 +159,13 @@ vcancyApp
 			controllerAs: 'propctrl',
 			templateUrl: 'views/addproperties.html',
 			resolve: { authenticate: authenticate }
+		})
+		.state ('customemailhandler', {
+			url: '/auth?{mode}&{oobCode}&{apiKey}',
+			controller: 'emailhandlerCtrl',
+			controllerAs: 'ehandlectrl',
+			templateUrl: 'views/customhandler.html',
+			// resolve: { authenticate: authenticate }
 		})
 		 .state ('addprop', {
 			url: '/addprop',

@@ -42,17 +42,19 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 					localStorage.clear();
 					$state.go('login');
 				 } else {			 
-                                         firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function(userdata) {
-                                           if(userdata.val().usertype === 0){
-                                                $rootScope.usertype = 0;
-                                                console.log("Signed in as tenant:", firebaseUser.uid);
-                                                $state.go("tenantdashboard");   
-                                           } else {    
-                                                $rootScope.usertype = 1;
-                                                console.log("Signed in as landlord:", firebaseUser.uid);
-                                                $state.go("landlorddashboard");
-                                           }
-                                         });
+					 firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function(userdata) {
+					   if(userdata.val().usertype === 0){
+							$rootScope.usertype = 0;
+							localStorage.setItem('usertype', 0);
+							console.log("Signed in as tenant:", firebaseUser.uid);
+							$state.go("tenantdashboard");   
+					   } else {    
+							$rootScope.usertype = 1;
+							localStorage.setItem('usertype', 1);
+							console.log("Signed in as landlord:", firebaseUser.uid);
+							$state.go("landlorddashboard");
+					   }
+					 });
 				 }
 				 
 			}).catch(function(error) {
@@ -78,13 +80,13 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
              // };
 		}
 		
-		this.registerUser = function($reguser){
-			var first = $reguser.first;
-			var last = $reguser.last;
-			var email = $reguser.email;
-			var pass = $reguser.pass; 
-			var cpass = $reguser.cpass; 
-			var usertype = $reguser.usertype;
+		this.registerUser = function(reguser){
+			var first = reguser.first;
+			var last = reguser.last;
+			var email = reguser.email;
+			var pass = reguser.pass; 
+			var cpass = reguser.cpass; 
+			var usertype = reguser.usertype;
 			$rootScope.invalid = '';
 			$rootScope.success = '';
 			$rootScope.error = '';
@@ -109,7 +111,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 						usertype : usertype
 					  });				  
 					$rootScope.success = 'Your account has been created and an email has been sent. Please verify your email to Log In!';
-					$rootScope.error = '';
+					$rootScope.error = '';			
 					//console.log("User " + firebaseUser.uid + " created successfully!");
 				  }).catch(function(error) {
 					if(error.message){
@@ -133,8 +135,27 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				//console.error("Error: ","Confirm password doesnot match password");
 			}
 			
-			$scope.deliberatelyTrustDangerousSnippet = function() {
-               return $sce.trustAsHtml($rootScope.error);
-             };
 		}
+		
+		this.forgotpwdmail = function(forgotuser){
+			var email = forgotuser.email;
+			$rootScope.invalid = '';
+			$rootScope.success = '';
+			$rootScope.error = '';
+			
+			var forgotuserObj = $firebaseAuth();
+			forgotuserObj.$sendPasswordResetEmail(email).then(function() {
+				console.log("Password reset email sent successfully!");
+				$rootScope.success = 'Password reset mail sent successfully.Please check your Inbox.';
+				$rootScope.error = '';	
+			}).catch(function(error) {
+				console.error("Error: ", error);
+				if(error.message){
+					$rootScope.error = error.message;
+					$rootScope.success = '';
+				} 
+			});
+			
+		}
+		
 }]);

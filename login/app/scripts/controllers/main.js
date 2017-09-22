@@ -6,8 +6,10 @@ vcancyApp
     // =========================================================================
 
     .controller('maCtrl', function($timeout, $state, $scope, $firebaseAuth, $rootScope){
-       
-        // Detact Mobile Browser
+      
+	   this.usertype = localStorage.getItem('usertype');
+	   
+	           // Detact Mobile Browser
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
            angular.element('html').addClass('ismobile');
 		   this.sidebarToggle = {
@@ -22,8 +24,9 @@ vcancyApp
 			}
 		}
 		
-		
-
+		// For Mainmenu Active Class
+        this.$state = $state;    
+        
         // By default template has a boxed layout
         this.layoutType = localStorage.getItem('ma-layout-status');
         
