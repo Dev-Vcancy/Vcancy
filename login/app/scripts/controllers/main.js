@@ -6,8 +6,10 @@ vcancyApp
     // =========================================================================
 
     .controller('maCtrl', function($timeout, $state, $scope, $firebaseAuth, $rootScope){
-       
-        // Detact Mobile Browser
+      
+	   this.usertype = localStorage.getItem('usertype');
+	   
+	           // Detact Mobile Browser
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
            angular.element('html').addClass('ismobile');
 		   this.sidebarToggle = {

@@ -74,7 +74,7 @@ vcancyApp
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
 		})
-                .state ('tenantdashboard', {
+        .state ('tenantdashboard', {
 			url: '/tenantdashboard',
 			controller: 'maCtrl',
 			controllerAs: 'mactrl',
