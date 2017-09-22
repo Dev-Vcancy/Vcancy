@@ -319,9 +319,14 @@ ul.header-inner li a:hover.button:before{
 .home_block .ptih-title{
   font-size: 16px;
 }
+@media (min-width: 1200px){
+  #content .container {
+      width: 95%;
+  }
+}
 @media screen and (min-width: 767px){
 	.toggled ~ #content{
-		padding-left: 268px;
+		padding-left: 280px;
 		transition: all 0.3s linear;
 	}
 }
