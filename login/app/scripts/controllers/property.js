@@ -4,7 +4,7 @@
 // PROPERTY
 //=================================================
 
-vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams) {
+vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window) {
 	$rootScope.invalid = '';
 	$rootScope.success = '';
 	$rootScope.error = '';
@@ -142,34 +142,42 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				
 				if(snapshot.key != "undefined"){
 					var propertylink = "http://35.182.211.61/login/dist/#/applyproperty/"+snapshot.key;
-					$('#propertylink').val(propertylink);
-												
+					vm.prop.propertylink = propertylink;	
+					
+					// link generated and property added message
+					$rootScope.success = 'Property added successfully. Property Link is also generated.';
+					
+					vm.prop.propertylink = propertylink;				
+					$('#propertylink').val(propertylink);	
+					
 					// update the property link to property table
 					propdbObj.ref('properties/'+snapshot.key).update({	
 						propertylink: propertylink
-					})	
+					})
+
 				}
 				
 			  })				
 				
-				// link generated and property added message
-				$rootScope.success = 'Property added successfully. Property Link is also generated.';
-				
 				// reset the add property form
 				vm.timeSlot = [{date:todaydate}];
-				vm.prop = {
-					propimg : '',
-					propstatus : '',
-					proptype : '',
-					units : '',
-					shared : '',
-					address : '',
-					date : vm.timeSlot,
-					fromtime : vm.timeSlot,
-					to : vm.timeSlot,
-					limit : [''],
-					propertylink: ''
-				}
+				// vm.prop = {
+					// propID: '',
+					// landlordID: '',
+					// propimg : '',
+					// propstatus : '',
+					// proptype : '',
+					// units : '',
+					// shared : '',
+					// address : '',
+					// date : vm.timeSlot,
+					// fromtime : vm.timeSlot,
+					// to : vm.timeSlot,
+					// limit : [],
+					// propertylink: ''
+				// }
+				// $('#propertylink').val('');
+				// $('#propimg').val('');
 				
 			  });
 		} else {
@@ -187,6 +195,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			}).then(function(){
 				// link generated and property added message
 				$rootScope.success = 'Property edited successfully.';
+				$window.scrollTo(0, 0);
 			})
 		}
 	}
@@ -215,7 +224,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	if($state.current.name == 'editprop') {
 		vm.mode = 'Edit';
 		vm.submitaction = "Update";
-		console.log('here'+$stateParams.propId)
+		// console.log('here'+$stateParams.propId)
 		var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snapshot) {
 		  var propData = snapshot.val();
 		  vm.timeSlot = [];
@@ -263,7 +272,8 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			//date : vm.timeSlot,
 			//fromtime : vm.timeSlot,
 			//to : vm.timeSlot,
-			limit : []
+			limit : [],
+			propertylink: ''
 		}
 	}
 	
