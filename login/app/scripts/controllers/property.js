@@ -11,6 +11,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		
 	var todaydate = new Date();
 	var vm = this;
+	vm.propsavail = 1;
 	
 	// DATEPICKER
 		vm.today = function() {
@@ -192,13 +193,19 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	
 	// View Property
-	//vm.viewprops = {};
+	// vm.viewprops = {};
 	if($state.current.name == 'viewprop') {
 		var landlordID = localStorage.getItem('userID');
 		var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
 			console.log(snapshot.val())
 			$scope.$apply(function(){
-			  vm.viewprops = snapshot.val();
+				if(snapshot.val()) {
+			 		vm.viewprops = snapshot.val();
+			 		vm.propsavail = 1;
+				}
+			 	else {
+			 		vm.propsavail = 0;
+			 	}
 			});
 		   
 		});
