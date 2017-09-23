@@ -304,9 +304,10 @@ ul.header-inner li a:hover.button:before{
     font-size: 18px;
     color: #1aa1ab;
 }
+
 .property-icon i {
-  font-size: 80px;
-  color: #009999;
+  font-size: 60px;
+  color: #fff;
   border: 4px solid #efefef;
   border-radius: 50%;
   width: 120px;
@@ -315,22 +316,28 @@ ul.header-inner li a:hover.button:before{
 }
 .add_property_block h1{
   font-size: 40px;
-  color: #444;
+  color: #fff;
   font-weight: 600;
 }
 .add_property_block h3{
   font-size: 20px;
-  color: #aaa;
+  color: #efefef;
 }
 .add_property_block .btn {
-    font-size: 20px;
-    background-color: #009999;
-    width: 400px;
-    color: #fff;
-    font-weight: 600;
-    text-transform: initial;
-    padding: 20px;
-    border-radius: 6px;
+  font-size: 20px;
+  background-color: transparent;
+  border:2px solid #fff;
+  color: #fff ;
+  font-weight: 600;
+  text-transform: initial;
+  padding: 16px 40px;
+  border-radius: 6px;
+  transition: all 0.3s linear;
+}
+.add_property_block .btn:hover {
+  background-color: #fff;
+  color: #03A9F4;
+  transition: all 0.3s linear;
 }
 /*************** Dashboard ***************/
 .home_block{
@@ -382,9 +389,6 @@ ul.header-inner li a:hover.button:before{
   }
   .add_property_block h3{
     font-size: 16px;
-  }
-  .add_property_block .btn {
-      width: 220px;
   }
 }
 
