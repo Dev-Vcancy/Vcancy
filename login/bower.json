@@ -38,7 +38,8 @@
     "Waves": "waves#~0.7.4",
     "angular": "1.4.7",
     "angularfire": "^2.3.0",
-    "ng-table-bundle": "^4.0.0"
+    "ng-table-bundle": "^4.0.0",
+    "ng-clipboard": "^1.0.0"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"
