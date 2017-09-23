@@ -304,6 +304,34 @@ ul.header-inner li a:hover.button:before{
     font-size: 18px;
     color: #1aa1ab;
 }
+.property-icon i {
+  font-size: 80px;
+  color: #009999;
+  border: 4px solid #efefef;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  line-height: 110px;
+}
+.add_property_block h1{
+  font-size: 40px;
+  color: #444;
+  font-weight: 600;
+}
+.add_property_block h3{
+  font-size: 20px;
+  color: #aaa;
+}
+.add_property_block .btn {
+    font-size: 20px;
+    background-color: #009999;
+    width: 400px;
+    color: #fff;
+    font-weight: 600;
+    text-transform: initial;
+    padding: 20px;
+    border-radius: 6px;
+}
 /*************** Dashboard ***************/
 .home_block{
 	padding: 0px 0;
@@ -319,12 +347,16 @@ ul.header-inner li a:hover.button:before{
 .home_block .ptih-title{
   font-size: 16px;
 }
+#content{
+  transition: all 0.3s linear;
+}
 @media (min-width: 1200px){
   #content .container {
       width: 95%;
+      max-width: 1170px;
   }
 }
-@media screen and (min-width: 767px){
+@media screen and (min-width: 769px){
 	.toggled ~ #content{
 		padding-left: 280px;
 		transition: all 0.3s linear;
@@ -345,6 +377,15 @@ ul.header-inner li a:hover.button:before{
 	.header .logo img {
 		width: 70px;
 	}
+  .add_property_block h1{
+    font-size: 30px;
+  }
+  .add_property_block h3{
+    font-size: 16px;
+  }
+  .add_property_block .btn {
+      width: 220px;
+  }
 }
 
 
