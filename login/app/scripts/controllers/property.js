@@ -269,9 +269,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			units : '',
 			shared : '',
 			address : '',
-			//date : vm.timeSlot,
-			//fromtime : vm.timeSlot,
-			//to : vm.timeSlot,
+			date : {date:todaydate},
+			fromtime :{date:todaydate},
+			to : {date:todaydate},
 			limit : [],
 			propertylink: ''
 		}

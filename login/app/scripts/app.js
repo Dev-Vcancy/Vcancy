@@ -139,27 +139,34 @@ vcancyApp
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
 		})
-                .state ('tenantdashboard', {
-                                url: '/tenantdashboard',
-                                controller: 'maCtrl',
-                                controllerAs: 'mactrl',
-                                templateUrl: 'views/tenant.html',
-                                resolve: { authenticate: authenticate }
-                })
-                .state ('tenantschedule', {
-                                url: '/tenantschedule',
-                                controller: 'maCtrl',
-                                controllerAs: 'mactrl',
-                                templateUrl: 'views/tenant_schedule.html',
-                                resolve: { authenticate: authenticate }
-                })
-                .state ('tenantapplications', {
-                                url: '/tenantapplications',
-                                controller: 'maCtrl',
-                                controllerAs: 'mactrl',
-                                templateUrl: 'views/tenant_app.html',
-                                resolve: { authenticate: authenticate }
-                })
+		.state ('tenantdashboard', {
+			url: '/tenantdashboard',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/tenant.html',
+			resolve: { authenticate: authenticate }
+		})
+		.state ('tenantapply', {
+			url: '/applyproperty/{propId}',
+			controller: 'applypropCtrl',
+			controllerAs: 'applyctrl',
+			templateUrl: 'views/applyproperty.html',
+			resolve: { authenticate: authenticate }
+		})
+		.state ('tenantschedule', {
+			url: '/tenantschedule',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/tenant_schedule.html',
+			resolve: { authenticate: authenticate }
+		})
+		.state ('tenantapplications', {
+			url: '/tenantapplications',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/tenant_app.html',
+			resolve: { authenticate: authenticate }
+		})
 		.state ('viewprop', {
 			url: '/myprop',
 			controller: 'propertyCtrl',

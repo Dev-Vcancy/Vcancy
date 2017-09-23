@@ -7,21 +7,20 @@
 vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams) {
 	
 	var mode = $stateParams.mode;
-	var oobCode = $stateParams.oobCode;	
-	this.mode = mode;	
+	var oobCode = $stateParams.oobCode;
+	// localStorage.setItem('emailHandled',"");
+	
+	this.mode = mode;
 	
 	// console.log($stateParams);
 	if(mode == 'verifyEmail'){
 		firebase.auth().applyActionCode(oobCode).then(function(resp) {
-			console.log("Thanks for verifying your email.");
-			$rootScope.emailhandler = "Thanks for verifying your email.";
-		}).catch(function(error) {	
+			localStorage.setItem('emailHandled', "Thanks for verifying your email.");
+		}).catch(function(error) {
+			localStorage.setItem('emailHandled', error.message);
 			console.log(error.message, error.reason);
-			if(error.message != "undefined"){
-				$rootScope.emailhandler = error.message;
-			}
-        })			
-		
+        })		
+		this.emailhandler = localStorage.getItem('emailHandled');		
 	} else if(mode == 'resetPassword'){
 		  var accountEmail;
 		  

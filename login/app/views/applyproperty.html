@@ -1,0 +1,71 @@
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
+
+<section id="main">
+    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+
+    <section id="content">
+
+        <div class="container">
+			<div class="block-header text-center">
+				<h2>Apply For Property</h2>
+            </div>	
+			<div class="row">
+				<div class="col-sm-12 card">
+					<form name="" ng-submit="" role="form" novalidate>	
+						<input type="hidden" name="landlordID" ng-model="applyctrl.applyprop.landlordID" class="form-control" >
+						<input type="hidden" name="propID" ng-model="applyctrl.applyprop.propID" class="form-control">		
+						
+						<div class="card-header text-center"><h1  >Enter basic info and select viewing time</h1>
+						</div>
+						<div class="card-body card-padding">				
+							<div class="col-sm-6">
+								<div class="form-group col-sm-6">
+									<input type="text" placeholder="Name" ng-model="applyctrl.applyprop.name" ng-required class="form-control"/>
+								</div>
+								<div class="form-group col-sm-6">
+									<input type="text" placeholder="Location" ng-model="applyctrl.applyprop.location" ng-required class="form-control"/>
+								</div>
+								<div class="form-group col-sm-6">
+									<input type="text" placeholder="Job Title" ng-model="applyctrl.applyprop.jobtitle" ng-required class="form-control"/>
+								</div>
+								<div class="form-group col-sm-6">
+									<input type="text" placeholder="Age" ng-model="applyctrl.applyprop.age" ng-required class="form-control"/>
+								</div>
+								<div class="form-group col-sm-12">
+									<textarea ng-model="applyctrl.applyprop.description"  ng-required class="form-control"></textarea>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<h3>Time Slots available</h3>
+								<div class="col-sm-12"><div class="col-sm-4">Date</div><div class="col-sm-4">Time</div><div class="col-sm-4">Select</div></div>
+								
+								<div class="col-sm-12" ng-repeat="(key, x) in applyctrl.applyprop.date">	
+									<div class="col-sm-4">{{x}}</div>
+									<div class="col-sm-4">{{applyctrl.applyprop.fromtime[key]}} - {{applyctrl.applyprop.to[key]}}</div>
+									<div class="col-sm-4">
+										<label class="radio">
+											<input type="radio" required ng-model="applyctrl.applyprop.selectslot" ng-value="{{key}}"  name="selectslot" value="{{key}}">
+											<i class="input-helper"></i>											
+										</label>
+									</div>
+								</div>
+							
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-sm-12 text-center">
+								<button type="submit" ng-disabled="addpropForm.$invalid"  class="btn btn-success">Send</button>
+							</div>
+							
+							<div class="clearfix"></div>
+						</div>
+						
+					</form>			
+				</div>
+			</div>
+		</div>				
+    </section>
+</section>
+
+<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+
+        
