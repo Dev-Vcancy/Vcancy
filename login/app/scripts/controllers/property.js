@@ -9,7 +9,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	$rootScope.success = '';
 	$rootScope.error = '';
 		
-	var today = new Date();
+	var todaydate = new Date();
 	var vm = this;
 	
 	// DATEPICKER
@@ -82,7 +82,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	// timeSlot for Date and Timepicker
 	vm.addTimeSlot = function(slotlen){
-		vm.timeSlot.push({date:today});
+		vm.timeSlot.push({date:todaydate});
 	}
 	
 	// Go Back To View Property
@@ -138,20 +138,24 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			  //Generate the property link
 			  propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
 				// console.log(snapshot.key);
-				var propertylink = "http://35.182.211.61/login/dist/#/applyproperty/"+snapshot.key;
-				$('#propertylink').val(propertylink);
-											
-				// update the property link to property table
-				propdbObj.ref('properties/'+snapshot.key).update({	
-					propertylink: propertylink
-				})	
+				
+				if(snapshot.key != "undefined"){
+					var propertylink = "http://35.182.211.61/login/dist/#/applyproperty/"+snapshot.key;
+					$('#propertylink').val(propertylink);
+												
+					// update the property link to property table
+					propdbObj.ref('properties/'+snapshot.key).update({	
+						propertylink: propertylink
+					})	
+				}
+				
 			  })				
 				
 				// link generated and property added message
 				$rootScope.success = 'Property added successfully. Property Link is also generated.';
 				
 				// reset the add property form
-				vm.timeSlot = [{date:today}];
+				vm.timeSlot = [{date:todaydate}];
 				vm.prop = {
 					propimg : '',
 					propstatus : '',
@@ -162,7 +166,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					date : vm.timeSlot,
 					fromtime : vm.timeSlot,
 					to : vm.timeSlot,
-					limit : [],
+					limit : [''],
 					propertylink: ''
 				}
 				
@@ -239,8 +243,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	} else {
 		vm.mode = 'Add';
 		vm.submitaction = "Save";
-		vm.timeSlot = [{date:today}];
+		vm.timeSlot = [{date:todaydate}];
 		vm.prop = {
+			propID: '',
+			landlordID: '',
 			propimg : '',
 			propstatus : '',
 			proptype : '',
