@@ -1,0 +1,85 @@
+
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
+
+<section id="main">
+    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+    <section id="content">
+
+        <div class="container">
+			<div class="block-header text-center">
+				<h2>Applications</h2>				
+				
+            </div>
+			<div class="card white-block p-20">
+				<div class="card-header">
+		            <label class="checkbox checkbox-inline m-r-20">
+		                <input type="checkbox" value="option1">
+		                <i class="input-helper"></i>
+		                Property 1
+		            </label>
+		            <label class="checkbox checkbox-inline m-r-20">
+		                <input type="checkbox" value="option1">
+		                <i class="input-helper"></i>
+		                Property 2
+		            </label>
+		            <label class="checkbox checkbox-inline m-r-20">
+		                <input type="checkbox" value="option1">
+		                <i class="input-helper"></i>
+		                Property 3
+		            </label>
+	         	</div>
+				<div class="card-body">
+		            <div class="table-responsive">
+		                <table class="table table-striped table-vmiddle ng-scope ng-table">
+		                	<thead class="ng-scope">
+		                		<tr>
+			                		<th><span class="ng-binding sort-indicator">Name</span></th>
+			                		<th><span class="ng-binding sort-indicator">Age</span></th>
+			                		<th><span class="ng-binding sort-indicator">Job Title</span></th>
+			                		<th><span class="ng-binding sort-indicator">Salary</span></th>
+			                		<th><span class="ng-binding sort-indicator">Pets</span></th>
+			                		<th><span class="ng-binding sort-indicator">Marital<br>Status</span></th>
+			                		<th><span class="ng-binding sort-indicator">No of<br>Appointment</span></th>
+			                		<th><span class="ng-binding sort-indicator">Credit Score</span></th>
+		                		</tr>
+		                	</thead>
+		                    <tbody>
+		                    	<tr class="ng-scope">
+			                        <td data-title="'Name'" data-title-text="Name" class="ng-binding">
+			                            Jhon
+			                        </td>
+			                        <td data-title="'Age'" data-title-text="Age" class="ng-binding">
+			                            26
+			                        </td>
+			                        <td data-title="'Job Title'" data-title-text="Job Title" class="ng-binding">
+			                            Finance
+			                        </td>
+			                        <td data-title="'Salary'" data-title-text="Salary" class="ng-binding">
+			                            $70K
+			                        </td>
+			                        <td data-title="'Pets'" data-title-text="Pets" class="ng-binding">
+			                            No
+			                        </td>
+			                        <td data-title="'Marital Status'" data-title-text="Marital Status" class="ng-binding">
+			                            Single
+			                        </td>
+			                        <td data-title="'No of Appointment'" data-title-text="No of Appointment" class="ng-binding">
+			                            2
+			                        </td>
+			                        <td data-title="'Credit Score'" data-title-text="Credit Score" class="ng-binding">
+			                            <button class="btn bgm-cyan waves-effect">Run Check</button>
+			                        </td>			           
+		                  		</tr>
+		                	</tbody>
+		                </table>
+		            </div>
+        		</div>
+			</div>
+		</div>				
+    </section>
+</section>
+
+<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+
+
+        

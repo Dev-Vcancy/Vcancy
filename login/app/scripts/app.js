@@ -39,7 +39,72 @@ vcancyApp
 	templateUrl: 'views/template/sidebar-left.html',
   };
 }); 
-  
+ vcancyApp
+ .directive('fullCalendar', function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element) {
+                element.fullCalendar({
+                    contentHeight: 'auto',
+                    theme: true,
+                    header: {
+                        right: '',
+                        center: 'prev, title, next',
+                        left: ''
+                    },
+                    defaultDate: '2014-06-12',
+                    editable: true,
+                    events: [
+                        {
+                            title: 'All Day',
+                            start: '2014-06-01',
+                            className: 'bgm-cyan'
+                        },
+                        {
+                            title: 'Long Event',
+                            start: '2014-06-07',
+                            end: '2014-06-10',
+                            className: 'bgm-orange'
+                        },
+                        {
+                            id: 999,
+                            title: 'Repeat',
+                            start: '2014-06-09',
+                            className: 'bgm-lightgreen'
+                        },
+                        {
+                            id: 999,
+                            title: 'Repeat',
+                            start: '2014-06-16',
+                            className: 'bgm-blue'
+                        },
+                        {
+                            title: 'Meet',
+                            start: '2014-06-12',
+                            end: '2014-06-12',
+                            className: 'bgm-teal'
+                        },
+                        {
+                            title: 'Lunch',
+                            start: '2014-06-12',
+                            className: 'bgm-gray'
+                        },
+                        {
+                            title: 'Birthday',
+                            start: '2014-06-13',
+                            className: 'bgm-pink'
+                        },
+                        {
+                            title: 'Google',
+                            url: 'http://google.com/',
+                            start: '2014-06-28',
+                            className: 'bgm-bluegray'
+                        }
+                    ]
+                });
+            }
+        }
+    }) 
 vcancyApp 
  .config(function ($stateProvider, $urlRouterProvider){	
 	  // Initialize Firebase
@@ -74,13 +139,27 @@ vcancyApp
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
 		})
-        .state ('tenantdashboard', {
-			url: '/tenantdashboard',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
-			templateUrl: 'views/tenant.html',
-			resolve: { authenticate: authenticate }
-		})
+                .state ('tenantdashboard', {
+                                url: '/tenantdashboard',
+                                controller: 'maCtrl',
+                                controllerAs: 'mactrl',
+                                templateUrl: 'views/tenant.html',
+                                resolve: { authenticate: authenticate }
+                })
+                .state ('tenantschedule', {
+                                url: '/tenantschedule',
+                                controller: 'maCtrl',
+                                controllerAs: 'mactrl',
+                                templateUrl: 'views/tenant_schedule.html',
+                                resolve: { authenticate: authenticate }
+                })
+                .state ('tenantapplications', {
+                                url: '/tenantapplications',
+                                controller: 'maCtrl',
+                                controllerAs: 'mactrl',
+                                templateUrl: 'views/tenant_app.html',
+                                resolve: { authenticate: authenticate }
+                })
 		.state ('viewprop', {
 			url: '/myprop',
 			controller: 'propertyCtrl',
@@ -108,7 +187,17 @@ vcancyApp
 			controllerAs: 'propctrl',
 			templateUrl: 'views/addproperties.html',
 			resolve: { authenticate: authenticate }
-		}) 
+		})
+		.state ('schedule', {
+			url: '/schedule',
+			templateUrl: 'views/schedule.html',
+			resolve: { authenticate: authenticate }
+		})
+		.state ('app', {
+			url: '/app',
+			templateUrl: 'views/app.html',
+			resolve: { authenticate: authenticate }
+		})  
 		.state ('faq', {
 			url: '/faq',
 			controller: 'maCtrl',
