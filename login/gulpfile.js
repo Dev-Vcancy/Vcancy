@@ -4,6 +4,7 @@
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
 var openURL = require('open');
+var gulpif = require('gulp-if');
 var lazypipe = require('lazypipe');
 var rimraf = require('rimraf');
 var wiredep = require('wiredep').stream;
@@ -167,7 +168,7 @@ gulp.task('client:build', ['html', 'styles'], function () {
     .pipe(cssFilter)
     .pipe($.minifyCss({cache: true}))
     .pipe(cssFilter.restore())
-    .pipe($.rev())
+    .pipe(gulpif('*.{js,css}', $.rev()))
     .pipe($.revReplace())
     .pipe(gulp.dest(yeoman.dist));
 });
