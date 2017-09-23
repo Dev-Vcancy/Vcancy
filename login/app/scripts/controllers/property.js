@@ -4,7 +4,7 @@
 // PROPERTY
 //=================================================
 
-vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams) {
+vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window) {
 	$rootScope.invalid = '';
 	$rootScope.success = '';
 	$rootScope.error = '';
@@ -195,6 +195,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			}).then(function(){
 				// link generated and property added message
 				$rootScope.success = 'Property edited successfully.';
+				$window.scrollTo(0, 0);
 			})
 		}
 	}
@@ -223,7 +224,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	if($state.current.name == 'editprop') {
 		vm.mode = 'Edit';
 		vm.submitaction = "Update";
-		console.log('here'+$stateParams.propId)
+		// console.log('here'+$stateParams.propId)
 		var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snapshot) {
 		  var propData = snapshot.val();
 		  vm.timeSlot = [];
