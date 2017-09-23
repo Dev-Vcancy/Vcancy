@@ -19,7 +19,7 @@ var vcancyApp = angular
     'nouislider',
     'ngTable',
 	'firebase',
-	'ngclipboard'
+	'ng-clipboard'
   ]);
   
 vcancyApp  
