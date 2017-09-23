@@ -3,8 +3,7 @@
   "private": true,
   "dependencies": {
     "angular-animate": "^1.4.3",
-    "ng-if-bootstrap-grid": "^0.1.0",
-	"clipboard": "~1.5.5"
+    "ng-if-bootstrap-grid": "^0.1.0"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
