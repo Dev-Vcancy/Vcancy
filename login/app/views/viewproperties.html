@@ -32,6 +32,11 @@
 
 							<div class="property_detail">						
 								<h3>{{x.address}} </h3>
+        						<p>{{x.propertylink}}</p>
+        						<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red">
+			                        <span>ACTIVE</span> <input id="ts2" type="checkbox" hidden="hidden" disabled="disabled">
+			                        <label for="ts2" class="ts-helper ac-inac m-l-10 m-r-10"></label><span>INACTIVE</span>
+			                    </div>
 								<a href="#/editprop/{{key}}">Edit</a>
 							</div>
 						</div>

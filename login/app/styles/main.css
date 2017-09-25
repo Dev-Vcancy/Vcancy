@@ -285,6 +285,9 @@ ul.header-inner li a:hover.button:before{
     border-radius: 5px;
     border-bottom: 2px solid #ccc;
 }
+.property_view .white_block p {
+    margin-bottom: 0;
+}
 .property_thumb {
   float: left;
   width: 100px;
@@ -295,6 +298,7 @@ ul.header-inner li a:hover.button:before{
     width: auto;
     height: 100px;
     margin: 0 auto;
+    image-rendering: pixelated;
 }
 .property_detail {
     display: grid;
@@ -338,6 +342,12 @@ ul.header-inner li a:hover.button:before{
   background-color: #fff;
   color: #03A9F4;
   transition: all 0.3s linear;
+}
+.ts-helper.ac-inac{
+  background-color: rgba(76, 175, 80, 0.5);
+}
+.ts-helper.ac-inac:before{
+  background-color: #4CAF50;
 }
 /*************** Dashboard ***************/
 .home_block{
