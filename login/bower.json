@@ -39,7 +39,8 @@
     "angular": "1.4.7",
     "angularfire": "^2.3.0",
     "ng-table-bundle": "^4.0.0",
-    "ng-clipboard": "^1.0.0"
+    "ng-clipboard": "^1.0.0",
+    "angular-moment": "^1.0.1"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"

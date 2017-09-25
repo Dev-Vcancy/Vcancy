@@ -1,26 +1,28 @@
 'use strict';
 
 //=================================================
-// CUSTOM EMAIL HANDLE
+// Custom Email Handler
 //=================================================
 
-vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams) {
+vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window) {
 	
 	var mode = $stateParams.mode;
-	var oobCode = $stateParams.oobCode;	
-	this.mode = mode;	
+	var oobCode = $stateParams.oobCode;
+	// localStorage.setItem('emailHandled',"");
+	$rootScope.emailhandler = '';
 	
-	// console.log($stateParams);
-	if(mode == 'verifyEmail'){
+	this.mode = mode;
+	
+	console.log($stateParams);
+	if(mode == 'verifyEmail') {
 		firebase.auth().applyActionCode(oobCode).then(function(resp) {
-			console.log("Thanks for verifying your email.");
-			$rootScope.emailhandler = "Thanks for verifying your email.";
-		}).catch(function(error) {	
+			localStorage.setItem('emailHandled', "Thanks for verifying your email.");
+		}).catch(function(error) {
+			localStorage.setItem('emailHandled', error.message);
 			console.log(error.message, error.reason);
-			if(error.message != "undefined"){
-				$rootScope.emailhandler = error.message;
-			}
-        })			
+        })	
+		
+		$rootScope.emailhandler = localStorage.getItem('emailHandled');	
 		
 	} else if(mode == 'resetPassword'){
 		  var accountEmail;

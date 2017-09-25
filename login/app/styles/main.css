@@ -349,6 +349,15 @@ ul.header-inner li a:hover.button:before{
 .ts-helper.ac-inac:before{
   background-color: #4CAF50;
 }
+
+.ts-helper.ac-ac{
+  background-color: rgba(244, 67, 54, 0.5);
+}
+.ts-helper.ac-ac:before{
+  background-color: rgb(244, 67, 54);
+}
+
+
 /*************** Dashboard ***************/
 .home_block{
 	padding: 0px 0;
