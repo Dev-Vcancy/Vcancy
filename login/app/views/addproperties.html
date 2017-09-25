@@ -18,7 +18,7 @@
 						<div class='message' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>	
 						<div class='message' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div></div>
 						<div class="card-header" style="overflow:auto;"><h1  class="pull-left" >{{propctrl.mode}}  Property</h1>						
-							<div class="pull-right fileinput fileinput-new" data-provides="fileinput">
+							<div class="pull-right fileinput {{propctrl.prop.propimg === ''? 'fileinput-new' : 'fileinput-exists'}}" data-provides="fileinput">
 								<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100px; height: 74px; border:1px solid #ccc;">
 								<img src="{{propctrl.prop.propimg}}" style="width:100%; margin-top:0 !important;"/>
 								</div>
@@ -54,7 +54,7 @@
 							</div>
 
 							<div class="col-sm-4 m-b-20">
-								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" ng-required class="form-control" placeholder="# of units">
+								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" ng-required class="form-control" placeholder="Unit number">
 							</div>
 
 							<div class="col-sm-2 m-b-20">
