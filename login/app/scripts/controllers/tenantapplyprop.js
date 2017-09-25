@@ -7,7 +7,7 @@
 vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window) {
 	
 	var vm = this;
-	
+	// Fetching property Data
 	var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snapshot) {
 	var propData = snapshot.val();
 	vm.timeSlot = [];
@@ -28,50 +28,47 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 			propertylink: propData.propertylink
 		}
 		angular.forEach(propData.date, function(value, key) {
-			console.log(value);
-		  vm.timeSlot.push({date: new Date(value)});
+			// console.log(value);
 		  vm.applyprop.date.push(value);
 		  vm.applyprop.fromtime.push(propData.fromtime[key]);
 		  vm.applyprop.to.push(propData.to[key]);
 		  vm.applyprop.limit.push(propData.limit[key]);
 		});
 		
-		console.log(vm.timeSlot)
 	});
 	});
 	
 	
-	// Property Apply form data save		
-	vm.applyProp = function(applydata){
-		// console.log(applydata);
+	// Property Application form - Data of tenant save		
+	vm.tenantapply = function(applyprop){
+		// console.log(vm.applyprop);
 		
-		var propID = applydata.propID;
-		var name = applydata.name;
-		var location = applydata.location;
-		var age = applydata.age; 
-		var jobtitle = applydata.jobtitle; 
-		var landlordID =  applydata.landlordID;
-		var description = applydata.description; 
-		var selectslot = applydata.selectslot;
+		var propID = vm.applyprop.propID;
+		var name = vm.applyprop.name;
+		var tenantlocation = vm.applyprop.tenantlocation;
+		var age = vm.applyprop.age; 
+		var jobtitle = vm.applyprop.jobtitle; 
+		var landlordID =  vm.applyprop.landlordID;
+		var description = vm.applyprop.description; 
+		var datetimeslot = vm.applyprop.datetimeslot;
 		
 		var applypropObj = $firebaseAuth();			
 		var applypropdbObj = firebase.database();
 		
-		// applypropdbObj.ref('applyprop/').push().set({	
-			// landlordID: landlordID,
-			// propimg: propimg,
-			// propstatus: propstatus,
-			// proptype: proptype,
-			// units: units,
-			// shared: shared, 
-			// address: address, 
-			// date: date,
-			// fromtime: fromtime,
-			// to: to,
-			// limit: limit
-		// }).then(function(){
-			// $rootScope.success = 'Property added successfully. Property Link is also generated.';			
-		// })	
+		applypropdbObj.ref('applyprop/').push().set({	
+			propID : propID,
+			name : name,
+			tenantlocation : tenantlocation,
+			age : age, 
+			jobtitle : jobtitle, 
+			landlordID :  landlordID,
+			description : description, 
+			datetimeslot : datetimeslot	
+		}).then(function(){
+			$state.go('applicationThanks');
+			// $rootScope.success = 'Application for property successfully sent!';	
+			console.log('Application for property successfully sent!');
+		})	
 	}
 
 }])

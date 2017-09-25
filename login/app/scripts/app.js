@@ -19,7 +19,8 @@ var vcancyApp = angular
     'nouislider',
     'ngTable',
 	'firebase',
-	'ng-clipboard'
+	'ng-clipboard',
+	'angularMoment'
   ]);
   
 vcancyApp  
@@ -119,7 +120,8 @@ vcancyApp
 	  var app = firebase.initializeApp(config);	  
 	  
 	$urlRouterProvider.otherwise("/");
-	$stateProvider			
+	$stateProvider	
+		// Public Routes
 	   .state ('login', {
 			url: '/',
 			controller: 'loginCtrl',
@@ -132,6 +134,7 @@ vcancyApp
 			templateUrl: 'views/termspublic.html',	
 		}) 
 		
+		// Landlord Routes
 		.state ('landlorddashboard', {
 			url: '/landlorddboard',
 			controller: 'maCtrl',
@@ -139,34 +142,7 @@ vcancyApp
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
 		})
-		.state ('tenantdashboard', {
-			url: '/tenantdashboard',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
-			templateUrl: 'views/tenant.html',
-			resolve: { authenticate: authenticate }
-		})
-		.state ('tenantapply', {
-			url: '/applyproperty/{propId}',
-			controller: 'applypropCtrl',
-			controllerAs: 'applyctrl',
-			templateUrl: 'views/applyproperty.html',
-			resolve: { authenticate: authenticate }
-		})
-		.state ('tenantschedule', {
-			url: '/tenantschedule',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
-			templateUrl: 'views/tenant_schedule.html',
-			resolve: { authenticate: authenticate }
-		})
-		.state ('tenantapplications', {
-			url: '/tenantapplications',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
-			templateUrl: 'views/tenant_app.html',
-			resolve: { authenticate: authenticate }
-		})
+		
 		.state ('viewprop', {
 			url: '/myprop',
 			controller: 'propertyCtrl',
@@ -174,6 +150,7 @@ vcancyApp
 			templateUrl: 'views/viewproperties.html',
 			resolve: { authenticate: authenticate }
 		}) 
+		
 		.state ('editprop', {
 			url: '/editprop/{propId}',
 			controller: 'propertyCtrl',
@@ -181,6 +158,7 @@ vcancyApp
 			templateUrl: 'views/addproperties.html',
 			resolve: { authenticate: authenticate }
 		})
+		
 		.state ('customemailhandler', {
 			url: '/auth?{mode}&{oobCode}&{apiKey}',
 			controller: 'emailhandlerCtrl',
@@ -188,6 +166,7 @@ vcancyApp
 			templateUrl: 'views/customhandler.html',
 			// resolve: { authenticate: authenticate }
 		})
+		
 		 .state ('addprop', {
 			url: '/addprop',
 			controller: 'propertyCtrl',
@@ -195,16 +174,19 @@ vcancyApp
 			templateUrl: 'views/addproperties.html',
 			resolve: { authenticate: authenticate }
 		})
+		
 		.state ('schedule', {
 			url: '/schedule',
 			templateUrl: 'views/schedule.html',
 			resolve: { authenticate: authenticate }
 		})
+		
 		.state ('app', {
 			url: '/app',
 			templateUrl: 'views/app.html',
 			resolve: { authenticate: authenticate }
 		})  
+		
 		.state ('faq', {
 			url: '/faq',
 			controller: 'maCtrl',
@@ -212,6 +194,7 @@ vcancyApp
 			templateUrl: 'views/faq.html',
 			resolve: { authenticate: authenticate }
 		}) 
+		
 		.state ('contact', {
 			url: '/contact',
 			controller: 'maCtrl',
@@ -219,6 +202,7 @@ vcancyApp
 			templateUrl: 'views/contact.html',
 			resolve: { authenticate: authenticate }
 		}) 
+		
 		.state ('security', {
 			url: '/security',
 			controller: 'maCtrl',
@@ -226,13 +210,55 @@ vcancyApp
 			templateUrl: 'views/security.html',
 			resolve: { authenticate: authenticate }
 		}) 
+		
 		.state ('terms', {
 			url: '/terms',
 			controller: 'maCtrl',
 			controllerAs: 'mactrl',
 			templateUrl: 'views/terms.html',
 			resolve: { authenticate: authenticate }
-		});
+		})
+		
+		// Tenant Routes
+		.state ('tenantdashboard', {
+			url: '/tenantdashboard',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/tenant.html',
+			resolve: { authenticate: authenticate }
+		})
+		
+		.state ('tenantapply', {
+			url: '/applyproperty/{propId}',
+			controller: 'applypropCtrl',
+			controllerAs: 'applyctrl',
+			templateUrl: 'views/applyproperty.html',
+			resolve: { authenticate: authenticate }
+		})
+		
+		.state ('applicationThanks', {
+			url: '/applicationThanks',
+			controller: 'applypropCtrl',
+			controllerAs: 'applyctrl',
+			templateUrl: 'views/applypropsuccess.html',
+			resolve: { authenticate: authenticate }
+		})
+		
+		.state ('tenantschedule', {
+			url: '/tenantschedule',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/tenant_schedule.html',
+			resolve: { authenticate: authenticate }
+		})
+		
+		.state ('tenantapplications', {
+			url: '/tenantapplications',
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/tenant_app.html',
+			resolve: { authenticate: authenticate }
+		})
 		
 		
 		function authenticate($q,$state, $timeout, $rootScope) {
