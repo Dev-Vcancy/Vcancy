@@ -115,7 +115,7 @@
     this.$hidden.val('')
     this.$hidden.attr('name', this.name)
     this.$input.attr('name', '')
-
+	
     //ie8+ doesn't support changing the value of input with type=file so clone instead
     if (isIE) { 
       var inputClone = this.$input.clone(true);
@@ -129,6 +129,7 @@
     this.$preview.html('')
     this.$element.find('.fileinput-filename').text('')
     this.$element.addClass('fileinput-new').removeClass('fileinput-exists')
+	this.$element.find('#propimg').val('');
     
     if (e !== undefined) {
       this.$input.trigger('change')
