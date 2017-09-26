@@ -20,7 +20,8 @@ var vcancyApp = angular
     'ngTable',
 	'firebase',
 	'ng-clipboard',
-	'angularMoment'
+	'angularMoment',
+	'gm'
   ]);
   
 vcancyApp  
