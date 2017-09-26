@@ -164,7 +164,6 @@ vcancyApp
 			controller: 'emailhandlerCtrl',
 			controllerAs: 'ehandlectrl',
 			templateUrl: 'views/customhandler.html',
-			// resolve: { authenticate: authenticate }
 		})
 		
 		 .state ('addprop', {
@@ -177,6 +176,8 @@ vcancyApp
 		
 		.state ('schedule', {
 			url: '/schedule',
+			controller: 'scheduleCtrl',
+			controllerAs: 'schedulectrl',
 			templateUrl: 'views/schedule.html',
 			resolve: { authenticate: authenticate }
 		})
@@ -225,7 +226,7 @@ vcancyApp
 			controller: 'maCtrl',
 			controllerAs: 'mactrl',
 			templateUrl: 'views/tenant.html',
-			resolve: { authenticate: authenticate }
+			resolve: { authenticate: tenantauthenticate }
 		})
 		
 		.state ('tenantapply', {
@@ -233,7 +234,7 @@ vcancyApp
 			controller: 'applypropCtrl',
 			controllerAs: 'applyctrl',
 			templateUrl: 'views/applyproperty.html',
-			resolve: { authenticate: authenticate }
+			resolve: { authenticate: tenantauthenticate }
 		})
 		
 		.state ('applicationThanks', {
@@ -241,7 +242,7 @@ vcancyApp
 			controller: 'applypropCtrl',
 			controllerAs: 'applyctrl',
 			templateUrl: 'views/applypropsuccess.html',
-			resolve: { authenticate: authenticate }
+			resolve: { authenticate: tenantauthenticate }
 		})
 		
 		.state ('tenantschedule', {
@@ -249,7 +250,7 @@ vcancyApp
 			controller: 'maCtrl',
 			controllerAs: 'mactrl',
 			templateUrl: 'views/tenant_schedule.html',
-			resolve: { authenticate: authenticate }
+			resolve: { authenticate: tenantauthenticate }
 		})
 		
 		.state ('tenantapplications', {
@@ -257,7 +258,7 @@ vcancyApp
 			controller: 'maCtrl',
 			controllerAs: 'mactrl',
 			templateUrl: 'views/tenant_app.html',
-			resolve: { authenticate: authenticate }
+			resolve: { authenticate: tenantauthenticate }
 		})
 		
 		
@@ -269,7 +270,33 @@ vcancyApp
 				 $rootScope.emailVerified  = localStorage.getItem('userEmailVerified');
 			 } 
 			  
-			if ($rootScope.uid && $rootScope.emailVerified) {				
+			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype ) {				
+				// Resolve the promise successfully
+				return $q.when()			
+				
+			} else {
+				  // The next bit of code is asynchronously tricky.
+
+				  $timeout(function() {
+				  // This code runs after the authentication promise has been rejected.
+				  // Go to the log-in page
+				  $state.go('login')
+				})
+
+				// Reject the authentication promise to prevent the state from loading
+				return $q.reject()
+			}
+		}
+		
+		function tenantauthenticate($q,$state, $timeout, $rootScope) {
+			// console.log($rootScope.user.emailVerified);
+			
+			if(localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified')!== "null"){
+				 $rootScope.uid  = localStorage.getItem('userID');
+				 $rootScope.emailVerified  = localStorage.getItem('userEmailVerified');
+			 } 
+			  
+			if ($rootScope.uid && $rootScope.emailVerified && !$rootScope.usertype ) {				
 				// Resolve the promise successfully
 				return $q.when()			
 				

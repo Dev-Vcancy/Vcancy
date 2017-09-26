@@ -35,6 +35,11 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 		  vm.applyprop.limit.push(propData.limit[key]);
 		});
 		
+		// If property is inactive tenant can't apply for the application
+		if(vm.applyprop.propstatus == false){
+			$state.go('tenantdashboard');
+		}
+		
 	});
 	});
 	
