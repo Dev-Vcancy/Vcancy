@@ -88,13 +88,13 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	// to remove timeslots
 	vm.removeTimeSlot = function(slotindex){
-		// console.log(slotindex);
+		console.log(slotindex);
+		console.log(vm.prop.limit[slotindex]);
 		vm.timeSlot.splice(slotindex,1);
 		vm.prop.date.splice(slotindex,1);
 		vm.prop.fromtime.splice(slotindex,1);
 		vm.prop.to.splice(slotindex,1);
-		vm.prop.limit.splice(slotindex,1);
-		
+		vm.prop.limit.splice(slotindex,1);		
 	}
 	
 	// Go Back To View Property
@@ -117,8 +117,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			var date = [];
 			var fromtime = [];
 			var to = [];
-			var limit = [];
-			
+			var limit = [];			
 			angular.forEach(property.limit, function(lval, key) {
 				date[key] = property.date[key].toString();
 				fromtime[key] = property.fromtime[key].toString();
@@ -179,9 +178,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 						units : '',
 						shared : '',	
 						address : '',
-						// date : vm.timeSlot ,
-						// fromtime : vm.timeSlot ,
-						// to : vm.timeSlot ,
+						date : [],
+						fromtime : [],
+						to : [],
 						limit : [],
 						propertylink: ''
 					}
@@ -289,9 +288,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			units : '',
 			shared : '',
 			address : '',
-			date : {date:todaydate},
-			fromtime :{date:todaydate},
-			to : {date:todaydate},
+			date : [],
+			fromtime : [],
+			to : [],
 			limit : [],
 			propertylink: ''
 		}
