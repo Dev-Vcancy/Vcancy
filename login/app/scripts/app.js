@@ -226,7 +226,7 @@ vcancyApp
 			controller: 'maCtrl',
 			controllerAs: 'mactrl',
 			templateUrl: 'views/tenant.html',
-			resolve: { authenticate: tenantauthenticate }
+			resolve: { tenantauthenticate: tenantauthenticate }
 		})
 		
 		.state ('tenantapply', {
@@ -234,7 +234,7 @@ vcancyApp
 			controller: 'applypropCtrl',
 			controllerAs: 'applyctrl',
 			templateUrl: 'views/applyproperty.html',
-			resolve: { authenticate: tenantauthenticate }
+			resolve: { tenantauthenticate: tenantauthenticate }
 		})
 		
 		.state ('applicationThanks', {
@@ -242,7 +242,7 @@ vcancyApp
 			controller: 'applypropCtrl',
 			controllerAs: 'applyctrl',
 			templateUrl: 'views/applypropsuccess.html',
-			resolve: { authenticate: tenantauthenticate }
+			resolve: { tenantauthenticate: tenantauthenticate }
 		})
 		
 		.state ('tenantschedule', {
@@ -250,7 +250,7 @@ vcancyApp
 			controller: 'maCtrl',
 			controllerAs: 'mactrl',
 			templateUrl: 'views/tenant_schedule.html',
-			resolve: { authenticate: tenantauthenticate }
+			resolve: { tenantauthenticate: tenantauthenticate }
 		})
 		
 		.state ('tenantapplications', {
@@ -258,16 +258,17 @@ vcancyApp
 			controller: 'maCtrl',
 			controllerAs: 'mactrl',
 			templateUrl: 'views/tenant_app.html',
-			resolve: { authenticate: tenantauthenticate }
+			resolve: { tenantauthenticate: tenantauthenticate }
 		})
 		
 		
 		function authenticate($q,$state, $timeout, $rootScope) {
 			// console.log($rootScope.user.emailVerified);
 			
-			if(localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified')!== "null"){
+			if(localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified')!== "null" && localStorage.getItem('usertype') != "null" ){
 				 $rootScope.uid  = localStorage.getItem('userID');
 				 $rootScope.emailVerified  = localStorage.getItem('userEmailVerified');
+				 $rootScope.usertype = localStorage.getItem('usertype');
 			 } 
 			  
 			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype ) {				
@@ -291,9 +292,10 @@ vcancyApp
 		function tenantauthenticate($q,$state, $timeout, $rootScope) {
 			// console.log($rootScope.user.emailVerified);
 			
-			if(localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified')!== "null"){
+			if(localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified')!== "null" && localStorage.getItem('usertype') != "null"){
 				 $rootScope.uid  = localStorage.getItem('userID');
 				 $rootScope.emailVerified  = localStorage.getItem('userEmailVerified');
+				 $rootScope.usertype = localStorage.getItem('usertype');
 			 } 
 			  
 			if ($rootScope.uid && $rootScope.emailVerified && !$rootScope.usertype ) {				
