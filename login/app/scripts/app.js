@@ -271,7 +271,7 @@ vcancyApp
 				 $rootScope.usertype = localStorage.getItem('usertype');
 			 } 
 			  
-			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype ) {				
+			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype == "1" ) {				
 				// Resolve the promise successfully
 				return $q.when()			
 				
@@ -298,7 +298,7 @@ vcancyApp
 				 $rootScope.usertype = localStorage.getItem('usertype');
 			 } 
 			  
-			if ($rootScope.uid && $rootScope.emailVerified && !$rootScope.usertype ) {				
+			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype == "0" ) {				
 				// Resolve the promise successfully
 				return $q.when()			
 				
