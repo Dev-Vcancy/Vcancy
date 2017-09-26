@@ -3,10 +3,6 @@
       
         <!-- Login -->
         <div class="lc-block" id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1">
-            <div class='text-center m-b-20 form_btns'>
-                <a href='javascript:void(0);' class="btn bgm-cyan waves-effect" data-block="#l-login"  data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In</a>
-                <a href='javascript:void(0);' data-block="#l-register" class="btn bgm-bluegray waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1;lctrl.login = 0">Sign Up</a>
-            </div>
             <div class="input-group m-b-20">
 			</div>
 			<form name="loginForm" ng-submit="lctrl.loginUser(user)" role="form" novalidate>
@@ -29,15 +25,14 @@
 				<button type="submit" ng-disabled="loginForm.$invalid" class="btn btn-success pull-right"> Sign In <i class="zmdi zmdi-arrow-forward"></i></button>
                                 <div class="clearfix"></div>
                                 <p class='text-center'><a data-block="#l-forget-password" data-ng-click="lctrl.login = 0; lctrl.forgot = 1" href='javascript:void(0);' class='a-title'>Forgot Password?</a></p>
+                                <hr>
+                                <p class='text-center'>Don't have an account yet?</p>
+                                <a href='javascript:void(0);' data-block="#l-register" class="btn btn-block bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1;lctrl.login = 0">Sign Up <i class="zmdi zmdi-arrow-forward"></i></a>
 			</form>
                 </div>
 
         <!-- Register -->
         <div class="lc-block" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 1 }" data-ng-if="lctrl.register === 1">			
-			<div class='text-center m-b-20 form_btns'>
-               <a href='javascript:void(0);'  data-block="#l-login" class="btn bgm-bluegray waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In</a>
-                <a href='javascript:void(0);'  data-block="#l-register" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1;lctrl.login = 0">Sign Up</a>
-            </div>
 			<form name="regForm" ng-submit="lctrl.registerUser(lctrl.reguser)" role="form" novalidate>
 				<div class='regmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>	
 				<div class='regmsgvalidate' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div></div>				
@@ -80,7 +75,6 @@
 					<span>By creating an account, you agree to <a target="_blank"   href='#/termsofuse'>Terms of use</a></span> 
 				</div>
 				<div class="clearfix"></div>
-				
 				<!-- <div class="form-group col-sm-12 m-b-20"  style='display:-webkit-box;'> -->
 					<!-- <span>Already have an account? <a href="" data-block="#l-login"  ng-click="lctrl.register = 0; lctrl.login = 1">Login</a></span>  -->
 				<!-- </div> -->
@@ -95,16 +89,15 @@
 
 				<button type="submit" ng-disabled="regForm.$invalid"  class="btn btn-success pull-right">Sign Up <i class="zmdi zmdi-arrow-forward"></i></button>
 			</form>
-			
+            <div class="clearfix"></div>
+                            <hr>
+                            <p class='text-center'>Already have an account?</p>
+                                <a href='javascript:void(0);'  data-block="#l-login" class="btn bgm-cyan btn-block waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In <i class="zmdi zmdi-arrow-forward"></i></a>
 			</div>
 
         <!-- Forgot Password -->
         <div class="lc-block" id="l-forget-password" data-ng-class="{ 'toggled': lctrl.forgot === 1 }" data-ng-if="lctrl.forgot === 1">
-            <div class='text-center m-b-20 form_btns'>
-                <a href='javascript:void(0);'  data-block="#l-login" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In</a>
-                <a href='javascript:void(0);'  data-block="#l-register" class="btn bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1;lctrl.login = 0">Sign Up</a>
-            </div>            
-			<form name="forgotpwdForm" ng-submit="lctrl.forgotpwdmail(lctrl.forgotuser)" role="form" novalidate>
+                      <form name="forgotpwdForm" ng-submit="lctrl.forgotpwdmail(lctrl.forgotuser)" role="form" novalidate>
 				<div class='msgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>	
 				<div class='msgvalidate' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div></div>
 				<p class="text-justify">Please provide the email address that you used when you signed up for your account. We will send you an email that will allow you to reset your password.</p>
@@ -116,6 +109,10 @@
 				</div>
 				<button type="submit" ng-disabled="forgotpwdForm.$invalid"  class="btn btn-success pull-right">Submit <i class="zmdi zmdi-arrow-forward"></i></button>
 			</form>
+            <div class="clearfix"></div>
+                            <hr>
+                            <p class='text-center'>You remember your password?</p>
+                                <a href='javascript:void(0);'  data-block="#l-login" class="btn bgm-cyan btn-block waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In <i class="zmdi zmdi-arrow-forward"></i></a>
         </div>
 
 <footer data-ng-include="'views/template/publicfooter.html'"></footer>
