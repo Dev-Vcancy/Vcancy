@@ -35,6 +35,11 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 		  vm.applyprop.limit.push(propData.limit[key]);
 		});
 		
+		// If property is inactive tenant can't apply for the application
+		if(vm.applyprop.propstatus == false){
+			$state.go('tenantdashboard');
+		}
+		
 	});
 	});
 	
@@ -42,7 +47,7 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 	// Property Application form - Data of tenant save		
 	vm.tenantapply = function(applyprop){
 		// console.log(vm.applyprop);
-		
+		var tenantID = localStorage.getItem('userID');
 		var propID = vm.applyprop.propID;
 		var name = vm.applyprop.name;
 		var tenantlocation = vm.applyprop.tenantlocation;
@@ -55,7 +60,8 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 		var applypropObj = $firebaseAuth();			
 		var applypropdbObj = firebase.database();
 		
-		applypropdbObj.ref('applyprop/').push().set({	
+		applypropdbObj.ref('applyprop/').push().set({
+			tenantID: tenantID,
 			propID : propID,
 			name : name,
 			tenantlocation : tenantlocation,

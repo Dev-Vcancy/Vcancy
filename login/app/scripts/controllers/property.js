@@ -7,11 +7,18 @@
 vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window) {
 	$rootScope.invalid = '';
 	$rootScope.success = '';
-	$rootScope.error = '';
+	$rootScope.error = '';		
 		
 	var todaydate = new Date();
 	var vm = this;
 	vm.propsavail = 1;
+	
+	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
+      var address = vm.prop.address.getPlace();
+	  vm.prop.address = address.formatted_address;
+	  $scope.$apply();
+	});
+	
 	
 	// DATEPICKER
 		vm.today = function() {
@@ -104,7 +111,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	// Add/Edit Property		
 	vm.submitProp = function(property){
-			// console.log(property);
+			console.log(property);
 			
 			var propID = property.propID;
 			var propimg = $('#propimg').val();	
