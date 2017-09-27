@@ -57,6 +57,12 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 		var landlordID =  vm.applyprop.landlordID;
 		var description = vm.applyprop.description; 
 		var datetimeslot = vm.applyprop.datetimeslot;
+		var dateslot = vm.applyprop.date[datetimeslot];
+		var fromtimeslot = vm.applyprop.fromtime[datetimeslot];
+		var toslot = vm.applyprop.to[datetimeslot];
+		
+		// console.log(dateslot,fromtimeslot,toslot);
+		
 		
 		var applypropObj = $firebaseAuth();			
 		var applypropdbObj = firebase.database();
@@ -72,7 +78,10 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 			jobtitle : jobtitle, 
 			landlordID :  landlordID,
 			description : description, 
-			datetimeslot : datetimeslot	
+			datetimeslot : datetimeslot,
+			dateslot: dateslot,
+			fromtimeslot: fromtimeslot,
+			toslot: toslot
 		}).then(function(){
 			$state.go('applicationThanks');
 			// $rootScope.success = 'Application for property successfully sent!';	
