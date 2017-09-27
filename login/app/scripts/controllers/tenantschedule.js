@@ -1,16 +1,16 @@
 'use strict';
 
 //=================================================
-// Landlord Schedule
+// Tenant Schedule
 //=================================================
 
 vcancyApp
-    .controller('scheduleCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce,NgTableParams) {
+    .controller('tenantscheduleCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
 		
 		var vm = this;
-		var landlordID = localStorage.getItem('userID');
+		var tenantID = localStorage.getItem('userID');
 		
-		var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
+		var propdbObj = firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
 			$scope.$apply(function(){
 				if(snapshot.val()) {
@@ -18,14 +18,19 @@ vcancyApp
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
 						return [value];
 					});
+					
+					
+					// vm.tabledata = [];
+					// $.map(snapshot.val(), function(value, index) {
+						// vm.tabledata[index] = value;
+					// });
+						
 		
 					vm.cols = [
-						  { field: "name", title: "Name", sortable: "name", show: true },
-						  { field: "tenantlocation", title: "Location", sortable: "tenantlocation", show: true },
-						  { field: "jobtitle", title: "Profession", sortable: "jobtitle", show: true },
-						  { field: "age", title: "Age", sortable: "age", show: true },
-						  { field: "datetimeslot", title: "Date/Time", sortable: "datetimeslot", show: true },
-						  { field: "description", title: "About", sortable: "description", show: true }
+						  { field: "address", title: "Address", sortable: "address", show: true },
+						  { field: "datetimeslot", title: "Date", sortable: "datetimeslot", show: true },
+						  { field: "datetimeslot", title: "Time", sortable: "datetimeslot", show: true },
+						  { field: "schedulestatus", title: "Status", sortable: "schedulestatus", show: true }
 						];
 					
 					//Sorting
@@ -51,10 +56,6 @@ vcancyApp
 				}
 			});
 		});
-		
-		vm.confirmschedule = function(index){
-			console.log(index);
-		}
 		
 		vm.cancelschedule = function(index){
 			console.log(index);
