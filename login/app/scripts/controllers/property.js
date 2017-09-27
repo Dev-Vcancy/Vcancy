@@ -7,17 +7,35 @@
 vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window) {
 	$rootScope.invalid = '';
 	$rootScope.success = '';
-	$rootScope.error = '';		
+	$rootScope.error = '';	
 		
+	
+	
 	var todaydate = new Date();
 	var vm = this;
 	vm.propsavail = 1;
 	
 	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
       var address = vm.prop.address.getPlace();
+	  // console.log(address);
 	  vm.prop.address = address.formatted_address;
 	  $scope.$apply();
 	});
+	
+	
+	vm.copy = "Copy link";		
+	$scope.copySuccess = function(e) {
+		console.info('Action:', e.action);
+		console.info('Text:', e.text);
+		console.info('Trigger:', e.trigger);
+		vm.copy = "Copied";
+		// e.clearSelection();
+	
+		console.log(vm.copy);
+		$scope.$apply();
+	};
+	
+	console.log(vm.copy);
 	
 	
 	// DATEPICKER
@@ -127,8 +145,19 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			var limit = [];			
 			angular.forEach(property.limit, function(lval, key) {
 				date[key] = property.date[key].toString();
-				fromtime[key] = property.fromtime[key].toString();
-				to[key] = property.to[key].toString();
+				if(property.fromtime[key] === undefined){
+					fromtime[key]  =  new Date().toString();					
+				} else {
+					fromtime[key] = property.fromtime[key].toString();					
+				}
+				
+				if(property.to[key] === undefined){
+					to[key] = new Date().toString();
+				} else {
+					to[key] = property.to[key].toString();
+				}
+									
+				// console.log(fromtime[key]);
 				limit[key] = lval;
 			});
 						
@@ -242,6 +271,21 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			});
 		   
 		});
+			
+	
+		vm.toggleSwitch = function(key){
+			console.log(key);
+			var propstatus = !vm.viewprops[key].propstatus;
+			console.log(propstatus);	
+			
+			// update the property status to property table
+			firebase.database().ref('properties/'+key).update({	
+				propstatus: propstatus
+			})
+			
+		}
+	
+	
 	}
 
 	// Edit Property

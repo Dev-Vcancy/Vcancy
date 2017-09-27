@@ -32,16 +32,17 @@
 
 							<div class="property_detail">						
 								<h3>{{x.address}} </h3>
-        						<p>{{x.propertylink}}</p>
-        						<div class="toggle-switch p-t-5 p-b-5" data-ts-color="green" ng-show="x.propstatus===true">
-			                        <span>ACTIVE</span> <input id="ts1" type="checkbox" hidden="hidden" disabled="disabled">
-			                        <label for="ts1" class="ts-helper ac-inac m-l-10 m-r-10"></label><span>INACTIVE</span>
+        						<div class="toggle-switch p-t-5 p-b-5" data-ts-color="" ng-show="x.propstatus===true">
+			                        <span>ACTIVE</span> <input ng-click="propctrl.toggleSwitch(key)" id="active{{key}}" type="checkbox" hidden="hidden">
+			                        <label  for="active{{key}}" class="ts-helper m-l-10 m-r-10"></label><span>INACTIVE</span>
 			                    </div>
-								<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===false">
-			                        <span>ACTIVE</span> <input id="ts2" type="checkbox" checked hidden="hidden" disabled="disabled">
-			                        <label for="ts2" class="ts-helper ac-ac  m-l-10 m-r-10"></label><span>INACTIVE</span>
+								<div class="toggle-switch p-t-5 p-b-5" data-ts-color="" ng-show="x.propstatus===false">
+			                        <span>ACTIVE</span> <input ng-click="propctrl.toggleSwitch(key)" id="inac{{key}}" type="checkbox" checked="checked" hidden="hidden">
+			                        <label for="inac{{key}}"  class="ts-helper  m-l-10 m-r-10"></label><span>INACTIVE</span>
 			                    </div>
 								<a href="#/editprop/{{key}}">Edit</a>
+								<input type="hidden" disabled="true" ng-model="x.propertylink" id="propertylink"/>
+								<a class="copylink_view" ><i tooltip-class="tooltip-blue" uib-tooltip="{{propctrl.copy}}" ng-copy="x.propertylink" onSuccess="propctrl.copySuccess(e)" class="zmdi zmdi-copy zmdi-hc-fw" style="font-size:25px;" ></i></a>
 							</div>
 						</div>
 					</div>

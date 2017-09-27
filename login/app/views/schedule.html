@@ -1,12 +1,4 @@
-<style>
-.ng-table th.sortable {
-    position: relative;
-}
-.table > thead > tr > th {
-    background-color: #fff;
-	color: #fff; 
-}
-</style>
+
 <header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
 
 <section id="main">
@@ -38,23 +30,14 @@
 	         	</div>
 				<div class="card-body">
 					<div class="table-responsive">
-						<table ng-table="schedulectrl.tableSorting"  class="table table-striped table-vmiddle">
+						<table ng-table-dynamic="schedulectrl.tableSorting with schedulectrl.cols"  class="table table-striped table-vmiddle">
 							<tr ng-repeat="w in schedulectrl.tabledata">
-								<td data-title="'Name'" sortable="'name'">
-									{{ w.name }}
-								</td>
-								<td data-title="'Location'" sortable="'tenantlocation'" >
-									{{ w.tenantlocation }}
-								</td>
-								<td data-title="'Profession'" sortable="'jobtitle'">
-									{{ w.jobtitle }}
-								</td>
-								<td data-title="'Age'" sortable="'age'">
-									{{ w.age }}
-								</td>								
-								<td data-title="'About'" sortable="'description'">
-									{{ w.description }}
-								</td>			           
+								<td ng-repeat="col in schedulectrl.cols">{{w[col.field]}}</td>
+								<td>
+									<a class="btn btn-xs btn-success">Confirm</a>
+									<a class="btn btn-xs btn-danger">Cancel</a>
+									
+								</td>		           
 							</tr>
 						</table>		               
 		            </div>
