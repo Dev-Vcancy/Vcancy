@@ -18,18 +18,19 @@ var vcancyApp = angular
     'oc.lazyLoad',
     'nouislider',
     'ngTable',
+	// 'ngTableDemos',
 	'firebase',
 	'ng-clipboard',
 	'angularMoment',
 	'gm'
-  ]);
+  ]); 
   
 vcancyApp  
  .directive('loginHeader', function() {
   return {
     controller: 'headerCtrl',
 	controllerAs: 'hctrl',
-	templateUrl: 'views/template/header.html',
+	templateUrl: 'views/template/header-top.html',
   };
 }); 
 
@@ -118,8 +119,8 @@ vcancyApp
 		storageBucket: "vcancy-5e3b4.appspot.com",
 		messagingSenderId: "330892868858"
 	  };
-	  var app = firebase.initializeApp(config);	  
-	  
+	  var app = firebase.initializeApp(config);	 
+	
 	$urlRouterProvider.otherwise("/");
 	$stateProvider	
 		// Public Routes

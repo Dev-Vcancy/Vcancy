@@ -49,6 +49,7 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 		// console.log(vm.applyprop);
 		var tenantID = localStorage.getItem('userID');
 		var propID = vm.applyprop.propID;
+		var address = vm.applyprop.address;
 		var name = vm.applyprop.name;
 		var tenantlocation = vm.applyprop.tenantlocation;
 		var age = vm.applyprop.age; 
@@ -63,6 +64,8 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 		applypropdbObj.ref('applyprop/').push().set({
 			tenantID: tenantID,
 			propID : propID,
+			address: address,
+			schedulestatus: "pending",
 			name : name,
 			tenantlocation : tenantlocation,
 			age : age, 
