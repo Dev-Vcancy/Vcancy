@@ -139,8 +139,8 @@ vcancyApp
 		// Landlord Routes
 		.state ('landlorddashboard', {
 			url: '/landlorddboard',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
+			controller: 'landlorddboardlCtrl',
+			controllerAs: 'ldboardctrl',
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
 		})
@@ -225,8 +225,8 @@ vcancyApp
 		// Tenant Routes
 		.state ('tenantdashboard', {
 			url: '/tenantdashboard',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
+			controller: 'tenantdboardlCtrl',
+			controllerAs: 'tdboardctrl',
 			templateUrl: 'views/tenant.html',
 			resolve: { tenantauthenticate: tenantauthenticate }
 		})
@@ -249,8 +249,8 @@ vcancyApp
 		
 		.state ('tenantschedule', {
 			url: '/tenantschedule',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
+			controller: 'tenantscheduleCtrl',
+			controllerAs: 'tschedulectrl',
 			templateUrl: 'views/tenant_schedule.html',
 			resolve: { tenantauthenticate: tenantauthenticate }
 		})
