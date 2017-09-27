@@ -28,8 +28,9 @@ vcancyApp
 		
 					vm.cols = [
 						  { field: "address", title: "Address", sortable: "address", show: true },
-						  { field: "datetimeslot", title: "Date", sortable: "datetimeslot", show: true },
-						  { field: "datetimeslot", title: "Time", sortable: "datetimeslot", show: true },
+						  { field: "dateslot", title: "Date", sortable: "dateslot", show: true },
+						  { field: "fromtimeslot", title: "From Time", sortable: "fromtimeslot", show: true },
+						  { field: "toslot", title: "To Time", sortable: "toslot", show: true },
 						  { field: "schedulestatus", title: "Status", sortable: "schedulestatus", show: true }
 						];
 					

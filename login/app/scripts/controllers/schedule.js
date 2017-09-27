@@ -24,7 +24,9 @@ vcancyApp
 						  { field: "tenantlocation", title: "Location", sortable: "tenantlocation", show: true },
 						  { field: "jobtitle", title: "Profession", sortable: "jobtitle", show: true },
 						  { field: "age", title: "Age", sortable: "age", show: true },
-						  { field: "datetimeslot", title: "Date/Time", sortable: "datetimeslot", show: true },
+						  { field: "dateslot", title: "Date", sortable: "dateslot", show: true },						  
+						  { field: "fromtimeslot", title: "From", sortable: "fromtimeslot", show: true },					  
+						  { field: "toslot", title: "To", sortable: "toslot", show: true },
 						  { field: "description", title: "About", sortable: "description", show: true }
 						];
 					
