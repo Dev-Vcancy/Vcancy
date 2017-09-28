@@ -34,8 +34,8 @@
 							<tr ng-repeat="(key,w) in schedulectrl.tabledata">
 								<td ng-repeat="col in schedulectrl.cols">{{w[col.field]}}</td>
 								<td>
-									<a class="btn btn-xs btn-success"  ng-click="schedulectrl.confirmschedule(key)">Confirm</a>
-									<a class="btn btn-xs btn-danger"  ng-click="schedulectrl.cancelschedule(key)">Cancel</a>
+									<a class="btn btn-xs btn-success"  ng-hide="w.schedulestatus == 'confirmed'" ng-click="schedulectrl.confirmschedule(w.propID)">Confirm</a>
+									<a class="btn btn-xs btn-danger"  ng-click="schedulectrl.cancelschedule(w.propID)">Cancel</a>
 									
 								</td>		           
 							</tr>

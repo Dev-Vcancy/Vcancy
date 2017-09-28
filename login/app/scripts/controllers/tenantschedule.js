@@ -16,21 +16,14 @@ vcancyApp
 				if(snapshot.val()) {
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
-						return [value];
-					});
-					
-					
-					// vm.tabledata = [];
-					// $.map(snapshot.val(), function(value, index) {
-						// vm.tabledata[index] = value;
-					// });
+						return [{propID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+					});			
 						
 		
 					vm.cols = [
 						  { field: "address", title: "Address", sortable: "address", show: true },
-						  { field: "dateslot", title: "Date", sortable: "dateslot", show: true },
-						  { field: "fromtimeslot", title: "From Time", sortable: "fromtimeslot", show: true },
-						  { field: "toslot", title: "To Time", sortable: "toslot", show: true },
+						  { field: "dateslot", title: "Date", sortable: "dateslot", show: true },					  
+						  { field: "timerange", title: "Time", sortable: "timerange", show: true },
 						  { field: "schedulestatus", title: "Status", sortable: "schedulestatus", show: true }
 						];
 					
@@ -59,6 +52,10 @@ vcancyApp
 		});
 		
 		vm.cancelschedule = function(index){
-			console.log(index);
+			// console.log(index);
+			if ($window.confirm("Do you want to continue?"))  {
+				firebase.database().ref('applyprop/'+index).remove();
+				$state.reload();
+			}
 		}
 }])
