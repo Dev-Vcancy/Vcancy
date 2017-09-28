@@ -144,17 +144,17 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			var to = [];
 			var limit = [];			
 			angular.forEach(property.limit, function(lval, key) {
-				date[key] = property.date[key].toString();
+				date[key] = moment(property.date[key]).format('DD-MMMM-YYYY');
 				if(property.fromtime[key] === undefined){
-					fromtime[key]  =  new Date().toString();					
+					fromtime[key]  =  moment().format('hh:mm A');			
 				} else {
-					fromtime[key] = property.fromtime[key].toString();					
+					fromtime[key] = moment(property.fromtime[key]).format('hh:mm A');	
 				}
 				
 				if(property.to[key] === undefined){
-					to[key] = new Date().toString();
+					to[key] = moment().format('hh:mm A');	
 				} else {
-					to[key] = property.to[key].toString();
+					to[key] = moment(property.to[key]).format('hh:mm A');	
 				}
 									
 				// console.log(fromtime[key]);

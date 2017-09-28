@@ -16,8 +16,10 @@ vcancyApp
 				if(snapshot.val()) {
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
-						return [value];
+						return [{propID:index, name:value.name, tenantlocation: value.tenantlocation, jobtitle: value.jobtitle, age: value.age, dateslot: value.dateslot, timerange: value.timerange, description: value.description, schedulestatus: value.schedulestatus}];
 					});
+					
+					// console.log(vm.tabledata);
 		
 					vm.cols = [
 						  { field: "name", title: "Name", sortable: "name", show: true },
@@ -25,8 +27,7 @@ vcancyApp
 						  { field: "jobtitle", title: "Profession", sortable: "jobtitle", show: true },
 						  { field: "age", title: "Age", sortable: "age", show: true },
 						  { field: "dateslot", title: "Date", sortable: "dateslot", show: true },						  
-						  { field: "fromtimeslot", title: "From", sortable: "fromtimeslot", show: true },					  
-						  { field: "toslot", title: "To", sortable: "toslot", show: true },
+						  { field: "timerange", title: "Time", sortable: "timerange", show: true },
 						  { field: "description", title: "About", sortable: "description", show: true }
 						];
 					
@@ -55,10 +56,18 @@ vcancyApp
 		});
 		
 		vm.confirmschedule = function(index){
-			console.log(index);
+			// console.log(index);
+			firebase.database().ref('applyprop/'+index).update({	
+				schedulestatus: "confirmed"
+			})
+			$state.reload();
 		}
 		
 		vm.cancelschedule = function(index){
-			console.log(index);
+			// console.log(index);
+			if ($window.confirm("Do you want to continue?"))  {
+				firebase.database().ref('applyprop/'+index).remove();
+				$state.reload();
+			}
 		}
 }])

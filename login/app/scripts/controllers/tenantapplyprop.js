@@ -4,7 +4,7 @@
 // Apply Property
 //=================================================
 
-vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window) {
+vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window,$filter) {
 	
 	var vm = this;
 	// Fetching property Data
@@ -57,11 +57,12 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 		var landlordID =  vm.applyprop.landlordID;
 		var description = vm.applyprop.description; 
 		var datetimeslot = vm.applyprop.datetimeslot;
-		var dateslot = vm.applyprop.date[datetimeslot];
+		var dateslot = moment(vm.applyprop.date[datetimeslot]).format('DD-MMMM-YYYY');
 		var fromtimeslot = vm.applyprop.fromtime[datetimeslot];
 		var toslot = vm.applyprop.to[datetimeslot];
+		var timerange = fromtimeslot+" - "+toslot;
 		
-		// console.log(dateslot,fromtimeslot,toslot);
+		console.log(dateslot,fromtimeslot,toslot);
 		
 		
 		var applypropObj = $firebaseAuth();			
@@ -81,7 +82,8 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 			datetimeslot : datetimeslot,
 			dateslot: dateslot,
 			fromtimeslot: fromtimeslot,
-			toslot: toslot
+			toslot: toslot,
+			timerange: timerange
 		}).then(function(){
 			$state.go('applicationThanks');
 			// $rootScope.success = 'Application for property successfully sent!';	
