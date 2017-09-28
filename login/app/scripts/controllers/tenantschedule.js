@@ -16,7 +16,7 @@ vcancyApp
 				if(snapshot.val()) {
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
-						return [{propID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+						return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 					});			
 						
 		

@@ -17,7 +17,7 @@
 							<tr ng-repeat="(key,w) in tschedulectrl.tabledata">
 								<td ng-repeat="col in tschedulectrl.cols">{{w[col.field]}}</td>
 								<td>
-									<a class="btn btn-xs bgm-red waves-effect" ng-click="tschedulectrl.cancelschedule(w.propID)">Cancel</a>
+									<a class="btn btn-xs bgm-red waves-effect" ng-click="tschedulectrl.cancelschedule(w.scheduleID)">Cancel</a>
 								</td>		           
 							</tr>
 						</table>		               
