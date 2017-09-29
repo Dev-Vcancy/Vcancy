@@ -8,12 +8,11 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	$rootScope.invalid = '';
 	$rootScope.success = '';
 	$rootScope.error = '';	
-		
-	
 	
 	var todaydate = new Date();
 	var vm = this;
 	vm.propsavail = 1;
+	
 	
 	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
       var address = vm.prop.address.getPlace();
@@ -36,6 +35,24 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	};
 	
 	console.log(vm.copy);
+	
+	// timeSlot for Date and Timepicker
+	vm.addTimeSlot = function(slotlen){
+		vm.timeSlot.push({date:todaydate});
+	}
+	
+	// to remove timeslots
+	vm.removeTimeSlot = function(slotindex){
+		console.log(slotindex);
+		console.log(vm.prop.limit[slotindex]);
+		vm.timeSlot.splice(slotindex,1);
+		vm.prop.date.splice(slotindex,1);
+		vm.prop.fromtime.splice(slotindex,1);
+		vm.prop.to.splice(slotindex,1);
+		vm.prop.limit.splice(slotindex,1);	
+		vm.prop.multiple.splice(slotindex,1);		
+	}
+	
 	
 	
 	// DATEPICKER
@@ -76,11 +93,24 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		  }; 
 	
 	//  TIMEPICKER
-		vm.mytime = new Date();
+	  vm.mytime = new Date();
 
 	  vm.hstep = 1;
 	  vm.mstep = 5;
+		
+	  // vm.prop.fromtime = new Date();
+	  // vm.prop.time = new Date();	  
+	  // vm.prop.time.setMinutes(vm.prop.time.getMinutes() + 30);
 
+	  // $scope.changed = function() {
+
+		// if ($scope.end <= $scope.start) {
+
+		  // $scope.end = new Date($scope.start.getTime() + $scope.mstep * 60000)
+
+		// }
+	  
+	  
 	  vm.options = {
 		hstep: [1, 2, 3],
 		mstep: [1, 5, 10, 15, 25, 30]
@@ -98,29 +128,46 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		vm.mytime = d;
 	  };
 
-	  vm.changed = function () {
-
+	  vm.datetimeslotchanged = function (key) {
+		console.log("Date time SLot");
+			
+		// angular.forEach(vm.prop.limit, function(lval, key) {
+			if(vm.prop.fromtime[key] === undefined){
+				var fromtime  =  new Date();			
+			} else {
+				var fromtime= vm.prop.fromtime[key];	
+			}
+			
+			if(vm.prop.to[key] === undefined){
+				var to = new Date();	
+			} else {
+				var to = vm.prop.to[key];	
+			}
+					
+			console.log(vm.prop.multiple[key],fromtime,to);
+			
+			if(vm.prop.multiple[key] === false || vm.prop.multiple[key] === undefined){
+				var minutestimediff = (to - fromtime)/ 60000;
+				var subslots = Math.floor(Math.ceil(minutestimediff)/30);
+				
+				console.log(minutestimediff,subslots);
+				// console.log("Date time SLot");
+				
+				if(vm.prop.limit[key] > subslots){
+					// vm.prop.limit[key] = '';
+					vm.prop.invalid[key] = 1;
+				} else {
+					vm.prop.invalid[key] = 0;
+				}
+			}
+								
+		// });
 	  };
 
 	  vm.clear = function() {
 		vm.mytime = null;
 	  };
 	
-	// timeSlot for Date and Timepicker
-	vm.addTimeSlot = function(slotlen){
-		vm.timeSlot.push({date:todaydate});
-	}
-	
-	// to remove timeslots
-	vm.removeTimeSlot = function(slotindex){
-		console.log(slotindex);
-		console.log(vm.prop.limit[slotindex]);
-		vm.timeSlot.splice(slotindex,1);
-		vm.prop.date.splice(slotindex,1);
-		vm.prop.fromtime.splice(slotindex,1);
-		vm.prop.to.splice(slotindex,1);
-		vm.prop.limit.splice(slotindex,1);		
-	}
 	
 	// Go Back To View Property
 	vm.backtoviewprop = function(){
@@ -138,25 +185,26 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			var units = property.units;
 			var shared = property.shared  == '' ? false : property.shared ; 
 			var address = property.address; 
+			var rent = property.rent; 
 			var landlordID = localStorage.getItem('userID');
 			var date = [];
 			var fromtime = [];
 			var to = [];
-			var limit = [];			
+			var limit = [];	
+			var multiple = [];		
 			angular.forEach(property.limit, function(lval, key) {
-				date[key] = moment(property.date[key]).format('DD-MMMM-YYYY');
+				date[key] = property.date[key].toString();
 				if(property.fromtime[key] === undefined){
-					fromtime[key]  =  moment().format('hh:mm A');			
+					fromtime[key]  =  new Date().toString();				
 				} else {
-					fromtime[key] = moment(property.fromtime[key]).format('hh:mm A');	
+					fromtime[key] = property.fromtime[key].toString();					
 				}
 				
 				if(property.to[key] === undefined){
-					to[key] = moment().format('hh:mm A');	
+					to[key] = new Date().toString();	
 				} else {
-					to[key] = moment(property.to[key]).format('hh:mm A');	
-				}
-									
+					to[key] = property.to[key].toString();	
+				}			
 				// console.log(fromtime[key]);
 				limit[key] = lval;
 			});
@@ -175,11 +223,13 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				propstatus: propstatus,
 				proptype: proptype,
 				units: units,
+				rent: rent,
 				shared: shared, 
 				address: address, 
 				date: date,
 				fromtime: fromtime,
 				to: to,
+				multiple: multiple,
 				limit: limit
 			}).then(function(){
 			  //Generate the property link
@@ -212,6 +262,8 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 						propstatus : '',
 						proptype : '',
 						units : '',
+						multiple: [],
+						rent: '',
 						shared : '',	
 						address : '',
 						date : [],
@@ -237,7 +289,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					propstatus: propstatus,
 					proptype: proptype,
 					units: units,
+					rent: rent,
 					shared: shared, 
+					multiple: multiple,
 					address: address, 
 					date: date,
 					fromtime: fromtime,
@@ -305,8 +359,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					propstatus : propData.propstatus,
 					proptype : propData.proptype,
 					units : propData.units,
+					rent: propData.rent,
 					shared : propData.shared,
 					address : propData.address,
+					multiple: [],
 					date : [],
 					fromtime : [],
 					to : [],
@@ -320,6 +376,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				  vm.prop.fromtime.push(new Date(propData.fromtime[key]));
 				  vm.prop.to.push(new Date(propData.to[key]));
 				  vm.prop.limit.push(propData.limit[key]);
+				  vm.prop.multiple.push(propData.multiple[key]);				  
 				});
 				
 				console.log(vm.timeSlot)
@@ -330,6 +387,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		vm.submitaction = "Save";		
 		vm.otheraction = "Cancel";
 		vm.timeSlot = [{date:todaydate}];
+		// vm.prop.invalid = [0];
 		vm.prop = {
 			propID: '',
 			landlordID: '',
@@ -337,14 +395,18 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			propstatus : '',
 			proptype : '',
 			units : '',
+			multiple: [],
+			rent: '',
 			shared : '',
 			address : '',
 			date : [],
 			fromtime : [],
 			to : [],
 			limit : [],
-			propertylink: ''
+			propertylink: '',
+			invalid: [0]
 		}
+		
 	}
 	
 	// Delete Property Permanently

@@ -25,6 +25,38 @@ var vcancyApp = angular
 	'gm'
   ]); 
   
+vcancyApp
+.service('slotsBuildService', function(){
+   this.maketimeslots = function(date,fromtime,to) {
+	   var minutestimediff = (to - fromtime)/ 60000;
+	   var subslots = Math.floor(Math.ceil(minutestimediff)/30);
+	   
+	   // console.log(subslots,to,fromtime);
+	   var slots = [];
+	   var temp = 0;
+	   for(var i=0; i<subslots; i++){
+		   if(temp == 0){
+			   temp = fromtime;
+		   } 		   
+		   // console.log(temp);
+		   // var x = temp;
+		   var currentDate = temp;
+		   var twentyMinutesLater = new Date(currentDate.getTime() + (30 * 60 * 1000));
+		   
+		   slots.push({date:date, fromtime1:currentDate, to1:twentyMinutesLater})
+		   var y = new Date(temp.setMinutes(temp.getMinutes()+30));
+		   // var y = temp;
+		   // console.log(x,y);
+		  console.log(currentDate,twentyMinutesLater); 
+		   temp.setMinutes(temp.getMinutes()+1);
+	   }   
+	   
+	   console.log(slots);
+      // return slots;
+   }
+});
+  
+  
 vcancyApp  
  .directive('loginHeader', function() {
   return {
@@ -300,21 +332,24 @@ vcancyApp
 				 $rootScope.usertype = localStorage.getItem('usertype');
 			 } 
 			  
-			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype == "0" ) {				
+			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype == "0" ) {			
 				// Resolve the promise successfully
 				return $q.when()			
 				
 			} else {
 				  // The next bit of code is asynchronously tricky.
 
-				  $timeout(function() {
-				  // This code runs after the authentication promise has been rejected.
-				  // Go to the log-in page
-				  $state.go('login')
-				})
-
+				 console.log(window.location);
+				 $rootScope.applyhiturl = window.location.href;
 				// Reject the authentication promise to prevent the state from loading
 				return $q.reject()
 			}
 		}
-  });
+		
+		
+  })
+  // .run( [ '$rootScope', function ($rootScope) {
+        // $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
+            // $rootScope.$previousState = from;
+        // });
+      // }]);

@@ -42,7 +42,7 @@
 									<label for="ts3" class="ts-helper"></label>
 								</div>
 							</div>
-						   <div class="col-sm-4 m-b-20" >                
+						   <div class="col-sm-3 m-b-20" >                
 								<select chosen="" class="form-control" name="proptype" ng-model="propctrl.prop.proptype" ng-required data-placeholder="Prop type" class="w-100 localytics-chosen" >
 									<option value="">Property type</option>
 									<option value="house">House</option>
@@ -53,8 +53,11 @@
 								</select>
 							</div>
 
-							<div class="col-sm-4 m-b-20">
+							<div class="col-sm-2 m-b-20">
 								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" ng-required class="form-control" placeholder="Unit number">
+							</div>
+							<div class="col-sm-3 m-b-20">
+								<input type="text" id="rent" name="rent" ng-model="propctrl.prop.rent" ng-required class="form-control" placeholder="Rent">
 							</div>
 
 							<div class="col-sm-2 m-b-20">
@@ -71,29 +74,29 @@
 							
 							<div class="col-sm-12 m-b-20">
 								<h4>Add showing time slots: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="propctrl.addTimeSlot(propctrl.timeSlot.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></h4>
-								<div class="col-sm-3">Date</div><div class="col-sm-3">Time From</div><div class="col-sm-3">Time To</div><div class="col-sm-2">Persons Limit</div><div class="col-sm-1"></div>
+								<div class="col-sm-3">Date</div><div class="col-sm-2">Time From</div><div class="col-sm-2">Time To</div><div class="col-sm-2">Persons Limit</div><div class="col-sm-2">Multiple Visitors</div><div class="col-sm-1"></div>
 								<div class="row" ng-repeat="x in propctrl.timeSlot">
 									<div class="col-sm-3">
 										<div class="date-picker input-group" ng-class="{ 'is-opened': x.opened == true }">
 											<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 											<div class="fg-line" ng-class="{ 'fg-toggled': x.opened == true }">
-												<input ng-click="propctrl.open($event, x)" type="text" class="form-control" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="propctrl.prop.date[$index]" name = "date[]" is-open="x.opened" min-date="minDate" datepicker-options="propctrl.dateOptions" ng-required="true" close-text="Close" placeholder="Select Date" />
+												<input ng-click="propctrl.open($event, x)" ng-change="propctrl.datetimeslotchanged($index)" type="text" class="form-control" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="propctrl.prop.date[$index]" name = "date[]" is-open="x.opened" min-date="minDate" datepicker-options="propctrl.dateOptions" ng-required="true" close-text="Close" placeholder="Select Date" />
 											</div>
 										</div>
 									</div>
-									<div class="col-sm-3">
+									<div class="col-sm-2">
 										<div class="time-picker input-group">
 											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
-											 <div uib-timepicker ng-model="propctrl.prop.fromtime[$index]" name = "fromtime[]" ng-change="propctrl.changed()" ng-click="" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
+											 <div uib-timepicker ng-model="propctrl.prop.fromtime[$index]" name = "fromtime[]" ng-change="propctrl.datetimeslotchanged($index)" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
 											<!-- <div class="fg-line" ng-class="{ 'fg-toggled': x.timeopened == true }"> -->
 												<!-- <input ng-click="propctrl.timeopen($event, x)" type="text" class="form-control" uib-timepicker ng-model="propctrl.propctrl.prop.time" hour-step="1" minute-step="1" show-meridian="ismeridian" name = "time[]" is-open="x.timeopened" ng-required="true" close-text="Close" placeholder="Select Time" /> -->
 											<!-- </div> -->
 										</div>
 									</div>
-									<div class="col-sm-3">
+									<div class="col-sm-2">
 										<div class="time-picker input-group">
 											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
-											 <div uib-timepicker ng-model="propctrl.prop.to[$index]" name = "to[]" ng-change="propctrl.changed()" ng-click="" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
+											 <div uib-timepicker ng-model="propctrl.prop.to[$index]" name = "to[]" ng-change="propctrl.datetimeslotchanged($index)" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
 											<!-- <div class="fg-line" ng-class="{ 'fg-toggled': x.timeopened == true }"> -->
 												<!-- <input ng-click="propctrl.timeopen($event, x)" type="text" class="form-control" uib-timepicker ng-model="propctrl.propctrl.prop.time" hour-step="1" minute-step="1" show-meridian="ismeridian" name = "time[]" is-open="x.timeopened" ng-required="true" close-text="Close" placeholder="Select Time" /> -->
 											<!-- </div> -->
@@ -104,12 +107,20 @@
 										<!-- </div> -->
 									</div>
 									<div class="col-sm-2">
-										<input type="text" ng-required="true" id="limit" ng-model="propctrl.prop.limit[$index]" name="limit[]" class="form-control" placeholder="Person Limit">
+										<input type="text" ng-required="true" id="limit" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.limit[$index]" name="limit[]" class="form-control" placeholder="Person Limit">
+									</div>
+									<div class="col-sm-2">
+										<label class="checkbox checkbox-inline m-r-20">
+											<input type="checkbox" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.multiple[$index]">
+											<i class="input-helper"></i>
+										</label>
 									</div>
 									<div class="col-sm-1">									
 										<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="propctrl.removeTimeSlot($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
 									</div>
-									
+									<div class="col-sm-12">	
+										<div  ng-if="propctrl.prop.invalid[$index]"  class="alert alert-danger" style="padding:3px !important;text-align:center">Manage the Time Range and Person Limit</div>
+									</div>
 								</div>
 							</div>
 							
