@@ -74,7 +74,7 @@
 			                            27 Nov, 2017
 			                        </td>
 			                        <td data-title="'Salary'" data-title-text="Salary" class="ng-binding">
-			                            <button class="btn bgm-cyan waves-effect">Submit</button>
+			                            <button class="btn bgm-cyan">Submit</button>
 			                        </td>			           
 		                  		</tr>
 		                	</tbody>
@@ -87,6 +87,9 @@
 </section>
 
 <footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
-
+<script type="text/javascript">
+    Waves.init();
+	Waves.attach('.btn');
+</script> 
 
         
