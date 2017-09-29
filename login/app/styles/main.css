@@ -307,6 +307,10 @@ ul.header-inner li a:hover.button:before{
     margin-top: 0;
     font-size: 18px;
     color: #1aa1ab;
+    word-break: break-all;
+    width: 90%;
+    max-height: 40px;
+    overflow: hidden;
 }
 
 .property-icon i {
@@ -357,7 +361,9 @@ ul.header-inner li a:hover.button:before{
   background-color: rgb(244, 67, 54);
 }
 
-
+.btn {
+    text-transform: initial;
+}
 /*************** Dashboard ***************/
 .home_block{
 	padding: 0px 0;
@@ -380,6 +386,11 @@ ul.header-inner li a:hover.button:before{
   #content .container {
       width: 95%;
       max-width: 1170px;
+  }
+}
+@media (max-width: 1024px) and (min-width: 769px){
+  .property_detail h3 {
+      width: 85%;
   }
 }
 @media screen and (min-width: 769px){
