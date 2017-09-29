@@ -27,7 +27,7 @@
                                 <p class='text-center'><a data-block="#l-forget-password" data-ng-click="lctrl.login = 0; lctrl.forgot = 1" href='javascript:void(0);' class='a-title'>Forgot Password?</a></p>
                                 <hr>
                                 <p class='text-center'>Don't have an account yet?</p>
-                                <a href='javascript:void(0);' data-block="#l-register" class="btn btn-block bgm-cyan waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 1;lctrl.login = 0">Sign Up <i class="zmdi zmdi-arrow-forward"></i></a>
+                                <a href='javascript:void(0);' data-block="#l-register" class="btn btn-block bgm-cyan" data-ng-click="lctrl.forgot = 0; lctrl.register = 1;lctrl.login = 0">Sign Up <i class="zmdi zmdi-arrow-forward"></i></a>
 			</form>
                 </div>
 
@@ -92,7 +92,7 @@
             <div class="clearfix"></div>
                             <hr>
                             <p class='text-center'>Already have an account?</p>
-                                <a href='javascript:void(0);'  data-block="#l-login" class="btn bgm-cyan btn-block waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In <i class="zmdi zmdi-arrow-forward"></i></a>
+                                <a href='javascript:void(0);'  data-block="#l-login" class="btn bgm-cyan btn-block" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In <i class="zmdi zmdi-arrow-forward"></i></a>
 			</div>
 
         <!-- Forgot Password -->
@@ -112,7 +112,11 @@
             <div class="clearfix"></div>
                             <hr>
                             <p class='text-center'>You remember your password?</p>
-                                <a href='javascript:void(0);'  data-block="#l-login" class="btn bgm-cyan btn-block waves-effect" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In <i class="zmdi zmdi-arrow-forward"></i></a>
+                                <a href='javascript:void(0);'  data-block="#l-login" class="btn bgm-cyan btn-block" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1">Sign In <i class="zmdi zmdi-arrow-forward"></i></a>
         </div>
 
 <footer data-ng-include="'views/template/publicfooter.html'"></footer>
+<script type="text/javascript">
+    Waves.init();
+	Waves.attach('.btn');
+</script> 
