@@ -4,7 +4,7 @@
 // LOGIN, REGISTER
 //=================================================
 
-vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$sce',function($scope,$firebaseAuth,$state,$rootScope,$sce) {
+vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$location',function($scope,$firebaseAuth,$state,$rootScope,$location) {
 	
         //Status
         this.login = 1;
@@ -22,12 +22,12 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			var authObj = $firebaseAuth();
 			authObj.$signInWithEmailAndPassword(email, password).then(function(firebaseUser) {
 			 
-				 console.log(firebase.auth().currentUser);
+				 // console.log(firebase.auth().currentUser);
 				 if(firebase.auth().currentUser != null){
 					 localStorage.setItem('userID', firebase.auth().currentUser.uid);
 					 localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
 				 } 
-				 console.log(localStorage.getItem('currentUser'));
+				 // console.log(localStorage.getItem('currentUser'));
 
 				 if(firebase.auth().currentUser != null){
 					 $rootScope.uid = firebase.auth().currentUser.uid;
@@ -47,7 +47,12 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 							$rootScope.usertype = 0;
 							localStorage.setItem('usertype', 0);
 							console.log("Signed in as tenant:", firebaseUser.uid);
-							$state.go("tenantdashboard");   
+							if($rootScope.applyhiturl.indexOf("applyproperty") !== -1){
+								console.log($rootScope.applyhiturl);
+								window.location.href = $rootScope.applyhiturl;
+							} else {
+								$state.go("tenantdashboard");  
+							} 
 					   } else {    
 							$rootScope.usertype = 1;
 							localStorage.setItem('usertype', 1);
@@ -72,7 +77,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 					console.log('hre');
 					$rootScope.invalid = '';
 				}
-			 console.error("Authentication failed:", error);
+			 // console.error("Authentication failed:", error);
 			});
 			 
 			 // $scope.deliberatelyTrustDangerousSnippet = function() {
@@ -99,9 +104,9 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 						
 						console.log(firebaseUser);
 						firebaseUser.sendEmailVerification().then(function() {
-							console.log("Email Sent");
+							// console.log("Email Sent");
 						}).catch(function(error) {
-							console.log("Error in sending email"+error);
+							// console.log("Error in sending email"+error);
 						});
 												
 						var reguserdbObj = firebase.database();
@@ -145,11 +150,11 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			
 			var forgotuserObj = $firebaseAuth();
 			forgotuserObj.$sendPasswordResetEmail(email).then(function() {
-				console.log("Password reset email sent successfully!");
+				// console.log("Password reset email sent successfully!");
 				$rootScope.success = 'Password reset mail sent successfully.Please check your Inbox.';
 				$rootScope.error = '';	
 			}).catch(function(error) {
-				console.error("Error: ", error);
+				// console.error("Error: ", error);
 				if(error.message){
 					$rootScope.error = error.message;
 					$rootScope.success = '';
