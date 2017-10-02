@@ -47,10 +47,11 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 							$rootScope.usertype = 0;
 							localStorage.setItem('usertype', 0);
 							console.log("Signed in as tenant:", firebaseUser.uid);
-                                                        console.log($rootScope.applyhiturl);
-							if($rootScope.applyhiturl != undefined && $rootScope.applyhiturl.indexOf("applyproperty") !== -1){
-								console.log($rootScope.applyhiturl);
-								window.location.href = $rootScope.applyhiturl;
+                                                        
+							if(localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1){
+								console.log(localStorage.getItem('applyhiturl'));
+								window.location.href = localStorage.getItem('applyhiturl');
+								localStorage.setItem('applyhiturl','');
 							} else {
 								$state.go("tenantdashboard");  
 							} 

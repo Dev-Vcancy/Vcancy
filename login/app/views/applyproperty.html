@@ -18,7 +18,11 @@
             </div>	
 			<div class="row">
 				<div class="col-sm-12 card">
-					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate>	
+					<div ng-if="applyctrl.applyprop.availableslots.length == 0">
+						<h4>No Time Slot Available to Schedule your application for Property</h4>										
+					</div>
+					
+					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="applyctrl.applyprop.availableslots.length">	
 						<input type="hidden" name="landlordID" ng-model="applyctrl.applyprop.landlordID" class="form-control" >
 						<input type="hidden" name="propID" ng-model="applyctrl.applyprop.propID" class="form-control">	
 						<input type="hidden" name="address" ng-model="applyctrl.applyprop.address" class="form-control">						
@@ -45,11 +49,11 @@
 									<textarea placeholder="Tell me a little about yourself" ng-model="applyctrl.applyprop.description"  ng-required class="form-control"></textarea>
 								</div>
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-6" >
 								<h3>Time Slots available</h3>
 								<div class="table-responsive">
 									<table class="table">
-										<thead>
+										<thead >
 											<tr>
 												<th>Date</th>
 												<th>Time</th>
@@ -57,9 +61,9 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr ng-repeat="(key, x) in applyctrl.applyprop.date">	
-												<td>{{x | amDateFormat:'dddd, MMMM Do YYYY'}}</td>
-												<td>{{applyctrl.applyprop.fromtime[key] | amDateFormat:'h:mm:ss A'}} - {{applyctrl.applyprop.to[key]| amDateFormat:'h:mm:ss A'}}</td>
+											<tr ng-repeat="(key, x) in applyctrl.applyprop.availableslots" >	
+												<td>{{x.date | amDateFormat:'dddd, MMMM Do YYYY'}}</td>
+												<td>{{x.fromtime | amDateFormat:'h:mm:ss A'}} - {{x.to| amDateFormat:'h:mm:ss A'}}</td>
 												<td>
 													<label class="radio">
 														<input type="radio" ng-required ng-model="applyctrl.applyprop.datetimeslot" ng-value="{{key}}"  name="datetimeslot" value="{{key}}">
@@ -68,6 +72,7 @@
 												</td>
 											</tr>
 										</tbody>
+										
 									</table>							
 								</div>							
 							</div>
