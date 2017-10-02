@@ -47,7 +47,8 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 							$rootScope.usertype = 0;
 							localStorage.setItem('usertype', 0);
 							console.log("Signed in as tenant:", firebaseUser.uid);
-							if($rootScope.applyhiturl.indexOf("applyproperty") !== -1){
+                                                        console.log($rootScope.applyhiturl);
+							if($rootScope.applyhiturl != undefined && $rootScope.applyhiturl.indexOf("applyproperty") !== -1){
 								console.log($rootScope.applyhiturl);
 								window.location.href = $rootScope.applyhiturl;
 							} else {
