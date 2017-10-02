@@ -27,37 +27,79 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				fromtime : [],
 				to : [],
 				limit : [],
+				multiple: [],
 				propertylink: propData.propertylink
 			}
 			angular.forEach(propData.date, function(value, key) {
-				// console.log(value);
 			  vm.applyprop.date.push(value);
 			  vm.applyprop.fromtime.push(propData.fromtime[key]);
 			  vm.applyprop.to.push(propData.to[key]);
 			  vm.applyprop.limit.push(propData.limit[key]);
-			  
-			  vm.slots.push(slotsBuildService.maketimeslots(vm.applyprop.date[key],new Date(vm.applyprop.fromtime[key]),new Date(vm.applyprop.to[key])));
+			  vm.applyprop.multiple.push(propData.multiple[key]);
 			});
+			
+			vm.applyprop.slots = slotsBuildService.maketimeslots(vm.applyprop.date,vm.applyprop.fromtime,vm.applyprop.to,vm.applyprop.limit,vm.applyprop.multiple);
 			
 			// If property is inactive tenant can't apply for the application
 			if(vm.applyprop.propstatus == false){
 				$state.go('tenantdashboard');
 			}
-			
 		});
-	});
-	
-	firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
-		$scope.$apply(function(){
-			vm.appliedslots = [];
-			console.log(snapshot.val());
-			vm.appliedslots = $.map(snapshot.val(), function(value, index) {							
-					return [{date:value.dateslot, fromtime:value.fromtimeslot, to:value.toslot}];
-				});	 	
-			});	console.log(vm.appliedslots);
-	
-	console.log(vm.appliedslots.length);
+		
+		firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
+			$scope.$apply(function(){
+				// console.log(snapshot.val());
+				vm.appliedslots = [];
+				if(snapshot.val() != undefined){
+					vm.appliedslots = $.map(snapshot.val(), function(value, index) {							
+						return [{date:value.dateslot, fromtime:value.fromtimeslot, to:value.toslot, person:1}];
+					});
+				}
+					 
+				// console.log(vm.applyprop.slots);
+				// console.log(vm.appliedslots);	
+				// console.log(vm.appliedslots.length);	
+
+				vm.applyprop.availableslots = [];
+				vm.timeslotavail = 0;
+					
+				for (var i = 0; i < vm.applyprop.slots.length; i++) {
+					for (var j = 0; j < vm.appliedslots.length; j++) {
+						if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  vm.applyprop.slots[i].fromtime== vm.appliedslots[j].fromtime && vm.applyprop.slots[i].to == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == false) {					
+							vm.applyprop.slots[i].person = 0;
+							// break;
+						}
+						
+						if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  vm.applyprop.slots[i].fromtime== vm.appliedslots[j].fromtime && vm.applyprop.slots[i].to == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == true ) {
+							for (var l = 0; l < vm.applyprop.slots.length; l++) {
+								if(vm.applyprop.slots[l].dateslotindex ==  vm.applyprop.slots[i].dateslotindex){
+									vm.applyprop.slots[l].person -= 1;
+								}
+							}
+							// break;
+						}
+					// console.log(vm.applyprop.slots);
+					}
+				}
+				
+				
+				for (var i = 0; i< vm.applyprop.slots.length; i++) {					
+					if (vm.applyprop.slots[i].person > 0) {
+						vm.applyprop.availableslots.push(vm.applyprop.slots[i]);
+					}
+					vm.timeslotavail = 1;
+				}
+				
+				if(vm.appliedslots == null){
+					vm.applyprop.availableslots = vm.applyprop.slots;
+					vm.timeslotavail = 1;
+				}
+				// console.log(vm.applyprop.availableslots);
+				
+			});	
 		});	
+		
+	});
 	
 	
 	// Property Application form - Data of tenant save		
@@ -73,12 +115,12 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 		var landlordID =  vm.applyprop.landlordID;
 		var description = vm.applyprop.description; 
 		var datetimeslot = vm.applyprop.datetimeslot;
-		var dateslot = moment(vm.applyprop.date[datetimeslot]).format('DD-MMMM-YYYY');
-		var fromtimeslot = vm.applyprop.fromtime[datetimeslot];
-		var toslot = vm.applyprop.to[datetimeslot];
-		var timerange = moment(vm.applyprop.fromtime[datetimeslot]).format('hh:mm A')+" - "+moment(vm.applyprop.to[datetimeslot]).format('hh:mm A');
+		var dateslot = moment(vm.applyprop.availableslots[datetimeslot].date).format('DD-MMMM-YYYY');
+		var fslot = vm.applyprop.availableslots[datetimeslot].fromtime.toString();
+		var tslot = vm.applyprop.availableslots[datetimeslot].to.toString();
+		var timerange = moment(vm.applyprop.availableslots[datetimeslot].fromtime).format('hh:mm A')+" - "+moment(vm.applyprop.availableslots[datetimeslot].to).format('hh:mm A');
 		
-		console.log(dateslot,fromtimeslot,toslot);
+		// console.log(dateslot,fslot,tslot);
 		
 		
 		var applypropObj = $firebaseAuth();			
@@ -92,13 +134,13 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 			name : name,
 			tenantlocation : tenantlocation,
 			age : age, 
+			datetimeslot : datetimeslot,
+			dateslot : dateslot,
+			fromtimeslot : fslot,
+			toslot : tslot,
 			jobtitle : jobtitle, 
 			landlordID :  landlordID,
 			description : description, 
-			datetimeslot : datetimeslot,
-			dateslot: dateslot,
-			fromtimeslot: fromtimeslot,
-			toslot: toslot,
 			timerange: timerange
 		}).then(function(){
 			$state.go('applicationThanks');

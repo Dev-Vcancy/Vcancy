@@ -27,32 +27,59 @@ var vcancyApp = angular
   
 vcancyApp
 .service('slotsBuildService', function(){
-   this.maketimeslots = function(date,fromtime,to) {
-	   var minutestimediff = (to - fromtime)/ 60000;
-	   var subslots = Math.floor(Math.ceil(minutestimediff)/30);
+   this.maketimeslots = function(date,ftime,totime,limit,multiple) {
+	   	   
+		var slots = [];
 	   
-	   // console.log(subslots,to,fromtime);
-	   var slots = [];
-	   var temp = 0;
-	   for(var i=0; i<subslots; i++){
+		angular.forEach(date, function(value, key) { 
+			var fromtime = new Date(ftime[key]);
+			var to = new Date(totime[key]);
+			
+			var minutestimediff = (to - fromtime)/ 60000;
+			var subslots = Math.floor(Math.ceil(minutestimediff)/30);
+			
+		    var temp = 0;
+			for(var i=0; i<subslots; i++){
+			   if(temp == 0){
+				   temp = fromtime;
+			   } 		   
+			   var f = temp;
+			   var t = new Date(f.getTime() + (30 * 60 * 1000)); // 30 minutes add to from time 
+			   
+			   slots.push({date:value, fromtime:f.toString(), to:t.toString(), person: limit[key], multiple: multiple[key], dateslotindex: key});
+			   
+			   temp = new Date(t.getTime() + (1 * 60 * 1000)); // 1 minute add to TO time
+			}  
+		});
+	   
+	  // console.log(slots);
+      return slots;
+   }
+	this.maketimeslotsingle = function(date,ftime,totime) {
+	   	   
+		var slots = [];
+	   
+		var fromtime = new Date(ftime);
+		var to = new Date(totime);
+		
+		var minutestimediff = (to - fromtime)/ 60000;
+		var subslots = Math.floor(Math.ceil(minutestimediff)/30);
+		
+		var temp = 0;
+		for(var i=0; i<subslots; i++){
 		   if(temp == 0){
 			   temp = fromtime;
 		   } 		   
-		   // console.log(temp);
-		   // var x = temp;
-		   var currentDate = temp;
-		   var twentyMinutesLater = new Date(currentDate.getTime() + (30 * 60 * 1000));
+		   var f = temp;
+		   var t = new Date(f.getTime() + (30 * 60 * 1000)); // 30 minutes add to from time 
 		   
-		   slots.push({date:date, fromtime1:currentDate, to1:twentyMinutesLater})
-		   var y = new Date(temp.setMinutes(temp.getMinutes()+30));
-		   // var y = temp;
-		   // console.log(x,y);
-		  console.log(currentDate,twentyMinutesLater); 
-		   temp.setMinutes(temp.getMinutes()+1);
-	   }   
+		   slots.push({date:date, fromtime:f.toString(), to:t.toString()});
+		   
+		   temp = new Date(t.getTime() + (1 * 60 * 1000)); // 1 minute add to TO time
+		}  
 	   
-	   console.log(slots);
-      // return slots;
+	  // console.log(slots);
+      return slots;
    }
 });
   
@@ -273,8 +300,6 @@ vcancyApp
 		
 		.state ('applicationThanks', {
 			url: '/applicationThanks',
-			controller: 'applypropCtrl',
-			controllerAs: 'applyctrl',
 			templateUrl: 'views/applypropsuccess.html',
 			resolve: { tenantauthenticate: tenantauthenticate }
 		})
@@ -340,7 +365,17 @@ vcancyApp
 				  // The next bit of code is asynchronously tricky.
 
 				 console.log(window.location);
-				 $rootScope.applyhiturl = window.location.href;
+				 // $rootScope.applyhiturl = window.location.href;
+				 localStorage.setItem('applyhiturl',window.location.href) 
+				 
+				 
+				 $timeout(function() {
+				  // This code runs after the authentication promise has been rejected.
+				  // Go to the log-in page
+				  $state.go('login')
+				})
+
+				 
 				// Reject the authentication promise to prevent the state from loading
 				return $q.reject()
 			}
