@@ -33,11 +33,11 @@
 
 							<div class="property_detail">						
 								<h3>{{x.address}} </h3>
-        						<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===true">
+        						<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===false">
 			                        <span><strong>ACTIVE</strong></span> <input ng-click="propctrl.toggleSwitch(key)" id="active{{key}}" type="checkbox" hidden="hidden">
 			                        <label  for="active{{key}}" class="ts-helper m-l-10 m-r-10 ac-inac"></label><span><strong>INACTIVE</strong></span>
 			                    </div>
-								<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===false">
+								<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===true">
 			                        <span><strong>ACTIVE</strong></span> <input ng-click="propctrl.toggleSwitch(key)" id="inac{{key}}" type="checkbox" checked="checked" hidden="hidden">
 			                        <label for="inac{{key}}"  class="ts-helper  m-l-10 m-r-10 ac-inac"></label><span><strong>INACTIVE</strong></span>
 			                    </div>
