@@ -253,6 +253,11 @@ vcancyApp
 			templateUrl: 'views/terms.html',
 			resolve: { authenticate: authenticate }
 		})
+
+		.state ('rentalform', {
+			url: '/rentalform',
+			templateUrl: 'views/rental_app_form.html',
+		})
 		
 		// Tenant Routes
 		.state ('tenantdashboard', {
