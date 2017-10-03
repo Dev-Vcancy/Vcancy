@@ -347,8 +347,8 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			}).then(function(){
 				// link generated and property added message
 				$scope.$apply(function(){
-					// $rootScope.success = 'Property edited successfully.';
-					localStorage.setItem('propertysuccessmsg','Property edited successfully.');
+					// $rootScope.success = 'Property updated successfully.';
+					localStorage.setItem('propertysuccessmsg','Property updated successfully.');
 					angular.forEach(vm.scheduleIDs, function(value, key) {
 						firebase.database().ref('applyprop/'+value).update({	
 							schedulestatus: "cancelled"
