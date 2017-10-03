@@ -47,9 +47,8 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 							$rootScope.usertype = 0;
 							localStorage.setItem('usertype', 0);
 							console.log("Signed in as tenant:", firebaseUser.uid);
-                                                        
+                                                
 							if(localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1){
-								console.log(localStorage.getItem('applyhiturl'));
 								window.location.href = localStorage.getItem('applyhiturl');
 								localStorage.setItem('applyhiturl','');
 							} else {
@@ -88,6 +87,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 		}
 		
 		this.registerUser = function(reguser){
+			console.log(localStorage.getItem('applyhiturl'));
 			var first = reguser.first;
 			var last = reguser.last;
 			var email = reguser.email;
@@ -119,6 +119,35 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 					  });				  
 					$rootScope.success = 'Your account has been created and an email has been sent. Please verify your email to Log In!';
 					$rootScope.error = '';			
+					
+					// When apply property url hit direct login and redirect to apply link url on signup successful
+					console.log(localStorage.getItem('applyhiturl'));
+					if(localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1 && usertype === 0 ){
+						var authObj = $firebaseAuth();
+						authObj.$signInWithEmailAndPassword(email, pass).then(function(firebaseUser) {
+							 if(firebase.auth().currentUser != null){
+								 localStorage.setItem('userID', firebase.auth().currentUser.uid);
+								 localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
+							 } 
+
+							 if(firebase.auth().currentUser != null){
+								 $rootScope.uid = firebase.auth().currentUser.uid;
+								 $rootScope.emailVerified = firebase.auth().currentUser.emailVerified;
+							 } 
+							
+							firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function(userdata) {
+							   if(userdata.val().usertype === 0){
+									$rootScope.usertype = 0;
+									localStorage.setItem('usertype', 0);
+									console.log("Signed in as tenant:", firebaseUser.uid);
+									
+									window.location.href = localStorage.getItem('applyhiturl');
+									localStorage.setItem('applyhiturl','');
+							   } 
+							 });
+						});
+					}		
+					// Ends Here
 					//console.log("User " + firebaseUser.uid + " created successfully!");
 				  }).catch(function(error) {
 					if(error.message){

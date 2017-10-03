@@ -46,7 +46,7 @@ vcancyApp
 			   var f = temp;
 			   var t = new Date(f.getTime() + (30 * 60 * 1000)); // 30 minutes add to from time 
 			   
-			   slots.push({date:value, fromtime:f.toString(), to:t.toString(), person: limit[key], multiple: multiple[key], dateslotindex: key});
+			   slots.push({date:value, fromtime:moment(f).format('HH:mm'), to:moment(t).format('HH:mm'), person: limit[key], multiple: multiple[key], dateslotindex: key});
 			   
 			   temp = new Date(t.getTime() + (1 * 60 * 1000)); // 1 minute add to TO time
 			}  
@@ -73,7 +73,7 @@ vcancyApp
 		   var f = temp;
 		   var t = new Date(f.getTime() + (30 * 60 * 1000)); // 30 minutes add to from time 
 		   
-		   slots.push({date:date, fromtime:f.toString(), to:t.toString()});
+		   slots.push({date:date, fromtime:moment(f).format('HH:mm'), to:moment(t).format('HH:mm')});
 		   
 		   temp = new Date(t.getTime() + (1 * 60 * 1000)); // 1 minute add to TO time
 		}  

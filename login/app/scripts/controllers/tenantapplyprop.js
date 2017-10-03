@@ -8,6 +8,16 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 	
 	var vm = this;
 	
+	
+	
+	console.log(localStorage.getItem('userEmailVerified'));
+	if(localStorage.getItem('userEmailVerified') == "false" || !$rootScope.emailVerified ){
+		vm.isEmailVerified = 1;
+	} else {
+		vm.isEmailVerified = 0;
+	}
+	console.log(vm.isEmailVerified);
+	
 	// Fetching property Data
 	var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snapshot) {
 		var propData = snapshot.val();
@@ -51,8 +61,10 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				// console.log(snapshot.val());
 				vm.appliedslots = [];
 				if(snapshot.val() != undefined){
-					vm.appliedslots = $.map(snapshot.val(), function(value, index) {							
-						return [{date:value.dateslot, fromtime:value.fromtimeslot, to:value.toslot, person:1}];
+					vm.appliedslots = $.map(snapshot.val(), function(value, index) {			
+						if(value.schedulestatus !== "cancelled"){
+							return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot), person:1}];
+						}						
 					});
 				}
 					 
