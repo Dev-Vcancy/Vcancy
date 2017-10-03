@@ -15,26 +15,19 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
       var address = vm.prop.address.getPlace();
-	  // console.log(address);
 	  vm.prop.address = address.formatted_address;
 	  $scope.$apply();
 	});
-	
 	
 	vm.copy = "Copy link";		
 	$scope.copySuccess = function(e) {
 		console.info('Action:', e.action);
 		console.info('Text:', e.text);
 		console.info('Trigger:', e.trigger);
-		vm.copy = "Copied";
-		// e.clearSelection();
-	
-		console.log(vm.copy);
+		vm.copy = "Copied";	
 		$scope.$apply();
 	};
-	
-	console.log(vm.copy);
-	
+		
 	// timeSlot for Date and Timepicker
 	vm.addTimeSlot = function(slotlen){
 		console.log(slotlen);
@@ -45,36 +38,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	// to remove timeslots
 	vm.removeTimeSlot = function(slotindex){
 		if($state.current.name == 'editprop') {
-			if ($window.confirm("Are you sure you want to delete this viewing slot? All schedules will be cancelled"))  {			
-				vm.slot = slotsBuildService.maketimeslotsingle(moment(vm.prop.date[slotindex]).format('DD-MMMM-YYYY'),vm.prop.fromtime[slotindex],vm.prop.to[slotindex]);
-				
-				firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
-					$scope.$apply(function(){
-						// console.log(snapshot.val());
-						vm.appliedslots = [];
-						if(snapshot.val() != undefined){
-							vm.appliedslots = $.map(snapshot.val(), function(value, index) {							
-								return [{date:value.dateslot, fromtime:value.fromtimeslot, to:value.toslot, scheduleID: index}];
-							});
-						}
-						
-						console.log(vm.slot);
-						console.log(vm.appliedslots);
-						
-						vm.scheduleIDs = [];
-						for (var i = 0; i < vm.slot.length; i++) {
-							for (var j = 0; j < vm.appliedslots.length; j++) {
-								if (vm.slot[i].date == vm.appliedslots[j].date &&  vm.slot[i].fromtime == vm.appliedslots[j].fromtime && vm.slot[i].to == vm.appliedslots[j].to	) {					
-									// firebase.database().ref('applyprop/'+(vm.slot[i].scheduleID)).remove();
-									// console.log(vm.appliedslots[j].scheduleID);
-									vm.scheduleIDs.push(vm.appliedslots[j].scheduleID);
-								}							
-							}
-						}	
-						console.log(vm.scheduleIDs);						
-					});	
-				});
-				
+			if ($window.confirm("Are you sure you want to delete this viewing slot? "))  {	
 				vm.timeSlot.splice(slotindex,1);
 				vm.prop.date.splice(slotindex,1);
 				vm.prop.fromtime.splice(slotindex,1);
@@ -89,134 +53,122 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			vm.prop.to.splice(slotindex,1);
 			vm.prop.limit.splice(slotindex,1);	
 			vm.prop.multiple.splice(slotindex,1);
-		}
-			
-						
+		}			
 	}
 	
-	
-	
 	// DATEPICKER
-		vm.today = function() {
-            vm.dt = new Date();
-        };
-        vm.today();
+	vm.today = function() {
+		vm.dt = new Date();
+	};
+	vm.today();
+
+	vm.toggleMin = function() {
+		vm.minDate = vm.minDate ? null : new Date();
+	};
+	vm.toggleMin();
+
+	vm.open = function($event, opened) {
+		$event.preventDefault();
+		$event.stopPropagation();
+		angular.forEach(vm.timeSlot, function(value, key) {
+		  value.opened = false;;
+		});
+		opened.opened = true;
+	};
+
+	vm.dateOptions = {
+		formatYear: 'yy',
+		startingDay: 1
+	};
+
+	vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+	vm.format = vm.formats[0];
 		
-        vm.toggleMin = function() {
-            vm.minDate = vm.minDate ? null : new Date();
-        };
-        vm.toggleMin();
-
-        vm.open = function($event, opened) {
-            $event.preventDefault();
-            $event.stopPropagation();
-			angular.forEach(vm.timeSlot, function(value, key) {
-			  value.opened = false;;
-			});
-			opened.opened = true;
-        };
-
-        vm.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-        };
-
-        vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-        vm.format = vm.formats[0];
-		
-		vm.timeopen = function($event,opened) {
-			$event.preventDefault();
-			$event.stopPropagation();
-			angular.forEach(vm.timeSlot, function(value, key) {
-			  value.opened = false;;
-			});
-			vm.opened = true;
-		  }; 
+	vm.timeopen = function($event,opened) {
+		$event.preventDefault();
+		$event.stopPropagation();
+		angular.forEach(vm.timeSlot, function(value, key) {
+		  value.opened = false;;
+		});
+		vm.opened = true;
+	  }; 
 	
 	//  TIMEPICKER
-	  vm.mytime = new Date();
+	vm.mytime = new Date();
 
-	  vm.hstep = 1;
-	  vm.mstep = 5;
+	vm.hstep = 1;
+	vm.mstep = 5;
 		
-	  // vm.prop.fromtime = new Date();
-	  // vm.prop.time = new Date();	  
-	  // vm.prop.time.setMinutes(vm.prop.time.getMinutes() + 30);
+	// vm.prop.fromtime = new Date();
+	// vm.prop.time = new Date();	  
+	// vm.prop.time.setMinutes(vm.prop.time.getMinutes() + 30);
 
-	  // vm.changed = function() {
-		  // console.log("SAda"+vm.prop.fromtime)
-		// if (vm.prop.to <= vm.prop.fromtime) {
-		  // vm.prop.to = new Date(vm.prop.fromtime.getTime() + 1 * 60000)
-		// }
-	  // }
+	// vm.changed = function() {
+	  // console.log("SAda"+vm.prop.fromtime)
+	// if (vm.prop.to <= vm.prop.fromtime) {
+	  // vm.prop.to = new Date(vm.prop.fromtime.getTime() + 1 * 60000)
+	// }
+	// }
+
 	  
-	  
-	  vm.options = {
+	vm.options = {
 		hstep: [1, 2, 3],
 		mstep: [1, 5, 10, 15, 25, 30]
-	  };
+	};
 
-	  vm.ismeridian = true;
-	  vm.toggleMode = function() {
+	vm.ismeridian = true;
+	vm.toggleMode = function() {
 		vm.ismeridian = ! vm.ismeridian;
-	  };
+	};
 
-	  vm.update = function() {
+	vm.update = function() {
 		var d = new Date();
 		d.setHours( 14 );
 		d.setMinutes( 0 );
 		vm.mytime = d;
-	  };
+	};
 
-	  vm.datetimeslotchanged = function (key) {
+	vm.datetimeslotchanged = function (key) {
 		console.log("Date time SLot");
-			
-		// angular.forEach(vm.prop.limit, function(lval, key) {
-			if(vm.prop.fromtime[key] === undefined){
-				var fromtime  =  new Date();			
-			} else {
-				var fromtime= vm.prop.fromtime[key];	
-			}
-			
-			if(vm.prop.to[key] === undefined){
-				var to = new Date();	
-			} else {
-				var to = vm.prop.to[key];	
-			}
-			// if (vm.prop.to <= vm.prop.fromtime) {
-			  // vm.prop.to = new Date(vm.prop.fromtime.getTime() + 1 * 60000)
-			// }
-					
-			console.log(vm.prop.multiple[key],fromtime,to);
-			
-			if(vm.prop.multiple[key] === false || vm.prop.multiple[key] === undefined){
-				var minutestimediff = (to - fromtime)/ 60000;
-				var subslots = Math.floor(Math.ceil(minutestimediff)/30);
+		if(vm.prop.fromtime[key] === undefined){
+			var fromtime  =  new Date();			
+		} else {
+			var fromtime= vm.prop.fromtime[key];	
+		}
+		
+		if(vm.prop.to[key] === undefined){
+			var to = new Date();	
+		} else {
+			var to = vm.prop.to[key];	
+		}
+		// if (vm.prop.to <= vm.prop.fromtime) {
+		  // vm.prop.to = new Date(vm.prop.fromtime.getTime() + 1 * 60000)
+		// }
 				
-				console.log(minutestimediff,subslots);
-				// console.log("Date time SLot");
-				
-				if(vm.prop.limit[key] > subslots){
-					// vm.prop.limit[key] = '';
-					vm.prop.invalid[key] = 1;
-					vm.isDisabled = 1;
-				} else {
-					vm.prop.invalid[key] = 0;
-					vm.isDisabled = 0;
-				}
+		console.log(vm.prop.multiple[key],fromtime,to);
+		
+		if(vm.prop.multiple[key] === false || vm.prop.multiple[key] === undefined){
+			var minutestimediff = (to - fromtime)/ 60000;
+			var subslots = Math.floor(Math.ceil(minutestimediff)/30);				
+			console.log(minutestimediff,subslots);
+			
+			if(vm.prop.limit[key] > subslots){
+				vm.prop.invalid[key] = 1;
+				vm.isDisabled = 1;
 			} else {
 				vm.prop.invalid[key] = 0;
 				vm.isDisabled = 0;
 			}
-								
-		// });
-	  };
+		} else {
+			vm.prop.invalid[key] = 0;
+			vm.isDisabled = 0;
+		}
+	}
 
-	  vm.clear = function() {
+	vm.clear = function() {
 		vm.mytime = null;
-	  };
-	
-	
+	};
+		
 	// Go Back To View Property
 	vm.backtoviewprop = function(){
 		$state.go('viewprop');
@@ -253,7 +205,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				} else {
 					to[key] = property.to[key].toString();	
 				}			
-				// console.log(fromtime[key]);
 				multiple[key] = property.multiple[key]   == '' ? false : property.multiple[key];
 				limit[key] = lval;
 			});
@@ -283,15 +234,12 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			}).then(function(){
 			  //Generate the property link
 			  propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
-				// console.log(snapshot.key);
 				
 				if(snapshot.key != "undefined"){
 					var propertylink = "http://35.182.211.61/login/dist/#/applyproperty/"+snapshot.key;
 					vm.prop.propertylink = propertylink;	
 					
 					// link generated and property added message
-					console.log('Property added successfully. Property Link is also generated.');
-					$rootScope.success = 'Property added successfully. Property Link is also generated.';
 					localStorage.setItem('propertysuccessmsg','Property added successfully. Property Link is also generated.');
 					$window.scrollTo(0, 0);
 					
@@ -331,34 +279,66 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			  })
 			});
 		} else {
-			propdbObj.ref('properties/'+propID).update({
-					propimg: propimg,
-					propstatus: propstatus,
-					proptype: proptype,
-					units: units,
-					rent: rent,
-					shared: shared, 
-					multiple: multiple,
-					address: address, 
-					date: date,
-					fromtime: fromtime,
-					to: to,
-					limit: limit
-			}).then(function(){
-				// link generated and property added message
-				$scope.$apply(function(){
-					// $rootScope.success = 'Property updated successfully.';
-					localStorage.setItem('propertysuccessmsg','Property updated successfully.');
-					angular.forEach(vm.scheduleIDs, function(value, key) {
-						firebase.database().ref('applyprop/'+value).update({	
-							schedulestatus: "cancelled"
-						})
-						console.log(value);
-					});			
-					$state.go('viewprop');
-				});
-				$window.scrollTo(0, 0);
-			})
+			if ($window.confirm("Are you sure you want to update these viewing slots? All schedules will be cancelled those will not belong to these viewing slots"))  {
+				propdbObj.ref('properties/'+propID).update({
+						propimg: propimg,
+						propstatus: propstatus,
+						proptype: proptype,
+						units: units,
+						rent: rent,
+						shared: shared, 
+						multiple: multiple,
+						address: address, 
+						date: date,
+						fromtime: fromtime,
+						to: to,
+						limit: limit
+				}).then(function(){
+					vm.slots = slotsBuildService.maketimeslots(date,fromtime,to,limit,multiple);
+					
+					firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
+						$scope.$apply(function(){
+							vm.appliedslots = [];
+							vm.scheduleIDs = [];
+							
+							if(snapshot.val() != undefined){
+								vm.appliedslots = $.map(snapshot.val(), function(value, index) {							
+									if(value.schedulestatus !== "cancelled"){	
+										vm.scheduleIDs.push(index);
+										return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot).format('HH:mm'),scheduleID:index}];				
+									}
+								});
+							}
+							
+							console.log(vm.slots);
+							console.log(vm.appliedslots);	
+														
+							for (var i = 0; i < vm.slots.length; i++) {
+								for (var j = 0; j < vm.appliedslots.length; j++) {
+									if (moment(vm.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  vm.slots[i].fromtime == vm.appliedslots[j].fromtime && vm.slots[i].to == vm.appliedslots[j].to) {					
+										var index = vm.scheduleIDs.indexOf(vm.appliedslots[j].scheduleID);
+										if (index > -1) {
+										   vm.scheduleIDs.splice(index, 1);
+										}
+									} 				
+								}
+							}		
+							
+							// link generated and property added message
+							localStorage.setItem('propertysuccessmsg','Property updated successfully.');
+							angular.forEach(vm.scheduleIDs, function(value, key) {
+								firebase.database().ref('applyprop/'+value).update({	
+									schedulestatus: "cancelled"
+								})
+								console.log(value);
+							});			
+							$state.go('viewprop');
+						});	
+					});	
+					
+					$window.scrollTo(0, 0);
+				})
+			}
 		}
 	}
 	
@@ -369,7 +349,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		vm.loader = 1;
 		var landlordID = localStorage.getItem('userID');
 		var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
-			// console.log(snapshot.val())
 			$scope.$apply(function(){
 				vm.success = 0;
 				if(snapshot.val()) {
@@ -386,7 +365,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				if(($rootScope.$previousState.name == "editprop" || $rootScope.$previousState.name == "addprop") && vm.propsuccess != ''){
 					vm.success = 1;
 				}
-				// console.log(vm.loader);
 				localStorage.setItem('propertysuccessmsg','')
 			});
 		   
@@ -437,7 +415,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					invalid: [0]
 				}
 				angular.forEach(propData.date, function(value, key) {
-					console.log(value);
 				  vm.timeSlot.push({date: new Date(value)});
 				  vm.prop.date.push(new Date(value));
 				  vm.prop.fromtime.push(new Date(propData.fromtime[key]));
@@ -445,8 +422,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				  vm.prop.limit.push(propData.limit[key]);
 				  vm.prop.multiple.push(propData.multiple[key]);				  
 				});
-				
-				console.log(vm.timeSlot)
 			});
 		});
 	} else {
@@ -454,7 +429,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		vm.submitaction = "Save";		
 		vm.otheraction = "Cancel";
 		vm.timeSlot = [{date:todaydate}];
-		// vm.prop.invalid = [0];
 		vm.prop = {
 			propID: '',
 			landlordID: '',
@@ -478,7 +452,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	// Delete Property Permanently
 	this.delprop = function(propID){
-		// console.log("delete action");
 		var propertyObj = $firebaseAuth();
 		var propdbObj = firebase.database();
 		if ($window.confirm("Do you want to continue?"))  {

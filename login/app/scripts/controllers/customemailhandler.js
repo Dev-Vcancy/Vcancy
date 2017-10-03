@@ -18,6 +18,7 @@ vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$ro
 	if(mode == 'verifyEmail') {
 		firebase.auth().applyActionCode(oobCode).then(function(resp) {
 			localStorage.setItem('emailHandled', "Thanks for verifying your email.");
+			localStorage.setItem('userEmailVerified', "true");
 			$scope.$apply(function(){
 				$rootScope.emailhandler = localStorage.getItem('emailHandled');	
 			});			
