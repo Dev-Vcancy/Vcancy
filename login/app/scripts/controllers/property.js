@@ -37,7 +37,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	// timeSlot for Date and Timepicker
 	vm.addTimeSlot = function(slotlen){
+		console.log(slotlen);
 		vm.timeSlot.push({date:todaydate});
+		vm.prop.multiple[slotlen] = true;
 	}
 	
 	// to remove timeslots
@@ -197,9 +199,14 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				if(vm.prop.limit[key] > subslots){
 					// vm.prop.limit[key] = '';
 					vm.prop.invalid[key] = 1;
+					vm.isDisabled = 1;
 				} else {
 					vm.prop.invalid[key] = 0;
+					vm.isDisabled = 0;
 				}
+			} else {
+				vm.prop.invalid[key] = 0;
+				vm.isDisabled = 0;
 			}
 								
 		// });
@@ -363,18 +370,21 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
 			$scope.$apply(function(){
+				vm.success = 0;
 				if(snapshot.val()) {
 			 		vm.viewprops = snapshot.val();
 			 		vm.propsavail = 1;
 					vm.propsuccess = localStorage.getItem('propertysuccessmsg');
-					vm.success = 1;
 				}
 			 	else {
 			 		vm.propsavail = 0;
 					vm.propsuccess = localStorage.getItem('propertysuccessmsg');
-					vm.success = 1;
 			 	}
-				console.log("here:"+localStorage.getItem('propertysuccessmsg'));
+				
+				console.log($rootScope.$previousState.name);
+				if(($rootScope.$previousState.name == "editprop" || $rootScope.$previousState.name == "addprop") && vm.propsuccess != ''){
+					vm.success = 1;
+				}
 				localStorage.setItem('propertysuccessmsg','')
 			});
 		   
@@ -421,7 +431,8 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					fromtime : [],
 					to : [],
 					limit : [],
-					propertylink: propData.propertylink
+					propertylink: propData.propertylink,
+					invalid: [0]
 				}
 				angular.forEach(propData.date, function(value, key) {
 					console.log(value);
@@ -449,7 +460,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			propstatus : '',
 			proptype : '',
 			units : '',
-			multiple: [],
+			multiple: [true],
 			rent: '',
 			shared : '',
 			address : '',

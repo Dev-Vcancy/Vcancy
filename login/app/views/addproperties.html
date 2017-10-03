@@ -130,7 +130,7 @@
 							<div class="col-sm-6">
 								<button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
 								<a ng-click="propctrl.delprop(propctrl.prop.propID)" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Delete'">Delete</a>
-								<button type="submit" ng-disabled="addpropForm.$invalid"  class="btn btn-success pull-right">{{propctrl.submitaction}}  </button>
+								<button type="submit" ng-disabled="addpropForm.$invalid || propctrl.isDisabled"  class="btn btn-success pull-right">{{propctrl.submitaction}}  </button>
 							</div>	
 							<div class="col-sm-12">
 								<div class="col-xs-11 col-md-offset-3 col-md-5">
