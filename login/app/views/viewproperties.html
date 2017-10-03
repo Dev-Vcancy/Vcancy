@@ -47,9 +47,9 @@
 			                        <span><strong>ACTIVE</strong></span> <input ng-click="propctrl.toggleSwitch(key)" id="inac{{key}}" type="checkbox" checked="checked" hidden="hidden">
 			                        <label for="inac{{key}}"  class="ts-helper  m-l-10 m-r-10 ac-inac"></label><span><strong>INACTIVE</strong></span>
 			                    </div>
-								<a href="#/editprop/{{key}}">Edit</a>
-								<input type="hidden" disabled="true" ng-model="x.propertylink" id="propertylink"/>
-								<a class="copylink_view" ><i tooltip-class="tooltip-blue" uib-tooltip="{{propctrl.copy}}" ng-copy="x.propertylink" onSuccess="propctrl.copySuccess(e)" class="zmdi zmdi-copy zmdi-hc-fw" style="font-size:25px;" ></i></a>
+								<span><a href="#/editprop/{{key}}">Edit</a>
+								<span class="m-l-10"><input type="hidden" disabled="true" ng-model="x.propertylink" id="propertylink"/>
+								<a class="copylink_view" ><i tooltip-class="tooltip-blue" uib-tooltip="{{propctrl.copy}}" ng-copy="x.propertylink" onSuccess="propctrl.copySuccess(e)" class="zmdi zmdi-copy zmdi-hc-fw" style="font-size:25px;" ></i></a></span></span>
 							</div>
 						</div>
 					</div>
