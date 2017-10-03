@@ -8,8 +8,15 @@
         <div class="container">
 			<div class='message' ng-if="propctrl.success == 1"><div class="alert alert-success alert-dismissable fade in"> {{propctrl.propsuccess}}</div></div>
 			<div class="block-header text-center" ng-hide="!propctrl.propsavail">
-				<h2>Your Properties<a href="#/addprop" class="btn bgm-green pull-right"> Add Property </a></h2>
+				<h2>Your Properties<buttton  data-ui-sref="addprop"   class="btn bgm-green pull-right"> Add Property </button></h2>
             </div>
+            <div class="loader">
+	            <div class="preloader pl-xl">
+	                <svg class="pl-circular" viewBox="25 25 50 50">
+	                    <circle class="plc-path" cx="50" cy="50" r="20"/>
+	                </svg>
+	            </div>
+	      	</div>
 
             <div class="add_property_block">
 				<div class="card white-block bgm-cyan p-20 m-t-30" ng-show="!propctrl.propsavail">
@@ -17,7 +24,7 @@
 						<div class="property-icon m-b-20"><i class="zmdi zmdi-balance zmdi-hc-fw"></i></div>
 						<h1>Add Properties</h1>
 						<h3>Add a property to start collecting rent, market a vacancy, or collect applications.</h3>
-	                	<a href="#/addprop" class="btn btn-lg m-t-20">Add a Property</a>
+	                	<button data-ui-sref="addprop" class="btn btn-lg m-t-20">Add a Property</button>
 		         	</div>
 				</div>
 			</div>

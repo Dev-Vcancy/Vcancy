@@ -4,7 +4,7 @@
 // PROPERTY
 //=================================================
 
-vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','slotsBuildService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window,slotsBuildService) {
+vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','slotsBuildService','$location',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window,slotsBuildService,$location) {
 	$rootScope.invalid = '';
 	$rootScope.success = '';
 	$rootScope.error = '';	
@@ -13,6 +13,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	var vm = this;
 	vm.propsavail = 1;
 	
+
 	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
       var address = vm.prop.address.getPlace();
 	  // console.log(address);

@@ -92,7 +92,25 @@ body {
 	border-color: red !important;
     color: red !important;
 }
-
+.loader {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    background: #fff;
+    opacity: 0.9;
+    display: none;
+}
+.loader .preloader{
+    display: block;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
 .login-content:before {
     height: 50%;
     width: 100%;
