@@ -280,11 +280,6 @@ vcancyApp
 			templateUrl: 'views/terms.html',
 			resolve: { authenticate: authenticate }
 		})
-
-		.state ('rentalform', {
-			url: '/rentalform',
-			templateUrl: 'views/rental_app_form.html',
-		})
 		
 		// Tenant Routes
 		.state ('tenantdashboard', {
@@ -325,6 +320,11 @@ vcancyApp
 			resolve: { tenantauthenticate: tenantauthenticate }
 		})
 		
+		.state ('rentalform', {
+			url: '/rentalform',
+			templateUrl: 'views/rental_app_form.html',
+			resolve: { tenantauthenticate: tenantauthenticate }
+		})
 		
 		function authenticate($q,$state, $timeout, $rootScope) {
 			// console.log($rootScope.user.emailVerified);
@@ -388,8 +388,8 @@ vcancyApp
 		
 		
   })
-  // .run( [ '$rootScope', function ($rootScope) {
-        // $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
-            // $rootScope.$previousState = from;
-        // });
-      // }]);
+  .run( [ '$rootScope', function ($rootScope) {
+        $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
+            $rootScope.$previousState = from;
+        });
+      }]);

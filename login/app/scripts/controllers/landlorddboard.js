@@ -20,7 +20,7 @@ vcancyApp
 				snapshot.forEach(function(childSnapshot) {
 					// console.log(childSnapshot.val().propstatus);
 					
-					if(childSnapshot.val().propstatus == false){
+					if(childSnapshot.val().propstatus == true){
 						vm.proplive += 1;
 					}
 					
