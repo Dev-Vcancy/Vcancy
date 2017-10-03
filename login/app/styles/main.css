@@ -481,6 +481,11 @@ ul.header-inner li a:hover.button:before{
   width: 20%;
   max-width: 100%;
 }
+.cancel_status {
+    color: #f00;
+    font-weight: bold;
+    border: 1px solid;
+}
 @media (min-width: 1200px){
   #content .container {
       width: 95%;
