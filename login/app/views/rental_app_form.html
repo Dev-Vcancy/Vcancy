@@ -1,0 +1,135 @@
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
+
+<section id="main">
+    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+    <section id="content">
+
+        <div class="container">
+			<div class="block-header text-center">
+				<h2>Rental Application</h2>
+            </div>
+
+		    <div class="card app_form">
+
+		        <form class="form-horizontal" role="form">
+		            <div class="card-header">
+		                <p class="m-b-10">We offer to rent <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> (the “Rental unit”) at monthly rent of $ <span class="fg-line"><input type="text" class="form-control m-b-5" id="" placeholder=""></span> for a term of <span class="fg-line"><input type="text" class="form-control m-b-5" id="" placeholder=""></span> months starting <span class="fg-line"><input type="text" class="form-control m-b-5" id="" placeholder=""></span>(date). Parking is required for <span class="fg-line"><input type="text" class="form-control" id="" placeholder=""></span> vehicles (licensed only). This unit is strictly <strong>NON SMOKING.</strong> This offer is subject to acceptance by the landlord/property management company that listed the property. This application is made on the understanding that no betterments will be provided to the Rental Unit except those which may be specifically requested in this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.</p>
+
+						<p class="m-b-10">It is understood that this application <u>will not be processed unless fully completed.</u></p>
+
+						<p class="m-b-10">If the landlord/property management company accepts this Application, we will sign a Fixed Term Tenancy Agreement at the offices of the property management company or in person with the landlord and pay the security deposit. The Rental Unit will not be considered rented until the Fixed Term Tenancy Agreement is signed by the Tenant and the Landlord.</p>
+		            </div>
+
+		            <div class="card-body card-padding">
+		            	<h3 class="m-b-20 m-t-10">APPLICANT DETAILS:</h3>
+		            	<p class="m-b-10">Full Name: <span class="fg-line"><input type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span> Date of Birth: <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span>
+Tel (work): <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Tel (home): <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Email: <span class="fg-line"><input type="text" class="form-control m-b-5 w-9" id="" placeholder=""></span> Current Address: <span class="fg-line"><input type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span> City: <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
+						<div class="m-b-10">
+							<div class="radio m-b-15">
+								<span class="p-r-5 f-500">Do you rent or own the above address</span>
+							    <label>
+								    <input type="radio" class="" name="sample" value="">
+								    <i class="input-helper"></i>
+								    Rent
+								</label>
+								<label>
+								    <input type="radio" name="sample" value="">
+								    <i class="input-helper"></i>
+								    Own
+								</label>
+							</div>
+						</div>
+
+						<p class="m-b-10">
+							How long have you lived at this address: <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> 1 year 5 months(months/years) Rent/Mortgage amount: $ <span class="fg-line"><input type="text" class="form-control m-b-5" id="" placeholder=""></span> Reason for vacating existing home: <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><br> Full Name of Landlord: <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Landlord’s daytime phone #: <span class="fg-line"><input type="text" class="form-control m-b-5" id="" placeholder=""></span>
+						</p>
+
+						<p class="m-b-10">
+							<p>Additional Adult Occupants (18+) to occupy the premises: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
+
+							<p>Full Name: <span class="fg-line"><input type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span> Date of Birth:<span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
+						</p>
+
+						<p class="m-b-10">
+							<p>Additional Minors (0-18YRS) to occupy the premises: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
+
+							<p>Full Name: <span class="fg-line"><input type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span> Date of Birth:<span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
+						</p>
+
+						<p class="m-b-10">
+							<span class="radio m-b-15">
+								<span class="p-r-5 f-500">Pets:</span>
+							    <label>
+								    <input type="radio" class="" name="sample" value="">
+								    <i class="input-helper"></i>
+								    YES
+								</label>
+								<label>
+								    <input type="radio" name="sample" value="">
+								    <i class="input-helper"></i>
+								    NO
+								</label>
+								<span>How many and what kind: <span class="fg-line"><input type="text" class="form-control m-b-5" id="" placeholder=""></span></span>
+							</span> 
+						</p>
+
+						<div class="m-b-10">
+							<div class="radio m-b-15">
+								<span class="p-r-5 f-500">Smoking</span>
+							    <label>
+								    <input type="radio" class="" name="sample" value="">
+								    <i class="input-helper"></i>
+								    YES
+								</label>
+								<label>
+								    <input type="radio" name="sample" value="">
+								    <i class="input-helper"></i>
+								    NO
+								</label>
+							</div>
+						</div>
+
+		            	<h3 class="m-b-20 m-t-20">Employment Status & Income Verification: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></h3>
+		            	<h4 class="m-b-20 m-t-10">Applicant #1:</h4>
+		            	<p class="m-b-10">Current Employer:  <span class="fg-line"><input type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span> Position: <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span>
+Employer phone #: <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> How long have you worked in this company: <span class="fg-line"><input type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>Gross monthly income: $ <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> <span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input type="radio" class="" name="sample" value=""><i class="input-helper"></i>Employment</label><label><input type="radio" name="sample" value=""><i class="input-helper"></i>Retired</label></span> <br>Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
+
+
+		            	<h4 class="m-b-20 m-t-10">Vehicle Information:</h4>
+		            	<p class="m-b-10">Make: <span class="fg-line"><input type="text" class="form-control m-b-5" id="" placeholder=""></span> Model: <span class="fg-line"><input type="text" class="form-control m-b-5" id="" placeholder=""></span>
+Year: <span class="fg-line"><input type="text" class="form-control m-b-5" id="" placeholder=""></p>
+
+						<p>Name and phone number of personal/family reference who may be contacted in the case of <u>emergency:</u></p>
+						<p class="m-b-10">Name: <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span></p>
+
+		            	<h4 class="m-b-20 m-t-10">References:</h4>
+						<p class="m-b-10">1. Name: <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input type="text" class="form-control m-b-5 w-6" id="" placeholder=""></span></p>
+
+						<p class="m-b-10">2. Name: <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input type="text" class="form-control m-b-5 w-6" id="" placeholder=""></span></p>
+
+		            	<p class="f-500">You are authorized to obtaining credit checks & verifying details contained in this Application.</p>
+
+		            	<p>We will ensure that the collection, use, disclosure and retention of information will comply with the provisions of the <i>Freedom of information and Protection of Privacy Act.</i> Information will be collected and used only as necessary and for the intended purpose and will not be disclosed as required by law.</p> 
+
+		            	<p>I hereby state that the information contained herein is true and I authorize my References as listed above to release information regarding my employment and/or past/current tenancies.</p>
+
+		            	<p>Tenants are not chosen on a first come – first served basis. We choose the most suitable application for the unit at our sole discretion. This application form is to be used only in the interested of the owner of the rental unit.</p>
+
+		            	<p class="m-b-10">Dated: <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> Signature of Applicant #1:  <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span>(FULL NAME IN CAPS)  Signature of Applicant #2:   <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span>(FULL NAME IN CAPS)</p>
+
+		            	<button type="submit" class="btn bgm-orange btn-lg m-t-10">Submit</button> 
+		            </div>
+
+		        </form>
+		    </div>
+
+		</div>				
+    </section>
+</section>
+
+<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+<script type="text/javascript">
+    Waves.init();
+	Waves.attach('.btn');
+</script> 
+        
