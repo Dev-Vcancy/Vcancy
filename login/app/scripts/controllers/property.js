@@ -366,6 +366,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	// View Property
 	// vm.viewprops = {};
 	if($state.current.name == 'viewprop') {
+		vm.loader = 1;
 		var landlordID = localStorage.getItem('userID');
 		var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
@@ -380,11 +381,12 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			 		vm.propsavail = 0;
 					vm.propsuccess = localStorage.getItem('propertysuccessmsg');
 			 	}
-				
+				vm.loader = 0;
 				console.log($rootScope.$previousState.name);
 				if(($rootScope.$previousState.name == "editprop" || $rootScope.$previousState.name == "addprop") && vm.propsuccess != ''){
 					vm.success = 1;
 				}
+				// console.log(vm.loader);
 				localStorage.setItem('propertysuccessmsg','')
 			});
 		   
