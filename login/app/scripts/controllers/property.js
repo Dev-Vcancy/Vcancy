@@ -456,8 +456,24 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		var propdbObj = firebase.database();
 		if ($window.confirm("Do you want to continue?"))  {
 			propdbObj.ref('properties/'+propID).remove();
-			$state.go('viewprop');
-		}		
+			firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
+				$scope.$apply(function(){
+					vm.scheduleIDs = [];
+					
+					if(snapshot.val() != undefined){
+						$.map(snapshot.val(), function(value, index) {	
+							vm.scheduleIDs.push(index);	
+						});
+					}
+					angular.forEach(vm.scheduleIDs, function(value, key) {
+						firebase.database().ref('applyprop/'+value).update({	
+							schedulestatus: "removed"
+						})
+					});	
+				})
+				$state.go('viewprop');
+			})
+		}
 	}
 }])
 	

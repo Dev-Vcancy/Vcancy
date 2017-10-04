@@ -63,7 +63,7 @@
 										<tbody>
 											<tr ng-repeat="(key, x) in applyctrl.applyprop.availableslots" >	
 												<td>{{x.date | amDateFormat:'dddd, MMMM Do YYYY'}}</td>
-												<td>{{x.fromtime | amDateFormat:'h:mm:ss A'}} - {{x.to| amDateFormat:'h:mm:ss A'}}</td>
+												<td>{{x.fromtime | amDateFormat:'h:mm A'}} - {{x.to| amDateFormat:'h:mm A'}}</td>
 												<td>
 													<label class="radio">
 														<input type="radio" ng-required ng-model="applyctrl.applyprop.datetimeslot" ng-value="{{key}}"  name="datetimeslot" value="{{key}}">
