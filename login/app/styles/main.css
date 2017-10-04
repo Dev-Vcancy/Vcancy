@@ -290,7 +290,8 @@ ul.header-inner li a:hover.button:before{
   width: 100%;
 }
 .block-header > h2 {
-    font-size: 20px;
+    font-size: 25px;
+    font-weight: 500;
 }
 .white_block{
   float: left;
@@ -325,10 +326,9 @@ ul.header-inner li a:hover.button:before{
     margin-top: 0;
     font-size: 18px;
     color: #1aa1ab;
-    word-break: break-all;
-    width: 90%;
-    max-height: 40px;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .property-icon i {
@@ -492,11 +492,6 @@ ul.header-inner li a:hover.button:before{
       max-width: 1170px;
   }
 }
-@media (max-width: 1024px) and (min-width: 769px){
-  .property_detail h3 {
-      width: 85%;
-  }
-}
 @media screen and (min-width: 769px){
 	.toggled ~ #content{
 		padding-left: 280px;
@@ -581,8 +576,6 @@ ul.header-inner li a:hover.button:before{
 	}
 }
 
-.copylink_view{
-	position:absolute;
-	right:5px;
-	text-align:left;
+.copylink_view {
+    margin-top: 10px;
 }
