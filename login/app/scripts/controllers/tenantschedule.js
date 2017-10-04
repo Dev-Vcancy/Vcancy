@@ -8,12 +8,24 @@ vcancyApp
     .controller('tenantscheduleCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
 		
 		var vm = this;
+		vm.showCal = false;
 		var tenantID = localStorage.getItem('userID');
 		
 		var propdbObj = firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
 			$scope.$apply(function(){
 				if(snapshot.val()) {
+					vm.calendardata = $.map(snapshot.val(), function(value, index) {
+						if(value.schedulestatus == "confirmed") {
+							return [{scheduleID:index, className: 'bgm-cyan', title:value.address, start: value.dateslot}];
+						}
+					});						
+					
+					// vm.calendardata = [{scheduleID:"-KvaDdFDac3A_apLY-ce",className:"bgm-cyan",title:"Active kl",start:"24-September-2017"}]
+					$scope.calendardata = vm.calendardata;
+					
+					console.log($scope.calendardata);
+					
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
 						if(value.schedulestatus !== "removed") {
@@ -54,6 +66,7 @@ vcancyApp
 				} else {
 					
 				}
+				vm.showCal = true;
 			});
 		});
 		

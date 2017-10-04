@@ -57,7 +57,7 @@
 							<tr ng-repeat="(key,w) in tappctrl.tabledata">
 								<td ng-repeat="col in tappctrl.cols">{{w[col.field]}}</td>
 								<td ng-repeat="col in tappctrl.extracols">
-									<a href="#/rentalform" class="btn bgm-cyan">Submit</a>
+									<a href="#/rentalform/{{w[col.field]}}" class="btn bgm-cyan">Submit</a>
 								</td>		           
 							</tr>
 						</table>		               

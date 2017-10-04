@@ -17,10 +17,13 @@ vcancyApp
 			if(propID !=''){
 				vm.propcheck[propID] = !vm.propcheck[propID];
 			}
+			
+			vm.showCal = false;
 			firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
 				// console.log(snapshot.val())
 				$scope.$apply(function(){
 					if(snapshot.val()) {						
+						
 						$.map(snapshot.val(), function(value, index) {							
 							 if(vm.schedulepropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus !== "removed") {
 								  vm.schedulepropaddress.push({propID: value.propID, address: value.address}); 
@@ -28,6 +31,17 @@ vcancyApp
 							 } 	
 						});
 						
+						
+						vm.calendardata = $.map(snapshot.val(), function(value, index) {
+							if(value.schedulestatus == "confirmed" && (vm.propcheck[value.propID] == true || propID == '')) {
+								return [{scheduleID:index, className: 'bgm-cyan', title:value.address, start: value.dateslot}];
+							}
+						});						
+						
+						// vm.calendardata = [{scheduleID:"-KvaDdFDac3A_apLY-ce",className:"bgm-cyan",title:"Active kl",start:"24-September-2017"}]
+						$scope.calendardata = vm.calendardata;
+						
+						console.log($scope.calendardata);
 						
 						
 						//to map the object to array
@@ -76,6 +90,8 @@ vcancyApp
 					} else {
 						
 					}
+					
+					vm.showCal = true;
 				});
 			});
 		}
