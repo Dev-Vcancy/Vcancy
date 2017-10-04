@@ -77,12 +77,12 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 					
 				for (var i = 0; i < vm.applyprop.slots.length; i++) {
 					for (var j = 0; j < vm.appliedslots.length; j++) {
-						if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  vm.applyprop.slots[i].fromtime== vm.appliedslots[j].fromtime && vm.applyprop.slots[i].to == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == false) {					
+						if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == false) {					
 							vm.applyprop.slots[i].person = 0;
 							// break;
 						}
 						
-						if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  vm.applyprop.slots[i].fromtime== vm.appliedslots[j].fromtime && vm.applyprop.slots[i].to == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == true ) {
+						if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == true ) {
 							for (var l = 0; l < vm.applyprop.slots.length; l++) {
 								if(vm.applyprop.slots[l].dateslotindex ==  vm.applyprop.slots[i].dateslotindex){
 									vm.applyprop.slots[l].person -= 1;
