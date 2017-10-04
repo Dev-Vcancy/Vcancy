@@ -26,7 +26,7 @@
 						<table ng-table-dynamic="schedulectrl.tableSorting with schedulectrl.cols"  class="table table-striped table-vmiddle">
 							<tr ng-repeat="(key,w) in schedulectrl.tabledata">
 								<td ng-repeat="col in schedulectrl.cols">{{w[col.field]}}</td>
-								<td>
+								<td ng-repeat="col in schedulectrl.extracols">
 									<button class="btn btn-xs btn-success"  ng-hide="w.schedulestatus == 'confirmed' || w.schedulestatus == 'cancelled'" ng-click="schedulectrl.confirmschedule(w.scheduleID)">Confirm</button>
 									<button class="btn btn-xs btn-danger"  ng-hide="w.schedulestatus == 'cancelled'" ng-click="schedulectrl.cancelschedule(w.scheduleID)">Cancel</button>
 									

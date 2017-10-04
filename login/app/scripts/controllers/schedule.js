@@ -22,7 +22,7 @@ vcancyApp
 				$scope.$apply(function(){
 					if(snapshot.val()) {						
 						$.map(snapshot.val(), function(value, index) {							
-							 if(vm.schedulepropaddress.findIndex(x => x.propID == value.propID) == -1) {
+							 if(vm.schedulepropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus !== "removed") {
 								  vm.schedulepropaddress.push({propID: value.propID, address: value.address}); 
 								  vm.propcheck[value.propID] = true;
 							 } 	
@@ -33,14 +33,13 @@ vcancyApp
 						//to map the object to array
 						vm.tabledata = $.map(snapshot.val(), function(value, index) {
 							if(vm.propcheck[value.propID] == true || propID == ''){
-								return [{scheduleID:index, name:value.name, tenantlocation: value.tenantlocation, jobtitle: value.jobtitle, age: value.age, dateslot: value.dateslot, address:value.address, timerange: value.timerange, description: value.description, schedulestatus: value.schedulestatus}];
+								if(value.schedulestatus !== "removed") {
+									return [{scheduleID:index, name:value.name, tenantlocation: value.tenantlocation, jobtitle: value.jobtitle, age: value.age, dateslot: value.dateslot, address:value.address, timerange: value.timerange, description: value.description, schedulestatus: value.schedulestatus}];
+								}
 							}
 							
 							
 						});
-						
-						
-						
 			
 						vm.cols = [
 							  { field: "name", title: "Name", sortable: "name", show: true },
@@ -51,6 +50,10 @@ vcancyApp
 							  { field: "timerange", title: "Time", sortable: "timerange", show: true },
 							  { field: "description", title: "About", sortable: "description", show: true }
 							];
+							
+						vm.extracols = [
+							{ field: "", title: "", show: true}
+						];	
 						
 						//Sorting
 						vm.tableSorting = new NgTableParams({

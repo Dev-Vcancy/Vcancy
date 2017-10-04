@@ -30,22 +30,26 @@ vcancyApp
 		});
 		
 		var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
-			// console.log(snapshot.val())
+			console.log(snapshot.val())
 			$scope.$apply(function(){
-				snapshot.forEach(function(childSnapshot) {
-					// console.log(childSnapshot.val().propstatus);
+				$.map(snapshot.val(), function(value, index) {
 					
-					// if(childSnapshot.val().schedulestatus == "pending"){
-						vm.viewingschedule += 1;
+					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isBefore(new Date()) ) {
 						vm.viewed += 1;
-					// }
+					} 
+					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isAfter(new Date())) {
+						vm.viewingschedule += 1;
+					}
+					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date())  &&   moment(value.fromtimeslot).format('HH:mm') < moment(new Date()).format('HH:mm') &&  moment(value.toslot).format('HH:mm') < moment(new Date()).format('HH:mm')) {
+						vm.viewed += 1;
+					}
+					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date())  &&   moment(value.fromtimeslot).format('HH:mm') >= moment(new Date()).format('HH:mm') &&  moment(value.toslot).format('HH:mm') >= moment(new Date()).format('HH:mm')) {
+						vm.viewingschedule += 1;
+					}
 					
-				});
+				});	
 			});
 		   
 		});
-		
-		
-		
 		
 }])
