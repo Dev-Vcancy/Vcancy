@@ -46,7 +46,7 @@ vcancyApp
 			   var f = temp;
 			   var t = new Date(f.getTime() + (30 * 60 * 1000)); // 30 minutes add to from time 
 			   
-			   slots.push({date:value, fromtime:moment(f).format('HH:mm'), to:moment(t).format('HH:mm'), person: limit[key], multiple: multiple[key], dateslotindex: key});
+			   slots.push({date:value, fromtime:f, to:t, person: limit[key], multiple: multiple[key], dateslotindex: key});
 			   
 			   temp = new Date(t.getTime() + (1 * 60 * 1000)); // 1 minute add to TO time
 			}  
@@ -314,8 +314,8 @@ vcancyApp
 		
 		.state ('tenantapplications', {
 			url: '/tenantapplications',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
+			controller: 'tenantappCtrl',
+			controllerAs: 'tappctrl',
 			templateUrl: 'views/tenant_app.html',
 			resolve: { tenantauthenticate: tenantauthenticate }
 		})

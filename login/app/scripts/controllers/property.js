@@ -315,7 +315,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 														
 							for (var i = 0; i < vm.slots.length; i++) {
 								for (var j = 0; j < vm.appliedslots.length; j++) {
-									if (moment(vm.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  vm.slots[i].fromtime == vm.appliedslots[j].fromtime && vm.slots[i].to == vm.appliedslots[j].to) {					
+									if (moment(vm.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.slots[i].to).format('HH:mm') == vm.appliedslots[j].to) {					
 										var index = vm.scheduleIDs.indexOf(vm.appliedslots[j].scheduleID);
 										if (index > -1) {
 										   vm.scheduleIDs.splice(index, 1);
