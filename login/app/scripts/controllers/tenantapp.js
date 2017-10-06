@@ -1,7 +1,7 @@
 'use strict';
 
 //=================================================
-// Tenant Schedule
+// Tenant Applications
 //=================================================
 
 vcancyApp
@@ -10,7 +10,7 @@ vcancyApp
 		var vm = this;
 		var tenantID = localStorage.getItem('userID');
 		
-		var propdbObj = firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
+		firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
 			$scope.$apply(function(){
 				if(snapshot.val()) {
@@ -53,11 +53,44 @@ vcancyApp
 						}
 						 // dataset: vm.tabledata
 					})
-				} else {
-					
 				}
+			})
+		})
+		
+		firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
+			// console.log(snapshot.val())
+			$scope.$apply(function(){
+				if(snapshot.val()) {					
+					//to map the object to array
+					vm.submitappsdata = $.map(snapshot.val(), function(value, index) {	
+						return [{appID:index, address:value.address, dated: value.dated, rentalstatus: value.rentalstatus}];
+					});	
+					
+					vm.submitappscols = [
+						  { field: "address", title: "Address", sortable: "address", show: true },
+						  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
+						  { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
+						];
+						
+					//Sorting
+					vm.submitappsSorting = new NgTableParams({
+						// page: 1,            // show first page
+						// count: 10,           // count per page
+						sorting: {
+							name: 'asc'     // initial sorting
+						}
+					}, {
+						total: vm.submitappsdata.length, // length of data
+						getData: function($defer, params) {
+							// console.log(params);
+							// use build-in angular filter
+							var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
 				
-				console.log(vm.tabledata);
+							$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+						}
+						 // dataset: vm.submitappsdata
+					})
+				} 
 			});
 		});
 }])
