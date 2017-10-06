@@ -11,17 +11,17 @@ vcancyApp
 		var tenantID = localStorage.getItem('userID');
 		
 		var propdbObj = firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
-			console.log(snapshot.val())
+			// console.log(snapshot.val())
 			$scope.$apply(function(){
 				if(snapshot.val()) {
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
-						console.log((moment(value.fromtimeslot).format("HH:mm") , moment(new Date()).format("HH:mm")));
 						
 						if(value.schedulestatus == "confirmed" && moment(value.dateslot).isBefore(new Date()) ) {
 							return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						}
-						if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date())  &&   moment(value.fromtimeslot).format('HH:mm') < moment(new Date()).format('HH:mm') &&  moment(value.toslot).format('HH:mm') < moment(new Date()).format('HH:mm')) {
+						
+						if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date())  &&   moment(value.fromtimeslot).format("HH:mm") < moment(new Date()).format("HH:mm") &&  moment(value.to).format("HH:mm") < moment(new Date()).format("HH:mm")) {
 							return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						}
 					});	
@@ -32,7 +32,7 @@ vcancyApp
 						];
 						
 					vm.extracols = [
-						  { field: "", title: "", show: true }
+						  { field: "scheduleID", title: "", show: true }
 						];
 						
 					//Sorting
