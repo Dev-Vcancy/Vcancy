@@ -28,7 +28,7 @@ vcancyApp
 					
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
-						if(value.schedulestatus !== "removed") {
+						if(value.schedulestatus !== "removed"  && value.schedulestatus !== "submitted") {
 							return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						}
 					});			
