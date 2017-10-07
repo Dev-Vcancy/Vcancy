@@ -9,7 +9,15 @@
 			<div class="block-header text-center">
 				<h2>Viewing Schedule</h2>				
 				
-            </div>			
+            </div>	
+			<div class="loader" ng-if="schedulectrl.loader">
+	            <div class="preloader pl-xl">
+	                <svg class="pl-circular" viewBox="25 25 50 50">
+	                    <circle class="plc-path" cx="50" cy="50" r="20"/>
+	                </svg>
+	            </div>
+	      	</div>
+
 			<div class="card white-block p-20">
 				<div class="card-header row">
 					<div class="col-sm-4" ng-repeat="(key,w) in schedulectrl.schedulepropaddress">
@@ -33,7 +41,10 @@
 									<span class="cancel_status btn-xs" ng-show="w.schedulestatus == 'cancelled'">Cancelled</span>
 								</td>		           
 							</tr>
-						</table>		               
+						</table>
+						<div ng-if="schedulectrl.schedulesavail == 0">
+							No Schedules yet
+						</div>	
 		            </div>
         		</div>
 			</div>

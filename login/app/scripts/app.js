@@ -273,6 +273,8 @@ vcancyApp
 		
 		.state ('app', {
 			url: '/app',
+			controller: 'landlordappCtrl',
+			controllerAs: 'lappctrl',
 			templateUrl: 'views/app.html',
 			resolve: { authenticate: authenticate }
 		})  
@@ -306,6 +308,14 @@ vcancyApp
 			controller: 'maCtrl',
 			controllerAs: 'mactrl',
 			templateUrl: 'views/terms.html',
+			resolve: { authenticate: authenticate }
+		})
+		
+		.state ('viewtenantapplication', {
+			url: '/viewapplication/{appID}',
+			controller: 'viewappCtrl',
+			controllerAs: 'vappctrl',
+			templateUrl: 'views/view_rental_app_form.html',
 			resolve: { authenticate: authenticate }
 		})
 		

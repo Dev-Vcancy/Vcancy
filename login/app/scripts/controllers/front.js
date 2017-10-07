@@ -25,12 +25,14 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				 // console.log(firebase.auth().currentUser);
 				 if(firebase.auth().currentUser != null){
 					 localStorage.setItem('userID', firebase.auth().currentUser.uid);
+					 localStorage.setItem('userEmail', firebase.auth().currentUser.email);
 					 localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
 				 } 
 				 // console.log(localStorage.getItem('currentUser'));
 
 				 if(firebase.auth().currentUser != null){
 					 $rootScope.uid = firebase.auth().currentUser.uid;
+					 $rootScope.userEmail = firebase.auth().currentUser.email;
 					 $rootScope.emailVerified = firebase.auth().currentUser.emailVerified;
 				 } 
 				 
@@ -127,11 +129,13 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 						authObj.$signInWithEmailAndPassword(email, pass).then(function(firebaseUser) {
 							 if(firebase.auth().currentUser != null){
 								 localStorage.setItem('userID', firebase.auth().currentUser.uid);
+								 localStorage.setItem('userEmail', firebase.auth().currentUser.email);
 								 localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
 							 } 
 
 							 if(firebase.auth().currentUser != null){
 								 $rootScope.uid = firebase.auth().currentUser.uid;
+								 $rootScope.userEmail = firebase.auth().currentUser.email;
 								 $rootScope.emailVerified = firebase.auth().currentUser.emailVerified;
 							 } 
 							

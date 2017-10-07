@@ -15,6 +15,8 @@ vcancyApp
 		vm.propactive = 0;
 		vm.applicantcompet = 0;
 		
+		vm.loader = 1;
+		
 		var propdbObj = firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
 			console.log(snapshot.val())
 			$scope.$apply(function(){
@@ -27,7 +29,12 @@ vcancyApp
 						vm.viewingschedule += 1;
 					}
 					
+					if(value.schedulestatus == "submitted"){
+						vm.submitapps += 1;
+					}
+					
 				});	
+				vm.loader = 0;
 			});
 		   
 		});

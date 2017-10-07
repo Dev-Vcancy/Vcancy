@@ -68,7 +68,7 @@ vcancyApp
 						vm.extracols = [
 							{ field: "", title: "", show: true}
 						];	
-						
+						vm.schedulesavail = 1;
 						//Sorting
 						vm.tableSorting = new NgTableParams({
 						      // initial sort order
@@ -76,6 +76,12 @@ vcancyApp
 						    }, {
 						      dataset: vm.tabledata
 						    });
+					} else {
+						vm.tabledata = [{scheduleID:'', name:'', tenantlocation: '', jobtitle: '', age: '', dateslot: '', address:'', timerange: '', description: '', schedulestatus: ''}];						
+						vm.calendardata = [{scheduleID:'', className: 'bgm-cyan', title:'', start: ''}]						
+						$scope.calendardata = vm.calendardata;
+						
+						vm.schedulesavail = 0;
 					}
 					
 					vm.showCal = true;
