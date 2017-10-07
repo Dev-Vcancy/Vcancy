@@ -71,24 +71,11 @@ vcancyApp
 						
 						//Sorting
 						vm.tableSorting = new NgTableParams({
-							// page: 1,            // show first page
-							// count: 10,           // count per page
-							sorting: {
-								name: 'asc'     // initial sorting
-							}
-						}, {
-							total: vm.tabledata.length, // length of data
-							getData: function($defer, params) {
-								// console.log(params);
-								// use build-in angular filter
-								var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
-					
-								$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-							}
-							 // dataset: vm.tabledata
-						})
-					} else {
-						
+						      // initial sort order
+						      sorting: { name: "asc" } 
+						    }, {
+						      dataset: vm.tabledata
+						    });
 					}
 					
 					vm.showCal = true;
