@@ -11,6 +11,8 @@ vcancyApp
 		var tenantID = localStorage.getItem('userID');
 		var scheduleID = $stateParams.scheduleId;
 		var tenantEmail = localStorage.getItem('userEmail');
+		vm.draft = "false";
+		
 		vm.adult = [0];
 		vm.minor = [0];
 		vm.addadult = function(adultlen){
@@ -19,6 +21,29 @@ vcancyApp
 		vm.addminor = function(minorlen){
 			vm.minor.push(minorlen);
 		}
+		
+		// to remove adult
+		vm.removeadult = function(slotindex){
+			vm.adult.splice(slotindex,1);
+			vm.rentaldata.otherappname.splice(slotindex,1);
+			vm.rentaldata.otherappdob.splice(slotindex,1);
+			vm.rentaldata.otherappcurrentemployer.splice(slotindex,1);
+			vm.rentaldata.otherappposition.splice(slotindex,1);	
+			vm.rentaldata.otherappemployerphone.splice(slotindex,1);
+			vm.rentaldata.otherappworkingduration.splice(slotindex,1);
+			vm.rentaldata.otherappgrossmonthlyincome.splice(slotindex,1);
+			vm.rentaldata.otherappincometype.splice(slotindex,1);	
+			vm.rentaldata.otherappotherincome.splice(slotindex,1);
+			vm.rentaldata.otherappsign.splice(slotindex,1);			
+		}
+		
+		// to remove minor
+		vm.removeminor = function(slotindex){			
+			vm.minor.splice(slotindex,1);
+			vm.rentaldata.minorappdob.splice(slotindex,1);
+			vm.rentaldata.minorappname.splice(slotindex,1);
+		}
+		
 		
 		vm.tenantdata = [];
 		vm.rentaldata = [];
@@ -95,37 +120,97 @@ vcancyApp
 		vm.rentaldata.appsign =  '';
 		vm.rentaldata.otherappsign =  [];
 		
-		
-		firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
-			// console.log(snapshot.val())
+		firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(scheduleID).once("value", function(snapshot) {	
+			console.log(snapshot.val());
 			$scope.$apply(function(){
-				if(snapshot.val()) {
-					vm.scheduledata = snapshot.val();
-					vm.scheduledata.scheduleID = snapshot.key;
-					
-					firebase.database().ref('properties/'+vm.scheduledata.propID).once("value", function(snap) {	
+				if(snapshot.val() !== null) {
+					$.map(snapshot.val(),function(value,index){
+						vm.applicationID = index;
+						vm.draftdata = "true";
+						vm.tenantdata.tenantID = value.tenantID;
+						vm.scheduledata.scheduleID = value.scheduleID;
+						vm.propdata.propID = value.propID;
+						
+						vm.propdata.address = value.address;
+						vm.propdata.rent = value.rent;
+						vm.rentaldata.months = value.months;
+						vm.rentaldata.startdate = value.startdate;
+						vm.rentaldata.parking = value.parking;
+						vm.rentaldata.telwork = value.telwork;
+						vm.rentaldata.telhome = value.telhome;
+						vm.tenantdata.tenantEmail = value.applicantemail;
+						vm.rentaldata.appadress = value.appadress;
+						vm.rentaldata.appcity = value.applicantcity;
+						vm.rentaldata.maritalstatus = value.maritalstatus;
+						vm.rentaldata.rent_own = value.rent_own;
+						vm.rentaldata.live_time = value.live_time_at_address;
+						vm.rentaldata.rentamt = value.rentamt;
+						vm.rentaldata.vacantreason = value.vacantreason;
+						vm.rentaldata.landlordname = value.landlordname;
+						vm.rentaldata.landlordphone = value.landlordphone;
+						vm.rentaldata.pets = value.pets;
+						vm.rentaldata.petsdesc = value.petsdesc;
+						vm.rentaldata.smoking = value.petsdesc;
+						vm.rentaldata.vehiclemake = value.vehiclemake;
+						vm.rentaldata.vehiclemodel = value.vehiclemodel;
+						vm.rentaldata.vehicleyear = value.vehicleyear;						
+						vm.rentaldata.emergencyname = value.emergencyname;
+						vm.rentaldata.emergencyphone = value.emergencyphone;
+						vm.rentaldata.refone_name = value.refone_name;
+						vm.rentaldata.refone_phone = value.refone_phone;
+						vm.rentaldata.refone_relation = value.refone_relation;
+						vm.rentaldata.reftwo_name = value.reftwo_name;
+						vm.rentaldata.reftwo_phone = value.reftwo_phone;
+						vm.rentaldata.reftwo_relation = value.reftwo_relation;
+						vm.rentaldata.dated = value.dated;
+					});
+					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
 						$scope.$apply(function(){
 							if(snap.val()) {
-								vm.propdata = snap.val();
-								vm.propdata.propID = snap.key;								
+								$.map(snap.val(), function(v, k) {
+									
+								});
 							}
-						});								
+						});
 					});
-					firebase.database().ref('users/'+tenantID).once("value", function(snapval) {	
+				} else {
+						vm.draftdata = "false";
+					firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
+						// console.log(snapshot.val())
 						$scope.$apply(function(){
-							if(snapval.val()) {
-								vm.tenantdata = snapval.val();
-								console.log(vm.tenantdata);
-								vm.tenantdata.tenantID = snapval.key;
-								vm.tenantdata.tenantName = vm.tenantdata.firstname+" "+vm.tenantdata.lastname;
-								vm.tenantdata.tenantEmail = tenantEmail;
-							}
-						});								
-					});					
-				} 
+							if(snapshot.val()) {
+								vm.scheduledata = snapshot.val();
+								vm.scheduledata.scheduleID = snapshot.key;
+								
+								firebase.database().ref('properties/'+vm.scheduledata.propID).once("value", function(snap) {	
+									$scope.$apply(function(){
+										if(snap.val()) {
+											vm.propdata = snap.val();
+											vm.propdata.propID = snap.key;								
+										}
+									});								
+								});
+								firebase.database().ref('users/'+tenantID).once("value", function(snapval) {	
+									$scope.$apply(function(){
+										if(snapval.val()) {
+											vm.tenantdata = snapval.val();
+											
+											vm.tenantdata.tenantID = snapval.key;
+											vm.tenantdata.tenantName = vm.tenantdata.firstname+" "+vm.tenantdata.lastname;
+											vm.tenantdata.tenantEmail = tenantEmail;
+										}
+									});								
+								});					
+							} 
+						});
+					});
+				}
+				console.log(vm.tenantdata);	
+				console.log(vm.rentaldata);	
+				console.log(vm.propdata);	
 			});
 		});
-			
+		
 			
 		vm.rentalAppSubmit = function(){
 			console.log(vm.rentaldata);
@@ -221,90 +306,179 @@ vcancyApp
 					}];
 			});	
 			
+			if(vm.draftdata === "false") {		
+				firebase.database().ref('submitapps/').push().set({
+					tenantID: tenantID,
+					scheduleID: scheduleID,
+					propID: propID,
 					
-			firebase.database().ref('submitapps/').push().set({
-				tenantID: tenantID,
-				scheduleID: scheduleID,
-				propID: propID,
-				
-				address: address,
-				rent: rent,
-				months: months,
-				startdate: startdate,
-				parking: parking,					
+					address: address,
+					rent: rent,
+					months: months,
+					startdate: startdate,
+					parking: parking,					
 
-				telwork: telwork,
-				telhome: telhome,
-				applicantemail: applicantemail,
-				appaddress: '', //appaddress,
-				applicantcity: applicantcity,
-				maritalstatus: maritalstatus,
-				rent_own: rent_own,
-				live_time_at_address: live_time_at_address,
-				rentamt: rentamt,
-				vacantreason: vacantreason,
-				landlordname: landlordname,
-				landlordphone: landlordphone,
-					
-				pets: pets,
-				petsdesc: petsdesc,
-				smoking:smoking,
-				
-				vehiclemake: vehiclemake,
-				vehiclemodel: vehiclemodel,
-				vehicleyear: vehicleyear,
-				
-				emergencyname: emergencyname,
-				emergencyphone: emergencyphone,
-				
-				refone_name: refone_name,
-				refone_phone: refone_phone,
-				refone_relation: refone_relation,
-				
-				reftwo_name: reftwo_name,
-				reftwo_phone: reftwo_phone,
-				reftwo_relation: reftwo_relation,			
-				
-				applicantsno: (vm.addadult.length)+1,
-				
-				dated: dated,
-				
-				rentalstatus: "pending"
-			}).then(function(){
-				 //Generate the applicant details of submitted app to new table
-				firebase.database().ref('submitapps/').limitToLast(1).once("child_added", function (snapshot) {		
-			  
-					if(snapshot.key != "undefined"){
-						var applicantsdata = {
-							"applicantID": snapshot.key,
-							"mainapplicant": {
-												"applicantname": applicantname,
-												"applicantdob": applicantdob,												
-												"appcurrentemployer": appcurrentemployer,
-												"appposition": appposition,
-												"appemployerphone": appemployerphone,
-												"appworkingduration": appworkingduration,
-												"appgrossmonthlyincome": appgrossmonthlyincome,
-												"appincometype": appincometype,
-												"appotherincome": appotherincome,												
-												"appsign": appsign,
-											},
-							"otherapplicants": vm.adultapplicants,
-							"minors":	vm.minorapplicants	 					
-						}
-
-						console.log(applicantsdata);
-					
-						firebase.database().ref('submitappapplicants/').push().set(applicantsdata);
+					telwork: telwork,
+					telhome: telhome,
+					applicantemail: applicantemail,
+					appaddress: '', //appaddress,
+					applicantcity: applicantcity,
+					maritalstatus: maritalstatus,
+					rent_own: rent_own,
+					live_time_at_address: live_time_at_address,
+					rentamt: rentamt,
+					vacantreason: vacantreason,
+					landlordname: landlordname,
+					landlordphone: landlordphone,
 						
-						// update the schedule to be aubmitted application
-						firebase.database().ref('applyprop/'+scheduleID).update({	
-							schedulestatus: "submitted"
-						})					
-						$state.go('tenantapplications');
-					}				
+					pets: pets,
+					petsdesc: petsdesc,
+					smoking:smoking,
+					
+					vehiclemake: vehiclemake,
+					vehiclemodel: vehiclemodel,
+					vehicleyear: vehicleyear,
+					
+					emergencyname: emergencyname,
+					emergencyphone: emergencyphone,
+					
+					refone_name: refone_name,
+					refone_phone: refone_phone,
+					refone_relation: refone_relation,
+					
+					reftwo_name: reftwo_name,
+					reftwo_phone: reftwo_phone,
+					reftwo_relation: reftwo_relation,			
+					
+					applicantsno: (vm.adult.length)+1,
+					
+					dated: dated,
+					
+					rentalstatus: "pending"
+				}).then(function(){
+					 //Generate the applicant details of submitted app to new table
+					firebase.database().ref('submitapps/').limitToLast(1).once("child_added", function (snapshot) {		
+				  
+						if(snapshot.key != "undefined"){
+							var applicantsdata = {
+								"applicantID": snapshot.key,
+								"mainapplicant": {
+													"applicantname": applicantname,
+													"applicantdob": applicantdob,												
+													"appcurrentemployer": appcurrentemployer,
+													"appposition": appposition,
+													"appemployerphone": appemployerphone,
+													"appworkingduration": appworkingduration,
+													"appgrossmonthlyincome": appgrossmonthlyincome,
+													"appincometype": appincometype,
+													"appotherincome": appotherincome,												
+													"appsign": appsign,
+												},
+								"otherapplicants": vm.adultapplicants,
+								"minors":	vm.minorapplicants	 					
+							}
+
+							console.log(applicantsdata);
+						
+							firebase.database().ref('submitappapplicants/').push().set(applicantsdata);
+							
+							if(vm.draft == "false"){
+								// update the schedule to be aubmitted application
+								firebase.database().ref('applyprop/'+scheduleID).update({	
+									schedulestatus: "submitted"
+								})
+							}
+																
+							$state.go('tenantapplications');
+						}				
+					})
 				})
-			})	
+			} else {
+				firebase.database().ref('submitapps/'+vm.applicationID).set({
+					tenantID: tenantID,
+					scheduleID: scheduleID,
+					propID: propID,
+					
+					address: address,
+					rent: rent,
+					months: months,
+					startdate: startdate,
+					parking: parking,					
+
+					telwork: telwork,
+					telhome: telhome,
+					applicantemail: applicantemail,
+					appaddress: '', //appaddress,
+					applicantcity: applicantcity,
+					maritalstatus: maritalstatus,
+					rent_own: rent_own,
+					live_time_at_address: live_time_at_address,
+					rentamt: rentamt,
+					vacantreason: vacantreason,
+					landlordname: landlordname,
+					landlordphone: landlordphone,
+						
+					pets: pets,
+					petsdesc: petsdesc,
+					smoking:smoking,
+					
+					vehiclemake: vehiclemake,
+					vehiclemodel: vehiclemodel,
+					vehicleyear: vehicleyear,
+					
+					emergencyname: emergencyname,
+					emergencyphone: emergencyphone,
+					
+					refone_name: refone_name,
+					refone_phone: refone_phone,
+					refone_relation: refone_relation,
+					
+					reftwo_name: reftwo_name,
+					reftwo_phone: reftwo_phone,
+					reftwo_relation: reftwo_relation,			
+					
+					applicantsno: (vm.adult.length)+1,
+					
+					dated: dated,
+					
+					rentalstatus: "pending"
+				}).then(function(){
+					 //Generate the applicant details of submitted app to new table
+					var applicantsdata = {
+						"applicationID": vm.applicationID,
+						"mainapplicant": {
+											"applicantname": applicantname,
+											"applicantdob": applicantdob,												
+											"appcurrentemployer": appcurrentemployer,
+											"appposition": appposition,
+											"appemployerphone": appemployerphone,
+											"appworkingduration": appworkingduration,
+											"appgrossmonthlyincome": appgrossmonthlyincome,
+											"appincometype": appincometype,
+											"appotherincome": appotherincome,												
+											"appsign": appsign,
+										},
+						"otherapplicants": vm.adultapplicants,
+						"minors":	vm.minorapplicants	 					
+					}
+
+					console.log(applicantsdata);
+				
+					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).set(applicantsdata);
+										
+					// update the schedule to be submitted application
+					firebase.database().ref('applyprop/'+scheduleID).update({	
+						schedulestatus: "submitted"
+					})								
+					$state.go('tenantapplications');				
+				})
+			}
+		}
+		
+		vm.rentalApp = function(){
+			vm.draft = "true";
+			// alert(vm.draft);
+			vm.rentalAppSubmit();
 		}
 		
 }])

@@ -12,6 +12,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	var todaydate = new Date();
 	var vm = this;
 	vm.propsavail = 1;
+	vm.timeslotmodified = "false";
 	
 	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
       var address = vm.prop.address.getPlace();
@@ -39,6 +40,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	vm.removeTimeSlot = function(slotindex){
 		if($state.current.name == 'editprop') {
 			if ($window.confirm("Are you sure you want to delete this viewing slot? "))  {	
+				vm.timeslotmodified = "true";
 				vm.timeSlot.splice(slotindex,1);
 				vm.prop.date.splice(slotindex,1);
 				vm.prop.fromtime.splice(slotindex,1);
@@ -130,6 +132,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 
 	vm.datetimeslotchanged = function (key) {
 		console.log("Date time SLot");
+		vm.timeslotmodified = "true";
 		if(vm.prop.fromtime[key] === undefined){
 			var fromtime  =  new Date();			
 		} else {
@@ -279,7 +282,14 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			  })
 			});
 		} else {
-			if ($window.confirm("Are you sure you want to update these viewing slots? All schedules will be cancelled those will not belong to these viewing slots"))  {
+			if(vm.timeslotmodified == "true"){
+				var confirmText = "Are you sure you want to update these viewing slots? All schedules will be cancelled those will not belong to these viewing slots";
+			} else {
+				var confirmText = "Are you sure you want to update the property?";
+			}
+			
+			
+			if ($window.confirm(confirmText))  {
 				propdbObj.ref('properties/'+propID).update({
 						propimg: propimg,
 						propstatus: propstatus,

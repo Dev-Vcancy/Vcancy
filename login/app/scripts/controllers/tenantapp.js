@@ -12,7 +12,7 @@ vcancyApp
 		vm.loader = 1;
 		
 		firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
-			// console.log(snapshot.val())
+			console.log(snapshot.val())
 			$scope.$apply(function(){
 				if(snapshot.val() != null) {
 					//to map the object to array
@@ -26,6 +26,8 @@ vcancyApp
 							// return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						// }
 					});	
+					
+					console.log(vm.tabledata);
 					vm.extracols = [
 						  { field: "scheduleID", title: "", show: true }
 						];
@@ -62,52 +64,59 @@ vcancyApp
 					}
 					 // dataset: vm.tabledata
 				})
-			})
-		})
-		
-		firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
-			// console.log(snapshot.val())
-			$scope.$apply(function(){
-				if(snapshot.val() !== null) {					
-					//to map the object to array
-					vm.submitappsdata = $.map(snapshot.val(), function(value, index) {	
-						return [{appID:index, address:value.address, dated: value.dated, rentalstatus: value.rentalstatus}];
-					});	
-					
-					vm.submittedappsavail = 1;
-				} else {
-					vm.submitappsdata = [{scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''}];
-					
-					vm.submittedappsavail = 0;
-				}
-					
-				vm.submitappscols = [
-					  { field: "address", title: "Address", sortable: "address", show: true },
-					  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
-					  { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
-					];
-					
 				
-				vm.loader = 0;	
-					
-				//Sorting
-				vm.submitappsSorting = new NgTableParams({
-					// page: 1,            // show first page
-					// count: 10,           // count per page
-					sorting: {
-						name: 'asc'     // initial sorting
+				$.map(snapshot.val(), function(val, key) {
+					if(val.schedulestatus == "submitted" ){
+						vm.submitappsdata = [];
+						firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(key).once("value", function(snap) {	
+							// console.log(snap.val())
+							$scope.$apply(function(){
+								if(snap.val() !== null) {					
+									//to map the object to array
+									$.map(snap.val(), function(value, index) {	
+										vm.submitappsdata.push({appID:index, address:value.address, dated: value.dated, rentalstatus: value.rentalstatus});
+									});	
+									
+									vm.submittedappsavail = 1;
+								} else {
+									vm.submitappsdata.push({scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''});
+									
+									vm.submittedappsavail = 0;
+								}
+									
+								vm.submitappscols = [
+									  { field: "address", title: "Address", sortable: "address", show: true },
+									  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
+									  { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
+									];
+									
+								
+								vm.loader = 0;	
+									
+								//Sorting
+								vm.submitappsSorting = new NgTableParams({
+									// page: 1,            // show first page
+									// count: 10,           // count per page
+									sorting: {
+										name: 'asc'     // initial sorting
+									}
+								}, {
+									total: vm.submitappsdata.length, // length of data
+									getData: function($defer, params) {
+										// console.log(params);
+										// use build-in angular filter
+										var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
+							
+										$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+									}
+									 // dataset: vm.submitappsdata
+								})
+							});
+						});
 					}
-				}, {
-					total: vm.submitappsdata.length, // length of data
-					getData: function($defer, params) {
-						// console.log(params);
-						// use build-in angular filter
-						var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
+				});
+				
+			})
+		})	
 			
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}
-					 // dataset: vm.submitappsdata
-				})
-			});
-		});
 }])
