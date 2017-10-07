@@ -7,9 +7,14 @@
 vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','slotsBuildService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window,$filter,slotsBuildService) {
 	
 	var vm = this;
-	
-	
-	
+	vm.emailVerifiedError = '';
+	firebase.database().ref('users/'+localStorage.getItem('userID')).once("value", function(snapval) {	
+		var userData = snapval.val();
+	  	$scope.$apply(function(){
+	  		console.log(userData);
+	  		vm.userName = userData.firstname + ' ' +userData.lastname;
+	  	});
+	 });
 	console.log(localStorage.getItem('userEmailVerified'));
 	if(localStorage.getItem('userEmailVerified') == "false" || !$rootScope.emailVerified ){
 		vm.isEmailVerified = 1;
@@ -38,7 +43,8 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				to : [],
 				limit : [],
 				multiple: [],
-				propertylink: propData.propertylink
+				propertylink: propData.propertylink,
+				name : vm.userName
 			}
 			angular.forEach(propData.date, function(value, key) {
 			  vm.applyprop.date.push(value);
@@ -116,49 +122,55 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 	
 	// Property Application form - Data of tenant save		
 	vm.tenantapply = function(applyprop){
-		// console.log(vm.applyprop);
-		var tenantID = localStorage.getItem('userID');
-		var propID = vm.applyprop.propID;
-		var address = vm.applyprop.address;
-		var name = vm.applyprop.name;
-		var tenantlocation = vm.applyprop.tenantlocation;
-		var age = vm.applyprop.age; 
-		var jobtitle = vm.applyprop.jobtitle; 
-		var landlordID =  vm.applyprop.landlordID;
-		var description = vm.applyprop.description; 
-		var datetimeslot = vm.applyprop.datetimeslot;
-		var dateslot = moment(vm.applyprop.availableslots[datetimeslot].date).format('DD-MMMM-YYYY');
-		var fslot = vm.applyprop.availableslots[datetimeslot].fromtime.toString();
-		var tslot = vm.applyprop.availableslots[datetimeslot].to.toString();
-		var timerange = moment(vm.applyprop.availableslots[datetimeslot].fromtime).format('hh:mm A')+" - "+moment(vm.applyprop.availableslots[datetimeslot].to).format('hh:mm A');
-		
-		// console.log(dateslot,fslot,tslot);
-		
-		
-		var applypropObj = $firebaseAuth();			
-		var applypropdbObj = firebase.database();
-		
-		applypropdbObj.ref('applyprop/').push().set({
-			tenantID: tenantID,
-			propID : propID,
-			address: address,
-			schedulestatus: "pending",
-			name : name,
-			tenantlocation : tenantlocation,
-			age : age, 
-			datetimeslot : datetimeslot,
-			dateslot : dateslot,
-			fromtimeslot : fslot,
-			toslot : tslot,
-			jobtitle : jobtitle, 
-			landlordID :  landlordID,
-			description : description, 
-			timerange: timerange
-		}).then(function(){
-			$state.go('applicationThanks');
-			// $rootScope.success = 'Application for property successfully sent!';	
-			console.log('Application for property successfully sent!');
-		})	
+		if(localStorage.getItem('userEmailVerified') !== 'false') {
+			vm.emailVerifiedError = '';
+			var tenantID = localStorage.getItem('userID');
+			var propID = vm.applyprop.propID;
+			var address = vm.applyprop.address;
+			var name = vm.applyprop.name;
+			var tenantlocation = vm.applyprop.tenantlocation;
+			var age = vm.applyprop.age; 
+			var jobtitle = vm.applyprop.jobtitle; 
+			var landlordID =  vm.applyprop.landlordID;
+			var description = vm.applyprop.description; 
+			var datetimeslot = vm.applyprop.datetimeslot;
+			var units = vm.applyprop.units;
+			var dateslot = moment(vm.applyprop.availableslots[datetimeslot].date).format('DD-MMMM-YYYY');
+			var fslot = vm.applyprop.availableslots[datetimeslot].fromtime.toString();
+			var tslot = vm.applyprop.availableslots[datetimeslot].to.toString();
+			var timerange = moment(vm.applyprop.availableslots[datetimeslot].fromtime).format('hh:mm A')+" - "+moment(vm.applyprop.availableslots[datetimeslot].to).format('hh:mm A');
+			
+			// console.log(dateslot,fslot,tslot);
+			
+			
+			var applypropObj = $firebaseAuth();			
+			var applypropdbObj = firebase.database();
+			
+			applypropdbObj.ref('applyprop/').push().set({
+				tenantID: tenantID,
+				propID : propID,
+				address: address,
+				schedulestatus: "pending",
+				name : name,
+				tenantlocation : tenantlocation,
+				age : age, 
+				datetimeslot : datetimeslot,
+				dateslot : dateslot,
+				fromtimeslot : fslot,
+				toslot : tslot,
+				jobtitle : jobtitle, 
+				landlordID :  landlordID,
+				description : description, 
+				timerange: timerange,
+				units: units
+			}).then(function(){
+				$state.go('applicationThanks');
+				// $rootScope.success = 'Application for property successfully sent!';	
+				console.log('Application for property successfully sent!');
+			})	
+		} else {
+			vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'
+		}
 	}
 
 }])

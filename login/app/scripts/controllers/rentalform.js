@@ -125,6 +125,7 @@ vcancyApp
 			$scope.$apply(function(){
 				if(snapshot.val() !== null) {
 					$.map(snapshot.val(),function(value,index){
+						console.log('here');
 						vm.applicationID = index;
 						vm.draftdata = "true";
 						vm.tenantdata.tenantID = value.tenantID;
@@ -174,7 +175,7 @@ vcancyApp
 						});
 					});
 				} else {
-						vm.draftdata = "false";
+					vm.draftdata = "false";
 					firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
 						// console.log(snapshot.val())
 						$scope.$apply(function(){
@@ -213,7 +214,7 @@ vcancyApp
 		
 			
 		vm.rentalAppSubmit = function(){
-			console.log(vm.rentaldata);
+			console.log(vm.draftdata);
 			var tenantID = vm.tenantdata.tenantID;
 			var scheduleID = vm.scheduledata.scheduleID;
 			var propID = vm.propdata.propID;
