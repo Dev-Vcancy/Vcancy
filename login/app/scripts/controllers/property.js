@@ -282,14 +282,13 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			  })
 			});
 		} else {
-			if(vm.timeslotmodified == "true"){
+			/*if(vm.timeslotmodified == "true"){
 				var confirmText = "Are you sure you want to update these viewing slots? All schedules will be cancelled those will not belong to these viewing slots";
 			} else {
 				var confirmText = "Are you sure you want to update the property?";
-			}
+			}*/
 			
 			
-			if ($window.confirm(confirmText))  {
 				propdbObj.ref('properties/'+propID).update({
 						propimg: propimg,
 						propstatus: propstatus,
@@ -348,7 +347,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					
 					$window.scrollTo(0, 0);
 				})
-			}
 		}
 	}
 	
