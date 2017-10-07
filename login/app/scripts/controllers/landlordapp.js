@@ -20,14 +20,17 @@ vcancyApp
 			firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
 			$scope.$apply(function(){
-				if(snapshot.val()) {										
+				if(snapshot.val() != null) {										
 					$.map(snapshot.val(), function(value, index) {							
 						 if(vm.apppropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus == "submitted") {
 							  vm.apppropaddress.push({propID: value.propID, address: value.address}); 
 							  vm.propcheck[value.propID] = true;
 						 } 	
 					});
-								
+				}
+					vm.submitappsdata = [];
+				
+				if(snapshot.val() != null) {	
 					//to map the object to array
 					vm.submitappsdata = $.map(snapshot.val(), function(value, index) {
 						if(vm.propcheck[value.propID] == true || propID == ''){					
@@ -61,40 +64,49 @@ vcancyApp
 							});
 						});
 					});
-										
-					vm.submitappscols = [
-						  { field: "name", title: "Name", sortable: "name", show: true },
-						  { field: "age", title: "Age", sortable: "age", show: true },
-						  { field: "profession", title: "Job Title", sortable: "profession", show: true },
-						  { field: "salary", title: "Salary", sortable: "salary", show: true },
-						  { field: "pets", title: "Pets", sortable: "pets", show: true },
-						  { field: "maritalstatus", title: "Marital Status", sortable: "maritalstatus", show: true },
-						  { field: "appno", title: "No of Appointment", sortable: "appno", show: true },
-						];
-						
+					
 					vm.submitappsextracols = [
-						  { field: "applicationID", title: "Credit Score", show: true }
+					  { field: "applicationID", title: "Credit Score", show: true }
 					];
+					
+					vm.submittedappsavail = 1;
+				} else {
+					vm.submitappsdata = [{scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''}];
+					
+					vm.submittedappsavail = 0;
+				}
+	
 						
-					//Sorting
-					vm.submitappsSorting = new NgTableParams({
-						// page: 1,            // show first page
-						// count: 10,           // count per page
-						sorting: {
-							name: 'asc'     // initial sorting
-						}
-					}, {
-						total: vm.submitappsdata.length, // length of data
-						getData: function($defer, params) {
-							// console.log(params);
-							// use build-in angular filter
-							var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
+				vm.submitappscols = [
+					  { field: "name", title: "Name", sortable: "name", show: true },
+					  { field: "age", title: "Age", sortable: "age", show: true },
+					  { field: "profession", title: "Job Title", sortable: "profession", show: true },
+					  { field: "salary", title: "Salary", sortable: "salary", show: true },
+					  { field: "pets", title: "Pets", sortable: "pets", show: true },
+					  { field: "maritalstatus", title: "Marital Status", sortable: "maritalstatus", show: true },
+					  { field: "appno", title: "No of Appointment", sortable: "appno", show: true },
+					];
+					
 				
-							$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-						}
-						 // dataset: vm.submitappsdata
-					})
-				} 
+					
+				//Sorting
+				vm.submitappsSorting = new NgTableParams({
+					// page: 1,            // show first page
+					// count: 10,           // count per page
+					sorting: {
+						name: 'asc'     // initial sorting
+					}
+				}, {
+					total: vm.submitappsdata.length, // length of data
+					getData: function($defer, params) {
+						// console.log(params);
+						// use build-in angular filter
+						var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
+			
+						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+					}
+					 // dataset: vm.submitappsdata
+				})
 			});
 		});
 		

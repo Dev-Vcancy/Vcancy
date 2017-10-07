@@ -21,7 +21,10 @@
 							<tr ng-repeat="(key,w) in tappctrl.submitappsdata">
 								<td ng-repeat="col in tappctrl.submitappscols">{{w[col.field]}}</td>
 							</tr>
-						</table>		               
+						</table>
+						<div ng-if="tappctrl.submitappsavail == 0">
+							No submitted applications yet
+						</div>						
 		            </div> 
         		</div>
 			</div>
@@ -39,7 +42,10 @@
 									<a href="#/rentalform/{{w[col.field]}}" class="btn bgm-cyan">Submit</a>
 								</td>		           
 							</tr>
-						</table>		               
+						</table>	
+						<div ng-if="tappctrl.pendingappsavail == 0">
+							No pending applications yet
+						</div>	 
 		            </div> 
         		</div>
 			</div>
