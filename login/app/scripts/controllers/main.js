@@ -24,6 +24,13 @@ vcancyApp
 			}
 		}
 		
+		if($state.current.name == "rentalform"){
+			this.sidebarToggle = {
+				left: false,
+				right: false
+			}
+		}
+		
 		// For Mainmenu Active Class
         this.$state = $state;    
         

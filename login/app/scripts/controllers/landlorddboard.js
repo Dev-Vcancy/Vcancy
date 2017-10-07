@@ -14,6 +14,8 @@ vcancyApp
 		vm.viewed = 0;
 		vm.submitapps = 0;
 		
+		vm.loader = 1;
+		
 		var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
 			$scope.$apply(function(){
@@ -25,6 +27,7 @@ vcancyApp
 					}
 					
 				});
+				vm.loader = 0;
 			});
 		   
 		});
@@ -46,8 +49,14 @@ vcancyApp
 					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date())  &&   moment(value.fromtimeslot).format('HH:mm') >= moment(new Date()).format('HH:mm') &&  moment(value.toslot).format('HH:mm') >= moment(new Date()).format('HH:mm')) {
 						vm.viewingschedule += 1;
 					}
+					if(value.schedulestatus == "submitted"){
+						vm.submitapps += 1;
+					}
+					
 					
 				});	
+				
+				vm.loader = 0;
 			});
 		   
 		});

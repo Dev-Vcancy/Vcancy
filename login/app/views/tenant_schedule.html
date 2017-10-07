@@ -10,6 +10,13 @@
 				<h2>Viewing Schedule</h2>				
 				
             </div>
+			<div class="loader" ng-if="tschedulectrl.loader">
+	            <div class="preloader pl-xl">
+	                <svg class="pl-circular" viewBox="25 25 50 50">
+	                    <circle class="plc-path" cx="50" cy="50" r="20"/>
+	                </svg>
+	            </div>
+	      	</div>
 			<div class="card white-block">
 				<div class="card-body">
 		            <div class="table-responsive">
@@ -20,7 +27,10 @@
 									<a class="btn btn-xs bgm-red" ng-hide="w.schedulestatus == 'cancelled'"  ng-click="tschedulectrl.cancelschedule(w.scheduleID)">Cancel</a>
 								</td>		           
 							</tr>
-						</table>		               
+						</table>
+						<div ng-if="tschedulectrl.schedulesavail == 0">
+							No Schedules yet
+						</div>							
 		            </div>          
         		</div>
 			</div>

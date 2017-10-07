@@ -10,6 +10,14 @@
 				<h2>Applications</h2>				
 				
             </div>
+			<div class="loader" ng-if="tappctrl.loader">
+	            <div class="preloader pl-xl">
+	                <svg class="pl-circular" viewBox="25 25 50 50">
+	                    <circle class="plc-path" cx="50" cy="50" r="20"/>
+	                </svg>
+	            </div>
+	      	</div>
+
 			<div class="card white-block p-20">
 				<div class="card-header">
 					<h2>Submitted Applications<small>All applications submitted to landlords and waiting for response</small></h2>
@@ -21,7 +29,10 @@
 							<tr ng-repeat="(key,w) in tappctrl.submitappsdata">
 								<td ng-repeat="col in tappctrl.submitappscols">{{w[col.field]}}</td>
 							</tr>
-						</table>		               
+						</table>
+						<div ng-if="tappctrl.submitappsavail == 0">
+							No submitted applications yet
+						</div>						
 		            </div> 
         		</div>
 			</div>
@@ -39,7 +50,10 @@
 									<a href="#/rentalform/{{w[col.field]}}" class="btn bgm-cyan">Submit</a>
 								</td>		           
 							</tr>
-						</table>		               
+						</table>	
+						<div ng-if="tappctrl.pendingappsavail == 0">
+							No pending applications yet
+						</div>	 
 		            </div> 
         		</div>
 			</div>
