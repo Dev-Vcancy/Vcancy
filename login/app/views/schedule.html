@@ -35,10 +35,10 @@
 							<tr ng-repeat="row in $data">
 								<td ng-repeat="col in $columns">{{row[col.field]}}</td>
 								<td ng-repeat="col in schedulectrl.extracols">
-									<button class="btn btn-xs btn-success"  ng-hide="w.schedulestatus == 'confirmed' || w.schedulestatus == 'cancelled'" ng-click="schedulectrl.confirmschedule(w.scheduleID)">Confirm</button>
-									<button class="btn btn-xs btn-danger"  ng-hide="w.schedulestatus == 'cancelled'" ng-click="schedulectrl.cancelschedule(w.scheduleID)">Cancel</button>
+									<button class="btn btn-xs btn-success"  ng-hide="row.schedulestatus == 'confirmed' || row.schedulestatus == 'cancelled'" ng-click="schedulectrl.confirmschedule(row.scheduleID)">Confirm</button>
+									<button class="btn btn-xs btn-danger"  ng-hide="row.schedulestatus == 'cancelled'" ng-click="schedulectrl.cancelschedule(w.scheduleID)">Cancel</button>
 									
-									<span class="cancel_status btn-xs" ng-show="w.schedulestatus == 'cancelled'">Cancelled</span>
+									<span class="cancel_status btn-xs" ng-show="row.schedulestatus == 'cancelled'">Cancelled</span>
 								</td>		           
 							</tr>
 						</table>
