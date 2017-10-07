@@ -10,6 +10,7 @@ vcancyApp
 		var vm = this;
 		vm.showCal = false;
 		var tenantID = localStorage.getItem('userID');
+		vm.loader = 1;
 		
 		var propdbObj = firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
@@ -52,6 +53,7 @@ vcancyApp
 					];
 					
 				
+				vm.loader = 0;
 				
 				//Sorting
 				vm.tableSorting = new NgTableParams({

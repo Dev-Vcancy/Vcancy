@@ -12,7 +12,7 @@ vcancyApp
 	
 		vm.propcheck = [];
 		vm.schedulepropaddress = [];
-		
+		vm.loader = 1;
 		vm.tablefilterdata = function(propID = '') {
 			if(propID !=''){
 				vm.propcheck[propID] = !vm.propcheck[propID];
@@ -73,7 +73,8 @@ vcancyApp
 						  { field: "description", title: "About", sortable: "description", show: true }
 						];
 						
-						
+					
+						vm.loader = 0;	
 					
 					//Sorting
 					vm.tableSorting = new NgTableParams({

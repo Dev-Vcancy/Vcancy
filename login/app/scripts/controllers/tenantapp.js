@@ -9,6 +9,7 @@ vcancyApp
 		
 		var vm = this;
 		var tenantID = localStorage.getItem('userID');
+		vm.loader = 1;
 		
 		firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
@@ -41,7 +42,7 @@ vcancyApp
 					  { field: "dateslot", title: "Viewed On", sortable: "dateslot", show: true }
 					];
 					
-				
+				vm.loader = 0;
 					
 				//Sorting
 				vm.tableSorting = new NgTableParams({
@@ -85,6 +86,9 @@ vcancyApp
 					  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
 					  { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
 					];
+					
+				
+				vm.loader = 0;	
 					
 				//Sorting
 				vm.submitappsSorting = new NgTableParams({

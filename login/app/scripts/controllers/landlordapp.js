@@ -11,6 +11,7 @@ vcancyApp
 		var landlordID = localStorage.getItem('userID');
 		vm.propcheck = [];
 		vm.apppropaddress = [];
+		vm.loader = 1;
 		
 		vm.tablefilterdata = function(propID = '') {
 			if(propID !=''){
@@ -87,7 +88,7 @@ vcancyApp
 					  { field: "appno", title: "No of Appointment", sortable: "appno", show: true },
 					];
 					
-				
+				vm.loader = 0;
 					
 				//Sorting
 				vm.submitappsSorting = new NgTableParams({
