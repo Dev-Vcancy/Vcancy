@@ -17,13 +17,13 @@ vcancyApp
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
 						
-						if(value.schedulestatus == "confirmed" && moment(value.dateslot).isBefore(new Date()) ) {
+						if(value.schedulestatus == "confirmed" ) { // && moment(value.dateslot).isBefore(new Date())
 							return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						}
 						
-						if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date())  &&   moment(value.fromtimeslot).format("HH:mm") < moment(new Date()).format("HH:mm") &&  moment(value.to).format("HH:mm") < moment(new Date()).format("HH:mm")) {
-							return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
-						}
+						// if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date())  &&   moment(value.fromtimeslot).format("HH:mm") < moment(new Date()).format("HH:mm") &&  moment(value.to).format("HH:mm") < moment(new Date()).format("HH:mm")) {
+							// return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+						// }
 					});	
 					
 					vm.cols = [
