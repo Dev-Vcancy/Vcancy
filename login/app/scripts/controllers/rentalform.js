@@ -20,6 +20,81 @@ vcancyApp
 			vm.minor.push(minorlen);
 		}
 		
+		vm.tenantdata = [];
+		vm.rentaldata = [];
+		vm.propdata = [];
+		vm.scheduledata = [];
+		
+		
+		vm.tenantdata.tenantID =  '';
+		vm.scheduledata.scheduleID =  '';
+		vm.propdata.propID =  '';
+		
+		vm.propdata.address =  '';
+		vm.propdata.rent =  '';
+		vm.rentaldata.months =  '';
+		vm.rentaldata.startdate =  '';
+		vm.rentaldata.parking =  '';
+		vm.tenantdata.tenantName =  '';
+		vm.rentaldata.dob =  '';
+		vm.rentaldata.telwork =  '';
+		vm.rentaldata.telhome =  '';
+		vm.tenantdata.tenantEmail =  '';
+		vm.rentaldata.appadress =  '';
+		vm.rentaldata.appcity =  '';
+		vm.rentaldata.maritalstatus =  '';
+		vm.rentaldata.rent_own =  '';
+		vm.rentaldata.live_time =  '';
+		vm.rentaldata.rentamt =  '';
+		vm.rentaldata.vacantreason =  '';
+		vm.rentaldata.landlordname =  '';
+		vm.rentaldata.landlordphone =  '';
+		
+		vm.rentaldata.otherappname =  [];
+		vm.rentaldata.otherappdob =  [];
+		
+		vm.rentaldata.minorappname =  [];
+		vm.rentaldata.minorappdob =  [];
+		
+		vm.rentaldata.pets =  '';
+		vm.rentaldata.petsdesc =  '';
+		vm.rentaldata.smoking =  '';
+		
+		vm.rentaldata.appcurrentemployer =  '';
+		vm.rentaldata.appposition =  '';
+		vm.rentaldata.appemployerphone =  '';
+		vm.rentaldata.appworkingduration =  '';
+		vm.rentaldata.appgrossmonthlyincome =  '';
+		vm.rentaldata.appincometype =  '';
+		vm.rentaldata.appotherincome =  '';
+		
+		vm.rentaldata.vehiclemake =  '';
+		vm.rentaldata.vehiclemodel =  '';
+		vm.rentaldata.vehicleyear =  '';
+		
+		vm.rentaldata.emergencyname =  '';
+		vm.rentaldata.emergencyphone =  '';
+		
+		vm.rentaldata.refone_name =  '';
+		vm.rentaldata.refone_phone =  '';
+		vm.rentaldata.refone_relation =  '';
+		
+		vm.rentaldata.reftwo_name =  '';
+		vm.rentaldata.reftwo_phone =  '';
+		vm.rentaldata.reftwo_relation =  '';
+		
+		vm.rentaldata.otherappcurrentemployer =  [];
+		vm.rentaldata.otherappposition =  [];
+		vm.rentaldata.otherappemployerphone =  [];
+		vm.rentaldata.otherappworkingduration =  [];
+		vm.rentaldata.otherappgrossmonthlyincome =  [];
+		vm.rentaldata.otherappincometype =  [];
+		vm.rentaldata.otherappotherincome =  [];
+		
+		vm.rentaldata.dated =  '';
+		vm.rentaldata.appsign =  '';
+		vm.rentaldata.otherappsign =  [];
+		
 		
 		firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
@@ -52,77 +127,77 @@ vcancyApp
 		});
 			
 			
-		vm.rentalAppSubmit = function(rentaldata){
-			console.log(rentaldata);
+		vm.rentalAppSubmit = function(){
+			console.log(vm.rentaldata);
 			var tenantID = vm.tenantdata.tenantID;
 			var scheduleID = vm.scheduledata.scheduleID;
 			var propID = vm.propdata.propID;
 			
 			var address = vm.propdata.address;
 			var rent = vm.propdata.rent;
-			var months = rentaldata.months;
-			var startdate = rentaldata.startdate;
-			var parking = rentaldata.parking;
+			var months = vm.rentaldata.months;
+			var startdate = vm.rentaldata.startdate;
+			var parking = vm.rentaldata.parking;
 			
 			var applicantname = vm.tenantdata.tenantName;
-			var applicantdob = rentaldata.dob;
-			var telwork = rentaldata.telwork;
-			var telhome = rentaldata.telhome;
+			var applicantdob = vm.rentaldata.dob;
+			var telwork = vm.rentaldata.telwork;
+			var telhome = vm.rentaldata.telhome;
 			var applicantemail = vm.tenantdata.tenantEmail;
-			var appaddress = rentaldata.appadress;
-			var applicantcity = rentaldata.appcity;
-			var maritalstatus = rentaldata.maritalstatus;
-			var rent_own = rentaldata.rent_own;
-			var live_time_at_address = rentaldata.live_time;
-			var rentamt = rentaldata.rentamt;
-			var vacantreason = rentaldata.vacantreason;
-			var landlordname = rentaldata.landlordname;
-			var landlordphone = rentaldata.landlordphone;
+			var appaddress = vm.rentaldata.appadress;
+			var applicantcity = vm.rentaldata.appcity;
+			var maritalstatus = vm.rentaldata.maritalstatus;
+			var rent_own = vm.rentaldata.rent_own;
+			var live_time_at_address = vm.rentaldata.live_time;
+			var rentamt = vm.rentaldata.rentamt;
+			var vacantreason = vm.rentaldata.vacantreason;
+			var landlordname = vm.rentaldata.landlordname;
+			var landlordphone = vm.rentaldata.landlordphone;
 			
-			var adultapplicantname = rentaldata.otherappname;
-			var adultapplicantdob = rentaldata.otherappdob;
+			var adultapplicantname = vm.rentaldata.otherappname;
+			var adultapplicantdob = vm.rentaldata.otherappdob;
 			
-			var minorapplicantname = rentaldata.minorappname;
-			var minorapplicantdob = rentaldata.minorappdob;
+			var minorapplicantname = vm.rentaldata.minorappname;
+			var minorapplicantdob = vm.rentaldata.minorappdob;
 			
-			var pets = rentaldata.pets;
-			var petsdesc = rentaldata.petsdesc;
-			var smoking = rentaldata.smoking;
+			var pets = vm.rentaldata.pets;
+			var petsdesc = vm.rentaldata.petsdesc;
+			var smoking = vm.rentaldata.smoking;
 			
-			var appcurrentemployer = rentaldata.appcurrentemployer;
-			var appposition = rentaldata.appposition;
-			var appemployerphone = rentaldata.appemployerphone;
-			var appworkingduration = rentaldata.appworkingduration;
-			var appgrossmonthlyincome = rentaldata.appgrossmonthlyincome;
-			var appincometype = rentaldata.appincometype;
-			var appotherincome = rentaldata.appotherincome;
+			var appcurrentemployer = vm.rentaldata.appcurrentemployer;
+			var appposition = vm.rentaldata.appposition;
+			var appemployerphone = vm.rentaldata.appemployerphone;
+			var appworkingduration = vm.rentaldata.appworkingduration;
+			var appgrossmonthlyincome = vm.rentaldata.appgrossmonthlyincome;
+			var appincometype = vm.rentaldata.appincometype;
+			var appotherincome = vm.rentaldata.appotherincome;
 			
-			var vehiclemake = rentaldata.vehiclemake;
-			var vehiclemodel = rentaldata.vehiclemodel;
-			var vehicleyear = rentaldata.vehicleyear;
+			var vehiclemake = vm.rentaldata.vehiclemake;
+			var vehiclemodel = vm.rentaldata.vehiclemodel;
+			var vehicleyear = vm.rentaldata.vehicleyear;
 			
-			var emergencyname = rentaldata.emergencyname;
-			var emergencyphone = rentaldata.emergencyphone;
+			var emergencyname = vm.rentaldata.emergencyname;
+			var emergencyphone = vm.rentaldata.emergencyphone;
 			
-			var refone_name = rentaldata.refone_name;
-			var refone_phone = rentaldata.refone_phone;
-			var refone_relation = rentaldata.refone_relation;
+			var refone_name = vm.rentaldata.refone_name;
+			var refone_phone = vm.rentaldata.refone_phone;
+			var refone_relation = vm.rentaldata.refone_relation;
 			
-			var reftwo_name = rentaldata.reftwo_name;
-			var reftwo_phone = rentaldata.reftwo_phone;
-			var reftwo_relation = rentaldata.reftwo_relation;
+			var reftwo_name = vm.rentaldata.reftwo_name;
+			var reftwo_phone = vm.rentaldata.reftwo_phone;
+			var reftwo_relation = vm.rentaldata.reftwo_relation;
 			
-			var otherappcurrentemployer = rentaldata.otherappcurrentemployer;
-			var otherappposition = rentaldata.otherappposition;
-			var otherappemployerphone = rentaldata.otherappemployerphone;
-			var otherappworkingduration = rentaldata.otherappworkingduration;
-			var otherappgrossmonthlyincome = rentaldata.otherappgrossmonthlyincome;
-			var otherappincometype = rentaldata.otherappincometype;
-			var otherappotherincome = rentaldata.otherappotherincome;
+			var otherappcurrentemployer = vm.rentaldata.otherappcurrentemployer;
+			var otherappposition = vm.rentaldata.otherappposition;
+			var otherappemployerphone = vm.rentaldata.otherappemployerphone;
+			var otherappworkingduration = vm.rentaldata.otherappworkingduration;
+			var otherappgrossmonthlyincome = vm.rentaldata.otherappgrossmonthlyincome;
+			var otherappincometype = vm.rentaldata.otherappincometype;
+			var otherappotherincome = vm.rentaldata.otherappotherincome;
 			
-			var dated = rentaldata.dated;
-			var appsign = rentaldata.appsign;
-			var otherappsign = rentaldata.otherappsign;
+			var dated = vm.rentaldata.dated;
+			var appsign = vm.rentaldata.appsign;
+			var otherappsign = vm.rentaldata.otherappsign;
 			
 			vm.adultapplicants = $.map(adultapplicantname, function(adult, index) {
 				return [{
