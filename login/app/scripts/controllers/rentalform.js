@@ -214,7 +214,7 @@ vcancyApp
 						});
 					});
 				} else {
-						vm.draftdata = "false";
+					vm.draftdata = "false";
 					firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
 						// console.log(snapshot.val())
 						$scope.$apply(function(){
@@ -229,21 +229,22 @@ vcancyApp
 											vm.propdata.propID = snap.key;								
 										}
 									});								
-								});
-								firebase.database().ref('users/'+tenantID).once("value", function(snapval) {	
-									$scope.$apply(function(){
-										if(snapval.val()) {
-											vm.tenantdata = snapval.val();
-											
-											vm.tenantdata.tenantID = snapval.key;
-											vm.tenantdata.tenantName = vm.tenantdata.firstname+" "+vm.tenantdata.lastname;
-											vm.tenantdata.tenantEmail = tenantEmail;
-										}
-									});								
-								});					
+								});				
 							} 
 						});
 					});
+					
+					
+					firebase.database().ref('users/'+tenantID).once("value", function(snapval) {	
+						$scope.$apply(function(){
+							if(snapval.val()) {
+								vm.tenantdata = snapval.val();
+								vm.tenantdata.tenantID = snapval.key;
+								vm.tenantdata.tenantName = vm.tenantdata.firstname+" "+vm.tenantdata.lastname;
+								vm.tenantdata.tenantEmail = tenantEmail;
+							}
+						});								
+					});	
 				}
 				console.log(vm.tenantdata);	
 				console.log(vm.rentaldata);	
@@ -255,11 +256,19 @@ vcancyApp
 		vm.rentalAppSubmit = function(){
 			console.log(vm.rentaldata);
 			var tenantID = vm.tenantdata.tenantID;
-			var scheduleID = vm.scheduledata.scheduleID;
-			var propID = vm.propdata.propID;
+			// console.log($stateParams.scheduleId);
+			if($stateParams.scheduleId != 0){
+				var scheduleID = vm.scheduledata.scheduleID;
+				var propID = vm.propdata.propID;
+				
+			} else {
+				var scheduleID = 0;
+				var propID = 0;	
+			}
 			
 			var address = vm.propdata.address;
 			var rent = vm.propdata.rent;
+			
 			var months = vm.rentaldata.months;
 			var startdate = vm.rentaldata.startdate;
 			var parking = vm.rentaldata.parking;
