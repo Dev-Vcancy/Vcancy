@@ -32,12 +32,14 @@ vcancyApp
 					vm.submitappsdata = [];
 				
 				if(snapshot.val() != null) {	
+					vm.submittedappsavail = 0;
 					//to map the object to array
 					vm.submitappsdata = $.map(snapshot.val(), function(value, index) {
 						if(vm.propcheck[value.propID] == true || propID == ''){					
 							if(value.schedulestatus == "submitted" ){
+								vm.submittedappsavail = 1;
 								return [{scheduleID:index, name:value.name, age: value.age, profession: value.jobtitle,  schedulestatus: value.schedulestatus}];
-							}
+							} 
 						}
 					});	
 					
@@ -70,7 +72,7 @@ vcancyApp
 					  { field: "applicationID", title: "Credit Score", show: true }
 					];
 					
-					vm.submittedappsavail = 1;
+					
 				} else {
 					vm.submitappsdata = [{scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''}];
 					

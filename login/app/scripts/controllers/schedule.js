@@ -42,19 +42,20 @@ vcancyApp
 						
 						console.log($scope.calendardata);
 						
-						
+						vm.schedulesavail = 0;
 						//to map the object to array
 						vm.tabledata = $.map(snapshot.val(), function(value, index) {
 							if(vm.propcheck[value.propID] == true || propID == ''){
 								if(value.schedulestatus !== "removed" && value.schedulestatus !== "submitted") {
+									vm.schedulesavail = 1;
 									return [{scheduleID:index, name:value.name, tenantlocation: value.tenantlocation, jobtitle: value.jobtitle, age: value.age, dateslot: value.dateslot, address:value.address, timerange: value.timerange, description: value.description, schedulestatus: value.schedulestatus}];
-								}
-							}
+								} 
+							} 
 						});
 						vm.extracols = [
 							{ field: "", title: "", show: true}
 						];
-						vm.schedulesavail = 1;
+						
 					} else {
 						vm.tabledata = [{scheduleID:'', name:'', tenantlocation: '', jobtitle: '', age: '', dateslot: '', address:'', timerange: '', description: '', schedulestatus: ''}];						
 						vm.calendardata = [{scheduleID:'', className: 'bgm-cyan', title:'', start: ''}]						

@@ -12,6 +12,7 @@ vcancyApp
 		var scheduleID = $stateParams.scheduleId;
 		var tenantEmail = localStorage.getItem('userEmail');
 		vm.draft = "false";
+		vm.draftdata = "false";
 		
 		vm.adult = [0];
 		vm.minor = [0];

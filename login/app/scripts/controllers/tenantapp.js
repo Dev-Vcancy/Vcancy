@@ -15,13 +15,15 @@ vcancyApp
 			console.log(snapshot.val())
 			$scope.$apply(function(){
 				if(snapshot.val() != null) {
+					
+					vm.pendingappsavail = 0;
+					
 					//to map the object to array
-					vm.tabledata = $.map(snapshot.val(), function(value, index) {
-						
+					vm.tabledata = $.map(snapshot.val(), function(value, index) {						
 						if(value.schedulestatus == "confirmed" ) { // && moment(value.dateslot).isBefore(new Date())
+							vm.pendingappsavail = 1;
 							return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
-						}
-						
+						} 
 						// if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date())  &&   moment(value.fromtimeslot).format("HH:mm") < moment(new Date()).format("HH:mm") &&  moment(value.to).format("HH:mm") < moment(new Date()).format("HH:mm")) {
 							// return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						// }
@@ -32,7 +34,7 @@ vcancyApp
 						  { field: "scheduleID", title: "", show: true }
 						];
 						
-					vm.pendingappsavail = 1;
+					
 				} else {
 					vm.tabledata = [{scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''}];
 					
