@@ -47,11 +47,16 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				name : vm.userName
 			}
 			angular.forEach(propData.date, function(value, key) {
+				console.log(propData);
 			  vm.applyprop.date.push(value);
 			  vm.applyprop.fromtime.push(propData.fromtime[key]);
 			  vm.applyprop.to.push(propData.to[key]);
 			  vm.applyprop.limit.push(propData.limit[key]);
-			  vm.applyprop.multiple.push(propData.multiple[key]);
+			  
+			  if(propData.multiple) {
+			  	vm.applyprop.multiple.push(propData.multiple[key]);
+			  }
+			  
 			});
 			
 			vm.applyprop.slots = slotsBuildService.maketimeslots(vm.applyprop.date,vm.applyprop.fromtime,vm.applyprop.to,vm.applyprop.limit,vm.applyprop.multiple);
@@ -61,72 +66,74 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				$state.go('tenantdashboard');
 			}
 		});
-		
 		firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
-			$scope.$apply(function(){
-				// console.log(snapshot.val());
-					
-				vm.alreadyBookedSlot = 0;
-				 $.map(snapshot.val(), function(value, index) {
-					if(value.tenantID == localStorage.getItem('userID') && value.schedulestatus !== "cancelled"){
-						vm.alreadyBookedSlot = 1;
-					}
-				 
-				 });
-				
-				
-				
-				
-				vm.appliedslots = [];
-				if(snapshot.val() != undefined){
-					vm.appliedslots = $.map(snapshot.val(), function(value, index) {			
-						if(value.schedulestatus !== "cancelled"){
-							return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot), person:1}];
-						}						
-					});
-				}
-					 
-				// console.log(vm.applyprop.slots);
-				// console.log(vm.appliedslots);	
-				// console.log(vm.appliedslots.length);	
-
-				vm.applyprop.availableslots = [];
-				vm.timeslotavail = 0;
-					
-				for (var i = 0; i < vm.applyprop.slots.length; i++) {
-					for (var j = 0; j < vm.appliedslots.length; j++) {
-						if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == false) {					
-							vm.applyprop.slots[i].person = 0;
-							// break;
-						}
+			console.log(snapshot.val());
+			if(snapshot.val()) {
+				$scope.$apply(function(){
+					 //console.log(snapshot.val());
 						
-						if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == true ) {
-							for (var l = 0; l < vm.applyprop.slots.length; l++) {
-								if(vm.applyprop.slots[l].dateslotindex ==  vm.applyprop.slots[i].dateslotindex){
-									vm.applyprop.slots[l].person -= 1;
-								}
-							}
-							// break;
+					vm.alreadyBookedSlot = 0;
+					 $.map(snapshot.val(), function(value, index) {
+						if(value.tenantID == localStorage.getItem('userID') && value.schedulestatus !== "cancelled"){
+							vm.alreadyBookedSlot = 1;
 						}
+					 
+					 });
+					
+					
+					
+					
+					vm.appliedslots = [];
+					if(snapshot.val() != undefined){
+						vm.appliedslots = $.map(snapshot.val(), function(value, index) {			
+							if(value.schedulestatus !== "cancelled"){
+								return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot), person:1}];
+							}						
+						});
+					}
+						 
 					// console.log(vm.applyprop.slots);
+					// console.log(vm.appliedslots);	
+					// console.log(vm.appliedslots.length);	
+
+					vm.applyprop.availableslots = [];
+					vm.timeslotavail = 0;
+						
+					for (var i = 0; i < vm.applyprop.slots.length; i++) {
+						for (var j = 0; j < vm.appliedslots.length; j++) {
+							if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == false) {					
+								vm.applyprop.slots[i].person = 0;
+								// break;
+							}
+							
+							if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == true ) {
+								for (var l = 0; l < vm.applyprop.slots.length; l++) {
+									if(vm.applyprop.slots[l].dateslotindex ==  vm.applyprop.slots[i].dateslotindex){
+										vm.applyprop.slots[l].person -= 1;
+									}
+								}
+								// break;
+							}
+						// console.log(vm.applyprop.slots);
+						}
 					}
-				}
-				
-				
-				for (var i = 0; i< vm.applyprop.slots.length; i++) {					
-					if (vm.applyprop.slots[i].person > 0) {
-						vm.applyprop.availableslots.push(vm.applyprop.slots[i]);
+					
+					
+					for (var i = 0; i< vm.applyprop.slots.length; i++) {					
+						if (vm.applyprop.slots[i].person > 0) {
+							vm.applyprop.availableslots.push(vm.applyprop.slots[i]);
+						}
+						vm.timeslotavail = 1;
 					}
-					vm.timeslotavail = 1;
-				}
-				
-				if(vm.appliedslots == null){
-					vm.applyprop.availableslots = vm.applyprop.slots;
-					vm.timeslotavail = 1;
-				}
-				// console.log(vm.applyprop.availableslots);
-				
-			});	
+					
+					if(vm.appliedslots == null){
+						vm.applyprop.availableslots = vm.applyprop.slots;
+						vm.timeslotavail = 1;
+					}
+					// console.log(vm.applyprop.availableslots);
+					
+				});	
+			}
 		});	
 		
 	});
