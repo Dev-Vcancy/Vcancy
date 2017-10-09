@@ -16,6 +16,9 @@
 			<div class="block-header text-center">
 				<h2>Apply For Property</h2>
             </div>	
+            <div class="row text-center">
+				<div class="alert alert-danger alert-dismissable" ng-if="applyctrl.emailVerifiedError"><h4>{{applyctrl.emailVerifiedError}}</h4></div>	
+			</div>		
 			<div class="row">
 				<div class="col-sm-12 card">
 					<div ng-if="applyctrl.applyprop.availableslots.length == 0">
@@ -37,7 +40,7 @@
 									<input type="text" placeholder="Name" ng-model="applyctrl.applyprop.name" ng-required class="form-control"/>
 								</div>
 								<div class="form-group col-sm-6">
-									<input type="text" placeholder="Location" ng-model="applyctrl.applyprop.tenantlocation" ng-required class="form-control"/>
+									<input type="text" placeholder="City" ng-model="applyctrl.applyprop.tenantlocation" ng-required class="form-control"/>
 								</div>
 								<div class="form-group col-sm-6">
 									<input type="text" placeholder="Job Title" ng-model="applyctrl.applyprop.jobtitle" ng-required class="form-control"/>
@@ -78,7 +81,7 @@
 							</div>
 							<div class="clearfix"></div>
 							<div class="col-sm-12 text-center">
-								<button type="submit" ng-disabled="applypropForm.$invalid || applyctrl.isEmailVerified"  class="btn btn-success">Send</button>
+								<button type="submit" ng-disabled="applypropForm.$invalid"  class="btn btn-success">Send</button>
 							</div>
 							
 							<div class="clearfix"></div>
