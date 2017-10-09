@@ -61,13 +61,13 @@ Tel (work): <span class="fg-line"><input readonly type="text" ng-model="vappctrl
 						</p>
 
 						<p class="m-b-10">
-							<p>Additional Adult Occupants (18+) to occupy the premises: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="vappctrl.addadult(vappctrl.adult.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
+							<p>Additional Adult Occupants (18+) to occupy the premises: </p>
 
 							<p ng-repeat="x in vappctrl.adult">Full Name: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.otherappname[$index]" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span> Date of Birth:<span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.otherappdob[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
 						</p>
 
 						<p class="m-b-10">
-							<p>Additional Minors (0-18YRS) to occupy the premises: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="vappctrl.addminor(vappctrl.minor.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
+							<p>Additional Minors (0-18YRS) to occupy the premises: </p>
 
 							<p ng-repeat="x in vappctrl.minor">Full Name: <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.minorappname[$index]" class="form-control m-b-5 w-5" id="" placeholder=""></span> Date of Birth:<span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.minorappdob[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
 						</p>

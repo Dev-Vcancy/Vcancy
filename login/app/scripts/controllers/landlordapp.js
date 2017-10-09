@@ -24,7 +24,7 @@ vcancyApp
 				if(snapshot.val() != null) {										
 					$.map(snapshot.val(), function(value, index) {							
 						 if(vm.apppropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus == "submitted") {
-							  vm.apppropaddress.push({propID: value.propID, address: value.address}); 
+							  vm.apppropaddress.push({propID: value.propID, address: value.address, units: value.units}); 
 							  vm.propcheck[value.propID] = true;
 						 } 	
 					});
@@ -32,12 +32,14 @@ vcancyApp
 					vm.submitappsdata = [];
 				
 				if(snapshot.val() != null) {	
+					vm.submittedappsavail = 0;
 					//to map the object to array
 					vm.submitappsdata = $.map(snapshot.val(), function(value, index) {
 						if(vm.propcheck[value.propID] == true || propID == ''){					
 							if(value.schedulestatus == "submitted" ){
+								vm.submittedappsavail = 1;
 								return [{scheduleID:index, name:value.name, age: value.age, profession: value.jobtitle,  schedulestatus: value.schedulestatus}];
-							}
+							} 
 						}
 					});	
 					
@@ -70,7 +72,7 @@ vcancyApp
 					  { field: "applicationID", title: "Credit Score", show: true }
 					];
 					
-					vm.submittedappsavail = 1;
+					
 				} else {
 					vm.submitappsdata = [{scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''}];
 					

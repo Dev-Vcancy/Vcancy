@@ -26,18 +26,20 @@ vcancyApp
 					$scope.calendardata = vm.calendardata;
 					
 					console.log($scope.calendardata);
+					vm.schedulesavail = 0;
 					
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
 						if(value.schedulestatus !== "removed"  && value.schedulestatus !== "submitted") {
+							vm.schedulesavail = 1;
 							return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
-						}
+						} 
 					});	
 					
 					vm.extracols = [
 							{ field: "", title: "", show: true}
 						];	
-					vm.schedulesavail = 1;
+					
 				} else {
 					vm.tabledata = [{scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''}];						
 					vm.calendardata = [{scheduleID:'', className: 'bgm-cyan', title:'', start: ''}]						

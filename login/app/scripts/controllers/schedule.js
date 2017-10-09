@@ -9,7 +9,8 @@ vcancyApp
 		
 		var vm = this;
 		var landlordID = localStorage.getItem('userID');
-	
+		vm.loader = 1;
+		
 		vm.propcheck = [];
 		vm.schedulepropaddress = [];
 		
@@ -44,16 +45,15 @@ vcancyApp
 						
 						console.log($scope.calendardata);
 						
-						
+						vm.schedulesavail = 0;
 						//to map the object to array
 						vm.tabledata = $.map(snapshot.val(), function(value, index) {
 							if(vm.propcheck[value.propID] == true || propID == ''){
-								if(value.schedulestatus !== "removed") {
+								if(value.schedulestatus !== "removed" && value.schedulestatus !== "submitted") {
+									vm.schedulesavail = 1;
 									return [{scheduleID:index, name:value.name, tenantlocation: value.tenantlocation, jobtitle: value.jobtitle, age: value.age, dateslot: value.dateslot, address:value.address, timerange: value.timerange, description: value.description, schedulestatus: value.schedulestatus}];
-								}
-							}
-							
-							
+								} 
+							} 
 						});
 			
 						vm.cols = [
@@ -65,18 +65,23 @@ vcancyApp
 							  { field: "timerange", title: "Time", sortable: "timerange", show: true },
 							  { field: "description", title: "About", sortable: "description", show: true }
 							];
-							
+
+						
+						
 						vm.extracols = [
 							{ field: "", title: "", show: true}
-						];	
-						vm.schedulesavail = 1;
-						//Sorting
-						vm.tableSorting = new NgTableParams({
+						];
+						
+						if(vm.schedulesavail == 1){
+							//Sorting
+							vm.tableSorting = new NgTableParams({
 						      // initial sort order
 						      sorting: { name: "asc" } 
 						    }, {
 						      dataset: vm.tabledata
 						    });
+						}
+						
 					} else {
 						vm.tabledata = [{scheduleID:'', name:'', tenantlocation: '', jobtitle: '', age: '', dateslot: '', address:'', timerange: '', description: '', schedulestatus: ''}];						
 						vm.calendardata = [{scheduleID:'', className: 'bgm-cyan', title:'', start: ''}]						
@@ -85,6 +90,7 @@ vcancyApp
 						vm.schedulesavail = 0;
 					}
 					
+					vm.loader = 0;
 					vm.showCal = true;
 				});
 			});

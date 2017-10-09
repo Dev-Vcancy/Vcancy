@@ -22,7 +22,8 @@ var vcancyApp = angular
 	'firebase',
 	'ng-clipboard',
 	'angularMoment',
-	'gm'
+	'gm',
+	'unsavedChanges'
   ]); 
   
 vcancyApp

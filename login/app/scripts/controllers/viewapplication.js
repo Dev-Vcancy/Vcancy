@@ -11,7 +11,9 @@ vcancyApp
 		var tenantID = localStorage.getItem('userID');
 		var applicationID = $stateParams.appID;
 		var tenantEmail = localStorage.getItem('userEmail');
-
+		
+		vm.adult = [0];
+		vm.minor = [0];
 		vm.rentaldata = [];
 		
 		firebase.database().ref('submitapps/'+applicationID).once("value", function(snapshot) {	
@@ -63,6 +65,40 @@ vcancyApp
 							$scope.$apply(function(){
 								if(snap.val()) {
 									$.map(snap.val(), function(v, k) {
+										console.log(v);
+										vm.rentaldata.tenantName = v.mainapplicant.applicantname;
+										vm.rentaldata.dob =  v.mainapplicant.applicantdob;												
+										vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
+										vm.rentaldata.appposition =  v.mainapplicant.appposition;
+										vm.rentaldata.appemployerphone =  v.mainapplicant.appemployerphone;
+										vm.rentaldata.appworkingduration =  v.mainapplicant.appworkingduration;
+										vm.rentaldata.appgrossmonthlyincome =  v.mainapplicant.appgrossmonthlyincome;
+										vm.rentaldata.appincometype =  v.mainapplicant.appincometype;
+										vm.rentaldata.appotherincome =  v.mainapplicant.appotherincome;												
+										vm.rentaldata.appsign =  v.mainapplicant.appsign;
+										
+										
+										angular.forEach(v.minors, function(value, key) {
+										  vm.minor.push(key+1);
+										  vm.rentaldata.minorappname.push(value.minorapplicantname);
+										  vm.rentaldata.minorappdob.push(value.minorapplicantdob);			  
+										});
+										vm.minor.pop();
+										
+										angular.forEach(v.otherapplicants, function(value, key) {
+										  vm.adult.push(key+1);
+										  vm.rentaldata.otherappname.push(value.adultapplicantname);
+										  vm.rentaldata.otherappdob.push(value.adultapplicantdob);
+										  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
+										  vm.rentaldata.otherappposition.push(value.otherappposition);
+										  vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
+										  vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
+										  vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
+										  vm.rentaldata.otherappincometype.push(value.otherappincometype);
+										  vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
+										  vm.rentaldata.otherappsign.push(value.otherappsign);									  
+										});
+										vm.adult.pop();
 										
 									});
 								}

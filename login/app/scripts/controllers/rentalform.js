@@ -12,6 +12,7 @@ vcancyApp
 		var scheduleID = $stateParams.scheduleId;
 		var tenantEmail = localStorage.getItem('userEmail');
 		vm.draft = "false";
+		vm.draftdata = "false";
 		
 		vm.adult = [0];
 		vm.minor = [0];
@@ -24,6 +25,7 @@ vcancyApp
 		
 		// to remove adult
 		vm.removeadult = function(slotindex){
+			console.log(slotindex,vm.adult);
 			vm.adult.splice(slotindex,1);
 			vm.rentaldata.otherappname.splice(slotindex,1);
 			vm.rentaldata.otherappdob.splice(slotindex,1);
@@ -38,10 +40,14 @@ vcancyApp
 		}
 		
 		// to remove minor
-		vm.removeminor = function(slotindex){			
+		vm.removeminor = function(slotindex){	
+			console.log(slotindex,vm.adult);
+			console.log(vm.rentaldata);		
 			vm.minor.splice(slotindex,1);
 			vm.rentaldata.minorappdob.splice(slotindex,1);
 			vm.rentaldata.minorappname.splice(slotindex,1);
+			
+			console.log(vm.minor,vm.rentaldata);
 		}
 		
 		
@@ -125,7 +131,6 @@ vcancyApp
 			$scope.$apply(function(){
 				if(snapshot.val() !== null) {
 					$.map(snapshot.val(),function(value,index){
-						console.log('here');
 						vm.applicationID = index;
 						vm.draftdata = "true";
 						vm.tenantdata.tenantID = value.tenantID;
@@ -151,7 +156,7 @@ vcancyApp
 						vm.rentaldata.landlordphone = value.landlordphone;
 						vm.rentaldata.pets = value.pets;
 						vm.rentaldata.petsdesc = value.petsdesc;
-						vm.rentaldata.smoking = value.petsdesc;
+						vm.rentaldata.smoking = value.smoking;
 						vm.rentaldata.vehiclemake = value.vehiclemake;
 						vm.rentaldata.vehiclemodel = value.vehiclemodel;
 						vm.rentaldata.vehicleyear = value.vehicleyear;						
@@ -167,15 +172,49 @@ vcancyApp
 					});
 					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
 						$scope.$apply(function(){
-							if(snap.val()) {
+							if(snap.val()!= null) {
 								$.map(snap.val(), function(v, k) {
+									console.log(v);
+									vm.tenantdata.tenantName = v.mainapplicant.applicantname;
+									vm.rentaldata.dob =  v.mainapplicant.applicantdob;												
+									vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
+									vm.rentaldata.appposition =  v.mainapplicant.appposition;
+									vm.rentaldata.appemployerphone =  v.mainapplicant.appemployerphone;
+									vm.rentaldata.appworkingduration =  v.mainapplicant.appworkingduration;
+									vm.rentaldata.appgrossmonthlyincome =  v.mainapplicant.appgrossmonthlyincome;
+									vm.rentaldata.appincometype =  v.mainapplicant.appincometype;
+									vm.rentaldata.appotherincome =  v.mainapplicant.appotherincome;												
+									vm.rentaldata.appsign =  v.mainapplicant.appsign;
+									
+									
+									angular.forEach(v.minors, function(value, key) {
+									  vm.minor.push(key+1);
+									  vm.rentaldata.minorappname.push(value.minorapplicantname);
+									  vm.rentaldata.minorappdob.push(value.minorapplicantdob);			  
+									});
+									vm.minor.pop();
+									
+									angular.forEach(v.otherapplicants, function(value, key) {
+									  vm.adult.push(key+1);
+									  vm.rentaldata.otherappname.push(value.adultapplicantname);
+									  vm.rentaldata.otherappdob.push(value.adultapplicantdob);
+									  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
+									  vm.rentaldata.otherappposition.push(value.otherappposition);
+									  vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
+									  vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
+									  vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
+									  vm.rentaldata.otherappincometype.push(value.otherappincometype);
+									  vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
+									  vm.rentaldata.otherappsign.push(value.otherappsign);									  
+									});
+									vm.adult.pop();
 									
 								});
 							}
 						});
 					});
 				} else {
-					vm.draftdata = "false";
+						vm.draftdata = "false";
 					firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
 						// console.log(snapshot.val())
 						$scope.$apply(function(){
@@ -214,7 +253,7 @@ vcancyApp
 		
 			
 		vm.rentalAppSubmit = function(){
-			console.log(vm.draftdata);
+			console.log(vm.rentaldata);
 			var tenantID = vm.tenantdata.tenantID;
 			var scheduleID = vm.scheduledata.scheduleID;
 			var propID = vm.propdata.propID;
@@ -306,6 +345,7 @@ vcancyApp
 						minorapplicantdob: minorapplicantdob[index]
 					}];
 			});	
+			console.log(vm.minorapplicants);
 			
 			if(vm.draftdata === "false") {		
 				firebase.database().ref('submitapps/').push().set({
@@ -362,7 +402,7 @@ vcancyApp
 				  
 						if(snapshot.key != "undefined"){
 							var applicantsdata = {
-								"applicantID": snapshot.key,
+								"applicationID": snapshot.key,
 								"mainapplicant": {
 													"applicantname": applicantname,
 													"applicantdob": applicantdob,												
@@ -464,13 +504,25 @@ vcancyApp
 					}
 
 					console.log(applicantsdata);
-				
-					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).set(applicantsdata);
+					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
+						console.log(snap.val());
+						if(snap.val() != null) {								
+							$.map(snap.val(), function(v, k) {
+								console.log(k,applicantsdata);
+								firebase.database().ref('submitappapplicants/'+k).set(applicantsdata);
+							});
+						}
+					});
+					
 										
-					// update the schedule to be submitted application
-					firebase.database().ref('applyprop/'+scheduleID).update({	
-						schedulestatus: "submitted"
-					})								
+					if(vm.draft == "false"){
+						// update the schedule to be aubmitted application
+						firebase.database().ref('applyprop/'+scheduleID).update({	
+							schedulestatus: "submitted"
+						})
+					}			
+
+					
 					$state.go('tenantapplications');				
 				})
 			}

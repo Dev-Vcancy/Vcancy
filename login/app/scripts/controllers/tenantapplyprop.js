@@ -65,6 +65,18 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 		firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
 			$scope.$apply(function(){
 				// console.log(snapshot.val());
+					
+				vm.alreadyBookedSlot = 0;
+				 $.map(snapshot.val(), function(value, index) {
+					if(value.tenantID == localStorage.getItem('userID') && value.schedulestatus !== "cancelled"){
+						vm.alreadyBookedSlot = 1;
+					}
+				 
+				 });
+				
+				
+				
+				
 				vm.appliedslots = [];
 				if(snapshot.val() != undefined){
 					vm.appliedslots = $.map(snapshot.val(), function(value, index) {			
