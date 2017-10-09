@@ -303,6 +303,17 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 						to: to,
 						limit: limit
 				}).then(function(){
+					firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snap) {
+						if(snap.val() != null) {								
+							$.map(snap.val(), function(v, k) {
+								firebase.database().ref('applyprop/'+k).update({
+									address: address,
+									units: units
+								});
+							});
+						}
+					});
+					
 					vm.slots = slotsBuildService.maketimeslots(date,fromtime,to,limit,multiple);
 					
 					firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	

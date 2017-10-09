@@ -24,7 +24,7 @@ vcancyApp
 				if(snapshot.val() != null) {										
 					$.map(snapshot.val(), function(value, index) {							
 						 if(vm.apppropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus == "submitted") {
-							  vm.apppropaddress.push({propID: value.propID, address: value.address}); 
+							  vm.apppropaddress.push({propID: value.propID, address: value.address, units: value.units}); 
 							  vm.propcheck[value.propID] = true;
 						 } 	
 					});

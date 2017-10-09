@@ -24,8 +24,10 @@
 					<div ng-if="applyctrl.applyprop.availableslots.length == 0">
 						<h4>No Time Slot Available to Schedule your application for Property</h4>										
 					</div>
-					
-					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="applyctrl.applyprop.availableslots.length">	
+					<div ng-if="applyctrl.alreadyBookedSlot == 1">
+						<h4>You had already booked a schedule for this property.</h4>										
+					</div>
+					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="applyctrl.applyprop.availableslots.length" ng-hide="applyctrl.alreadyBookedSlot == 1">	
 						<input type="hidden" name="landlordID" ng-model="applyctrl.applyprop.landlordID" class="form-control" >
 						<input type="hidden" name="propID" ng-model="applyctrl.applyprop.propID" class="form-control">	
 						<input type="hidden" name="address" ng-model="applyctrl.applyprop.address" class="form-control">						
