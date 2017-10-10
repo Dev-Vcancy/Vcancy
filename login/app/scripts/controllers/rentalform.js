@@ -254,7 +254,7 @@ vcancyApp
 		
 			
 		vm.rentalAppSubmit = function(){
-			console.log(vm.rentaldata);
+			console.log(vm.rentaldata, vm.draft);
 			var tenantID = vm.tenantdata.tenantID;
 			// console.log($stateParams.scheduleId);
 			if($stateParams.scheduleId != 0){
