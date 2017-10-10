@@ -121,8 +121,8 @@ Employer phone #: <span class="fg-line"><input ng-model="rctrl.rentaldata.appemp
 						<p class="m-b-10">Name: <span class="fg-line"><input ng-model="rctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input ng-model="rctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span></p>
 						</div>
 
-						<div class="border">
-						<div  ng-repeat="x in rctrl.adult">
+						<div class="border" ng-repeat="x in rctrl.adult">
+						<div>
 						<h4 class="m-b-20 m-t-10">Additional Applicant #{{$index+1}}:</h4>
 		            	<p class="m-b-10">
 							Current Employer:  <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.otherappcurrentemployer[$index]" class="form-control m-b-5 w-5" id="" placeholder=""></span> 

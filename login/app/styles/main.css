@@ -293,7 +293,7 @@ ul.header-inner li a:hover.button:before{
 .block-header > h2 {
     font-size: 25px;
     font-weight: 700;
-    text-transform: lowercase;
+    text-transform: capitalize;
 }
 .white_block{
   float: left;
@@ -398,7 +398,7 @@ ul.header-inner li a:hover.button:before{
 }
 .home_block .ptih-title {
     font-size: 18px;
-    text-transform: lowercase !important;
+    text-transform: capitalize !important;
 }
 #content{
   transition: all 0.3s linear;
