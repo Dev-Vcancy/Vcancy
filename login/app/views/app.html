@@ -31,17 +31,17 @@
 		            <div class="table-responsive">
 						<div class="table-responsive">
 							<table ng-table-dynamic="lappctrl.submitappsSorting with lappctrl.submitappscols"  class="table table-striped table-vmiddle">
-								<tr ng-repeat="(key,w) in lappctrl.submitappsdata">
-									<td ng-repeat="col in lappctrl.submitappscols">{{w[col.field]}}</td>
+								<tr ng-repeat="row in $data">
+									<td ng-repeat="col in $columns">{{row[col.field]}}</td>
 									<td ng-repeat="col in lappctrl.submitappsextracols">
 										<a href="" class="btn bgm-cyan">Run Check</a>
-										<a href="#/viewapplication/{{w[col.field]}}" target="_blank" class="btn bgm-cyan">View Application</a>
+										<a href="#/viewapplication/{{row[col.field]}}" target="_blank" class="btn bgm-cyan">View Application</a>
 									</td>		           
 								</tr>
-							</table>	
-							<div ng-if="lappctrl.submittedappsavail == 0">
-								No submitted applications yet
-							</div>	               
+                                                                <tr ng-if="lappctrl.submittedappsavail == 0"><td colspan='8'>
+                                                                    No submitted applications yet </td>
+                                                               </tr>
+							</table>	           
 						</div> 		                
 		            </div>
         		</div>

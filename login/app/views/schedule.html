@@ -41,10 +41,10 @@
 									<span class="cancel_status btn-xs" ng-show="row.schedulestatus == 'cancelled'">Cancelled</span>
 								</td>		           
 							</tr>
+                                                        <tr ng-if="schedulectrl.schedulesavail == 0"><td colspan='8'>
+                                                                    No Schedules yet </td>
+                                                        </tr>
 						</table>
-						<div ng-if="schedulectrl.schedulesavail == 0">
-							No Schedules yet
-						</div>	
 		            </div>
         		</div>
 			</div>

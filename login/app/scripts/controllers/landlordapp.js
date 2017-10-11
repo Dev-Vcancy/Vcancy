@@ -94,12 +94,10 @@ vcancyApp
 					
 				//Sorting
 				vm.submitappsSorting = new NgTableParams({
-					// page: 1,            // show first page
-					// count: 10,           // count per page
-					sorting: {
-						name: 'asc'     // initial sorting
-					}
-				}, {
+					sorting: {name: 'asc'}}, 
+					
+					{dataset: vm.submitappsdata
+				/*}, {
 					total: vm.submitappsdata.length, // length of data
 					getData: function($defer, params) {
 						// console.log(params);
@@ -107,7 +105,7 @@ vcancyApp
 						var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
 			
 						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}
+					}*/
 					 // dataset: vm.submitappsdata
 				})
 			});

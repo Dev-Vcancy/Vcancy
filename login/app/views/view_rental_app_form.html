@@ -118,8 +118,8 @@ Employer phone #: <span class="fg-line"><input readonly ng-model="vappctrl.renta
 						<p>Name and phone number of personal/family reference who may be contacted in the case of <u>emergency:</u></p>
 						<p class="m-b-10">Name: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span></p>
 
-		            	
-						<div  ng-repeat="x in vappctrl.adult">
+                                                <div class="border" ng-repeat="x in vappctrl.adult">
+						<div>
 						<h4 class="m-b-20 m-t-10">Additional Applicant #{{$index+1}}:</h4>
 		            	<p class="m-b-10">
 							Current Employer:  <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.otherappcurrentemployer[$index]" class="form-control m-b-5 w-5" id="" placeholder=""></span> 
@@ -130,7 +130,7 @@ Employer phone #: <span class="fg-line"><input readonly ng-model="vappctrl.renta
 							<span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input readonly type="radio" class="" ng-model="vappctrl.rentaldata.otherappincometype[$index]" value="employment" ><i class="input-helper"></i>Employment</label><label><input readonly type="radio" ng-model="vappctrl.rentaldata.otherappincometype[$index]" value="retired"><i class="input-helper"></i>Retired</label></span> <br>
 							Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.otherappotherincome[$index]" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
 						</div>
-						
+                                                </div>
 						<h4 class="m-b-20 m-t-10">References:</h4>
 						<p class="m-b-10">1. Name: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.refone_name"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.refone_phone" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.refone_relation" type="text" class="form-control m-b-5 w-6" id="" placeholder=""></span></p>
 

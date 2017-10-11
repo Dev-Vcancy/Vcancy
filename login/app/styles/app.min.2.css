@@ -4194,11 +4194,11 @@ select.chosen {
 }
 
 .sortable.sort-desc .ng-table-header:before {
-  content: "\f1ce";
+  content: "\25bc";
 }
 
 .sortable.sort-asc .ng-table-header:before {
-  content: "\f1cd";
+  content: "\25b2";
 }
 
 .sweet-alert {

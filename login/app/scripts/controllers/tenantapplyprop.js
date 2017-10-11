@@ -47,11 +47,16 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				name : vm.userName
 			}
 			angular.forEach(propData.date, function(value, key) {
+				console.log(propData);
 			  vm.applyprop.date.push(value);
 			  vm.applyprop.fromtime.push(propData.fromtime[key]);
 			  vm.applyprop.to.push(propData.to[key]);
 			  vm.applyprop.limit.push(propData.limit[key]);
-			  vm.applyprop.multiple.push(propData.multiple[key]);
+			  
+			  if(propData.multiple) {
+			  	vm.applyprop.multiple.push(propData.multiple[key]);
+			  }
+			  
 			});
 			
 			vm.applyprop.slots = slotsBuildService.maketimeslots(vm.applyprop.date,vm.applyprop.fromtime,vm.applyprop.to,vm.applyprop.limit,vm.applyprop.multiple);
@@ -61,10 +66,9 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				$state.go('tenantdashboard');
 			}
 		});
-		
 		firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
 			$scope.$apply(function(){
-				console.log(snapshot.val());
+				// console.log(snapshot.val());
 					
 				vm.alreadyBookedSlot = 0;
 				vm.appliedslots = [];
