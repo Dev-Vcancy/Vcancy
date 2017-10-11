@@ -39,88 +39,6 @@ vcancyApp
 			}
 		}
 		
-		
-		// DATEPICKER
-		vm.today = function() {
-			vm.dt = new Date();
-		};
-		vm.today();
-
-		vm.toggleMin = function() {
-			vm.minDate = vm.minDate ? null : new Date();
-		};
-		vm.toggleMin();
-
-		vm.dobopen = function($event) {
-			$event.preventDefault();
-			$event.stopPropagation();
-			vm.dobopened = true;
-		};
-		
-		vm.dateopen = function($event) {
-			$event.preventDefault();
-			$event.stopPropagation();
-			vm.dateopened = true;
-		};
-		
-		vm.minordobopen = function($event,minorindex) {
-			$event.preventDefault();
-			$event.stopPropagation();
-			angular.forEach(vm.rentaldata.minorappdob, function(value, key) {
-			  value.minordobopened = false;;
-			});
-			vm.rentaldata.minorappdob[minorindex].minordobopened = true;
-		};
-
-		vm.dateOptions = {
-			formatYear: 'yy',
-			startingDay: 1
-		};
-
-		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-		vm.format = vm.formats[0];
-		
-		
-		
-		
-		
-		vm.adult = [0];
-		vm.minor = [0];
-		vm.addadult = function(adultlen){
-			vm.adult.push(adultlen);
-		}
-		vm.addminor = function(minorlen){
-			vm.minor.push(minorlen);
-		}
-		
-		// to remove adult
-		vm.removeadult = function(slotindex){
-			console.log(slotindex,vm.adult);
-			vm.adult.splice(slotindex,1);
-			vm.rentaldata.otherappname.splice(slotindex,1);
-			vm.rentaldata.otherappdob.splice(slotindex,1);
-			vm.rentaldata.otherappcurrentemployer.splice(slotindex,1);
-			vm.rentaldata.otherappposition.splice(slotindex,1);	
-			vm.rentaldata.otherappemployerphone.splice(slotindex,1);
-			vm.rentaldata.otherappworkingduration.splice(slotindex,1);
-			vm.rentaldata.otherappgrossmonthlyincome.splice(slotindex,1);
-			vm.rentaldata.otherappincometype.splice(slotindex,1);	
-			vm.rentaldata.otherappotherincome.splice(slotindex,1);
-			vm.rentaldata.otherappsign.splice(slotindex,1);			
-		}
-		
-		// to remove minor
-		vm.removeminor = function(slotindex){	
-			console.log(slotindex,vm.adult);
-			console.log(vm.rentaldata);		
-			vm.minor.splice(slotindex,1);
-			vm.rentaldata.minorappdob.splice(slotindex,1);
-			vm.rentaldata.minorappname.splice(slotindex,1);
-			
-			console.log(vm.minor,vm.rentaldata);
-		}
-		
-		
 		vm.tenantdata = [];
 		vm.rentaldata = [];
 		vm.propdata = [];
@@ -195,6 +113,103 @@ vcancyApp
 		vm.rentaldata.dated =  '';
 		vm.rentaldata.appsign =  '';
 		vm.rentaldata.otherappsign =  [];
+		
+		
+		// DATEPICKER
+		vm.today = function() {
+			vm.dt = new Date();
+		};
+		vm.today();
+
+		vm.toggleMin = function() {
+			vm.minDate = vm.minDate ? null : new Date();
+		};
+		vm.toggleMin();
+
+		vm.dobopen = function($event) {
+			$event.preventDefault();
+			$event.stopPropagation();
+			vm.dobopened = true;
+		};
+		
+		vm.dateopen = function($event) {
+			$event.preventDefault();
+			$event.stopPropagation();
+			vm.dateopened = true;
+		};
+		
+		vm.minordobopened = [];
+		vm.minordobopen = function($event,minorindex) {
+			console.log(minorindex);
+			$event.preventDefault();
+			$event.stopPropagation();
+			angular.forEach(vm.minor, function(value, key) {
+			  vm.minordobopened[key] = false;
+			console.log(vm.minordobopened[key]);
+			});
+			vm.minordobopened[minorindex] = true;
+			console.log("here"+vm.minordobopened[minorindex]);
+		};
+		
+		
+		vm.adultdobopened = [];
+		vm.adultdobopen = function($event,adultindex) {
+			console.log(adultindex);
+			$event.preventDefault();
+			$event.stopPropagation();
+			angular.forEach(vm.adult, function(value, key) {
+			  vm.adultdobopened[key] = false;
+			console.log(vm.adultdobopened[key]);
+			});
+			vm.adultdobopened[adultindex] = true;
+			console.log("here"+vm.adultdobopened[adultindex]);
+		};
+
+		vm.dateOptions = {
+			formatYear: 'yy',
+			startingDay: 1
+		};
+
+		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+		vm.format = vm.formats[0];
+		
+		
+		vm.adult = [0];
+		vm.minor = [0];
+		vm.addadult = function(adultlen){
+			vm.adult.push(adultlen);
+		}
+		vm.addminor = function(minorlen){
+			vm.minor.push(minorlen);
+		}
+		
+		// to remove adult
+		vm.removeadult = function(slotindex){
+			console.log(slotindex,vm.adult);
+			vm.adult.splice(slotindex,1);
+			vm.rentaldata.otherappname.splice(slotindex,1);
+			vm.rentaldata.otherappdob.splice(slotindex,1);
+			vm.rentaldata.otherappcurrentemployer.splice(slotindex,1);
+			vm.rentaldata.otherappposition.splice(slotindex,1);	
+			vm.rentaldata.otherappemployerphone.splice(slotindex,1);
+			vm.rentaldata.otherappworkingduration.splice(slotindex,1);
+			vm.rentaldata.otherappgrossmonthlyincome.splice(slotindex,1);
+			vm.rentaldata.otherappincometype.splice(slotindex,1);	
+			vm.rentaldata.otherappotherincome.splice(slotindex,1);
+			vm.rentaldata.otherappsign.splice(slotindex,1);			
+		}
+		
+		// to remove minor
+		vm.removeminor = function(slotindex){	
+			console.log(slotindex,vm.adult);
+			console.log(vm.rentaldata);		
+			vm.minor.splice(slotindex,1);
+			vm.rentaldata.minorappdob.splice(slotindex,1);
+			vm.rentaldata.minorappname.splice(slotindex,1);
+			
+			console.log(vm.minor,vm.rentaldata);
+		}
+		
 		
 		firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(scheduleID).once("value", function(snapshot) {	
 			console.log(snapshot.val());
