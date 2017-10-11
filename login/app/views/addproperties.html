@@ -38,12 +38,12 @@
 							<div class="col-sm-2 m-b-20">
 								<div class="toggle-switch" data-ts-color="blue">
 									<label for="ts3" class="ts-label">Active/Inactive</label>
-									<input name="propstatus" ng-model="propctrl.prop.propstatus" id="ts3" type="checkbox" ng-required hidden="hidden">
+									<input name="propstatus" ng-model="propctrl.prop.propstatus" id="ts3" type="checkbox" required hidden="hidden">
 									<label for="ts3" class="ts-helper"></label>
 								</div>
 							</div>
 						   <div class="col-sm-3 m-b-20" >                
-								<select chosen="" class="form-control" name="proptype" ng-model="propctrl.prop.proptype" ng-required data-placeholder="Prop type" class="w-100 localytics-chosen" >
+								<select chosen="" class="form-control" name="proptype" ng-model="propctrl.prop.proptype" required data-placeholder="Prop type" class="w-100 localytics-chosen" >
 									<option value="">Property type</option>
 									<option value="house">House</option>
 									<option value="townhouse">Town House</option>
@@ -54,23 +54,23 @@
 							</div>
 
 							<div class="col-sm-2 m-b-20">
-								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" ng-required class="form-control" placeholder="Unit number">
+								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" required class="form-control" placeholder="Unit number">
 							</div>
 							<div class="col-sm-3 m-b-20 input-group" style="float:left;">
 								<span class="input-group-addon">$</span>
-								<input type="text" id="rent" name="rent" ng-model="propctrl.prop.rent" ng-required class="form-control" placeholder="Rent">
+								<input type="text" id="rent" name="rent" ng-model="propctrl.prop.rent" required class="form-control" placeholder="Rent">
 							</div>
 
 							<div class="col-sm-2 m-b-20">
 								<div class="toggle-switch" data-ts-color="blue">
 									<label for="ts1" class="ts-label">Shared</label>
-									<input name="shared" ng-model="propctrl.prop.shared" id="ts1"  ng-required type="checkbox" hidden="hidden" style="display:inline">
+									<input name="shared" ng-model="propctrl.prop.shared" id="ts1" required type="checkbox" hidden="hidden" style="display:inline">
 									<label for="ts1" class="ts-helper"></label>
 								</div>
 							</div>
 							
 							<div class="col-sm-12 m-b-20">
-								<input type="text" id="address" gm-places-autocomplete  ng-model="propctrl.prop.address" ng-required="true" name="address" class="form-control" placeholder="Address">
+								<input type="text" id="address" gm-places-autocomplete  ng-model="propctrl.prop.address" required name="address" class="form-control" placeholder="Address">
 							</div>
 							
 							<div class="col-sm-12 m-b-20">
@@ -81,7 +81,7 @@
 										<div class="date-picker input-group" ng-class="{ 'is-opened': x.opened == true }">
 											<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 											<div class="fg-line" ng-class="{ 'fg-toggled': x.opened == true }">
-												<input ng-click="propctrl.open($event, x)" ng-change="propctrl.datetimeslotchanged($index)" type="text" class="form-control" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="propctrl.prop.date[$index]" name = "date[]" is-open="x.opened" min-date="minDate" datepicker-options="propctrl.dateOptions" ng-required="true" close-text="Close" placeholder="Select Date" />
+												<input ng-click="propctrl.open($event, x)" ng-change="propctrl.datetimeslotchanged($index)" type="text" class="form-control" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="propctrl.prop.date[$index]" name = "date[]" is-open="x.opened" min-date="minDate" datepicker-options="propctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
 											</div>
 										</div>
 									</div>
@@ -108,7 +108,7 @@
 										<!-- </div> -->
 									</div>
 									<div class="col-sm-2">
-										<input type="text" ng-required="true" id="limit" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.limit[$index]" name="limit[]" class="form-control" placeholder="Person Limit">
+										<input type="text" required id="limit" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.limit[$index]" name="limit[]" class="form-control" placeholder="Person Limit">
 									</div>
 									<div class="col-sm-2">
 										<label class="checkbox checkbox-inline m-r-20">
