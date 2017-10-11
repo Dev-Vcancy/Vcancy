@@ -58,7 +58,7 @@
 							</div>
 							<div class="col-sm-3 m-b-20 input-group" style="float:left;">
 								<span class="input-group-addon">$</span>
-								<input type="text" id="rent" name="rent" ng-model="propctrl.prop.rent" required class="form-control" placeholder="Rent">
+								<input type="text" id="rent" name="rent" ng-model="propctrl.prop.rent" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" required class="form-control" placeholder="Rent">
 							</div>
 
 							<div class="col-sm-2 m-b-20">
