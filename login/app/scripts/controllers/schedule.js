@@ -26,7 +26,7 @@ vcancyApp
 					if(snapshot.val()) {						
 						
 						$.map(snapshot.val(), function(value, index) {							
-							 if(vm.schedulepropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus !== "removed") {
+							 if(vm.schedulepropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus !== "removed" && value.schedulestatus !== "submitted" ) {
 							 		console.log(value);
 								  vm.schedulepropaddress.push({propID: value.propID, address: value.address, units: value.units}); 
 								  vm.propcheck[value.propID] = true;
