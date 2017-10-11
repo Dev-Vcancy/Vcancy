@@ -39,19 +39,19 @@
 						<div class="card-body card-padding">				
 							<div class="col-sm-6">
 								<div class="form-group col-sm-6">
-									<input type="text" placeholder="Name" ng-model="applyctrl.applyprop.name" ng-required class="form-control"/>
+									<input type="text" placeholder="Name" ng-model="applyctrl.applyprop.name" required  class="form-control"/>
 								</div>
 								<div class="form-group col-sm-6">
-									<input type="text" placeholder="City" ng-model="applyctrl.applyprop.tenantlocation" ng-required class="form-control"/>
+									<input type="text" placeholder="City" ng-model="applyctrl.applyprop.tenantlocation" required  class="form-control"/>
 								</div>
 								<div class="form-group col-sm-6">
-									<input type="text" placeholder="Job Title" ng-model="applyctrl.applyprop.jobtitle" ng-required class="form-control"/>
+									<input type="text" placeholder="Job Title" ng-model="applyctrl.applyprop.jobtitle" required  class="form-control"/>
 								</div>
 								<div class="form-group col-sm-6">
-									<input type="text" placeholder="Age" ng-model="applyctrl.applyprop.age" ng-required class="form-control"/>
+									<input type="text" placeholder="Age" ng-model="applyctrl.applyprop.age" required  class="form-control"/>
 								</div>
 								<div class="form-group col-sm-12">
-									<textarea placeholder="Tell me a little about yourself" ng-model="applyctrl.applyprop.description"  ng-required class="form-control"></textarea>
+									<textarea placeholder="Tell me a little about yourself" ng-model="applyctrl.applyprop.description"  required  class="form-control"></textarea>
 								</div>
 							</div>
 							<div class="col-sm-6" >
@@ -71,7 +71,7 @@
 												<td>{{x.fromtime | amDateFormat:'h:mm A'}} - {{x.to| amDateFormat:'h:mm A'}}</td>
 												<td>
 													<label class="radio">
-														<input type="radio" ng-required ng-model="applyctrl.applyprop.datetimeslot" ng-value="{{key}}"  name="datetimeslot" value="{{key}}">
+														<input type="radio" required  ng-model="applyctrl.applyprop.datetimeslot" ng-value="{{key}}"  name="datetimeslot" value="{{key}}">
 														<i class="input-helper"></i>											
 													</label>
 												</td>

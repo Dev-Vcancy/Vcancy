@@ -14,6 +14,76 @@ vcancyApp
 		vm.draft = "false";
 		vm.draftdata = "false";
 		
+		vm.rentownchange = function(){
+			if(vm.rentaldata.rent_own == "rent"){
+				vm.rentaldata.live_time =  '';
+				vm.rentaldata.rentamt =  '';
+				vm.rentaldata.vacantreason =  '';
+				vm.rentaldata.landlordname =  '';
+				vm.rentaldata.landlordphone =  '';
+			} else {
+				vm.rentaldata.live_time =  ' ';
+				vm.rentaldata.rentamt =  ' ';
+				vm.rentaldata.vacantreason =  ' ';
+				vm.rentaldata.landlordname =  ' ';
+				vm.rentaldata.landlordphone =  ' ';
+			}
+			
+		}
+		
+		vm.petschange = function(){
+			if(vm.rentaldata.pets == "yes"){
+				vm.rentaldata.petsdesc = '';
+			} else {
+				vm.rentaldata.petsdesc = ' ';
+			}
+		}
+		
+		
+		// DATEPICKER
+		vm.today = function() {
+			vm.dt = new Date();
+		};
+		vm.today();
+
+		vm.toggleMin = function() {
+			vm.minDate = vm.minDate ? null : new Date();
+		};
+		vm.toggleMin();
+
+		vm.dobopen = function($event) {
+			$event.preventDefault();
+			$event.stopPropagation();
+			vm.dobopened = true;
+		};
+		
+		vm.dateopen = function($event) {
+			$event.preventDefault();
+			$event.stopPropagation();
+			vm.dateopened = true;
+		};
+		
+		vm.minordobopen = function($event,minorindex) {
+			$event.preventDefault();
+			$event.stopPropagation();
+			angular.forEach(vm.rentaldata.minorappdob, function(value, key) {
+			  value.minordobopened = false;;
+			});
+			vm.rentaldata.minorappdob[minorindex].minordobopened = true;
+		};
+
+		vm.dateOptions = {
+			formatYear: 'yy',
+			startingDay: 1
+		};
+
+		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+		vm.format = vm.formats[0];
+		
+		
+		
+		
+		
 		vm.adult = [0];
 		vm.minor = [0];
 		vm.addadult = function(adultlen){
@@ -332,6 +402,9 @@ vcancyApp
 			var appsign = vm.rentaldata.appsign;
 			var otherappsign = vm.rentaldata.otherappsign;
 			
+			vm.adultapplicants = [];
+			vm.minorapplicants = [];
+			
 			vm.adultapplicants = $.map(adultapplicantname, function(adult, index) {
 				return [{
 						adultapplicantname: adult,
@@ -353,7 +426,7 @@ vcancyApp
 						minorapplicantdob: minorapplicantdob[index]
 					}];
 			});	
-			console.log(appaddress);
+			console.log(vm.adultapplicants);
 			
 			if(vm.draftdata === "false") {		
 				firebase.database().ref('submitapps/').push().set({

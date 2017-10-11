@@ -63,15 +63,14 @@
                 <div class="card-header">
                                     <h2>Submit External Applications<small>Enter Landlord's email and generate application for him directly</small></h2>
                             </div>
-                <div class="card-body">
-                    
-                            <div class="col-sm-8">
-                                        <input type="text" ng-model="rctrl.scheduledata.email" class="form-control m-b-5 w-3" >
-                                </div>
-                                <div class="col-sm-4">
-                                        <a href="#/rentalform/0" class="btn bgm-cyan">Submit</a>
-                                </div>
-                                <div class="clearfix"></div>
+                <div class="card-body">                    
+					<div class="col-sm-8">
+						<input type="email" ng-model="tappctrl.email" ng-change="tappctrl.emailrequired()" class="form-control m-b-5 w-3" >
+					</div>
+					<div class="col-sm-4">
+							<a ng-disabled="tappctrl.disablebutton" ng-click="tappctrl.gotoRental()" class="btn bgm-cyan">Submit</a>
+					</div>
+					<div class="clearfix"></div>
                 </div>
             </div>
 		</div>				

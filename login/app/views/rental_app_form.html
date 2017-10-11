@@ -21,19 +21,31 @@
 
 		            <div class="card-body card-padding">
 		            	<h3 class="m-b-20 m-t-10">APPLICANT DETAILS:</h3>
-		            	<p class="m-b-10"><label>Full Name:</label> <span class="fg-line"><input type="text" ng-model="rctrl.tenantdata.tenantName"  class="form-control m-b-5 w-5" id="" placeholder=""></span> <label>Date of Birth:</label> <span class="fg-line"><input ng-model="rctrl.rentaldata.dob" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span>
-<label>Tel (work):</label> <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.telwork" class="form-control m-b-5 w-4" id="" placeholder=""></span> <label>Tel (home):</label> <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.telhome" class="form-control m-b-5 w-4" id="" placeholder=""></span> <label>Email:</label> <span class="fg-line"><input type="text"  ng-model="rctrl.tenantdata.tenantEmail"   class="form-control m-b-5 w-9" id="" placeholder=""></span> <label>Current Address:</label> <span class="fg-line"><input type="text" class="form-control m-b-5 w-5" ng-model="rctrl.rentaldata.appaddress" id="" placeholder=""></span> <label>City:</label> <span class="fg-line"><input ng-model="rctrl.rentaldata.appcity"  type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
+		            	<p class="m-b-10" style="display:inline;">
+							<label>Full Name:</label>
+							<span class="fg-line"><input  required   type="text" ng-model="rctrl.tenantdata.tenantName"  class="form-control w-5" id="" placeholder=""></span>
+							
+							<label>Date of Birth:</label>
+							<span class="fg-line">
+								<div class="date-picker input-group" ng-class="{ 'is-opened': rctrl.dobopened == true }" style="display:inline-flex;">
+									<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
+									<div ng-class="{ 'fg-toggled': rctrl.dobopened == true }">
+										<input ng-click="rctrl.dobopen($event)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.dob" is-open="rctrl.dobopened" min-date="minDate" datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+									</div>
+								</div>
+							</span>
+						<p>	<label>Tel (work):</label> <span class="fg-line"><input  required   type="text" ng-model="rctrl.rentaldata.telwork" class="form-control m-b-5 w-4" id="" placeholder=""></span> <label>Tel (home):</label> <span class="fg-line"><input  required   type="text" ng-model="rctrl.rentaldata.telhome" class="form-control m-b-5 w-4" id="" placeholder=""></span> <label>Email:</label> <span class="fg-line"><input  required   type="text"  ng-model="rctrl.tenantdata.tenantEmail"   class="form-control m-b-5 w-9" id="" placeholder=""></span> <label>Current Address:</label> <span class="fg-line"><input  required   type="text" class="form-control m-b-5 w-5" ng-model="rctrl.rentaldata.appaddress" id="" placeholder=""></span> <label>City:</label> <span class="fg-line"><input  required   ng-model="rctrl.rentaldata.appcity"  type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
 
 						<div class="m-b-10">
 							<div class="radio m-b-15">
 								<span class="p-r-5 f-500">Marital Status</span>
 							    <label>
-								    <input type="radio" class="" ng-model="rctrl.rentaldata.maritalstatus"  value="single">
+								    <input  required   type="radio" class="" ng-model="rctrl.rentaldata.maritalstatus"  value="single">
 								    <i class="input-helper"></i>
 								    Single
 								</label>
 								<label>
-								    <input type="radio" ng-model="rctrl.rentaldata.maritalstatus" value="married">
+								    <input  required   type="radio" ng-model="rctrl.rentaldata.maritalstatus" value="married">
 								    <i class="input-helper"></i>
 								    Married
 								</label>
@@ -44,32 +56,36 @@
 							<div class="radio m-b-15">
 								<span class="p-r-5 f-500">Do you rent or own the above address</span>
 							    <label>
-								    <input type="radio" class="" ng-model="rctrl.rentaldata.rent_own"  value="rent">
+								    <input  required  type="radio" class="" ng-model="rctrl.rentaldata.rent_own"  value="rent" ng-change="rctrl.rentownchange()">
 								    <i class="input-helper"></i>
 								    Rent
 								</label>
 								<label>
-								    <input type="radio" ng-model="rctrl.rentaldata.rent_own" value="own">
+								    <input  required  type="radio" ng-model="rctrl.rentaldata.rent_own" value="own" ng-change="rctrl.rentownchange()">
 								    <i class="input-helper"></i>
 								    Own
 								</label>
 							</div>
 						</div>
 
-						<p class="m-b-10">
-							How long have you lived at this address: <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.live_time" class="form-control m-b-5 w-4" id="" placeholder=""></span> 1 year 5 months(months/years) Rent/Mortgage amount: $ <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.rentamt" class="form-control m-b-5" id="" placeholder=""></span> Reason for vacating existing home: <span class="fg-line"><input ng-model="rctrl.rentaldata.vacantreason" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><br> Full Name of Landlord: <span class="fg-line"><input ng-model="rctrl.rentaldata.landlordname" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Landlord’s daytime phone #: <span class="fg-line"><input ng-model="rctrl.rentaldata.landlordphone" type="text" class="form-control m-b-5" id="" placeholder=""></span>
+						<p class="m-b-10" ng-show="rctrl.rentaldata.rent_own == 'rent'">
+							How long have you lived at this address: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.live_time" class="form-control m-b-5 w-4" id="" placeholder=""></span> 1 year 5 months(months/years) Rent/Mortgage amount: $ <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.rentamt" class="form-control m-b-5" id="" placeholder=""></span> Reason for vacating existing home: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.vacantreason" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><br> Full Name of Landlord: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.landlordname" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Landlord’s daytime phone #: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.landlordphone" type="text" class="form-control m-b-5" id="" placeholder=""></span>
 						</p>
 
 						<p class="m-b-10">
 							<p>Additional Adult Occupants (18+) to occupy the premises: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="rctrl.addadult(rctrl.adult.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
 
-							<p ng-repeat="x in rctrl.adult">Full Name: <span class="fg-line"><input ng-model="rctrl.rentaldata.otherappname[$index]" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Date of Birth:<span class="fg-line"><input ng-model="rctrl.rentaldata.otherappdob[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="rctrl.removeadult($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
+							<p ng-repeat="x in rctrl.adult">Full Name: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.otherappname[$index]" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Date of Birth:<span class="fg-line"><input  required  ng-model="rctrl.rentaldata.otherappdob[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="rctrl.removeadult($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
 						</p>
 
 						<p class="m-b-10">
 							<p>Additional Minors (0-18YRS) to occupy the premises: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="rctrl.addminor(rctrl.minor.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
 
-							<p ng-repeat="x in rctrl.minor">Full Name: <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.minorappname[$index]" class="form-control m-b-5 w-4" id="" placeholder=""></span> Date of Birth:<span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.minorappdob[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span><button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="rctrl.removeminor($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
+							<p ng-repeat="x in rctrl.minor">Full Name: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.minorappname[$index]" class="form-control m-b-5 w-4" id="" placeholder=""></span> 
+							Date of Birth:<span class="fg-line">
+							<input  required  ng-model="rctrl.rentaldata.minorappdob[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder="">
+							</span>
+							<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="rctrl.removeminor($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
 						</p>
 						</p>
 
@@ -77,16 +93,16 @@
 							<span class="radio m-b-15">
 								<span class="p-r-5 f-500">Pets:</span>
 							    <label>
-								    <input type="radio" class="" ng-model="rctrl.rentaldata.pets" value="yes">
+								    <input  required  type="radio" class="" ng-model="rctrl.rentaldata.pets" value="yes" ng-change="rctrl.petschange()">
 								    <i class="input-helper"></i>
 								    YES
 								</label>
 								<label>
-								    <input type="radio" ng-model="rctrl.rentaldata.pets" value="no">
+								    <input  required  type="radio" ng-model="rctrl.rentaldata.pets" value="no" ng-change="rctrl.petschange()">
 								    <i class="input-helper"></i>
 								    NO
 								</label>
-								<span>How many and what kind: <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.petsdesc" class="form-control m-b-5" id="" placeholder=""></span></span>
+								<span ng-show="rctrl.rentaldata.pets == 'yes'">How many and what kind: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.petsdesc" class="form-control m-b-5" id="" placeholder=""></span></span>
 							</span> 
 						</p>
 
@@ -94,12 +110,12 @@
 							<div class="radio m-b-15">
 								<span class="p-r-5 f-500">Smoking</span>
 							    <label>
-								    <input type="radio" class="" ng-model="rctrl.rentaldata.smoking" value="yes">
+								    <input  required  type="radio" class="" ng-model="rctrl.rentaldata.smoking" value="yes">
 								    <i class="input-helper"></i>
 								    YES
 								</label>
 								<label>
-								    <input type="radio" ng-model="rctrl.rentaldata.smoking" value="no">
+								    <input  required  type="radio" ng-model="rctrl.rentaldata.smoking" value="no">
 								    <i class="input-helper"></i>
 								    NO
 								</label>
@@ -109,39 +125,39 @@
 		            	<h3 class="m-b-20 m-t-20">Employment Status & Income Verification: </h3>
 		            	<div class="border">
 		            	<h4 class="m-b-20 m-t-10">Primary Applicant:</h4>
-		            	<p class="m-b-10">Current Employer:  <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.appcurrentemployer" class="form-control m-b-5 w-5" id="" placeholder=""></span> Position: <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.appposition" class="form-control m-b-5 w-3" id="" placeholder=""></span>
-Employer phone #: <span class="fg-line"><input ng-model="rctrl.rentaldata.appemployerphone" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> How long have you worked in this company: <span class="fg-line"><input ng-model="rctrl.rentaldata.appworkingduration" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>Gross monthly income: $ <span class="fg-line"><input ng-model="rctrl.rentaldata.appgrossmonthlyincome" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> <span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input type="radio" class="" ng-model="rctrl.rentaldata.appincometype" value="employment" ><i class="input-helper"></i>Employment</label><label><input type="radio" ng-model="rctrl.rentaldata.appincometype" value="retired"><i class="input-helper"></i>Retired</label></span> <br>Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input ng-model="rctrl.rentaldata.appotherincome" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
+		            	<p class="m-b-10">Current Employer:  <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.appcurrentemployer" class="form-control m-b-5 w-5" id="" placeholder=""></span> Position: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.appposition" class="form-control m-b-5 w-3" id="" placeholder=""></span>
+Employer phone #: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appemployerphone" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> How long have you worked in this company: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appworkingduration" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>Gross monthly income: $ <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appgrossmonthlyincome" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> <span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input  required  type="radio" class="" ng-model="rctrl.rentaldata.appincometype" value="employment" ><i class="input-helper"></i>Employment</label><label><input  required  type="radio" ng-model="rctrl.rentaldata.appincometype" value="retired"><i class="input-helper"></i>Retired</label></span> <br>Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appotherincome" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
 
 
 		            	<h4 class="m-b-20 m-t-10">Vehicle Information:</h4>
-		            	<p class="m-b-10">Make: <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.vehiclemake"  class="form-control m-b-5" id="" placeholder=""></span> Model: <span class="fg-line"><input ng-model="rctrl.rentaldata.vehiclemodel"  type="text" class="form-control m-b-5" id="" placeholder=""></span>
-						Year: <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.vehicleyear"  class="form-control m-b-5" id="" placeholder=""></p>
+		            	<p class="m-b-10">Make: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.vehiclemake"  class="form-control m-b-5" id="" placeholder=""></span> Model: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.vehiclemodel"  type="text" class="form-control m-b-5" id="" placeholder=""></span>
+						Year: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.vehicleyear"  class="form-control m-b-5" id="" placeholder=""></p>
 
 						<p>Name and phone number of personal/family reference who may be contacted in the case of <u>emergency:</u></p>
-						<p class="m-b-10">Name: <span class="fg-line"><input ng-model="rctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input ng-model="rctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span></p>
+						<p class="m-b-10">Name: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span></p>
 						</div>
 
 						<div class="border" ng-repeat="x in rctrl.adult">
 						<div>
 						<h4 class="m-b-20 m-t-10">Additional Applicant #{{$index+1}}:</h4>
 		            	<p class="m-b-10">
-							Current Employer:  <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.otherappcurrentemployer[$index]" class="form-control m-b-5 w-5" id="" placeholder=""></span> 
-							Position: <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.otherappposition[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span> 
-							Employer phone #: <span class="fg-line"><input ng-model="rctrl.rentaldata.otherappemployerphone[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> 
-							How long have you worked in this company: <span class="fg-line"><input ng-model="rctrl.rentaldata.otherappworkingduration[$index]" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>
-							Gross monthly income: $ <span class="fg-line"><input ng-model="rctrl.rentaldata.otherappgrossmonthlyincome[$index]" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> 
-							<span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input type="radio" class="" ng-model="rctrl.rentaldata.otherappincometype[$index]" value="employment" ><i class="input-helper"></i>Employment</label><label><input type="radio" ng-model="rctrl.rentaldata.otherappincometype[$index]" value="retired"><i class="input-helper"></i>Retired</label></span> <br>
-							Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input ng-model="rctrl.rentaldata.otherappotherincome[$index]" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
+							Current Employer:  <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.otherappcurrentemployer[$index]" class="form-control m-b-5 w-5" id="" placeholder=""></span> 
+							Position: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.otherappposition[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span> 
+							Employer phone #: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.otherappemployerphone[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> 
+							How long have you worked in this company: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.otherappworkingduration[$index]" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>
+							Gross monthly income: $ <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.otherappgrossmonthlyincome[$index]" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> 
+							<span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input  required  type="radio" class="" ng-model="rctrl.rentaldata.otherappincometype[$index]" value="employment" ><i class="input-helper"></i>Employment</label><label><input  required  type="radio" ng-model="rctrl.rentaldata.otherappincometype[$index]" value="retired"><i class="input-helper"></i>Retired</label></span> <br>
+							Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.otherappotherincome[$index]" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
 						</div>
 						</div>
 						
 						<h4 class="m-b-20 m-t-10">References:</h4>
-						<p class="m-b-10">1. Name: <span class="fg-line"><input ng-model="rctrl.rentaldata.refone_name"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input ng-model="rctrl.rentaldata.refone_phone" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input ng-model="rctrl.rentaldata.refone_relation" type="text" class="form-control m-b-5 w-6" id="" placeholder=""></span></p>
+						<p class="m-b-10">1. Name: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.refone_name"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.refone_phone" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.refone_relation" type="text" class="form-control m-b-5 w-6" id="" placeholder=""></span></p>
 
-						<p class="m-b-10">2. Name: <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.reftwo_name" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input ng-model="rctrl.rentaldata.reftwo_phone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input type="text" class="form-control m-b-5 w-6" id="" ng-model="rctrl.rentaldata.reftwo_relation" placeholder=""></span></p>
+						<p class="m-b-10">2. Name: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.reftwo_name" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.reftwo_phone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input  required  type="text" class="form-control m-b-5 w-6" id="" ng-model="rctrl.rentaldata.reftwo_relation" placeholder=""></span></p>
 						
 		            	<p class="f-500">You are authorized to obtaining credit checks & verifying details contained in this Application.</p>
-						<p class="m-b-10">We offer to rent <span class="fg-line"><input type="text" ng-model="rctrl.propdata.address" class="form-control m-b-5 w-3" id="" placeholder=""></span> (the “Rental unit”) at monthly rent of $ <span class="fg-line"><input type="text" ng-model="rctrl.propdata.rent" class="form-control m-b-5" id="" placeholder=""></span> for a term of <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.months" class="form-control m-b-5" id="" placeholder=""></span> months starting <span class="fg-line"><input type="text"  ng-model="rctrl.rentaldata.startdate" class="form-control m-b-5" id="" placeholder=""></span>(date). Parking is required for <span class="fg-line"><input  ng-model="rctrl.rentaldata.parking" type="text" class="form-control" id="" placeholder=""></span> vehicles (licensed only). This unit is strictly <strong>NON SMOKING.</strong> This offer is subject to acceptance by the landlord/property management company that listed the property. This application is made on the understanding that no betterments will be provided to the Rental Unit except those which may be specifically requested in this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.</p>
+						<p class="m-b-10">We offer to rent <span class="fg-line"><input  required  type="text" ng-model="rctrl.propdata.address" class="form-control m-b-5 w-3" id="" placeholder=""></span> (the “Rental unit”) at monthly rent of $ <span class="fg-line"><input  required  type="text" ng-model="rctrl.propdata.rent" class="form-control m-b-5" id="" placeholder=""></span> for a term of <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.months" class="form-control m-b-5" id="" placeholder=""></span> months starting <span class="fg-line"><input  required  type="text"  ng-model="rctrl.rentaldata.startdate" class="form-control m-b-5" id="" placeholder=""></span>(date). Parking is required for <span class="fg-line"><input  required   ng-model="rctrl.rentaldata.parking" type="text" class="form-control" id="" placeholder=""></span> vehicles (licensed only). This unit is strictly <strong>NON SMOKING.</strong> This offer is subject to acceptance by the landlord/property management company that listed the property. This application is made on the understanding that no betterments will be provided to the Rental Unit except those which may be specifically requested in this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.</p>
 
 						<p class="m-b-10">It is understood that this application <u>will not be processed unless fully completed.</u></p>
 
@@ -152,14 +168,23 @@ Employer phone #: <span class="fg-line"><input ng-model="rctrl.rentaldata.appemp
 
 		            	<p>Tenants are not chosen on a first come – first served basis. We choose the most suitable application for the unit at our sole discretion. This application form is to be used only in the interested of the owner of the rental unit.</p>
 
-		            	<p class="m-b-10">
-							Dated: <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" id="" ng-model="rctrl.rentaldata.dated" placeholder=""></span> 
-							Signature of Primary Applicant:  <span class="fg-line"><input type="text" class="form-control m-b-5 w-3" ng-model="rctrl.rentaldata.appsign" id="" placeholder=""></span>(FULL NAME IN CAPS)  
-							<span   ng-repeat="x in rctrl.adult">Signature of Additional Applicant #{{$index+1}}:   <span class="fg-line"><input type="text" ng-model="rctrl.rentaldata.otherappsign[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span>(FULL NAME IN CAPS)<br/> </span>
+		            	<p class="m-b-10" style="display:inline;">
+							Dated: <span class="fg-line">
+							<div class="date-picker input-group" ng-class="{ 'is-opened': rctrl.dateopened == true }" style="display:inline-flex;">
+								<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
+								<div ng-class="{ 'fg-toggled': rctrl.dateopened == true }">
+									<input ng-click="rctrl.dateopen($event)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.dated" is-open="rctrl.dateopened" min-date="minDate" datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+								</div>
+							</div>
+							
+							</span> 
+						<p>
+							Signature of Primary Applicant:  <span class="fg-line"><input  required  type="text" class="form-control m-b-5 w-3" ng-model="rctrl.rentaldata.appsign" id="" placeholder=""></span>(FULL NAME IN CAPS)  
+							<span   ng-repeat="x in rctrl.adult">Signature of Additional Applicant #{{$index+1}}:   <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.otherappsign[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span>(FULL NAME IN CAPS)<br/> </span>
 						</p>
 
 		            	<button type="submit" ng-disabled="rentalForm.$invalid" class="btn bgm-orange btn-lg m-t-10">Submit</button> 
-						<button type="submit" ng-click="rctrl.draft = 'true';" ng-model="rctrl.draft" class="btn bgm-orange btn-lg m-t-10">Save as Draft</button> 
+						<button type="button" ng-click="rctrl.rentalApp();" class="btn bgm-orange btn-lg m-t-10">Save as Draft</button> 
 		            </div>
 
 		        </form>
