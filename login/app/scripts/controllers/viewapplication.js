@@ -45,7 +45,7 @@ vcancyApp
 						vm.rentaldata.landlordphone = value.landlordphone;
 						vm.rentaldata.pets = value.pets;
 						vm.rentaldata.petsdesc = value.petsdesc;
-						vm.rentaldata.smoking = value.petsdesc;
+						vm.rentaldata.smoking = value.smoking;
 						vm.rentaldata.vehiclemake = value.vehiclemake;
 						vm.rentaldata.vehiclemodel = value.vehiclemodel;
 						vm.rentaldata.vehicleyear = value.vehicleyear;						

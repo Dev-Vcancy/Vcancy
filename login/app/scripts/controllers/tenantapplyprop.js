@@ -11,17 +11,17 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 	firebase.database().ref('users/'+localStorage.getItem('userID')).once("value", function(snapval) {	
 		var userData = snapval.val();
 	  	$scope.$apply(function(){
-	  		console.log(userData);
+	  		// console.log(userData);
 	  		vm.userName = userData.firstname + ' ' +userData.lastname;
 	  	});
 	 });
-	console.log(localStorage.getItem('userEmailVerified'));
+	// console.log(localStorage.getItem('userEmailVerified'));
 	if(localStorage.getItem('userEmailVerified') == "false" || !$rootScope.emailVerified ){
 		vm.isEmailVerified = 1;
 	} else {
 		vm.isEmailVerified = 0;
 	}
-	console.log(vm.isEmailVerified);
+	// console.log(vm.isEmailVerified);
 	
 	// Fetching property Data
 	var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snapshot) {
@@ -67,37 +67,31 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 			}
 		});
 		firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
-			console.log(snapshot.val());
-			if(snapshot.val()) {
-				$scope.$apply(function(){
-					 //console.log(snapshot.val());
-						
-					vm.alreadyBookedSlot = 0;
-					 $.map(snapshot.val(), function(value, index) {
+			$scope.$apply(function(){
+				// console.log(snapshot.val());
+					
+				vm.alreadyBookedSlot = 0;
+				vm.appliedslots = [];
+				vm.applyprop.availableslots = [];
+				vm.timeslotavail = 0;
+				
+				
+				if(snapshot.val() != null){
+					$.map(snapshot.val(), function(value, index) {
 						if(value.tenantID == localStorage.getItem('userID') && value.schedulestatus !== "cancelled"){
 							vm.alreadyBookedSlot = 1;
 						}
-					 
 					 });
-					
-					
-					
-					
-					vm.appliedslots = [];
-					if(snapshot.val() != undefined){
-						vm.appliedslots = $.map(snapshot.val(), function(value, index) {			
-							if(value.schedulestatus !== "cancelled"){
-								return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot), person:1}];
-							}						
-						});
-					}
-						 
+				
+					vm.appliedslots = $.map(snapshot.val(), function(value, index) {			
+						if(value.schedulestatus !== "cancelled"){
+							return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot), person:1}];
+						}						
+					});
+					 
 					// console.log(vm.applyprop.slots);
 					// console.log(vm.appliedslots);	
-					// console.log(vm.appliedslots.length);	
-
-					vm.applyprop.availableslots = [];
-					vm.timeslotavail = 0;
+					// console.log(vm.appliedslots.length);
 						
 					for (var i = 0; i < vm.applyprop.slots.length; i++) {
 						for (var j = 0; j < vm.appliedslots.length; j++) {
@@ -125,15 +119,13 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 						}
 						vm.timeslotavail = 1;
 					}
-					
-					if(vm.appliedslots == null){
-						vm.applyprop.availableslots = vm.applyprop.slots;
-						vm.timeslotavail = 1;
-					}
-					// console.log(vm.applyprop.availableslots);
-					
-				});	
-			}
+				} else {
+					vm.applyprop.availableslots = vm.applyprop.slots;
+					vm.timeslotavail = 1;
+				}
+				// console.log(vm.applyprop.availableslots);
+				
+			});	
 		});	
 		
 	});

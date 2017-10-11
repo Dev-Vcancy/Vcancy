@@ -71,7 +71,7 @@ vcancyApp
 		vm.rentaldata.telwork =  '';
 		vm.rentaldata.telhome =  '';
 		vm.tenantdata.tenantEmail =  '';
-		vm.rentaldata.appadress =  '';
+		vm.rentaldata.appaddress =  '';
 		vm.rentaldata.appcity =  '';
 		vm.rentaldata.maritalstatus =  '';
 		vm.rentaldata.rent_own =  '';
@@ -145,7 +145,7 @@ vcancyApp
 						vm.rentaldata.telwork = value.telwork;
 						vm.rentaldata.telhome = value.telhome;
 						vm.tenantdata.tenantEmail = value.applicantemail;
-						vm.rentaldata.appadress = value.appadress;
+						vm.rentaldata.appaddress = value.appaddress;
 						vm.rentaldata.appcity = value.applicantcity;
 						vm.rentaldata.maritalstatus = value.maritalstatus;
 						vm.rentaldata.rent_own = value.rent_own;
@@ -246,9 +246,9 @@ vcancyApp
 						});								
 					});	
 				}
-				console.log(vm.tenantdata);	
-				console.log(vm.rentaldata);	
-				console.log(vm.propdata);	
+				// console.log(vm.tenantdata);	
+				// console.log(vm.rentaldata);	
+				// console.log(vm.propdata);	
 			});
 		});
 		
@@ -256,11 +256,10 @@ vcancyApp
 		vm.rentalAppSubmit = function(){
 			console.log(vm.rentaldata, vm.draft);
 			var tenantID = vm.tenantdata.tenantID;
-			// console.log($stateParams.scheduleId);
+			
 			if($stateParams.scheduleId != 0){
 				var scheduleID = vm.scheduledata.scheduleID;
 				var propID = vm.propdata.propID;
-				
 			} else {
 				var scheduleID = 0;
 				var propID = 0;	
@@ -278,7 +277,7 @@ vcancyApp
 			var telwork = vm.rentaldata.telwork;
 			var telhome = vm.rentaldata.telhome;
 			var applicantemail = vm.tenantdata.tenantEmail;
-			var appaddress = vm.rentaldata.appadress;
+			var appaddress = vm.rentaldata.appaddress;
 			var applicantcity = vm.rentaldata.appcity;
 			var maritalstatus = vm.rentaldata.maritalstatus;
 			var rent_own = vm.rentaldata.rent_own;
@@ -354,7 +353,7 @@ vcancyApp
 						minorapplicantdob: minorapplicantdob[index]
 					}];
 			});	
-			console.log(vm.minorapplicants);
+			console.log(appaddress);
 			
 			if(vm.draftdata === "false") {		
 				firebase.database().ref('submitapps/').push().set({
@@ -371,7 +370,7 @@ vcancyApp
 					telwork: telwork,
 					telhome: telhome,
 					applicantemail: applicantemail,
-					appaddress: '', //appaddress,
+					appaddress: appaddress,
 					applicantcity: applicantcity,
 					maritalstatus: maritalstatus,
 					rent_own: rent_own,
@@ -458,7 +457,7 @@ vcancyApp
 					telwork: telwork,
 					telhome: telhome,
 					applicantemail: applicantemail,
-					appaddress: '', //appaddress,
+					appaddress: appaddress,
 					applicantcity: applicantcity,
 					maritalstatus: maritalstatus,
 					rent_own: rent_own,
