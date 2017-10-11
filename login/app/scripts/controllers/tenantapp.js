@@ -131,5 +131,21 @@ vcancyApp
 			vm.submitappsdata.push({scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''});
 		}
 		
+		
+		vm.email = '';
+		vm.disablebutton = 1;
+		vm.emailrequired = function(event){
+			if(vm.email == ''){
+				vm.disablebutton = 1;
+			} else {
+				vm.disablebutton = 0;
+			}
+		}
+		vm.gotoRental = function(event){
+			if(vm.disablebutton == 0){
+				window.location.href = "#/rentalform/0";
+			}
+		}
+		
 			
 }])

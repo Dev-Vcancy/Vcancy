@@ -114,4 +114,6 @@ vcancyApp
 		}
 		vm.tablefilterdata();
 		
+		
+		
 }])
