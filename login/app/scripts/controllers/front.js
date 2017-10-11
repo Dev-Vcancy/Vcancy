@@ -170,9 +170,9 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				  });
 			} else {
 				$rootScope.invalid = 'regcpwd';			
-				$rootScope.error = 'Confirm password doesnot match password.';
+				$rootScope.error = 'Passwords don’t match.';
 				$rootScope.success = '';
-				//console.error("Error: ","Confirm password doesnot match password");
+				//console.error("Error: ","Passwords don’t match.");
 			}
 			
 		}
