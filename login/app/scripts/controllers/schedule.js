@@ -36,7 +36,7 @@ vcancyApp
 						
 						vm.calendardata = $.map(snapshot.val(), function(value, index) {
 							if(value.schedulestatus == "confirmed" && (vm.propcheck[value.propID] == true || propID == '')) {
-								return [{scheduleID:index, className: 'bgm-cyan', title:value.address, start: value.dateslot}];
+								return [{scheduleID:index, className: 'bgm-cyan', title:value.address, start: new Date(value.dateslot)}];
 							}
 						});						
 						

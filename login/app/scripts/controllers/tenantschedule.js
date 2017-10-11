@@ -18,7 +18,7 @@ vcancyApp
 				if(snapshot.val() !== null) {
 					vm.calendardata = $.map(snapshot.val(), function(value, index) {
 						if(value.schedulestatus == "confirmed") {
-							return [{scheduleID:index, className: 'bgm-cyan', title:value.address, start: value.dateslot}];
+							return [{scheduleID:index, className: 'bgm-cyan', title:value.address, start: new Date(value.dateslot)}];
 						}
 					});						
 					
