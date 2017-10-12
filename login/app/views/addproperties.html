@@ -111,9 +111,10 @@
 										<input type="text" required id="limit" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.limit[$index]" name="limit[]" class="form-control" placeholder="Person Limit">
 									</div>
 									<div class="col-sm-2">
-										<label class="checkbox checkbox-inline m-r-20">
-											<input type="checkbox" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.multiple[$index]">
+										<label class="custom_tooltip checkbox checkbox-inline m-r-20">
+											<input type="checkbox" tooltip-placement="bottom" uib-tooltip="" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.multiple[$index]">
 											<i class="input-helper"></i>
+											<span class="tooltiptext">This allows multiple renters to view the unit at the same time</span>
 										</label>
 									</div>
 									<div class="col-sm-1">									
