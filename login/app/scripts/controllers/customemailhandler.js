@@ -71,18 +71,19 @@ vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$ro
 					  console.log("Password reset has been confirmed and new password updated.");
 						$scope.$apply(function(){
 							$rootScope.success = "Password reset has been confirmed and new password updated.";	
+							$rootScope.error = '';
 						});				  
 					}).catch(function(error) {
 					  console.log("Error occurred during confirmation. The code might have expired or the password is too weak.");
 					  $scope.$apply(function(){
 						$rootScope.error = "Error occurred during confirmation. The code might have expired or the password is too weak.";
+						$rootScope.success = '';
 					  });
 					});
 				} else {
 					console.log("Passwords don’t match.");
-					  $scope.$apply(function(){
-						$rootScope.error = "Passwords don’t match.";
-					  });
+					$rootScope.error = "Passwords don’t match.";
+					$rootScope.success = ''; 
 				}				
 			}
 			
