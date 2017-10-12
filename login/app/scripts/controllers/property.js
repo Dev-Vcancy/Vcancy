@@ -131,6 +131,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	};
 
 	vm.datetimeslotchanged = function (key) {
+		console.log(key,vm.prop.fromtime);
 		console.log("Date time SLot");
 		vm.timeslotmodified = "true";
 		if(vm.prop.fromtime[key] === undefined){
@@ -143,19 +144,57 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			var to = new Date();	
 		} else {
 			var to = vm.prop.to[key];	
+		}		
+		
+		vm.overlap = 0;
+		for (var i = 0; i < vm.prop.fromtime.length ; i++) {
+			if(i != key){
+				if(vm.prop.fromtime[i] === undefined){
+					var ftime  =  new Date();			
+				} else {
+					var ftime= vm.prop.fromtime[i];	
+				}
+				
+				if(vm.prop.to[i] === undefined){
+					var totime = new Date();	
+				} else {
+					var totime = vm.prop.to[i];	
+				}
+							
+				if ((fromtime <= ftime && to <= ftime) || (fromtime >= totime && to >= totime)) {
+					
+				} else {
+					vm.overlap = 1;
+				}
+			}
 		}
-		// if (vm.prop.to <= vm.prop.fromtime) {
-		  // vm.prop.to = new Date(vm.prop.fromtime.getTime() + 1 * 60000)
-		// }
+	
+		if(vm.overlap == 1) {
+			vm.prop.timeoverlapinvalid[key] = 1;
+			vm.isDisabled = 1;
+		} else {
+			vm.prop.timeoverlapinvalid[key] = 0;
+			vm.isDisabled = 0;
+		}
+		
+		var temp = new Date(fromtime.getTime() + 30 * 60000)
+		console.log(temp,to);
+		if (to < temp && vm.prop.timeoverlapinvalid[key] == 0) {
+			vm.prop.timeinvalid[key] = 1;
+			vm.isDisabled = 1;
+		} else {
+			vm.prop.timeinvalid[key] = 0;
+			vm.isDisabled = 0;
+		}
 				
 		console.log(vm.prop.multiple[key],fromtime,to);
 		
-		if(vm.prop.multiple[key] === false || vm.prop.multiple[key] === undefined){
+		if((vm.prop.multiple[key] === false || vm.prop.multiple[key] === undefined) && vm.prop.timeinvalid[key] == 0){
 			var minutestimediff = (to - fromtime)/ 60000;
 			var subslots = Math.floor(Math.ceil(minutestimediff)/30);				
 			console.log(minutestimediff,subslots);
 			
-			if(vm.prop.limit[key] > subslots){
+			if(vm.prop.limit[key] > subslots ){
 				vm.prop.invalid[key] = 1;
 				vm.isDisabled = 1;
 			} else {
@@ -450,7 +489,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					to : [],
 					limit : [],
 					propertylink: propData.propertylink,
-					invalid: [0]
+					invalid: [0],
+					timeinvalid: [0],
+					timeoverlapinvalid: [0]
 				}
 				angular.forEach(propData.date, function(value, key) {
 				  vm.timeSlot.push({date: new Date(value)});
@@ -483,7 +524,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			to : [],
 			limit : [],
 			propertylink: '',
-			invalid: [0]
+			invalid: [0],
+			timeinvalid: [0],
+			timeoverlapinvalid: [0]
 		}
 		
 	}
