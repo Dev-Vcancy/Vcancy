@@ -311,7 +311,7 @@ vcancyApp
 									$scope.$apply(function(){
 										if(snap.val()) {
 											vm.propdata = snap.val();
-											vm.propdata.propID = snap.key;								
+											vm.propdata.propID = snap.key;	
 										}
 									});								
 								});				

@@ -452,7 +452,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			propID: '',
 			landlordID: '',
 			propimg : '',
-			propstatus : '',
+			propstatus : true,
 			proptype : '',
 			units : '',
 			multiple: [true],

@@ -23,7 +23,7 @@ vcancyApp
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {						
 						if(value.schedulestatus == "confirmed" ) { // && moment(value.dateslot).isBefore(new Date())
 							vm.pendingappsavail = 1;
-							return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+							return [{scheduleID:index, address:value.units+" - "+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						} 
 					});	
 					
@@ -75,7 +75,7 @@ vcancyApp
 									$.map(snap.val(), function(value, index) {	
 										if(val.schedulestatus == "submitted" ){
 											vm.submittedappsavail = 1;
-											vm.submitappsdata.push({appID:index, address:value.address, dated: value.dated, rentalstatus: value.rentalstatus});
+											vm.submitappsdata.push({appID:index, address:val.units+" - "+value.address, dated: value.dated, rentalstatus: value.rentalstatus});
 										}
 										
 										

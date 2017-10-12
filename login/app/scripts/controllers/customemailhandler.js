@@ -22,6 +22,7 @@ vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$ro
 			$scope.$apply(function(){
 				$rootScope.emailhandler = localStorage.getItem('emailHandled');	
 			});			
+			$state.go('login');
 		}).catch(function(error) {
 			localStorage.setItem('emailHandled', error.message);
 			$scope.$apply(function(){
