@@ -88,7 +88,7 @@ vcancyApp
 					vm.submitappscols = [
 					  { field: "address", title: "Address", sortable: "address", show: true },
 					  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
-					  { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
+					  // { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
 					];
 					
 					//Sorting
@@ -125,7 +125,7 @@ vcancyApp
 					vm.submitappscols = [
 					  { field: "address", title: "Address", sortable: "address", show: true },
 					  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
-					  { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
+					  // { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
 					];
 
 					//Sorting

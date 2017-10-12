@@ -332,17 +332,19 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 							
 							console.log(vm.slots);
 							console.log(vm.appliedslots);	
-														
-							for (var i = 0; i < vm.slots.length; i++) {
-								for (var j = 0; j < vm.appliedslots.length; j++) {
-									if (moment(vm.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.slots[i].to).format('HH:mm') == vm.appliedslots[j].to) {					
-										var index = vm.scheduleIDs.indexOf(vm.appliedslots[j].scheduleID);
-										if (index > -1) {
-										   vm.scheduleIDs.splice(index, 1);
-										}
-									} 				
-								}
-							}		
+							
+							if(propstatus != false)	{
+								for (var i = 0; i < vm.slots.length; i++) {
+									for (var j = 0; j < vm.appliedslots.length; j++) {
+										if (moment(vm.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.slots[i].to).format('HH:mm') == vm.appliedslots[j].to) {					
+											var index = vm.scheduleIDs.indexOf(vm.appliedslots[j].scheduleID);
+											if (index > -1) {
+											   vm.scheduleIDs.splice(index, 1);
+											}
+										} 
+									}
+								}	
+							} 				
 							
 							// link generated and property added message
 							localStorage.setItem('propertysuccessmsg','Property updated successfully.');
@@ -388,7 +390,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			});
 		   
 		});
-			
 	
 		vm.toggleSwitch = function(key){
 			console.log(key);
@@ -400,9 +401,27 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				propstatus: propstatus
 			})
 			
+			firebase.database().ref('applyprop/').orderByChild("propID").equalTo(key).once("value", function(snapshot) {	
+				$scope.$apply(function(){
+					vm.scheduleIDs = [];
+					
+					if(snapshot.val() != undefined){
+						$.map(snapshot.val(), function(value, index) {							
+							if(value.schedulestatus !== "cancelled"){	
+								vm.scheduleIDs.push(index);				
+							}
+						});
+					}
+					
+					angular.forEach(vm.scheduleIDs, function(value, key) {
+						firebase.database().ref('applyprop/'+value).update({	
+							schedulestatus: "cancelled"
+						})
+						console.log(value);
+					});			
+				});	
+			});	
 		}
-	
-	
 	}
 
 	// Edit Property

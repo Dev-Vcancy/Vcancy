@@ -89,7 +89,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 		}
 		
 		this.registerUser = function(reguser){
-			console.log(localStorage.getItem('applyhiturl'));
+			// console.log(localStorage.getItem('applyhiturl'));
 			var first = reguser.first;
 			var last = reguser.last;
 			var email = reguser.email;
@@ -106,7 +106,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				reguserObj.$createUserWithEmailAndPassword(email, pass)
 					.then(function(firebaseUser) {
 						
-						console.log(firebaseUser);
+						// console.log(firebaseUser);
 						firebaseUser.sendEmailVerification().then(function() {
 							// console.log("Email Sent");
 						}).catch(function(error) {
@@ -121,7 +121,8 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 					  });				  
 					$rootScope.success = 'Your account has been created and an email has been sent. Please verify your email to Log In!';
 					$rootScope.error = '';			
-					
+					// $rootScope.successSubmit = 1;					
+										
 					// When apply property url hit direct login and redirect to apply link url on signup successful
 					console.log(localStorage.getItem('applyhiturl'));
 					if(localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1 && usertype === 0 ){
@@ -174,11 +175,20 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				$rootScope.success = '';
 				//console.error("Error: ","Passwords don’t match.");
 			}
+
+			// if($rootScope.successSubmit == 1){
+				// this.reguser.first = '';
+				// this.reguser.last = '';
+				// this.reguser.email = '';
+				// this.reguser.pass = ''; 
+				// this.reguser.cpass = ''; 
+				// this.reguser.usertype = '';
+			// }
 			
 		}
 		
-		this.forgotpwdmail = function(forgotuser){
-			var email = forgotuser.email;
+		this.forgotpwdmail = function(forgot){
+			var email = forgot.email;
 			$rootScope.invalid = '';
 			$rootScope.success = '';
 			$rootScope.error = '';
@@ -187,15 +197,16 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			forgotuserObj.$sendPasswordResetEmail(email).then(function() {
 				// console.log("Password reset email sent successfully!");
 				$rootScope.success = 'Password reset mail sent successfully.Please check your Inbox.';
-				$rootScope.error = '';	
+				$rootScope.error = '';
 			}).catch(function(error) {
-				// console.error("Error: ", error);
+				console.error("Error: ", error);
 				if(error.message){
 					$rootScope.error = error.message;
 					$rootScope.success = '';
 				} 
 			});
 			
+			this.forgotuser.email = '';			
 		}
 		
 }]);

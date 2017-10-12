@@ -46,10 +46,10 @@ vcancyApp
 			   } 		   
 			   var f = temp;
 			   var t = new Date(f.getTime() + (30 * 60 * 1000)); // 30 minutes add to from time 
-			   
+			   var temp = t;
 			   slots.push({date:value, fromtime:f, to:t, person: limit[key], multiple: multiple[key], dateslotindex: key});
 			   
-			   temp = new Date(t.getTime() + (1 * 60 * 1000)); // 1 minute add to TO time
+			   // temp = new Date(t.getTime() + (1 * 60 * 1000)); // 1 minute add to TO time
 			}  
 		});
 	   
