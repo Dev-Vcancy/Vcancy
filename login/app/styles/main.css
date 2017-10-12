@@ -633,6 +633,11 @@ ul.header-inner li a:hover.button:before{
   .app_form label{
     width: 30%;
   }
+  .block-header .pull-right {
+      float: initial !important;
+      margin-top: 10px;
+      width: 100%;
+  }  
 }
 
 .copylink_view {
