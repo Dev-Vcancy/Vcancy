@@ -13,7 +13,7 @@ vcancyApp
 		vm.viewingschedule = 0;
 		vm.submitapps = 0;
 		vm.propactive = 0;
-		vm.applicantcompet = 0;
+		vm.applicationcomplete = 0;
 		
 		vm.loader = 1;
 		
