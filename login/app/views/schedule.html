@@ -33,7 +33,10 @@
 					<div class="table-responsive">
 						<table ng-table-dynamic="schedulectrl.tableSorting with schedulectrl.cols"  class="table table-striped table-vmiddle">
 							<tr ng-repeat="row in $data">
-								<td ng-repeat="col in $columns">{{row[col.field]}}</td>
+								<td ng-repeat="col in $columns">
+									<span ng-if="col.field != 'description'">{{row[col.field]}}</span>
+									<span ng-if="col.field == 'description'" tooltip-placement="top" uib-tooltip="{{row.desctooltip}}">{{row[col.field]}}</span>
+								</td>
 								<td ng-repeat="col in schedulectrl.extracols">
 									<button class="btn btn-xs btn-success"  ng-hide="row.schedulestatus == 'confirmed' || row.schedulestatus == 'cancelled'" ng-click="schedulectrl.confirmschedule(row.scheduleID)">Confirm</button>
 									<button class="btn btn-xs btn-danger"  ng-hide="row.schedulestatus == 'cancelled'" ng-click="schedulectrl.cancelschedule(w.scheduleID)">Cancel</button>

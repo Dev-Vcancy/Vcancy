@@ -8,6 +8,8 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 	
 	var vm = this;
 	vm.emailVerifiedError = '';
+	var tenantID = localStorage.getItem('userID');
+	
 	firebase.database().ref('users/'+localStorage.getItem('userID')).once("value", function(snapval) {	
 		var userData = snapval.val();
 	  	$scope.$apply(function(){
@@ -24,13 +26,13 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 	// console.log(vm.isEmailVerified);
 	
 	// Fetching property Data
-	var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snapshot) {
-		var propData = snapshot.val();
+	var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snap) {
+		var propData = snap.val();
 		vm.timeSlot = [];
 		vm.slots = [];
 		$scope.$apply(function(){
 			vm.applyprop = {
-				propID: snapshot.key,
+				propID: snap.key,
 				landlordID: propData.landlordID,
 				propimg : propData.propimg,
 				propstatus : propData.propstatus,
@@ -66,6 +68,9 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				$state.go('tenantdashboard');
 			}
 		});
+		
+		
+		
 		firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
 			$scope.$apply(function(){
 				// console.log(snapshot.val());
@@ -127,6 +132,29 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				
 			});	
 		});	
+		
+		firebase.database().ref('applyprop/').orderByChild("tenantID").limitToLast(1).once("child_added", function(snapshot) {	
+			$scope.$apply(function(){
+				console.log(snapshot.val());
+				if(snapshot.val() != null){
+					var value = snapshot.val();
+					vm.applyprop.name = value.name;
+					vm.applyprop.tenantlocation = value.tenantlocation;
+					vm.applyprop.age = value.age; 
+					vm.applyprop.jobtitle = value.jobtitle; 
+					vm.applyprop.description = value.description; 
+					
+				} else {
+					vm.applyprop.name = '';
+					vm.applyprop.tenantlocation = '';
+					vm.applyprop.age = ''; 
+					vm.applyprop.jobtitle = ''; 
+					vm.applyprop.description = ''; 
+				}
+			});
+		});
+		
+		
 		
 	});
 	
