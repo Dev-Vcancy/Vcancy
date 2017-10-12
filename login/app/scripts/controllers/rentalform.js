@@ -312,6 +312,7 @@ vcancyApp
 										if(snap.val()) {
 											vm.propdata = snap.val();
 											vm.propdata.propID = snap.key;	
+											vm.propdata.address = vm.propdata.units +" - "+vm.propdata.address;
 										}
 									});								
 								});				
