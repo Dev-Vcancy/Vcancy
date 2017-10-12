@@ -51,7 +51,7 @@ vcancyApp
 							if(vm.propcheck[value.propID] == true || propID == ''){
 								if(value.schedulestatus !== "removed" && value.schedulestatus !== "submitted") {
 									vm.schedulesavail = 1;
-									return [{scheduleID:index, name:value.name, tenantlocation: value.tenantlocation, jobtitle: value.jobtitle, age: value.age, dateslot: value.dateslot, address:value.address, timerange: value.timerange, description: value.description, schedulestatus: value.schedulestatus}];
+									return [{scheduleID:index, name:value.name, tenantlocation: value.tenantlocation, jobtitle: value.jobtitle, age: value.age, dateslot: value.dateslot, address:value.address, timerange: value.timerange, description: value.description.substr(0, 15),desctooltip: value.description, schedulestatus: value.schedulestatus}];
 								} 
 							} 
 						});
@@ -63,7 +63,7 @@ vcancyApp
 							  { field: "age", title: "Age", sortable: "age", show: true },
 							  { field: "dateslot", title: "Date", sortable: "dateslot", show: true },						  
 							  { field: "timerange", title: "Time", sortable: "timerange", show: true },
-							  { field: "description", title: "About", sortable: "description", show: true }
+							  { field: "description", title: "About Me", sortable: "description", show: true }
 							];
 
 						
