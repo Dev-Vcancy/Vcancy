@@ -18,7 +18,7 @@ vcancyApp
 				if(snapshot.val() !== null) {
 					vm.calendardata = $.map(snapshot.val(), function(value, index) {
 						if(value.schedulestatus == "confirmed") {
-							return [{scheduleID:index, className: 'bgm-cyan', title:value.address, start: new Date(value.dateslot)}];
+							return [{scheduleID:index, className: 'bgm-cyan', title:value.units+" - "+value.address, start: new Date(value.dateslot)}];
 						}
 					});						
 					
@@ -32,7 +32,7 @@ vcancyApp
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
 						if(value.schedulestatus !== "removed"  && value.schedulestatus !== "submitted") {
 							vm.schedulesavail = 1;
-							return [{scheduleID:index, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+							return [{scheduleID:index, address:value.units+" - "+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						} 
 					});	
 					

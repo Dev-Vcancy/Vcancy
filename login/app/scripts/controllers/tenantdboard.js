@@ -20,21 +20,26 @@ vcancyApp
 		var propdbObj = firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
 			console.log(snapshot.val())
 			$scope.$apply(function(){
-				$.map(snapshot.val(), function(value, index) {
+				if(snapshot.val() != null){
+					$.map(snapshot.val(), function(value, index) {
 					
-					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isAfter(new Date())  ) {
-						vm.viewingschedule += 1;
-					}
-					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date()) &&   moment(value.fromtimeslot).format('HH:mm') >= moment(new Date()).format('HH:mm') &&  moment(value.toslot).format('HH:mm') >= moment(new Date()).format('HH:mm')) {
-						vm.viewingschedule += 1;
-					}
-					
-					if(value.schedulestatus == "submitted"){
-						vm.submitapps += 1;
-					}
-					
-				});	
-				vm.loader = 0;
+						if(value.schedulestatus == "confirmed" && moment(value.dateslot).isAfter(new Date())  ) {
+							vm.viewingschedule += 1;
+						}
+						if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date()) &&   moment(value.fromtimeslot).format('HH:mm') >= moment(new Date()).format('HH:mm') &&  moment(value.toslot).format('HH:mm') >= moment(new Date()).format('HH:mm')) {
+							vm.viewingschedule += 1;
+						}
+						
+						if(value.schedulestatus == "submitted"){
+							vm.submitapps += 1;
+						}
+						
+					});	
+				
+					vm.loader = 0;
+				} else {
+					vm.loader = 0;
+				}
 			});
 		   
 		});

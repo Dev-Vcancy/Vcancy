@@ -37,7 +37,7 @@
 							
 							<div class="col-sm-2 m-b-20">
 								<div class="toggle-switch" data-ts-color="blue">
-									<label for="ts3" class="ts-label">Active/Inactive</label>
+									<label for="ts3" class="ts-label">Active</label>
 									<input name="propstatus" ng-model="propctrl.prop.propstatus" id="ts3" type="checkbox" required hidden="hidden">
 									<label for="ts3" class="ts-helper"></label>
 								</div>
@@ -120,7 +120,7 @@
 										<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="propctrl.removeTimeSlot($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
 									</div>
 									<div class="col-sm-12">	
-										<div  ng-if="propctrl.prop.invalid[$index]"  class="alert alert-danger" style="padding:3px !important;text-align:center">Manage the Time Range and Person Limit</div>
+										<div  ng-if="propctrl.prop.invalid[$index]"  class="alert alert-danger" style="padding:3px !important;text-align:center">Each renter has a 30 min slot unless the checkbox is checked</div>
 									</div>
 								</div>
 							</div>
