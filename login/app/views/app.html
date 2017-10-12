@@ -34,8 +34,10 @@
 								<tr ng-repeat="row in $data">
 									<td ng-repeat="col in $columns">{{row[col.field]}}</td>
 									<td ng-repeat="col in lappctrl.submitappsextracols">
+
 										<a href="" class="btn bgm-cyan m-b-5">Run Check</a>
 										<a href="#/viewapplication/{{row[col.field]}}" target="_blank" class="btn bgm-cyan m-b-5">View Application</a>
+
 									</td>		           
 								</tr>
                                                                 <tr ng-if="lappctrl.submittedappsavail == 0"><td colspan='8'>

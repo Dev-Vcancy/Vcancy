@@ -22,6 +22,7 @@ vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$ro
 			$scope.$apply(function(){
 				$rootScope.emailhandler = localStorage.getItem('emailHandled');	
 			});			
+			$state.go('login');
 		}).catch(function(error) {
 			localStorage.setItem('emailHandled', error.message);
 			$scope.$apply(function(){
@@ -65,19 +66,24 @@ vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$ro
 		  
 			this.resetpasswordsubmit = function(){
 				// console.log(this.newpassword);
-				firebase.auth().confirmPasswordReset(oobCode, this.newpassword).then(function(resp) {
-				  console.log("Password reset has been confirmed and new password updated.");
-					$scope.$apply(function(){
-						$rootScope.success = "Password reset has been confirmed and new password updated.";	
-					});				  
-				}).catch(function(error) {
-				  console.log("Error occurred during confirmation. The code might have expired or the password is too weak.");
-				  $scope.$apply(function(){
-					$rootScope.error = "Error occurred during confirmation. The code might have expired or the password is too weak.";
-				  });
-				});
-				
-				
+				if(this.cpassword == this.newpassword){
+					firebase.auth().confirmPasswordReset(oobCode, this.newpassword).then(function(resp) {
+					  console.log("Password reset has been confirmed and new password updated.");
+						$scope.$apply(function(){
+							$rootScope.success = "Password reset has been confirmed and new password updated.";	
+						});				  
+					}).catch(function(error) {
+					  console.log("Error occurred during confirmation. The code might have expired or the password is too weak.");
+					  $scope.$apply(function(){
+						$rootScope.error = "Error occurred during confirmation. The code might have expired or the password is too weak.";
+					  });
+					});
+				} else {
+					console.log("Passwords don’t match.");
+					  $scope.$apply(function(){
+						$rootScope.error = "Passwords don’t match.";
+					  });
+				}				
 			}
 			
 	}

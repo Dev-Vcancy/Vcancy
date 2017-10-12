@@ -36,7 +36,7 @@ vcancyApp
 						
 						vm.calendardata = $.map(snapshot.val(), function(value, index) {
 							if(value.schedulestatus == "confirmed" && (vm.propcheck[value.propID] == true || propID == '')) {
-								return [{scheduleID:index, className: 'bgm-cyan', title:value.address, start: new Date(value.dateslot)}];
+								return [{scheduleID:index, className: 'bgm-cyan', title:value.units+" - "+value.address, start: new Date(value.dateslot)}];
 							}
 						});						
 						
@@ -58,7 +58,7 @@ vcancyApp
 			
 						vm.cols = [
 							  { field: "name", title: "Name", sortable: "name", show: true },
-							  { field: "tenantlocation", title: "Location", sortable: "tenantlocation", show: true },
+							  { field: "tenantlocation", title: "City", sortable: "tenantlocation", show: true },
 							  { field: "jobtitle", title: "Profession", sortable: "jobtitle", show: true },
 							  { field: "age", title: "Age", sortable: "age", show: true },
 							  { field: "dateslot", title: "Date", sortable: "dateslot", show: true },						  
