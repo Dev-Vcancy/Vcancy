@@ -21,7 +21,7 @@ vcancyApp
 				vm.rentaldata.vacantreason =  '';
 			} else {
 				vm.rentaldata.live_time =  ' ';
-				vm.rentaldata.rentamt =  ' ';
+				vm.rentaldata.rentamt =  '0.00';
 				vm.rentaldata.vacantreason =  ' ';
 			}
 			
