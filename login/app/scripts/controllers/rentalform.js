@@ -174,8 +174,8 @@ vcancyApp
 		vm.format = vm.formats[0];
 		
 		
-		vm.adult = [0];
-		vm.minor = [0];
+		vm.adult = [];
+		vm.minor = [];
 		vm.addadult = function(adultlen){
 			vm.adult.push(adultlen);
 		}
