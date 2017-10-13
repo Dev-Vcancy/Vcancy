@@ -73,11 +73,15 @@
 								<input type="text" id="address" gm-places-autocomplete  ng-model="propctrl.prop.address" required name="address" class="form-control" placeholder="Address">
 							</div>
 							
-							<div class="col-sm-12 m-b-20">
-								<h4>Add showing time slots: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="propctrl.addTimeSlot(propctrl.timeSlot.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></h4>
-								<div class="col-sm-3">Date</div><div class="col-sm-2">Time From</div><div class="col-sm-2">Time To</div><div class="col-sm-2">Persons Limit</div><div class="col-sm-2">Multiple Visitors</div><div class="col-sm-1"></div>
+							<div class="col-sm-12 m-b-20 time_slot">
+								<h4 class="m-b-20 fw">Add showing time slots: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="propctrl.addTimeSlot(propctrl.timeSlot.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></h4>
+								
 								<div class="row" ng-repeat="x in propctrl.timeSlot">
-									<div class="col-sm-3">
+									<div class="col-sm-1 fw hidden-sm hidden-md hidden-lg">									
+										<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="propctrl.removeTimeSlot($index)" class="btn btn-xs btn-danger pull-right"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
+									</div>
+									<div class="col-sm-3 m-b-10">
+										<div class="col-sm-12"><p class="m-b-10">Date</p></div>
 										<div class="date-picker input-group" ng-class="{ 'is-opened': x.opened == true }">
 											<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 											<div class="fg-line" ng-class="{ 'fg-toggled': x.opened == true }">
@@ -85,7 +89,8 @@
 											</div>
 										</div>
 									</div>
-									<div class="col-sm-2">
+									<div class="col-sm-2 m-b-10">
+										<div class="col-sm-12"><p class="m-b-10">Time From</p></div>
 										<div class="time-picker input-group">
 											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
 											 <div uib-timepicker ng-model="propctrl.prop.fromtime[$index]" name = "fromtime[]" ng-change="propctrl.datetimeslotchanged($index)" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
@@ -94,7 +99,8 @@
 											<!-- </div> -->
 										</div>
 									</div>
-									<div class="col-sm-2">
+									<div class="col-sm-2 m-b-10">
+										<div class="col-sm-12"><p class="m-b-10">Time To</p></div>
 										<div class="time-picker input-group">
 											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
 											 <div uib-timepicker ng-model="propctrl.prop.to[$index]" name = "to[]" ng-change="propctrl.datetimeslotchanged($index)" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
@@ -107,18 +113,22 @@
 											<!-- <input ng-click="open($event)" ps-input-time sy-timepicker-popup="HH:mm:ss" class="form-control" ng-model="propctrl.prop.to" show-meridian="false" is-open="opened" ng-controller="syTimepickerController"/> -->
 										<!-- </div> -->
 									</div>
-									<div class="col-sm-2">
-										<input type="text" required id="limit" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.limit[$index]" name="limit[]" ng-pattern="/^([1-9][0-9]*)$/" class="form-control" placeholder="Person Limit">
+
+									<div class="col-sm-2 m-b-10">
+										<div><p class="m-b-10">Persons Limit</p></div>
+										<input type="text" required id="limit" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.limit[$index]" name="limit[]" class="form-control person_limit" placeholder="Person Limit">
+
 									</div>
-									<div class="col-sm-2">
-										<label class="custom_tooltip checkbox checkbox-inline m-r-20">
+									<div class="col-sm-2 m-b-10">
+										<div><p class="m-b-10">Multiple Visitors</p></div>
+										<label class="custom_tooltip checkbox checkbox-inline m-r-20 multiple_visiter">
 											<input type="checkbox" tooltip-placement="bottom" uib-tooltip="" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.multiple[$index]">
 											<i class="input-helper"></i>
 											<span class="tooltiptext">This allows multiple renters to view the unit at the same time</span>
 										</label>
 									</div>
-									<div class="col-sm-1">									
-										<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="propctrl.removeTimeSlot($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
+									<div class="col-sm-1 hidden-xs">									
+										<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="propctrl.removeTimeSlot($index)" class="btn btn-xs btn-danger pull-right"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
 									</div>
 									<div class="col-sm-12">	
 										<div  ng-if="propctrl.prop.invalid[$index]"  class="alert alert-danger" style="padding:3px !important;text-align:center">Each renter has a 30 min slot unless the checkbox is checked.</div>
@@ -132,19 +142,20 @@
 								</div>
 							</div>
 							
-							<div class="col-sm-6">
-								<button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
+							<div class="m-t-10 fw">
+								<div class="col-sm-12 submit_btn">
+									<button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
+									<button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
+									<button type="button" ng-click="propctrl.delprop(propctrl.prop.propID)" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Delete'">Delete</button>
+									<button type="submit" ng-disabled="addpropForm.$invalid || propctrl.isDisabled"  class="btn btn-success pull-right">{{propctrl.submitaction}}  </button>
+								</div>
 							</div>
-							<div class="col-sm-6">
-								<button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
-								<button type="button" ng-click="propctrl.delprop(propctrl.prop.propID)" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Delete'">Delete</button>
-								<button type="submit" ng-disabled="addpropForm.$invalid || propctrl.isDisabled"  class="btn btn-success pull-right">{{propctrl.submitaction}}  </button>
-							</div>	
-							<div class="col-sm-12">
-								<div class="col-xs-11 col-md-offset-3 col-md-5">
+
+							<div class="m-t-10 fw">
+								<div class="col-xs-10 col-md-offset-3 col-md-5 m-b-10">
 									<input type="text" readonly="true" placeholder="LINK GENERATED HERE" ng-model="propctrl.prop.propertylink" class="form-control" name="propertylink" id="propertylink"/>
 								</div>
-								<div class="col-xs-1 col-md-1">
+								<div class="col-xs-2 col-md-1">
 									<button type="button" class="btn btn-info" tooltip-class="tooltip-cyan" uib-tooltip="{{propctrl.copy}}" ng-copy="propctrl.prop.propertylink" onSuccess="propctrl.copySuccess(e)" ><i class="zmdi zmdi-copy zmdi-hc-fw" style="font-size:25px;" ></i></button>
 								</div>
 							</div>
