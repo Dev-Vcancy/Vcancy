@@ -133,20 +133,22 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 			});	
 		});	
 		
-		firebase.database().ref('applyprop/').orderByChild("tenantID").limitToLast(1).once("child_added", function(snapshot) {	
+		firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).limitToLast(1).once("value", function(snapshot) {	
 			$scope.$apply(function(){
 				console.log(snapshot.val());
 				if(snapshot.val() != null){
-					var value = snapshot.val();
-					vm.applyprop.name = value.name;
-					vm.applyprop.tenantlocation = value.tenantlocation;
-					vm.applyprop.age = value.age; 
-					vm.applyprop.jobtitle = value.jobtitle; 
-					vm.applyprop.description = value.description; 
-					
+					$.map(snapshot.val(), function(value, index) {
+						vm.applyprop.name = value.name;
+						vm.applyprop.tenantlocation = value.tenantlocation;
+						vm.applyprop.phone = value.phone;
+						vm.applyprop.age = value.age; 
+						vm.applyprop.jobtitle = value.jobtitle; 
+						vm.applyprop.description = value.description; 
+					});
 				} else {
 					vm.applyprop.name = '';
 					vm.applyprop.tenantlocation = '';
+					vm.applyprop.phone = '';
 					vm.applyprop.age = ''; 
 					vm.applyprop.jobtitle = ''; 
 					vm.applyprop.description = ''; 
@@ -168,6 +170,7 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 			var address = vm.applyprop.address;
 			var name = vm.applyprop.name;
 			var tenantlocation = vm.applyprop.tenantlocation;
+			var phone = vm.applyprop.phone;
 			var age = vm.applyprop.age; 
 			var jobtitle = vm.applyprop.jobtitle; 
 			var landlordID =  vm.applyprop.landlordID;
@@ -192,6 +195,7 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				schedulestatus: "pending",
 				name : name,
 				tenantlocation : tenantlocation,
+				phone: phone,
 				age : age, 
 				datetimeslot : datetimeslot,
 				dateslot : dateslot,
