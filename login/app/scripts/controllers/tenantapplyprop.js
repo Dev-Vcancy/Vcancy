@@ -138,7 +138,6 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				console.log(snapshot.val());
 				if(snapshot.val() != null){
 					$.map(snapshot.val(), function(value, index) {
-						vm.applyprop.name = value.name;
 						vm.applyprop.tenantlocation = value.tenantlocation;
 						vm.applyprop.phone = value.phone;
 						vm.applyprop.age = value.age; 
@@ -146,7 +145,6 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 						vm.applyprop.description = value.description; 
 					});
 				} else {
-					vm.applyprop.name = '';
 					vm.applyprop.tenantlocation = '';
 					vm.applyprop.phone = '';
 					vm.applyprop.age = ''; 
