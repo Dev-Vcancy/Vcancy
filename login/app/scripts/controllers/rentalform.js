@@ -19,14 +19,10 @@ vcancyApp
 				vm.rentaldata.live_time =  '';
 				vm.rentaldata.rentamt =  '';
 				vm.rentaldata.vacantreason =  '';
-				vm.rentaldata.landlordname =  '';
-				vm.rentaldata.landlordphone =  '';
 			} else {
 				vm.rentaldata.live_time =  ' ';
 				vm.rentaldata.rentamt =  ' ';
 				vm.rentaldata.vacantreason =  ' ';
-				vm.rentaldata.landlordname =  ' ';
-				vm.rentaldata.landlordphone =  ' ';
 			}
 			
 		}
