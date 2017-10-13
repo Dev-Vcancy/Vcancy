@@ -80,16 +80,16 @@ body {
 }
 
 .col-2.fg-line{
-	width:50% !important;
-	float:left;
+  width:50% !important;
+  float:left;
 }
 
 .col-2.fg-line .form-control{
-	display:inline-block !important;	
+  display:inline-block !important;  
 }
 
 .invalidField{
-	border-color: red !important;
+  border-color: red !important;
     color: red !important;
 }
 .loader {
@@ -122,13 +122,43 @@ body {
 }
 #sidebar{
   z-index: 100;
+  -webkit-transform: translate3d(0px, 0, 0);
+  transform: translate3d(0px, 0, 0);
+  width: 60px;
+  opacity: 1;
+  filter: alpha(opacity=1);
+}
+#sidebar.toggled{
+  z-index: 100;
+  -webkit-transform: translate3d(0px, 0, 0);
+  transform: translate3d(0px, 0, 0);
+  width: 268px;
+  opacity: 1;
+  filter: alpha(opacity=1);
+}
+#sidebar .sidebar-inner{
+  width: 100%;
+  overflow: initial;
+}
+.main-menu > li > a > i {
+    font-size: 24px;
+    padding: 10px 0;
+}
+#sidebar .sidebar-inner .main-menu a{
+  height: 45px;
+}
+#sidebar .sidebar-inner .main-menu a span{
+  display: none;
+}
+#sidebar.toggled .sidebar-inner .main-menu a span{
+  display: block;
 }
 header.header, nav.header {
   text-align: left;
   background-color: #1f2833 !important;
   color: #fff;
-  padding: 3px 20px;
-	z-index: 9999;
+  padding: 3px 20px 3px 0px;
+  z-index: 9999;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   min-height: 70px;
   -webkit-touch-callout: none;
@@ -142,18 +172,21 @@ header.header, nav.header {
   left: 0;
   top: 0;
 }
+nav.header{
+  padding: 3px 20px !important;
+}
 .header .logo{
-	color: #fff;
-	width: auto;
-	float: left;
+  color: #fff;
+  width: auto;
+  float: left;
 }
 .header .logo img {
     width: 110px;
-	image-rendering: -webkit-optimize-contrast;
+  image-rendering: -webkit-optimize-contrast;
 }
 .login-menu{
-	width: auto;
-	float: right;
+  width: auto;
+  float: right;
     list-style: none;
     margin: 14px 0;
 }
@@ -166,19 +199,19 @@ header.header, nav.header {
     display: inline-block; 
 }
 .header ul li a{
-	padding: 10px;
+  padding: 10px;
     display: block;
-	color: #fff;
-	font-size: 13px;
-	letter-spacing: 3px;
-	font-weight: 600;
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 3px;
+  font-weight: 600;
 }
 .header ul li a:hover {
     opacity: .7;
     -webkit-transition: all .4s ease-in-out;
     -moz-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
-	background-color: transparent;
+  background-color: transparent;
 }
 .header ul li a .notification {
     font-size: 18px;
@@ -211,26 +244,26 @@ header.header, nav.header {
     -webkit-transition: all .2s;
     -moz-transition: all .2s;
     transition: all .2s;
-	padding: 5px 15px;
-	position: relative;
-	margin-left: 20px;
+  padding: 5px 15px;
+  position: relative;
+  margin-left: 20px;
 }
 .header ul li a.button:before{
-	content: '\f2fb';
+  content: '\f2fb';
     font-family: 'Material-Design-Iconic-Font';
     position: absolute;
     top: 50%;
     font-size: 23px;
     left: 20%;
     transform: translate(-20%, -50%);
-	opacity: 0;
+  opacity: 0;
 }
 .header ul li a.button:hover{
-	border-color: #009999;
-	padding: 5px 20px;
+  border-color: #009999;
+  padding: 5px 20px;
 }
 .header ul li a:hover.button:before{
-	opacity: 1;
+  opacity: 1;
     transform: translate(0%, -50%);
     left: 7px;
     transition: all 0.3s linear;
@@ -279,8 +312,8 @@ ul.header-inner li a:hover.button:before{
   background-color: #fff;
 }
 .form_btns{
-	width: 100%;
-	position: absolute;
+  width: 100%;
+  position: absolute;
     top: -50px;
     left: 50%;
     transform: translate(-50%);
@@ -386,7 +419,7 @@ ul.header-inner li a:hover.button:before{
 
 /*************** Dashboard ***************/
 .home_block{
-	padding: 0px 0;
+  padding: 0px 0;
 }
 .home_block i {
   font-size: 80px;
@@ -413,6 +446,9 @@ ul.header-inner li a:hover.button:before{
 }
 .app_form label{
   font-weight: initial;
+}
+.app_form .date-picker{
+  display: inline-flex;
 }
 .app_form p .fg-line:not(.form-group) {
     display: initial;
@@ -588,10 +624,10 @@ ul.header-inner li a:hover.button:before{
   }
 }
 @media screen and (min-width: 769px){
-	.toggled ~ #content{
-		margin-left: 280px;
-		transition: all 0.3s linear;
-	}
+  .toggled ~ #content{
+    margin-left: 280px;
+    transition: all 0.3s linear;
+  }
   .time_slot .date-picker {
       margin-top: 30px;
       float: left;
@@ -607,20 +643,20 @@ ul.header-inner li a:hover.button:before{
 }
 
 @media screen and (max-width: 767px){
-	.login-menu {
-		width: 100%;
-		float: initial;
-		padding: 0;
-	}
-	.login-menu ul li {
-		display: flex;
-	}
-	.login-menu ul li a.button{
-		margin-left: 10px;
-	}
-	.header .logo img {
-		width: 70px;
-	}
+  .login-menu {
+    width: 100%;
+    float: initial;
+    padding: 0;
+  }
+  .login-menu ul li {
+    display: flex;
+  }
+  .login-menu ul li a.button{
+    margin-left: 10px;
+  }
+  .header .logo img {
+    width: 70px;
+  }
   .add_property_block h1{
     font-size: 30px;
   }
@@ -633,30 +669,28 @@ ul.header-inner li a:hover.button:before{
 }
 
 @media (max-width: 480px){
-	.lc-block {
-		background: #fff;
-		box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
-		border-radius: 2px;
-		max-width: 500px;
-		width: 80%;
-		display: inline-block;
-		vertical-align: middle; 
-		top: 0%;
-		position: relative;
-		left: 10%;
-		transform: translate(0%, 20%);
-	}
-	#sidebar{
-		width: 200px;
-	}
-	#sidebar .sidebar-inner {
-		width: 200px;
-	}
-  .app_form .form-control.w-2, .app_form .form-control.w-3, .app_form .form-control.w-3_5, .app_form .form-control.w-4, .app_form .form-control.w-5, .app_form .form-control.w-6, .app_form .form-control.w-9 {
-      width: 68%;
+  .lc-block {
+    background: #fff;
+    box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
+    border-radius: 2px;
+    max-width: 500px;
+    width: 80%;
+    display: inline-block;
+    vertical-align: middle; 
+    top: 0%;
+    position: relative;
+    left: 10%;
+    transform: translate(0%, 20%);
+  }
+  .app_form .form-control{
+      width: 100% !important;
+      margin-bottom: 10px !important
   }
   .app_form label{
-    width: 30%;
+    width: 100%;
+  }
+  .app_form .date-picker{
+    display: table;
   }
   .block-header .pull-right {
       float: initial !important;
