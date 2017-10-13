@@ -27,7 +27,7 @@
 							
 							<label>Date of Birth:</label>
 							<span class="fg-line">
-								<div class="date-picker input-group" ng-class="{ 'is-opened': rctrl.dobopened == true }" style="display:inline-flex;">
+								<div class="date-picker input-group" ng-class="{ 'is-opened': rctrl.dobopened == true }">
 									<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 									<div ng-class="{ 'fg-toggled': rctrl.dobopened == true }">
 										<input readonly="true" ng-click="rctrl.dobopen($event)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.dob" is-open="rctrl.dobopened" min-date="minDate" datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
@@ -75,7 +75,7 @@
 							Full Name of Landlord: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.landlordname" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Landlord’s daytime phone #: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.landlordphone" type="text" class="form-control m-b-5" id="" placeholder=""></span>
 						</p>
 
-						<div class="row m-b-10">
+						<div class="m-b-10">
 							<p>Additional Adult Occupants (18+) to occupy the premises: <button print-remove type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="rctrl.addadult(rctrl.adult.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
 
 							<div class="col-sm-12" ng-repeat="x in rctrl.adult">
@@ -95,7 +95,7 @@
 							</div>
 						</div>
 
-						<div class="row m-b-10">
+						<div class="m-b-10">
 							<p>Additional Minors (0-18YRS) to occupy the premises: <button print-remove type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="rctrl.addminor(rctrl.minor.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
 
 							<div class="col-sm-12" ng-repeat="x in rctrl.minor">
@@ -155,8 +155,9 @@
 		            	<h3 class="m-b-20 m-t-20">Employment Status & Income Verification: </h3>
 		            	<div class="border">
 		            	<h4 class="m-b-20 m-t-10">Primary Applicant:</h4>
-		            	<p class="m-b-10">Current Employer:  <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.appcurrentemployer" class="form-control m-b-5 w-5" id="" placeholder=""></span> Position: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.appposition" class="form-control m-b-5 w-3" id="" placeholder=""></span>
-Employer phone #: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appemployerphone" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> How long have you worked in this company: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appworkingduration" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>Gross monthly income: $ <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appgrossmonthlyincome" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> <span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input  required  type="radio" class="" ng-model="rctrl.rentaldata.appincometype" value="employment" ><i class="input-helper"></i>Employment</label><label><input  required  type="radio" ng-model="rctrl.rentaldata.appincometype" value="retired"><i class="input-helper"></i>Retired</label></span> <br>Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appotherincome" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
+		            	<p class="m-b-10">Current Employer:  <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.appcurrentemployer" class="form-control m-b-5 w-5" id="" placeholder=""></span> Position: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.appposition" class="form-control m-b-5 w-2" id="" placeholder=""></span>
+<br>Employer phone #: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appemployerphone" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> <br>How long have you worked in this company: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appworkingduration" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>Gross monthly income: $ <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appgrossmonthlyincome" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> <span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input  required  type="radio" class="" ng-model="rctrl.rentaldata.appincometype" value="employment" ><i class="input-helper"></i>Employment</label><label><input  required  type="radio" ng-model="rctrl.rentaldata.appincometype" value="retired"><i class="input-helper"></i>Retired</label></span> <br>Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appotherincome" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
+						</div>
 
 
 		            	<h4 class="m-b-20 m-t-10">Vehicle Information:</h4>
@@ -165,8 +166,7 @@ Employer phone #: <span class="fg-line"><input  required  ng-model="rctrl.rental
 
 						<p>Name and phone number of personal/family reference who may be contacted in the case of <u>emergency:</u></p>
 						<p class="m-b-10">Name: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span></p>
-						</div>
-
+						
 						<div class="border" ng-repeat="x in rctrl.adult">
 						<div>
 						<h4 class="m-b-20 m-t-10">Additional Applicant #{{$index+1}}:</h4>
@@ -214,7 +214,7 @@ Employer phone #: <span class="fg-line"><input  required  ng-model="rctrl.rental
 						</p>
 						<div print-remove>
 							<button type="submit" ng-disabled="rentalForm.$invalid" class="btn bgm-orange btn-lg m-t-10">Submit</button> 
-							<button type="submit" ng-click="rctrl.draft = 'true';" ng-model="rctrl.draft" class="btn bgm-orange btn-lg m-t-10">Save as Draft</button> 
+							<button type="submit" id="draft" ng-click="rctrl.draft = 'true';" ng-model="rctrl.draft" class="btn bgm-orange btn-lg m-t-10">Save as Draft</button> 
 							<button type="button" ng-click="rctrl.printApp()" class="btn bgm-orange btn-lg m-t-10">Print</button> 
 						</div>
 		            </div>
