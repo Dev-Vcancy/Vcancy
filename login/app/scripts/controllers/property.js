@@ -100,19 +100,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 
 	vm.hstep = 1;
 	vm.mstep = 5;
-		
-	// vm.prop.fromtime = new Date();
-	// vm.prop.time = new Date();	  
-	// vm.prop.time.setMinutes(vm.prop.time.getMinutes() + 30);
-
-	// vm.changed = function() {
-	  // console.log("SAda"+vm.prop.fromtime)
-	// if (vm.prop.to <= vm.prop.fromtime) {
-	  // vm.prop.to = new Date(vm.prop.fromtime.getTime() + 1 * 60000)
-	// }
-	// }
-
-	  
+	
 	vm.options = {
 		hstep: [1, 2, 3],
 		mstep: [1, 5, 10, 15, 25, 30]
@@ -217,9 +205,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	}	
 	
 	// Add/Edit Property		
-	vm.submitProp = function(property){
-			console.log(property);
-			
+	vm.submitProp = function(property){			
 			var propID = property.propID;
 			var propimg = $('#propimg').val();	
 			var propstatus = property.propstatus  == '' ? false : property.propstatus ; 
@@ -404,7 +390,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	
 	// View Property
-	// vm.viewprops = {};
 	if($state.current.name == 'viewprop') {
 		vm.loader = 1;
 		var landlordID = localStorage.getItem('userID');
@@ -468,7 +453,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		vm.mode = 'Edit';
 		vm.submitaction = "Update";
 		vm.otheraction = "Delete";
-		// console.log('here'+$stateParams.propId)
 		var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snapshot) {
 		  var propData = snapshot.val();
 		  vm.timeSlot = [];
