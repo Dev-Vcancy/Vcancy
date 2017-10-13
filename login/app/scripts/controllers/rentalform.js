@@ -627,4 +627,8 @@ vcancyApp
 			vm.rentalAppSubmit();
 		}
 		
+		vm.printApp = function(){
+			$window.print();
+		}
+		
 }])

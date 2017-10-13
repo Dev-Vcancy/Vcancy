@@ -23,7 +23,8 @@ var vcancyApp = angular
 	'ng-clipboard',
 	'angularMoment',
 	'gm',
-	'unsavedChanges'
+	'unsavedChanges',
+	'AngularPrint'
   ]); 
   
 vcancyApp

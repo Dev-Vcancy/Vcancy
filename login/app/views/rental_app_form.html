@@ -9,7 +9,7 @@
 				<h2>Apply For Property</h2>
             </div>
 
-		    <div class="card app_form">
+		    <div class="card app_form" print-section >
 
 		        <form class="form-horizontal" name="rentalForm" ng-submit="rctrl.rentalAppSubmit()" role="form" novalidate unsaved-warning-form>
 					<input type="hidden" name="scheduleID" ng-model="rctrl.scheduledata.scheduleID" class="form-control" >
@@ -23,7 +23,7 @@
 		            	<h3 class="m-b-20 m-t-10">APPLICANT DETAILS:</h3>
 		            	<p class="m-b-10" style="display:inline;">
 							<label>Full Name:</label>
-							<span class="fg-line"><input  required   type="text" ng-model="rctrl.tenantdata.tenantName"  class="form-control w-5" id="" placeholder=""></span>
+							<span class="fg-line"><input  required  readonly="true" type="text" ng-model="rctrl.tenantdata.tenantName"  class="form-control w-5" id="" placeholder=""></span>
 							
 							<label>Date of Birth:</label>
 							<span class="fg-line">
@@ -76,7 +76,7 @@
 						</p>
 
 						<div class="row m-b-10">
-							<p>Additional Adult Occupants (18+) to occupy the premises: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="rctrl.addadult(rctrl.adult.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
+							<p>Additional Adult Occupants (18+) to occupy the premises: <button print-remove type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="rctrl.addadult(rctrl.adult.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
 
 							<div class="col-sm-12" ng-repeat="x in rctrl.adult">
 								<div class="col-sm-6">
@@ -90,13 +90,13 @@
 										</div>
 									</div>
 									
-									<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="rctrl.removeadult($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
+									<button type="button" print-remove tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="rctrl.removeadult($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
 								</div>
 							</div>
 						</div>
 
 						<div class="row m-b-10">
-							<p>Additional Minors (0-18YRS) to occupy the premises: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="rctrl.addminor(rctrl.minor.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
+							<p>Additional Minors (0-18YRS) to occupy the premises: <button print-remove type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="rctrl.addminor(rctrl.minor.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></p>
 
 							<div class="col-sm-12" ng-repeat="x in rctrl.minor">
 								<div class="col-sm-6">
@@ -114,7 +114,7 @@
 									<!-- <span class="fg-line"> -->
 									<!-- <input  required  ng-model="rctrl.rentaldata.minorappdob[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""> -->
 									<!-- </span> -->
-									<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="rctrl.removeminor($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
+									<button type="button" print-remove tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="rctrl.removeminor($index)" class="btn btn-xs btn-danger"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
 								</div>
 							</div>
 						</div>
@@ -212,9 +212,11 @@ Employer phone #: <span class="fg-line"><input  required  ng-model="rctrl.rental
 							Signature of Primary Applicant:  <span class="fg-line"><input  required  type="text" class="form-control m-b-5 w-3" ng-model="rctrl.rentaldata.appsign" id="" placeholder=""></span>(FULL NAME IN CAPS)  
 							<span   ng-repeat="x in rctrl.adult">Signature of Additional Applicant #{{$index+1}}:   <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.otherappsign[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span>(FULL NAME IN CAPS)<br/> </span>
 						</p>
-
-		            	<button type="submit" ng-disabled="rentalForm.$invalid" class="btn bgm-orange btn-lg m-t-10">Submit</button> 
-						<button type="submit" ng-click="rctrl.draft = 'true';" ng-model="rctrl.draft" class="btn bgm-orange btn-lg m-t-10">Save as Draft</button> 
+						<div print-remove>
+							<button type="submit" ng-disabled="rentalForm.$invalid" class="btn bgm-orange btn-lg m-t-10">Submit</button> 
+							<button type="submit" ng-click="rctrl.draft = 'true';" ng-model="rctrl.draft" class="btn bgm-orange btn-lg m-t-10">Save as Draft</button> 
+							<button type="button" ng-click="rctrl.printApp()" class="btn bgm-orange btn-lg m-t-10">Print</button> 
+						</div>
 		            </div>
 
 		        </form>
