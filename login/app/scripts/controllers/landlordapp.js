@@ -87,7 +87,7 @@ vcancyApp
 					  { field: "salary", title: "Salary", sortable: "salary", show: true },
 					  { field: "pets", title: "Pets", sortable: "pets", show: true },
 					  { field: "maritalstatus", title: "Marital Status", sortable: "maritalstatus", show: true },
-					  { field: "appno", title: "No of Appointment", sortable: "appno", show: true },
+					  { field: "appno", title: "No of Applicants", sortable: "appno", show: true },
 					];
 					
 				vm.loader = 0;
