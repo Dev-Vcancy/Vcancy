@@ -14,7 +14,7 @@
 
         <div class="container">
 			<div class="block-header text-center">
-				<h2>Apply For Property</h2>
+				<h2>Schedule Viewing</h2>
             </div>	
             <div class="row text-center">
 				<div class="alert alert-danger alert-dismissable" ng-if="applyctrl.emailVerifiedError"><h4>{{applyctrl.emailVerifiedError}}</h4></div>	
@@ -41,14 +41,17 @@
 								<div class="form-group col-sm-12">
 									<input type="text" placeholder="Full name" ng-model="applyctrl.applyprop.name" required  class="form-control"/>
 								</div>
-								<div class="form-group col-sm-12">
+								<div class="form-group col-sm-6">
 									<input type="text" placeholder="City" ng-model="applyctrl.applyprop.tenantlocation" required  class="form-control"/>
+								</div>
+								<div class="form-group col-sm-6">
+									<input type="text" placeholder="Phone Number" ng-model="applyctrl.applyprop.phone" required  class="form-control"/>
 								</div>
 								<div class="form-group col-sm-6">
 									<input type="text" placeholder="Job Title" ng-model="applyctrl.applyprop.jobtitle" required  class="form-control"/>
 								</div>
 								<div class="form-group col-sm-6">
-									<input type="text" placeholder="Age" ng-model="applyctrl.applyprop.age" required  class="form-control"/>
+									<input type="text" placeholder="Age" ng-model="applyctrl.applyprop.age" required  ng-pattern="/^([1-9][0-9]*)$/" class="form-control"/>
 								</div>
 								<div class="form-group col-sm-12 m-t-10">
 									<textarea placeholder="Tell me a little about yourself" ng-model="applyctrl.applyprop.description"  required  class="form-control" style="height: 50px;"></textarea>

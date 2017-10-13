@@ -39,7 +39,7 @@
 								</td>
 								<td ng-repeat="col in schedulectrl.extracols">
 									<button class="btn btn-xs btn-success"  ng-hide="row.schedulestatus == 'confirmed' || row.schedulestatus == 'cancelled'" ng-click="schedulectrl.confirmschedule(row.scheduleID)">Confirm</button>
-									<button class="btn btn-xs btn-danger"  ng-hide="row.schedulestatus == 'cancelled'" ng-click="schedulectrl.cancelschedule(w.scheduleID)">Cancel</button>
+									<button class="btn btn-xs btn-danger"  ng-hide="row.schedulestatus == 'cancelled'" ng-click="schedulectrl.cancelschedule(row.scheduleID)">Cancel</button>
 									
 									<span class="cancel_status btn-xs" ng-show="row.schedulestatus == 'cancelled'">Cancelled</span>
 								</td>		           
