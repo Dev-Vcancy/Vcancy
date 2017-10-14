@@ -103,6 +103,18 @@ vcancyApp
 	templateUrl: 'views/template/sidebar-left.html',
   };
 }); 
+
+vcancyApp 
+.directive('autoSize', function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element){
+                if (element[0]) {
+                   autosize(element);
+                }
+            }
+        }
+    })
  // vcancyApp
  // .directive('fullCalendar', function(){
         // return {

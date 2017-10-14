@@ -11,7 +11,7 @@
     "angular-resource": "~1.4.8",
     "angular-ui-router": "ui-router#~0.2.15",
     "animate.css": "daneden/animate.css#~3.3.0",
-    "autosize": "~3.0.6",
+    "autosize": "^4.0.0",
     "bootstrap-sweetalert": "~0.4.5",
     "bower": "*",
     "br-validations": "~0.2.4",
@@ -59,6 +59,7 @@
     }
   },
   "resolutions": {
-    "angular": "1.4.7"
+    "angular": "1.4.7",
+    "autosize": "~3.0.6"
   }
 }
