@@ -15,6 +15,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	vm.timeslotmodified = "false";
 	vm.isDisabled = false;
 	vm.googleAddress = 0;
+	var oldtimeSlotLen = 0;
 	// console.log(vm.isDisabled);
 	
 	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
@@ -45,7 +46,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	vm.removeTimeSlot = function(slotindex){
 		if($state.current.name == 'editprop') {
 			if ($window.confirm("Are you sure you want to delete this viewing slot? "))  {	
-				vm.timeslotmodified = "true";
+				if(slotindex < oldtimeSlotLen){
+					vm.timeslotmodified = "true";
+				} 
 				vm.timeSlot.splice(slotindex,1);
 				vm.prop.date.splice(slotindex,1);
 				vm.prop.fromtime.splice(slotindex,1);
@@ -138,8 +141,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		vm.datetimeslotchanged(0);
 	}
 	
-	vm.datetimeslotchanged = function (key) {
-		vm.timeslotmodified = "true";
+	vm.datetimeslotchanged = function (key) {		
+		if(key < oldtimeSlotLen){
+			vm.timeslotmodified = "true";
+		} 
 		if(vm.prop.fromtime[key] === undefined){
 			var fromtime  =  new Date();			
 		} else {
@@ -518,11 +523,8 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				  vm.prop.limit.push(propData.limit[key]);
 				  vm.prop.multiple.push(propData.multiple[key]);				  
 				});
-				vm.addresschange();
-				vm.prop.pastdate = vm.prop.date;
-				vm.prop.pastfrom = vm.prop.fromtime;
-				vm.prop.pastto = vm.prop.to;
-				
+				vm.addresschange();		
+				oldtimeSlotLen = vm.timeSlot.length;
 			});
 		});
 	} else {
