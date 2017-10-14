@@ -30,7 +30,7 @@
 								<div class="date-picker input-group" ng-class="{ 'is-opened': rctrl.dobopened == true }">
 									<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 									<div ng-class="{ 'fg-toggled': rctrl.dobopened == true }">
-										<input readonly="true" ng-click="rctrl.dobopen($event)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.dob" is-open="rctrl.dobopened" min-date="minDate" datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+										<input readonly="true" ng-click="rctrl.dobopen($event)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.dob" is-open="rctrl.dobopened" max-date="rctrl.maxDate" datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
 									</div>
 								</div>
 							</span>
@@ -86,7 +86,7 @@
 									<div class="date-picker input-group" ng-class="{ 'is-opened': rctrl.adultdobopened[$index] == true }" style="display:inline-flex;">
 										<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 										<div ng-class="{ 'fg-toggled': rctrl.adultdobopened[$index] == true }">
-											<input readonly="true"  ng-click="rctrl.adultdobopen($event,$index)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.otherappdob[$index]" is-open="rctrl.adultdobopened[$index]" min-date="minDate" datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+											<input readonly="true"  ng-click="rctrl.adultdobopen($event,$index)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.otherappdob[$index]" is-open="rctrl.adultdobopened[$index]" max-date="rctrl.maxDate"datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
 										</div>
 									</div>
 									
@@ -106,7 +106,7 @@
 									<div class="date-picker input-group" ng-class="{ 'is-opened': rctrl.minordobopened[$index] == true }" style="display:inline-flex;">
 										<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 										<div ng-class="{ 'fg-toggled': rctrl.minordobopened[$index] == true }">
-											<input readonly="true"  ng-click="rctrl.minordobopen($event,$index)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.minorappdob[$index]" is-open="rctrl.minordobopened[$index]" min-date="minDate" datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+											<input readonly="true"  ng-click="rctrl.minordobopen($event,$index)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.minorappdob[$index]" is-open="rctrl.minordobopened[$index]" max-date="rctrl.maxDate" datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
 										</div>
 									</div>
 							
@@ -203,7 +203,7 @@
 							<div class="date-picker input-group" ng-class="{ 'is-opened': rctrl.dateopened == true }" style="display:inline-flex;">
 								<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 								<div ng-class="{ 'fg-toggled': rctrl.dateopened == true }">
-									<input readonly="true"  ng-click="rctrl.dateopen($event)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.dated" is-open="rctrl.dateopened" min-date="minDate" datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+									<input readonly="true"  ng-click="rctrl.dateopen($event)" type="text" class="form-control" uib-datepicker-popup="{{rctrl.format}}" show-weeks="false" ng-model="rctrl.rentaldata.dated" is-open="rctrl.dateopened"  datepicker-options="rctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
 								</div>
 							</div>
 							

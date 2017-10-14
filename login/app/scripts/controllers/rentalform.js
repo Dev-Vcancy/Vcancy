@@ -165,7 +165,7 @@ vcancyApp
 			formatYear: 'yy',
 			startingDay: 1
 		};
-
+		vm.maxDate = new Date();
 		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
 		vm.format = vm.formats[0];
 		

@@ -13,6 +13,15 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	var vm = this;
 	vm.propsavail = 1;
 	vm.timeslotmodified = "false";
+	vm.isDisabled = false;
+	// console.log(vm.isDisabled);
+	
+	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
+      var address = vm.prop.address.getPlace();
+	  vm.prop.address = address.formatted_address;
+	  $scope.$apply();
+	});
+	
 	
 	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
       var address = vm.prop.address.getPlace();
@@ -106,6 +115,8 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		mstep: [1, 5, 10, 15, 25, 30]
 	};
 
+	vm.minDate = new Date();
+	
 	vm.ismeridian = true;
 	vm.toggleMode = function() {
 		vm.ismeridian = ! vm.ismeridian;
@@ -117,10 +128,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		d.setMinutes( 0 );
 		vm.mytime = d;
 	};
-
+	
 	vm.datetimeslotchanged = function (key) {
-		console.log(key,vm.prop.fromtime);
-		console.log("Date time SLot");
+		// console.log(key,vm.prop.fromtime);
+		// console.log("Date time SLot");
 		vm.timeslotmodified = "true";
 		if(vm.prop.fromtime[key] === undefined){
 			var fromtime  =  new Date();			
@@ -148,8 +159,8 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				} else {
 					var totime = vm.prop.to[i];	
 				}
-							
-				if ((fromtime <= ftime && to <= ftime) || (fromtime >= totime && to >= totime)) {
+					
+				if ((fromtime <= ftime && to <= ftime && moment(vm.prop.date[key]).format('DD-MMMM-YYYY') != moment(vm.prop.date[i]).format('DD-MMMM-YYYY')) || (fromtime >= totime && to >= totime && moment(vm.prop.date[key]).format('DD-MMMM-YYYY') != moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) {
 					
 				} else {
 					vm.overlap = 1;
@@ -159,39 +170,46 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 		if(vm.overlap == 1) {
 			vm.prop.timeoverlapinvalid[key] = 1;
-			vm.isDisabled = 1;
+			vm.isDisabled = true;
 		} else {
 			vm.prop.timeoverlapinvalid[key] = 0;
-			vm.isDisabled = 0;
 		}
 		
 		var temp = new Date(fromtime.getTime() + 30 * 60000)
 		console.log(temp,to);
 		if (to < temp && vm.prop.timeoverlapinvalid[key] == 0) {
 			vm.prop.timeinvalid[key] = 1;
-			vm.isDisabled = 1;
+			vm.isDisabled = true;
 		} else {
 			vm.prop.timeinvalid[key] = 0;
-			vm.isDisabled = 0;
 		}
 				
-		console.log(vm.prop.multiple[key],fromtime,to);
+		// console.log(vm.prop.multiple[key],fromtime,to);
 		
 		if((vm.prop.multiple[key] === false || vm.prop.multiple[key] === undefined) && vm.prop.timeinvalid[key] == 0){
 			var minutestimediff = (to - fromtime)/ 60000;
 			var subslots = Math.floor(Math.ceil(minutestimediff)/30);				
-			console.log(minutestimediff,subslots);
+			// console.log(minutestimediff,subslots);
 			
 			if(vm.prop.limit[key] > subslots ){
 				vm.prop.invalid[key] = 1;
-				vm.isDisabled = 1;
+				vm.isDisabled = true;
 			} else {
 				vm.prop.invalid[key] = 0;
-				vm.isDisabled = 0;
+				if(vm.prop.address != undefined && typeof vm.prop.address == "string"){
+					vm.isDisabled = false;
+				} else {
+					vm.isDisabled = true;
+				}
 			}
 		} else {
 			vm.prop.invalid[key] = 0;
-			vm.isDisabled = 0;
+			console.log(vm.prop.address != undefined , typeof vm.prop.address == "string");
+			if(vm.prop.address != undefined && typeof vm.prop.address == "string"){
+				vm.isDisabled = false;
+			} else {
+				vm.isDisabled = true;
+			}
 		}
 	}
 
@@ -205,7 +223,8 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	}	
 	
 	// Add/Edit Property		
-	vm.submitProp = function(property){			
+	vm.submitProp = function(property){				
+			vm.loader = 1;
 			var propID = property.propID;
 			var propimg = $('#propimg').val();	
 			var propstatus = property.propstatus  == '' ? false : property.propstatus ; 
@@ -485,6 +504,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				  vm.prop.limit.push(propData.limit[key]);
 				  vm.prop.multiple.push(propData.multiple[key]);				  
 				});
+				vm.addresschange();
 			});
 		});
 	} else {
@@ -512,7 +532,17 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			timeinvalid: [0],
 			timeoverlapinvalid: [0]
 		}
-		
+
+	}
+	
+	
+	vm.addresschange = function(){
+		// console.log(vm.prop.address);
+		if(vm.prop.address != undefined && typeof vm.prop.address == "string"){
+			vm.isDisabled = false;
+		} else {
+			vm.isDisabled = true;
+		}
 	}
 	
 	// Delete Property Permanently

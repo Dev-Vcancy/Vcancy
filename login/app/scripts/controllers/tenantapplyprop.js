@@ -128,7 +128,14 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 					vm.applyprop.availableslots = vm.applyprop.slots;
 					vm.timeslotavail = 1;
 				}
-				// console.log(vm.applyprop.availableslots);
+				console.log(vm.applyprop.availableslots, vm.applyprop.availableslots.length);
+				
+				for (var j = 0; j < vm.applyprop.availableslots.length; j++) {
+					if (moment(moment(vm.applyprop.availableslots[j].date).format('DD-MMMM-YYYY')).isBefore(moment(new Date()).format('DD-MMMM-YYYY')) ) {
+						vm.applyprop.availableslots.splice(vm.applyprop.availableslots[j]);
+					}
+				}
+				console.log(vm.applyprop.availableslots, vm.applyprop.availableslots.length);
 				
 			});	
 		});	

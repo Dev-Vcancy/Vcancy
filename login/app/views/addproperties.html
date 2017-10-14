@@ -9,6 +9,13 @@
 			<div class="block-header text-center">
 				<h2>{{propctrl.mode}} Property</h2>
             </div>	
+			<div class="loader" ng-if="propctrl.loader">
+	            <div class="preloader pl-xl">
+	                <svg class="pl-circular" viewBox="25 25 50 50">
+	                    <circle class="plc-path" cx="50" cy="50" r="20"/>
+	                </svg>
+	            </div>
+	      	</div>
 			<div class="row">
 				<div class="col-sm-12 card">
 					<form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" role="form" novalidate>	
@@ -70,7 +77,7 @@
 							</div>
 							
 							<div class="col-sm-12 m-b-20">
-								<input type="text" id="address" gm-places-autocomplete  ng-model="propctrl.prop.address" required name="address" class="form-control" placeholder="Address">
+								<input type="text" id="address" gm-places-autocomplete  ng-model="propctrl.prop.address" ng-change="propctrl.addresschange()" required name="address" class="form-control" placeholder="Address">
 							</div>
 							
 							<div class="col-sm-12 m-b-20 time_slot">
@@ -85,7 +92,7 @@
 										<div class="date-picker input-group" ng-class="{ 'is-opened': x.opened == true }">
 											<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 											<div class="fg-line" ng-class="{ 'fg-toggled': x.opened == true }">
-												<input readonly='true' ng-click="propctrl.open($event, x)" ng-change="propctrl.datetimeslotchanged($index)" type="text" class="form-control" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="propctrl.prop.date[$index]" name = "date[]" is-open="x.opened" min-date="minDate" datepicker-options="propctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+												<input readonly='true' ng-click="propctrl.open($event, x)" ng-change="propctrl.datetimeslotchanged($index)" type="text" class="form-control" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="propctrl.prop.date[$index]" name = "date[]" is-open="x.opened" min-date="propctrl.minDate" datepicker-options="propctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
 											</div>
 										</div>
 									</div>
@@ -147,7 +154,7 @@
 									<button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
 									<button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
 									<button type="button" ng-click="propctrl.delprop(propctrl.prop.propID)" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Delete'">Delete</button>
-									<button type="submit" ng-disabled="addpropForm.$invalid || propctrl.isDisabled"  class="btn btn-success pull-right">{{propctrl.submitaction}}  </button>
+									<button type="submit" ng-disabled="addpropForm.$invalid || propctrl.isDisabled"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
 								</div>
 							</div>
 
