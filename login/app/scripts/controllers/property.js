@@ -40,7 +40,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		
 	// timeSlot for Date and Timepicker
 	vm.addTimeSlot = function(slotlen){
-		console.log(slotlen);
+		// console.log(slotlen);
 		vm.timeSlot.push({date:todaydate});
 		vm.prop.multiple[slotlen] = true;
 	}
@@ -130,8 +130,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	};
 	
 	vm.datetimeslotchanged = function (key) {
-		// console.log(key,vm.prop.fromtime);
-		// console.log("Date time SLot");
 		vm.timeslotmodified = "true";
 		if(vm.prop.fromtime[key] === undefined){
 			var fromtime  =  new Date();			
@@ -146,7 +144,11 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		}		
 		
 		vm.overlap = 0;
-		for (var i = 0; i < vm.prop.fromtime.length ; i++) {
+		
+		
+		
+		for (var i = 0; i < vm.prop.date.length ; i++) {
+			// console.log(i,key);
 			if(i != key){
 				if(vm.prop.fromtime[i] === undefined){
 					var ftime  =  new Date();			
@@ -176,7 +178,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		}
 		
 		var temp = new Date(fromtime.getTime() + 30 * 60000)
-		console.log(temp,to);
+		// console.log(temp,to);
 		if (to < temp && vm.prop.timeoverlapinvalid[key] == 0) {
 			vm.prop.timeinvalid[key] = 1;
 			vm.isDisabled = true;
@@ -204,7 +206,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			}
 		} else {
 			vm.prop.invalid[key] = 0;
-			console.log(vm.prop.address != undefined , typeof vm.prop.address == "string");
+			// console.log(vm.prop.address != undefined , typeof vm.prop.address == "string");
 			if(vm.prop.address != undefined && typeof vm.prop.address == "string"){
 				vm.isDisabled = false;
 			} else {
@@ -326,13 +328,12 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			  })
 			});
 		} else {
-			/*if(vm.timeslotmodified == "true"){
-				var confirmText = "Are you sure you want to update these viewing slots? All schedules will be cancelled those will not belong to these viewing slots";
-			} else {
-				var confirmText = "Are you sure you want to update the property?";
-			}*/
-			
-			
+			if(vm.timeslotmodified == "true"){
+				 var confirmAns = $window.confirm("Are you sure you want to change timeslots? Any changes will result in time slots being canceled at the renters’ end.");
+			} else {				
+				var confirmAns = true;
+			}
+			if(confirmAns == true){
 				propdbObj.ref('properties/'+propID).update({
 						propimg: propimg,
 						propstatus: propstatus,
@@ -367,15 +368,15 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 							
 							if(snapshot.val() != undefined){
 								vm.appliedslots = $.map(snapshot.val(), function(value, index) {							
-									if(value.schedulestatus !== "cancelled"){	
+									if(value.schedulestatus !== "cancelled" || value.schedulestatus !== "submitted"){	
 										vm.scheduleIDs.push(index);
 										return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot).format('HH:mm'),scheduleID:index}];				
 									}
 								});
 							}
 							
-							console.log(vm.slots);
-							console.log(vm.appliedslots);	
+							// console.log(vm.slots);
+							// console.log(vm.appliedslots);	
 							
 							if(propstatus != false)	{
 								for (var i = 0; i < vm.slots.length; i++) {
@@ -396,7 +397,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 								firebase.database().ref('applyprop/'+value).update({	
 									schedulestatus: "cancelled"
 								})
-								console.log(value);
+								// console.log(value);
 							});			
 							$state.go('viewprop');
 						});	
@@ -404,6 +405,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					
 					$window.scrollTo(0, 0);
 				})
+			} else {
+				vm.loader = 0;				
+				$state.reload();
+			}
 		}
 	}
 	
@@ -425,7 +430,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					vm.propsuccess = localStorage.getItem('propertysuccessmsg');
 			 	}
 				vm.loader = 0;
-				console.log($rootScope.$previousState.name);
+				// console.log($rootScope.$previousState.name);
 				if(($rootScope.$previousState.name == "editprop" || $rootScope.$previousState.name == "addprop") && vm.propsuccess != ''){
 					vm.success = 1;
 				}
@@ -435,9 +440,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		});
 	
 		vm.toggleSwitch = function(key){
-			console.log(key);
+			// console.log(key);
 			var propstatus = !vm.viewprops[key].propstatus;
-			console.log(propstatus);	
+			// console.log(propstatus);	
 			
 			// update the property status to property table
 			firebase.database().ref('properties/'+key).update({	
@@ -460,7 +465,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 						firebase.database().ref('applyprop/'+value).update({	
 							schedulestatus: "cancelled"
 						})
-						console.log(value);
+						// console.log(value);
 					});			
 				});	
 			});	
@@ -505,6 +510,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				  vm.prop.multiple.push(propData.multiple[key]);				  
 				});
 				vm.addresschange();
+				vm.prop.pastdate = vm.prop.date;
+				vm.prop.pastfrom = vm.prop.fromtime;
+				vm.prop.pastto = vm.prop.to;
+				
 			});
 		});
 	} else {
