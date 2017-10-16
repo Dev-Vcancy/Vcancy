@@ -4,7 +4,7 @@
 // PROPERTY
 //=================================================
 
-vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','slotsBuildService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window,slotsBuildService) {
+vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','slotsBuildService','emailSendingService','$http', function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, slotsBuildService, emailSendingService, $http) {
 	$rootScope.invalid = '';
 	$rootScope.success = '';
 	$rootScope.error = '';	
@@ -157,9 +157,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			var to = vm.prop.to[key];	
 		}		
 		
-		vm.overlap = 0;
-		
-		
+		vm.overlap = 0;			
 		
 		for (var i = 0; i < vm.prop.date.length ; i++) {
 			// console.log(i,key);
@@ -176,11 +174,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					var totime = vm.prop.to[i];	
 				}
 					
-				if ((fromtime <= ftime && to <= ftime && moment(vm.prop.date[key]).format('DD-MMMM-YYYY') != moment(vm.prop.date[i]).format('DD-MMMM-YYYY')) || (fromtime >= totime && to >= totime && moment(vm.prop.date[key]).format('DD-MMMM-YYYY') != moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) {
-					
-				} else {
+				if (((fromtime > ftime || to > ftime) && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || ((fromtime > totime || to > totime) && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isEqual(moment(vm.prop.date[i]).format('DD-MMMM-YYYY')))) {
 					vm.overlap = 1;
-				}
+				} 
 			}
 		}
 	
@@ -192,8 +188,8 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		}
 		
 		var temp = new Date(fromtime.getTime() + 30 * 60000)
-		// console.log(temp,to);
-		if (to < temp && vm.prop.timeoverlapinvalid[key] == 0) {
+		// console.log(moment(to).format('HH:mm'),moment(temp).format('HH:mm'));
+		if (moment(to).format('HH:mm') < moment(temp).format('HH:mm') && vm.prop.timeoverlapinvalid[key] == 0) {
 			vm.prop.timeinvalid[key] = 1;
 			vm.isDisabled = true;
 		} else {
@@ -313,6 +309,12 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					propdbObj.ref('properties/'+snapshot.key).update({	
 						propertylink: propertylink
 					})
+					
+					var emailData = {};
+					emailData.propertylink = propertylink;
+					
+					// Send Email
+					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Property Added', 'addproperty', emailData.propertylink);
 					
 					$state.go('viewprop');
 					
