@@ -27,6 +27,33 @@ var vcancyApp = angular
 	'AngularPrint'
   ]); 
   
+vcancyApp.service('emailSendingService',function($http){
+	this.sendEmailViaNodeMailer = function(to,subject,mode,emailData){
+		// var data = {
+			// to: to,
+			// subject: subject,
+			// mode: mode,
+			// emailData: emailData
+		// };
+	
+		// var config = {
+			// headers : {
+				// 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;',
+				// 'Access-Control-Allow-Origin': '*',
+				// "Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin",
+			// }
+		// }
+
+		// $http.post('http://localhost:3000/sendemail', data, config)
+		// .success(function (data, status, headers, config) {
+			// console.log("Done");
+		// })
+		// .error(function (data, status, header, config) {
+			// console.log("Fail");
+		// });
+	}
+});  
+  
 vcancyApp
 .service('slotsBuildService', function(){
    this.maketimeslots = function(date,ftime,totime,limit,multiple) {
@@ -56,33 +83,7 @@ vcancyApp
 	   
 	  // console.log(slots);
       return slots;
-   }
-	this.maketimeslotsingle = function(date,ftime,totime) {
-	   	   
-		var slots = [];
-	   
-		var fromtime = new Date(ftime);
-		var to = new Date(totime);
-		
-		var minutestimediff = (to - fromtime)/ 60000;
-		var subslots = Math.floor(Math.ceil(minutestimediff)/30);
-		
-		var temp = 0;
-		for(var i=0; i<subslots; i++){
-		   if(temp == 0){
-			   temp = fromtime;
-		   } 		   
-		   var f = temp;
-		   var t = new Date(f.getTime() + (30 * 60 * 1000)); // 30 minutes add to from time 
-		   
-		   slots.push({date:date, fromtime:moment(f).format('HH:mm'), to:moment(t).format('HH:mm')});
-		   
-		   temp = new Date(t.getTime() + (1 * 60 * 1000)); // 1 minute add to TO time
-		}  
-	   
-	  // console.log(slots);
-      return slots;
-   }
+   }	
 });
   
   
