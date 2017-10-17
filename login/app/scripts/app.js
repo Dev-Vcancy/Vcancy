@@ -29,28 +29,27 @@ var vcancyApp = angular
   
 vcancyApp.service('emailSendingService',function($http){
 	this.sendEmailViaNodeMailer = function(to,subject,mode,emailData){
-		// var data = {
-			// to: to,
-			// subject: subject,
-			// mode: mode,
-			// emailData: emailData
-		// };
-	
-		// var config = {
-			// headers : {
-				// 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;',
-				// 'Access-Control-Allow-Origin': '*',
-				// "Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin",
-			// }
-		// }
+		var req = {
+			 method: 'POST',
+			 url: 'http://localhost:1337/email/sendemail',
+			 headers: {
+			    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;',
+				'Access-Control-Allow-Origin': '*',
+				"Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+			 },
+			 data: { 
+				to: to,
+				subject: subject,
+				mode: mode,
+				emailData: emailData
+				}
+			}
 
-		// $http.post('http://localhost:3000/sendemail', data, config)
-		// .success(function (data, status, headers, config) {
-			// console.log("Done");
-		// })
-		// .error(function (data, status, header, config) {
-			// console.log("Fail");
-		// });
+		$http(req).then(function successCallback(response) {	
+			console.log("Done");
+		}, function errorCallback(response) {
+			console.log("Fail");
+		});
 	}
 });  
   
