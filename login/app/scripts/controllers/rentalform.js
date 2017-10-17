@@ -211,7 +211,7 @@ vcancyApp
 			console.log(snapshot.val());
 			$scope.$apply(function(){
 				if(snapshot.val() !== null) {
-					$.map(snapshot.val(),function(value,index){
+					$.map(snapshot.val(),function(value,index){						
 						vm.applicationID = index;
 						vm.draftdata = "true";
 						vm.tenantdata.tenantID = value.tenantID;
@@ -249,7 +249,7 @@ vcancyApp
 						vm.rentaldata.reftwo_name = value.reftwo_name;
 						vm.rentaldata.reftwo_phone = value.reftwo_phone;
 						vm.rentaldata.reftwo_relation = value.reftwo_relation;
-						vm.rentaldata.dated = value.dated;
+						vm.rentaldata.dated = new Date(value.dated);
 					});
 					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
 						$scope.$apply(function(){
@@ -257,7 +257,7 @@ vcancyApp
 								$.map(snap.val(), function(v, k) {
 									console.log(v);
 									vm.tenantdata.tenantName = v.mainapplicant.applicantname;
-									vm.rentaldata.dob =  v.mainapplicant.applicantdob;												
+									vm.rentaldata.dob =  new Date(v.mainapplicant.applicantdob);												
 									vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
 									vm.rentaldata.appposition =  v.mainapplicant.appposition;
 									vm.rentaldata.appemployerphone =  v.mainapplicant.appemployerphone;
@@ -269,16 +269,15 @@ vcancyApp
 									
 									
 									angular.forEach(v.minors, function(value, key) {
-									  vm.minor.push(key+1);
+									  vm.minor.push(key);
 									  vm.rentaldata.minorappname.push(value.minorapplicantname);
-									  vm.rentaldata.minorappdob.push(value.minorapplicantdob);			  
+									  vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));			  
 									});
-									vm.minor.pop();
 									
 									angular.forEach(v.otherapplicants, function(value, key) {
-									  vm.adult.push(key+1);
+									  vm.adult.push(key);
 									  vm.rentaldata.otherappname.push(value.adultapplicantname);
-									  vm.rentaldata.otherappdob.push(value.adultapplicantdob);
+									  vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
 									  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
 									  vm.rentaldata.otherappposition.push(value.otherappposition);
 									  vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
@@ -288,7 +287,6 @@ vcancyApp
 									  vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
 									  vm.rentaldata.otherappsign.push(value.otherappsign);									  
 									});
-									vm.adult.pop();
 									
 								});
 							}
@@ -355,7 +353,7 @@ vcancyApp
 			var parking = vm.rentaldata.parking;
 			
 			var applicantname = vm.tenantdata.tenantName;
-			var applicantdob = vm.rentaldata.dob;
+			var applicantdob = vm.rentaldata.dob.toString();
 			var telwork = vm.rentaldata.telwork;
 			var telhome = vm.rentaldata.telhome;
 			var applicantemail = vm.tenantdata.tenantEmail;
@@ -410,32 +408,31 @@ vcancyApp
 			var otherappincometype = vm.rentaldata.otherappincometype;
 			var otherappotherincome = vm.rentaldata.otherappotherincome;
 			
-			var dated = vm.rentaldata.dated;
+			var dated = vm.rentaldata.dated.toString();
 			var appsign = vm.rentaldata.appsign;
 			var otherappsign = vm.rentaldata.otherappsign;
-			
 			vm.adultapplicants = [];
 			vm.minorapplicants = [];
 			
-			vm.adultapplicants = $.map(adultapplicantname, function(adult, index) {
+			vm.adultapplicants = $.map(vm.adult, function(adult, index) {
 				return [{
-						adultapplicantname: adult,
-						adultapplicantdob: adultapplicantdob[index],												
-						otherappcurrentemployer: otherappcurrentemployer[index],
-						otherappposition: otherappposition[index],
-						otherappemployerphone: otherappemployerphone[index],
-						otherappworkingduration: otherappworkingduration[index],
-						otherappgrossmonthlyincome: otherappgrossmonthlyincome[index],
-						otherappincometype: otherappincometype[index],
-						otherappotherincome: otherappotherincome[index],												
-						otherappsign: otherappsign[index]
+						adultapplicantname: adultapplicantname[index] == undefined ? '' :adultapplicantname[index],
+						adultapplicantdob: adultapplicantdob[index] == undefined ? '' :adultapplicantdob[index].toString(),
+						otherappcurrentemployer: otherappcurrentemployer[index] == undefined ? '' :otherappcurrentemployer[index],
+						otherappposition: otherappposition[index] == undefined ? '' :otherappposition[index],
+						otherappemployerphone: otherappemployerphone[index] == undefined ? '' :otherappemployerphone[index],
+						otherappworkingduration: otherappworkingduration[index] == undefined ? '' :otherappworkingduration[index],
+						otherappgrossmonthlyincome: otherappgrossmonthlyincome[index] == undefined ? '' :otherappgrossmonthlyincome[index],
+						otherappincometype: otherappincometype[index] == undefined ? '' :otherappincometype[index] ,
+						otherappotherincome: otherappotherincome[index] == undefined ? '' :otherappotherincome[index],					
+						otherappsign: otherappsign[index] == undefined ? '' :otherappsign[index] 
 					}];
 			});	
 			
-			vm.minorapplicants = $.map(minorapplicantname, function(minor, index) {
+			vm.minorapplicants = $.map(vm.minor, function(minor, index) {
 				return [{
-						minorapplicantname: minor,
-						minorapplicantdob: minorapplicantdob[index]
+						minorapplicantname: minorapplicantname[index]  == undefined ? '' :minorapplicantname[index] ,
+						minorapplicantdob: minorapplicantdob[index].toString()  == undefined ? '' :minorapplicantdob[index] 
 					}];
 			});	
 			console.log(vm.adultapplicants);

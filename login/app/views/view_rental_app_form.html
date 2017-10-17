@@ -6,34 +6,45 @@
 
         <div class="container">
 			<div class="block-header text-center">
-				<h2>Application</h2>
+				<h2>Apply For Property</h2>
             </div>
 
-		    <div class="card app_form">
-
-		        
-					<input type="hidden" name="scheduleID" ng-model="vappctrl.rentaldata.scheduleID" class="form-control" >
-					<input type="hidden" name="tenantID" ng-model="vappctrl.rentaldata.tenantID" class="form-control">	
-					<input type="hidden" name="propID" ng-model="vappctrl.rentaldata.propID" class="form-control">	
+		    <div class="card app_form" >
+		       
+					<input readonly="true"type="hidden" name="scheduleID" ng-model="vappctrl.rentaldata.scheduleID" class="form-control" >
+					<input readonly="true"type="hidden" name="tenantID" ng-model="vappctrl.rentaldata.tenantID" class="form-control">	
+					<input readonly="true"type="hidden" name="propID" ng-model="vappctrl.rentaldata.propID" class="form-control">	
 		            <div class="card-header">
 		                
 		            </div>
 
 		            <div class="card-body card-padding">
 		            	<h3 class="m-b-20 m-t-10">APPLICANT DETAILS:</h3>
-		            	<p class="m-b-10">Full Name: <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.tenantName"  class="form-control m-b-5 w-5" id="" placeholder=""></span> Date of Birth: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.dob" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span>
-Tel (work): <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.telwork" class="form-control m-b-5 w-4" id="" placeholder=""></span> Tel (home): <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.telhome" class="form-control m-b-5 w-4" id="" placeholder=""></span> Email: <span class="fg-line"><input readonly type="text"  ng-model="vappctrl.rentaldata.tenantEmail"   class="form-control m-b-5 w-9" id="" placeholder=""></span> Current Address: <span class="fg-line"><input readonly type="text" class="form-control m-b-5 w-5" ng-model="vappctrl.rentaldata.appaddress" id="" placeholder=""></span> City: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.appcity"  type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
+		            	<p class="m-b-10" style="display:inline;">
+							<label>Full Name:</label>
+							<span class="fg-line"><input readonly="true" required  readonly="true" type="text" ng-model="vappctrl.rentaldata.tenantName"  class="form-control w-5" id="" placeholder=""></span>
+							
+							<label>Date of Birth:</label>
+							<span class="fg-line">
+								<div class="date-picker input-group" ng-class="{ 'is-opened': vappctrl.dobopened == true }">
+									<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
+									<div ng-class="{ 'fg-toggled': vappctrl.dobopened == true }">
+										<input readonly="true"readonly="true" ng-click="vappctrl.dobopen($event)" type="text" class="form-control" uib-datepicker-popup="{{vappctrl.format}}" show-weeks="false" ng-model="vappctrl.rentaldata.dob" is-open="vappctrl.dobopened" max-date="vappctrl.maxDate" datepicker-options="vappctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+									</div>
+								</div>
+							</span>
+						<p>	<label>Tel (work):</label> <span class="fg-line"><input readonly="true" required   type="text" ng-model="vappctrl.rentaldata.telwork" class="form-control m-b-5 w-4" id="" placeholder=""></span> <label>Tel (home):</label> <span class="fg-line"><input readonly="true" required   type="text" ng-model="vappctrl.rentaldata.telhome" class="form-control m-b-5 w-4" id="" placeholder=""></span> <label>Email:</label> <span class="fg-line"><input readonly="true" required   type="text"  ng-model="vappctrl.rentaldata.tenantEmail"  ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/"  class="form-control m-b-5 w-9" id="" placeholder=""></span> <label>Current Address:</label> <span class="fg-line"><input readonly="true" required   type="text" class="form-control m-b-5 w-5" ng-model="vappctrl.rentaldata.appaddress" id="" placeholder=""></span> <label>City:</label> <span class="fg-line"><input readonly="true" required   ng-model="vappctrl.rentaldata.appcity"  type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
 
 						<div class="m-b-10">
 							<div class="radio m-b-15">
 								<span class="p-r-5 f-500">Marital Status</span>
 							    <label>
-								    <input readonly type="radio" class="" ng-model="vappctrl.rentaldata.maritalstatus"  value="single">
+								    <input disabled="true" required   type="radio" class="" ng-model="vappctrl.rentaldata.maritalstatus"  value="single">
 								    <i class="input-helper"></i>
 								    Single
 								</label>
 								<label>
-								    <input readonly type="radio" ng-model="vappctrl.rentaldata.maritalstatus" value="married">
+								    <input disabled="true" required   type="radio" ng-model="vappctrl.rentaldata.maritalstatus" value="married">
 								    <i class="input-helper"></i>
 								    Married
 								</label>
@@ -44,61 +55,88 @@ Tel (work): <span class="fg-line"><input readonly type="text" ng-model="vappctrl
 							<div class="radio m-b-15">
 								<span class="p-r-5 f-500">Do you rent or own the above address</span>
 							    <label>
-								    <input readonly type="radio" class="" ng-model="vappctrl.rentaldata.rent_own"  value="rent">
+								    <input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.rent_own"  value="rent" ng-change="vappctrl.rentownchange()">
 								    <i class="input-helper"></i>
 								    Rent
 								</label>
 								<label>
-								    <input readonly type="radio" ng-model="vappctrl.rentaldata.rent_own" value="own">
+								    <input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.rent_own" value="own" ng-change="vappctrl.rentownchange()">
 								    <i class="input-helper"></i>
 								    Own
 								</label>
 							</div>
 						</div>
 
-						<p class="m-b-10">
-							How long have you lived at this address: <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.live_time" class="form-control m-b-5 w-4" id="" placeholder=""></span> (months/years) Rent/Mortgage amount: $ <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.rentamt" class="form-control m-b-5" id="" placeholder=""></span> Reason for vacating existing home: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.vacantreason" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><br> Full Name of Landlord: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.landlordname" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Landlord’s daytime phone #: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.landlordphone" type="text" class="form-control m-b-5" id="" placeholder=""></span>
+						<p class="m-b-10" ng-show="vappctrl.rentaldata.rent_own == 'rent'">
+							How long have you lived at this address: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.live_time" class="form-control m-b-5 w-4" id="" placeholder=""></span>(months/years) Rent/Mortgage amount: $ <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.rentamt" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  class="form-control m-b-5" id="" placeholder=""></span> Reason for vacating existing home: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.vacantreason" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><br> 
+						</p>
+						<p class="m-b-10" >							
+							Full Name of Landlord: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.landlordname" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Landlord’s daytime phone #: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.landlordphone" type="text" class="form-control m-b-5" id="" placeholder=""></span>
 						</p>
 
-						<p class="m-b-10">
+						<div class="m-b-10">
 							<p>Additional Adult Occupants (18+) to occupy the premises: </p>
 
-							<p ng-repeat="x in vappctrl.adult">Full Name: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.otherappname[$index]" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span> Date of Birth:<span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.otherappdob[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
-						</p>
+							<div class="col-sm-12" ng-repeat="x in vappctrl.adult">
+								<div class="col-sm-6">
+									Full Name: <input readonly="true" required  ng-model="vappctrl.rentaldata.otherappname[$index]" type="text" class="form-control m-b-5 w-4" id="" placeholder="">
+								</div><div class="col-sm-6">	
+									Date of Birth:
+									<div class="date-picker input-group" ng-class="{ 'is-opened': vappctrl.adultdobopened[$index] == true }" style="display:inline-flex;">
+										<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
+										<div ng-class="{ 'fg-toggled': vappctrl.adultdobopened[$index] == true }">
+											<input readonly="true"readonly="true"  ng-click="vappctrl.adultdobopen($event,$index)" type="text" class="form-control" uib-datepicker-popup="{{vappctrl.format}}" show-weeks="false" ng-model="vappctrl.rentaldata.otherappdob[$index]" is-open="vappctrl.adultdobopened[$index]" max-date="vappctrl.maxDate"datepicker-options="vappctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+										</div>
+									</div></p>
+								</div>
+							</div>
+						</div>
 
-						<p class="m-b-10">
+						<div class="m-b-10">
 							<p>Additional Minors (0-18YRS) to occupy the premises: </p>
 
-							<p ng-repeat="x in vappctrl.minor">Full Name: <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.minorappname[$index]" class="form-control m-b-5 w-5" id="" placeholder=""></span> Date of Birth:<span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.minorappdob[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span></p>
-						</p>
+							<div class="col-sm-12" ng-repeat="x in vappctrl.minor">
+								<div class="col-sm-6">
+									Full Name: <input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.minorappname[$index]" class="form-control m-b-5" id="" placeholder="">
+								</div><div class="col-sm-6">
+									Date of Birth:
+									<div class="date-picker input-group" ng-class="{ 'is-opened': vappctrl.minordobopened[$index] == true }" style="display:inline-flex;">
+										<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
+										<div ng-class="{ 'fg-toggled': vappctrl.minordobopened[$index] == true }">
+											<input readonly="true"readonly="true"  ng-click="vappctrl.minordobopen($event,$index)" type="text" class="form-control" uib-datepicker-popup="{{vappctrl.format}}" show-weeks="false" ng-model="vappctrl.rentaldata.minorappdob[$index]" is-open="vappctrl.minordobopened[$index]" max-date="vappctrl.maxDate" datepicker-options="vappctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
 						<p class="m-b-10">
-							<span class="radio m-b-15">
+							<span class="radio m-b-15 fw">
 								<span class="p-r-5 f-500">Pets:</span>
 							    <label>
-								    <input readonly type="radio" class="" ng-model="vappctrl.rentaldata.pets" value="yes">
+								    <input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.pets" value="yes" ng-change="vappctrl.petschange()">
 								    <i class="input-helper"></i>
 								    YES
 								</label>
 								<label>
-								    <input readonly type="radio" ng-model="vappctrl.rentaldata.pets" value="no">
+								    <input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.pets" value="no" ng-change="vappctrl.petschange()">
 								    <i class="input-helper"></i>
 								    NO
 								</label>
-								<span>How many and what kind: <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.petsdesc" class="form-control m-b-5" id="" placeholder=""></span></span>
+								<span ng-show="vappctrl.rentaldata.pets == 'yes'">How many and what kind: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.petsdesc" class="form-control m-b-5" id="" placeholder=""></span></span>
 							</span> 
 						</p>
 
 						<div class="m-b-10">
-							<div class="radio m-b-15">
+							<div class="radio m-b-15 fw">
 								<span class="p-r-5 f-500">Smoking</span>
 							    <label>
-								    <input readonly type="radio" class="" ng-model="vappctrl.rentaldata.smoking" value="yes">
+								    <input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.smoking" value="yes">
 								    <i class="input-helper"></i>
 								    YES
 								</label>
 								<label>
-								    <input readonly type="radio" ng-model="vappctrl.rentaldata.smoking" value="no">
+								    <input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.smoking" value="no">
 								    <i class="input-helper"></i>
 								    NO
 								</label>
@@ -106,39 +144,41 @@ Tel (work): <span class="fg-line"><input readonly type="text" ng-model="vappctrl
 						</div>
 
 		            	<h3 class="m-b-20 m-t-20">Employment Status & Income Verification: </h3>
+		            	<div class="border">
 		            	<h4 class="m-b-20 m-t-10">Primary Applicant:</h4>
-		            	<p class="m-b-10">Current Employer:  <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.appcurrentemployer" class="form-control m-b-5 w-5" id="" placeholder=""></span> Position: <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.appposition" class="form-control m-b-5 w-3" id="" placeholder=""></span>
-Employer phone #: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.appemployerphone" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> How long have you worked in this company: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.appworkingduration" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>Gross monthly income: $ <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.appgrossmonthlyincome" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> <span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input readonly type="radio" class="" ng-model="vappctrl.rentaldata.appincometype" value="employment" ><i class="input-helper"></i>Employment</label><label><input readonly type="radio" ng-model="vappctrl.rentaldata.appincometype" value="retired"><i class="input-helper"></i>Retired</label></span> <br>Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.appotherincome" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
+		            	<p class="m-b-10">Current Employer:  <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.appcurrentemployer" class="form-control m-b-5 w-5" id="" placeholder=""></span> Position: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.appposition" class="form-control m-b-5 w-2" id="" placeholder=""></span>
+<br>Employer phone #: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.appemployerphone" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> <br>How long have you worked in this company: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.appworkingduration" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>Gross monthly income: $ <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.appgrossmonthlyincome" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> <span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.appincometype" value="employment" ><i class="input-helper"></i>Employment</label><label><input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.appincometype" value="retired"><i class="input-helper"></i>Retired</label></span> <br>Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.appotherincome" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
+						</div>
 
 
 		            	<h4 class="m-b-20 m-t-10">Vehicle Information:</h4>
-		            	<p class="m-b-10">Make: <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.vehiclemake"  class="form-control m-b-5" id="" placeholder=""></span> Model: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.vehiclemodel"  type="text" class="form-control m-b-5" id="" placeholder=""></span>
-						Year: <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.vehicleyear"  class="form-control m-b-5" id="" placeholder=""></p>
+		            	<p class="m-b-10">Make: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.vehiclemake"  class="form-control m-b-5" id="" placeholder=""></span> Model: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.vehiclemodel"  type="text" class="form-control m-b-5" id="" placeholder=""></span>
+						Year: <span class="fg-line"><input readonly="true" required ng-pattern="/^([1-9][0-9]*)$/" type="text" ng-model="vappctrl.rentaldata.vehicleyear"  class="form-control m-b-5" id="" placeholder=""></p>
 
 						<p>Name and phone number of personal/family reference who may be contacted in the case of <u>emergency:</u></p>
-						<p class="m-b-10">Name: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span></p>
-
-                                                <div class="border" ng-repeat="x in vappctrl.adult">
+						<p class="m-b-10">Name: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span></p>
+						
+						<div class="border" ng-repeat="x in vappctrl.adult">
 						<div>
 						<h4 class="m-b-20 m-t-10">Additional Applicant #{{$index+1}}:</h4>
 		            	<p class="m-b-10">
-							Current Employer:  <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.otherappcurrentemployer[$index]" class="form-control m-b-5 w-5" id="" placeholder=""></span> 
-							Position: <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.otherappposition[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span> 
-							Employer phone #: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.otherappemployerphone[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> 
-							How long have you worked in this company: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.otherappworkingduration[$index]" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>
-							Gross monthly income: $ <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.otherappgrossmonthlyincome[$index]" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> 
-							<span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input readonly type="radio" class="" ng-model="vappctrl.rentaldata.otherappincometype[$index]" value="employment" ><i class="input-helper"></i>Employment</label><label><input readonly type="radio" ng-model="vappctrl.rentaldata.otherappincometype[$index]" value="retired"><i class="input-helper"></i>Retired</label></span> <br>
-							Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.otherappotherincome[$index]" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
+							Current Employer:  <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.otherappcurrentemployer[$index]" class="form-control m-b-5 w-5" id="" placeholder=""></span> 
+							Position: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.otherappposition[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span> 
+							Employer phone #: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.otherappemployerphone[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> 
+							How long have you worked in this company: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.otherappworkingduration[$index]" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>
+							Gross monthly income: $ <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.otherappgrossmonthlyincome[$index]" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> 
+							<span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.otherappincometype[$index]" value="employment" ><i class="input-helper"></i>Employment</label><label><input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.otherappincometype[$index]" value="retired"><i class="input-helper"></i>Retired</label></span> <br>
+							Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.otherappotherincome[$index]" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
 						</div>
-                                                </div>
+						</div>
+						
 						<h4 class="m-b-20 m-t-10">References:</h4>
-						<p class="m-b-10">1. Name: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.refone_name"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.refone_phone" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.refone_relation" type="text" class="form-control m-b-5 w-6" id="" placeholder=""></span></p>
+						<p class="m-b-10">1. Name: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.refone_name"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.refone_phone" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.refone_relation" type="text" class="form-control m-b-5 w-6" id="" placeholder=""></span></p>
 
-						<p class="m-b-10">2. Name: <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.reftwo_name" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly ng-model="vappctrl.rentaldata.reftwo_phone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input readonly type="text" class="form-control m-b-5 w-6" id="" ng-model="vappctrl.rentaldata.reftwo_relation" placeholder=""></span></p>
-
+						<p class="m-b-10">2. Name: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.reftwo_name" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.reftwo_phone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input readonly="true" required  type="text" class="form-control m-b-5 w-6" id="" ng-model="vappctrl.rentaldata.reftwo_relation" placeholder=""></span></p>
 						
 		            	<p class="f-500">You are authorized to obtaining credit checks & verifying details contained in this Application.</p>
-						<p class="m-b-10">We offer to rent <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.address" class="form-control m-b-5 w-3" id="" placeholder=""></span> (the “Rental unit”) at monthly rent of $ <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.rent" class="form-control m-b-5" id="" placeholder=""></span> for a term of <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.months" class="form-control m-b-5" id="" placeholder=""></span> months starting <span class="fg-line"><input readonly type="text"  ng-model="vappctrl.rentaldata.startdate" class="form-control m-b-5" id="" placeholder=""></span>(date). Parking is required for <span class="fg-line"><input readonly  ng-model="vappctrl.rentaldata.parking" type="text" class="form-control" id="" placeholder=""></span> vehicles (licensed only). This unit is strictly <strong>NON SMOKING.</strong> This offer is subject to acceptance by the landlord/property management company that listed the property. This application is made on the understanding that no betterments will be provided to the Rental Unit except those which may be specifically requested in this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.</p>
+						<p class="m-b-10">We offer to rent <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.address" class="form-control m-b-5 w-3" id="" placeholder=""></span> (the “Rental unit”) at monthly rent of $ <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.rent" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  class="form-control m-b-5" id="" placeholder=""></span> for a term of <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.months" class="form-control m-b-5" id="" placeholder=""></span> months starting <span class="fg-line"><input readonly="true" required  type="text"  ng-model="vappctrl.rentaldata.startdate" class="form-control m-b-5" id="" placeholder=""></span>(date). Parking is required for <span class="fg-line"><input readonly="true" required   ng-model="vappctrl.rentaldata.parking" type="text" class="form-control" id="" placeholder=""></span> vehicles (licensed only). This unit is strictly <strong>NON SMOKING.</strong> This offer is subject to acceptance by the landlord/property management company that listed the property. This application is made on the understanding that no betterments will be provided to the Rental Unit except those which may be specifically requested in this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.</p>
 
 						<p class="m-b-10">It is understood that this application <u>will not be processed unless fully completed.</u></p>
 
@@ -149,14 +189,23 @@ Employer phone #: <span class="fg-line"><input readonly ng-model="vappctrl.renta
 
 		            	<p>Tenants are not chosen on a first come – first served basis. We choose the most suitable application for the unit at our sole discretion. This application form is to be used only in the interested of the owner of the rental unit.</p>
 
-		            	<p class="m-b-10">
-							Dated: <span class="fg-line"><input readonly type="text" class="form-control m-b-5 w-3" id="" ng-model="vappctrl.rentaldata.dated" placeholder=""></span> 
-							Signature of Primary Applicant:  <span class="fg-line"><input readonly type="text" class="form-control m-b-5 w-3" ng-model="vappctrl.rentaldata.appsign" id="" placeholder=""></span>(FULL NAME IN CAPS)  
-							<span   ng-repeat="x in vappctrl.adult">Signature of Additional Applicant #{{$index+1}}:   <span class="fg-line"><input readonly type="text" ng-model="vappctrl.rentaldata.otherappsign[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span>(FULL NAME IN CAPS)<br/> </span>
+		            	<p class="m-b-10" style="display:inline;">
+							Dated: <span class="fg-line">
+							<div class="date-picker input-group" ng-class="{ 'is-opened': vappctrl.dateopened == true }" style="display:inline-flex;">
+								<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
+								<div ng-class="{ 'fg-toggled': vappctrl.dateopened == true }">
+									<input readonly="true"readonly="true"  ng-click="vappctrl.dateopen($event)" type="text" class="form-control" uib-datepicker-popup="{{vappctrl.format}}" show-weeks="false" ng-model="vappctrl.rentaldata.dated" is-open="vappctrl.dateopened"  datepicker-options="vappctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+								</div>
+							</div>
+							
+							</span> 
+						<p>
+							Signature of Primary Applicant:  <span class="fg-line"><input readonly="true" required  type="text" class="form-control m-b-5 w-3" ng-model="vappctrl.rentaldata.appsign" id="" placeholder=""></span>(FULL NAME IN CAPS)  
+							<span   ng-repeat="x in vappctrl.adult">Signature of Additional Applicant #{{$index+1}}:   <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.otherappsign[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span>(FULL NAME IN CAPS)<br/> </span>
 						</p>
-
-		            	
 		            </div>
+
+		        </form>
 		    </div>
 
 		</div>				

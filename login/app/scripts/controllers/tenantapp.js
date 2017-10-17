@@ -75,7 +75,7 @@ vcancyApp
 									$.map(snap.val(), function(value, index) {	
 										if(val.schedulestatus == "submitted" ){
 											vm.submittedappsavail = 1;
-											vm.submitappsdata.push({appID:index, address:val.units+" - "+value.address, dated: value.dated, rentalstatus: value.rentalstatus});
+											vm.submitappsdata.push({appID:index, address:value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus});
 										}
 										
 										
@@ -118,7 +118,7 @@ vcancyApp
 					$.map(snapshot.val(), function(value, key) {		
 						if(value.scheduleID == 0){
 							vm.submittedappsavail = 1;
-							vm.submitappsdata.push({appID:key, address:value.address, dated: value.dated, rentalstatus: value.rentalstatus});
+							vm.submitappsdata.push({appID:key, address:value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus});
 						}
 					});
 					
