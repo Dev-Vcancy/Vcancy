@@ -81,7 +81,7 @@ vcancyApp
 		
 		vm.cancelschedule = function(index){
 			// console.log(index);
-			if ($window.confirm("Do you want to continue cancelling of schedule?"))  {
+			if ($window.confirm("Are you sure you want to cancel this viewing appointment?"))  {
 				firebase.database().ref('applyprop/'+index).update({	
 					schedulestatus: "cancelled"
 				})

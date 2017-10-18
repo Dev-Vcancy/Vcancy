@@ -47,7 +47,7 @@
 							<tr ng-repeat="row in $data">
 								<td ng-repeat="col in $columns">{{row[col.field]}}</td>
 								<td ng-repeat="col in tappctrl.extracols">
-									<a href="#/rentalform/{{row[col.field]}}" class="btn bgm-cyan">Submit</a>
+									<a href="#/rentalform/{{row[col.field]}}/{{row.applicationID}}" class="btn bgm-cyan">Submit</a>
 								</td>		           
 							</tr>
                                                         <tr ng-if="tappctrl.pendingappsavail == 0"><td colspan='2'>

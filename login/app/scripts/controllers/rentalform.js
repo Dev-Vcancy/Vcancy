@@ -10,6 +10,7 @@ vcancyApp
 		var vm = this;
 		var tenantID = localStorage.getItem('userID');
 		var scheduleID = $stateParams.scheduleId;
+		var applicationID = $stateParams.applicationId;
 		var tenantEmail = localStorage.getItem('userEmail');
 		vm.draft = "false";
 		vm.draftdata = "false";
@@ -52,6 +53,7 @@ vcancyApp
 		vm.rentaldata.parking =  '';
 		vm.tenantdata.tenantName =  '';
 		vm.rentaldata.dob =  '';
+		vm.rentaldata.sinno = '';
 		vm.rentaldata.telwork =  '';
 		vm.rentaldata.telhome =  '';
 		vm.tenantdata.tenantEmail =  '';
@@ -67,9 +69,11 @@ vcancyApp
 		
 		vm.rentaldata.otherappname =  [];
 		vm.rentaldata.otherappdob =  [];
+		vm.rentaldata.otherappsinno =  [];
 		
 		vm.rentaldata.minorappname =  [];
 		vm.rentaldata.minorappdob =  [];
+		vm.rentaldata.minorappsinno =  [];
 		
 		vm.rentaldata.pets =  '';
 		vm.rentaldata.petsdesc =  '';
@@ -185,6 +189,7 @@ vcancyApp
 			vm.adult.splice(slotindex,1);
 			vm.rentaldata.otherappname.splice(slotindex,1);
 			vm.rentaldata.otherappdob.splice(slotindex,1);
+			vm.rentaldata.otherappsinno.splice(slotindex,1);
 			vm.rentaldata.otherappcurrentemployer.splice(slotindex,1);
 			vm.rentaldata.otherappposition.splice(slotindex,1);	
 			vm.rentaldata.otherappemployerphone.splice(slotindex,1);
@@ -201,137 +206,245 @@ vcancyApp
 			console.log(vm.rentaldata);		
 			vm.minor.splice(slotindex,1);
 			vm.rentaldata.minorappdob.splice(slotindex,1);
+			vm.rentaldata.minorappsinno.splice(slotindex,1);
 			vm.rentaldata.minorappname.splice(slotindex,1);
 			
 			console.log(vm.minor,vm.rentaldata);
 		}
 		
-		
-		firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(scheduleID).once("value", function(snapshot) {	
-			console.log(snapshot.val());
-			$scope.$apply(function(){
-				if(snapshot.val() !== null) {
-					$.map(snapshot.val(),function(value,index){						
-						vm.applicationID = index;
-						vm.draftdata = "true";
-						vm.tenantdata.tenantID = value.tenantID;
-						vm.scheduledata.scheduleID = value.scheduleID;
-						vm.propdata.propID = value.propID;
+		if($stateParams.scheduleId != 0) {
+			firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo($stateParams.scheduleId).once("value", function(snapshot) {	
+				console.log(snapshot.val());
+				$scope.$apply(function(){
+					if(snapshot.val() !== null) {
+						$.map(snapshot.val(),function(value,index){						
+							vm.applicationID = index;
+							vm.draftdata = "true";
+							vm.tenantdata.tenantID = value.tenantID;
+							vm.scheduledata.scheduleID = value.scheduleID;
+							vm.propdata.propID = value.propID;
+							
+							vm.propdata.address = value.address;
+							vm.propdata.rent = value.rent;
+							vm.rentaldata.months = value.months;
+							vm.rentaldata.startdate = value.startdate;
+							vm.rentaldata.parking = value.parking;
+							vm.rentaldata.telwork = value.telwork;
+							vm.rentaldata.telhome = value.telhome;
+							vm.tenantdata.tenantEmail = value.applicantemail;
+							vm.rentaldata.appaddress = value.appaddress;
+							vm.rentaldata.appcity = value.applicantcity;
+							vm.rentaldata.maritalstatus = value.maritalstatus;
+							vm.rentaldata.rent_own = value.rent_own;
+							vm.rentaldata.live_time = value.live_time_at_address;
+							vm.rentaldata.rentamt = value.rentamt;
+							vm.rentaldata.vacantreason = value.vacantreason;
+							vm.rentaldata.landlordname = value.landlordname;
+							vm.rentaldata.landlordphone = value.landlordphone;
+							vm.rentaldata.pets = value.pets;
+							vm.rentaldata.petsdesc = value.petsdesc;
+							vm.rentaldata.smoking = value.smoking;
+							vm.rentaldata.vehiclemake = value.vehiclemake;
+							vm.rentaldata.vehiclemodel = value.vehiclemodel;
+							vm.rentaldata.vehicleyear = value.vehicleyear;						
+							vm.rentaldata.emergencyname = value.emergencyname;
+							vm.rentaldata.emergencyphone = value.emergencyphone;
+							vm.rentaldata.refone_name = value.refone_name;
+							vm.rentaldata.refone_phone = value.refone_phone;
+							vm.rentaldata.refone_relation = value.refone_relation;
+							vm.rentaldata.reftwo_name = value.reftwo_name;
+							vm.rentaldata.reftwo_phone = value.reftwo_phone;
+							vm.rentaldata.reftwo_relation = value.reftwo_relation;
+							vm.rentaldata.dated = new Date(value.dated);
+						});
+						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
+							$scope.$apply(function(){
+								if(snap.val()!= null) {
+									$.map(snap.val(), function(v, k) {
+										console.log(v);
+										vm.tenantdata.tenantName = v.mainapplicant.applicantname;
+										vm.rentaldata.dob =  new Date(v.mainapplicant.applicantdob);
+										vm.rentaldata.sinno = v.mainapplicant.applicantsinno;												
+										vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
+										vm.rentaldata.appposition =  v.mainapplicant.appposition;
+										vm.rentaldata.appemployerphone =  v.mainapplicant.appemployerphone;
+										vm.rentaldata.appworkingduration =  v.mainapplicant.appworkingduration;
+										vm.rentaldata.appgrossmonthlyincome =  v.mainapplicant.appgrossmonthlyincome;
+										vm.rentaldata.appincometype =  v.mainapplicant.appincometype;
+										vm.rentaldata.appotherincome =  v.mainapplicant.appotherincome;												
+										vm.rentaldata.appsign =  v.mainapplicant.appsign;
+										
+										
+										angular.forEach(v.minors, function(value, key) {
+										  vm.minor.push(key);
+										  vm.rentaldata.minorappname.push(value.minorapplicantname);
+										  vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));
+										  vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);			  
+										});
+										
+										angular.forEach(v.otherapplicants, function(value, key) {
+										  vm.adult.push(key);
+										  vm.rentaldata.otherappname.push(value.adultapplicantname);
+										  vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
+										  vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
+										  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
+										  vm.rentaldata.otherappposition.push(value.otherappposition);
+										  vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
+										  vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
+										  vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
+										  vm.rentaldata.otherappincometype.push(value.otherappincometype);
+										  vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
+										  vm.rentaldata.otherappsign.push(value.otherappsign);									  
+										});
+										
+									});
+								}
+							});
+						});
+					} else {
+						vm.draftdata = "false";
+						firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
+							// console.log(snapshot.val())
+							$scope.$apply(function(){
+								if(snapshot.val()) {
+									vm.scheduledata = snapshot.val();
+									vm.scheduledata.scheduleID = snapshot.key;
+									
+									firebase.database().ref('properties/'+vm.scheduledata.propID).once("value", function(snap) {	
+										$scope.$apply(function(){
+											if(snap.val()) {
+												vm.propdata = snap.val();
+												vm.propdata.propID = snap.key;	
+												vm.propdata.address = vm.propdata.units +" - "+vm.propdata.address;
+											}
+										});								
+									});				
+								} 
+							});
+						});
 						
-						vm.propdata.address = value.address;
-						vm.propdata.rent = value.rent;
-						vm.rentaldata.months = value.months;
-						vm.rentaldata.startdate = value.startdate;
-						vm.rentaldata.parking = value.parking;
-						vm.rentaldata.telwork = value.telwork;
-						vm.rentaldata.telhome = value.telhome;
-						vm.tenantdata.tenantEmail = value.applicantemail;
-						vm.rentaldata.appaddress = value.appaddress;
-						vm.rentaldata.appcity = value.applicantcity;
-						vm.rentaldata.maritalstatus = value.maritalstatus;
-						vm.rentaldata.rent_own = value.rent_own;
-						vm.rentaldata.live_time = value.live_time_at_address;
-						vm.rentaldata.rentamt = value.rentamt;
-						vm.rentaldata.vacantreason = value.vacantreason;
-						vm.rentaldata.landlordname = value.landlordname;
-						vm.rentaldata.landlordphone = value.landlordphone;
-						vm.rentaldata.pets = value.pets;
-						vm.rentaldata.petsdesc = value.petsdesc;
-						vm.rentaldata.smoking = value.smoking;
-						vm.rentaldata.vehiclemake = value.vehiclemake;
-						vm.rentaldata.vehiclemodel = value.vehiclemodel;
-						vm.rentaldata.vehicleyear = value.vehicleyear;						
-						vm.rentaldata.emergencyname = value.emergencyname;
-						vm.rentaldata.emergencyphone = value.emergencyphone;
-						vm.rentaldata.refone_name = value.refone_name;
-						vm.rentaldata.refone_phone = value.refone_phone;
-						vm.rentaldata.refone_relation = value.refone_relation;
-						vm.rentaldata.reftwo_name = value.reftwo_name;
-						vm.rentaldata.reftwo_phone = value.reftwo_phone;
-						vm.rentaldata.reftwo_relation = value.reftwo_relation;
-						vm.rentaldata.dated = new Date(value.dated);
-					});
-					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
-						$scope.$apply(function(){
-							if(snap.val()!= null) {
-								$.map(snap.val(), function(v, k) {
-									console.log(v);
-									vm.tenantdata.tenantName = v.mainapplicant.applicantname;
-									vm.rentaldata.dob =  new Date(v.mainapplicant.applicantdob);												
-									vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
-									vm.rentaldata.appposition =  v.mainapplicant.appposition;
-									vm.rentaldata.appemployerphone =  v.mainapplicant.appemployerphone;
-									vm.rentaldata.appworkingduration =  v.mainapplicant.appworkingduration;
-									vm.rentaldata.appgrossmonthlyincome =  v.mainapplicant.appgrossmonthlyincome;
-									vm.rentaldata.appincometype =  v.mainapplicant.appincometype;
-									vm.rentaldata.appotherincome =  v.mainapplicant.appotherincome;												
-									vm.rentaldata.appsign =  v.mainapplicant.appsign;
-									
-									
-									angular.forEach(v.minors, function(value, key) {
-									  vm.minor.push(key);
-									  vm.rentaldata.minorappname.push(value.minorapplicantname);
-									  vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));			  
-									});
-									
-									angular.forEach(v.otherapplicants, function(value, key) {
-									  vm.adult.push(key);
-									  vm.rentaldata.otherappname.push(value.adultapplicantname);
-									  vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
-									  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
-									  vm.rentaldata.otherappposition.push(value.otherappposition);
-									  vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
-									  vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
-									  vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
-									  vm.rentaldata.otherappincometype.push(value.otherappincometype);
-									  vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
-									  vm.rentaldata.otherappsign.push(value.otherappsign);									  
-									});
-									
-								});
-							}
-						});
-					});
-				} else {
-					vm.draftdata = "false";
-					firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
-						// console.log(snapshot.val())
-						$scope.$apply(function(){
-							if(snapshot.val()) {
-								vm.scheduledata = snapshot.val();
-								vm.scheduledata.scheduleID = snapshot.key;
-								
-								firebase.database().ref('properties/'+vm.scheduledata.propID).once("value", function(snap) {	
-									$scope.$apply(function(){
-										if(snap.val()) {
-											vm.propdata = snap.val();
-											vm.propdata.propID = snap.key;	
-											vm.propdata.address = vm.propdata.units +" - "+vm.propdata.address;
-										}
-									});								
-								});				
-							} 
-						});
-					});
-					
-					
-					firebase.database().ref('users/'+tenantID).once("value", function(snapval) {	
-						$scope.$apply(function(){
-							if(snapval.val()) {
-								vm.tenantdata = snapval.val();
-								vm.tenantdata.tenantID = snapval.key;
-								vm.tenantdata.tenantName = vm.tenantdata.firstname+" "+vm.tenantdata.lastname;
-								vm.tenantdata.tenantEmail = tenantEmail;
-							}
-						});								
-					});	
-				}
-				// console.log(vm.tenantdata);	
-				// console.log(vm.rentaldata);	
-				// console.log(vm.propdata);	
+						
+						firebase.database().ref('users/'+tenantID).once("value", function(snapval) {	
+							$scope.$apply(function(){
+								if(snapval.val()) {
+									vm.tenantdata = snapval.val();
+									vm.tenantdata.tenantID = snapval.key;
+									vm.tenantdata.tenantName = vm.tenantdata.firstname+" "+vm.tenantdata.lastname;
+									vm.tenantdata.tenantEmail = tenantEmail;
+								}
+							});								
+						});	
+					}
+					// console.log(vm.tenantdata);	
+					// console.log(vm.rentaldata);	
+					// console.log(vm.propdata);	
+				});
 			});
-		});
-		
+		} else {
+			firebase.database().ref('submitapps/'+$stateParams.applicationId).once("value", function(snapshot) {	
+				console.log(snapshot.val());
+				$scope.$apply(function(){
+					if(snapshot.val() !== null) {
+							var value = snapshot.val();
+							vm.applicationID = $stateParams.applicationId;
+							vm.draftdata = "true";
+							vm.tenantdata.tenantID = value.tenantID;
+							vm.scheduledata.scheduleID = value.scheduleID;
+							vm.propdata.propID = value.propID;
+							
+							vm.propdata.address = value.address;
+							vm.propdata.rent = value.rent;
+							vm.rentaldata.months = value.months;
+							vm.rentaldata.startdate = value.startdate;
+							vm.rentaldata.parking = value.parking;
+							vm.rentaldata.telwork = value.telwork;
+							vm.rentaldata.telhome = value.telhome;
+							vm.tenantdata.tenantEmail = value.applicantemail;
+							vm.rentaldata.appaddress = value.appaddress;
+							vm.rentaldata.appcity = value.applicantcity;
+							vm.rentaldata.maritalstatus = value.maritalstatus;
+							vm.rentaldata.rent_own = value.rent_own;
+							vm.rentaldata.live_time = value.live_time_at_address;
+							vm.rentaldata.rentamt = value.rentamt;
+							vm.rentaldata.vacantreason = value.vacantreason;
+							vm.rentaldata.landlordname = value.landlordname;
+							vm.rentaldata.landlordphone = value.landlordphone;
+							vm.rentaldata.pets = value.pets;
+							vm.rentaldata.petsdesc = value.petsdesc;
+							vm.rentaldata.smoking = value.smoking;
+							vm.rentaldata.vehiclemake = value.vehiclemake;
+							vm.rentaldata.vehiclemodel = value.vehiclemodel;
+							vm.rentaldata.vehicleyear = value.vehicleyear;						
+							vm.rentaldata.emergencyname = value.emergencyname;
+							vm.rentaldata.emergencyphone = value.emergencyphone;
+							vm.rentaldata.refone_name = value.refone_name;
+							vm.rentaldata.refone_phone = value.refone_phone;
+							vm.rentaldata.refone_relation = value.refone_relation;
+							vm.rentaldata.reftwo_name = value.reftwo_name;
+							vm.rentaldata.reftwo_phone = value.reftwo_phone;
+							vm.rentaldata.reftwo_relation = value.reftwo_relation;
+							vm.rentaldata.dated = new Date(value.dated);
+						
+						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
+							$scope.$apply(function(){
+								if(snap.val()!= null) {
+									$.map(snap.val(), function(v, k) {
+										console.log(v);
+										vm.tenantdata.tenantName = v.mainapplicant.applicantname;
+										vm.rentaldata.dob =  new Date(v.mainapplicant.applicantdob);
+										vm.rentaldata.sinno = v.mainapplicant.applicantsinno;												
+										vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
+										vm.rentaldata.appposition =  v.mainapplicant.appposition;
+										vm.rentaldata.appemployerphone =  v.mainapplicant.appemployerphone;
+										vm.rentaldata.appworkingduration =  v.mainapplicant.appworkingduration;
+										vm.rentaldata.appgrossmonthlyincome =  v.mainapplicant.appgrossmonthlyincome;
+										vm.rentaldata.appincometype =  v.mainapplicant.appincometype;
+										vm.rentaldata.appotherincome =  v.mainapplicant.appotherincome;												
+										vm.rentaldata.appsign =  v.mainapplicant.appsign;
+										
+										
+										angular.forEach(v.minors, function(value, key) {
+										  vm.minor.push(key);
+										  vm.rentaldata.minorappname.push(value.minorapplicantname);
+										  vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));
+										  vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);			  
+										});
+										
+										angular.forEach(v.otherapplicants, function(value, key) {
+										  vm.adult.push(key);
+										  vm.rentaldata.otherappname.push(value.adultapplicantname);
+										  vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
+										  vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
+										  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
+										  vm.rentaldata.otherappposition.push(value.otherappposition);
+										  vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
+										  vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
+										  vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
+										  vm.rentaldata.otherappincometype.push(value.otherappincometype);
+										  vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
+										  vm.rentaldata.otherappsign.push(value.otherappsign);									  
+										});
+										
+									});
+								}
+							});
+						});
+					} else {
+						vm.draftdata = "false";
+						firebase.database().ref('users/'+tenantID).once("value", function(snapval) {	
+							$scope.$apply(function(){
+								if(snapval.val()) {
+									vm.tenantdata = snapval.val();
+									vm.tenantdata.tenantID = snapval.key;
+									vm.tenantdata.tenantName = vm.tenantdata.firstname+" "+vm.tenantdata.lastname;
+									vm.tenantdata.tenantEmail = tenantEmail;
+								}
+							});								
+						});	
+					}	
+				});
+			});
+		}
 			
 		vm.rentalAppSubmit = function(){
 			console.log(vm.rentaldata, vm.draft);
@@ -340,9 +453,16 @@ vcancyApp
 			if($stateParams.scheduleId != 0){
 				var scheduleID = vm.scheduledata.scheduleID;
 				var propID = vm.propdata.propID;
+				var externalappStatus = "";
 			} else {
 				var scheduleID = 0;
 				var propID = 0;	
+				var externalappStatus = "submit";
+				if(vm.draft == "true"){
+					var externalappStatus = "draft";					
+				} else {
+					var externalappStatus = "submit";	
+				}
 			}
 			
 			var address = vm.propdata.address;
@@ -354,6 +474,7 @@ vcancyApp
 			
 			var applicantname = vm.tenantdata.tenantName;
 			var applicantdob = vm.rentaldata.dob.toString();
+			var applicantsinno = vm.rentaldata.sinno;
 			var telwork = vm.rentaldata.telwork;
 			var telhome = vm.rentaldata.telhome;
 			var applicantemail = vm.tenantdata.tenantEmail;
@@ -369,9 +490,11 @@ vcancyApp
 			
 			var adultapplicantname = vm.rentaldata.otherappname;
 			var adultapplicantdob = vm.rentaldata.otherappdob;
+			var adultapplicantsinno = vm.rentaldata.otherappsinno;
 			
 			var minorapplicantname = vm.rentaldata.minorappname;
 			var minorapplicantdob = vm.rentaldata.minorappdob;
+			var minorapplicantsinno = vm.rentaldata.minorappsinno;
 			
 			var pets = vm.rentaldata.pets;
 			var petsdesc = vm.rentaldata.petsdesc;
@@ -418,6 +541,7 @@ vcancyApp
 				return [{
 						adultapplicantname: adultapplicantname[index] == undefined ? '' :adultapplicantname[index],
 						adultapplicantdob: adultapplicantdob[index] == undefined ? '' :adultapplicantdob[index].toString(),
+						adultapplicantsinno: adultapplicantsinno[index] == undefined ? '' :adultapplicantsinno[index],
 						otherappcurrentemployer: otherappcurrentemployer[index] == undefined ? '' :otherappcurrentemployer[index],
 						otherappposition: otherappposition[index] == undefined ? '' :otherappposition[index],
 						otherappemployerphone: otherappemployerphone[index] == undefined ? '' :otherappemployerphone[index],
@@ -432,12 +556,13 @@ vcancyApp
 			vm.minorapplicants = $.map(vm.minor, function(minor, index) {
 				return [{
 						minorapplicantname: minorapplicantname[index]  == undefined ? '' :minorapplicantname[index] ,
-						minorapplicantdob: minorapplicantdob[index].toString()  == undefined ? '' :minorapplicantdob[index] 
+						minorapplicantdob: minorapplicantdob[index]  == undefined ? '' :minorapplicantdob[index].toString(), 
+						minorapplicantsinno: minorapplicantsinno[index]  == undefined ? '' :minorapplicantsinno[index] 
 					}];
 			});	
 			console.log(vm.adultapplicants);
 			
-			if(vm.draftdata === "false") {		
+			if(vm.draftdata === "false" && $stateParams.applicationId == 0 ) {		
 				firebase.database().ref('submitapps/').push().set({
 					tenantID: tenantID,
 					scheduleID: scheduleID,
@@ -482,6 +607,7 @@ vcancyApp
 					reftwo_relation: reftwo_relation,			
 					
 					applicantsno: (vm.adult.length)+1,
+					externalappStatus: externalappStatus,
 					
 					dated: dated,
 					
@@ -495,7 +621,8 @@ vcancyApp
 								"applicationID": snapshot.key,
 								"mainapplicant": {
 													"applicantname": applicantname,
-													"applicantdob": applicantdob,												
+													"applicantdob": applicantdob,
+													"applicantsinno": applicantsinno,												
 													"appcurrentemployer": appcurrentemployer,
 													"appposition": appposition,
 													"appemployerphone": appemployerphone,
@@ -569,6 +696,7 @@ vcancyApp
 					reftwo_relation: reftwo_relation,			
 					
 					applicantsno: (vm.adult.length)+1,
+					externalappStatus: externalappStatus,
 					
 					dated: dated,
 					
@@ -579,7 +707,8 @@ vcancyApp
 						"applicationID": vm.applicationID,
 						"mainapplicant": {
 											"applicantname": applicantname,
-											"applicantdob": applicantdob,												
+											"applicantdob": applicantdob,	
+											"applicantsinno": applicantsinno,												
 											"appcurrentemployer": appcurrentemployer,
 											"appposition": appposition,
 											"appemployerphone": appemployerphone,

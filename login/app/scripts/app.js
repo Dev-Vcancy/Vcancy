@@ -33,7 +33,7 @@ vcancyApp.service('emailSendingService',function($http){
 			 method: 'POST',
 			 url: 'http://localhost:1337/email/sendemail',
 			 headers: {
-			    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;',
+			    'Content-Type': 'application/json',
 				'Access-Control-Allow-Origin': '*',
 				"Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
 			 },
@@ -373,7 +373,7 @@ vcancyApp
 		})
 		
 		.state ('rentalform', {
-			url: '/rentalform/{scheduleId}',
+			url: '/rentalform/{scheduleId}/{applicationId}',
 			controller: 'rentalformCtrl',
 			controllerAs: 'rctrl',
 			templateUrl: 'views/rental_app_form.html',

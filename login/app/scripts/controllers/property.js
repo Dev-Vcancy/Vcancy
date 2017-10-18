@@ -384,14 +384,14 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 							
 							if(snapshot.val() != undefined){
 								vm.appliedslots = $.map(snapshot.val(), function(value, index) {							
-									if(value.schedulestatus !== "cancelled" || value.schedulestatus !== "submitted"){	
+									if(value.schedulestatus !== "cancelled" && value.schedulestatus !== "submitted"){	
 										vm.scheduleIDs.push(index);
 										return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot).format('HH:mm'),scheduleID:index}];				
 									}
 								});
 							}
 							
-							// console.log(vm.slots);
+							console.log(vm.scheduleIDs);
 							// console.log(vm.appliedslots);	
 							
 							if(propstatus != false)	{
@@ -527,6 +527,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				});
 				vm.addresschange();		
 				oldtimeSlotLen = vm.timeSlot.length;
+				vm.unitsOptional();
 			});
 		});
 	} else {
@@ -582,6 +583,14 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				})
 				$state.go('viewprop');
 			})
+		}
+	}
+	
+	// Units to be optional when house is selected
+	this.unitsOptional = function(proptype){
+		console.log(vm.prop.units);
+		if(vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)){
+			vm.prop.units = ' ';
 		}
 	}
 }])

@@ -28,46 +28,50 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 	// Fetching property Data
 	var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snap) {
 		var propData = snap.val();
-		vm.timeSlot = [];
-		vm.slots = [];
-		$scope.$apply(function(){
-			vm.applyprop = {
-				propID: snap.key,
-				landlordID: propData.landlordID,
-				propimg : propData.propimg,
-				propstatus : propData.propstatus,
-				proptype : propData.proptype,
-				units : propData.units,
-				shared : propData.shared,
-				address : propData.address,
-				date : [],
-				fromtime : [],
-				to : [],
-				limit : [],
-				multiple: [],
-				propertylink: propData.propertylink,
-				name : vm.userName
-			}
-			angular.forEach(propData.date, function(value, key) {
-				console.log(propData);
-			  vm.applyprop.date.push(value);
-			  vm.applyprop.fromtime.push(propData.fromtime[key]);
-			  vm.applyprop.to.push(propData.to[key]);
-			  vm.applyprop.limit.push(propData.limit[key]);
-			  
-			  if(propData.multiple) {
-			  	vm.applyprop.multiple.push(propData.multiple[key]);
-			  }
-			  
+		if(propData == null){
+			$state.go('tenantdashboard');
+		} else {
+			vm.timeSlot = [];
+			vm.slots = [];
+			$scope.$apply(function(){
+				vm.applyprop = {
+					propID: snap.key,
+					landlordID: propData.landlordID,
+					propimg : propData.propimg,
+					propstatus : propData.propstatus,
+					proptype : propData.proptype,
+					units : propData.units,
+					shared : propData.shared,
+					address : propData.address,
+					date : [],
+					fromtime : [],
+					to : [],
+					limit : [],
+					multiple: [],
+					propertylink: propData.propertylink,
+					name : vm.userName
+				}
+				angular.forEach(propData.date, function(value, key) {
+					console.log(propData);
+				  vm.applyprop.date.push(value);
+				  vm.applyprop.fromtime.push(propData.fromtime[key]);
+				  vm.applyprop.to.push(propData.to[key]);
+				  vm.applyprop.limit.push(propData.limit[key]);
+				  
+				  if(propData.multiple) {
+					vm.applyprop.multiple.push(propData.multiple[key]);
+				  }
+				  
+				});
+			
+				vm.applyprop.slots = slotsBuildService.maketimeslots(vm.applyprop.date,vm.applyprop.fromtime,vm.applyprop.to,vm.applyprop.limit,vm.applyprop.multiple);
+				
+				// If property is inactive tenant can't apply for the application
+				if(vm.applyprop.propstatus == false){
+					$state.go('tenantdashboard');
+				}
 			});
-			
-			vm.applyprop.slots = slotsBuildService.maketimeslots(vm.applyprop.date,vm.applyprop.fromtime,vm.applyprop.to,vm.applyprop.limit,vm.applyprop.multiple);
-			
-			// If property is inactive tenant can't apply for the application
-			if(vm.applyprop.propstatus == false){
-				$state.go('tenantdashboard');
-			}
-		});
+		}
 		
 		
 		

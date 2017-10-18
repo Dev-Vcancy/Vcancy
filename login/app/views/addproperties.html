@@ -50,18 +50,19 @@
 								</div>
 							</div>
 						   <div class="col-sm-3 m-b-20" >                
-								<select chosen="" class="form-control" name="proptype" ng-model="propctrl.prop.proptype" required data-placeholder="Prop type" class="w-100 localytics-chosen" >
+								<select chosen="" class="form-control" name="proptype" ng-model="propctrl.prop.proptype" ng-change="propctrl.unitsOptional('house')"  required data-placeholder="Prop type" class="w-100 localytics-chosen" >
 									<option value="">Property type</option>
 									<option value="house">House</option>
 									<option value="townhouse">Town House</option>
 									<option value="apartment">Apartment</option>
 									<option value="condo">Condo</option>
 									<option value="coop">Co-op</option>
+									<option value="coop">Other</option>
 								</select>
 							</div>
 
 							<div class="col-sm-2 m-b-20">
-								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" required class="form-control" placeholder="Unit number">
+								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" ng-blur="propctrl.unitsOptional('house')"  required class="form-control" placeholder="Unit number">
 							</div>
 							<div class="col-sm-3 m-b-20 input-group" style="float:left;">
 								<span class="input-group-addon">$</span>

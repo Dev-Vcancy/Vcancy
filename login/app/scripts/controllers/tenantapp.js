@@ -23,7 +23,7 @@ vcancyApp
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {						
 						if(value.schedulestatus == "confirmed" ) { // && moment(value.dateslot).isBefore(new Date())
 							vm.pendingappsavail = 1;
-							return [{scheduleID:index, address:value.units+" - "+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+							return [{applicationID: 0, scheduleID:index, address:value.units+" - "+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						} 
 					});	
 					
@@ -31,39 +31,33 @@ vcancyApp
 					vm.extracols = [
 						  { field: "scheduleID", title: "", show: true }
 						];
+				
+				
+					vm.cols = [
+						  { field: "address", title: "Address", sortable: "address", show: true },
+						  { field: "dateslot", title: "Viewed On", sortable: "dateslot", show: true }
+						];
 						
-					
-				} else {
-					vm.tabledata = [{scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''}];
-					
-					vm.pendingappsavail = 0;
-				}
-				
-				vm.cols = [
-					  { field: "address", title: "Address", sortable: "address", show: true },
-					  { field: "dateslot", title: "Viewed On", sortable: "dateslot", show: true }
-					];
-					
-				vm.loader = 0;
-					
-				//Sorting
-				vm.tableSorting = new NgTableParams({
-					sorting: {address: 'asc'}}, 
-					
-					{dataset: vm.tabledata
+					vm.loader = 0;
+						
+					//Sorting
+					vm.tableSorting = new NgTableParams({
+						sorting: {address: 'asc'}}, 
+						
+						{dataset: vm.tabledata
 
-					/*, {
-					total: vm.tabledata.length, // length of data
-					getData: function($defer, params) {
-						// console.log(params);
-						// use build-in angular filter
-						var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
-			
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}*/
-					 // dataset: vm.tabledata
-				})
+						/*, {
+						total: vm.tabledata.length, // length of data
+						getData: function($defer, params) {
+							// console.log(params);
+							// use build-in angular filter
+							var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
 				
+							$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+						}*/
+						 // dataset: vm.tabledata
+						})
+					}
 				
 				
 				if(snapshot.val() != null){
@@ -77,8 +71,6 @@ vcancyApp
 											vm.submittedappsavail = 1;
 											vm.submitappsdata.push({appID:index, address:value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus});
 										}
-										
-										
 									});	
 								}
 							});
@@ -111,12 +103,55 @@ vcancyApp
 			});		
 		});	
 		
+		firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
+			$scope.$apply(function(){
+				if(snapshot.val() != null){
+					$.map(snapshot.val(), function(value, key) {		
+						if(value.scheduleID == 0 && value.externalappStatus == "draft" ){
+							vm.pendingappsavail = 1;
+							vm.tabledata.push({applicationID: key,scheduleID:0, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus});
+						}
+					});
+					
+					vm.cols = [
+					  { field: "address", title: "Address", sortable: "address", show: true },
+					  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
+					  // { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
+					];
+					
+					// console.log(vm.tabledata);
+					vm.extracols = [
+						  { field: "scheduleID", title: "", show: true }
+						];
+						
+
+					//Sorting
+					vm.tableSorting = new NgTableParams({
+						sorting: {address: 'asc'}}, 
+					
+					{dataset: vm.tabledata
+					/*, {
+					total: vm.tabledata.length, // length of data
+					getData: function($defer, params) {
+						// console.log(params);
+						// use build-in angular filter
+						var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
+			
+						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+					}*/
+					 // dataset: vm.tabledata
+					})	
+				}			
+					
+			});
+		});
+		
 		
 		firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
 			$scope.$apply(function(){
 				if(snapshot.val() != null){
 					$.map(snapshot.val(), function(value, key) {		
-						if(value.scheduleID == 0){
+						if(value.scheduleID == 0 && value.externalappStatus == "submit" ){
 							vm.submittedappsavail = 1;
 							vm.submitappsdata.push({appID:key, address:value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus});
 						}
@@ -154,6 +189,12 @@ vcancyApp
 		} else {			
 			vm.loader = 0;				
 		}
+		
+		if(vm.pendingappsavail == 0) {
+			vm.tabledata.push({scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''});
+		} else {			
+			vm.loader = 0;				
+		}
 				
 				
 		vm.email = '';
@@ -169,7 +210,7 @@ vcancyApp
 		
 		vm.gotoRental = function(event){
 			if(vm.disablebutton == 0){
-				window.location.href = "#/rentalform/0";
+				window.location.href = "#/rentalform/0/0";
 			}
 		}
 		
