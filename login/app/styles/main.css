@@ -120,26 +120,6 @@ body {
     content: "";
     z-index: 0;
 }
-#sidebar{
-  z-index: 100;
-  -webkit-transform: translate3d(0px, 0, 0);
-  transform: translate3d(0px, 0, 0);
-  width: 60px;
-  opacity: 1;
-  filter: alpha(opacity=1);
-}
-#sidebar.toggled{
-  z-index: 100;
-  -webkit-transform: translate3d(0px, 0, 0);
-  transform: translate3d(0px, 0, 0);
-  width: 268px;
-  opacity: 1;
-  filter: alpha(opacity=1);
-}
-#sidebar .sidebar-inner{
-  width: 100%;
-  overflow: initial;
-}
 .main-menu > li > a > i {
     font-size: 24px;
     padding: 10px 0;
@@ -147,12 +127,7 @@ body {
 #sidebar .sidebar-inner .main-menu a{
   height: 45px;
 }
-#sidebar .sidebar-inner .main-menu a span{
-  display: none;
-}
-#sidebar.toggled .sidebar-inner .main-menu a span{
-  display: block;
-}
+
 header.header, nav.header {
   text-align: left;
   background-color: #1f2833 !important;
@@ -443,9 +418,7 @@ ul.header-inner li a:hover.button:before{
   width: 100%;
   font-size: 17px;
   color: #222;
-}
-.app_form label{
-  font-weight: initial;
+  font-weight: 500;
 }
 .app_form .date-picker{
   display: inline-flex;
@@ -462,6 +435,7 @@ ul.header-inner li a:hover.button:before{
     -moz-appearance: none;
     appearance: none;
     padding: 0;
+    font-weight: initial;
 }
 .app_form .form-control {
     display: initial;
@@ -485,6 +459,7 @@ ul.header-inner li a:hover.button:before{
 .app_form .checkbox label, .radio label {
     display: inline-block;
     margin-right: 10px;
+    font-weight: 500;
 }
 .app_form .radio .input-helper:before {
     top: 3px;
@@ -523,6 +498,10 @@ ul.header-inner li a:hover.button:before{
 .app_form .form-control.w-2{
   width: 20%;
   max-width: 100%;
+}
+.additional_applicant .col-sm-12, .additional_applicant .col-sm-4{
+  padding-right: 0;
+  padding-left: 0;
 }
 
 /*************** Custom Tooltip ***************/
@@ -569,6 +548,8 @@ ul.header-inner li a:hover.button:before{
   border: 2px solid #1aa1ab;
   padding: 20px;
   margin-bottom: 20px;
+  float: left;
+  width: 100%;
 }
 .cancel_status {
     color: #f00;
@@ -626,7 +607,38 @@ ul.header-inner li a:hover.button:before{
       max-width: 1170px;
   }
 }
+@media (max-width: 1200px) and (min-width: 769px){
+  #content {
+      margin-left: 60px;
+  }
+}
 @media screen and (min-width: 769px){
+  #sidebar{
+    z-index: 100;
+    -webkit-transform: translate3d(0px, 0, 0);
+    transform: translate3d(0px, 0, 0);
+    width: 60px;
+    opacity: 1;
+    filter: alpha(opacity=1);
+  }
+  #sidebar.toggled{
+    z-index: 100;
+    -webkit-transform: translate3d(0px, 0, 0);
+    transform: translate3d(0px, 0, 0);
+    width: 268px;
+    opacity: 1;
+    filter: alpha(opacity=1);
+  }
+  #sidebar .sidebar-inner{
+    width: 100%;
+    overflow: initial;
+  }
+  #sidebar .sidebar-inner .main-menu a span{
+    display: none;
+  }
+  #sidebar.toggled .sidebar-inner .main-menu a span{
+    display: block;
+  }
   .toggled ~ #content{
     margin-left: 280px;
     transition: all 0.3s linear;
