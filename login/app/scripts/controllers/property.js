@@ -527,6 +527,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				});
 				vm.addresschange();		
 				oldtimeSlotLen = vm.timeSlot.length;
+				vm.unitsOptional();
 			});
 		});
 	} else {
@@ -582,6 +583,14 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				})
 				$state.go('viewprop');
 			})
+		}
+	}
+	
+	// Units to be optional when house is selected
+	this.unitsOptional = function(proptype){
+		console.log(vm.prop.units);
+		if(vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)){
+			vm.prop.units = ' ';
 		}
 	}
 }])
