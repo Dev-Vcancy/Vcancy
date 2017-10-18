@@ -384,14 +384,14 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 							
 							if(snapshot.val() != undefined){
 								vm.appliedslots = $.map(snapshot.val(), function(value, index) {							
-									if(value.schedulestatus !== "cancelled" || value.schedulestatus !== "submitted"){	
+									if(value.schedulestatus !== "cancelled" && value.schedulestatus !== "submitted"){	
 										vm.scheduleIDs.push(index);
 										return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot).format('HH:mm'),scheduleID:index}];				
 									}
 								});
 							}
 							
-							// console.log(vm.slots);
+							console.log(vm.scheduleIDs);
 							// console.log(vm.appliedslots);	
 							
 							if(propstatus != false)	{

@@ -87,7 +87,8 @@ vcancyApp
 									$.map(snap.val(), function(v, k) {
 										console.log(v);
 										vm.rentaldata.tenantName = v.mainapplicant.applicantname;
-										vm.rentaldata.dob =  new Date(v.mainapplicant.applicantdob);												
+										vm.rentaldata.dob =  new Date(v.mainapplicant.applicantdob);
+										vm.rentaldata.sinno = v.mainapplicant.applicantsinno;
 										vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
 										vm.rentaldata.appposition =  v.mainapplicant.appposition;
 										vm.rentaldata.appemployerphone =  v.mainapplicant.appemployerphone;
@@ -104,7 +105,8 @@ vcancyApp
 											angular.forEach(v.minors, function(value, key) {
 											  vm.minor.push(key);
 											  vm.rentaldata.minorappname.push(value.minorapplicantname);
-											  vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));			  
+											  vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));
+											  vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);					  
 											});
 										}
 										vm.rentaldata.otherappname= [];
@@ -123,6 +125,7 @@ vcancyApp
 											  vm.adult.push(key);
 											  vm.rentaldata.otherappname.push(value.adultapplicantname);
 											  vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
+											  vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
 											  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
 											  vm.rentaldata.otherappposition.push(value.otherappposition);
 											  vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
