@@ -16,7 +16,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	vm.isDisabled = false;
 	vm.googleAddress = 0;
 	var oldtimeSlotLen = 0;
-	// console.log(vm.isDisabled);
+	// console.log(vm.isDisabled);	
 	
 	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
       var address = vm.prop.address.getPlace();
