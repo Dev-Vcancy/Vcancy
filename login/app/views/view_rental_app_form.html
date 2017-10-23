@@ -127,7 +127,7 @@
 						</div>
 
 						<p class="m-b-10" ng-show="vappctrl.rentaldata.rent_own == 'rent'">
-							How long have you lived at this address: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.live_time" class="form-control m-b-5 w-4" id="" placeholder=""></span>(months/years) Rent/Mortgage amount: $ <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.rentamt" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  class="form-control m-b-5" id="" placeholder=""></span> Reason for vacating existing home: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.vacantreason" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><br> 
+							How long have you lived at this address: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.live_time" class="form-control m-b-5 w-4" id="" placeholder="Months/Years"></span><br> Rent/Mortgage amount: $ <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.rentamt" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  class="form-control m-b-5" id="" placeholder=""></span> Reason for vacating existing home: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.vacantreason" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><br> 
 						</p>
 
 						<p class="m-b-10" >							
@@ -137,7 +137,7 @@
 
 					<h3 class="m-b-20 m-t-10 fw">Additional Applicant</h3>
 					<div class="border additional_applicant">
-						<div class="m-b-10">
+						<div class="fw">
 							<p>Additional Adult Occupants (18+) to occupy the premises: </p>
 
 							<div class="col-sm-12" ng-repeat="x in vappctrl.adult">
@@ -159,7 +159,7 @@
 							</div>
 						</div>
 
-						<div class="m-b-10">
+						<div class="fw">
 							<p>Additional Minors (0-18YRS) to occupy the premises: </p>
 
 							<div class="col-sm-12" ng-repeat="x in vappctrl.minor">
@@ -204,11 +204,14 @@
 							</div>
 						</div>
 
+						<h3 class="m-b-20 m-t-10 fw">Vehicle Information</h3>
 						<div class="border">
-			            	<h4 class="m-b-20 m-t-10">Vehicle Information:</h4>
 			            	<p class="m-b-10">Make: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.vehiclemake"  class="form-control m-b-5" id="" placeholder=""></span> Model: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.vehiclemodel"  type="text" class="form-control m-b-5" id="" placeholder=""></span>
 							Year: <span class="fg-line"><input readonly="true" required ng-pattern="/^([1-9][0-9]*)$/" type="text" ng-model="vappctrl.rentaldata.vehicleyear"  class="form-control m-b-5" id="" placeholder=""></p>
+						</div>
 
+						<h3 class="m-b-20 m-t-10 fw">Emergency Contact</h3>
+						<div class="border">
 							<p>Name and phone number of personal/family reference who may be contacted in the case of <u>emergency:</u></p>
 							<p class="m-b-10">Name: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span></p>
 						</div>
@@ -223,7 +226,7 @@
 						<div class="border">
 		            		<p class="f-500">You are authorized to obtaining credit checks & verifying details contained in this Application.</p>
 
-							<p class="m-b-10">We offer to rent <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.address" class="form-control m-b-5 w-3" id="" placeholder=""></span> (the “Rental unit”) at monthly rent of $ <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.rent" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  class="form-control m-b-5" id="" placeholder=""></span> for a term of <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.months" class="form-control m-b-5" id="" placeholder=""></span> months starting <span class="fg-line"><input readonly="true" required  type="text"  ng-model="vappctrl.rentaldata.startdate" class="form-control m-b-5" id="" placeholder=""></span>(date). Parking is required for <span class="fg-line"><input readonly="true" required   ng-model="vappctrl.rentaldata.parking" type="text" class="form-control" id="" placeholder=""></span> vehicles (licensed only). This unit is strictly <strong>NON SMOKING.</strong> This offer is subject to acceptance by the landlord/property management company that listed the property. This application is made on the understanding that no betterments will be provided to the Rental Unit except those which may be specifically requested in this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.</p>
+							<p class="m-b-10">We offer to rent <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.address" class="form-control m-b-5 w-3" id="" placeholder="Address"></span> (the “Rental unit”) at monthly rent of $ <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.rent" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  class="form-control m-b-5" id="" placeholder=""></span> for a term of <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.months" class="form-control m-b-5" id="" placeholder=""></span> months starting <span class="fg-line"><input readonly="true" required  type="text"  ng-model="vappctrl.rentaldata.startdate" class="form-control m-b-5" id="" placeholder=""></span>(date). Parking is required for <span class="fg-line"><input readonly="true" required   ng-model="vappctrl.rentaldata.parking" type="text" class="form-control" id="" placeholder=""></span> vehicles (licensed only). This unit is strictly <strong>NON SMOKING.</strong> This offer is subject to acceptance by the landlord/property management company that listed the property. This application is made on the understanding that no betterments will be provided to the Rental Unit except those which may be specifically requested in this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.</p>
 
 							<p class="m-b-10">It is understood that this application <u>will not be processed unless fully completed.</u></p>
 
