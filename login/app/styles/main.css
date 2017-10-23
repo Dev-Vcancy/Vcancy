@@ -391,6 +391,9 @@ ul.header-inner li a:hover.button:before{
 .btn {
     text-transform: initial;
 }
+.pointer{
+  cursor: pointer;
+}
 
 /*************** Dashboard ***************/
 .home_block{
@@ -502,6 +505,10 @@ ul.header-inner li a:hover.button:before{
 .additional_applicant .col-sm-12, .additional_applicant .col-sm-4{
   padding-right: 0;
   padding-left: 0;
+}
+.mandatory {
+  font-size: 25px;
+  color: #f00;
 }
 
 /*************** Custom Tooltip ***************/
@@ -721,4 +728,29 @@ ul.header-inner li a:hover.button:before{
       width: 100%;
       margin-bottom: 5px;
   } 
+}
+
+/*************** Print Application ***************/
+
+@media print {
+  body {
+    zoom:70%;
+  }
+  @page :left {
+    margin: 0.5cm;
+  }
+  @page :right {
+    margin: 0.5cm;
+  }
+  header {
+    position:fixed;
+    top:-10;
+    height:20px;
+  }
+  .app_form .card-body{
+    margin-top: -140px;
+  }
+  .border{
+        page-break-inside: avoid;
+    }
 }

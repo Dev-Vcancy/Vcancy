@@ -31,7 +31,7 @@
 								</div>
 								<div>
 									<span class="btn btn-info btn-file">
-										<span class="fileinput-new">Select image</span>
+										<span class="fileinput-new">Add image</span>
 										<span class="fileinput-exists">Change</span>
 										<input type="hidden" ng-model="propctrl.prop.propimg" name="propimg" id="propimg" value="{{propctrl.prop.propimg}}">
 										<input type="file" >
@@ -50,7 +50,7 @@
 								</div>
 							</div>
 						   <div class="col-sm-3 m-b-20" >                
-								<select chosen="" class="form-control" name="proptype" ng-model="propctrl.prop.proptype" ng-change="propctrl.unitsOptional('house')"  required data-placeholder="Prop type" class="w-100 localytics-chosen" >
+								<select chosen="" class="form-control pointer" name="proptype" ng-model="propctrl.prop.proptype" ng-change="propctrl.unitsOptional('house')"  required data-placeholder="Prop type" class="w-100 localytics-chosen" >
 									<option value="">Property type</option>
 									<option value="house">House</option>
 									<option value="townhouse">Town House</option>
@@ -93,7 +93,7 @@
 										<div class="date-picker input-group" ng-class="{ 'is-opened': x.opened == true }">
 											<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 											<div class="fg-line" ng-class="{ 'fg-toggled': x.opened == true }">
-												<input readonly='true' ng-click="propctrl.open($event, x)" ng-change="propctrl.datetimeslotchanged($index)" type="text" class="form-control" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="propctrl.prop.date[$index]" name = "date[]" is-open="x.opened" min-date="propctrl.minDate" datepicker-options="propctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+												<input readonly='true' ng-click="propctrl.open($event, x)" ng-change="propctrl.datetimeslotchanged($index)" type="text" class="form-control pointer" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="propctrl.prop.date[$index]" name = "date[]" is-open="x.opened" min-date="propctrl.minDate" datepicker-options="propctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
 											</div>
 										</div>
 									</div>
