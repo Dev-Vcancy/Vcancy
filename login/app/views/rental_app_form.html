@@ -109,6 +109,16 @@
 										</label>
 									</div>
 								</div>
+								<div class="fileinput fileinput-new" data-provides="fileinput">
+									<span class="btn btn-primary btn-file m-r-10">
+										<span class="fileinput-new">Select file</span>
+										<span class="fileinput-exists">Change</span>
+										<input type="hidden" ng-model="rctrl.rentaldata.appfiles" name="appfiles" value="{{rctrl.rentaldata.appfiles}}">
+										<input type="file" id="appfiles" >
+									</span>
+									<span class="fileinput-filename">{{rctrl.rentaldata.appfiles}}</span>
+									<a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
+								</div>
 							</p>
 						</div>
 

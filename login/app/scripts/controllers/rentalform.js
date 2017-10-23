@@ -78,6 +78,7 @@ vcancyApp
 		vm.rentaldata.pets =  '';
 		vm.rentaldata.petsdesc =  '';
 		vm.rentaldata.smoking =  '';
+		vm.rentaldata.appfiles = '';
 		
 		vm.rentaldata.appcurrentemployer =  '';
 		vm.rentaldata.appposition =  '';
@@ -212,14 +213,14 @@ vcancyApp
 			console.log(vm.minor,vm.rentaldata);
 		}
 		
-		if($stateParams.scheduleId != 0) {
-			firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo($stateParams.scheduleId).once("value", function(snapshot) {	
+		if(applicationID == 0) {
+			firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).limitToLast(1).once("value", function(snapshot) {	
 				console.log(snapshot.val());
 				$scope.$apply(function(){
 					if(snapshot.val() !== null) {
-						$.map(snapshot.val(),function(value,index){						
+						$.map(snapshot.val(),function(value,index){	
+							vm.draftdata = "false";					
 							vm.applicationID = index;
-							vm.draftdata = "true";
 							vm.tenantdata.tenantID = value.tenantID;
 							vm.scheduledata.scheduleID = value.scheduleID;
 							vm.propdata.propID = value.propID;
@@ -244,6 +245,7 @@ vcancyApp
 							vm.rentaldata.pets = value.pets;
 							vm.rentaldata.petsdesc = value.petsdesc;
 							vm.rentaldata.smoking = value.smoking;
+							vm.rentaldata.appfiles = value.appfiles;
 							vm.rentaldata.vehiclemake = value.vehiclemake;
 							vm.rentaldata.vehiclemodel = value.vehiclemodel;
 							vm.rentaldata.vehicleyear = value.vehicleyear;						
@@ -255,7 +257,7 @@ vcancyApp
 							vm.rentaldata.reftwo_name = value.reftwo_name;
 							vm.rentaldata.reftwo_phone = value.reftwo_phone;
 							vm.rentaldata.reftwo_relation = value.reftwo_relation;
-							vm.rentaldata.dated = new Date(value.dated);
+							vm.rentaldata.dated = value.dated != '' ? new Date(value.dated) : '';
 						});
 						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
 							$scope.$apply(function(){
@@ -263,7 +265,7 @@ vcancyApp
 									$.map(snap.val(), function(v, k) {
 										console.log(v);
 										vm.tenantdata.tenantName = v.mainapplicant.applicantname;
-										vm.rentaldata.dob =  new Date(v.mainapplicant.applicantdob);
+										vm.rentaldata.dob =  v.mainapplicant.applicantdob != '' ? new Date(v.mainapplicant.applicantdob) : '';
 										vm.rentaldata.sinno = v.mainapplicant.applicantsinno;												
 										vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
 										vm.rentaldata.appposition =  v.mainapplicant.appposition;
@@ -278,14 +280,14 @@ vcancyApp
 										angular.forEach(v.minors, function(value, key) {
 										  vm.minor.push(key);
 										  vm.rentaldata.minorappname.push(value.minorapplicantname);
-										  vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));
+										  vm.rentaldata.minorappdob.push(value.minorapplicantdob != '' ? new Date(value.minorapplicantdob) : '');
 										  vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);			  
 										});
 										
 										angular.forEach(v.otherapplicants, function(value, key) {
 										  vm.adult.push(key);
 										  vm.rentaldata.otherappname.push(value.adultapplicantname);
-										  vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
+										  vm.rentaldata.otherappdob.push(value.adultapplicantdob != '' ? new Date(value.adultapplicantdob) : '');
 										  vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
 										  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
 										  vm.rentaldata.otherappposition.push(value.otherappposition);
@@ -372,6 +374,7 @@ vcancyApp
 							vm.rentaldata.pets = value.pets;
 							vm.rentaldata.petsdesc = value.petsdesc;
 							vm.rentaldata.smoking = value.smoking;
+							vm.rentaldata.appfiles = value.appfiles;
 							vm.rentaldata.vehiclemake = value.vehiclemake;
 							vm.rentaldata.vehiclemodel = value.vehiclemodel;
 							vm.rentaldata.vehicleyear = value.vehicleyear;						
@@ -448,6 +451,7 @@ vcancyApp
 			
 		vm.rentalAppSubmit = function(){
 			console.log(vm.rentaldata, vm.draft);
+			alert($('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime());
 			var tenantID = vm.tenantdata.tenantID;
 			
 			if($stateParams.scheduleId != 0){
@@ -499,6 +503,11 @@ vcancyApp
 			var pets = vm.rentaldata.pets;
 			var petsdesc = vm.rentaldata.petsdesc;
 			var smoking = vm.rentaldata.smoking;
+			
+			var file = $('#appfiles').val().split('\\').pop().split('/').pop();
+			var filename = $('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime();
+			var fileext = $('#appfiles').val().split('\\').pop().split('/').pop().split('.').pop().toLowerCase();
+			var appfiles = "images/applicationuploads/"+filename+"."+fileext;
 			
 			var appcurrentemployer = vm.rentaldata.appcurrentemployer;
 			var appposition = vm.rentaldata.appposition;
@@ -590,6 +599,7 @@ vcancyApp
 					pets: pets,
 					petsdesc: petsdesc,
 					smoking:smoking,
+					appfiles: appfiles,
 					
 					vehiclemake: vehiclemake,
 					vehiclemodel: vehiclemodel,
@@ -679,6 +689,7 @@ vcancyApp
 					pets: pets,
 					petsdesc: petsdesc,
 					smoking:smoking,
+					appfiles: appfiles,
 					
 					vehiclemake: vehiclemake,
 					vehiclemodel: vehiclemodel,
