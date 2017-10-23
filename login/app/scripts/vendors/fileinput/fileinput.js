@@ -87,6 +87,7 @@
         files[0].result = re.target.result
 		
         element.find('#propimg').val(re.target.result);
+		element.find('#appfiles').val(re.target.result);
         element.find('.fileinput-filename').text(file.name)
         
         // if parent has max-height, using `(max-)height: 100%` on child doesn't take padding and border into account
@@ -130,6 +131,7 @@
     this.$element.find('.fileinput-filename').text('')
     this.$element.addClass('fileinput-new').removeClass('fileinput-exists')
 	this.$element.find('#propimg').val('');
+		element.find('#appfiles').val('');
     
     if (e !== undefined) {
       this.$input.trigger('change')

@@ -105,7 +105,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	//  TIMEPICKER
 	vm.mytime = new Date();
-
+	
 	vm.hstep = 1;
 	vm.mstep = 5;
 	
@@ -127,7 +127,6 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		d.setMinutes( 0 );
 		vm.mytime = d;
 	};
-	
 	
 	
 	vm.addresschange = function(){
