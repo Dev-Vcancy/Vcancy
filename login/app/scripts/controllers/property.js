@@ -309,11 +309,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 						propertylink: propertylink
 					})
 					
-					var emailData = {};
-					emailData.propertylink = propertylink;
+					var emailData = '<p style="margin: 10px auto;">Congratulations! Your new property, '+address+', has been successfully added to Vcancy.<br><br> <p style="margin: 10px auto;">You have registered your new property '+address+' to Vcancy.<br><br>Please share the following property link '+propertylink+' with the renters to start viewings and applications on your property.<br><br>';
 					
 					// Send Email
-					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Property Added', 'addproperty', emailData.propertylink);
+					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Property link generated for New property on Vcancy', 'addproperty', emailData);
 					
 					$state.go('viewprop');
 					
