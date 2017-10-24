@@ -24,7 +24,8 @@ var vcancyApp = angular
 	'angularMoment',
 	'gm',
 	'unsavedChanges',
-	'AngularPrint'
+	'AngularPrint',
+	'ngFileUpload'
   ]); 
   
 vcancyApp.service('emailSendingService',function($http){
