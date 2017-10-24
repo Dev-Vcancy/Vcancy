@@ -751,6 +751,16 @@ ul.header-inner li a:hover.button:before{
     margin-top: -140px;
   }
   .border{
-        page-break-inside: avoid;
-    }
+    page-break-inside: avoid;
+  }
+  .radio input:checked + .input-helper:after {
+    transform: scale(1) !important;
+    display: block !important;
+    width: 9px !important;
+    height: 9px !important;
+    background: #009688 !important;
+    border-radius: 50% !important;
+    top: 8px !important;
+    left: 5px !important; 
+  }
 }
