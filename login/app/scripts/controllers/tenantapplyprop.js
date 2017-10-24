@@ -4,7 +4,7 @@
 // Apply Property
 //=================================================
 
-vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','slotsBuildService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window,$filter,slotsBuildService) {
+vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','slotsBuildService','emailSendingService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window,$filter,slotsBuildService,emailSendingService) {
 	
 	var vm = this;
 	vm.emailVerifiedError = '';
@@ -219,6 +219,16 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				$state.go('applicationThanks');
 				// $rootScope.success = 'Application for property successfully sent!';	
 				console.log('Application for property successfully sent!');
+				
+				// Mail to Landlord
+				var emailData = '<p style="margin: 10px auto;">Congratulations,<br> The Tenant '+name+' has scheduled for your property'+address+'. <br><br>Log into http://35.182.211.61/login/dist/#/ to connect with your Tenant!</p><!--Confirm Button Cancel Button -->';
+				// Send Email
+				emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new viewing request on your property', 'newviewingreq', emailData);
+				
+				// Mail to Tenant
+				var emailData = '<p style="margin: 10px auto;">Thank you, your viewing request on property '+address+' has been generated and we will send you an email once the landlord accepts your viewing invitation</p>';
+				// Send Email
+				emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Viewing request generated', 'viewingreq', emailData);
 			})	
 		} else {
 			vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'
