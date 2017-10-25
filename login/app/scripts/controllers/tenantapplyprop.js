@@ -220,15 +220,17 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				// $rootScope.success = 'Application for property successfully sent!';	
 				console.log('Application for property successfully sent!');
 				
-				// Mail to Landlord
-				var emailData = '<p style="margin: 10px auto;">Congratulations,<br> The Tenant '+name+' has scheduled for your property'+address+'. <br><br>Log into http://35.182.211.61/login/dist/#/ to connect with your Tenant!</p><!--Confirm Button Cancel Button -->';
-				// Send Email
-				emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new viewing request on your property', 'newviewingreq', emailData);
+				firebase.database().ref('users/'+landlordID).once("value", function(snapshot) {
+					// Mail to Landlord
+					var emailData = '<p>Hello, </p><p>'+name+' has requested a viewing at '+dateslot+', '+timerange+'for '+address+'.</p><p>To accept this invitation and view renter details, please log in http://35.182.211.61/login/dist/#/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+					// Send Email
+					emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name+' has requested a viewing for '+address, 'newviewingreq', emailData);
+				});
 				
 				// Mail to Tenant
-				var emailData = '<p style="margin: 10px auto;">Thank you, your viewing request on property '+address+' has been generated and we will send you an email once the landlord accepts your viewing invitation</p>';
+				var emailData = '<p>Hello '+name+', </p><p>Your viewing request for '+address+' at '+dateslot+', '+timerange+' has been sent.</p><p>To view your requests, please log in http://35.182.211.61/login/dist/#/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 				// Send Email
-				emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Viewing request generated', 'viewingreq', emailData);
+				emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Viewing request for '+address, 'viewingreq', emailData);
 			})	
 		} else {
 			vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'

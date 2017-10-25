@@ -210,6 +210,7 @@ vcancyApp
 		
 		vm.gotoRental = function(event){
 			if(vm.disablebutton == 0){
+				$rootScope.renterExternalEmail = vm.email;
 				window.location.href = "#/rentalform/0/0";
 			}
 		}
