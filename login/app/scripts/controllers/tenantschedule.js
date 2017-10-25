@@ -85,6 +85,17 @@ vcancyApp
 				firebase.database().ref('applyprop/'+index).update({	
 					schedulestatus: "cancelled"
 				})
+				firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
+					// var emailData = '<p style="margin: 10px auto;">Viewing request on property '+snapshot.val().address+' has been cancelled by tenant.</p>';
+					// Send Email
+					// emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your generated viewing request status on Vcancy', 'cancelstatus', emailData);
+					
+					var emailData = '<p style="margin: 10px auto;">Your viewing request on property '+snapshot.val().address+' has been cancelled.</p>';
+					
+					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your generated viewing request status on Vcancy', 'cancelstatus', emailData);
+				});
+				
+				
 				$state.reload();
 			}
 		}

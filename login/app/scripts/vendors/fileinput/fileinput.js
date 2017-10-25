@@ -31,7 +31,8 @@
     if (this.$input.length === 0) return
 
     this.name = this.$input.attr('name') || options.name
-
+	
+	
     this.$hidden = this.$element.find('input[type=hidden][name="' + this.name + '"]')
     if (this.$hidden.length === 0) {
       this.$hidden = $('<input type="hidden">').insertBefore(this.$input)
@@ -77,6 +78,7 @@
     var file = files[0]
 
     if (this.$preview.length > 0 && (typeof file.type !== "undefined" ? file.type.match(/^image\/(gif|png|jpeg)$/) : file.name.match(/\.(gif|png|jpe?g)$/i)) && typeof FileReader !== "undefined") {
+		// console.log(file.name);
       var reader = new FileReader()
       var preview = this.$preview
       var element = this.$element
@@ -85,7 +87,7 @@
         var $img = $('<img>')
         $img[0].src = re.target.result
         files[0].result = re.target.result
-		
+		element.find('#filename').val(file.name);
         element.find('#propimg').val(re.target.result);
 		element.find('#appfiles').val(re.target.result);
         element.find('.fileinput-filename').text(file.name)

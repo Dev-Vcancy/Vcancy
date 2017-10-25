@@ -10,7 +10,7 @@
             </div>
 
 		    <div class="card app_form" print-section >
-			<form class="form-horizontal" name="rentalForm" ng-submit="rctrl.rentalAppSubmit()" role="form" novalidate> <!--unsaved-warning-form -->
+			<form class="form-horizontal" name="rentalForm"  enctype="multipart/form-data" ng-submit="rctrl.rentalAppSubmit()" role="form" novalidate> <!--unsaved-warning-form -->
 					<input type="hidden" name="scheduleID" ng-model="rctrl.scheduledata.scheduleID" class="form-control" >
 					<input type="hidden" name="tenantID" ng-model="rctrl.tenantdata.tenantID" class="form-control">	
 					<input type="hidden" name="propID" ng-model="rctrl.propdata.propID" class="form-control">	
@@ -110,14 +110,20 @@
 									</div>
 								</div>
 								<div class="fileinput fileinput-new" data-provides="fileinput">
-									<span class="btn btn-primary btn-file m-r-10">
-										<span class="fileinput-new">Select file</span>
-										<span class="fileinput-exists">Change</span>
-										<input type="hidden" ng-model="rctrl.rentaldata.appfiles" name="appfiles" value="{{rctrl.rentaldata.appfiles}}">
-										<input type="file" id="appfiles" >
-									</span>
-									<span class="fileinput-filename">{{rctrl.rentaldata.appfiles}}</span>
-									<a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
+									<div class="fileinput-preview thumbnail" style="display:none" data-trigger="fileinput" style="width: 100px; height: 74px; border:1px solid #ccc;">
+										<img src="{{rctrl.rentaldata.appfiles}}" style="width:100%; margin-top:0 !important;"/>
+									</div>
+									<div>
+										<span class="btn btn-primary btn-file m-r-10">
+											<span class="fileinput-new">Select file</span>
+											<span class="fileinput-exists">Change</span>
+											<input type="hidden" ng-model="rctrl.rentaldata.appfiles" name="appfiles" value="{{rctrl.rentaldata.appfiles}}" id="appfiles" >
+											<input type="hidden" ng-model="rctrl.rentaldata.filename" name="filename" value="{{rctrl.rentaldata.filename}}" id="filename" >
+											<input type="file" name="file">
+										</span>
+										<span class="fileinput-filename">{{rctrl.rentaldata.appfiles}}</span>
+										<a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
+									</div>
 								</div>
 							</p>
 						</div>

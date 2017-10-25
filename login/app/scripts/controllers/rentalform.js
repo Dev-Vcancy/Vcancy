@@ -5,7 +5,7 @@
 //=================================================
 
 vcancyApp
-    .controller('rentalformCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
+    .controller('rentalformCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams','Upload','$http',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams,Upload, $http) {
 		
 		var vm = this;
 		var tenantID = localStorage.getItem('userID');
@@ -451,7 +451,7 @@ vcancyApp
 			
 		vm.rentalAppSubmit = function(){
 			console.log(vm.rentaldata, vm.draft);
-			alert($('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime());
+			// alert($('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime());
 			var tenantID = vm.tenantdata.tenantID;
 			
 			if($stateParams.scheduleId != 0){
@@ -504,10 +504,14 @@ vcancyApp
 			var petsdesc = vm.rentaldata.petsdesc;
 			var smoking = vm.rentaldata.smoking;
 			
-			var file = $('#appfiles').val().split('\\').pop().split('/').pop();
-			var filename = $('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime();
-			var fileext = $('#appfiles').val().split('\\').pop().split('/').pop().split('.').pop().toLowerCase();
-			var appfiles = "images/applicationuploads/"+filename+"."+fileext;
+			// var file = $('#appfiles').val().split('\\').pop().split('/').pop();
+			// var filename = $('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime();
+			// var fileext = $('#appfiles').val().split('\\').pop().split('/').pop().split('.').pop().toLowerCase();
+			// var appfiles = "images/applicationuploads/"+filename+"."+fileext;
+			
+			var appfiles = $('#appfiles').val();
+			var filename = $('#filename').val() === '' ? '' : $('#filename').val();
+			var filepath = "http://35.182.211.61/login/dist/dist/images/"+filename;
 			
 			var appcurrentemployer = vm.rentaldata.appcurrentemployer;
 			var appposition = vm.rentaldata.appposition;
@@ -599,7 +603,7 @@ vcancyApp
 					pets: pets,
 					petsdesc: petsdesc,
 					smoking:smoking,
-					appfiles: appfiles,
+					appfiles: filepath,
 					
 					vehiclemake: vehiclemake,
 					vehiclemodel: vehiclemodel,
@@ -656,8 +660,6 @@ vcancyApp
 									schedulestatus: "submitted"
 								})
 							}
-																
-							$state.go('tenantapplications');
 						}				
 					})
 				})
@@ -689,7 +691,7 @@ vcancyApp
 					pets: pets,
 					petsdesc: petsdesc,
 					smoking:smoking,
-					appfiles: appfiles,
+					appfiles: filepath,
 					
 					vehiclemake: vehiclemake,
 					vehiclemodel: vehiclemodel,
@@ -750,13 +752,41 @@ vcancyApp
 						firebase.database().ref('applyprop/'+scheduleID).update({	
 							schedulestatus: "submitted"
 						})
-					}			
-
-					
-					$state.go('tenantapplications');				
+					}						
 				})
 			}
+			$state.go('tenantapplications');
+			
+			if(filename != ''){
+				vm.upload(appfiles,filename);
+			}
+			
+			
 		}
+		
+		vm.upload = function (file,filename) {
+			var req = {
+				 method: 'POST',
+				 url: 'http://localhost:1337/fileupload/upload',
+				 headers: {
+					'Content-Type': 'application/json',
+					'Access-Control-Allow-Origin': '*',
+					"Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+				 },
+				 data: { 
+					file:file,
+					filename:filename
+					}
+				}
+
+			$http(req).then(function successCallback(response) {	
+				console.log(response);
+				console.log("Done");
+			}, function errorCallback(response) {
+				console.log("Fail");
+			});			
+        };
+		
 		
 		vm.rentalApp = function(){
 			vm.draft = "true";
