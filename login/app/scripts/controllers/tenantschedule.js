@@ -91,7 +91,7 @@ vcancyApp
 					// emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your generated viewing request status on Vcancy', 'cancelstatus', emailData);
 					
 					var emailData = '<p style="margin: 10px auto;">Your viewing request on property '+snapshot.val().address+' has been cancelled.</p>';
-					Send Email
+					
 					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your generated viewing request status on Vcancy', 'cancelstatus', emailData);
 				});
 				
