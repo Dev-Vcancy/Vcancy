@@ -27,9 +27,9 @@
 									<a class="btn btn-xs bgm-red" ng-hide="row.schedulestatus == 'cancelled' || row.schedulestatus == 'submitted'"  ng-click="tschedulectrl.cancelschedule(row.scheduleID)">Cancel</a>
 								</td>		           
 							</tr>
-                                                        <tr ng-if="tschedulectrl.schedulesavail == 0"><td colspan='4'>
-                                                                No pending schedules yet </td>
-                                                        </tr>
+							<tr ng-if="tschedulectrl.schedulesavail == 0"><td colspan='4'>
+									No pending schedules yet </td>
+							</tr>
 						</table>						
 		            </div>          
         		</div>

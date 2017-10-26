@@ -238,6 +238,13 @@ vcancyApp
 			templateUrl: 'views/termspublic.html',	
 		}) 
 		
+		.state ('viewexternalapplication', {
+			url: '/viewexternalapp/{appID}',
+			controller: 'viewappCtrl',
+			controllerAs: 'vappctrl',
+			templateUrl: 'views/view_rental_app_form.html',
+		})
+		
 		// Landlord Routes
 		.state ('landlorddashboard', {
 			url: '/landlorddboard',
@@ -380,6 +387,15 @@ vcancyApp
 			templateUrl: 'views/rental_app_form.html',
 			resolve: { tenantauthenticate: tenantauthenticate }
 		})
+				
+		.state ('viewapplication1', {
+			url: '/viewapp/{appID}',
+			controller: 'viewappCtrl',
+			controllerAs: 'vappctrl',
+			templateUrl: 'views/view_rental_app_form.html',
+			resolve: { tenantauthenticate: tenantauthenticate }
+		})
+		
 		
 		function authenticate($q,$state, $timeout, $rootScope) {
 			// console.log($rootScope.user.emailVerified);

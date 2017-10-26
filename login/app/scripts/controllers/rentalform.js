@@ -278,7 +278,12 @@ vcancyApp
 												if(snap.val()) {
 													vm.propdata = snap.val();
 													vm.propdata.propID = snap.key;	
-													vm.propdata.address = vm.propdata.units +" - "+vm.propdata.address;
+													if(vm.propdata.units == ' '){
+														var units = '';
+													} else {
+														var units = vm.propdata.units +" - ";
+													}
+													vm.propdata.address = units+vm.propdata.address;
 												}
 											});								
 										});				
@@ -662,6 +667,7 @@ vcancyApp
 					firebase.database().ref('submitapps/').limitToLast(1).once("child_added", function (snapshot) {		
 				  
 						if(snapshot.key != "undefined"){
+							vm.applicationID = snapshot.key;
 							var applicantsdata = {
 								"applicationID": snapshot.key,
 								"mainapplicant": {
@@ -801,7 +807,7 @@ vcancyApp
 						emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname+' has submitting a rental application', 'rentalreceive', emailData);
 					});
 				} else {
-					var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted an online rental application via Vcancy.</p><p>If you want to organize your rental viewings, know who’s coming, receive and compare online rental applications and run credit and background checks all from one-place then you should check out at vcancy.com http://35.182.211.61/login/dist/#/</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted an online rental application via Vcancy.Follow the link to check out the rental application http://35.182.211.61/login/dist/#/viewexternalapp/'+vm.applicationID+'.</p><p>If you want to organize your rental viewings, know who’s coming, receive and compare online rental applications and run credit and background checks all from one-place then you should check out at vcancy.com http://35.182.211.61/login/dist/#/</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 					
 					emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname+' has submitting a rental application', 'rentalreceive', emailData);
 				}
@@ -838,9 +844,9 @@ vcancyApp
 				console.log("Fail");
 			});			
         };
+
 		
-		
-		vm.rentalApp = function(){
+		vm.savechanges = function(){
 			vm.draft = "true";
 			// alert(vm.draft);
 			vm.rentalAppSubmit();

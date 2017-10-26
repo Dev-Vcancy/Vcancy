@@ -8,9 +8,12 @@ vcancyApp
     .controller('viewappCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
 		
 		var vm = this;
-		var tenantID = localStorage.getItem('userID');
+		// var tenantID = localStorage.getItem('userID');
 		var applicationID = $stateParams.appID;
-		var tenantEmail = localStorage.getItem('userEmail');
+		// var tenantEmail = localStorage.getItem('userEmail');
+		
+		vm.publicappview = $state.current.name == "viewexternalapplication" ? "1" : "0";
+		
 		
 		vm.adult = [];
 		vm.minor = [];
@@ -66,6 +69,7 @@ vcancyApp
 						vm.rentaldata.pets = value.pets;
 						vm.rentaldata.petsdesc = value.petsdesc;
 						vm.rentaldata.smoking = value.smoking;
+						vm.rentaldata.appfiles = value.appfiles;
 						vm.rentaldata.vehiclemake = value.vehiclemake;
 						vm.rentaldata.vehiclemodel = value.vehiclemodel;
 						vm.rentaldata.vehicleyear = value.vehicleyear;						
