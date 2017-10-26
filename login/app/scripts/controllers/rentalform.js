@@ -5,13 +5,18 @@
 //=================================================
 
 vcancyApp
-    .controller('rentalformCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams','Upload','$http',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams,Upload, $http) {
+    .controller('rentalformCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams','Upload','$http','emailSendingService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams,Upload, $http,emailSendingService) {
 		
 		var vm = this;
 		var tenantID = localStorage.getItem('userID');
 		var scheduleID = $stateParams.scheduleId;
 		var applicationID = $stateParams.applicationId;
 		var tenantEmail = localStorage.getItem('userEmail');
+		vm.submitemail = $rootScope.renterExternalEmail;
+		console.log(vm.submitemail);
+		$rootScope.renterExternalEmail = '';
+		console.log($rootScope.renterExternalEmail);
+		
 		vm.draft = "false";
 		vm.draftdata = "false";
 		
@@ -45,6 +50,7 @@ vcancyApp
 		vm.tenantdata.tenantID =  '';
 		vm.scheduledata.scheduleID =  '';
 		vm.propdata.propID =  '';
+		vm.propdata.landlordID =  '';
 		
 		vm.propdata.address =  '';
 		vm.propdata.rent =  '';
@@ -222,10 +228,11 @@ vcancyApp
 							vm.draftdata = "false";					
 							vm.applicationID = index;
 							vm.tenantdata.tenantID = value.tenantID;
-							vm.scheduledata.scheduleID = value.scheduleID;
-							vm.propdata.propID = value.propID;
+							// vm.scheduledata.scheduleID = value.scheduleID;
+							// vm.propdata.propID = value.propID;
+							// vm.propdata.landlordID = value.landlordID;
 							
-							vm.propdata.address = value.address;
+							// vm.propdata.address = value.address;
 							vm.propdata.rent = value.rent;
 							vm.rentaldata.months = value.months;
 							vm.rentaldata.startdate = value.startdate;
@@ -258,6 +265,26 @@ vcancyApp
 							vm.rentaldata.reftwo_phone = value.reftwo_phone;
 							vm.rentaldata.reftwo_relation = value.reftwo_relation;
 							vm.rentaldata.dated = value.dated != '' ? new Date(value.dated) : '';
+							
+							firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
+								// console.log(snapshot.val())
+								$scope.$apply(function(){
+									if(snapshot.val()) {
+										vm.scheduledata = snapshot.val();
+										vm.scheduledata.scheduleID = snapshot.key;
+										
+										firebase.database().ref('properties/'+vm.scheduledata.propID).once("value", function(snap) {	
+											$scope.$apply(function(){
+												if(snap.val()) {
+													vm.propdata = snap.val();
+													vm.propdata.propID = snap.key;	
+													vm.propdata.address = vm.propdata.units +" - "+vm.propdata.address;
+												}
+											});								
+										});				
+									} 
+								});
+							});
 						});
 						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
 							$scope.$apply(function(){
@@ -353,7 +380,7 @@ vcancyApp
 							vm.tenantdata.tenantID = value.tenantID;
 							vm.scheduledata.scheduleID = value.scheduleID;
 							vm.propdata.propID = value.propID;
-							
+							vm.propdata.landlordID = value.landlordID;
 							vm.propdata.address = value.address;
 							vm.propdata.rent = value.rent;
 							vm.rentaldata.months = value.months;
@@ -455,12 +482,14 @@ vcancyApp
 			var tenantID = vm.tenantdata.tenantID;
 			
 			if($stateParams.scheduleId != 0){
-				var scheduleID = vm.scheduledata.scheduleID;
+				var scheduleID = $stateParams.scheduleId;
 				var propID = vm.propdata.propID;
-				var externalappStatus = "";
+				var landlordID = vm.propdata.landlordID;
+				var externalappStatus = "submit";
 			} else {
 				var scheduleID = 0;
 				var propID = 0;	
+				var landlordID = 0;
 				var externalappStatus = "submit";
 				if(vm.draft == "true"){
 					var externalappStatus = "draft";					
@@ -468,6 +497,7 @@ vcancyApp
 					var externalappStatus = "submit";	
 				}
 			}
+			console.log(externalappStatus);
 			
 			var address = vm.propdata.address;
 			var rent = vm.propdata.rent;
@@ -580,6 +610,7 @@ vcancyApp
 					tenantID: tenantID,
 					scheduleID: scheduleID,
 					propID: propID,
+					landlordID: landlordID,
 					
 					address: address,
 					rent: rent,
@@ -668,6 +699,7 @@ vcancyApp
 					tenantID: tenantID,
 					scheduleID: scheduleID,
 					propID: propID,
+					landlordID: landlordID,
 					
 					address: address,
 					rent: rent,
@@ -755,11 +787,31 @@ vcancyApp
 					}						
 				})
 			}
-			$state.go('tenantapplications');
 			
 			if(filename != ''){
 				vm.upload(appfiles,filename);
 			}
+			
+			if(vm.draft == "false") {
+				if(landlordID != 0) {
+					firebase.database().ref('users/'+landlordID).once("value", function(snap) {
+						console.log(snap.val());
+						var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted a rental application for '+address+'.</p><p>To view the application, please log in http://35.182.211.61/login/dist/#/ and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+						
+						emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname+' has submitting a rental application', 'rentalreceive', emailData);
+					});
+				} else {
+					var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted an online rental application via Vcancy.</p><p>If you want to organize your rental viewings, know who’s coming, receive and compare online rental applications and run credit and background checks all from one-place then you should check out at vcancy.com http://35.182.211.61/login/dist/#/</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+					
+					emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname+' has submitting a rental application', 'rentalreceive', emailData);
+				}
+					
+				var emailData = '<p>Hello '+applicantname+', </p><p>Your rental application has been submitted to '+applicantemail+'.</p><p>To make changes, please log in  http://35.182.211.61/login/dist/#/ and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+					
+				emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
+			}
+			$state.go('tenantapplications');
+			
 			
 			
 		}
