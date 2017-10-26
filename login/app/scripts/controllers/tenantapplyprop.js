@@ -77,7 +77,7 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 		
 		firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
 			$scope.$apply(function(){
-				// console.log(snapshot.val());
+				console.log(snapshot.val());
 					
 				vm.alreadyBookedSlot = 0;
 				vm.appliedslots = [];
@@ -94,19 +94,25 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				
 					vm.appliedslots = $.map(snapshot.val(), function(value, index) {			
 						if(value.schedulestatus !== "cancelled"){
-							return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot), person:1}];
+							return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot).format('HH:mm'), person:1}];
 						}						
 					});
 					 
-					// console.log(vm.applyprop.slots);
-					// console.log(vm.appliedslots);	
+					console.log(vm.applyprop.slots);
+					console.log(vm.appliedslots);	
 					// console.log(vm.appliedslots.length);
 						
 					for (var i = 0; i < vm.applyprop.slots.length; i++) {
 						for (var j = 0; j < vm.appliedslots.length; j++) {
-							if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == false) {					
+							if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == false) {
 								vm.applyprop.slots[i].person = 0;
-								// break;
+								
+								for (var l = 0; l < vm.applyprop.slots.length; l++) {
+									if(vm.applyprop.slots[l].dateslotindex == vm.applyprop.slots[i].dateslotindex && l != i){
+										vm.applyprop.slots[l].person -=1;
+									}
+								}
+								
 							}
 							
 							if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == true ) {
@@ -117,7 +123,7 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 								}
 								// break;
 							}
-						// console.log(vm.applyprop.slots);
+						console.log(vm.applyprop.slots);
 						}
 					}
 					

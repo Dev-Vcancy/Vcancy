@@ -26,7 +26,7 @@ vcancyApp
 					if(snapshot.val()) {						
 						
 						$.map(snapshot.val(), function(value, index) {							
-							 if(vm.schedulepropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus !== "removed" && value.schedulestatus !== "submitted" ) {
+							 if(vm.schedulepropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus !== "removed"  ) {
 							 		console.log(value);
 								  vm.schedulepropaddress.push({propID: value.propID, address: value.address, units: value.units}); 
 								  vm.propcheck[value.propID] = true;
@@ -49,7 +49,7 @@ vcancyApp
 						//to map the object to array
 						vm.tabledata = $.map(snapshot.val(), function(value, index) {
 							if(vm.propcheck[value.propID] == true || propID == ''){
-								if(value.schedulestatus !== "removed" && value.schedulestatus !== "submitted") {
+								if(value.schedulestatus !== "removed" ) {
 									vm.schedulesavail = 1;
 									return [{scheduleID:index, name:value.name, tenantlocation: value.tenantlocation, jobtitle: value.jobtitle, age: value.age, dateslot: value.dateslot, address:value.address, timerange: value.timerange, description: value.description.substr(0, 15),desctooltip: value.description, schedulestatus: value.schedulestatus}];
 								} 
