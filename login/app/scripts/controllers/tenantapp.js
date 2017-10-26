@@ -23,7 +23,12 @@ vcancyApp
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {						
 						if(value.schedulestatus == "confirmed" ) { // && moment(value.dateslot).isBefore(new Date())
 							vm.pendingappsavail = 1;
-							return [{applicationID: 0, scheduleID:index, address:value.units+" - "+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+							if(value.units === ' '){
+								var units = '';
+							} else {
+								var units = value.units+" - ";								
+							}
+							return [{applicationID: 0, scheduleID:index, address: units+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						} 
 					});	
 					
@@ -76,6 +81,10 @@ vcancyApp
 							});
 						});
 					});	
+					
+					vm.submitappsextracols = [
+					  { field: "appID", title: "", show: true }
+					];
 					
 					vm.submitappscols = [
 					  { field: "address", title: "Address", sortable: "address", show: true },
@@ -163,6 +172,9 @@ vcancyApp
 							vm.submitappsdata.push({appID:key, address:value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus});
 						}
 					});
+					vm.submitappsextracols = [
+					  { field: "appID", title: "", show: true }
+					];
 					
 					vm.submitappscols = [
 					  { field: "address", title: "Address", sortable: "address", show: true },

@@ -9,6 +9,7 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 	var vm = this;
 	vm.emailVerifiedError = '';
 	var tenantID = localStorage.getItem('userID');
+	vm.propinactive = 0;
 	
 	firebase.database().ref('users/'+localStorage.getItem('userID')).once("value", function(snapval) {	
 		var userData = snapval.val();
@@ -68,7 +69,8 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				
 				// If property is inactive tenant can't apply for the application
 				if(vm.applyprop.propstatus == false){
-					$state.go('tenantdashboard');
+					// $state.go('tenantdashboard');
+					vm.propinactive = 1;
 				}
 			});
 		}

@@ -79,7 +79,7 @@ vcancyApp
 					vm.submittedappsavail = 0;
 				}
 	
-						
+						console.log(vm.submittedappsavail);
 				vm.submitappscols = [
 					  { field: "name", title: "Name", sortable: "name", show: true },
 					  { field: "age", title: "Age", sortable: "age", show: true },

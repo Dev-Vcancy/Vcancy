@@ -18,7 +18,12 @@ vcancyApp
 				if(snapshot.val() !== null) {
 					vm.calendardata = $.map(snapshot.val(), function(value, index) {
 						if(value.schedulestatus == "confirmed") {
-							return [{scheduleID:index, className: 'bgm-cyan', title:value.units+" - "+value.address, start: new Date(value.dateslot)}];
+							if(value.units === ' '){
+								var units = '';
+							} else {
+								var units = value.units+" - ";								
+							}
+							return [{scheduleID:index, className: 'bgm-cyan', title: units+value.address, start: new Date(value.dateslot)}];
 						}
 					});						
 					
@@ -32,7 +37,12 @@ vcancyApp
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
 						if(value.schedulestatus !== "removed") {
 							vm.schedulesavail = 1;
-							return [{scheduleID:index, address:value.units+" - "+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+							if(value.units === ' '){
+								var units = '';
+							} else {
+								var units = value.units+" - ";								
+							}
+							return [{scheduleID:index, address:units+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						} 
 					});	
 					

@@ -23,7 +23,7 @@
 						 <label class="checkbox checkbox-inline m-r-20">
 							<input type="checkbox" value="{{w.propID}}" checked="{{lappctrl.propcheck[w.propID]}}" ng-click="lappctrl.tablefilterdata(w.propID)">
 							<i class="input-helper"></i>
-							{{w.units}} - {{w.address}} 
+							{{w.units}}  <span ng-hide="w.units == ' '">-</span>  {{w.address}} 
 						</label>
 					</div>
 	         	</div>
@@ -40,7 +40,7 @@
 
 									</td>		           
 								</tr>
-								<tr ng-if="lappctrl.submittedappsavail == 0"><td colspan='8'>
+								<tr ng-if="lappctrl.submittedappsavail == 0">
 									No submitted applications yet </td>
 							   </tr>
 							</table>	           

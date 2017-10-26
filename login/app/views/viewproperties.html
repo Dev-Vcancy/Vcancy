@@ -37,8 +37,8 @@
 								<img class="img-responsive" src="{{x.propimg}}" >
 							</div>
 
-							<div class="property_detail">						
-								<h3><a tooltip-placement="top" uib-tooltip="{{x.address}}">{{x.units}} - {{x.address}}</a></h3>
+							<div class="property_detail">					
+								<h3><a tooltip-placement="top" uib-tooltip="{{x.units}} - {{x.address}}">{{x.units}} <span ng-hide="x.units == ' '">-</span> {{x.address}}</a></h3>
         						<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===true">
 			                        <span><strong>ACTIVE</strong></span> <input ng-click="propctrl.toggleSwitch(key)" id="active{{key}}" type="checkbox" hidden="hidden">
 			                        <label  for="active{{key}}" class="ts-helper m-l-10 m-r-10 ac-inac"></label><span><strong>INACTIVE</strong></span>
