@@ -504,28 +504,27 @@ vcancyApp
 			}
 			console.log(externalappStatus);
 			
-			var address = vm.propdata.address;
-			var rent = vm.propdata.rent;
+			var address = vm.propdata.address == undefined ? '' :vm.propdata.address;
+			var rent = vm.propdata.rent == undefined ? '' :vm.propdata.rent;
+			var months = vm.rentaldata.months == undefined ? '' :vm.rentaldata.months;
+			var startdate = vm.rentaldata.startdate == undefined ? '' :vm.rentaldata.startdate;
+			var parking = vm.rentaldata.parking == undefined ? '' :vm.rentaldata.parking;
 			
-			var months = vm.rentaldata.months;
-			var startdate = vm.rentaldata.startdate;
-			var parking = vm.rentaldata.parking;
-			
-			var applicantname = vm.tenantdata.tenantName;
-			var applicantdob = vm.rentaldata.dob.toString();
-			var applicantsinno = vm.rentaldata.sinno;
-			var telwork = vm.rentaldata.telwork;
-			var telhome = vm.rentaldata.telhome;
-			var applicantemail = vm.tenantdata.tenantEmail;
-			var appaddress = vm.rentaldata.appaddress;
-			var applicantcity = vm.rentaldata.appcity;
-			var maritalstatus = vm.rentaldata.maritalstatus;
-			var rent_own = vm.rentaldata.rent_own;
-			var live_time_at_address = vm.rentaldata.live_time;
-			var rentamt = vm.rentaldata.rentamt;
-			var vacantreason = vm.rentaldata.vacantreason;
-			var landlordname = vm.rentaldata.landlordname;
-			var landlordphone = vm.rentaldata.landlordphone;
+			var applicantname = vm.tenantdata.tenantName == undefined ? '' :vm.tenantdata.tenantName;
+			var applicantdob = vm.rentaldata.dob == undefined ? '' :vm.rentaldata.dob.toString();
+			var applicantsinno = vm.rentaldata.sinno == undefined ? '' :vm.rentaldata.sinno;
+			var telwork = vm.rentaldata.telwork == undefined ? '' :vm.rentaldata.telwork;
+			var telhome = vm.rentaldata.telhome == undefined ? '' : vm.rentaldata.telhome;
+			var applicantemail = vm.tenantdata.tenantEmail == undefined ? '' :vm.tenantdata.tenantEmail;
+			var appaddress = vm.rentaldata.appaddress == undefined ? '' :vm.rentaldata.appaddress;
+			var applicantcity = vm.rentaldata.appcity == undefined ? '' :vm.rentaldata.appcity;
+			var maritalstatus = vm.rentaldata.maritalstatus == undefined ? '' :vm.rentaldata.maritalstatus;
+			var rent_own = vm.rentaldata.rent_own == undefined ? '' : vm.rentaldata.rent_own;
+			var live_time_at_address = vm.rentaldata.live_time == undefined ? '' :vm.rentaldata.live_time;
+			var rentamt = vm.rentaldata.rentamt == undefined ? '' :vm.rentaldata.rentamt ;
+			var vacantreason = vm.rentaldata.vacantreason == undefined ? '' :vm.rentaldata.vacantreason;
+			var landlordname = vm.rentaldata.landlordname == undefined ? '' :vm.rentaldata.landlordname;
+			var landlordphone = vm.rentaldata.landlordphone == undefined ? '' :vm.rentaldata.landlordphone;
 			
 			var adultapplicantname = vm.rentaldata.otherappname;
 			var adultapplicantdob = vm.rentaldata.otherappdob;
@@ -535,9 +534,9 @@ vcancyApp
 			var minorapplicantdob = vm.rentaldata.minorappdob;
 			var minorapplicantsinno = vm.rentaldata.minorappsinno;
 			
-			var pets = vm.rentaldata.pets;
-			var petsdesc = vm.rentaldata.petsdesc;
-			var smoking = vm.rentaldata.smoking;
+			var pets = vm.rentaldata.pets == undefined ? '' :vm.rentaldata.pets;
+			var petsdesc = vm.rentaldata.petsdesc == undefined ? '' :vm.rentaldata.petsdesc;
+			var smoking = vm.rentaldata.smoking == undefined ? '' :vm.rentaldata.smoking;
 			
 			// var file = $('#appfiles').val().split('\\').pop().split('/').pop();
 			// var filename = $('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime();
@@ -548,28 +547,28 @@ vcancyApp
 			var filename = $('#filename').val() === '' ? '' : $('#filename').val();
 			var filepath = filename != '' ? "http://35.182.211.61/login/dist/dist/images/"+filename : appfiles;
 			
-			var appcurrentemployer = vm.rentaldata.appcurrentemployer;
-			var appposition = vm.rentaldata.appposition;
-			var appemployerphone = vm.rentaldata.appemployerphone;
-			var appworkingduration = vm.rentaldata.appworkingduration;
-			var appgrossmonthlyincome = vm.rentaldata.appgrossmonthlyincome;
-			var appincometype = vm.rentaldata.appincometype;
-			var appotherincome = vm.rentaldata.appotherincome;
+			var appcurrentemployer = vm.rentaldata.appcurrentemployer == undefined ? '' :vm.rentaldata.appcurrentemployer;
+			var appposition = vm.rentaldata.appposition == undefined ? '' :vm.rentaldata.appposition;
+			var appemployerphone = vm.rentaldata.appemployerphone == undefined ? '' :vm.rentaldata.appemployerphone;
+			var appworkingduration = vm.rentaldata.appworkingduration == undefined ? '' :vm.rentaldata.appworkingduration;
+			var appgrossmonthlyincome = vm.rentaldata.appgrossmonthlyincome == undefined ? '' :vm.rentaldata.appgrossmonthlyincome;
+			var appincometype = vm.rentaldata.appincometype == undefined ? '' :vm.rentaldata.appincometype;
+			var appotherincome = vm.rentaldata.appotherincome == undefined ? '' :vm.rentaldata.appotherincome;
 			
-			var vehiclemake = vm.rentaldata.vehiclemake;
-			var vehiclemodel = vm.rentaldata.vehiclemodel;
-			var vehicleyear = vm.rentaldata.vehicleyear;
+			var vehiclemake = vm.rentaldata.vehiclemake == undefined ? '' :vm.rentaldata.vehiclemake;
+			var vehiclemodel = vm.rentaldata.vehiclemodel == undefined ? '' :vm.rentaldata.vehiclemodel;
+			var vehicleyear = vm.rentaldata.vehicleyear == undefined ? '' :vm.rentaldata.vehicleyear;
 			
-			var emergencyname = vm.rentaldata.emergencyname;
-			var emergencyphone = vm.rentaldata.emergencyphone;
+			var emergencyname = vm.rentaldata.emergencyname == undefined ? '' :vm.rentaldata.emergencyname;
+			var emergencyphone = vm.rentaldata.emergencyphone == undefined ? '' :vm.rentaldata.emergencyphone;
 			
-			var refone_name = vm.rentaldata.refone_name;
-			var refone_phone = vm.rentaldata.refone_phone;
-			var refone_relation = vm.rentaldata.refone_relation;
+			var refone_name = vm.rentaldata.refone_name == undefined ? '' :vm.rentaldata.refone_name;
+			var refone_phone = vm.rentaldata.refone_phone == undefined ? '' :vm.rentaldata.refone_phone;
+			var refone_relation = vm.rentaldata.refone_relation == undefined ? '' :vm.rentaldata.refone_relation;
 			
-			var reftwo_name = vm.rentaldata.reftwo_name;
-			var reftwo_phone = vm.rentaldata.reftwo_phone;
-			var reftwo_relation = vm.rentaldata.reftwo_relation;
+			var reftwo_name = vm.rentaldata.reftwo_name == undefined ? '' :vm.rentaldata.reftwo_name;
+			var reftwo_phone = vm.rentaldata.reftwo_phone == undefined ? '' :vm.rentaldata.reftwo_phone;
+			var reftwo_relation = vm.rentaldata.reftwo_relation == undefined ? '' :vm.rentaldata.reftwo_relation;
 			
 			var otherappcurrentemployer = vm.rentaldata.otherappcurrentemployer;
 			var otherappposition = vm.rentaldata.otherappposition;
@@ -579,8 +578,8 @@ vcancyApp
 			var otherappincometype = vm.rentaldata.otherappincometype;
 			var otherappotherincome = vm.rentaldata.otherappotherincome;
 			
-			var dated = vm.rentaldata.dated.toString();
-			var appsign = vm.rentaldata.appsign;
+			var dated = vm.rentaldata.dated == undefined ? '' :vm.rentaldata.dated.toString();
+			var appsign = vm.rentaldata.appsign == undefined ? '' :vm.rentaldata.appsign;
 			var otherappsign = vm.rentaldata.otherappsign;
 			vm.adultapplicants = [];
 			vm.minorapplicants = [];
