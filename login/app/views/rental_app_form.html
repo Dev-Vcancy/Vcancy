@@ -110,22 +110,6 @@
 										</label>
 									</div>
 								</div>
-								<div class="fileinput fileinput-new" data-provides="fileinput">
-									<div class="fileinput-preview thumbnail" style="display:none" data-trigger="fileinput" style="width: 100px; height: 74px; border:1px solid #ccc;">
-										<img src="{{rctrl.rentaldata.appfiles}}" style="width:100%; margin-top:0 !important;"/>
-									</div>
-									<div>
-										<span class="btn btn-primary btn-file m-r-10">
-											<span class="fileinput-new">Select file</span>
-											<span class="fileinput-exists">Change</span>
-											<input type="hidden" ng-model="rctrl.rentaldata.appfiles" name="appfiles" value="{{rctrl.rentaldata.appfiles}}" id="appfiles" >
-											<input type="hidden" ng-model="rctrl.rentaldata.filename" name="filename" value="{{rctrl.rentaldata.filename}}" id="filename" >
-											<input type="file" name="file">
-										</span>
-										<span class="fileinput-filename">{{rctrl.rentaldata.appfiles}}</span>
-										<a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
-									</div>
-								</div>
 							</p>
 						</div>
 
@@ -279,6 +263,25 @@
 							<p>  
 								<span   ng-repeat="x in rctrl.adult">Signature of Additional Applicant #{{$index+1}}<span class="mandatory" print-remove>*</span>:   <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.otherappsign[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span>(FULL NAME IN CAPS)<br/> </span>
 							</p>
+							
+							<span>Upload Document/Image File:</span>
+							<div class="fileinput fileinput-new" data-provides="fileinput">
+								<div class="fileinput-preview thumbnail" style="display:none" data-trigger="fileinput" style="width: 100px; height: 74px; border:1px solid #ccc;">
+									<img src="{{rctrl.rentaldata.appfiles}}" style="width:100%; margin-top:0 !important;"/>
+								</div>
+								<div>
+									<span class="btn btn-primary btn-file m-r-10">
+										<span class="fileinput-new">Select file</span>
+										<span class="fileinput-exists">Change</span>
+										<input type="hidden" ng-model="rctrl.rentaldata.appfiles" name="appfiles" value="{{rctrl.rentaldata.appfiles}}" id="appfiles" >
+										<input type="hidden" ng-model="rctrl.rentaldata.filename" name="filename" value="{{rctrl.rentaldata.filename}}" id="filename" >
+										<input type="file" name="file">
+									</span>
+									<span class="fileinput-filename">{{rctrl.rentaldata.appfiles}}</span>
+									<a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
+								</div>
+							</div>
+							
 
 							<div print-remove>
 								<button type="submit" ng-disabled="rentalForm.$invalid" class="btn bgm-orange btn-lg m-t-10">Submit</button> 

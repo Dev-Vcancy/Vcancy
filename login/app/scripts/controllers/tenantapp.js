@@ -109,6 +109,13 @@ vcancyApp
 					$.map(snapshot.val(), function(value, key) {		
 						if(value.scheduleID == 0 && value.externalappStatus == "draft" ){
 							vm.pendingappsavail = 1;
+							if(value.address == ''){
+								value.address = 'No Address Entered';
+							} else {
+								value.address = value.address;
+							}
+							
+							
 							vm.tabledata.push({applicationID: key,scheduleID:0, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus});
 						}
 					});
