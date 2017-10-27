@@ -27,12 +27,18 @@ var vcancyApp = angular
 	'AngularPrint',
 	'ngFileUpload'
   ]); 
-  
-vcancyApp.service('emailSendingService',function($http){
+ 
+	
+vcancyApp.constant('config', {
+   "sailsBaseUrl": 'http://35.182.211.61/api/v1/',
+});
+
+vcancyApp.service('emailSendingService',function($http,config){
 	this.sendEmailViaNodeMailer = function(to,subject,mode,emailData){
 		var req = {
 			 method: 'POST',
-			 url: 'http://localhost:1337/email/sendemail',
+			// url: 'http://localhost:1337/email/sendemail',
+			 url: config.sailsBaseUrl+'email/sendemail',
 			 headers: {
 			    'Content-Type': 'application/json',
 				'Access-Control-Allow-Origin': '*',
@@ -209,6 +215,7 @@ vcancyApp
             }
         }
     }) 	
+
 	
 vcancyApp 
  .config(function ($stateProvider, $urlRouterProvider){	
@@ -222,6 +229,8 @@ vcancyApp
 		messagingSenderId: "330892868858"
 	  };
 	  var app = firebase.initializeApp(config);	 
+	  
+	  // var sailsBaseUrl = 'http://35.182.211.61/api/v1/';
 	
 	$urlRouterProvider.otherwise("/");
 	$stateProvider	

@@ -30,7 +30,7 @@
 								<td ng-repeat="col in $columns">{{row[col.field]}}</td>
 								<td ng-repeat="col in tappctrl.submitappsextracols">
 									<a href="" class="btn bgm-cyan m-b-5">Run Credit Check</a>
-									<a href="#/viewapp/{{row[col.field]}}" target="_blank" class="btn bgm-blue m-b-5">Application</a>
+									<a href="#/viewapp/{{row[appID]}}" target="_blank" class="btn bgm-blue m-b-5">Application</a>
 								</td>
 							</tr>
                             <tr ng-if="tappctrl.submitappsavail == 0">

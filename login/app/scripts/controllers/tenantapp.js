@@ -83,7 +83,7 @@ vcancyApp
 					});	
 					
 					vm.submitappsextracols = [
-					  { field: "appID", title: "", show: true }
+					  { field: "", title: "", show: true }
 					];
 					
 					vm.submitappscols = [
@@ -173,7 +173,7 @@ vcancyApp
 						}
 					});
 					vm.submitappsextracols = [
-					  { field: "appID", title: "", show: true }
+					  { field: "", title: "", show: true }
 					];
 					
 					vm.submitappscols = [
@@ -204,13 +204,13 @@ vcancyApp
 		});
 		
 		if(vm.submittedappsavail == 0) {
-			vm.submitappsdata.push({scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''});
+			// vm.submitappsdata.push({scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''});
 		} else {			
 			vm.loader = 0;				
 		}
 		
 		if(vm.pendingappsavail == 0) {
-			vm.tabledata.push({scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''});
+			// vm.tabledata.push({scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''});
 		} else {			
 			vm.loader = 0;				
 		}
