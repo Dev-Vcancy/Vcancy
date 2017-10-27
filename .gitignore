@@ -3,3 +3,5 @@
 login/bower_components
 login/node_modules
 login/app/bower_components
+
+node/node_modules
