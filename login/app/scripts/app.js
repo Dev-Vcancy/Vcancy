@@ -30,7 +30,7 @@ var vcancyApp = angular
  
 	
 vcancyApp.constant('config', {
-   "sailsBaseUrl": 'http://35.182.211.61/api/v1/',
+   "sailsBaseUrl": 'http://35.182.211.61/nodeapi/api/v1/',
 });
 
 vcancyApp.service('emailSendingService',function($http,config){
