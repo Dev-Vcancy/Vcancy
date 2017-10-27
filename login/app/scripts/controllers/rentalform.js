@@ -5,7 +5,7 @@
 //=================================================
 
 vcancyApp
-    .controller('rentalformCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams','Upload','$http','emailSendingService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams,Upload, $http,emailSendingService) {
+    .controller('rentalformCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams','Upload','$http','emailSendingService','config', function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams,Upload, $http,emailSendingService,config) {
 		
 		var vm = this;
 		var tenantID = localStorage.getItem('userID');
@@ -824,7 +824,7 @@ vcancyApp
 		vm.upload = function (file,filename) {
 			var req = {
 				 method: 'POST',
-				 url: 'http://localhost:1337/fileupload/upload',
+				 url: config.sailsBaseUrl+'fileupload/upload',
 				 headers: {
 					'Content-Type': 'application/json',
 					'Access-Control-Allow-Origin': '*',
