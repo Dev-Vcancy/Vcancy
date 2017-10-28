@@ -545,7 +545,7 @@ vcancyApp
 			
 			var appfiles = $('#appfiles').val();
 			var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-			var filepath = filename != '' ? "http://35.182.211.61/login/dist/dist/images/"+filename : appfiles;
+			var filepath = filename != '' ? "http://35.182.211.61/login/dist/images/"+filename : appfiles;
 			
 			var appcurrentemployer = vm.rentaldata.appcurrentemployer == undefined ? '' :vm.rentaldata.appcurrentemployer;
 			var appposition = vm.rentaldata.appposition == undefined ? '' :vm.rentaldata.appposition;

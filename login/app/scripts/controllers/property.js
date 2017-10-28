@@ -9,7 +9,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	$rootScope.success = '';
 	$rootScope.error = '';	
 	
-	var todaydate = new Date();
+	var todaydate = new Date();	
+	var dateconfig = new Date(new Date().setMinutes( 0 ));
+	console.log(dateconfig,todaydate);
+	
 	var vm = this;
 	vm.propsavail = 1;
 	vm.timeslotmodified = "false";
@@ -42,8 +45,14 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	// timeSlot for Date and Timepicker
 	vm.addTimeSlot = function(slotlen){
 		// console.log(slotlen);
-		vm.timeSlot.push({date:todaydate});
+		for(var i=0; i<slotlen; i++){
+			vm.newTime = false;		
+		}
+		
+		vm.timeSlot.push({date:dateconfig});
 		vm.prop.multiple[slotlen] = true;
+		vm.newTime = true;
+		console.log(vm.newTime);
 	}
 	
 	// to remove timeslots
@@ -85,11 +94,11 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		$event.preventDefault();
 		$event.stopPropagation();
 		angular.forEach(vm.timeSlot, function(value, key) {
-		  value.opened = false;;
+		  value.opened = false;
 		});
 		opened.opened = true;
 	};
-
+	
 	vm.dateOptions = {
 		formatYear: 'yy',
 		startingDay: 1
@@ -102,7 +111,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		$event.preventDefault();
 		$event.stopPropagation();
 		angular.forEach(vm.timeSlot, function(value, key) {
-		  value.opened = false;;
+		  value.opened = false;
 		});
 		vm.opened = true;
 	  }; 
@@ -120,7 +129,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 
 	vm.minDate = new Date();
 	
+	vm.newTime = false;
+	
 	vm.ismeridian = true;
+	
 	vm.toggleMode = function() {
 		vm.ismeridian = ! vm.ismeridian;
 	};
@@ -149,13 +161,13 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			vm.timeslotmodified = "true";
 		} 
 		if(vm.prop.fromtime[key] === undefined){
-			var fromtime  =  new Date();			
+			var fromtime  =  dateconfig;			
 		} else {
 			var fromtime= vm.prop.fromtime[key];	
 		}
 		
 		if(vm.prop.to[key] === undefined){
-			var to = new Date();	
+			var to = dateconfig;	
 		} else {
 			var to = vm.prop.to[key];	
 		}		
@@ -166,13 +178,13 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			// console.log(i,key);
 			if(i != key){
 				if(vm.prop.fromtime[i] === undefined){
-					var ftime  =  new Date();			
+					var ftime  =  dateconfig;			
 				} else {
 					var ftime= vm.prop.fromtime[i];	
 				}
 				
 				if(vm.prop.to[i] === undefined){
-					var totime = new Date();	
+					var totime = dateconfig;	
 				} else {
 					var totime = vm.prop.to[i];	
 				}
@@ -257,13 +269,13 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			angular.forEach(property.limit, function(lval, key) {
 				date[key] = property.date[key].toString();
 				if(property.fromtime[key] === undefined){
-					fromtime[key]  =  new Date().toString();				
+					fromtime[key]  =  dateconfig.toString();				
 				} else {
 					fromtime[key] = property.fromtime[key].toString();					
 				}
 				
 				if(property.to[key] === undefined){
-					to[key] = new Date().toString();	
+					to[key] = dateconfig.toString();	
 				} else {
 					to[key] = property.to[key].toString();	
 				}			
@@ -321,7 +333,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					$state.go('viewprop');
 					
 				// reset the add property form
-				vm.timeSlot = [{date:todaydate}];
+				vm.timeSlot = [{date:dateconfig}];
 				$scope.$apply(function(){
 					vm.prop = {
 						propID: '',
@@ -594,7 +606,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		vm.mode = 'Add';
 		vm.submitaction = "Save";		
 		vm.otheraction = "Cancel";
-		vm.timeSlot = [{date:todaydate}];
+		vm.timeSlot = [{date:dateconfig}];
 		vm.prop = {
 			propID: '',
 			landlordID: '',

@@ -83,7 +83,7 @@ vcancyApp
 					});	
 					
 					vm.submitappsextracols = [
-					  { field: "", title: "", show: true }
+					  { field: "appID", title: "", show: true }
 					];
 					
 					vm.submitappscols = [
@@ -173,7 +173,7 @@ vcancyApp
 						}
 					});
 					vm.submitappsextracols = [
-					  { field: "", title: "", show: true }
+					  { field: "appID", title: "", show: true }
 					];
 					
 					vm.submitappscols = [

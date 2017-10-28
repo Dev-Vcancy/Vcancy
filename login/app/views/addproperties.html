@@ -101,7 +101,7 @@
 										<div class="col-sm-12"><p class="m-b-10">Time From</p></div>
 										<div class="time-picker input-group">
 											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
-											 <div uib-timepicker ng-model="propctrl.prop.fromtime[$index]" name = "fromtime[]" ng-change="propctrl.datetimeslotchanged($index)" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
+											 <div uib-timepicker ng-model="propctrl.prop.fromtime[$index]" name = "fromtime[]" ng-change="propctrl.datetimeslotchanged($index)" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian" new-time="propctrl.newTime" id="fromtime{{$index}}"></div>
 											<!-- <div class="fg-line" ng-class="{ 'fg-toggled': x.timeopened == true }"> -->
 												<!-- <input ng-click="propctrl.timeopen($event, x)" type="text" class="form-control" uib-timepicker ng-model="propctrl.propctrl.prop.time" hour-step="1" minute-step="1" show-meridian="ismeridian" name = "time[]" is-open="x.timeopened" ng-required="true" close-text="Close" placeholder="Select Time" /> -->
 											<!-- </div> -->
@@ -111,7 +111,7 @@
 										<div class="col-sm-12"><p class="m-b-10">Time To</p></div>
 										<div class="time-picker input-group">
 											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
-											 <div uib-timepicker ng-model="propctrl.prop.to[$index]" name = "to[]" ng-change="propctrl.datetimeslotchanged($index)" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian"></div>
+											 <div uib-timepicker ng-model="propctrl.prop.to[$index]" name = "to[]" ng-change="propctrl.datetimeslotchanged($index)" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian" new-time="propctrl.newTime" id="to{{$index}}"></div>
 											<!-- <div class="fg-line" ng-class="{ 'fg-toggled': x.timeopened == true }"> -->
 												<!-- <input ng-click="propctrl.timeopen($event, x)" type="text" class="form-control" uib-timepicker ng-model="propctrl.propctrl.prop.time" hour-step="1" minute-step="1" show-meridian="ismeridian" name = "time[]" is-open="x.timeopened" ng-required="true" close-text="Close" placeholder="Select Time" /> -->
 											<!-- </div> -->
