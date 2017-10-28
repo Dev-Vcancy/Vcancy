@@ -29,7 +29,6 @@
 							<tr ng-repeat="row in $data">
 								<td ng-repeat="col in $columns">{{row[col.field]}}</td>
 								<td ng-repeat="col in tappctrl.submitappsextracols">
-									<a href="" class="btn bgm-cyan m-b-5">Run Credit Check</a>
 									<a href="#/viewapp/{{row[col.field]}}" target="_blank" class="btn bgm-blue m-b-5">Application</a>
 								</td>
 							</tr>
@@ -65,8 +64,8 @@
 			</div>
             <div class="card white-block p-20">
                 <div class="card-header p-l-15">
-                                    <h2>Submit Application via Email</h2>
-                            </div>
+					<h2>Submit Application via Email</h2>
+				</div>
                 <div class="card-body">                    
 					<div class="col-sm-8">
 						<input type="email" placeholder="Enter landlord’s email here" ng-model="tappctrl.email" ng-change="tappctrl.emailrequired()" class="form-control m-b-5 w-3" >
@@ -77,6 +76,17 @@
 					<div class="clearfix"></div>
                 </div>
             </div>
+			<div class="card white-block p-20">
+                <div class="card-header p-l-15">
+					<h2>Add credit check to your application</h2>
+				</div>
+                <div class="card-body">                    
+					<div class="col-sm-12">
+						<a href="http://35.182.211.61/credit-background-checks" target="_blank" class="btn bgm-cyan m-b-5">Run Credit Check</a>
+					</div>
+					<div class="clearfix"></div>
+                </div>
+            </div>			
 		</div>				
     </section>
 </section>

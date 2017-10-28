@@ -189,7 +189,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					var totime = vm.prop.to[i];	
 				}
 					
-				if (((fromtime > ftime || to > ftime) && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || ((fromtime > totime || to > totime) && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isEqual(moment(vm.prop.date[i]).format('DD-MMMM-YYYY')))) {
+				if (((fromtime > ftime || to > ftime) && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || ((fromtime > totime || to > totime) && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY')))) {
 					vm.overlap = 1;
 				} 
 			}

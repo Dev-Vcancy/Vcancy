@@ -157,9 +157,9 @@
 												<input readonly="true"readonly="true"  ng-click="vappctrl.adultdobopen($event,$index)" type="text" class="form-control" uib-datepicker-popup="{{vappctrl.format}}" show-weeks="false" ng-model="vappctrl.rentaldata.otherappdob[$index]" is-open="vappctrl.adultdobopened[$index]" max-date="vappctrl.maxDate"datepicker-options="vappctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
 											</div>
 										</div>
-										<div class="col-sm-4">
-											SIN Number: <input  required  ng-model="rctrl.rentaldata.otherappsinno[$index]" type="text" class="form-control m-b-5 w-4" id="" placeholder="SIN Number">
-										</div>
+									</div>
+									<div class="col-sm-4">
+										SIN Number: <input  required  ng-model="rctrl.rentaldata.otherappsinno[$index]" type="text" class="form-control m-b-5 w-4" id="" placeholder="SIN Number">
 									</div>
 								</div>
 							</div>
@@ -203,8 +203,8 @@
 							<h4 class="m-b-20 m-t-10">Additional Applicant #{{$index+1}}:</h4>
 			            	<p class="m-b-10">
 								Current Employer:  <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.otherappcurrentemployer[$index]" class="form-control m-b-5 w-5" id="" placeholder=""></span> 
-								Position: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.otherappposition[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span> 
-								Employer phone #: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.otherappemployerphone[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> 
+								Position: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.otherappposition[$index]" class="form-control m-b-5 w-2" id="" placeholder=""></span><br> 
+								Employer phone #: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.otherappemployerphone[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><br> 
 								How long have you worked in this company: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.otherappworkingduration[$index]" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>
 								Gross monthly income: $ <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.otherappgrossmonthlyincome[$index]" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> 
 								<span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.otherappincometype[$index]" value="employment" ><i class="input-helper"></i>Employment</label><label><input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.otherappincometype[$index]" value="retired"><i class="input-helper"></i>Retired</label></span> <br>
