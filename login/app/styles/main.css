@@ -416,6 +416,10 @@ ul.header-inner li a:hover.button:before{
   position: relative;
 }
 /*************** Application form ***************/
+.printview {
+  float: left;
+  width: 100%;
+}
 .app_form{
   float: left;
   width: 100%;
@@ -756,7 +760,7 @@ ul.header-inner li a:hover.button:before{
   .app_form .card-body{
     margin-top: -140px;
   }
-  .border{
+  .printview{
     page-break-inside: avoid;
   }
   .radio input:checked + .input-helper:after {
