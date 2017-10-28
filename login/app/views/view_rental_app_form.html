@@ -16,10 +16,10 @@
 				<input readonly="true"type="hidden" name="propID" ng-model="vappctrl.rentaldata.propID" class="form-control">	
 
 		            <div class="card-body card-padding">
-		            	<div class="printview">
-			            	<h3 class="m-b-20 m-t-10 fw">Applicant Details</h3>
-			            	<div class="border">
-			            	<p class="m-b-10" style="display:inline;">
+						<div class="printview">
+							<h3 class="m-b-20 m-t-10 fw">Applicant Details</h3>
+							<div class="border">
+							<p class="m-b-10" style="display:inline;">
 								<label>Full Name:</label>
 								<span class="fg-line"><input readonly="true" required  readonly="true" type="text" ng-model="vappctrl.rentaldata.tenantName"  class="form-control w-3" id="" placeholder=""></span>
 								
@@ -62,15 +62,15 @@
 								<div class="m-b-5 fw">
 									<div class="radio m-b-5">
 										<span class="p-r-5">Marital Status</span>
-									    <label>
-										    <input disabled="true" required   type="radio" class="" ng-model="vappctrl.rentaldata.maritalstatus"  value="single">
-										    <i class="input-helper"></i>
-										    Single
+										<label>
+											<input disabled="true" required   type="radio" class="" ng-model="vappctrl.rentaldata.maritalstatus"  value="single">
+											<i class="input-helper"></i>
+											Single
 										</label>
 										<label>
-										    <input disabled="true" required   type="radio" ng-model="vappctrl.rentaldata.maritalstatus" value="married">
-										    <i class="input-helper"></i>
-										    Married
+											<input disabled="true" required   type="radio" ng-model="vappctrl.rentaldata.maritalstatus" value="married">
+											<i class="input-helper"></i>
+											Married
 										</label>
 									</div>
 								</div>
@@ -78,15 +78,15 @@
 								<p class="m-b-5 fw">
 									<span class="radio m-b-0 m-t-0">
 										<span class="p-r-5">Pets:</span>
-									    <label>
-										    <input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.pets" value="yes" ng-change="vappctrl.petschange()">
-										    <i class="input-helper"></i>
-										    YES
+										<label>
+											<input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.pets" value="yes" ng-change="vappctrl.petschange()">
+											<i class="input-helper"></i>
+											YES
 										</label>
 										<label>
-										    <input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.pets" value="no" ng-change="vappctrl.petschange()">
-										    <i class="input-helper"></i>
-										    NO
+											<input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.pets" value="no" ng-change="vappctrl.petschange()">
+											<i class="input-helper"></i>
+											NO
 										</label>
 										<span ng-show="vappctrl.rentaldata.pets == 'yes'">How many and what kind: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.petsdesc" class="form-control m-b-5" id="" placeholder=""></span></span>
 									</span> 
@@ -95,15 +95,15 @@
 								<div class="m-b-5 fw">
 									<div class="radio m-b-0 m-t-0 fw">
 										<span class="p-r-5">Smoking</span>
-									    <label>
-										    <input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.smoking" value="yes">
-										    <i class="input-helper"></i>
-										    YES
+										<label>
+											<input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.smoking" value="yes">
+											<i class="input-helper"></i>
+											YES
 										</label>
 										<label>
-										    <input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.smoking" value="no">
-										    <i class="input-helper"></i>
-										    NO
+											<input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.smoking" value="no">
+											<i class="input-helper"></i>
+											NO
 										</label>
 									</div>
 								</div>
@@ -116,15 +116,15 @@
 							<div class="m-b-10">
 								<div class="radio m-b-15">
 									<span class="p-r-5 f-500">Do you rent or own the above address</span>
-								    <label>
-									    <input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.rent_own"  value="rent" ng-change="vappctrl.rentownchange()">
-									    <i class="input-helper"></i>
-									    Rent
+									<label>
+										<input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.rent_own"  value="rent" ng-change="vappctrl.rentownchange()">
+										<i class="input-helper"></i>
+										Rent
 									</label>
 									<label>
-									    <input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.rent_own" value="own" ng-change="vappctrl.rentownchange()">
-									    <i class="input-helper"></i>
-									    Own
+										<input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.rent_own" value="own" ng-change="vappctrl.rentownchange()">
+										<i class="input-helper"></i>
+										Own
 									</label>
 								</div>
 							</div>
@@ -138,7 +138,7 @@
 							</p>
 						</div>
 					</div>
-
+					
 					<div class="printview">
 						<h3 class="m-b-20 m-t-10 fw">Additional Applicant</h3>
 						<div class="border additional_applicant">
@@ -196,7 +196,7 @@
 							<br>Employer phone #: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.appemployerphone" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span> <br>How long have you worked in this company: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.appworkingduration" type="text" class="form-control m-b-5" id="" placeholder=""></span> <br>Gross monthly income: $ <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.appgrossmonthlyincome" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> <span class="radio" style="display: inline-block;"><span class="p-r-5">Income type: </span><label><input disabled="true" required  type="radio" class="" ng-model="vappctrl.rentaldata.appincometype" value="employment" ><i class="input-helper"></i>Employment</label><label><input disabled="true" required  type="radio" ng-model="vappctrl.rentaldata.appincometype" value="retired"><i class="input-helper"></i>Retired</label></span> <br>Other income description (eg. Disability, Income Assistance, Savings):  <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.appotherincome" type="text" class="form-control m-b-5 w-5" id="" placeholder=""></span></p>
 						</div>
 					</div>
-
+					
 					<div class="printview">
 						<div class="border" ng-repeat="x in vappctrl.adult">
 							<div>
@@ -212,7 +212,7 @@
 							</div>
 						</div>
 					</div>
-
+					
 					<div class="printview">
 						<h3 class="m-b-20 m-t-10 fw">Vehicle Information</h3>
 						<div class="border">
@@ -220,7 +220,7 @@
 							Year: <span class="fg-line"><input readonly="true" required ng-pattern="/^([1-9][0-9]*)$/" type="text" ng-model="vappctrl.rentaldata.vehicleyear"  class="form-control m-b-5" id="" placeholder=""></span></p>
 						</div>
 					</div>
-
+					
 					<div class="printview">
 						<h3 class="m-b-20 m-t-10 fw">Emergency Contact</h3>
 						<div class="border">
@@ -228,7 +228,7 @@
 							<p class="m-b-10">Name: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span></p>
 						</div>
 					</div>
-						
+					
 					<div class="printview">
 						<h3 class="m-b-20 m-t-10 fw">References</h3>
 						<div class="border">
@@ -237,7 +237,7 @@
 							<p class="m-b-10">2. Name: <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.reftwo_name" class="form-control m-b-5 w-4" id="" placeholder=""></span> Phone: <span class="fg-line"><input readonly="true" required  ng-model="vappctrl.rentaldata.reftwo_phone"  type="text" class="form-control m-b-5 w-4" id="" placeholder=""></span> Relationship (previous landlord, employer):  <span class="fg-line"><input readonly="true" required  type="text" class="form-control m-b-5 w-6" id="" ng-model="vappctrl.rentaldata.reftwo_relation" placeholder=""></span></p>
 						</div>
 					</div>
-
+					
 					<div class="printview">
 						<div class="border">
 		            		<p class="f-500">You are authorized to obtaining credit checks & verifying details contained in this Application.</p>
@@ -274,7 +274,7 @@
 								<button type="button" ng-click="vappctrl.printApp()" class="btn bgm-orange btn-lg m-t-10">Print</button> 
 							</div>
 		            	</div>
-		            </div>
+					</div>
 		            </span>
 		        </form>
 		    </div>
@@ -288,4 +288,3 @@
 	Waves.init();
 	Waves.attach('.btn');
 </script> 
-        
