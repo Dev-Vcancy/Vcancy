@@ -567,6 +567,12 @@ ul.header-inner li a:hover.button:before{
     font-weight: bold;
     border: 1px solid;
 }
+.applied_status {
+    color: #4CAF50;
+    font-weight: bold;
+    border: 1px solid;
+}
+
 .dash-widget-item{
    min-height: 227px !important;
 }

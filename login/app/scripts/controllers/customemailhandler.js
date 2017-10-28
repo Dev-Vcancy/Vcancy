@@ -4,7 +4,7 @@
 // Custom Email Handler
 //=================================================
 
-vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window) {
+vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','emailSendingService', function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, emailSendingService) {
 	
 	var mode = $stateParams.mode;
 	var oobCode = $stateParams.oobCode;
@@ -17,11 +17,13 @@ vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$ro
 	console.log($stateParams);
 	if(mode == 'verifyEmail') {
 		firebase.auth().applyActionCode(oobCode).then(function(resp) {
+			console.log(resp);
 			localStorage.setItem('emailHandled', "Thanks for verifying your email.");
 			localStorage.setItem('userEmailVerified', "true");
 			$scope.$apply(function(){
 				$rootScope.emailhandler = localStorage.getItem('emailHandled');	
-			});			
+			});		
+			
 			$state.go('login');
 		}).catch(function(error) {
 			localStorage.setItem('emailHandled', error.message);
@@ -73,6 +75,12 @@ vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$ro
 							$rootScope.success = "Password reset has been confirmed and new password updated.";	
 							$rootScope.error = '';
 						});				  
+						
+						var emailData = '<p>This is to confirm that your password has been changed!</p><p>Please ensure you keep this password safe and secure for your records.</p><p>Your email address: '+$rootScope.useremail+'.</p><p>If you have not requested a password change&nbsp;please contact Vcancy immediately.</p>';
+										
+						// Send Email
+						emailSendingService.sendEmailViaNodeMailer($rootScope.useremail, 'Your new password on Vcancy', 'changepwd', emailData);
+						
 					}).catch(function(error) {
 					  console.log("Error occurred during confirmation. The code might have expired or the password is too weak.");
 					  $scope.$apply(function(){

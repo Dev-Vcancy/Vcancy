@@ -5,7 +5,7 @@
 //=================================================
 
 vcancyApp
-    .controller('tenantscheduleCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
+    .controller('tenantscheduleCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams','emailSendingService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams,emailSendingService) {
 		
 		var vm = this;
 		vm.showCal = false;
@@ -18,7 +18,12 @@ vcancyApp
 				if(snapshot.val() !== null) {
 					vm.calendardata = $.map(snapshot.val(), function(value, index) {
 						if(value.schedulestatus == "confirmed") {
-							return [{scheduleID:index, className: 'bgm-cyan', title:value.units+" - "+value.address, start: new Date(value.dateslot)}];
+							if(value.units === ' '){
+								var units = '';
+							} else {
+								var units = value.units+" - ";								
+							}
+							return [{scheduleID:index, className: 'bgm-cyan', title: units+value.address, start: new Date(value.dateslot)}];
 						}
 					});						
 					
@@ -30,9 +35,14 @@ vcancyApp
 					
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
-						if(value.schedulestatus !== "removed"  && value.schedulestatus !== "submitted") {
+						if(value.schedulestatus !== "removed") {
 							vm.schedulesavail = 1;
-							return [{scheduleID:index, address:value.units+" - "+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+							if(value.units === ' '){
+								var units = '';
+							} else {
+								var units = value.units+" - ";								
+							}
+							return [{scheduleID:index, address:units+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						} 
 					});	
 					
@@ -85,14 +95,17 @@ vcancyApp
 				firebase.database().ref('applyprop/'+index).update({	
 					schedulestatus: "cancelled"
 				})
+				
 				firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
-					// var emailData = '<p style="margin: 10px auto;">Viewing request on property '+snapshot.val().address+' has been cancelled by tenant.</p>';
-					// Send Email
-					// emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your generated viewing request status on Vcancy', 'cancelstatus', emailData);
-					
-					var emailData = '<p style="margin: 10px auto;">Your viewing request on property '+snapshot.val().address+' has been cancelled.</p>';
-					
-					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your generated viewing request status on Vcancy', 'cancelstatus', emailData);
+					firebase.database().ref('users/'+snapshot.val().landlordID).once("value", function(snap) {
+						var emailData = '<p>Hello, </p><p>'+snapshot.val().name+' has <strong>cancelled</strong> their viewing at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' for '+snapshot.val().address+'.</p><p>The time slot is now open to other renters.</p><p>To view details, please log in  http://35.182.211.61/login/dist/#/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+						
+						emailSendingService.sendEmailViaNodeMailer(snap.val().email, snapshot.val().name+'has cancelled viewing for '+snapshot.val().address, 'cancelstatus', emailData);
+					});
+						
+					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing time '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been been <strong>cancelled</strong> by the landlord of '+snapshot.val().address+'.</p><p>Please book another time using the link initially provided or contact the landlord directly.</p><p>To view details, please log in  http://35.182.211.61/login/dist/#/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+						
+					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your viewing has been cancelled for '+snapshot.val().address, 'cancelstatus', emailData);
 				});
 				
 				

@@ -21,20 +21,23 @@
 			</div>		
 			<div class="row">
 				<div class="col-sm-12 card">
-					<div ng-if="applyctrl.applyprop.availableslots.length == 0">
-						<h4>No Time Slot Available to Schedule your application for Property</h4>										
+					<div ng-if="applyctrl.applyprop.availableslots.length == 0" ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1">
+						<h4>No Time Slot Available to Schedule your application for Property.</h4>										
 					</div>
-					<div ng-if="applyctrl.alreadyBookedSlot == 1">
-						<h4>You have already booked a time slot for this property, please cancel your time slot if you want to reschedule.</h4>										
+					<div ng-if="applyctrl.alreadyBookedSlot == 1" ng-hide="applyctrl.propinactive == 1">
+						<h4>You have already booked a time slot for this property, please cancel your time slot if you want to reschedule.</h4>
 					</div>
-					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="applyctrl.applyprop.availableslots.length" ng-hide="applyctrl.alreadyBookedSlot == 1">	
+					<div ng-if="applyctrl.propinactive == 1" >
+						<h4>This property isnt available now.</h4>										
+					</div>
+					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="applyctrl.applyprop.availableslots.length" ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1">	
 						<input type="hidden" name="landlordID" ng-model="applyctrl.applyprop.landlordID" class="form-control" >
 						<input type="hidden" name="propID" ng-model="applyctrl.applyprop.propID" class="form-control">	
 						<input type="hidden" name="address" ng-model="applyctrl.applyprop.address" class="form-control">						
 						
 						<div class="card-header text-center">
 							<h1>Enter basic info and select viewing time</h1>
-							<p><i class="zmdi zmdi-home zmdi-hc-fw"></i> {{applyctrl.applyprop.units}} - {{applyctrl.applyprop.address}}</p>
+							<p><i class="zmdi zmdi-home zmdi-hc-fw"></i> {{applyctrl.applyprop.units}}  <span ng-hide="applyctrl.applyprop.units == ' '">-</span>  {{applyctrl.applyprop.address}}</p>
 						</div>
 						<div class="card-body card-padding">				
 							<div class="col-sm-6">

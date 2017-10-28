@@ -24,7 +24,7 @@
 						 <label class="checkbox checkbox-inline m-r-20">
 							<input type="checkbox" value="{{w.propID}}" checked="{{schedulectrl.propcheck[w.propID]}}" ng-click="schedulectrl.tablefilterdata(w.propID)">
 							<i class="input-helper"></i>
-							{{w.units}} - {{w.address}} 
+							{{w.units}} <span ng-hide="w.units == ' '">-</span> {{w.address}} 
 						</label>
 					</div>
 	         	</div>
@@ -38,9 +38,10 @@
 									<span ng-if="col.field == 'description'" tooltip-placement="top" uib-tooltip="{{row.desctooltip}}">{{row[col.field]}}</span>
 								</td>
 								<td ng-repeat="col in schedulectrl.extracols">
-									<button class="btn btn-xs btn-success"  ng-hide="row.schedulestatus == 'confirmed' || row.schedulestatus == 'cancelled'" ng-click="schedulectrl.confirmschedule(row.scheduleID)">Confirm</button>
-									<button class="btn btn-xs btn-danger"  ng-hide="row.schedulestatus == 'cancelled'" ng-click="schedulectrl.cancelschedule(row.scheduleID)">Cancel</button>
+									<button class="btn btn-xs btn-success"  ng-hide="row.schedulestatus == 'confirmed' || row.schedulestatus == 'cancelled' || row.schedulestatus == 'submitted'" ng-click="schedulectrl.confirmschedule(row.scheduleID)">Confirm</button>
+									<button class="btn btn-xs btn-danger"  ng-hide="row.schedulestatus == 'cancelled' || row.schedulestatus == 'submitted'" ng-click="schedulectrl.cancelschedule(row.scheduleID)">Cancel</button>
 									
+									<span class="applied_status btn-xs" ng-show="row.schedulestatus == 'submitted'">Applied</span>
 									<span class="cancel_status btn-xs" ng-show="row.schedulestatus == 'cancelled'">Cancelled</span>
 								</td>		           
 							</tr>

@@ -5,7 +5,7 @@
 //=================================================
 
 vcancyApp
-    .controller('scheduleCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce,NgTableParams) {
+    .controller('scheduleCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams','emailSendingService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce,NgTableParams,emailSendingService) {
 		
 		var vm = this;
 		var landlordID = localStorage.getItem('userID');
@@ -26,7 +26,7 @@ vcancyApp
 					if(snapshot.val()) {						
 						
 						$.map(snapshot.val(), function(value, index) {							
-							 if(vm.schedulepropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus !== "removed" && value.schedulestatus !== "submitted" ) {
+							 if(vm.schedulepropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus !== "removed"  ) {
 							 		console.log(value);
 								  vm.schedulepropaddress.push({propID: value.propID, address: value.address, units: value.units}); 
 								  vm.propcheck[value.propID] = true;
@@ -49,7 +49,7 @@ vcancyApp
 						//to map the object to array
 						vm.tabledata = $.map(snapshot.val(), function(value, index) {
 							if(vm.propcheck[value.propID] == true || propID == ''){
-								if(value.schedulestatus !== "removed" && value.schedulestatus !== "submitted") {
+								if(value.schedulestatus !== "removed" ) {
 									vm.schedulesavail = 1;
 									return [{scheduleID:index, name:value.name, tenantlocation: value.tenantlocation, jobtitle: value.jobtitle, age: value.age, dateslot: value.dateslot, address:value.address, timerange: value.timerange, description: value.description.substr(0, 15),desctooltip: value.description, schedulestatus: value.schedulestatus}];
 								} 
@@ -102,6 +102,14 @@ vcancyApp
 			firebase.database().ref('applyprop/'+index).update({	
 				schedulestatus: "confirmed"
 			})
+			
+			firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
+				firebase.database().ref('users/'+snapshot.val().tenantID).once("value", function(snap) {
+					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing request for '+snapshot.val().address+' at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been accepted.</p><p>If you wish you complete your rental application before-hand, please log in  http://35.182.211.61/login/dist/#/ and go to “Applications”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+					
+					emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Viewing request for '+snapshot.val().address, 'confirmstatus', emailData);
+				});
+			});
 			$state.reload();
 		}
 		
@@ -111,6 +119,13 @@ vcancyApp
 				firebase.database().ref('applyprop/'+index).update({	
 					schedulestatus: "cancelled"
 				})
+				firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
+					firebase.database().ref('users/'+snapshot.val().tenantID).once("value", function(snap) {
+						var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing time '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been been <strong>cancelled</strong> by the landlord of '+snapshot.val().address+'.</p><p>Please book another time using the link initially provided or contact the landlord directly.</p><p>To view details, please log in  http://35.182.211.61/login/dist/#/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+						
+						emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your viewing has been cancelled for '+snapshot.val().address, 'cancelstatus', emailData);
+					});
+				});
 				$state.reload();
 			}
 		}

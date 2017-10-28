@@ -23,7 +23,12 @@ vcancyApp
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {						
 						if(value.schedulestatus == "confirmed" ) { // && moment(value.dateslot).isBefore(new Date())
 							vm.pendingappsavail = 1;
-							return [{applicationID: 0, scheduleID:index, address:value.units+" - "+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+							if(value.units === ' '){
+								var units = '';
+							} else {
+								var units = value.units+" - ";								
+							}
+							return [{applicationID: 0, scheduleID:index, address: units+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
 						} 
 					});	
 					
@@ -77,6 +82,10 @@ vcancyApp
 						});
 					});	
 					
+					vm.submitappsextracols = [
+					  { field: "", title: "", show: true }
+					];
+					
 					vm.submitappscols = [
 					  { field: "address", title: "Address", sortable: "address", show: true },
 					  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
@@ -109,6 +118,13 @@ vcancyApp
 					$.map(snapshot.val(), function(value, key) {		
 						if(value.scheduleID == 0 && value.externalappStatus == "draft" ){
 							vm.pendingappsavail = 1;
+							if(value.address == ''){
+								value.address = 'No Address Entered';
+							} else {
+								value.address = value.address;
+							}
+							
+							
 							vm.tabledata.push({applicationID: key,scheduleID:0, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus});
 						}
 					});
@@ -156,6 +172,9 @@ vcancyApp
 							vm.submitappsdata.push({appID:key, address:value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus});
 						}
 					});
+					vm.submitappsextracols = [
+					  { field: "", title: "", show: true }
+					];
 					
 					vm.submitappscols = [
 					  { field: "address", title: "Address", sortable: "address", show: true },
@@ -185,13 +204,13 @@ vcancyApp
 		});
 		
 		if(vm.submittedappsavail == 0) {
-			vm.submitappsdata.push({scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''});
+			// vm.submitappsdata.push({scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''});
 		} else {			
 			vm.loader = 0;				
 		}
 		
 		if(vm.pendingappsavail == 0) {
-			vm.tabledata.push({scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''});
+			// vm.tabledata.push({scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''});
 		} else {			
 			vm.loader = 0;				
 		}
@@ -210,6 +229,7 @@ vcancyApp
 		
 		vm.gotoRental = function(event){
 			if(vm.disablebutton == 0){
+				$rootScope.renterExternalEmail = vm.email;
 				window.location.href = "#/rentalform/0/0";
 			}
 		}

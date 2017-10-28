@@ -28,9 +28,13 @@
 						<table ng-table-dynamic="tappctrl.submitappsSorting with tappctrl.submitappscols"  class="table table-striped table-vmiddle">
 							<tr ng-repeat="row in $data">
 								<td ng-repeat="col in $columns">{{row[col.field]}}</td>
+								<td ng-repeat="col in tappctrl.submitappsextracols">
+									<a href="" class="btn bgm-cyan m-b-5">Run Credit Check</a>
+									<a href="#/viewapp/{{row[appID]}}" target="_blank" class="btn bgm-blue m-b-5">Application</a>
+								</td>
 							</tr>
                             <tr ng-if="tappctrl.submitappsavail == 0">
-                            	<td colspan='3'>No pending applications yet </td>
+                            	<td colspan='3'>No submitted applications yet </td>
                             </tr>
 						</table>					
 		            </div> 
