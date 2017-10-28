@@ -40,12 +40,12 @@
 								<p class="m-b-0">
 									<label>Tel (work)<span class="mandatory" print-remove>*</span>:</label>
 									<span class="fg-line">
-										<input  required   type="text" ng-model="rctrl.rentaldata.telwork" class="form-control m-b-5 w-4" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" >
+										<input  required   type="text" ng-model="rctrl.rentaldata.telwork" class="form-control m-b-5 w-4 phone" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" >
 									</span>
 
 									<label>Tel (home)<span class="mandatory" print-remove>*</span>:</label>
 									<span class="fg-line">
-										<input  required   type="text" ng-model="rctrl.rentaldata.telhome" class="form-control m-b-5 w-4" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
+										<input  required   type="text" ng-model="rctrl.rentaldata.telhome" class="form-control m-b-5 w-4 phone" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
 									</span>
 
 									<label>Email<span class="mandatory" print-remove>*</span>:</label>
@@ -137,7 +137,7 @@
 									How long have you lived at this address<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.live_time" class="form-control m-b-5 w-4" id="" placeholder="Months/Years"></span><br>Rent/Mortgage amount<span class="mandatory" print-remove>*</span>: $ <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.rentamt" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  class="form-control m-b-5" id="" placeholder="0000.00"></span> Reason for vacating existing home<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.vacantreason" type="text" class="form-control m-b-5 w-3" id="" placeholder=""></span><br> 
 								</p>
 								<p class="m-b-10" >							
-									Full Name of Landlord<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.landlordname" type="text" class="form-control m-b-5 w-4" id="" placeholder="Full Name of Landlord"></span> Landlord’s daytime phone #<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.landlordphone" type="text" class="form-control m-b-5" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span>
+									Full Name of Landlord<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.landlordname" type="text" class="form-control m-b-5 w-4" id="" placeholder="Full Name of Landlord"></span> Landlord’s daytime phone #<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.landlordphone" type="text" class="form-control m-b-5 phone" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span>
 								</p>
 							</div>
 						</div>
@@ -202,7 +202,7 @@
 							<div class="border">
 								<h4 class="m-b-20 m-t-10">Primary Applicant:</h4>
 								<p class="m-b-10">Current Employer<span class="mandatory" print-remove>*</span>:  <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.appcurrentemployer" class="form-control m-b-5 w-5" id="" placeholder="Current Employer"></span> Position<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.appposition" class="form-control m-b-5 w-2" id="" placeholder="Position"></span>
-								<br>Employer phone #<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appemployerphone" type="text" class="form-control m-b-5 w-3" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span> <br>How long have you worked in this company<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appworkingduration" type="text" class="form-control m-b-5" id="" placeholder="Month/Year"></span> <br>Gross monthly income<span class="mandatory" print-remove>*</span>: $ <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appgrossmonthlyincome" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  type="text" class="form-control m-b-5 w-4" id="" placeholder="0000.00"></span> <span class="radio" style="display: inline-block;"><span class="p-r-5">Income type<span class="mandatory" print-remove>*</span>: </span><label><input  required  type="radio" class="" ng-model="rctrl.rentaldata.appincometype" value="employment" ><i class="input-helper"></i>Employment</label><label><input  required  type="radio" ng-model="rctrl.rentaldata.appincometype" value="retired"><i class="input-helper"></i>Retired</label></span> <br>Other income description (eg. Disability, Income Assistance, Savings)<span class="mandatory" print-remove>*</span>:  <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appotherincome" type="text" class="form-control m-b-5 w-5" id="" placeholder="eg. Disability, Income Assistance, Savings"></span></p>
+								<br>Employer phone #<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appemployerphone" type="text" class="form-control m-b-5 w-3 phone" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span> <br>How long have you worked in this company<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appworkingduration" type="text" class="form-control m-b-5" id="" placeholder="Month/Year"></span> <br>Gross monthly income<span class="mandatory" print-remove>*</span>: $ <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appgrossmonthlyincome" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/"  type="text" class="form-control m-b-5 w-4" id="" placeholder="0000.00"></span> <span class="radio" style="display: inline-block;"><span class="p-r-5">Income type<span class="mandatory" print-remove>*</span>: </span><label><input  required  type="radio" class="" ng-model="rctrl.rentaldata.appincometype" value="employment" ><i class="input-helper"></i>Employment</label><label><input  required  type="radio" ng-model="rctrl.rentaldata.appincometype" value="retired"><i class="input-helper"></i>Retired</label></span> <br>Other income description (eg. Disability, Income Assistance, Savings)<span class="mandatory" print-remove>*</span>:  <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.appotherincome" type="text" class="form-control m-b-5 w-5" id="" placeholder="eg. Disability, Income Assistance, Savings"></span></p>
 							</div>
 						</div>
 						
@@ -213,7 +213,7 @@
 								<p class="m-b-10">
 									Current Employer<span class="mandatory" print-remove>*</span>:  <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.otherappcurrentemployer[$index]" class="form-control m-b-5 w-4" id="" placeholder="Current Employer"></span> 
 									Position<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.otherappposition[$index]" class="form-control m-b-5 w-3" id="" placeholder="Position"></span> 
-									<br>Employer phone #<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.otherappemployerphone[$index]" type="text" class="form-control m-b-5 w-3" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span> 
+									<br>Employer phone #<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.otherappemployerphone[$index]" type="text" class="form-control m-b-5 w-3 phone" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span><br> 
 									How long have you worked in this company<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.otherappworkingduration[$index]" type="text" class="form-control m-b-5" id="" placeholder="Month/Year"></span> <br>
 									Gross monthly income<span class="mandatory" print-remove>*</span>: $ <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.otherappgrossmonthlyincome[$index]" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" type="text" class="form-control m-b-5 w-4" id="" placeholder="0000.00"></span> 
 									<span class="radio" style="display: inline-block;"><span class="p-r-5">Income type<span class="mandatory" print-remove>*</span>: </span><label><input  required  type="radio" class="" ng-model="rctrl.rentaldata.otherappincometype[$index]" value="employment" ><i class="input-helper"></i>Employment</label><label><input  required  type="radio" ng-model="rctrl.rentaldata.otherappincometype[$index]" value="retired"><i class="input-helper"></i>Retired</label></span> <br>
@@ -234,16 +234,16 @@
 							<h3 class="m-b-20 m-t-10 fw">Emergency Contact</h3>
 							<div class="border">
 								<p>Name and phone number of personal/family reference who may be contacted in the case of <u>emergency:</u></p>
-								<p class="m-b-10">Name<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder="Full Name"></span> Phone<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span></p>
+								<p class="m-b-10">Name<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.emergencyname"  type="text" class="form-control m-b-5 w-4" id="" placeholder="Full Name"></span> Phone<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.emergencyphone"  type="text" class="form-control m-b-5 w-4 phone" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span></p>
 							</div>
 						</div>
 						
 						<div class="printview">
 							<h3 class="m-b-20 m-t-10 fw">References</h3>
 							<div class="border">
-								<p class="m-b-10">1. Name<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.refone_name"  type="text" class="form-control m-b-5 w-4" id="" placeholder="Full Name"></span> Phone<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.refone_phone" type="text" class="form-control m-b-5 w-4" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span> Relationship (previous landlord, employer)<span class="mandatory" print-remove>*</span>:  <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.refone_relation" type="text" class="form-control m-b-5 w-6" id="" placeholder=""></span></p>
+								<p class="m-b-10">1. Name<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.refone_name"  type="text" class="form-control m-b-5 w-4" id="" placeholder="Full Name"></span> Phone<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.refone_phone" type="text" class="form-control m-b-5 w-4 phone" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span> Relationship (previous landlord, employer)<span class="mandatory" print-remove>*</span>:  <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.refone_relation" type="text" class="form-control m-b-5 w-6" id="" placeholder=""></span></p>
 
-								<p class="m-b-10">2. Name<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.reftwo_name" class="form-control m-b-5 w-4" id="" placeholder="Full Name"></span> Phone<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.reftwo_phone"  type="text" class="form-control m-b-5 w-4" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span> Relationship (previous landlord, employer)<span class="mandatory" print-remove>*</span>:  <span class="fg-line"><input  required  type="text" class="form-control m-b-5 w-6" id="" ng-model="rctrl.rentaldata.reftwo_relation" placeholder="Relationship"></span></p>
+								<p class="m-b-10">2. Name<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  type="text" ng-model="rctrl.rentaldata.reftwo_name" class="form-control m-b-5 w-4" id="" placeholder="Full Name"></span> Phone<span class="mandatory" print-remove>*</span>: <span class="fg-line"><input  required  ng-model="rctrl.rentaldata.reftwo_phone"  type="text" class="form-control m-b-5 w-4 phone" id="" placeholder="XXX-XXX-XXXX" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"></span> Relationship (previous landlord, employer)<span class="mandatory" print-remove>*</span>:  <span class="fg-line"><input  required  type="text" class="form-control m-b-5 w-6" id="" ng-model="rctrl.rentaldata.reftwo_relation" placeholder="Relationship"></span></p>
 							</div>
 						</div>
 						
@@ -306,6 +306,7 @@
 									<a id="draft" ng-click="rctrl.savechanges()" style="display:none;">Save Changes as Draft</a>
 									<button type="button" ng-click="rctrl.printApp()" class="btn bgm-orange btn-lg m-t-10">Print</button> 
 								</div>
+								</div>
 							</div>
 						</div>
 		    		</div>
@@ -321,3 +322,6 @@
 	Waves.init();
 	Waves.attach('.btn');
 </script> 
+<script>
+$(".phone").mask("999-999-9999");
+</script>

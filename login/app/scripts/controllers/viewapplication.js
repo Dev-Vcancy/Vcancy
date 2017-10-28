@@ -104,6 +104,7 @@ vcancyApp
 										
 										vm.rentaldata.minorappname= [];
 										vm.rentaldata.minorappdob= [];
+										vm.rentaldata.minorappsinno = [];
 										
 										if(v.minors != undefined){
 											angular.forEach(v.minors, function(value, key) {
@@ -115,6 +116,7 @@ vcancyApp
 										}
 										vm.rentaldata.otherappname= [];
 										vm.rentaldata.otherappdob= [];
+										vm.rentaldata.otherappsinno = [];
 										vm.rentaldata.otherappcurrentemployer= [];
 										vm.rentaldata.otherappposition= [];
 										vm.rentaldata.otherappemployerphone= [];
