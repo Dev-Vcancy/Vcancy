@@ -19,6 +19,15 @@ vcancyApp
 				if(snapshot.val() != null) {					
 					vm.pendingappsavail = 0;
 					
+					console.log($rootScope.$previousState.name);
+					if($rootScope.$previousState.name == "rentalform"){		
+						$state.transitionTo($state.current, $stateParams, {
+							reload: true,
+							inherit: false,
+							notify: true
+						});
+					}
+					
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {						
 						if(value.schedulestatus == "confirmed" ) { // && moment(value.dateslot).isBefore(new Date())
@@ -110,15 +119,6 @@ vcancyApp
 					})	
 				}
 				
-						
-				console.log($rootScope.$previousState.name);
-				if($rootScope.$previousState.name == "rentalform"){		
-					$state.transitionTo($state.current, $stateParams, {
-						reload: true,
-						inherit: false,
-						notify: true
-					});
-				}
 			});		
 		});	
 		
