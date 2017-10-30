@@ -25,7 +25,8 @@ var vcancyApp = angular
 	'gm',
 	'unsavedChanges',
 	'AngularPrint',
-	'ngFileUpload'
+	'ngFileUpload',
+	'ui.jq'
   ]); 
  
 	

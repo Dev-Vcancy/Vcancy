@@ -511,8 +511,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 		vm.toggleSwitch = function(key){
 			// console.log(key);
+			console.log(vm.viewprops[key].propstatus);	
 			var propstatus = !vm.viewprops[key].propstatus;
-			// console.log(propstatus);	
+			console.log(!vm.viewprops[key].propstatus);	
 			
 			firebase.database().ref('properties/'+key).once("value", function(snap) {
 				vm.property_address = snap.val().address;
@@ -523,7 +524,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				propstatus: propstatus
 			})
 			
-			if(propstatus === false) {
+			if(!vm.viewprops[key].propstatus == false) {
 				firebase.database().ref('applyprop/').orderByChild("propID").equalTo(key).once("value", function(snapshot) {	
 					$scope.$apply(function(){
 						vm.scheduleIDs = [];
@@ -562,6 +563,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					});	
 				});	
 			}
+			$state.reload();
 		}
 	}
 

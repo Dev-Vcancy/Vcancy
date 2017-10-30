@@ -818,7 +818,6 @@ vcancyApp
 			$state.go('tenantapplications');
 			
 			
-			
 		}
 		
 		vm.upload = function (file,filename) {
