@@ -310,7 +310,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			  propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
 				
 				if(snapshot.key != "undefined"){
-					var propertylink = "http://35.182.211.61/login/dist/#/applyproperty/"+snapshot.key;
+					var propertylink = "http://www.vcancy.ca/login/dist/#/applyproperty/"+snapshot.key;
 					vm.prop.propertylink = propertylink;	
 					
 					// link generated and property added message
@@ -434,7 +434,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 							});		
 
 							if(propstatus === false){
-								var emailData = '<p>Hello, </p><p>'+address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in http://35.182.211.61/login/dist/#/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+								var emailData = '<p>Hello, </p><p>'+address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in http://www.vcancy.ca/login/dist/#/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 									
 								// Send Email
 								emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), address+' has been deactivated', 'deactivateproperty', emailData);
@@ -455,7 +455,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 						 
 								angular.forEach(vm.tenants, function(tenantID, key) {
 									firebase.database().ref('users/'+tenantID).once("value", function(snap) {
-										var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has made some changes in time slots for this property.</p><p>To reschedule the viewing and book some another available time, please log in http://35.182.211.61/login/dist/#/ and use the link initially provided to schedule the viewing or follow the link http://35.182.211.61/login/dist/#/applyproperty/'+$stateParams.propId+'.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+										var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has made some changes in time slots for this property.</p><p>To reschedule the viewing and book some another available time, please log in http://www.vcancy.ca/login/dist/#/ and use the link initially provided to schedule the viewing or follow the link http://www.vcancy.ca/login/dist/#/applyproperty/'+$stateParams.propId+'.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 									
 										// Send Email
 										emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'updateproperty', emailData);
@@ -540,7 +540,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 							// console.log(value);
 						});	
 
-						var emailData = '<p>Hello, </p><p>'+vm.property_address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in http://35.182.211.61/login/dist/#/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+						var emailData = '<p>Hello, </p><p>'+vm.property_address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in http://www.vcancy.ca/login/dist/#/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 									
 						// Send Email
 						emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address+' has been deactivated', 'deactivateproperty', emailData);
