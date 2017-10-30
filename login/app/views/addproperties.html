@@ -62,7 +62,7 @@
 							</div>
 
 							<div class="col-sm-2 m-b-20">
-								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" ng-blur="propctrl.unitsOptional('house')"  required class="form-control" placeholder="Unit number">
+								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" ng-blur="propctrl.unitsClear('house')"  required class="form-control" placeholder="Unit number">
 							</div>
 							<div class="col-sm-3 m-b-20 input-group" style="float:left;">
 								<span class="input-group-addon">$</span>
@@ -136,7 +136,7 @@
 										</label>
 									</div>
 									<div class="col-sm-1 hidden-xs">									
-										<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="propctrl.removeTimeSlot($index)" class="btn btn-xs btn-danger pull-right"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
+										<button  type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="propctrl.removeTimeSlot($index)" class="btn btn-xs btn-danger pull-right"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
 									</div>
 									<div class="col-sm-12">	
 										<div  ng-if="propctrl.prop.invalid[$index]"  class="alert alert-danger" style="padding:3px !important;text-align:center">Each renter has a 30 min slot unless the checkbox is checked.</div>
