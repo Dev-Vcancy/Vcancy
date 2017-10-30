@@ -545,7 +545,7 @@ vcancyApp
 			
 			var appfiles = $('#appfiles').val();
 			var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-			var filepath = filename != '' ? "http://35.182.211.61/login/dist/images/"+filename : appfiles;
+			var filepath = filename != '' ? "http://www.vcancy.ca/login/dist/images/"+filename : appfiles;
 			
 			var appcurrentemployer = vm.rentaldata.appcurrentemployer == undefined ? '' :vm.rentaldata.appcurrentemployer;
 			var appposition = vm.rentaldata.appposition == undefined ? '' :vm.rentaldata.appposition;
@@ -801,17 +801,17 @@ vcancyApp
 				if(landlordID != 0) {
 					firebase.database().ref('users/'+landlordID).once("value", function(snap) {
 						console.log(snap.val());
-						var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted a rental application for '+address+'.</p><p>To view the application, please log in http://35.182.211.61/login/dist/#/ and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+						var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted a rental application for '+address+'.</p><p>To view the application, please log in http://www.vcancy.ca/login/dist/#/ and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 						
 						emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname+' has submitting a rental application', 'rentalreceive', emailData);
 					});
 				} else {
-					var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted an online rental application via Vcancy.com.Please go to this link http://35.182.211.61/login/dist/#/viewexternalapp/'+vm.applicationID+' to view the application.</p><p>Check out vcancy.com http://35.182.211.61/login/dist/#/ to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted an online rental application via Vcancy.com.Please go to this link http://www.vcancy.ca/login/dist/#/viewexternalapp/'+vm.applicationID+' to view the application.</p><p>Check out vcancy.com http://www.vcancy.ca/login/dist/#/ to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 					
 					emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname+' has submitting a rental application', 'rentalreceive', emailData);
 				}
 					
-				var emailData = '<p>Hello '+applicantname+', </p><p>Your rental application has been submitted to '+applicantemail+'.</p><p>To make changes, please log in  http://35.182.211.61/login/dist/#/ and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+				var emailData = '<p>Hello '+applicantname+', </p><p>Your rental application has been submitted to '+applicantemail+'.</p><p>To make changes, please log in  http://www.vcancy.ca/login/dist/#/ and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 					
 				emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
 			}
