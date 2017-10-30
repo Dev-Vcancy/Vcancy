@@ -57,26 +57,31 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	// to remove timeslots
 	vm.removeTimeSlot = function(slotindex){
-		if($state.current.name == 'editprop') {
-			if ($window.confirm("Are you sure you want to delete this viewing slot? "))  {	
-				if(slotindex < oldtimeSlotLen){
-					vm.timeslotmodified = "true";
-				} 
+		if(vm.timeSlot.length == 1){
+			
+		} else {
+			if($state.current.name == 'editprop') {
+				if ($window.confirm("Are you sure you want to delete this viewing slot? "))  {	
+					if(slotindex < oldtimeSlotLen){
+						vm.timeslotmodified = "true";
+					} 
+					vm.timeSlot.splice(slotindex,1);
+					vm.prop.date.splice(slotindex,1);
+					vm.prop.fromtime.splice(slotindex,1);
+					vm.prop.to.splice(slotindex,1);
+					vm.prop.limit.splice(slotindex,1);	
+					vm.prop.multiple.splice(slotindex,1);
+				}			
+			} else {
 				vm.timeSlot.splice(slotindex,1);
 				vm.prop.date.splice(slotindex,1);
 				vm.prop.fromtime.splice(slotindex,1);
 				vm.prop.to.splice(slotindex,1);
 				vm.prop.limit.splice(slotindex,1);	
 				vm.prop.multiple.splice(slotindex,1);
-			}			
-		} else {
-			vm.timeSlot.splice(slotindex,1);
-			vm.prop.date.splice(slotindex,1);
-			vm.prop.fromtime.splice(slotindex,1);
-			vm.prop.to.splice(slotindex,1);
-			vm.prop.limit.splice(slotindex,1);	
-			vm.prop.multiple.splice(slotindex,1);
-		}			
+			}
+		}		
+				
 	}
 	
 	// DATEPICKER
@@ -188,12 +193,17 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				} else {
 					var totime = vm.prop.to[i];	
 				}
+				
+				console.log(fromtime > ftime , to > ftime,fromtime > totime , to > totime)	;			
+				
+				if ((moment(fromtime).format('HH:mm') <= moment(ftime).format('HH:mm') && moment(to).format('HH:mm') <= moment(ftime).format('HH:mm') && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || (moment(fromtime).format('HH:mm') >= moment(totime).format('HH:mm') && moment(to).format('HH:mm') >= moment(totime).format('HH:mm') && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isBefore(moment(vm.prop.date[i]).format('DD-MMMM-YYYY')) || moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isAfter(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) {
 					
-				if (((fromtime > ftime || to > ftime) && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || ((fromtime > totime || to > totime) && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY')))) {
+				} else { 
 					vm.overlap = 1;
-				} 
+				}
 			}
 		}
+		console.log(vm.overlap);
 	
 		if(vm.overlap == 1) {
 			vm.prop.timeoverlapinvalid[key] = 1;
@@ -229,14 +239,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					vm.isDisabled = true;
 				}
 			}
-		} else {
+		} else if((vm.prop.multiple[key] === true) && vm.prop.timeinvalid[key] == 0){
 			vm.prop.invalid[key] = 0;
-			// console.log(typeof vm.prop.address == "string", vm.googleAddress == 1);
-			if(vm.prop.address != undefined && (typeof vm.prop.address == "string" || vm.googleAddress == 1)){
-				vm.isDisabled = false;
-			} else {
-				vm.isDisabled = true;
-			}
+			vm.isDisabled = false;
 		}
 	}
 
@@ -506,8 +511,9 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 		vm.toggleSwitch = function(key){
 			// console.log(key);
+			console.log(vm.viewprops[key].propstatus);	
 			var propstatus = !vm.viewprops[key].propstatus;
-			// console.log(propstatus);	
+			console.log(!vm.viewprops[key].propstatus);	
 			
 			firebase.database().ref('properties/'+key).once("value", function(snap) {
 				vm.property_address = snap.val().address;
@@ -518,7 +524,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				propstatus: propstatus
 			})
 			
-			if(propstatus === false) {
+			if(!vm.viewprops[key].propstatus == false) {
 				firebase.database().ref('applyprop/').orderByChild("propID").equalTo(key).once("value", function(snapshot) {	
 					$scope.$apply(function(){
 						vm.scheduleIDs = [];
@@ -557,6 +563,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 					});	
 				});	
 			}
+			$state.reload();
 		}
 	}
 
@@ -685,7 +692,16 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 		console.log(vm.prop.units);
 		if(vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)){
 			vm.prop.units = ' ';
+		} else if(vm.prop.proptype != proptype && (vm.prop.units == '' || vm.prop.units == undefined)){
+			vm.prop.units = '';
 		}
+	}
+	
+	this.unitsClear = function(proptype){
+		console.log(vm.prop.units);
+		if(vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)){
+			vm.prop.units = ' ';
+		} 
 	}
 }])
 	
