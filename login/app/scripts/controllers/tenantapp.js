@@ -11,7 +11,7 @@ vcancyApp
 		var tenantID = localStorage.getItem('userID');
 		vm.loader = 1;
 		vm.submittedappsavail = 0;
-		vm.submitappsdata = [];		
+		vm.submitappsdata = [];	
 		
 		firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
 			// console.log(snapshot.val())
@@ -108,6 +108,16 @@ vcancyApp
 						}*/
 						 // dataset: vm.submitappsdata
 					})	
+				}
+				
+						
+				console.log($rootScope.$previousState.name);
+				if($rootScope.$previousState.name == "rentalform"){		
+					$state.transitionTo($state.current, $stateParams, {
+						reload: true,
+						inherit: false,
+						notify: true
+					});
 				}
 			});		
 		});	
@@ -214,8 +224,8 @@ vcancyApp
 		} else {			
 			vm.loader = 0;				
 		}
-				
-				
+		
+		
 		vm.email = '';
 		vm.disablebutton = 1;
 		vm.emailrequired = function(event){
