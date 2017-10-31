@@ -12,7 +12,7 @@ var runSequence = require('run-sequence');
 
 var yeoman = {
   app: require('./bower.json').appPath || 'app',
-  dist: 'dist'
+  dist: '../login'
 };
 
 var paths = {
