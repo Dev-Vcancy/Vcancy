@@ -420,7 +420,7 @@ vcancyApp
 							vm.rentaldata.reftwo_relation = value.reftwo_relation;
 							vm.rentaldata.dated = new Date(value.dated);
 							
-							vm.submitemail = value.externalemail == undefined ? '': value.externalemail;
+							vm.submitemail = value.externalemail;
 						console.log(vm.submitemail);
 						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
 							$scope.$apply(function(){
@@ -505,7 +505,7 @@ vcancyApp
 				}
 			}
 			
-			var externalemail = vm.submitemail;
+			var externalemail = vm.submitemail  == undefined ? '': vm.submitemail;
 			
 			console.log(externalappStatus);
 			
