@@ -559,11 +559,12 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 								emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
 							});
 						});
-						
+						$state.reload();
 					});	
 				});	
+			} else {
+				$state.reload();				
 			}
-			$state.reload();
 		}
 	}
 
