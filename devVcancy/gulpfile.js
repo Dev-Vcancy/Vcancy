@@ -12,7 +12,7 @@ var runSequence = require('run-sequence');
 
 var yeoman = {
   app: require('./bower.json').appPath || 'app',
-  dist: '../login'
+  dist: 'dist'
 };
 
 var paths = {
@@ -76,7 +76,7 @@ gulp.task('start:server', function() {
     livereload: true,
     // Change this to '0.0.0.0' to access the server from outside.
     port: 9000,
-	middleware:function(connect, opt){
+  middleware:function(connect, opt){
       return [['/bower_components', 
         connect["static"]('./bower_components')]]
     }
@@ -152,7 +152,7 @@ gulp.task('bower', function () {
 ///////////
 
 gulp.task('clean:dist', function (cb) {
-  rimraf('./dist', cb);
+  rimraf('./../login', cb);
 });
 
 gulp.task('client:build', ['html', 'styles'], function () {
@@ -162,8 +162,8 @@ gulp.task('client:build', ['html', 'styles'], function () {
   return gulp.src(paths.views.main)
     .pipe($.useref({searchPath: [yeoman.app, '.tmp']}))
     .pipe(jsFilter)
-    .pipe($.ngAnnotate())
-    .pipe($.uglify())
+    //.pipe($.ngAnnotate())
+    //.pipe($.uglify())
     .pipe(jsFilter.restore())
     .pipe(cssFilter)
     .pipe($.minifyCss({cache: true}))
@@ -179,6 +179,7 @@ gulp.task('html', function () {
 });
 
 gulp.task('images', function () {
+  console.log(yeoman.dist);
   return gulp.src(yeoman.app + '/images/**/*')
     .pipe($.cache($.imagemin({
         optimizationLevel: 5,
