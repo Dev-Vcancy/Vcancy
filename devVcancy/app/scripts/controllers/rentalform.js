@@ -287,7 +287,7 @@ vcancyApp
 												}
 											});								
 										});				
-									} 
+									 } 
 								});
 							});
 						});
@@ -420,8 +420,8 @@ vcancyApp
 							vm.rentaldata.reftwo_relation = value.reftwo_relation;
 							vm.rentaldata.dated = new Date(value.dated);
 							
-							vm.submitemail = value.externalemail;
-						
+							vm.submitemail = value.externalemail == undefined ? '': value.externalemail;
+						console.log(vm.submitemail);
 						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
 							$scope.$apply(function(){
 								if(snap.val()!= null) {
