@@ -265,7 +265,9 @@
 							</p>
 
 							<p>
-								Signature of Primary Applicant:  <span class="fg-line"><input readonly="true" required  type="text" class="form-control m-b-5 w-3" ng-model="vappctrl.rentaldata.appsign" id="" placeholder=""></span>(FULL NAME IN CAPS)  
+								Signature of Primary Applicant:  <span class="fg-line"><input readonly="true" required  type="text" class="form-control m-b-5 w-3" ng-model="vappctrl.rentaldata.appsign" id="" placeholder=""></span>(FULL NAME IN CAPS)
+							</p>
+							<p>
 								<span   ng-repeat="x in vappctrl.adult">Signature of Additional Applicant #{{$index+1}}:   <span class="fg-line"><input readonly="true" required  type="text" ng-model="vappctrl.rentaldata.otherappsign[$index]" class="form-control m-b-5 w-3" id="" placeholder=""></span>(FULL NAME IN CAPS)<br/> </span>
 							</p>
 							<span>Upload Document/Image File: </span><a href="{{vappctrl.rentaldata.appfiles}}" target="_blank">{{vappctrl.rentaldata.appfiles}}</a>
