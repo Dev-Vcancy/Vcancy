@@ -1,0 +1,89 @@
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
+
+<section id="main">
+    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+    <section id="content">
+
+        <div class="container">
+            <div class="block-header text-center">
+                <h2>Landlord Dashboard</h2>
+            </div>
+			<div class="loader" ng-if="ldboardctrl.loader">
+	            <div class="preloader pl-xl">
+	                <svg class="pl-circular" viewBox="25 25 50 50">
+	                    <circle class="plc-path" cx="50" cy="50" r="20"/>
+	                </svg>
+	            </div>
+	      	</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div id="pie-charts" class="dash-widget-item pt-inner">
+						<div class="pti-header bgm-lightblue">
+							<div class="text-center">
+								<div class="main-pie home_block">
+									<i class="zmdi zmdi-home zmdi-hc-fw"></i>
+									<h1 class="text-bold">{{ldboardctrl.proplive}} </h1>
+									<div class="ptih-title">Properties Live</div>
+									
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div id="pie-charts" class="dash-widget-item  pt-inner">
+						<div class="pti-header bgm-cyan">
+							<div class="text-center">
+								<div class="main-pie home_block">
+									<i class="zmdi zmdi-alarm-check zmdi-hc-fw"></i>
+									<h1 class="text-bold">{{ldboardctrl.viewingschedule}}</h1>
+									<div class="ptih-title">Viewings Schedule</div>
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div id="pie-charts" class="dash-widget-item  pt-inner">
+						<div class="pti-header bgm-cyan">
+							<div class="text-center">
+								<div class="main-pie home_block">
+									<i class="zmdi zmdi-eye zmdi-hc-fw"></i>
+									<h1 class="text-bold">{{ldboardctrl.viewed}}</h1>
+									<div class="ptih-title">Viewed</div>
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div id="pie-charts" class="dash-widget-item pt-inner">
+						<div class="pti-header  bgm-lightblue">
+							<div class="text-center">
+								<div class="main-pie home_block">
+									<i class="zmdi zmdi-layers zmdi-hc-fw"></i>
+									<h1 class="text-bold">{{ldboardctrl.submitapps}}</h1>
+									<div class="ptih-title">Submitted Apps</div>
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>
+				<!-- <div class="col-sm-12"> -->
+					<!-- <h2>Your Showings</h2> -->
+					<!-- <ul> -->
+						<!-- <li>Sat, Nov 26,2017: 2pm - 4pm</li> -->
+						<!-- <li>Fri, Nov 21,2017: 1pm - 5pm</li> -->
+					<!-- </ul> -->
+				<!-- </div> -->
+			</div>
+            
+        </div>
+    </section>
+</section>
+
+<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+<script type="text/javascript">
+	Waves.init();
+	Waves.attach('.btn');
+</script>    
