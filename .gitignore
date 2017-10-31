@@ -4,4 +4,8 @@ login/bower_components
 login/node_modules
 login/app/bower_components
 
+devVcancy/bower_components
+devVcancy/node_modules
+devVcancy/app/bower_components
+devVcancy/dist
 node/node_modules
