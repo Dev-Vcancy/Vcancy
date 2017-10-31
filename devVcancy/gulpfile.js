@@ -12,7 +12,7 @@ var runSequence = require('run-sequence');
 
 var yeoman = {
   app: require('./bower.json').appPath || 'app',
-  dist: 'dist'
+  dist: './dist'
 };
 
 var paths = {
@@ -179,7 +179,6 @@ gulp.task('html', function () {
 });
 
 gulp.task('images', function () {
-  console.log(yeoman.dist);
   return gulp.src(yeoman.app + '/images/**/*')
     .pipe($.cache($.imagemin({
         optimizationLevel: 5,
