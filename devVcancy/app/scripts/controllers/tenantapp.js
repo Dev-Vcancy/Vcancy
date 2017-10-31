@@ -21,11 +21,7 @@ vcancyApp
 					
 					console.log($rootScope.$previousState.name);
 					if($rootScope.$previousState.name == "rentalform"){		
-						$state.transitionTo($state.current, $stateParams, {
-							reload: true,
-							inherit: false,
-							notify: true
-						});
+						$state.reload();
 					}
 					
 					//to map the object to array
@@ -128,6 +124,12 @@ vcancyApp
 					$.map(snapshot.val(), function(value, key) {		
 						if(value.scheduleID == 0 && value.externalappStatus == "draft" ){
 							vm.pendingappsavail = 1;
+														
+							console.log($rootScope.$previousState.name);
+							if($rootScope.$previousState.name == "rentalform"){		
+								$state.reload();
+							}
+					
 							if(value.address == ''){
 								value.address = 'No Address Entered';
 							} else {
@@ -225,6 +227,11 @@ vcancyApp
 			vm.loader = 0;				
 		}
 		
+									
+		console.log($rootScope.$previousState.name);
+		if($rootScope.$previousState.name == "rentalform"){		
+			$state.reload();
+		}
 		
 		vm.email = '';
 		vm.disablebutton = 1;

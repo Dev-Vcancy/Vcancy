@@ -419,6 +419,8 @@ vcancyApp
 							vm.rentaldata.reftwo_phone = value.reftwo_phone;
 							vm.rentaldata.reftwo_relation = value.reftwo_relation;
 							vm.rentaldata.dated = new Date(value.dated);
+							
+							vm.submitemail = value.externalemail;
 						
 						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
 							$scope.$apply(function(){
@@ -502,6 +504,9 @@ vcancyApp
 					var externalappStatus = "submit";	
 				}
 			}
+			
+			var externalemail = vm.submitemail;
+			
 			console.log(externalappStatus);
 			
 			var address = vm.propdata.address == undefined ? '' :vm.propdata.address;
@@ -657,6 +662,7 @@ vcancyApp
 					
 					applicantsno: (vm.adult.length)+1,
 					externalappStatus: externalappStatus,
+					externalemail: externalemail,
 					
 					dated: dated,
 					
@@ -747,6 +753,7 @@ vcancyApp
 					
 					applicantsno: (vm.adult.length)+1,
 					externalappStatus: externalappStatus,
+					externalemail: externalemail,
 					
 					dated: dated,
 					
