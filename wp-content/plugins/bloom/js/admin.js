@@ -524,7 +524,14 @@
 
 		$( 'body' ).on( 'change', '.et_dashboard_select_provider_new select', function() {
 			var selected = $( this ).val();
-				display_new_account_form( selected );
+			var new_tab;
+
+			if ( 'aweber' === selected ) {
+				// Open a new tab without URL so that it isn't blocked by popup blocker (we'll update the URL after AJAX call)
+				new_tab = window.open('');
+			}
+
+			display_new_account_form( selected, new_tab );
 		});
 
 		$( 'body' ).on( 'click', '.save_account_tab', function() {
@@ -1403,20 +1410,24 @@
 			});
 		}
 
-		function display_new_account_form( $service ) {
+		function display_new_account_form( service, new_tab ) {
 			$.ajax({
 				type: 'POST',
 				url: bloom_settings.ajaxurl,
 				data: {
 					action : 'bloom_generate_new_account_fields',
 					accounts_tab_nonce : bloom_settings.accounts_tab,
-					bloom_service : $service
+					bloom_service : service
 				},
 				success: function( data ){
 					$( 'ul.et_dashboard_new_account_fields' ).replaceWith( function() {
 							return $( data ).hide().fadeIn();
 						} );
 					$( '.account_settings_fields' ).addClass( 'et_visible_settings' );
+
+					if ( 'aweber' === service ) {
+						new_tab.location = 'https://auth.aweber.com/1.0/oauth/authorize_app/e233dabd';
+					}
 				}
 			});
 		}

@@ -44,61 +44,11 @@ $all_sections = array(
  * 'validation_type' and 'name' are required attribute for the option which should be saved into DataBase.
  *
  */
-$email_providers = array(
-	'mailchimp'        => 'MailChimp',
-	'aweber'           => 'Aweber',
-	'constant_contact' => 'Constant Contact',
-	'campaign_monitor' => 'Campaign Monitor',
-	'madmimi'          => 'Mad Mimi',
-	'icontact'         => 'iContact',
-	'getresponse'      => 'GetResponse',
-	'sendinblue'       => 'SendinBlue',
-	'mailpoet'         => 'MailPoet',
-	'feedblitz'        => 'Feedblitz',
-	'ontraport'        => 'Ontraport',
-	'infusionsoft'     => 'Infusionsoft',
-	'salesforce'       => 'SalesForce',
-	'hubspot'          => 'HubSpot',
-	'convertkit'       => 'ConvertKit',
-	'mailster'         => 'Mailster',
-	'emma'             => 'Emma',
-	'activecampaign'   => 'ActiveCampaign',
-	'mailerlite'       => 'MailerLite',
-);
+$providers       = ET_Core_API_Email_Providers::instance();
+$email_providers = $providers->names_by_slug();
 
-$last_name_field_support = array(
-	'constant_contact',
-	'sendinblue',
-	'feedblitz',
-	'mailpoet',
-	'madmimi',
-	'icontact',
-	'mailchimp',
-	'ontraport',
-	'infusionsoft',
-	'salesforce',
-	'hubspot',
-	'mailster',
-	'emma',
-	'activecampaign',
-);
-
-$name_field_only_support = array(
-	'getresponse',
-	'aweber',
-	'campaign_monitor',
-	'convertkit',
-);
-
-$providers = new ET_Core_API_Email_Providers( 'bloom' );
-$third_party_providers = $providers->names( 'third-party' );
-if ( ! empty( $third_party_providers ) ) {
-	foreach ( $third_party_providers as $provider_name ) {
-		$slug = strtolower( $provider_name );
-		$email_providers[ $slug ] = $provider_name;
-		$last_name_field_support[] = $slug;
-	}
-}
+$name_field_only_support = array_keys( $providers->names_by_slug( 'all', 'name_field_only' ) );
+$last_name_field_support = array_diff( array_keys( $email_providers ), $name_field_only_support );
 
 // Sort alphabetically.
 ksort( $email_providers );
