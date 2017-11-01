@@ -27,6 +27,7 @@ if ( wp_doing_ajax() && ! is_customize_preview() ) {
 			'et_fb_process_imported_content',
 			'et_fb_get_saved_templates',
 			'et_fb_retrieve_builder_data',
+			'et_pb_process_custom_font',
 			'et_builder_email_add_account',     // email opt-in module
 			'et_builder_email_remove_account',  // email opt-in module
 			'et_builder_email_get_lists',       // email opt-in module
@@ -213,14 +214,38 @@ function et_builder_get_animation_data() {
 }
 add_action( 'wp_footer', 'et_builder_get_animation_data' );
 
+// Force Backbone templates cache to be cleared on language change to make sure the settings modal is translated
+// defaults for arguments are provided because their number is different for both the actions
+function et_pb_force_clear_template_cache( $meta_id = false, $object_id = false, $meta_key = false, $_meta_value = false) {
+	$current_action = current_action();
+
+	if ( ( 'updated_user_meta' === $current_action && 'locale' === $meta_key ) || 'update_option_WPLANG' === $current_action ) {
+		et_update_option( 'et_pb_clear_templates_cache', true );
+	}
+}
+add_action( 'update_option_WPLANG', 'et_pb_force_clear_template_cache' );
+add_action( 'updated_user_meta', 'et_pb_force_clear_template_cache', 10, 4 );
+
 function et_builder_handle_animation_data( $element_data = false ) {
 	static $data = array();
+	static $data_classes = array();
 
 	if ( ! $element_data ) {
 		return $data;
 	}
 
+	// This should not be possible but let's be safe
+	if ( empty( $element_data['class'] ) ) {
+		return;
+	}
+
+	// Prevent duplication animation data entries created by global modules
+	if ( in_array( $element_data['class'], $data_classes ) ) {
+		return;
+	}
+
 	$data[] = $element_data;
+	$data_classes[] = $element_data['class'];
 }
 
 /**
@@ -437,6 +462,16 @@ function et_builder_has_theme_style_enqueued() {
 function et_builder_body_classes( $classes ) {
 	if ( is_et_pb_preview() ) {
 		$classes[] = 'et-pb-preview';
+	}
+
+	// Minified JS identifier class name
+	if ( ! et_load_unminified_scripts() ) {
+		$classes[] = 'et_minified_js';
+	}
+
+	// Minified CSS identifier class name
+	if ( ! et_load_unminified_styles() ) {
+		$classes[] = 'et_minified_css';
 	}
 
 	return $classes;

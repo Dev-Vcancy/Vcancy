@@ -1,3 +1,47 @@
+version 1.2.20 ( updated 10-18-2017 )
+- Updated core framework to the latest version.
+	* core/admin/fonts/modules.eot
+	* core/admin/fonts/modules.svg
+	* core/admin/fonts/modules.ttf
+	* core/admin/fonts/modules.woff
+
+version 1.2.19 ( updated 9-29-2017 )
+- Updated core framework to the latest version.
+	* core/components/api/email/ConstantContact.php
+	* core/components/api/email/GetResponse.php
+	* core/components/api/email/MailPoet.php
+	* core/components/api/email/_MailPoet2.php
+	* core/components/api/email/Provider.php
+	* core/components/api/email/Providers.php
+	* bloom.php
+	* js/admin.js
+
+version 1.2.18 ( updated 9-21-2017 )
+- Improved API wrappers for iContact, Constant Contact, HubSpot, MadMimi, and MailPoet and moved them to core.
+- Added support for MailPoet 3.
+	* core/functions.php
+	* core/components/data/init.php
+	* core/components/data/Utils.php
+	* core/components/api/email/init.php
+	* core/components/api/email/iContact.php
+	* core/components/api/email/_ProviderName.php
+	* core/components/api/email/Providers.php
+	* core/components/api/email/Provider.php
+	* core/components/api/email/MailPoet.php
+	* core/components/api/email/MadMimi.php
+	* core/components/api/email/HubSpot.php
+	* core/components/api/email/GetResponse.php
+	* core/components/api/email/Feedblitz.php
+	* core/components/api/email/Emma.php
+	* core/components/api/email/ConvertKit.php
+	* core/components/api/email/ConstantContact.php
+	* core/components/api/email/CampaignMonitor.php
+	* core/components/api/email/Aweber.php
+	* core/components/api/email/ActiveCampaign.php
+	* core/components/api/Service.php
+	* core/components/Logger.php
+	* core/components/HTTPInterface.php
+
 version 1.2.17 ( updated 9-6-2017 )
 - Updated core framework to the latest version.
 	* core/init.php
@@ -70,7 +114,7 @@ version 1.2.5 ( updated 6-28-2017 )
 	* core/components/lib/BluehostCache.php
 	* core/functions.php
 	* core/init.php
-	
+
 version 1.2.4 ( updated 5-31-2017 )
 - Fixed a bug with ActiveCampaign integration that prevented confirmation emails from being sent to users.
 	* /core/components/api/email/ActiveCampaign.php
@@ -85,8 +129,8 @@ version 1.2.2 ( updated 5-3-2017 )
 	* core/components/api/email/MailChimp.php
 
 version 1.2.1 ( updated 4-26-2017 )
-- Fixed error that occured on websites running PHP 5.2. 
-- Fixed error that occured when updating plugins for some customers. 
+- Fixed error that occured on websites running PHP 5.2.
+- Fixed error that occured when updating plugins for some customers.
 	* core/components/Updates.php
 	* core/functions.php
 	* core/main_functions.php
@@ -98,17 +142,17 @@ version 1.2 ( updated 4-25-2017 )
 - Added ConvertKit support.
 - Added MailerLite support.
 - Added Mailster Support.
-- Streamlined and re-created core authorization methods for all email providers, removing Bloom's dependency on third party libraries and allowing for the use of core WordPress functions when managing email accounts. 
+- Streamlined and re-created core authorization methods for all email providers, removing Bloom's dependency on third party libraries and allowing for the use of core WordPress functions when managing email accounts.
 - Moved authorization methods to Elegant Themes core framework to be used on other products, such as Divi.
-- Text color settings will no longer affect success message, since this is always displayed on a white background. 
+- Text color settings will no longer affect success message, since this is always displayed on a white background.
 - Bloom optins will now work correctly on WooCommerce homepages.
-- Added RTL support for Bloom Dashboard. 
-- Fixed issue where open/close animations where not working for On Click triggers after triggering the optin multiple times. 
+- Added RTL support for Bloom Dashboard.
+- Fixed issue where open/close animations where not working for On Click triggers after triggering the optin multiple times.
 - Fixed a bug that caused some border styles to not inherit custom border colors.
-- Fixed incorrect CSS selector that caused some Google fonts to not work correctly. 
+- Fixed incorrect CSS selector that caused some Google fonts to not work correctly.
 - Quotes will now be encoded correctly inside of optin form content areas.
 - Optin forms with active split tests will now correctly log view stats for locked content optins.
-- Fixed an issue where not all posts and pages were listed in the Include/Exclude options. 
+- Fixed an issue where not all posts and pages were listed in the Include/Exclude options.
 - Fixed a bug that caused cookies to not be applied correctly in some situations when using Custom HTML optins.
 - Disabled "below the post" optins when the Divi Visual Builder is being used.
 - Fixed an error that occurred during Bloom settings import in some situations.

@@ -38,7 +38,7 @@
 .et_divi_builder #et_builder_outer_content .et-info:before {
   width: 22px;
   height: 20px;
-  background: url(../images/shortcodes-sprite.png) no-repeat -97px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -97px -2px;
 }
 .et_divi_builder #et_builder_outer_content .et-info .et-box-content {
   color: #ada771;
@@ -62,7 +62,7 @@
 .et_divi_builder #et_builder_outer_content .et-warning:before {
   width: 17px;
   height: 17px;
-  background: url(../images/shortcodes-sprite.png) no-repeat -75px -41px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -75px -41px;
 }
 .et_divi_builder #et_builder_outer_content .et-warning .et-box-content {
   color: #ad7676;
@@ -86,7 +86,7 @@
 .et_divi_builder #et_builder_outer_content .et-download:before {
   width: 19px;
   height: 14px;
-  background: url(../images/shortcodes-sprite.png) no-repeat -23px -19px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -23px -19px;
 }
 .et_divi_builder #et_builder_outer_content .et-download .et-box-content {
   color: #7ea57b;
@@ -110,7 +110,7 @@
 .et_divi_builder #et_builder_outer_content .et-bio:before {
   width: 19px;
   height: 15px;
-  background: url(../images/shortcodes-sprite.png) no-repeat -23px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -23px -2px;
   top: 33px;
 }
 .et_divi_builder #et_builder_outer_content .et-bio .et-box-content {
@@ -170,7 +170,7 @@
   box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.1);
 }
 .et_divi_builder #et_builder_outer_content .et-tooltip-arrow {
-  background: url(../images/shortcodes-sprite.png) no-repeat -120px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -120px -2px;
   width: 24px;
   height: 13px;
   display: block;
@@ -219,7 +219,7 @@
   margin-left: -6px;
   width: 13px;
   height: 10px;
-  background: url(../images/shortcodes-sprite.png) no-repeat -58px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -58px -2px;
 }
 .et_divi_builder #et_builder_outer_content .et-learn-more .open span.et_learnmore_arrow span {
   background-position: -58px -14px;
@@ -262,7 +262,7 @@
   margin: 0 3px;
 }
 .et_divi_builder #et_builder_outer_content .et_shortcodes_controls a {
-  background: url(../images/shortcodes-sprite.png) no-repeat -45px -1px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -45px -1px;
   width: 11px;
   height: 11px;
   display: inline-block;
@@ -578,60 +578,60 @@
   height: 16px;
 }
 .et_divi_builder #et_builder_outer_content a.download-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -3px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -3px -2px;
   width: 17px;
   height: 20px;
   top: 7px;
 }
 .et_divi_builder #et_builder_outer_content a.search-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -206px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -206px -2px;
   top: 9px;
 }
 .et_divi_builder #et_builder_outer_content a.refresh-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -169px -19px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -169px -19px;
 }
 .et_divi_builder #et_builder_outer_content a.question-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -164px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -164px -2px;
 }
 .et_divi_builder #et_builder_outer_content a.people-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -151px -33px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -151px -33px;
   height: 17px;
   top: 9px;
 }
 .et_divi_builder #et_builder_outer_content a.warning-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -188px -19px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -188px -19px;
   width: 15px;
 }
 .et_divi_builder #et_builder_outer_content a.mail-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -131px -33px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -131px -33px;
   height: 15px;
 }
 .et_divi_builder #et_builder_outer_content a.heart-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -131px -18px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -131px -18px;
   width: 14px;
   height: 13px;
   top: 12px;
   left: 14px;
 }
 .et_divi_builder #et_builder_outer_content a.paper-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -147px -17px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -147px -17px;
   width: 15px;
   height: 15px;
 }
 .et_divi_builder #et_builder_outer_content a.notice-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -147px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -147px -2px;
   width: 15px;
   height: 13px;
   top: 11px;
 }
 .et_divi_builder #et_builder_outer_content a.stats-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -184px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -184px -2px;
   width: 15px;
   height: 14px;
   top: 11px;
 }
 .et_divi_builder #et_builder_outer_content a.rss-icon span.et-icon {
-  background: url(../images/shortcodes-sprite.png) no-repeat -171px -36px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -171px -36px;
   width: 15px;
   top: 9px;
 }
@@ -655,11 +655,11 @@
 }
 .et_divi_builder #et_builder_outer_content ul.et_shortcodes_mobile_nav .et_sc_nav_prev span,
 .et_divi_builder #et_builder_outer_content .et_shortcodes_controls_arrows .et_sc_nav_prev span {
-  background: url(../images/shortcodes-sprite.png) no-repeat -3px -24px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -3px -24px;
 }
 .et_divi_builder #et_builder_outer_content ul.et_shortcodes_mobile_nav .et_sc_nav_next span,
 .et_divi_builder #et_builder_outer_content .et_shortcodes_controls_arrows .et_sc_nav_next span {
-  background: url(../images/shortcodes-sprite.png) no-repeat -3px -40px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -3px -40px;
 }
 .et_divi_builder #et_builder_outer_content .et-tabs-container {
   background: #fff;
@@ -959,7 +959,7 @@
   position: absolute;
   top: 16px;
   left: 20px;
-  background: url(../images/shortcodes-sprite.png) no-repeat -23px -36px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -23px -36px;
   width: 17px;
   height: 19px;
 }
@@ -979,7 +979,7 @@
   position: absolute;
   top: 2px;
   left: 18px;
-  background: url(../images/shortcodes-sprite.png) no-repeat -190px -37px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -190px -37px;
   display: block;
 }
 .et_divi_builder #et_builder_outer_content .et-protected-form p .et_protected_password {
@@ -1093,7 +1093,7 @@
   position: absolute;
   top: 5px;
   left: 0;
-  background: url(../images/shortcodes-sprite.png) no-repeat -74px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -74px -2px;
   width: 22px;
   height: 18px;
 }
@@ -1102,7 +1102,7 @@
   position: absolute;
   top: 6px;
   left: 0;
-  background: url(../images/shortcodes-sprite.png) no-repeat -75px -21px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -75px -21px;
   width: 22px;
   height: 18px;
 }
@@ -1114,7 +1114,7 @@
   position: absolute;
   top: 9px;
   left: 0;
-  background: url(../images/shortcodes-sprite.png) no-repeat -230px -3px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -230px -3px;
   width: 10px;
   height: 9px;
 }
@@ -1187,7 +1187,7 @@
   left: 30px;
   width: 22px;
   height: 18px;
-  background: url(../images/shortcodes-sprite.png) no-repeat -74px -2px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -74px -2px;
 }
 .et_divi_builder #et_builder_outer_content .pricing-table ul.pricing li.x-mark span.pricing-mark {
   background-position: -74px -20px;
@@ -1309,10 +1309,10 @@
   left: 35px;
   width: 25px;
   height: 19px;
-  background: url(../images/shortcodes-sprite.png) no-repeat -45px -35px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -45px -35px;
 }
 .et_divi_builder #et_builder_outer_content .t-bottom-arrow {
-  background: url(../images/shortcodes-sprite.png) no-repeat -97px -25px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -97px -25px;
   width: 31px;
   height: 32px;
   position: absolute;
@@ -1337,7 +1337,7 @@
   margin-bottom: 10px;
 }
 .et_divi_builder #et_builder_outer_content .et_quote .et_quote_sign {
-  background: url(../images/shortcodes-sprite.png) no-repeat -206px -20px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -206px -20px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1352,7 +1352,7 @@
   top: 3px;
 }
 .et_divi_builder #et_builder_outer_content .quote-center .et_quote_additional_sign {
-  background: url(../images/shortcodes-sprite.png) no-repeat -251px -22px;
+  background: url('../../../../themes/Divi/epanel/shortcodes/images/shortcodes-sprite.png') no-repeat -251px -22px;
   position: absolute;
   top: 3px;
   right: 13px;
