@@ -33,11 +33,26 @@ vcancyApp
 							} else {
 								var units = value.units+" - ";								
 							}
-							return [{applicationID: 0, scheduleID:index, address: units+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+							return [{applicationID: 0, scheduleID:index, address: units+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];			
 						} 
 					});	
 					
 					// console.log(vm.tabledata);
+					angular.forEach(vm.tabledata, function(schedule, key) {	
+						firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(schedule.scheduleID).once("value", function(snap) {	
+							// console.log(snap.val());
+							$scope.$apply(function(){
+								if(snap.val() != null) {		
+									$.map(snap.val(),function(val,k){
+										vm.tabledata[key].applicationID = k;
+									});
+								} 	
+							});
+						});
+					});
+					
+					// console.log(vm.tabledata);
+					
 					vm.extracols = [
 						  { field: "scheduleID", title: "", show: true }
 						];
