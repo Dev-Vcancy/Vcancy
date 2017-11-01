@@ -77,7 +77,7 @@
 
     var file = files[0]
 
-    if (this.$preview.length > 0 && (typeof file.type !== "undefined" ? file.type.match(/^image\/(gif|png|jpeg)$/) : file.name.match(/\.(gif|png|jpe?g)$/i)) && typeof FileReader !== "undefined") {
+    if (this.$preview.length > 0 && (typeof file.type !== "undefined" ? file.type.match(/^image\/(gif|png|jpeg|)$/) : file.name.match(/\.(gif|png|jpe?g)$/i)) && typeof FileReader !== "undefined") {
 		// console.log(file.name);
       var reader = new FileReader()
       var preview = this.$preview
@@ -105,7 +105,15 @@
     } else {
       this.$element.find('.fileinput-filename').text(file.name)
       this.$preview.text(file.name)
-      
+	  
+	  this.$element.find('#filename').val(file.name);	
+      var element = this.$element  
+      var reader = new FileReader()
+	  reader.onload = function(re) {
+		 element.find('#appfiles').val(re.target.result);
+	  }
+	  reader.readAsDataURL(file)
+	  
       this.$element.addClass('fileinput-exists').removeClass('fileinput-new')
       
       this.$element.trigger('change.bs.fileinput')
@@ -133,7 +141,7 @@
     this.$element.find('.fileinput-filename').text('')
     this.$element.addClass('fileinput-new').removeClass('fileinput-exists')
 	this.$element.find('#propimg').val('');
-		element.find('#appfiles').val('');
+	this.$element.find('#appfiles').val('');
     
     if (e !== undefined) {
       this.$input.trigger('change')
