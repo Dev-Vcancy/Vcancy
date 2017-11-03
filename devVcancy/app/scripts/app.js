@@ -222,7 +222,7 @@ vcancyApp
  .config(function ($stateProvider, $urlRouterProvider){	
 	  // Initialize Firebase
 	  var config = {
-		apiKey: "AIzaSyAM5ga-meRv9xYWKsCjDj-qYv3TD1ivLCA",
+		apiKey: "AIzaSyDO18QznZ7mvAezkQ1M80nUz1OhaHjuwSA",
 		authDomain: "vcancy-5e3b4.firebaseapp.com",
 		databaseURL: "https://vcancy-5e3b4.firebaseio.com",
 		projectId: "vcancy-5e3b4",
