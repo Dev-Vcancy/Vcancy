@@ -1,0 +1,25 @@
+{
+  "name": "vcancy",
+  "version": "1.0.0",
+  "description": "npm install npm@latest -g",
+  "main": "index.js",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "sails": "^0.12.14"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dev-Vcancy/Vcancy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dev-Vcancy/Vcancy/issues"
+  },
+  "homepage": "https://github.com/Dev-Vcancy/Vcancy#readme"
+}
