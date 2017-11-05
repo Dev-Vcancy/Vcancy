@@ -1,0 +1,27 @@
+<ul class="header-inner clearfix">
+    <li id="menu-trigger" data-target="mainmenu" data-toggle="collapse" data-model-left="mactrl.sidebarToggle.left" data-ng-class="{ 'open': mactrl.sidebarToggle.left === true }" data-ng-click="mactrl.sidebarToggle.left = !mactrl.sidebarToggle.left">
+        <div class="line-wrap">
+            <div class="line top"></div>
+            <div class="line center"></div>
+            <div class="line bottom"></div>  
+        </div>
+    </li>
+
+    <li class="logo hidden-xs">
+        <a data-ng-click="mactrl.sidebarStat($event)" class="logo" href="#"><img src="images/vcancy_logo.png"></a>
+    </li>
+
+    <li class="pull-right">
+        <ul class="top-menu">
+			<li class="pull-right"><a class="button" ng-click="hctrl.userLogout()" >Sign Out</a></li>
+        </ul>
+    </li>
+</ul>
+
+<!-- Top Search Content -->
+<div id="top-search-wrap">
+    <div class="tsw-inner">
+        <i id="top-search-close" class="zmdi zmdi-arrow-left" data-ng-click="hctrl.closeSearch()"></i>
+        <input type="text">
+    </div>
+</div>
