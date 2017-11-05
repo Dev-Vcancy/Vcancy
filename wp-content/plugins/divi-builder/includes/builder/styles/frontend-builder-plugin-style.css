@@ -9720,10 +9720,17 @@
     margin: 0 auto 20px;
   }
   .et_divi_builder #et_builder_outer_content .et_pb_column .et_pb_team_member_image {
-    float: left !important;
-    width: 280px !important;
-    margin: 0 30px 0 0 !important;
-    text-align: left !important;
+    float: left;
+    width: 280px;
+    margin: 0 30px 0 0;
+    text-align: left;
+  }
+  .et_divi_builder #et_builder_outer_content .et_pb_row_4col .et_pb_column.et_pb_column_1_4 .et_pb_team_member_image {
+    float: none;
+    width: auto;
+    max-width: none;
+    margin: 0 0 12px 0;
+    text-align: center;
   }
   .et_divi_builder #et_builder_outer_content .et_pb_column .et_pb_team_member_description {
     display: table-cell;

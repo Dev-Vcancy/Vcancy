@@ -2,7 +2,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '3.0.85' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '3.0.86' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -5227,7 +5227,7 @@ function et_pb_pagebuilder_meta_box() {
 				var select_value_escaped = _.escape( select_value );
 				var option_value_escaped = _.escape( option_value );
 				var default_value = this.et_builder_template_options.select.options.default;
-				var selected_attr = ! _.isUndefined( select_value ) && option_value_escaped === select_value_escaped || ( _.isUndefined( select_value ) && default_value !== "" && option_value_escaped === default_value ) ? \' selected="selected"\' : "";
+				var selected_attr = ! _.isUndefined( select_value ) && "" !== select_value && option_value_escaped === select_value_escaped || ( _.isUndefined( select_value ) && default_value !== "" && option_value_escaped === default_value ) ? \' selected="selected"\' : "";
 				%%>
 				<option <%%= data %%> value="<%%= option_value_escaped %%>" <%%= selected_attr %%>><%%= _.escape( option_label_updated ) %%></option>
 			<%% }); %%>
