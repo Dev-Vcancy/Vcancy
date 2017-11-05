@@ -16,13 +16,13 @@ module.exports = {
 	var transporter = nodemailer.createTransport({
 		service: 'Gmail',
 		auth: {
-			user: 'megha@aroracomfortechs.com', // Your email id
-			pass: 'megha123@' // Your password
+			user: 'developers.vcancy@gmail.com', // Your email id
+			pass: 'Mvpvcancy2018@' // Your password
 		}
 	});
 	
 	var mailOptions = {
-		from: 'megha@aroracomfortechs.com',  // sender address
+		from: 'developers.vcancy@gmail.com',  // sender address
 		// to: 'megha@aroracomfortechs.com',  // list of receivers
 		// subject: '123',  // Subject line
 		// text: "hello" // plaintext body
