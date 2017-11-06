@@ -22,7 +22,7 @@ module.exports = {
 	});
 	
 	var mailOptions = {
-		from: 'developers.vcancy@gmail.com',  // sender address
+		from: '"Team Vcancy" developers.vcancy@gmail.com',  // sender address
 		// to: 'megha@aroracomfortechs.com',  // list of receivers
 		// subject: '123',  // Subject line
 		// text: "hello" // plaintext body
