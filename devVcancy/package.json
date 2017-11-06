@@ -4,7 +4,8 @@
   "dependencies": {
     "angular-animate": "^1.4.3",
     "karma": "^1.7.1",
-    "ng-if-bootstrap-grid": "^0.1.0"
+    "ng-if-bootstrap-grid": "^0.1.0",
+    "nodemailer": "^4.3.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
