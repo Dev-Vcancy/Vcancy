@@ -15,7 +15,7 @@ module.exports = {
 		var data = img.replace(/^data:image\/\w+;base64,/, "");
 		var buf = new Buffer(data, 'base64');
 		// console.log(buf);
-		fs.writeFile('E:/wamp/www/Vcancy/login/dist/images/'+req.body.filename, buf, function (err, data) {
+		fs.writeFile(sails.config.fileUploadPath + req.body.filename, buf, function (err, data) {
 			  if (err) {
 				res.json("error");
 			  } else {

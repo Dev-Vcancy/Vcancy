@@ -7,22 +7,23 @@
 var nodemailer = require('nodemailer');
 module.exports = {
 	
-
-
   /**
    * `EmailController.sendemail()`
    */
   sendemail: function (req, res) {
 	var transporter = nodemailer.createTransport({
-		service: 'Gmail',
+		// service: 'Gmail',
+		host: 'smtp.office365.com',
+    port: 587,
+    secure: false,
 		auth: {
-			user: 'notes4ce@gmail.com', // Your email id
-			pass: '9998787197' // Your password
+			user: sails.config.SMTP.email, // Your email id
+			pass: sails.config.SMTP.password // Your password
 		}
 	});
 	
 	var mailOptions = {
-		from: '"Team Vcancy" developers.vcancy@gmail.com',  // sender address
+		from: '"Team Vcancy" '+ sails.config.SMTP.email,  // sender address
 		// to: 'megha@aroracomfortechs.com',  // list of receivers
 		// subject: '123',  // Subject line
 		// text: "hello" // plaintext body
