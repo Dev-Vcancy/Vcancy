@@ -37,8 +37,8 @@ module.exports.routes = {
   // }
 
   'GET /api/v1/email/test': 'EmailController.test',
-  'POST /nodeapi/api/v1/email/sendemail': 'EmailController.sendemail',
-  'POST /nodeapi/api/v1/fileupload/upload': 'FileUploadController.upload'
+  'POST /api/v1/email/sendemail': 'EmailController.sendemail',
+  'POST /api/v1/fileupload/upload': 'FileUploadController.upload'
 
   /***************************************************************************
   *                                                                          *
