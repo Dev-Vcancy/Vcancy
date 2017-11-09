@@ -2276,7 +2276,7 @@ var vcancyApp = angular
  
 	
 vcancyApp.constant('config', {
-   "sailsBaseUrl": 'http://www.vcancy.ca/nodeapi/api/v1/',
+   "sailsBaseUrl": 'https://www.vcancy.ca/nodeapi/api/v1/',
 });
 
 vcancyApp.service('emailSendingService',function($http,config){
