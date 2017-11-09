@@ -36,8 +36,10 @@ module.exports.routes = {
     // view: 'homepage'
   // }
 
-  'GET /api/v1/email/test': 'EmailController.test'
-  
+  'GET /api/v1/email/test': 'EmailController.test',
+  'POST /nodeapi/api/v1/email/sendemail': 'EmailController.sendemail',
+  'POST /nodeapi/api/v1/fileupload/upload': 'FileUploadController.upload'
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
