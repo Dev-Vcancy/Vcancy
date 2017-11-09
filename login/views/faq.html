@@ -1,0 +1,23 @@
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
+
+<section id="main">
+    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+    <section id="content" class="text-center">
+
+        <div class="container">
+			<div class="block-header">
+				<h2>Frequently Asked Questions</h2>
+            </div>	
+			<div class="col-sm-12">
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu risus. Curabitur commodo lorem fringilla enim feugiat commodo sed ac lacus.</p>
+			</div>
+		</div>				
+    </section>
+</section>
+
+<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+<script type="text/javascript">
+	Waves.init();
+	Waves.attach('.btn');
+</script> 
+        
