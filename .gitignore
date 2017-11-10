@@ -3,6 +3,7 @@
 login/bower_components
 login/node_modules
 login/app/bower_components
+login/uploads
 
 devVcancy/bower_components
 devVcancy/node_modules
