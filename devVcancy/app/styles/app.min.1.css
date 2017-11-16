@@ -11594,7 +11594,7 @@ a.lv-footer:hover {
 .card-header h2 {
   margin: 0;
   line-height: 100%;
-  font-size: 17px;
+  font-size: 26px;
   font-weight: 400;
 }
 
@@ -11919,8 +11919,8 @@ a.lv-footer:hover {
 
 .dash-widget-item {
   position: relative;
-  min-height: 380px;
-  margin-bottom: 30px;
+  min-height: inherit;
+  margin-bottom: 0px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
 }
 
@@ -14060,13 +14060,14 @@ html:not(.ie9) .select.fg-line:before {
   font-weight: 400;
   color: #959595;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
   left: 0;
   white-space: nowrap;
 }
 
 .fg-float .fg-toggled .fg-label {
-  top: -20px;
+  /*top: -20px;*/
+  top: -23px;
   font-size: 11px;
 }
 

@@ -26,7 +26,8 @@ var vcancyApp = angular
 	'unsavedChanges',
 	'AngularPrint',
 	'ngFileUpload',
-	'ui.jq'
+	'ui.jq',
+	'ui.bootstrap'
   ]); 
  
 	
@@ -262,8 +263,14 @@ vcancyApp
 			controllerAs: 'ldboardctrl',
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
+		}) 
+		.state('landordprofile', {
+		    url: '/landordprofile',
+		    controller: 'landlordProfilelCtrl',
+		    controllerAs: 'ldProfilectrl',
+		    templateUrl: 'views/landloardProfile.html',
+		    resolve: { authenticate: authenticate }
 		})
-		
 		.state ('viewprop', {
 			url: '/myprop',
 			controller: 'propertyCtrl',
@@ -350,7 +357,7 @@ vcancyApp
 			templateUrl: 'views/view_rental_app_form.html',
 			resolve: { authenticate: authenticate }
 		})
-		
+		 
 		// Tenant Routes
 		.state ('tenantdashboard', {
 			url: '/tenantdashboard',
@@ -359,7 +366,13 @@ vcancyApp
 			templateUrl: 'views/tenant.html',
 			resolve: { tenantauthenticate: tenantauthenticate }
 		})
-		
+		.state('tenantprofile', {
+		    url: '/tenantprofile',
+		    controller: 'tenantProfilelCtrl',
+		    controllerAs: 'tdProfilectrl',
+		    templateUrl: 'views/tenantProfile.html',
+		    resolve: { tenantauthenticate: tenantauthenticate }
+		})
 		.state ('tenantapply', {
 			url: '/applyproperty/{propId}',
 			controller: 'applypropCtrl',
@@ -389,6 +402,7 @@ vcancyApp
 			templateUrl: 'views/tenant_app.html',
 			resolve: { tenantauthenticate: tenantauthenticate }
 		})
+		
 		
 		.state ('rentalform', {
 			url: '/rentalform/{scheduleId}/{applicationId}',

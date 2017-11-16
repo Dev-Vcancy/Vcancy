@@ -20,17 +20,21 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			
 			var authObj = $firebaseAuth();
 			authObj.$signInWithEmailAndPassword(email, password).then(function(firebaseUser) {			 
-				 // console.log(firebase.auth().currentUser);
+				 //alert(JSON.stringify(firebase.auth().currentUser));
 				 if(firebase.auth().currentUser != null){
 					 localStorage.setItem('userID', firebase.auth().currentUser.uid);
 					 localStorage.setItem('userEmail', firebase.auth().currentUser.email);
 					 localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
+					 localStorage.setItem('password', password);
+					 
 				 } 
 
 				 if(firebase.auth().currentUser != null){
 					 $rootScope.uid = firebase.auth().currentUser.uid;
 					 $rootScope.userEmail = firebase.auth().currentUser.email;
 					 $rootScope.emailVerified = firebase.auth().currentUser.emailVerified;
+					 $rootScope.password = firebase.auth().currentUser.password;
+
 				 } 
 				 
 				 if(!firebase.auth().currentUser.emailVerified){
