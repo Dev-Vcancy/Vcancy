@@ -2271,7 +2271,8 @@ var vcancyApp = angular
 	'unsavedChanges',
 	'AngularPrint',
 	'ngFileUpload',
-	'ui.jq'
+	'ui.jq',
+	'ui.bootstrap'
   ]); 
  
 	
@@ -2507,8 +2508,14 @@ vcancyApp
 			controllerAs: 'ldboardctrl',
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
+		}) 
+		.state('landordprofile', {
+		    url: '/landordprofile',
+		    controller: 'landlordProfilelCtrl',
+		    controllerAs: 'ldProfilectrl',
+		    templateUrl: 'views/landloardProfile.html',
+		    resolve: { authenticate: authenticate }
 		})
-		
 		.state ('viewprop', {
 			url: '/myprop',
 			controller: 'propertyCtrl',
@@ -2595,7 +2602,7 @@ vcancyApp
 			templateUrl: 'views/view_rental_app_form.html',
 			resolve: { authenticate: authenticate }
 		})
-		
+		 
 		// Tenant Routes
 		.state ('tenantdashboard', {
 			url: '/tenantdashboard',
@@ -2604,7 +2611,13 @@ vcancyApp
 			templateUrl: 'views/tenant.html',
 			resolve: { tenantauthenticate: tenantauthenticate }
 		})
-		
+		.state('tenantprofile', {
+		    url: '/tenantprofile',
+		    controller: 'tenantProfilelCtrl',
+		    controllerAs: 'tdProfilectrl',
+		    templateUrl: 'views/tenantProfile.html',
+		    resolve: { tenantauthenticate: tenantauthenticate }
+		})
 		.state ('tenantapply', {
 			url: '/applyproperty/{propId}',
 			controller: 'applypropCtrl',
@@ -2634,6 +2647,7 @@ vcancyApp
 			templateUrl: 'views/tenant_app.html',
 			resolve: { tenantauthenticate: tenantauthenticate }
 		})
+		
 		
 		.state ('rentalform', {
 			url: '/rentalform/{scheduleId}/{applicationId}',
@@ -2719,6 +2733,90 @@ vcancyApp
             $rootScope.$previousState = from;
         });
       }]);
+
+vcancyApp.run(['$templateCache', function ($templateCache) {
+  'use strict';
+
+  $templateCache.put('template/chat.html',
+    "<div class=\"chat-search\"><div class=\"fg-line\"><input type=\"text\" class=\"form-control\" placeholder=\"Search People\"></div></div><div class=\"listview\"><a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left p-relative\"><img class=\"lv-img-sm\" src=\"img/profile-pics/2.jpg\" alt=\"\"> <i class=\"chat-status-busy\"></i></div><div class=\"media-body\"><div class=\"lv-title\">Jonathan Morris</div><small class=\"lv-small\">Available</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/1.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">David Belle</div><small class=\"lv-small\">Last seen 3 hours ago</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left p-relative\"><img class=\"lv-img-sm\" src=\"img/profile-pics/3.jpg\" alt=\"\"> <i class=\"chat-status-online\"></i></div><div class=\"media-body\"><div class=\"lv-title\">Fredric Mitchell Jr.</div><small class=\"lv-small\">Availble</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left p-relative\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"> <i class=\"chat-status-online\"></i></div><div class=\"media-body\"><div class=\"lv-title\">Glenn Jecobs</div><small class=\"lv-small\">Availble</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/5.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Bill Phillips</div><small class=\"lv-small\">Last seen 3 days ago</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/6.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Wendy Mitchell</div><small class=\"lv-small\">Last seen 2 minutes ago</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left p-relative\"><img class=\"lv-img-sm\" src=\"img/profile-pics/7.jpg\" alt=\"\"> <i class=\"chat-status-busy\"></i></div><div class=\"media-body\"><div class=\"lv-title\">Teena Bell Ann</div><small class=\"lv-small\">Busy</small></div></div></a></div>"
+  );
+
+
+  $templateCache.put('template/footer.html',
+    "Copyright &copy; 2015 Material Admin<ul class=\"f-menu\"><li><a href=\"\">Home</a></li><li><a href=\"\">Dashboard</a></li><li><a href=\"\">Reports</a></li><li><a href=\"\">Support</a></li><li><a href=\"\">Contact</a></li></ul>"
+  );
+
+
+  $templateCache.put('template/header-image-logo.html',
+    "<ul class=\"header-inner clearfix\"><li id=\"menu-trigger\" data-target=\"mainmenu\" data-toggle-sidebar data-model-left=\"mactrl.sidebarToggle.left\" data-ng-class=\"{ 'open': mactrl.sidebarToggle.left === true }\"><div class=\"line-wrap\"><div class=\"line top\"></div><div class=\"line center\"></div><div class=\"line bottom\"></div></div></li><li class=\"hidden-xs\"><a href=\"index.html\" class=\"m-l-10\" data-ng-click=\"mactrl.sidebarStat($event)\"><img src=\"img/demo/logo.png\" alt=\"\"></a></li><li class=\"pull-right\"><ul class=\"top-menu\"><li id=\"top-search\" data-ng-click=\"hctrl.openSearch()\"><a href=\"\"><span class=\"tm-label\">Search</span></a></li><li class=\"dropdown\" uib-dropdown><a uib-dropdown-toggle href=\"\"><span class=\"tm-label\">Messages</span></a><div class=\"dropdown-menu dropdown-menu-lg pull-right\"><div class=\"listview\"><div class=\"lv-header\">Messages</div><div class=\"lv-body\"><a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/1.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">David Belle</div><small class=\"lv-small\">Cum sociis natoque penatibus et magnis dis parturient montes</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/2.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Jonathan Morris</div><small class=\"lv-small\">Nunc quis diam diamurabitur at dolor elementum, dictum turpis vel</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/3.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Fredric Mitchell Jr.</div><small class=\"lv-small\">Phasellus a ante et est ornare accumsan at vel magnauis blandit turpis at augue ultricies</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Glenn Jecobs</div><small class=\"lv-small\">Ut vitae lacus sem ellentesque maximus, nunc sit amet varius dignissim, dui est consectetur neque</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Bill Phillips</div><small class=\"lv-small\">Proin laoreet commodo eros id faucibus. Donec ligula quam, imperdiet vel ante placerat</small></div></div></a></div><a class=\"lv-footer\" href=\"\">View All</a></div></div></li><li class=\"dropdown hidden-xs\" uib-dropdown><a uib-dropdown-toggle href=\"\"><span class=\"tm-label\">Notification</span></a><div class=\"dropdown-menu dropdown-menu-lg pull-right\"><div class=\"listview\" id=\"notifications\"><div class=\"lv-header\">Notification<ul class=\"actions\"><li class=\"dropdown\"><a href=\"\" data-clear=\"notification\"><i class=\"zmdi zmdi-check-all\"></i></a></li></ul></div><div class=\"lv-body\"><a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/1.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">David Belle</div><small class=\"lv-small\">Cum sociis natoque penatibus et magnis dis parturient montes</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/2.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Jonathan Morris</div><small class=\"lv-small\">Nunc quis diam diamurabitur at dolor elementum, dictum turpis vel</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/3.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Fredric Mitchell Jr.</div><small class=\"lv-small\">Phasellus a ante et est ornare accumsan at vel magnauis blandit turpis at augue ultricies</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Glenn Jecobs</div><small class=\"lv-small\">Ut vitae lacus sem ellentesque maximus, nunc sit amet varius dignissim, dui est consectetur neque</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Bill Phillips</div><small class=\"lv-small\">Proin laoreet commodo eros id faucibus. Donec ligula quam, imperdiet vel ante placerat</small></div></div></a></div><a class=\"lv-footer\" href=\"\">View Previous</a></div></div></li><li class=\"hidden-xs\"><a target=\"_blank\" href=\"https://wrapbootstrap.com/theme/superflat-simple-responsive-admin-theme-WB082P91H\"><span class=\"tm-label\">Link</span></a></li></ul></li></ul><!-- Top Search Content --><div id=\"top-search-wrap\"><div class=\"tsw-inner\"><i id=\"top-search-close\" data-ng-click=\"hctrl.closeSearch()\" class=\"zmdi zmdi-arrow-left\"></i> <input type=\"text\"></div></div>"
+  );
+
+
+  $templateCache.put('template/header-textual-menu.html',
+    "<ul class=\"header-inner clearfix\"><li id=\"menu-trigger\" data-target=\"mainmenu\" data-toggle-sidebar data-model-left=\"mactrl.sidebarToggle.left\" data-ng-class=\"{ 'open': mactrl.sidebarToggle.left === true }\"><div class=\"line-wrap\"><div class=\"line top\"></div><div class=\"line center\"></div><div class=\"line bottom\"></div></div></li><li class=\"logo hidden-xs\"><a data-ui-sref=\"home\" data-ng-click=\"mactrl.sidebarStat($event)\">Material Admin</a></li><li class=\"pull-right\"><ul class=\"top-menu\"><li id=\"top-search\" data-ng-click=\"hctrl.openSearch()\"><a href=\"\"><span class=\"tm-label\">Search</span></a></li><li class=\"dropdown\" uib-dropdown><a uib-dropdown-toggle href=\"\"><span class=\"tm-label\">Messages</span></a><div class=\"dropdown-menu dropdown-menu-lg pull-right\"><div class=\"listview\"><div class=\"lv-header\">Messages</div><div class=\"lv-body\"><a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/1.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">David Belle</div><small class=\"lv-small\">Cum sociis natoque penatibus et magnis dis parturient montes</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/2.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Jonathan Morris</div><small class=\"lv-small\">Nunc quis diam diamurabitur at dolor elementum, dictum turpis vel</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/3.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Fredric Mitchell Jr.</div><small class=\"lv-small\">Phasellus a ante et est ornare accumsan at vel magnauis blandit turpis at augue ultricies</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Glenn Jecobs</div><small class=\"lv-small\">Ut vitae lacus sem ellentesque maximus, nunc sit amet varius dignissim, dui est consectetur neque</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Bill Phillips</div><small class=\"lv-small\">Proin laoreet commodo eros id faucibus. Donec ligula quam, imperdiet vel ante placerat</small></div></div></a></div><a class=\"lv-footer\" href=\"\">View All</a></div></div></li><li class=\"dropdown hidden-xs\" uib-dropdown><a uib-dropdown-toggle href=\"\"><span class=\"tm-label\">Notification</span></a><div class=\"dropdown-menu dropdown-menu-lg pull-right\"><div class=\"listview\" id=\"notifications\"><div class=\"lv-header\">Notification<ul class=\"actions\"><li class=\"dropdown\"><a href=\"\" data-clear=\"notification\"><i class=\"zmdi zmdi-check-all\"></i></a></li></ul></div><div class=\"lv-body\"><a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/1.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">David Belle</div><small class=\"lv-small\">Cum sociis natoque penatibus et magnis dis parturient montes</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/2.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Jonathan Morris</div><small class=\"lv-small\">Nunc quis diam diamurabitur at dolor elementum, dictum turpis vel</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/3.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Fredric Mitchell Jr.</div><small class=\"lv-small\">Phasellus a ante et est ornare accumsan at vel magnauis blandit turpis at augue ultricies</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Glenn Jecobs</div><small class=\"lv-small\">Ut vitae lacus sem ellentesque maximus, nunc sit amet varius dignissim, dui est consectetur neque</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Bill Phillips</div><small class=\"lv-small\">Proin laoreet commodo eros id faucibus. Donec ligula quam, imperdiet vel ante placerat</small></div></div></a></div><a class=\"lv-footer\" href=\"\">View Previous</a></div></div></li><li class=\"hidden-xs\"><a target=\"_blank\" href=\"https://wrapbootstrap.com/theme/superflat-simple-responsive-admin-theme-WB082P91H\"><span class=\"tm-label\">Link</span></a></li></ul></li></ul><!-- Top Search Content --><div id=\"top-search-wrap\"><div class=\"tsw-inner\"><i id=\"top-search-close\" data-ng-click=\"hctrl.closeSearch()\" class=\"zmdi zmdi-arrow-left\"></i> <input type=\"text\"></div></div>"
+  );
+
+
+  $templateCache.put('template/header-top-menu.html',
+    "<ul class=\"header-inner clearfix\"><li id=\"menu-trigger\" data-trigger=\".ha-menu\" class=\"visible-xs\"><div class=\"line-wrap\"><div class=\"line top\"></div><div class=\"line center\"></div><div class=\"line bottom\"></div></div></li><li class=\"logo hidden-xs\"><a data-ui-sref=\"home\">Material Admin</a></li><li class=\"pull-right\"><ul class=\"top-menu\"><li class=\"dropdown\" uib-dropdown><a uib-dropdown-toggle href=\"\"><i class=\"tmn-counts\">6</i> <i class=\"tm-icon zmdi zmdi-email\"></i></a><div class=\"dropdown-menu dropdown-menu-lg pull-right\"><div class=\"listview\"><div class=\"lv-header\">Messages</div><div class=\"lv-body\"><a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/1.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">David Belle</div><small class=\"lv-small\">Cum sociis natoque penatibus et magnis dis parturient montes</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/2.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Jonathan Morris</div><small class=\"lv-small\">Nunc quis diam diamurabitur at dolor elementum, dictum turpis vel</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/3.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Fredric Mitchell Jr.</div><small class=\"lv-small\">Phasellus a ante et est ornare accumsan at vel magnauis blandit turpis at augue ultricies</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Glenn Jecobs</div><small class=\"lv-small\">Ut vitae lacus sem ellentesque maximus, nunc sit amet varius dignissim, dui est consectetur neque</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Bill Phillips</div><small class=\"lv-small\">Proin laoreet commodo eros id faucibus. Donec ligula quam, imperdiet vel ante placerat</small></div></div></a></div><a class=\"lv-footer\" href=\"\">View All</a></div></div></li><li class=\"dropdown\" uib-dropdown><a uib-dropdown-toggle><i class=\"tmn-counts\">9</i> <i class=\"tm-icon zmdi zmdi-notifications\"></i></a><div class=\"dropdown-menu dropdown-menu-lg pull-right\"><div class=\"listview\" id=\"notifications\"><div class=\"lv-header\">Notification<ul class=\"actions\"><li class=\"dropdown\"><a href=\"\" data-clear=\"notification\"><i class=\"zmdi zmdi-check-all\"></i></a></li></ul></div><div class=\"lv-body\"><a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/1.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">David Belle</div><small class=\"lv-small\">Cum sociis natoque penatibus et magnis dis parturient montes</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/2.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Jonathan Morris</div><small class=\"lv-small\">Nunc quis diam diamurabitur at dolor elementum, dictum turpis vel</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/3.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Fredric Mitchell Jr.</div><small class=\"lv-small\">Phasellus a ante et est ornare accumsan at vel magnauis blandit turpis at augue ultricies</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Glenn Jecobs</div><small class=\"lv-small\">Ut vitae lacus sem ellentesque maximus, nunc sit amet varius dignissim, dui est consectetur neque</small></div></div></a> <a class=\"lv-item\" href=\"\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" src=\"img/profile-pics/4.jpg\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">Bill Phillips</div><small class=\"lv-small\">Proin laoreet commodo eros id faucibus. Donec ligula quam, imperdiet vel ante placerat</small></div></div></a></div><a class=\"lv-footer\" href=\"\">View Previous</a></div></div></li><li class=\"dropdown\" uib-dropdown><a uib-dropdown-toggle href=\"\"><i class=\"tmn-counts\">2</i> <i class=\"tm-icon zmdi zmdi-view-list-alt\"></i></a><div class=\"dropdown-menu pull-right dropdown-menu-lg\"><div class=\"listview\"><div class=\"lv-header\">Tasks</div><div class=\"lv-body\"><div class=\"lv-item\"><div class=\"lv-title m-b-5\">HTML5 Validation Report</div><div class=\"progress\"><div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"95\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 95%\"><span class=\"sr-only\">95% Complete (success)</span></div></div></div><div class=\"lv-item\"><div class=\"lv-title m-b-5\">Google Chrome Extension</div><div class=\"progress\"><div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"80\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 80%\"><span class=\"sr-only\">80% Complete (success)</span></div></div></div><div class=\"lv-item\"><div class=\"lv-title m-b-5\">Social Intranet Projects</div><div class=\"progress\"><div class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 20%\"><span class=\"sr-only\">20% Complete</span></div></div></div><div class=\"lv-item\"><div class=\"lv-title m-b-5\">Bootstrap Admin Template</div><div class=\"progress\"><div class=\"progress-bar progress-bar-warning\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"><span class=\"sr-only\">60% Complete (warning)</span></div></div></div><div class=\"lv-item\"><div class=\"lv-title m-b-5\">Youtube Client App</div><div class=\"progress\"><div class=\"progress-bar progress-bar-danger\" role=\"progressbar\" aria-valuenow=\"80\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 80%\"><span class=\"sr-only\">80% Complete (danger)</span></div></div></div></div><a class=\"lv-footer\" href=\"\">View All</a></div></div></li><li class=\"dropdown\" uib-dropdown><a uib-dropdown-toggle href=\"\"><i class=\"tm-icon zmdi zmdi-more-vert\"></i></a><ul class=\"dropdown-menu dm-icon pull-right\"><li class=\"hidden-xs\"><a data-ng-click=\"hctrl.fullScreen()\" href=\"\"><i class=\"zmdi zmdi-fullscreen\"></i> Toggle Fullscreen</a></li><li><a data-ng-click=\"hctrl.clearLocalStorage()\" href=\"\"><i class=\"zmdi zmdi-delete\"></i> Clear Local Storage</a></li><li><a href=\"\"><i class=\"zmdi zmdi-face\"></i> Privacy Settings</a></li><li><a href=\"\"><i class=\"zmdi zmdi-settings\"></i> Other Settings</a></li></ul></li></ul></li></ul><div class=\"search\"><div class=\"fg-line\"><input type=\"text\" class=\"form-control\" placeholder=\"Search...\"></div></div><nav class=\"ha-menu\"><ul><li class=\"waves-effect\" data-ui-sref-active=\"active\"><a data-ui-sref=\"home\" data-ng-click=\"mactrl.sidebarStat($event)\">Home</a></li><li class=\"dropdown\" uib-dropdown data-ng-class=\"{ 'active': mactrl.$state.includes('headers') }\"><div class=\"waves-effect\" uib-dropdown-toggle>Headers</div><ul class=\"dropdown-menu\"><li data-ui-sref-active=\"active\"><a data-ui-sref=\"headers.textual-menu\">Textual menu</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"headers.image-logo\">Image logo</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"headers.mainmenu-on-top\">Mainmenu on top</a></li></ul></li><li class=\"waves-effect\" data-ui-sref-active=\"active\"><a data-ui-sref=\"typography\">Typography</a></li><li class=\"dropdown\" uib-dropdown><div class=\"waves-effect\" uib-dropdown-toggle>Widgets</div><ul class=\"dropdown-menu\"><li data-ui-sref-active=\"active\"><a data-ui-sref=\"widgets.widget-templates\">Templates</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"widgets.widgets\">Widgets</a></li></ul></li><li class=\"dropdown\" uib-dropdown><div class=\"waves-effect\" uib-dropdown-toggle>Tables</div><ul class=\"dropdown-menu\"><li data-ui-sref-active=\"active\"><a data-ui-sref=\"tables.tables\">Normal Tables</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"tables.data-table\">Data Tables</a></li></ul></li><li class=\"dropdown\" uib-dropdown><div class=\"waves-effect\" uib-dropdown-toggle>Forms</div><ul class=\"dropdown-menu\"><li data-ui-sref-active=\"active\"><a data-ui-sref=\"form.basic-form-elements\">Basic Form Elements</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"form.form-components\">Form Components</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"form.form-examples\">Form Examples</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"form.form-validations\">Form Validation</a></li></ul></li><li class=\"dropdown\" uib-dropdown><div class=\"waves-effect\" uib-dropdown-toggle>User Interface</div><ul class=\"dropdown-menu\"><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.ui-bootstrap\">UI Bootstrap</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.colors\">Colors</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.animations\">Animations</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.box-shadow\">Box Shadow</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.buttons\">Buttons</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.icons\">Icons</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.alerts\">Alerts</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.preloaders\">Preloaders</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.notifications-dialogs\">Notifications & Dialogs</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.media\">Media</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"user-interface.other-components\">Others</a></li></ul></li><li class=\"dropdown\" uib-dropdown><div class=\"waves-effect\" uib-dropdown-toggle>Charts</div><ul class=\"dropdown-menu\"><li data-ui-sref-active=\"active\"><a data-ui-sref=\"charts.flot-charts\">Flot Charts</a></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"charts.other-charts\">Other Charts</a></li></ul></li><li class=\"waves-effect\" data-ui-sref-active=\"active\"><a data-ui-sref=\"calendar\">Calendar</a></li></ul></nav><div class=\"skin-switch dropdown hidden-xs\" uib-dropdown><button uib-dropdown-toggle class=\"btn ss-icon\"><i class=\"zmdi zmdi-palette\"></i></button><div class=\"dropdown-menu\"><span ng-repeat=\"w in mactrl.skinList\" class=\"ss-skin bgm-{{ w }}\" data-ng-click=\"mactrl.skinSwitch(w)\"></span></div></div>"
+  );
+
+
+  $templateCache.put('template/header.html',
+    "<ul class=\"header-inner clearfix\"><li id=\"menu-trigger\" data-target=\"mainmenu\" data-toggle-sidebar data-model-left=\"mactrl.sidebarToggle.left\" data-ng-class=\"{ 'open': mactrl.sidebarToggle.left === true }\"><div class=\"line-wrap\"><div class=\"line top\"></div><div class=\"line center\"></div><div class=\"line bottom\"></div></div></li><li class=\"logo hidden-xs\"><a data-ui-sref=\"home\" data-ng-click=\"mactrl.sidebarStat($event)\">Material Admin</a></li><li class=\"pull-right\"><ul class=\"top-menu\"><li id=\"toggle-width\"><div class=\"toggle-switch\"><input id=\"tw-switch\" type=\"checkbox\" hidden data-change-layout=\"mactrl.layoutType\"><label for=\"tw-switch\" class=\"ts-helper\"></label></div></li><li id=\"top-search\"><a href=\"\" data-ng-click=\"hctrl.openSearch()\"><i class=\"tm-icon zmdi zmdi-search\"></i></a></li><li class=\"dropdown\" uib-dropdown><a uib-dropdown-toggle href=\"\"><i class=\"tm-icon zmdi zmdi-email\"></i> <i class=\"tmn-counts\">6</i></a><div class=\"dropdown-menu dropdown-menu-lg stop-propagate pull-right\"><div class=\"listview\"><div class=\"lv-header\">Messages</div><div class=\"lv-body\"><a class=\"lv-item\" ng-href=\"\" ng-repeat=\"w in hctrl.messageResult.list\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" ng-src=\"img/profile-pics/{{ w.img }}\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">{{ w.user }}</div><small class=\"lv-small\">{{ w.text }}</small></div></div></a></div><div class=\"clearfix\"></div><a class=\"lv-footer\" href=\"\">View All</a></div></div></li><li class=\"dropdown\" uib-dropdown><a uib-dropdown-toggle href=\"\"><i class=\"tm-icon zmdi zmdi-notifications\"></i> <i class=\"tmn-counts\">9</i></a><div class=\"dropdown-menu dropdown-menu-lg stop-propagate pull-right\"><div class=\"listview\" id=\"notifications\"><div class=\"lv-header\">Notification<ul class=\"actions\"><li><a href=\"\" data-ng-click=\"hctrl.clearNotification($event)\"><i class=\"zmdi zmdi-check-all\"></i></a></li></ul></div><div class=\"lv-body\"><a class=\"lv-item\" ng-href=\"\" ng-repeat=\"w in hctrl.messageResult.list\"><div class=\"media\"><div class=\"pull-left\"><img class=\"lv-img-sm\" ng-src=\"img/profile-pics/{{ w.img }}\" alt=\"\"></div><div class=\"media-body\"><div class=\"lv-title\">{{ w.user }}</div><small class=\"lv-small\">{{ w.text }}</small></div></div></a></div><div class=\"clearfix\"></div><a class=\"lv-footer\" href=\"\">View Previous</a></div></div></li><li class=\"dropdown hidden-xs\" uib-dropdown><a uib-dropdown-toggle href=\"\"><i class=\"tm-icon zmdi zmdi-view-list-alt\"></i> <i class=\"tmn-counts\">2</i></a><div class=\"dropdown-menu pull-right dropdown-menu-lg\"><div class=\"listview\"><div class=\"lv-header\">Tasks</div><div class=\"lv-body\"><div class=\"lv-item\"><div class=\"lv-title m-b-5\">HTML5 Validation Report</div><div class=\"progress\"><div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"95\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 95%\"><span class=\"sr-only\">95% Complete (success)</span></div></div></div><div class=\"lv-item\"><div class=\"lv-title m-b-5\">Google Chrome Extension</div><div class=\"progress\"><div class=\"progress-bar progress-bar-success\" role=\"progressbar\" aria-valuenow=\"80\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 80%\"><span class=\"sr-only\">80% Complete (success)</span></div></div></div><div class=\"lv-item\"><div class=\"lv-title m-b-5\">Social Intranet Projects</div><div class=\"progress\"><div class=\"progress-bar progress-bar-info\" role=\"progressbar\" aria-valuenow=\"20\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 20%\"><span class=\"sr-only\">20% Complete</span></div></div></div><div class=\"lv-item\"><div class=\"lv-title m-b-5\">Bootstrap Admin Template</div><div class=\"progress\"><div class=\"progress-bar progress-bar-warning\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%\"><span class=\"sr-only\">60% Complete (warning)</span></div></div></div><div class=\"lv-item\"><div class=\"lv-title m-b-5\">Youtube Client App</div><div class=\"progress\"><div class=\"progress-bar progress-bar-danger\" role=\"progressbar\" aria-valuenow=\"80\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 80%\"><span class=\"sr-only\">80% Complete (danger)</span></div></div></div></div><div class=\"clearfix\"></div><a class=\"lv-footer\" href=\"\">View All</a></div></div></li><li class=\"dropdown\" uib-dropdown><a uib-dropdown-toggle href=\"\"><i class=\"tm-icon zmdi zmdi-more-vert\"></i></a><ul class=\"dropdown-menu dm-icon pull-right\"><li class=\"skin-switch hidden-xs\"><span ng-repeat=\"w in mactrl.skinList | limitTo : 6\" class=\"ss-skin bgm-{{ w }}\" data-ng-click=\"mactrl.skinSwitch(w)\"></span></li><li class=\"divider hidden-xs\"></li><li class=\"hidden-xs\"><a data-ng-click=\"hctrl.fullScreen()\" href=\"\"><i class=\"zmdi zmdi-fullscreen\"></i> Toggle Fullscreen</a></li><li><a data-ng-click=\"hctrl.clearLocalStorage()\" href=\"\"><i class=\"zmdi zmdi-delete\"></i> Clear Local Storage</a></li><li><a href=\"\"><i class=\"zmdi zmdi-face\"></i> Privacy Settings</a></li><li><a href=\"\"><i class=\"zmdi zmdi-settings\"></i> Other Settings</a></li></ul></li><li class=\"hidden-xs\" data-target=\"chat\" data-toggle-sidebar data-model-right=\"mactrl.sidebarToggle.right\" data-ng-class=\"{ 'open': mactrl.sidebarToggle.right === true }\"><a href=\"\"><i class=\"tm-icon zmdi zmdi-comment-alt-text\"></i></a></li></ul></li></ul><!-- Top Search Content --><div id=\"top-search-wrap\"><div class=\"tsw-inner\"><i id=\"top-search-close\" class=\"zmdi zmdi-arrow-left\" data-ng-click=\"hctrl.closeSearch()\"></i> <input type=\"text\"></div></div>"
+  );
+
+
+  $templateCache.put('template/profile-menu.html',
+    "<li class=\"btn-wave\" data-ui-sref-active=\"active\"><a data-ui-sref=\"pages.profile.profile-about\">About</a></li><li class=\"btn-wave\" data-ui-sref-active=\"active\"><a data-ui-sref=\"pages.profile.profile-timeline\">Timeline</a></li><li class=\"btn-wave\" data-ui-sref-active=\"active\"><a data-ui-sref=\"pages.profile.profile-photos\">Photos</a></li><li class=\"btn-wave\" data-ui-sref-active=\"active\"><a data-ui-sref=\"pages.profile.profile-connections\">Connections</a></li>"
+  );
+
+
+  $templateCache.put('template/sidebar-left.html',
+    "<div class=\"sidebar-inner c-overflow\"><div class=\"profile-menu\"><a href=\"\" toggle-submenu><div class=\"profile-pic\"><img src=\"img/profile-pics/1.jpg\" alt=\"\"></div><div class=\"profile-info\">Malinda Hollaway <i class=\"zmdi zmdi-caret-down\"></i></div></a><ul class=\"main-menu\"><li><a data-ui-sref=\"pages.profile.profile-about\" data-ng-click=\"mactrl.sidebarStat($event)\"><i class=\"zmdi zmdi-account\"></i> View Profile</a></li><li><a href=\"\"><i class=\"zmdi zmdi-input-antenna\"></i> Privacy Settings</a></li><li><a href=\"\"><i class=\"zmdi zmdi-settings\"></i> Settings</a></li><li><a href=\"\"><i class=\"zmdi zmdi-time-restore\"></i> Logout</a></li></ul></div><ul class=\"main-menu\"><li data-ui-sref-active=\"active\"><a data-ui-sref=\"home\" data-ng-click=\"mactrl.sidebarStat($event)\"><i class=\"zmdi zmdi-home\"></i> Home</a></li><li class=\"sub-menu\" data-ng-class=\"{ 'active toggled': mactrl.$state.includes('headers') }\"><a href=\"\" toggle-submenu><i class=\"zmdi zmdi-view-compact\"></i> Headers</a><ul><li><a data-ui-sref-active=\"active\" data-ui-sref=\"headers.textual-menu\" data-ng-click=\"mactrl.sidebarStat($event)\">Textual menu</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"headers.image-logo\" data-ng-click=\"mactrl.sidebarStat($event)\">Image logo</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"headers.mainmenu-on-top\" data-ng-click=\"mactrl.sidebarStat($event)\">Mainmenu on top</a></li></ul></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"typography\" data-ng-click=\"mactrl.sidebarStat($event)\"><i class=\"zmdi zmdi-format-underlined\"></i> Typography</a></li><li class=\"sub-menu\" data-ng-class=\"{ 'active toggled': mactrl.$state.includes('widgets') }\"><a href=\"\" toggle-submenu><i class=\"zmdi zmdi-widgets\"></i> Widgets</a><ul><li><a data-ui-sref-active=\"active\" data-ui-sref=\"widgets.widget-templates\" data-ng-click=\"mactrl.sidebarStat($event)\">Templates</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"widgets.widgets\" data-ng-click=\"mactrl.sidebarStat($event)\">Widgets</a></li></ul></li><li class=\"sub-menu\" data-ng-class=\"{ 'active toggled': mactrl.$state.includes('tables') }\"><a href=\"\" toggle-submenu><i class=\"zmdi zmdi-view-list\"></i> Tables</a><ul><li><a data-ui-sref-active=\"active\" data-ui-sref=\"tables.tables\" data-ng-click=\"mactrl.sidebarStat($event)\">Tables</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"tables.data-table\" data-ng-click=\"mactrl.sidebarStat($event)\">Data Tables</a></li></ul></li><li class=\"sub-menu\" data-ng-class=\"{ 'active toggled': mactrl.$state.includes('form') }\"><a href=\"\" toggle-submenu><i class=\"zmdi zmdi-collection-text\"></i> Forms</a><ul><li><a data-ui-sref-active=\"active\" data-ui-sref=\"form.basic-form-elements\" data-ng-click=\"mactrl.sidebarStat($event)\">Basic Form Elements</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"form.form-components\" data-ng-click=\"mactrl.sidebarStat($event)\">Form Components</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"form.form-examples\" data-ng-click=\"mactrl.sidebarStat($event)\">Form Examples</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"form.form-validations\" data-ng-click=\"mactrl.sidebarStat($event)\">Form Validation</a></li></ul></li><li class=\"sub-menu\" data-ng-class=\"{ 'active toggled': mactrl.$state.includes('user-interface') }\"><a href=\"\" toggle-submenu><i class=\"zmdi zmdi-swap-alt\"></i>User Interface</a><ul><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.ui-bootstrap\" data-ng-click=\"mactrl.sidebarStat($event)\">UI Bootstrap</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.colors\" data-ng-click=\"mactrl.sidebarStat($event)\">Colors</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.animations\" data-ng-click=\"mactrl.sidebarStat($event)\">Animations</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.box-shadow\" data-ng-click=\"mactrl.sidebarStat($event)\">Box Shadow</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.buttons\" data-ng-click=\"mactrl.sidebarStat($event)\">Buttons</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.icons\" data-ng-click=\"mactrl.sidebarStat($event)\">Icons</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.alerts\" data-ng-click=\"mactrl.sidebarStat($event)\">Alerts</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.preloaders\" data-ng-click=\"mactrl.sidebarStat($event)\">Preloaders</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.notifications-dialogs\" data-ng-click=\"mactrl.sidebarStat($event)\">Notifications & Dialogs</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.media\" data-ng-click=\"mactrl.sidebarStat($event)\">Media</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"user-interface.other-components\" data-ng-click=\"mactrl.sidebarStat($event)\">Others</a></li></ul></li><li class=\"sub-menu\" data-ng-class=\"{ 'active toggled': mactrl.$state.includes('charts') }\"><a href=\"\" toggle-submenu><i class=\"zmdi zmdi-trending-up\"></i>Charts</a><ul><li><a data-ui-sref-active=\"active\" data-ui-sref=\"charts.flot-charts\" data-ng-click=\"mactrl.sidebarStat($event)\">Flot Charts</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"charts.other-charts\" data-ng-click=\"mactrl.sidebarStat($event)\">Other Charts</a></li></ul></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"calendar\" data-ng-click=\"mactrl.sidebarStat($event)\"><i class=\"zmdi zmdi-calendar\"></i> Calendar</a></li><li class=\"sub-menu\" data-ng-class=\"{ 'active toggled': mactrl.$state.includes('photo-gallery') }\"><a href=\"\" toggle-submenu><i class=\"zmdi zmdi-image\"></i>Photo Gallery</a><ul><li><a data-ui-sref-active=\"active\" data-ui-sref=\"photo-gallery.photos\" data-ng-click=\"mactrl.sidebarStat($event)\">Default</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"photo-gallery.timeline\" data-ng-click=\"mactrl.sidebarStat($event)\">Timeline</a></li></ul></li><li data-ui-sref-active=\"active\"><a data-ui-sref=\"generic-classes\" data-ng-click=\"mactrl.sidebarStat($event)\"><i class=\"zmdi zmdi-layers\"></i> Generic Classes</a></li><li class=\"sub-menu\" data-ng-class=\"{ 'active toggled': mactrl.$state.includes('pages') }\"><a href=\"\" toggle-submenu><i class=\"zmdi zmdi-collection-item\"></i> Sample Pages</a><ul><li><a data-ui-sref-active=\"active\" data-ui-sref=\"pages.profile.profile-about\" data-ng-click=\"mactrl.sidebarStat($event)\">Profile</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"pages.listview\" data-ng-click=\"mactrl.sidebarStat($event)\">List View</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"pages.messages\" data-ng-click=\"mactrl.sidebarStat($event)\">Messages</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"pages.pricing-table\" data-ng-click=\"mactrl.sidebarStat($event)\">Pricing Table</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"pages.contacts\" data-ng-click=\"mactrl.sidebarStat($event)\">Contacts</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"pages.invoice\" data-ng-click=\"mactrl.sidebarStat($event)\">Invoice</a></li><li><a data-ui-sref-active=\"active\" data-ui-sref=\"pages.wall\" data-ng-click=\"mactrl.sidebarStat($event)\">Wall</a></li><li><a href=\"login.html\">Login and Sign Up</a></li><li><a href=\"lockscreen.html\">Lockscreen</a></li><li><a href=\"404.html\">Error 404</a></li></ul></li><li class=\"sub-menu\"><a href=\"\" toggle-submenu><i class=\"zmdi zmdi-menu\"></i> 3 Level Menu</a><ul><li><a href=\"\">Level 2 link</a></li><li><a href=\"\">Another level 2 Link</a></li><li class=\"sub-menu\"><a href=\"\" toggle-submenu>I have children too</a><ul><li><a href=\"\">Level 3 link</a></li><li><a href=\"\">Another Level 3 link</a></li><li><a href=\"\">Third one</a></li></ul></li><li><a href=\"\">One more 2</a></li></ul></li><li><a href=\"https://wrapbootstrap.com/theme/material-admin-responsive-angularjs-WB011H985\"><i class=\"zmdi zmdi-money\"></i> Buy this template</a></li></ul></div>"
+  );
+
+
+  $templateCache.put('template/carousel/carousel.html',
+    "<div ng-mouseenter=\"pause()\" ng-mouseleave=\"play()\" class=\"carousel\" ng-swipe-right=\"prev()\" ng-swipe-left=\"next()\"><ol class=\"carousel-indicators\" ng-show=\"slides.length > 1\"><li ng-repeat=\"slide in slides | orderBy:'index' track by $index\" ng-class=\"{active: isActive(slide)}\" ng-click=\"select(slide)\"></li></ol><div class=\"carousel-inner\" ng-transclude></div><a class=\"left carousel-control\" ng-click=\"prev()\" ng-show=\"slides.length > 1\"><span class=\"zmdi zmdi-chevron-left\"></span></a> <a class=\"right carousel-control\" ng-click=\"next()\" ng-show=\"slides.length > 1\"><span class=\"zmdi zmdi-chevron-right\"></span></a></div>"
+  );
+
+
+  $templateCache.put('template/datepicker/day.html',
+    "<table role=\"grid\" aria-labelledby=\"{{::uniqueId}}-title\" aria-activedescendant=\"{{activeDateId}}\" class=\"dp-table dpt-day\"><thead><tr class=\"tr-dpnav\"><th><button type=\"button\" class=\"pull-left btn-dp\" ng-click=\"move(-1)\" tabindex=\"-1\"><i class=\"zmdi zmdi-long-arrow-left\"></i></button></th><th colspan=\"{{::5 + showWeeks}}\"><button id=\"{{::uniqueId}}-title\" role=\"heading\" aria-live=\"assertive\" aria-atomic=\"true\" type=\"button\" ng-click=\"toggleMode()\" ng-disabled=\"datepickerMode === maxMode\" tabindex=\"-1\" class=\"w-100 btn-dp\"><div class=\"dp-title\">{{title}}</div></button></th><th><button type=\"button\" class=\"pull-right btn-dp\" ng-click=\"move(1)\" tabindex=\"-1\"><i class=\"zmdi zmdi-long-arrow-right\"></i></button></th></tr><tr class=\"tr-dpday\"><th ng-if=\"showWeeks\" class=\"text-center\"></th><th ng-repeat=\"label in ::labels track by $index\" class=\"text-center\"><small aria-label=\"{{::label.full}}\">{{::label.abbr}}</small></th></tr></thead><tbody><tr ng-repeat=\"row in rows track by $index\"><td ng-if=\"showWeeks\" class=\"text-center h6\"><em>{{ weekNumbers[$index] }}</em></td><td ng-repeat=\"dt in row track by dt.date\" class=\"text-center\" role=\"gridcell\" id=\"{{::dt.uid}}\" ng-class=\"::dt.customClass\"><button type=\"button\" class=\"w-100 btn-dp btn-dpday btn-dpbody\" ng-class=\"{'dp-today': dt.current, 'dp-selected': dt.selected, 'dp-active': isActive(dt)}\" ng-click=\"select(dt.date)\" ng-disabled=\"dt.disabled\" tabindex=\"-1\"><span ng-class=\"::{'dp-day-muted': dt.secondary, 'dp-day-today': dt.current}\">{{::dt.label}}</span></button></td></tr></tbody></table>"
+  );
+
+
+  $templateCache.put('template/datepicker/month.html',
+    "<table role=\"grid\" aria-labelledby=\"{{::uniqueId}}-title\" aria-activedescendant=\"{{activeDateId}}\" class=\"dp-table\"><thead><tr class=\"tr-dpnav\"><th><button type=\"button\" class=\"pull-left btn-dp\" ng-click=\"move(-1)\" tabindex=\"-1\"><i class=\"zmdi zmdi-long-arrow-left\"></i></button></th><th><button id=\"{{::uniqueId}}-title\" role=\"heading\" aria-live=\"assertive\" aria-atomic=\"true\" type=\"button\" ng-click=\"toggleMode()\" ng-disabled=\"datepickerMode === maxMode\" tabindex=\"-1\" class=\"w-100 btn-dp\"><div class=\"dp-title\">{{title}}</div></button></th><th><button type=\"button\" class=\"pull-right btn-dp\" ng-click=\"move(1)\" tabindex=\"-1\"><i class=\"zmdi zmdi-long-arrow-right\"></i></button></th></tr></thead><tbody><tr ng-repeat=\"row in rows track by $index\"><td ng-repeat=\"dt in row track by dt.date\" class=\"text-center\" role=\"gridcell\" id=\"{{::dt.uid}}\" ng-class=\"::dt.customClass\"><button type=\"button\" class=\"w-100 btn-dp btn-dpbody\" ng-class=\"{'dp-selected': dt.selected, 'dp-active': isActive(dt)}\" ng-click=\"select(dt.date)\" ng-disabled=\"dt.disabled\" tabindex=\"-1\"><span ng-class=\"::{'dp-day-today': dt.current}\">{{::dt.label}}</span></button></td></tr></tbody></table>"
+  );
+
+
+  $templateCache.put('template/datepicker/popup.html',
+    "<ul class=\"dropdown-menu\" ng-keydown=\"keydown($event)\"><li ng-transclude></li><li ng-if=\"showButtonBar\" class=\"dp-actions clearfix\"><button type=\"button\" class=\"btn btn-link\" ng-click=\"select('today')\">{{ getText('current') }}</button> <button type=\"button\" class=\"btn btn-link\" ng-click=\"close()\">{{ getText('close') }}</button></li></ul>"
+  );
+
+
+  $templateCache.put('template/datepicker/year.html',
+    "<table role=\"grid\" aria-labelledby=\"{{::uniqueId}}-title\" aria-activedescendant=\"{{activeDateId}}\" class=\"dp-table\"><thead><tr class=\"tr-dpnav\"><th><button type=\"button\" class=\"pull-left btn-dp\" ng-click=\"move(-1)\" tabindex=\"-1\"><i class=\"zmdi zmdi-long-arrow-left\"></i></button></th><th colspan=\"3\"><button id=\"{{::uniqueId}}-title\" role=\"heading\" aria-live=\"assertive\" aria-atomic=\"true\" type=\"button\" class=\"w-100 btn-dp\" ng-click=\"toggleMode()\" ng-disabled=\"datepickerMode === maxMode\" tabindex=\"-1\"><div class=\"dp-title\">{{title}}</div></button></th><th><button type=\"button\" class=\"pull-right btn-dp\" ng-click=\"move(1)\" tabindex=\"-1\"><i class=\"zmdi zmdi-long-arrow-right\"></i></button></th></tr></thead><tbody><tr ng-repeat=\"row in rows track by $index\"><td ng-repeat=\"dt in row track by dt.date\" class=\"text-center\" role=\"gridcell\" id=\"{{::dt.uid}}\"><button type=\"button\" class=\"w-100 btn-dp btn-dpbody\" ng-class=\"{'dp-selected': dt.selected, 'dp-active': isActive(dt)}\" ng-click=\"select(dt.date)\" ng-disabled=\"dt.disabled\" tabindex=\"-1\"><span ng-class=\"::{'dp-day-today': dt.current}\">{{::dt.label}}</span></button></td></tr></tbody></table>"
+  );
+
+
+  $templateCache.put('template/pagination/pager.html',
+    "<ul class=\"pager\"><li ng-class=\"{disabled: noPrevious(), previous: align}\"><a href ng-click=\"selectPage(page - 1, $event)\">Previous</a></li><li ng-class=\"{disabled: noNext(), next: align}\"><a href ng-click=\"selectPage(page + 1, $event)\">Next</a></li></ul>"
+  );
+
+
+  $templateCache.put('template/pagination/pagination.html',
+    "<ul class=\"pagination\"><li ng-if=\"boundaryLinks\" ng-class=\"{disabled: noPrevious()}\"><a href ng-click=\"selectPage(1, $event)\"><i class=\"zmdi zmdi-more-horiz\"><i></i></i></a></li><li ng-if=\"directionLinks\" ng-class=\"{disabled: noPrevious()}\"><a href ng-click=\"selectPage(page - 1, $event)\"><i class=\"zmdi zmdi-chevron-left\"></i></a></li><li ng-repeat=\"page in pages track by $index\" ng-class=\"{active: page.active}\"><a href ng-click=\"selectPage(page.number, $event)\">{{page.text}}</a></li><li ng-if=\"directionLinks\" ng-class=\"{disabled: noNext()}\"><a href ng-click=\"selectPage(page + 1, $event)\"><i class=\"zmdi zmdi-chevron-right\"></i></a></li><li ng-if=\"boundaryLinks\" ng-class=\"{disabled: noNext()}\"><a href ng-click=\"selectPage(totalPages, $event)\"><i class=\"zmdi zmdi-more-horiz\"><i></i></i></a></li></ul>"
+  );
+
+
+  $templateCache.put('template/tabs/tabset.html',
+    "<div class=\"clearfix\"><ul class=\"tab-nav\" ng-class=\"{'tn-vertical': vertical, 'tn-justified': justified, 'tab-nav-right': right}\" ng-transclude></ul><div class=\"tab-content\"><div class=\"tab-pane\" ng-repeat=\"tab in tabs\" ng-class=\"{active: tab.active}\" tab-content-transclude=\"tab\"></div></div></div>"
+  );
+
+}]);
 
 'use strict';
 
@@ -3341,17 +3439,21 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			
 			var authObj = $firebaseAuth();
 			authObj.$signInWithEmailAndPassword(email, password).then(function(firebaseUser) {			 
-				 // console.log(firebase.auth().currentUser);
+				 //alert(JSON.stringify(firebase.auth().currentUser));
 				 if(firebase.auth().currentUser != null){
 					 localStorage.setItem('userID', firebase.auth().currentUser.uid);
 					 localStorage.setItem('userEmail', firebase.auth().currentUser.email);
 					 localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
+					 localStorage.setItem('password', password);
+					 
 				 } 
 
 				 if(firebase.auth().currentUser != null){
 					 $rootScope.uid = firebase.auth().currentUser.uid;
 					 $rootScope.userEmail = firebase.auth().currentUser.email;
 					 $rootScope.emailVerified = firebase.auth().currentUser.emailVerified;
+					 $rootScope.password = firebase.auth().currentUser.password;
+
 				 } 
 				 
 				 if(!firebase.auth().currentUser.emailVerified){
@@ -3553,7 +3655,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	  $scope.$apply();
 	});
 	
-	vm.copy = "Copy link";		
+	vm.copy = "Copy Link";		
 	$scope.copySuccess = function(e) {
 		console.info('Action:', e.action);
 		console.info('Text:', e.text);
@@ -3775,7 +3877,11 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	}	
 	
 	// Add/Edit Property		
-	vm.submitProp = function(property){				
+	vm.submitProp = function(property){		
+		var r = confirm("Your unique property link is generated, please click on edit property and copy the link at the bottom");
+		if (r == true) {
+		    
+		
 			vm.loader = 1;
 			var propID = property.propID;
 			var propimg = $('#propimg').val();	
@@ -3999,6 +4105,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				vm.loader = 0;				
 				$state.reload();
 			}
+		}
+
+		} else {
+		    return false;
 		}
 	}
 	
@@ -5330,380 +5440,502 @@ vcancyApp
 //=================================================
 
 vcancyApp
-    .controller('rentalformCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams','Upload','$http','emailSendingService','config', function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams,Upload, $http,emailSendingService,config) {
-		
-		var vm = this;
-		var tenantID = localStorage.getItem('userID');
-		var scheduleID = $stateParams.scheduleId;
-		var applicationID = $stateParams.applicationId;
-		var tenantEmail = localStorage.getItem('userEmail');
-		vm.submitemail = $rootScope.renterExternalEmail;
-		console.log(vm.submitemail);
-		$rootScope.renterExternalEmail = '';
-		console.log($rootScope.renterExternalEmail);
-		
-		vm.draft = "false";
-		vm.draftdata = "false";
-		
-		vm.rentownchange = function(){
-			if(vm.rentaldata.rent_own == "rent"){
-				vm.rentaldata.live_time =  '';
-				vm.rentaldata.rentamt =  '';
-				vm.rentaldata.vacantreason =  '';
-			} else {
-				vm.rentaldata.live_time =  ' ';
-				vm.rentaldata.rentamt =  '0.00';
-				vm.rentaldata.vacantreason =  ' ';
+	.controller('rentalformCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'Upload', '$http', 'emailSendingService', 'config',
+		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, Upload, $http, emailSendingService, config) {
+
+			var vm = this;
+			var tenantID = localStorage.getItem('userID');
+			var scheduleID = $stateParams.scheduleId;
+			var applicationID = $stateParams.applicationId;
+			var tenantEmail = localStorage.getItem('userEmail');
+			vm.submitemail = $rootScope.renterExternalEmail;
+			console.log(vm.submitemail);
+			$rootScope.renterExternalEmail = '';
+			console.log($rootScope.renterExternalEmail);
+			vm.draft = "false";
+			vm.draftdata = "false";
+			vm.rentownchange = function () {
+				if (vm.rentaldata.rent_own == "rent") {
+					vm.rentaldata.live_time = '';
+					vm.rentaldata.rentamt = '';
+					vm.rentaldata.vacantreason = '';
+				} else {
+					vm.rentaldata.live_time = ' ';
+					vm.rentaldata.rentamt = '0.00';
+					vm.rentaldata.vacantreason = ' ';
+				}
+
 			}
-			
-		}
-		
-		vm.petschange = function(){
-			if(vm.rentaldata.pets == "yes"){
-				vm.rentaldata.petsdesc = '';
-			} else {
-				vm.rentaldata.petsdesc = ' ';
+
+			vm.petschange = function () {
+				if (vm.rentaldata.pets == "yes") {
+					vm.rentaldata.petsdesc = '';
+				} else {
+					vm.rentaldata.petsdesc = ' ';
+				}
 			}
-		}
-		
-		vm.tenantdata = [];
-		vm.rentaldata = [];
-		vm.propdata = [];
-		vm.scheduledata = [];
-		
-		
-		vm.tenantdata.tenantID =  '';
-		vm.scheduledata.scheduleID =  '';
-		vm.propdata.propID =  '';
-		vm.propdata.landlordID =  '';
-		
-		vm.propdata.address =  '';
-		vm.propdata.rent =  '';
-		vm.rentaldata.months =  '';
-		vm.rentaldata.startdate =  '';
-		vm.rentaldata.parking =  '';
-		vm.tenantdata.tenantName =  '';
-		vm.rentaldata.dob =  '';
-		vm.rentaldata.sinno = '';
-		vm.rentaldata.telwork =  '';
-		vm.rentaldata.telhome =  '';
-		vm.tenantdata.tenantEmail =  '';
-		vm.rentaldata.appaddress =  '';
-		vm.rentaldata.appcity =  '';
-		vm.rentaldata.maritalstatus =  '';
-		vm.rentaldata.rent_own =  '';
-		vm.rentaldata.live_time =  '';
-		vm.rentaldata.rentamt =  '';
-		vm.rentaldata.vacantreason =  '';
-		vm.rentaldata.landlordname =  '';
-		vm.rentaldata.landlordphone =  '';
-		
-		vm.rentaldata.otherappname =  [];
-		vm.rentaldata.otherappdob =  [];
-		vm.rentaldata.otherappsinno =  [];
-		
-		vm.rentaldata.minorappname =  [];
-		vm.rentaldata.minorappdob =  [];
-		vm.rentaldata.minorappsinno =  [];
-		
-		vm.rentaldata.pets =  '';
-		vm.rentaldata.petsdesc =  '';
-		vm.rentaldata.smoking =  '';
-		vm.rentaldata.appfiles = '';
-		
-		vm.rentaldata.appcurrentemployer =  '';
-		vm.rentaldata.appposition =  '';
-		vm.rentaldata.appemployerphone =  '';
-		vm.rentaldata.appworkingduration =  '';
-		vm.rentaldata.appgrossmonthlyincome =  '';
-		vm.rentaldata.appincometype =  '';
-		vm.rentaldata.appotherincome =  '';
-		
-		vm.rentaldata.vehiclemake =  '';
-		vm.rentaldata.vehiclemodel =  '';
-		vm.rentaldata.vehicleyear =  '';
-		
-		vm.rentaldata.emergencyname =  '';
-		vm.rentaldata.emergencyphone =  '';
-		
-		vm.rentaldata.refone_name =  '';
-		vm.rentaldata.refone_phone =  '';
-		vm.rentaldata.refone_relation =  '';
-		
-		vm.rentaldata.reftwo_name =  '';
-		vm.rentaldata.reftwo_phone =  '';
-		vm.rentaldata.reftwo_relation =  '';
-		
-		vm.rentaldata.otherappcurrentemployer =  [];
-		vm.rentaldata.otherappposition =  [];
-		vm.rentaldata.otherappemployerphone =  [];
-		vm.rentaldata.otherappworkingduration =  [];
-		vm.rentaldata.otherappgrossmonthlyincome =  [];
-		vm.rentaldata.otherappincometype =  [];
-		vm.rentaldata.otherappotherincome =  [];
-		
-		vm.rentaldata.dated =  '';
-		vm.rentaldata.appsign =  '';
-		vm.rentaldata.otherappsign =  [];
-		
-		
-		// DATEPICKER
-		vm.today = function() {
-			vm.dt = new Date();
-		};
-		vm.today();
 
-		vm.toggleMin = function() {
-			vm.minDate = vm.minDate ? null : new Date();
-		};
-		vm.toggleMin();
+			vm.tenantdata = [];
+			vm.rentaldata = [];
+			vm.propdata = [];
+			vm.scheduledata = [];
 
-		vm.dobopen = function($event) {
-			$event.preventDefault();
-			$event.stopPropagation();
-			vm.dobopened = true;
-		};
-		
-		vm.dateopen = function($event) {
-			$event.preventDefault();
-			$event.stopPropagation();
-			vm.dateopened = true;
-		};
-		
-		vm.minordobopened = [];
-		vm.minordobopen = function($event,minorindex) {
-			console.log(minorindex);
-			$event.preventDefault();
-			$event.stopPropagation();
-			angular.forEach(vm.minor, function(value, key) {
-			  vm.minordobopened[key] = false;
-			console.log(vm.minordobopened[key]);
-			});
-			vm.minordobopened[minorindex] = true;
-			console.log("here"+vm.minordobopened[minorindex]);
-		};
-		
-		
-		vm.adultdobopened = [];
-		vm.adultdobopen = function($event,adultindex) {
-			console.log(adultindex);
-			$event.preventDefault();
-			$event.stopPropagation();
-			angular.forEach(vm.adult, function(value, key) {
-			  vm.adultdobopened[key] = false;
-			console.log(vm.adultdobopened[key]);
-			});
-			vm.adultdobopened[adultindex] = true;
-			console.log("here"+vm.adultdobopened[adultindex]);
-		};
 
-		vm.dateOptions = {
-			formatYear: 'yy',
-			startingDay: 1
-		};
-		vm.maxDate = new Date();
-		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-		vm.format = vm.formats[0];
-		
-		
-		vm.adult = [];
-		vm.minor = [];
-		vm.addadult = function(adultlen){
-			vm.adult.push(adultlen);
-		}
-		vm.addminor = function(minorlen){
-			vm.minor.push(minorlen);
-		}
-		
-		// to remove adult
-		vm.removeadult = function(slotindex){
-			console.log(slotindex,vm.adult);
-			vm.adult.splice(slotindex,1);
-			vm.rentaldata.otherappname.splice(slotindex,1);
-			vm.rentaldata.otherappdob.splice(slotindex,1);
-			vm.rentaldata.otherappsinno.splice(slotindex,1);
-			vm.rentaldata.otherappcurrentemployer.splice(slotindex,1);
-			vm.rentaldata.otherappposition.splice(slotindex,1);	
-			vm.rentaldata.otherappemployerphone.splice(slotindex,1);
-			vm.rentaldata.otherappworkingduration.splice(slotindex,1);
-			vm.rentaldata.otherappgrossmonthlyincome.splice(slotindex,1);
-			vm.rentaldata.otherappincometype.splice(slotindex,1);	
-			vm.rentaldata.otherappotherincome.splice(slotindex,1);
-			vm.rentaldata.otherappsign.splice(slotindex,1);			
-		}
-		
-		// to remove minor
-		vm.removeminor = function(slotindex){	
-			console.log(slotindex,vm.adult);
-			console.log(vm.rentaldata);		
-			vm.minor.splice(slotindex,1);
-			vm.rentaldata.minorappdob.splice(slotindex,1);
-			vm.rentaldata.minorappsinno.splice(slotindex,1);
-			vm.rentaldata.minorappname.splice(slotindex,1);
+			vm.tenantdata.tenantID = '';
+			vm.scheduledata.scheduleID = '';
+			vm.propdata.propID = '';
+			vm.propdata.landlordID = '';
+
+			vm.propdata.address = '';
+			vm.propdata.rent = '';
+			vm.rentaldata.months = '';
+			vm.rentaldata.startdate = '';
+			vm.rentaldata.parking = '';
+			vm.tenantdata.tenantName = '';
+			vm.rentaldata.dob = '';
+			vm.rentaldata.sinno = '';
+			vm.rentaldata.telwork = '';
+			vm.rentaldata.telhome = '';
+			vm.tenantdata.tenantEmail = '';
+			vm.rentaldata.appaddress = '';
+			vm.rentaldata.appcity = '';
+			vm.rentaldata.maritalstatus = '';
+			vm.rentaldata.rent_own = '';
+			vm.rentaldata.live_time = '';
+			vm.rentaldata.rentamt = '';
+			vm.rentaldata.vacantreason = '';
+			vm.rentaldata.landlordname = '';
+			vm.rentaldata.landlordphone = '';
+
+			vm.rentaldata.otherappname = [];
+			vm.rentaldata.otherappdob = [];
+			vm.rentaldata.otherappsinno = [];
+
+			vm.rentaldata.minorappname = [];
+			vm.rentaldata.minorappdob = [];
+			vm.rentaldata.minorappsinno = [];
+
+			vm.rentaldata.pets = '';
+			vm.rentaldata.petsdesc = '';
+			vm.rentaldata.smoking = '';
+			vm.rentaldata.appfiles = '';
+
+			vm.rentaldata.appcurrentemployer = '';
+			vm.rentaldata.appposition = '';
+			vm.rentaldata.appemployerphone = '';
+			vm.rentaldata.appworkingduration = '';
+			vm.rentaldata.appgrossmonthlyincome = '';
+			vm.rentaldata.appincometype = '';
+			vm.rentaldata.appotherincome = '';
+
+			vm.rentaldata.vehiclemake = '';
+			vm.rentaldata.vehiclemodel = '';
+			vm.rentaldata.vehicleyear = '';
+
+			vm.rentaldata.emergencyname = '';
+			vm.rentaldata.emergencyphone = '';
+
+			vm.rentaldata.refone_name = '';
+			vm.rentaldata.refone_phone = '';
+			vm.rentaldata.refone_relation = '';
+
+			vm.rentaldata.reftwo_name = '';
+			vm.rentaldata.reftwo_phone = '';
+			vm.rentaldata.reftwo_relation = '';
+
+			vm.rentaldata.otherappcurrentemployer = [];
+			vm.rentaldata.otherappposition = [];
+			vm.rentaldata.otherappemployerphone = [];
+			vm.rentaldata.otherappworkingduration = [];
+			vm.rentaldata.otherappgrossmonthlyincome = [];
+			vm.rentaldata.otherappincometype = [];
+			vm.rentaldata.otherappotherincome = [];
+
+			vm.rentaldata.dated = '';
+			vm.rentaldata.appsign = '';
+			vm.rentaldata.otherappsign = [];
+
+
+			// DATEPICKER
+			vm.today = function () {
+				vm.dt = new Date();
+			};
+			vm.today();
+
+			vm.toggleMin = function () {
+				vm.minDate = vm.minDate ? null : new Date();
+			};
+			vm.toggleMin();
+
+
+
+
+			vm.dobopen = function ($event) {
 			
-			console.log(vm.minor,vm.rentaldata);
-		}
-		
-		if(applicationID == 0) {
-			firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).limitToLast(1).once("value", function(snapshot) {	
-				console.log(snapshot.val());
-				$scope.$apply(function(){
-					if(snapshot.val() !== null) {
-						$.map(snapshot.val(),function(value,index){	
-							vm.draftdata = "false";					
-							vm.applicationval = index;
-							vm.tenantdata.tenantID = value.tenantID;
-							// vm.scheduledata.scheduleID = value.scheduleID;
-							// vm.propdata.propID = value.propID;
-							// vm.propdata.landlordID = value.landlordID;
-							
-							// vm.propdata.address = value.address;
-							vm.propdata.rent = value.rent;
-							vm.rentaldata.months = value.months;
-							vm.rentaldata.startdate = value.startdate;
-							vm.rentaldata.parking = value.parking;
-							vm.rentaldata.telwork = value.telwork;
-							vm.rentaldata.telhome = value.telhome;
-							vm.tenantdata.tenantEmail = value.applicantemail;
-							vm.rentaldata.appaddress = value.appaddress;
-							vm.rentaldata.appcity = value.applicantcity;
-							vm.rentaldata.maritalstatus = value.maritalstatus;
-							vm.rentaldata.rent_own = value.rent_own;
-							vm.rentaldata.live_time = value.live_time_at_address;
-							vm.rentaldata.rentamt = value.rentamt;
-							vm.rentaldata.vacantreason = value.vacantreason;
-							vm.rentaldata.landlordname = value.landlordname;
-							vm.rentaldata.landlordphone = value.landlordphone;
-							vm.rentaldata.pets = value.pets;
-							vm.rentaldata.petsdesc = value.petsdesc;
-							vm.rentaldata.smoking = value.smoking;
-							vm.rentaldata.appfiles = value.appfiles;
-							vm.rentaldata.vehiclemake = value.vehiclemake;
-							vm.rentaldata.vehiclemodel = value.vehiclemodel;
-							vm.rentaldata.vehicleyear = value.vehicleyear;						
-							vm.rentaldata.emergencyname = value.emergencyname;
-							vm.rentaldata.emergencyphone = value.emergencyphone;
-							vm.rentaldata.refone_name = value.refone_name;
-							vm.rentaldata.refone_phone = value.refone_phone;
-							vm.rentaldata.refone_relation = value.refone_relation;
-							vm.rentaldata.reftwo_name = value.reftwo_name;
-							vm.rentaldata.reftwo_phone = value.reftwo_phone;
-							vm.rentaldata.reftwo_relation = value.reftwo_relation;
-							vm.rentaldata.dated = value.dated != '' ? new Date(value.dated) : '';
-							
-							firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
-								// console.log(snapshot.val())
-								$scope.$apply(function(){
-									if(snapshot.val()) {
-										vm.scheduledata = snapshot.val();
-										vm.scheduledata.scheduleID = snapshot.key;
-										
-										firebase.database().ref('properties/'+vm.scheduledata.propID).once("value", function(snap) {	
-											$scope.$apply(function(){
-												if(snap.val()) {
-													vm.propdata = snap.val();
-													vm.propdata.propID = snap.key;	
-													if(vm.propdata.units == ' '){
-														var units = '';
-													} else {
-														var units = vm.propdata.units +" - ";
+				$event.preventDefault();
+				$event.stopPropagation();
+				vm.dobopened = true;
+			};
+			vm.dobopen1 = function ($event) {
+				
+				$event.preventDefault();
+				$event.stopPropagation();
+				vm.dobopened = false;
+			};
+
+
+
+
+			vm.dateopen = function ($event) {
+				$event.preventDefault();
+				$event.stopPropagation();
+				vm.dateopened = true;
+			};
+			vm.dateopen1 = function ($event) {
+				$event.preventDefault();
+				$event.stopPropagation();
+				vm.dateopened = false;
+			};
+
+			vm.minordobopened = [];
+			vm.minordobopen = function ($event, minorindex) {
+				console.log(minorindex);
+				$event.preventDefault();
+				$event.stopPropagation();
+				angular.forEach(vm.minor, function (value, key) {
+					vm.minordobopened[key] = false;
+					console.log(vm.minordobopened[key]);
+				});
+				vm.minordobopened[minorindex] = true;
+				console.log("here1" + vm.minordobopened[minorindex]);
+			};
+			vm.minordobopen1 = function ($event, minorindex) {
+				console.log(minorindex);
+				$event.preventDefault();
+				$event.stopPropagation();
+				angular.forEach(vm.minor, function (value, key) {
+					vm.minordobopened[key] = false;
+					console.log(vm.minordobopened[key]);
+				});
+				vm.minordobopened[minorindex] = false;
+				console.log("here2" + vm.minordobopened[minorindex]);
+			};
+
+
+			vm.adultdobopened = [];
+			vm.adultdobopen = function ($event, adultindex) {
+				console.log(adultindex);
+				$event.preventDefault();
+				$event.stopPropagation();
+				angular.forEach(vm.adult, function (value, key) {
+					vm.adultdobopened[key] = false;
+					console.log(vm.adultdobopened[key]);
+				});
+				vm.adultdobopened[adultindex] = true;
+				console.log("here3" + vm.adultdobopened[adultindex]);
+			};
+			vm.adultdobopen1 = function ($event, adultindex) {
+				console.log(adultindex);
+				$event.preventDefault();
+				$event.stopPropagation();
+				angular.forEach(vm.adult, function (value, key) {
+					vm.adultdobopened[key] = false;
+					console.log(vm.adultdobopened[key]);
+				});
+				vm.adultdobopened[adultindex] = false;
+				console.log("here4" + vm.adultdobopened[adultindex]);
+			};
+
+			vm.dateOptions = {
+				formatYear: 'yy',
+				startingDay: 1
+			};
+			vm.maxDate = new Date();
+			vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+			vm.format = vm.formats[0];
+
+
+			vm.adult = [];
+			vm.minor = [];
+			vm.addadult = function (adultlen) {
+				vm.adult.push(adultlen);
+			}
+			vm.addminor = function (minorlen) {
+				vm.minor.push(minorlen);
+			}
+
+			
+
+			// to remove adult
+			vm.removeadult = function (slotindex) {
+				console.log(slotindex, vm.adult);
+				vm.adult.splice(slotindex, 1);
+				vm.rentaldata.otherappname.splice(slotindex, 1);
+				vm.rentaldata.otherappdob.splice(slotindex, 1);
+				vm.rentaldata.otherappsinno.splice(slotindex, 1);
+				vm.rentaldata.otherappcurrentemployer.splice(slotindex, 1);
+				vm.rentaldata.otherappposition.splice(slotindex, 1);
+				vm.rentaldata.otherappemployerphone.splice(slotindex, 1);
+				vm.rentaldata.otherappworkingduration.splice(slotindex, 1);
+				vm.rentaldata.otherappgrossmonthlyincome.splice(slotindex, 1);
+				vm.rentaldata.otherappincometype.splice(slotindex, 1);
+				vm.rentaldata.otherappotherincome.splice(slotindex, 1);
+				vm.rentaldata.otherappsign.splice(slotindex, 1);
+			}
+
+			// to remove minor
+			vm.removeminor = function (slotindex) {
+				console.log(slotindex, vm.adult);
+				console.log(vm.rentaldata);
+				vm.minor.splice(slotindex, 1);
+				vm.rentaldata.minorappdob.splice(slotindex, 1);
+				vm.rentaldata.minorappsinno.splice(slotindex, 1);
+				vm.rentaldata.minorappname.splice(slotindex, 1);
+
+				console.log(vm.minor, vm.rentaldata);
+			}
+
+			$scope.something = function(form) {
+				
+		       
+		       if($("#test_"+form).val() == ''){
+		       	$("#index_"+form).addClass('has-error');
+		       }else{
+		       		$("#index_"+form).removeClass('has-error');
+		       }
+		    }
+			$scope.minorsomething = function(form) {
+				
+		       
+		       if($("#minortext_"+form).val() == ''){
+		       	$("#minor_"+form).addClass('has-error');
+		       }else{
+		       		$("#minor_"+form).removeClass('has-error');
+		       }
+		    }
+
+		    $scope.aacetext = function(form) {
+				
+		       
+		       if($("#aacetext_"+form).val() == ''){
+		       	$("#aace_"+form).addClass('has-error');
+		       }else{
+		       		$("#aace_"+form).removeClass('has-error');
+		       }
+		    }
+
+
+		    $scope.aapotext = function(form) {
+				
+		       
+		       if($("#aapotext_"+form).val() == ''){
+		       	$("#aapo_"+form).addClass('has-error');
+		       }else{
+		       		$("#aapo_"+form).removeClass('has-error');
+		       }
+		    }
+
+		     $scope.aaeptext = function(form) {
+				
+		       
+		       if($("#aaeptext_"+form).val() == ''){
+		       	$("#aaep_"+form).addClass('has-error');
+		       }else{
+		       		$("#aaep_"+form).removeClass('has-error');
+		       }
+		    }
+
+		    $scope.aahowtext = function(form) {
+				
+		       
+		       if($("#aahowtext_"+form).val() == ''){
+		       	$("#aahow_"+form).addClass('has-error');
+		       }else{
+		       		$("#aahow_"+form).removeClass('has-error');
+		       }
+		    }
+
+		    $scope.aagrstext = function(form) {
+				
+		       
+		       if($("#aagrstext_"+form).val() == ''){
+		       	$("#aagrs_"+form).addClass('has-error');
+		       }else{
+		       		$("#aagrs_"+form).removeClass('has-error');
+		       }
+		    } 
+
+		    $scope.aaothrtext = function(form) {
+				
+		       
+		       if($("#aaothrtext_"+form).val() == ''){
+		       	$("#aaothr_"+form).addClass('has-error');
+		       }else{
+		       		$("#aaothr_"+form).removeClass('has-error');
+		       }
+		    }
+
+
+			if (applicationID == 0) {
+				firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).limitToLast(1).once("value", function (snapshot) {
+					console.log(snapshot.val());
+					$scope.$apply(function () {
+						if (snapshot.val() !== null) {
+							$.map(snapshot.val(), function (value, index) {
+								vm.draftdata = "false";
+								vm.applicationval = index;
+								vm.tenantdata.tenantID = value.tenantID;
+								// vm.scheduledata.scheduleID = value.scheduleID;
+								// vm.propdata.propID = value.propID;
+								// vm.propdata.landlordID = value.landlordID;
+
+								// vm.propdata.address = value.address;
+								vm.propdata.rent = value.rent;
+								vm.rentaldata.months = value.months;
+								vm.rentaldata.startdate = value.startdate;
+								vm.rentaldata.parking = value.parking;
+								vm.rentaldata.telwork = value.telwork;
+								vm.rentaldata.telhome = value.telhome;
+								vm.tenantdata.tenantEmail = value.applicantemail;
+								vm.rentaldata.appaddress = value.appaddress;
+								vm.rentaldata.appcity = value.applicantcity;
+								vm.rentaldata.maritalstatus = value.maritalstatus;
+								vm.rentaldata.rent_own = value.rent_own;
+								vm.rentaldata.live_time = value.live_time_at_address;
+								vm.rentaldata.rentamt = value.rentamt;
+								vm.rentaldata.vacantreason = value.vacantreason;
+								vm.rentaldata.landlordname = value.landlordname;
+								vm.rentaldata.landlordphone = value.landlordphone;
+								vm.rentaldata.pets = value.pets;
+								vm.rentaldata.petsdesc = value.petsdesc;
+								vm.rentaldata.smoking = value.smoking;
+								vm.rentaldata.appfiles = value.appfiles;
+								vm.rentaldata.vehiclemake = value.vehiclemake;
+								vm.rentaldata.vehiclemodel = value.vehiclemodel;
+								vm.rentaldata.vehicleyear = value.vehicleyear;
+								vm.rentaldata.emergencyname = value.emergencyname;
+								vm.rentaldata.emergencyphone = value.emergencyphone;
+								vm.rentaldata.refone_name = value.refone_name;
+								vm.rentaldata.refone_phone = value.refone_phone;
+								vm.rentaldata.refone_relation = value.refone_relation;
+								vm.rentaldata.reftwo_name = value.reftwo_name;
+								vm.rentaldata.reftwo_phone = value.reftwo_phone;
+								vm.rentaldata.reftwo_relation = value.reftwo_relation;
+								vm.rentaldata.dated = value.dated != '' ? new Date(value.dated) : '';
+
+								firebase.database().ref('applyprop/' + scheduleID).once("value", function (snapshot) {
+									// console.log(snapshot.val())
+									$scope.$apply(function () {
+										if (snapshot.val()) {
+											vm.scheduledata = snapshot.val();
+											vm.scheduledata.scheduleID = snapshot.key;
+
+											firebase.database().ref('properties/' + vm.scheduledata.propID).once("value", function (snap) {
+												$scope.$apply(function () {
+													if (snap.val()) {
+														vm.propdata = snap.val();
+														vm.propdata.propID = snap.key;
+														if (vm.propdata.units == ' ') {
+															var units = '';
+														} else {
+															var units = vm.propdata.units + " - ";
+														}
+														vm.propdata.address = units + vm.propdata.address;
 													}
-													vm.propdata.address = units+vm.propdata.address;
-												}
-											});								
-										});				
-									 } 
+												});
+											});
+										}
+									});
 								});
 							});
-						});
-						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationval).once("value", function(snap) {	
-							$scope.$apply(function(){
-								if(snap.val()!= null) {
-									$.map(snap.val(), function(v, k) {
-										console.log(v);
-										vm.tenantdata.tenantName = v.mainapplicant.applicantname;
-										vm.rentaldata.dob =  v.mainapplicant.applicantdob != '' ? new Date(v.mainapplicant.applicantdob) : '';
-										vm.rentaldata.sinno = v.mainapplicant.applicantsinno;												
-										vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
-										vm.rentaldata.appposition =  v.mainapplicant.appposition;
-										vm.rentaldata.appemployerphone =  v.mainapplicant.appemployerphone;
-										vm.rentaldata.appworkingduration =  v.mainapplicant.appworkingduration;
-										vm.rentaldata.appgrossmonthlyincome =  v.mainapplicant.appgrossmonthlyincome;
-										vm.rentaldata.appincometype =  v.mainapplicant.appincometype;
-										vm.rentaldata.appotherincome =  v.mainapplicant.appotherincome;												
-										vm.rentaldata.appsign =  v.mainapplicant.appsign;
-										
-										
-										angular.forEach(v.minors, function(value, key) {
-										  vm.minor.push(key);
-										  vm.rentaldata.minorappname.push(value.minorapplicantname);
-										  vm.rentaldata.minorappdob.push(value.minorapplicantdob != '' ? new Date(value.minorapplicantdob) : '');
-										  vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);			  
+							firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationval).once("value", function (snap) {
+								$scope.$apply(function () {
+									if (snap.val() != null) {
+										$.map(snap.val(), function (v, k) {
+											console.log(v);
+											vm.tenantdata.tenantName = v.mainapplicant.applicantname;
+											vm.rentaldata.dob = v.mainapplicant.applicantdob != '' ? new Date(v.mainapplicant.applicantdob) : '';
+											vm.rentaldata.sinno = v.mainapplicant.applicantsinno;
+											vm.rentaldata.appcurrentemployer = v.mainapplicant.appcurrentemployer;
+											vm.rentaldata.appposition = v.mainapplicant.appposition;
+											vm.rentaldata.appemployerphone = v.mainapplicant.appemployerphone;
+											vm.rentaldata.appworkingduration = v.mainapplicant.appworkingduration;
+											vm.rentaldata.appgrossmonthlyincome = v.mainapplicant.appgrossmonthlyincome;
+											vm.rentaldata.appincometype = v.mainapplicant.appincometype;
+											vm.rentaldata.appotherincome = v.mainapplicant.appotherincome;
+											vm.rentaldata.appsign = v.mainapplicant.appsign;
+
+
+											angular.forEach(v.minors, function (value, key) {
+												vm.minor.push(key);
+												vm.rentaldata.minorappname.push(value.minorapplicantname);
+												vm.rentaldata.minorappdob.push(value.minorapplicantdob != '' ? new Date(value.minorapplicantdob) : '');
+												vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);
+											});
+
+											angular.forEach(v.otherapplicants, function (value, key) {
+												vm.adult.push(key);
+												vm.rentaldata.otherappname.push(value.adultapplicantname);
+												vm.rentaldata.otherappdob.push(value.adultapplicantdob != '' ? new Date(value.adultapplicantdob) : '');
+												vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
+												vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
+												vm.rentaldata.otherappposition.push(value.otherappposition);
+												vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
+												vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
+												vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
+												vm.rentaldata.otherappincometype.push(value.otherappincometype);
+												vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
+												vm.rentaldata.otherappsign.push(value.otherappsign);
+											});
+
 										});
-										
-										angular.forEach(v.otherapplicants, function(value, key) {
-										  vm.adult.push(key);
-										  vm.rentaldata.otherappname.push(value.adultapplicantname);
-										  vm.rentaldata.otherappdob.push(value.adultapplicantdob != '' ? new Date(value.adultapplicantdob) : '');
-										  vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
-										  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
-										  vm.rentaldata.otherappposition.push(value.otherappposition);
-										  vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
-										  vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
-										  vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
-										  vm.rentaldata.otherappincometype.push(value.otherappincometype);
-										  vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
-										  vm.rentaldata.otherappsign.push(value.otherappsign);									  
+									}
+								});
+							});
+						} else {
+							vm.draftdata = "false";
+							firebase.database().ref('applyprop/' + scheduleID).once("value", function (snapshot) {
+								// console.log(snapshot.val())
+								$scope.$apply(function () {
+									if (snapshot.val()) {
+										vm.scheduledata = snapshot.val();
+										vm.scheduledata.scheduleID = snapshot.key;
+
+										firebase.database().ref('properties/' + vm.scheduledata.propID).once("value", function (snap) {
+											$scope.$apply(function () {
+												if (snap.val()) {
+													vm.propdata = snap.val();
+													vm.propdata.propID = snap.key;
+													vm.propdata.address = vm.propdata.units + " - " + vm.propdata.address;
+												}
+											});
 										});
-										
-									});
-								}
+									}
+								});
 							});
-						});
-					} else {
-						vm.draftdata = "false";
-						firebase.database().ref('applyprop/'+scheduleID).once("value", function(snapshot) {	
-							// console.log(snapshot.val())
-							$scope.$apply(function(){
-								if(snapshot.val()) {
-									vm.scheduledata = snapshot.val();
-									vm.scheduledata.scheduleID = snapshot.key;
-									
-									firebase.database().ref('properties/'+vm.scheduledata.propID).once("value", function(snap) {	
-										$scope.$apply(function(){
-											if(snap.val()) {
-												vm.propdata = snap.val();
-												vm.propdata.propID = snap.key;	
-												vm.propdata.address = vm.propdata.units +" - "+vm.propdata.address;
-											}
-										});								
-									});				
-								} 
+
+
+							firebase.database().ref('users/' + tenantID).once("value", function (snapval) {
+								$scope.$apply(function () {
+									if (snapval.val()) {
+										vm.tenantdata = snapval.val();
+										vm.tenantdata.tenantID = snapval.key;
+										vm.tenantdata.tenantName = vm.tenantdata.firstname + " " + vm.tenantdata.lastname;
+										vm.tenantdata.tenantEmail = tenantEmail;
+									}
+								});
 							});
-						});
-						
-						
-						firebase.database().ref('users/'+tenantID).once("value", function(snapval) {	
-							$scope.$apply(function(){
-								if(snapval.val()) {
-									vm.tenantdata = snapval.val();
-									vm.tenantdata.tenantID = snapval.key;
-									vm.tenantdata.tenantName = vm.tenantdata.firstname+" "+vm.tenantdata.lastname;
-									vm.tenantdata.tenantEmail = tenantEmail;
-								}
-							});								
-						});	
-					}
-					// console.log(vm.tenantdata);	
-					// console.log(vm.rentaldata);	
-					// console.log(vm.propdata);	
+						}
+						// console.log(vm.tenantdata);	
+						// console.log(vm.rentaldata);	
+						// console.log(vm.propdata);	
+					});
 				});
-			});
-		} else {
-			firebase.database().ref('submitapps/'+$stateParams.applicationId).once("value", function(snapshot) {	
-				console.log(snapshot.val());
-				$scope.$apply(function(){
-					if(snapshot.val() !== null) {
+			} else {
+				firebase.database().ref('submitapps/' + $stateParams.applicationId).once("value", function (snapshot) {
+					console.log(snapshot.val());
+					$scope.$apply(function () {
+						if (snapshot.val() !== null) {
 							var value = snapshot.val();
 							vm.applicationID = $stateParams.applicationId;
 							vm.draftdata = "true";
@@ -5734,7 +5966,7 @@ vcancyApp
 							vm.rentaldata.appfiles = value.appfiles;
 							vm.rentaldata.vehiclemake = value.vehiclemake;
 							vm.rentaldata.vehiclemodel = value.vehiclemodel;
-							vm.rentaldata.vehicleyear = value.vehicleyear;						
+							vm.rentaldata.vehicleyear = value.vehicleyear;
 							vm.rentaldata.emergencyname = value.emergencyname;
 							vm.rentaldata.emergencyphone = value.emergencyphone;
 							vm.rentaldata.refone_name = value.refone_name;
@@ -5744,94 +5976,94 @@ vcancyApp
 							vm.rentaldata.reftwo_phone = value.reftwo_phone;
 							vm.rentaldata.reftwo_relation = value.reftwo_relation;
 							vm.rentaldata.dated = new Date(value.dated);
-							
+
 							vm.submitemail = value.externalemail;
-						console.log(vm.submitemail);
-						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
-							$scope.$apply(function(){
-								if(snap.val()!= null) {
-									$.map(snap.val(), function(v, k) {
-										console.log(v);
-										vm.tenantdata.tenantName = v.mainapplicant.applicantname;
-										vm.rentaldata.dob =  new Date(v.mainapplicant.applicantdob);
-										vm.rentaldata.sinno = v.mainapplicant.applicantsinno;												
-										vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
-										vm.rentaldata.appposition =  v.mainapplicant.appposition;
-										vm.rentaldata.appemployerphone =  v.mainapplicant.appemployerphone;
-										vm.rentaldata.appworkingduration =  v.mainapplicant.appworkingduration;
-										vm.rentaldata.appgrossmonthlyincome =  v.mainapplicant.appgrossmonthlyincome;
-										vm.rentaldata.appincometype =  v.mainapplicant.appincometype;
-										vm.rentaldata.appotherincome =  v.mainapplicant.appotherincome;												
-										vm.rentaldata.appsign =  v.mainapplicant.appsign;
-										
-										
-										angular.forEach(v.minors, function(value, key) {
-										  vm.minor.push(key);
-										  vm.rentaldata.minorappname.push(value.minorapplicantname);
-										  vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));
-										  vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);			  
+							console.log(vm.submitemail);
+							firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function (snap) {
+								$scope.$apply(function () {
+									if (snap.val() != null) {
+										$.map(snap.val(), function (v, k) {
+											console.log(v);
+											vm.tenantdata.tenantName = v.mainapplicant.applicantname;
+											vm.rentaldata.dob = new Date(v.mainapplicant.applicantdob);
+											vm.rentaldata.sinno = v.mainapplicant.applicantsinno;
+											vm.rentaldata.appcurrentemployer = v.mainapplicant.appcurrentemployer;
+											vm.rentaldata.appposition = v.mainapplicant.appposition;
+											vm.rentaldata.appemployerphone = v.mainapplicant.appemployerphone;
+											vm.rentaldata.appworkingduration = v.mainapplicant.appworkingduration;
+											vm.rentaldata.appgrossmonthlyincome = v.mainapplicant.appgrossmonthlyincome;
+											vm.rentaldata.appincometype = v.mainapplicant.appincometype;
+											vm.rentaldata.appotherincome = v.mainapplicant.appotherincome;
+											vm.rentaldata.appsign = v.mainapplicant.appsign;
+
+
+											angular.forEach(v.minors, function (value, key) {
+												vm.minor.push(key);
+												vm.rentaldata.minorappname.push(value.minorapplicantname);
+												vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));
+												vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);
+											});
+
+											angular.forEach(v.otherapplicants, function (value, key) {
+												vm.adult.push(key);
+												vm.rentaldata.otherappname.push(value.adultapplicantname);
+												vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
+												vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
+												vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
+												vm.rentaldata.otherappposition.push(value.otherappposition);
+												vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
+												vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
+												vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
+												vm.rentaldata.otherappincometype.push(value.otherappincometype);
+												vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
+												vm.rentaldata.otherappsign.push(value.otherappsign);
+											});
+
 										});
-										
-										angular.forEach(v.otherapplicants, function(value, key) {
-										  vm.adult.push(key);
-										  vm.rentaldata.otherappname.push(value.adultapplicantname);
-										  vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
-										  vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
-										  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
-										  vm.rentaldata.otherappposition.push(value.otherappposition);
-										  vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
-										  vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
-										  vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
-										  vm.rentaldata.otherappincometype.push(value.otherappincometype);
-										  vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
-										  vm.rentaldata.otherappsign.push(value.otherappsign);									  
-										});
-										
-									});
-								}
+									}
+								});
 							});
-						});
-					} else {
-						vm.draftdata = "false";
-						firebase.database().ref('users/'+tenantID).once("value", function(snapval) {	
-							$scope.$apply(function(){
-								if(snapval.val()) {
-									vm.tenantdata = snapval.val();
-									vm.tenantdata.tenantID = snapval.key;
-									vm.tenantdata.tenantName = vm.tenantdata.firstname+" "+vm.tenantdata.lastname;
-									vm.tenantdata.tenantEmail = tenantEmail;
-								}
-							});								
-						});	
-					}	
+						} else {
+							vm.draftdata = "false";
+							firebase.database().ref('users/' + tenantID).once("value", function (snapval) {
+								$scope.$apply(function () {
+									if (snapval.val()) {
+										vm.tenantdata = snapval.val();
+										vm.tenantdata.tenantID = snapval.key;
+										vm.tenantdata.tenantName = vm.tenantdata.firstname + " " + vm.tenantdata.lastname;
+										vm.tenantdata.tenantEmail = tenantEmail;
+									}
+								});
+							});
+						}
+					});
 				});
-			});
-		}
-			
-		vm.rentalAppSubmit = function(){
-			console.log(vm.rentaldata, vm.draft);
-			// alert($('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime());
-			var tenantID = vm.tenantdata.tenantID;
-			
-			if($stateParams.scheduleId != 0){
-				var scheduleID = $stateParams.scheduleId;
-				var propID = vm.propdata.propID;
-				var landlordID = vm.propdata.landlordID;
-				var externalappStatus = "submit";
-			} else {
-				var scheduleID = 0;
-				var propID = 0;	
-				var landlordID = 0;
-				var externalappStatus = "submit";
-				if(vm.draft == "true"){
-					var externalappStatus = "draft";					
-				} else {
-					var externalappStatus = "submit";	
-				}
 			}
-			
-			// Check File Type and Size
-			function checkFile() {
+
+			vm.rentalAppSubmit = function () {
+				console.log(vm.rentaldata, vm.draft);
+				// alert($('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime());
+				var tenantID = vm.tenantdata.tenantID;
+
+				if ($stateParams.scheduleId != 0) {
+					var scheduleID = $stateParams.scheduleId;
+					var propID = vm.propdata.propID;
+					var landlordID = vm.propdata.landlordID;
+					var externalappStatus = "submit";
+				} else {
+					var scheduleID = 0;
+					var propID = 0;
+					var landlordID = 0;
+					var externalappStatus = "submit";
+					if (vm.draft == "true") {
+						var externalappStatus = "draft";
+					} else {
+						var externalappStatus = "submit";
+					}
+				}
+
+
+					function checkFile() {
 				if($('#uploadfile')[0].files[0]) {
 					var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();				
 					if($('#uploadfile')[0].files[0].size > 3145728) {
@@ -5848,395 +6080,407 @@ vcancyApp
 			if(fileCheckMsg) {
 				return window.alert(fileCheckMsg);
 			}
-
 			var externalemail = vm.submitemail  == undefined ? '': vm.submitemail;
-			
 			console.log(externalappStatus);
-			
-			var address = vm.propdata.address == undefined ? '' :vm.propdata.address;
-			var rent = vm.propdata.rent == undefined ? '' :vm.propdata.rent;
-			var months = vm.rentaldata.months == undefined ? '' :vm.rentaldata.months;
-			var startdate = vm.rentaldata.startdate == undefined ? '' :vm.rentaldata.startdate;
-			var parking = vm.rentaldata.parking == undefined ? '' :vm.rentaldata.parking;
-			
-			var applicantname = vm.tenantdata.tenantName == undefined ? '' :vm.tenantdata.tenantName;
-			var applicantdob = vm.rentaldata.dob == undefined ? '' :vm.rentaldata.dob.toString();
-			var applicantsinno = vm.rentaldata.sinno == undefined ? '' :vm.rentaldata.sinno;
-			var telwork = vm.rentaldata.telwork == undefined ? '' :vm.rentaldata.telwork;
-			var telhome = vm.rentaldata.telhome == undefined ? '' : vm.rentaldata.telhome;
-			var applicantemail = vm.tenantdata.tenantEmail == undefined ? '' :vm.tenantdata.tenantEmail;
-			var appaddress = vm.rentaldata.appaddress == undefined ? '' :vm.rentaldata.appaddress;
-			var applicantcity = vm.rentaldata.appcity == undefined ? '' :vm.rentaldata.appcity;
-			var maritalstatus = vm.rentaldata.maritalstatus == undefined ? '' :vm.rentaldata.maritalstatus;
-			var rent_own = vm.rentaldata.rent_own == undefined ? '' : vm.rentaldata.rent_own;
-			var live_time_at_address = vm.rentaldata.live_time == undefined ? '' :vm.rentaldata.live_time;
-			var rentamt = vm.rentaldata.rentamt == undefined ? '' :vm.rentaldata.rentamt ;
-			var vacantreason = vm.rentaldata.vacantreason == undefined ? '' :vm.rentaldata.vacantreason;
-			var landlordname = vm.rentaldata.landlordname == undefined ? '' :vm.rentaldata.landlordname;
-			var landlordphone = vm.rentaldata.landlordphone == undefined ? '' :vm.rentaldata.landlordphone;
-			
-			var adultapplicantname = vm.rentaldata.otherappname;
-			var adultapplicantdob = vm.rentaldata.otherappdob;
-			var adultapplicantsinno = vm.rentaldata.otherappsinno;
-			
-			var minorapplicantname = vm.rentaldata.minorappname;
-			var minorapplicantdob = vm.rentaldata.minorappdob;
-			var minorapplicantsinno = vm.rentaldata.minorappsinno;
-			
-			var pets = vm.rentaldata.pets == undefined ? '' :vm.rentaldata.pets;
-			var petsdesc = vm.rentaldata.petsdesc == undefined ? '' :vm.rentaldata.petsdesc;
-			var smoking = vm.rentaldata.smoking == undefined ? '' :vm.rentaldata.smoking;
-			
-			// var file = $('#appfiles').val().split('\\').pop().split('/').pop();
-			// var filename = $('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime();
-			// var fileext = $('#appfiles').val().split('\\').pop().split('/').pop().split('.').pop().toLowerCase();
-			// var appfiles = "images/applicationuploads/"+filename+"."+fileext;
-			
-			var appfiles = $('#appfiles').val();
-			var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-			var filepath = filename != '' ? "http://vcancy.ca/login/uploads/"+filename : appfiles;
-							
-			console.log(filename,filepath,appfiles);							
-			
-			var appcurrentemployer = vm.rentaldata.appcurrentemployer == undefined ? '' :vm.rentaldata.appcurrentemployer;
-			var appposition = vm.rentaldata.appposition == undefined ? '' :vm.rentaldata.appposition;
-			var appemployerphone = vm.rentaldata.appemployerphone == undefined ? '' :vm.rentaldata.appemployerphone;
-			var appworkingduration = vm.rentaldata.appworkingduration == undefined ? '' :vm.rentaldata.appworkingduration;
-			var appgrossmonthlyincome = vm.rentaldata.appgrossmonthlyincome == undefined ? '' :vm.rentaldata.appgrossmonthlyincome;
-			var appincometype = vm.rentaldata.appincometype == undefined ? '' :vm.rentaldata.appincometype;
-			var appotherincome = vm.rentaldata.appotherincome == undefined ? '' :vm.rentaldata.appotherincome;
-			
-			var vehiclemake = vm.rentaldata.vehiclemake == undefined ? '' :vm.rentaldata.vehiclemake;
-			var vehiclemodel = vm.rentaldata.vehiclemodel == undefined ? '' :vm.rentaldata.vehiclemodel;
-			var vehicleyear = vm.rentaldata.vehicleyear == undefined ? '' :vm.rentaldata.vehicleyear;
-			
-			var emergencyname = vm.rentaldata.emergencyname == undefined ? '' :vm.rentaldata.emergencyname;
-			var emergencyphone = vm.rentaldata.emergencyphone == undefined ? '' :vm.rentaldata.emergencyphone;
-			
-			var refone_name = vm.rentaldata.refone_name == undefined ? '' :vm.rentaldata.refone_name;
-			var refone_phone = vm.rentaldata.refone_phone == undefined ? '' :vm.rentaldata.refone_phone;
-			var refone_relation = vm.rentaldata.refone_relation == undefined ? '' :vm.rentaldata.refone_relation;
-			
-			var reftwo_name = vm.rentaldata.reftwo_name == undefined ? '' :vm.rentaldata.reftwo_name;
-			var reftwo_phone = vm.rentaldata.reftwo_phone == undefined ? '' :vm.rentaldata.reftwo_phone;
-			var reftwo_relation = vm.rentaldata.reftwo_relation == undefined ? '' :vm.rentaldata.reftwo_relation;
-			
-			var otherappcurrentemployer = vm.rentaldata.otherappcurrentemployer;
-			var otherappposition = vm.rentaldata.otherappposition;
-			var otherappemployerphone = vm.rentaldata.otherappemployerphone;
-			var otherappworkingduration = vm.rentaldata.otherappworkingduration;
-			var otherappgrossmonthlyincome = vm.rentaldata.otherappgrossmonthlyincome;
-			var otherappincometype = vm.rentaldata.otherappincometype;
-			var otherappotherincome = vm.rentaldata.otherappotherincome;
-			
-			var dated = vm.rentaldata.dated == undefined ? '' :vm.rentaldata.dated.toString();
-			var appsign = vm.rentaldata.appsign == undefined ? '' :vm.rentaldata.appsign;
-			var otherappsign = vm.rentaldata.otherappsign;
-			vm.adultapplicants = [];
-			vm.minorapplicants = [];
-			
-			vm.adultapplicants = $.map(vm.adult, function(adult, index) {
-				return [{
-						adultapplicantname: adultapplicantname[index] == undefined ? '' :adultapplicantname[index],
-						adultapplicantdob: adultapplicantdob[index] == undefined ? '' :adultapplicantdob[index].toString(),
-						adultapplicantsinno: adultapplicantsinno[index] == undefined ? '' :adultapplicantsinno[index],
-						otherappcurrentemployer: otherappcurrentemployer[index] == undefined ? '' :otherappcurrentemployer[index],
-						otherappposition: otherappposition[index] == undefined ? '' :otherappposition[index],
-						otherappemployerphone: otherappemployerphone[index] == undefined ? '' :otherappemployerphone[index],
-						otherappworkingduration: otherappworkingduration[index] == undefined ? '' :otherappworkingduration[index],
-						otherappgrossmonthlyincome: otherappgrossmonthlyincome[index] == undefined ? '' :otherappgrossmonthlyincome[index],
-						otherappincometype: otherappincometype[index] == undefined ? '' :otherappincometype[index] ,
-						otherappotherincome: otherappotherincome[index] == undefined ? '' :otherappotherincome[index],					
-						otherappsign: otherappsign[index] == undefined ? '' :otherappsign[index] 
-					}];
-			});	
-			
-			vm.minorapplicants = $.map(vm.minor, function(minor, index) {
-				return [{
-						minorapplicantname: minorapplicantname[index]  == undefined ? '' :minorapplicantname[index] ,
-						minorapplicantdob: minorapplicantdob[index]  == undefined ? '' :minorapplicantdob[index].toString(), 
-						minorapplicantsinno: minorapplicantsinno[index]  == undefined ? '' :minorapplicantsinno[index] 
-					}];
-			});	
-			console.log(vm.adultapplicants);
-			
-			if(vm.draftdata == "false" && $stateParams.applicationId == 0 ) {		
-				firebase.database().ref('submitapps/').push().set({
-					tenantID: tenantID,
-					scheduleID: scheduleID,
-					propID: propID,
-					landlordID: landlordID,
-					
-					address: address,
-					rent: rent,
-					months: months,
-					startdate: startdate,
-					parking: parking,					
 
-					telwork: telwork,
-					telhome: telhome,
-					applicantemail: applicantemail,
-					appaddress: appaddress,
-					applicantcity: applicantcity,
-					maritalstatus: maritalstatus,
-					rent_own: rent_own,
-					live_time_at_address: live_time_at_address,
-					rentamt: rentamt,
-					vacantreason: vacantreason,
-					landlordname: landlordname,
-					landlordphone: landlordphone,
-						
-					pets: pets,
-					petsdesc: petsdesc,
-					smoking:smoking,
-					appfiles: filepath,
-					
-					vehiclemake: vehiclemake,
-					vehiclemodel: vehiclemodel,
-					vehicleyear: vehicleyear,
-					
-					emergencyname: emergencyname,
-					emergencyphone: emergencyphone,
-					
-					refone_name: refone_name,
-					refone_phone: refone_phone,
-					refone_relation: refone_relation,
-					
-					reftwo_name: reftwo_name,
-					reftwo_phone: reftwo_phone,
-					reftwo_relation: reftwo_relation,			
-					
-					applicantsno: (vm.adult.length)+1,
-					externalappStatus: externalappStatus,
-					externalemail: externalemail,
-					
-					dated: dated,
-					
-					rentalstatus: "pending"
-				}).then(function(){
-					 //Generate the applicant details of submitted app to new table
-					firebase.database().ref('submitapps/').limitToLast(1).once("child_added", function (snapshot) {		
-				  
-						if(snapshot.key != "undefined"){
-							vm.applicationID = snapshot.key;
-							console.log(vm.applicationID);
-							var applicantsdata = {
-								"applicationID": snapshot.key,
-								"mainapplicant": {
-													"applicantname": applicantname,
-													"applicantdob": applicantdob,
-													"applicantsinno": applicantsinno,												
-													"appcurrentemployer": appcurrentemployer,
-													"appposition": appposition,
-													"appemployerphone": appemployerphone,
-													"appworkingduration": appworkingduration,
-													"appgrossmonthlyincome": appgrossmonthlyincome,
-													"appincometype": appincometype,
-													"appotherincome": appotherincome,												
-													"appsign": appsign,
-												},
-								"otherapplicants": vm.adultapplicants,
-								"minors":	vm.minorapplicants	 					
-							}
+				var address = vm.propdata.address == undefined ? '' : vm.propdata.address;
+				var rent = vm.propdata.rent == undefined ? '' : vm.propdata.rent;
+				var months = vm.rentaldata.months == undefined ? '' : vm.rentaldata.months;
+				var startdate = vm.rentaldata.startdate == undefined ? '' : vm.rentaldata.startdate;
+				var parking = vm.rentaldata.parking == undefined ? '' : vm.rentaldata.parking;
 
-							console.log(applicantsdata);
-						
-							firebase.database().ref('submitappapplicants/').push().set(applicantsdata);
-							
-							if(vm.draft == "false"){
-								// update the schedule to be aubmitted application
-								firebase.database().ref('applyprop/'+scheduleID).update({	
-									schedulestatus: "submitted"
-								})
-							}
-							
-							if(filename != ''){
-								vm.upload(appfiles,filename);
-							}
-							
-							if(vm.draft == "false") {
-								if(landlordID != 0) {
-									firebase.database().ref('users/'+landlordID).once("value", function(snap) {
-										console.log(snap.val());
-										var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted a rental application for '+address+'.</p><p>To view the application, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a> and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-										
-										emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname+' has submitting a rental application', 'rentalreceive', emailData);
-									});
-								} else {
-									var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted an online rental application via vcancy.ca. Please go to this link http://www.vcancy.ca/login/#/viewexternalapp/'+vm.applicationID+' to view the application.</p><p>Check out <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-									
-									emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname+' has submitting a rental application', 'rentalreceive', emailData);
+				var applicantname = vm.tenantdata.tenantName == undefined ? '' : vm.tenantdata.tenantName;
+				var applicantdob = vm.rentaldata.dob == undefined ? '' : vm.rentaldata.dob.toString();
+				var applicantsinno = vm.rentaldata.sinno == undefined ? '' : vm.rentaldata.sinno;
+				var telwork = vm.rentaldata.telwork == undefined ? '' : vm.rentaldata.telwork;
+				var telhome = vm.rentaldata.telhome == undefined ? '' : vm.rentaldata.telhome;
+				var applicantemail = vm.tenantdata.tenantEmail == undefined ? '' : vm.tenantdata.tenantEmail;
+				var appaddress = vm.rentaldata.appaddress == undefined ? '' : vm.rentaldata.appaddress;
+				var applicantcity = vm.rentaldata.appcity == undefined ? '' : vm.rentaldata.appcity;
+				var maritalstatus = vm.rentaldata.maritalstatus == undefined ? '' : vm.rentaldata.maritalstatus;
+				var rent_own = vm.rentaldata.rent_own == undefined ? '' : vm.rentaldata.rent_own;
+				var live_time_at_address = vm.rentaldata.live_time == undefined ? '' : vm.rentaldata.live_time;
+				var rentamt = vm.rentaldata.rentamt == undefined ? '' : vm.rentaldata.rentamt;
+				var vacantreason = vm.rentaldata.vacantreason == undefined ? '' : vm.rentaldata.vacantreason;
+				var landlordname = vm.rentaldata.landlordname == undefined ? '' : vm.rentaldata.landlordname;
+				var landlordphone = vm.rentaldata.landlordphone == undefined ? '' : vm.rentaldata.landlordphone;
+
+				var adultapplicantname = vm.rentaldata.otherappname;
+				var adultapplicantdob = vm.rentaldata.otherappdob;
+				var adultapplicantsinno = vm.rentaldata.otherappsinno;
+
+				var minorapplicantname = vm.rentaldata.minorappname;
+				var minorapplicantdob = vm.rentaldata.minorappdob;
+				var minorapplicantsinno = vm.rentaldata.minorappsinno;
+
+				var pets = vm.rentaldata.pets == undefined ? '' : vm.rentaldata.pets;
+				var petsdesc = vm.rentaldata.petsdesc == undefined ? '' : vm.rentaldata.petsdesc;
+				var smoking = vm.rentaldata.smoking == undefined ? '' : vm.rentaldata.smoking;
+
+				// var file = $('#appfiles').val().split('\\').pop().split('/').pop();
+				// var filename = $('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime();
+				// var fileext = $('#appfiles').val().split('\\').pop().split('/').pop().split('.').pop().toLowerCase();
+				// var appfiles = "images/applicationuploads/"+filename+"."+fileext;
+
+				var appfiles = $('#appfiles').val();
+				var filename = $('#filename').val() === '' ? '' : $('#filename').val();
+				var filepath = filename != '' ? "http://vcancy.ca/login/images/" + filename : appfiles;
+
+				console.log(filename, filepath, appfiles);
+
+				var appcurrentemployer = vm.rentaldata.appcurrentemployer == undefined ? '' : vm.rentaldata.appcurrentemployer;
+				var appposition = vm.rentaldata.appposition == undefined ? '' : vm.rentaldata.appposition;
+				var appemployerphone = vm.rentaldata.appemployerphone == undefined ? '' : vm.rentaldata.appemployerphone;
+				var appworkingduration = vm.rentaldata.appworkingduration == undefined ? '' : vm.rentaldata.appworkingduration;
+				var appgrossmonthlyincome = vm.rentaldata.appgrossmonthlyincome == undefined ? '' : vm.rentaldata.appgrossmonthlyincome;
+				var appincometype = vm.rentaldata.appincometype == undefined ? '' : vm.rentaldata.appincometype;
+				var appotherincome = vm.rentaldata.appotherincome == undefined ? '' : vm.rentaldata.appotherincome;
+
+				var vehiclemake = vm.rentaldata.vehiclemake == undefined ? '' : vm.rentaldata.vehiclemake;
+				var vehiclemodel = vm.rentaldata.vehiclemodel == undefined ? '' : vm.rentaldata.vehiclemodel;
+				var vehicleyear = vm.rentaldata.vehicleyear == undefined ? '' : vm.rentaldata.vehicleyear;
+
+				var emergencyname = vm.rentaldata.emergencyname == undefined ? '' : vm.rentaldata.emergencyname;
+				var emergencyphone = vm.rentaldata.emergencyphone == undefined ? '' : vm.rentaldata.emergencyphone;
+
+				var refone_name = vm.rentaldata.refone_name == undefined ? '' : vm.rentaldata.refone_name;
+				var refone_phone = vm.rentaldata.refone_phone == undefined ? '' : vm.rentaldata.refone_phone;
+				var refone_relation = vm.rentaldata.refone_relation == undefined ? '' : vm.rentaldata.refone_relation;
+
+				var reftwo_name = vm.rentaldata.reftwo_name == undefined ? '' : vm.rentaldata.reftwo_name;
+				var reftwo_phone = vm.rentaldata.reftwo_phone == undefined ? '' : vm.rentaldata.reftwo_phone;
+				var reftwo_relation = vm.rentaldata.reftwo_relation == undefined ? '' : vm.rentaldata.reftwo_relation;
+
+				var otherappcurrentemployer = vm.rentaldata.otherappcurrentemployer;
+				var otherappposition = vm.rentaldata.otherappposition;
+				var otherappemployerphone = vm.rentaldata.otherappemployerphone;
+				var otherappworkingduration = vm.rentaldata.otherappworkingduration;
+				var otherappgrossmonthlyincome = vm.rentaldata.otherappgrossmonthlyincome;
+				var otherappincometype = vm.rentaldata.otherappincometype;
+				var otherappotherincome = vm.rentaldata.otherappotherincome;
+
+				var dated = vm.rentaldata.dated == undefined ? '' : vm.rentaldata.dated.toString();
+				var appsign = vm.rentaldata.appsign == undefined ? '' : vm.rentaldata.appsign;
+				var otherappsign = vm.rentaldata.otherappsign;
+				vm.adultapplicants = [];
+				vm.minorapplicants = [];
+
+				vm.adultapplicants = $.map(vm.adult, function (adult, index) {
+					return [{
+						adultapplicantname: adultapplicantname[index] == undefined ? '' : adultapplicantname[index],
+						adultapplicantdob: adultapplicantdob[index] == undefined ? '' : adultapplicantdob[index].toString(),
+						adultapplicantsinno: adultapplicantsinno[index] == undefined ? '' : adultapplicantsinno[index],
+						otherappcurrentemployer: otherappcurrentemployer[index] == undefined ? '' : otherappcurrentemployer[index],
+						otherappposition: otherappposition[index] == undefined ? '' : otherappposition[index],
+						otherappemployerphone: otherappemployerphone[index] == undefined ? '' : otherappemployerphone[index],
+						otherappworkingduration: otherappworkingduration[index] == undefined ? '' : otherappworkingduration[index],
+						otherappgrossmonthlyincome: otherappgrossmonthlyincome[index] == undefined ? '' : otherappgrossmonthlyincome[index],
+						otherappincometype: otherappincometype[index] == undefined ? '' : otherappincometype[index],
+						otherappotherincome: otherappotherincome[index] == undefined ? '' : otherappotherincome[index],
+						otherappsign: otherappsign[index] == undefined ? '' : otherappsign[index]
+					}];
+				});
+
+				vm.minorapplicants = $.map(vm.minor, function (minor, index) {
+					return [{
+						minorapplicantname: minorapplicantname[index] == undefined ? '' : minorapplicantname[index],
+						minorapplicantdob: minorapplicantdob[index] == undefined ? '' : minorapplicantdob[index].toString(),
+						minorapplicantsinno: minorapplicantsinno[index] == undefined ? '' : minorapplicantsinno[index]
+					}];
+				});
+				console.log(vm.adultapplicants);
+
+				if (vm.draftdata == "false" && $stateParams.applicationId == 0) {
+					firebase.database().ref('submitapps/').push().set({
+						tenantID: tenantID,
+						scheduleID: scheduleID,
+						propID: propID,
+						landlordID: landlordID,
+
+						address: address,
+						rent: rent,
+						months: months,
+						startdate: startdate,
+						parking: parking,
+
+						telwork: telwork,
+						telhome: telhome,
+						applicantemail: applicantemail,
+						appaddress: appaddress,
+						applicantcity: applicantcity,
+						maritalstatus: maritalstatus,
+						rent_own: rent_own,
+						live_time_at_address: live_time_at_address,
+						rentamt: rentamt,
+						vacantreason: vacantreason,
+						landlordname: landlordname,
+						landlordphone: landlordphone,
+
+						pets: pets,
+						petsdesc: petsdesc,
+						smoking: smoking,
+						appfiles: filepath,
+
+						vehiclemake: vehiclemake,
+						vehiclemodel: vehiclemodel,
+						vehicleyear: vehicleyear,
+
+						emergencyname: emergencyname,
+						emergencyphone: emergencyphone,
+
+						refone_name: refone_name,
+						refone_phone: refone_phone,
+						refone_relation: refone_relation,
+
+						reftwo_name: reftwo_name,
+						reftwo_phone: reftwo_phone,
+						reftwo_relation: reftwo_relation,
+
+						applicantsno: (vm.adult.length) + 1,
+						externalappStatus: externalappStatus,
+						externalemail: externalemail,
+
+						dated: dated,
+
+						rentalstatus: "pending"
+					}).then(function () {
+						//Generate the applicant details of submitted app to new table
+						firebase.database().ref('submitapps/').limitToLast(1).once("child_added", function (snapshot) {
+
+							if (snapshot.key != "undefined") {
+								vm.applicationID = snapshot.key;
+								console.log(vm.applicationID);
+								var applicantsdata = {
+									"applicationID": snapshot.key,
+									"mainapplicant": {
+										"applicantname": applicantname,
+										"applicantdob": applicantdob,
+										"applicantsinno": applicantsinno,
+										"appcurrentemployer": appcurrentemployer,
+										"appposition": appposition,
+										"appemployerphone": appemployerphone,
+										"appworkingduration": appworkingduration,
+										"appgrossmonthlyincome": appgrossmonthlyincome,
+										"appincometype": appincometype,
+										"appotherincome": appotherincome,
+										"appsign": appsign,
+									},
+									"otherapplicants": vm.adultapplicants,
+									"minors": vm.minorapplicants
 								}
-									
-								var emailData = '<p>Hello '+applicantname+', </p><p>Your rental application has been submitted to '+applicantemail+'.</p><p>To make changes, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-									
-								emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
+
+								console.log(applicantsdata);
+
+								firebase.database().ref('submitappapplicants/').push().set(applicantsdata);
+
+								if (vm.draft == "false") {
+									// update the schedule to be aubmitted application
+									firebase.database().ref('applyprop/' + scheduleID).update({
+										schedulestatus: "submitted"
+									})
+								}
+
+								if (filename != '') {
+									vm.upload(appfiles, filename);
+								}
+
+								if (vm.draft == "false") {
+									if (landlordID != 0) {
+										firebase.database().ref('users/' + landlordID).once("value", function (snap) {
+											console.log(snap.val());
+											var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a> and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+											emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+										});
+									} else {
+										var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.ca. Please go to this link http://www.vcancy.ca/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+										emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+									}
+
+									var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+									emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
+								}
+								$state.go('tenantapplications');
 							}
-							$state.go('tenantapplications');
-						}				
-					})
-				})
-			} else {
-				firebase.database().ref('submitapps/'+vm.applicationID).set({
-					tenantID: tenantID,
-					scheduleID: scheduleID,
-					propID: propID,
-					landlordID: landlordID,
-					
-					address: address,
-					rent: rent,
-					months: months,
-					startdate: startdate,
-					parking: parking,					
-
-					telwork: telwork,
-					telhome: telhome,
-					applicantemail: applicantemail,
-					appaddress: appaddress,
-					applicantcity: applicantcity,
-					maritalstatus: maritalstatus,
-					rent_own: rent_own,
-					live_time_at_address: live_time_at_address,
-					rentamt: rentamt,
-					vacantreason: vacantreason,
-					landlordname: landlordname,
-					landlordphone: landlordphone,
-						
-					pets: pets,
-					petsdesc: petsdesc,
-					smoking:smoking,
-					appfiles: filepath,
-					
-					vehiclemake: vehiclemake,
-					vehiclemodel: vehiclemodel,
-					vehicleyear: vehicleyear,
-					
-					emergencyname: emergencyname,
-					emergencyphone: emergencyphone,
-					
-					refone_name: refone_name,
-					refone_phone: refone_phone,
-					refone_relation: refone_relation,
-					
-					reftwo_name: reftwo_name,
-					reftwo_phone: reftwo_phone,
-					reftwo_relation: reftwo_relation,			
-					
-					applicantsno: (vm.adult.length)+1,
-					externalappStatus: externalappStatus,
-					externalemail: externalemail,
-					
-					dated: dated,
-					
-					rentalstatus: "pending"
-				}).then(function(){
-					 //Generate the applicant details of submitted app to new table
-					var applicantsdata = {
-						"applicationID": vm.applicationID,
-						"mainapplicant": {
-											"applicantname": applicantname,
-											"applicantdob": applicantdob,	
-											"applicantsinno": applicantsinno,												
-											"appcurrentemployer": appcurrentemployer,
-											"appposition": appposition,
-											"appemployerphone": appemployerphone,
-											"appworkingduration": appworkingduration,
-											"appgrossmonthlyincome": appgrossmonthlyincome,
-											"appincometype": appincometype,
-											"appotherincome": appotherincome,												
-											"appsign": appsign,
-										},
-						"otherapplicants": vm.adultapplicants,
-						"minors":	vm.minorapplicants	 					
-					}
-
-					console.log(applicantsdata);
-					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function(snap) {	
-						console.log(snap.val());
-						if(snap.val() != null) {								
-							$.map(snap.val(), function(v, k) {
-								console.log(k,applicantsdata);
-								firebase.database().ref('submitappapplicants/'+k).set(applicantsdata);
-							});
-						}
-					});
-					
-										
-					if(vm.draft == "false"){
-						// update the schedule to be aubmitted application
-						firebase.database().ref('applyprop/'+scheduleID).update({	
-							schedulestatus: "submitted"
 						})
-					}						
-				})
-				
-				if(filename != ''){
-					vm.upload(appfiles,filename);
-				}
-				
-				if(vm.draft == "false") {
-					if(landlordID != 0) {
-						firebase.database().ref('users/'+landlordID).once("value", function(snap) {
+					})
+				} else {
+					firebase.database().ref('submitapps/' + vm.applicationID).set({
+						tenantID: tenantID,
+						scheduleID: scheduleID,
+						propID: propID,
+						landlordID: landlordID,
+
+						address: address,
+						rent: rent,
+						months: months,
+						startdate: startdate,
+						parking: parking,
+
+						telwork: telwork,
+						telhome: telhome,
+						applicantemail: applicantemail,
+						appaddress: appaddress,
+						applicantcity: applicantcity,
+						maritalstatus: maritalstatus,
+						rent_own: rent_own,
+						live_time_at_address: live_time_at_address,
+						rentamt: rentamt,
+						vacantreason: vacantreason,
+						landlordname: landlordname,
+						landlordphone: landlordphone,
+
+						pets: pets,
+						petsdesc: petsdesc,
+						smoking: smoking,
+						appfiles: filepath,
+
+						vehiclemake: vehiclemake,
+						vehiclemodel: vehiclemodel,
+						vehicleyear: vehicleyear,
+
+						emergencyname: emergencyname,
+						emergencyphone: emergencyphone,
+
+						refone_name: refone_name,
+						refone_phone: refone_phone,
+						refone_relation: refone_relation,
+
+						reftwo_name: reftwo_name,
+						reftwo_phone: reftwo_phone,
+						reftwo_relation: reftwo_relation,
+
+						applicantsno: (vm.adult.length) + 1,
+						externalappStatus: externalappStatus,
+						externalemail: externalemail,
+
+						dated: dated,
+
+						rentalstatus: "pending"
+					}).then(function () {
+						//Generate the applicant details of submitted app to new table
+						var applicantsdata = {
+							"applicationID": vm.applicationID,
+							"mainapplicant": {
+								"applicantname": applicantname,
+								"applicantdob": applicantdob,
+								"applicantsinno": applicantsinno,
+								"appcurrentemployer": appcurrentemployer,
+								"appposition": appposition,
+								"appemployerphone": appemployerphone,
+								"appworkingduration": appworkingduration,
+								"appgrossmonthlyincome": appgrossmonthlyincome,
+								"appincometype": appincometype,
+								"appotherincome": appotherincome,
+								"appsign": appsign,
+							},
+							"otherapplicants": vm.adultapplicants,
+							"minors": vm.minorapplicants
+						}
+
+						console.log(applicantsdata);
+						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function (snap) {
 							console.log(snap.val());
-							var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted a rental application for '+address+'.</p><p>To view the application, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-							
-							emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname+' has submitting a rental application', 'rentalreceive', emailData);
+							if (snap.val() != null) {
+								$.map(snap.val(), function (v, k) {
+									console.log(k, applicantsdata);
+									firebase.database().ref('submitappapplicants/' + k).set(applicantsdata);
+								});
+							}
 						});
+
+
+						if (vm.draft == "false") {
+							// update the schedule to be aubmitted application
+							firebase.database().ref('applyprop/' + scheduleID).update({
+								schedulestatus: "submitted"
+							})
+						}
+					})
+
+					if (filename != '') {
+						vm.upload(appfiles, filename);
+					}
+
+					if (vm.draft == "false") {
+						if (landlordID != 0) {
+							firebase.database().ref('users/' + landlordID).once("value", function (snap) {
+								console.log(snap.val());
+								var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+								emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+							});
+						} else {
+							var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.ca. Please go to this link http://www.vcancy.ca/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+							emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+						}
+
+						var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+						emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
+					}
+					$state.go('tenantapplications');
+				}
+			}
+
+			vm.upload = function (file, filename) {
+				file = file.replace("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", "");
+				file = file.replace("data:application/pdf;base64,", "");
+				file = file.replace(/^data:image\/\w+;base64,/, "");
+				file = file.replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,", "");
+				// console.log(file,filename);
+
+				var req = {
+					method: 'POST',
+					url: config.sailsBaseUrl + 'fileupload/upload',
+					headers: {
+						'Content-Type': 'application/json',
+						'Access-Control-Allow-Origin': '*',
+						"Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+					},
+					data: {
+						file: file,
+						filename: filename
+					}
+				}
+
+				$http(req).then(function successCallback(response) {
+					console.log(response);
+					console.log("Done");
+				}, function errorCallback(response) {
+					console.log("Fail");
+				});
+			};
+
+
+			vm.savechanges = function () {
+				vm.draft = "true";
+				// alert(vm.draft);
+				vm.rentalAppSubmit();
+			}
+
+			vm.printApp = function () {
+				var css = '@page { size: landscape; }',
+				    head = document.head || document.getElementsByTagName('head')[0],
+				    style = document.createElement('style');
+
+					style.type = 'text/css';
+					style.media = 'print';
+
+					if (style.styleSheet){
+					  style.styleSheet.cssText = css;
 					} else {
-						var emailData = '<p>Hello, </p><p>'+applicantname+' has submitted an online rental application via vcancy.ca. Please go to this link http://www.vcancy.ca/login/#/viewexternalapp/'+vm.applicationID+' to view the application.</p><p>Check out <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-						
-						emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname+' has submitting a rental application', 'rentalreceive', emailData);
+					  style.appendChild(document.createTextNode(css));
 					}
-						
-					var emailData = '<p>Hello '+applicantname+', </p><p>Your rental application has been submitted to '+applicantemail+'.</p><p>To make changes, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-						
-					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
-				}
-				$state.go('tenantapplications');
-			}			
-		}
-		
-		vm.upload = function (file,filename) {			
-			file = file.replace("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", "");
-			file = file.replace("data:application/pdf;base64,", "");
-			file = file.replace(/^data:image\/\w+;base64,/, "");
-			file = file.replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,", "");
-			// console.log(file,filename);
-			
-			var req = {
-				 method: 'POST',
-				 url: config.sailsBaseUrl+'fileupload/upload',
-				 headers: {
-					'Content-Type': 'application/json',
-					'Access-Control-Allow-Origin': '*',
-					"Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
-				 },
-				 data: { 
-					file:file,
-					filename:filename
-					}
-				}
 
-			$http(req).then(function successCallback(response) {	
-				console.log(response);
-				console.log("Done");
-			}, function errorCallback(response) {
-				console.log("Fail");
-			});			
-        };
+					head.appendChild(style);
+				$window.print();
+			}
 
-		
-		vm.savechanges = function(){
-			vm.draft = "true";
-			// alert(vm.draft);
-			vm.rentalAppSubmit();
-		}
-		
-		vm.printApp = function(){
-			$window.print();
-		}
-		
-}])
+		}])
 'use strict';
 
 //=================================================
@@ -6389,6 +6633,457 @@ vcancyApp
 			});
 		});
 		vm.printApp = function(){
+
 		   $window.print();
 		  }
 }])
+'use strict';
+
+//=================================================
+// Tenant Profile
+//=================================================
+
+vcancyApp
+    .controller('tenantProfilelCtrl', ['$scope' , '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window) {
+        var vm = this;
+        var tenantID = localStorage.getItem('userID');
+        var password = localStorage.getItem('password');
+
+
+        vm.email = '';
+        vm.firstname = '';
+        vm.lastname = '';
+         vm.contact = '';
+        vm.address  = '';
+        vm.password  = password;
+        vm.loader = 1;
+        
+        $rootScope.invalid = '';
+        $rootScope.success = '';
+        $rootScope.error = '';
+
+        firebase.database().ref('/users/' + tenantID).once('value').then(function (userdata) {
+            $scope.$apply(function () {
+                if (userdata.val() !== null) {
+                    vm.email = userdata.val().email;
+                    vm.firstname = userdata.val().firstname;
+                    vm.lastname = userdata.val().lastname;
+                     vm.address = userdata.val().address;
+                    vm.contact = userdata.val().contact;
+                    vm.loader = 0;
+                }
+            });
+        });
+        vm.profileSubmit = function (tdProfilectrl) {
+          //alert($scope.tdProfilectrl.contact); return false;
+ 
+            var updatedata = {};
+            var tenantID = localStorage.getItem('userID');
+          
+
+            if($scope.tdProfilectrl.contact === undefined || $scope.tdProfilectrl.contact === ""){
+              vm.contact = '';
+              updatedata['contact'] = '';
+            }else{
+              updatedata['contact'] = $scope.tdProfilectrl.contact;
+            }
+             if($scope.tdProfilectrl.address === undefined || $scope.tdProfilectrl.address === ""){
+              vm.address = '';
+              updatedata['address'] = '';
+            }else{
+              updatedata['address'] = $scope.tdProfilectrl.address;
+            }
+            if($scope.tdProfilectrl.email === undefined || $scope.tdProfilectrl.email === ""){
+              vm.email = '';
+              updatedata['email'] = '';
+            }else{
+               updatedata['email'] = $scope.tdProfilectrl.email;
+            }
+
+            // alert(JSON.stringify(updatedata)); return false;
+            firebase.database().ref('users/' + tenantID).update(updatedata).then(function(){
+              confirm("Your Information updated!");
+            });
+        }
+
+         vm.changepasswordSubmit = function(passworduser){
+
+             $rootScope.invalid = '';
+            $rootScope.success = '';
+            $rootScope.error = '';
+             var oldpassword = localStorage.getItem('password');
+             var userEmail = localStorage.getItem('userEmail');
+             var ncpassword = passworduser.ncpassword ;
+             var password = passworduser.password ;
+             var npassword = passworduser.npassword ;
+              var landLordID = localStorage.getItem('userID');
+
+            if(password === oldpassword){
+
+                    if(ncpassword === npassword){
+                        
+                          //  alert(JSON.stringify(firebase.auth().currentUser));
+                            var user = firebase.auth().currentUser;
+                            var newPassword = ncpassword;
+                            user.updatePassword(newPassword).then(function() {
+                                console.log("success");
+                                 confirm("Your password has been updated!");
+                                 localStorage.setItem('password', newPassword);
+                             $rootScope.success = 'Your password has been updated';
+                             $rootScope.error = '';  
+                             $rootScope.invalid = '';
+                            }).catch(function(error) {
+                              // An error happened.
+                                $rootScope.invalid = 'regcpwd';         
+                                $rootScope.error = 'your Passwords not updated please try again.';
+                                $rootScope.success = '';
+                            });
+
+
+                    } else {
+                        $rootScope.invalid = 'regcpwd';         
+                        $rootScope.error = 'your Passwords don’t match with confirm password.';
+                        $rootScope.success = '';
+                    }
+
+
+            } else {
+                $rootScope.invalid = 'regcpwd';         
+                $rootScope.error = 'your Passwords don’t match with old password.';
+                $rootScope.success = '';
+            }
+        }
+            
+        
+    }]);
+
+'use strict';
+
+//=================================================
+// Tenant Dashboard
+//=================================================
+
+vcancyApp
+    .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window) {
+        var vm = this;
+        var landLordID = localStorage.getItem('userID');
+        var password = localStorage.getItem('password');
+        
+        vm.email = '';
+        vm.firstname = '';
+        vm.lastname = '';
+        vm.loader = 1;
+        vm.contact = '';
+        vm.address  = '';
+
+		 $rootScope.invalid = '';
+            $rootScope.success = '';
+            $rootScope.error = '';
+        //alert(landLordID);
+       /* var commentsRef = firebase.database().ref('users/' + landLordID);
+		      commentsRef.once('value', function(snapshot) {
+		      	 snapshot.forEach(function(childSnapshot) {
+		      	 	alert(childSnapshot.key);
+		      	 	 });
+		      });*/
+        
+
+        firebase.database().ref('/users/' + landLordID).once('value').then(function (userdata) {
+            $scope.$apply(function () {
+                if (userdata.val() !== null) {
+
+                    vm.email = userdata.val().email;
+                    vm.firstname = userdata.val().firstname;
+                    vm.lastname = userdata.val().lastname;
+                    vm.address = userdata.val().address;
+                    vm.contact = userdata.val().contact;
+                    vm.loader = 1;
+                }
+            });
+        }); 
+        
+        vm.profileSubmit = function (ldProfilectrl) {
+        	 var landLordID = localStorage.getItem('userID');
+
+
+             var updatedata = {};
+            //var tenantID = localStorage.getItem('userID');
+            if($scope.ldProfilectrl.contact === undefined || $scope.ldProfilectrl.contact === ""){
+              vm.contact = '';
+              updatedata['contact'] = '';
+            }else{
+              updatedata['contact'] = $scope.ldProfilectrl.contact;
+            }
+             if($scope.ldProfilectrl.address === undefined || $scope.ldProfilectrl.address === ""){
+              vm.address = '';
+              updatedata['address'] = '';
+            }else{
+              updatedata['address'] = $scope.ldProfilectrl.address;
+            }
+            if($scope.ldProfilectrl.email === undefined || $scope.ldProfilectrl.email === ""){
+              vm.email = '';
+              updatedata['email'] = '';
+            }else{
+               updatedata['email'] = $scope.ldProfilectrl.email;
+            }
+            //alert(JSON.stringify(updatedata)); return false;
+
+            firebase.database().ref('users/' + landLordID).update(updatedata).then(function(){
+              confirm("Your Information updated!");
+            });
+        }
+
+        vm.changepasswordSubmit = function(passworduser){
+
+            //alert(JSON.stringify(passworduser));
+            $rootScope.invalid = '';
+            $rootScope.success = '';
+            $rootScope.error = '';
+             var oldpassword = localStorage.getItem('password');
+             var userEmail = localStorage.getItem('userEmail');
+             var ncpassword = passworduser.ncpassword ;
+             var password = passworduser.password ;
+             var npassword = passworduser.npassword ;
+              var landLordID = localStorage.getItem('userID');
+
+            if(password === oldpassword){
+
+                    if(ncpassword === npassword){
+                        
+                          //  alert(JSON.stringify(firebase.auth().currentUser));
+                            var user = firebase.auth().currentUser;
+                            var newPassword = ncpassword;
+                            user.updatePassword(newPassword).then(function() {
+                                console.log("success");
+                                confirm("Your password has been updated!");
+                                 localStorage.setItem('password', newPassword);
+                             $rootScope.success = 'Your password has been updated';
+                             $rootScope.error = '';  
+                             $rootScope.invalid = '';
+                            }).catch(function(error) {
+                              // An error happened.
+                                $rootScope.invalid = 'regcpwd';         
+                                $rootScope.error = 'your Passwords not updated please try again.';
+                                $rootScope.success = '';
+                            });
+
+
+                    } else {
+                        $rootScope.invalid = 'regcpwd';         
+                        $rootScope.error = 'your Passwords don’t match with confirm password.';
+                        $rootScope.success = '';
+                    }
+
+
+        	} else {
+                $rootScope.invalid = 'regcpwd';         
+                $rootScope.error = 'your Passwords don’t match with old password.';
+                $rootScope.success = '';
+            }
+        }
+}])
+vcancyApp.directive('uiTour', ['$timeout', '$parse', function ($timeout, $parse) {
+    return {
+        link: function ($scope, $element, $attributes) {
+            $timeout(function(){
+                var model = $parse($attributes.uiTour);
+
+                // Watch model and change steps
+                $scope.$watch($attributes.uiTour, function (newVal, oldVal) {
+                    if (angular.isNumber(newVal)) {
+                        showStep(newVal)
+                    } else {
+                        if (angular.isString(newVal)) {
+                            var stepNumber = 0,
+                              children = $element.children()
+                            angular.forEach(children, function (step, index) {
+                                if (angular.element(step).attr('name') === newVal)
+                                    stepNumber = index + 1;
+                            });
+                            model.assign($scope, stepNumber);
+                        } else {
+                            model.assign($scope, newVal && 1 || 0);
+                        }
+                    }
+                });
+
+                // Show step
+                function showStep(stepNumber) {
+                    var elm, at, children = $element.children().removeClass('active');
+                    elm = children.eq(stepNumber - 1);
+                    if (stepNumber && elm.length) {
+                        at = elm.attr('at');
+                        $timeout(function () {
+                            var target = angular.element(elm.attr('target'))[0];
+
+
+                            if (elm.attr('overlay') !== undefined) {
+                                $('.tour-overlay').addClass('active').css({
+                                    marginLeft: target.offsetLeft + target.offsetWidth / 2 - 150,
+                                    marginTop: target.offsetTop + target.offsetHeight / 2 - 150
+                                }).addClass('in');
+                            } else {
+                                $('.tour-overlay').removeClass('in');
+                                setTimeout(function () {
+                                    $('.tour-overlay').removeClass('active');
+                                }, 1000);
+                            }
+                            offset = $(target).offset();
+
+                            //offset.top = target.top;
+                            //offset.left = target.left;
+
+                            elm.addClass('active');
+
+                            if (at.indexOf('bottom') > -1) {
+                               // offset.top += target.offsetHeight;
+                            } else if (at.indexOf('top') > -1) {
+                               // offset.top -= elm[0].offsetHeight;
+                            } else {
+                                //offset.top += target.offsetHeight / 2 - elm[0].offsetHeight / 2;
+                            }
+                            if (at.indexOf('left') > -1) {
+                              //  offset.left -= elm[0].offsetWidth;
+                            } else if (at.indexOf('right') > -1) {
+                              //  offset.left += target.offsetWidth;
+                            } else {
+                               // offset.left += target.offsetWidth / 2 - elm[0].offsetWidth / 2;
+                            }
+
+                            elm.css(offset);
+                        });
+                    } else {
+                        $('.tour-overlay').removeClass('in');
+                        setTimeout(function () {
+                            $('.tour-overlay').removeClass('active');
+                        }, 1000);
+                    }
+                }
+            },0)
+        }
+    };
+}]);
+ var materialAdmin = angular.module('vcancyApp');
+
+    // =========================================================================
+    // INPUT FEILDS MODIFICATION
+    // =========================================================================
+
+    //Add blue animated border and remove with condition when focus and blur
+
+materialAdmin.directive('fgLine', function () {
+        return {
+            restrict: 'C',
+            link: function(scope, element) {
+                if($('.fg-line')[0]) {
+                    $('body').on('focus', '.form-control', function(){
+                        $(this).closest('.fg-line').addClass('fg-toggled');
+                    })
+
+                    $('body').on('blur', '.form-control', function(){
+                        var p = $(this).closest('.form-group');
+                        var i = p.find('.form-control').val();
+
+                        if (p.hasClass('fg-float')) {
+                            if (i.length == 0) {
+                                $(this).closest('.fg-line').removeClass('fg-toggled');
+                            }
+                        }
+                        else {
+                            $(this).closest('.fg-line').removeClass('fg-toggled');
+                        }
+                    });
+                }
+    
+            }
+        }
+        
+    })
+
+    
+
+    // =========================================================================
+    // AUTO SIZE TEXTAREA
+    // =========================================================================
+    
+    .directive('autoSize', function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element){
+                if (element[0]) {
+                   autosize(element);
+                }
+            }
+        }
+    })
+    
+
+    // =========================================================================
+    // BOOTSTRAP SELECT
+    // =========================================================================
+
+    .directive('selectPicker', function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+                //if (element[0]) {
+                    element.selectpicker();
+                //}
+            }
+        }
+    })
+    
+
+    // =========================================================================
+    // INPUT MASK
+    // =========================================================================
+
+    .directive('inputMask', function(){
+        return {
+            restrict: 'A',
+            scope: {
+              inputMask: '='
+            },
+            link: function(scope, element){
+                element.mask(scope.inputMask.mask);
+            }
+        }
+    })
+
+    
+    // =========================================================================
+    // COLOR PICKER
+    // =========================================================================
+
+    .directive('colordPicker', function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+                $(element).each(function(){
+                    var colorOutput = $(this).closest('.cp-container').find('.cp-value');
+                    $(this).farbtastic(colorOutput);
+                });
+                
+            }
+        }
+    })
+
+
+
+    // =========================================================================
+    // PLACEHOLDER FOR IE 9 (on .form-control class)
+    // =========================================================================
+
+    .directive('formControl', function(){
+        return {
+            restrict: 'C',
+            link: function(scope, element, attrs) {
+                if(angular.element('html').hasClass('ie9')) {
+                    $('input, textarea').placeholder({
+                        customClass: 'ie9-placeholder'
+                    });
+                }
+            }
+            
+        }
+    })
