@@ -33,7 +33,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	  $scope.$apply();
 	});
 	
-	vm.copy = "Copy link";		
+	vm.copy = "Copy Link";		
 	$scope.copySuccess = function(e) {
 		console.info('Action:', e.action);
 		console.info('Text:', e.text);
@@ -255,7 +255,11 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	}	
 	
 	// Add/Edit Property		
-	vm.submitProp = function(property){				
+	vm.submitProp = function(property){		
+		var r = confirm("Your unique property link is generated, please click on edit property and copy the link at the bottom");
+		if (r == true) {
+		    
+		
 			vm.loader = 1;
 			var propID = property.propID;
 			var propimg = $('#propimg').val();	
@@ -479,6 +483,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 				vm.loader = 0;				
 				$state.reload();
 			}
+		}
+
+		} else {
+		    return false;
 		}
 	}
 	

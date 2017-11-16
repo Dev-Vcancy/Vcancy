@@ -1,4 +1,4 @@
-materialAdmin 
+ var materialAdmin = angular.module('vcancyApp');
 
     // =========================================================================
     // INPUT FEILDS MODIFICATION
@@ -6,7 +6,7 @@ materialAdmin
 
     //Add blue animated border and remove with condition when focus and blur
 
-    .directive('fgLine', function(){
+materialAdmin.directive('fgLine', function () {
         return {
             restrict: 'C',
             link: function(scope, element) {

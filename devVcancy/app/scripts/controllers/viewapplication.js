@@ -150,6 +150,7 @@ vcancyApp
 			});
 		});
 		vm.printApp = function(){
+
 		   $window.print();
 		  }
 }])
