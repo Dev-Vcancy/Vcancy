@@ -16,7 +16,7 @@ module.exports = {
     password: 'vcancy2018@'
   },
   // fileUploadPath: 'C:\\xampp\\htdocs\\Vcancy\\login\\images\\'
-  fileUploadPath: process.env.FILE_UPLOAD_PATH || '/var/www/html/login/uploads/'
+  fileUploadPath: process.env.FILE_UPLOAD_PATH || '/var/www/html/login/images/'
   /***************************************************************************
    * Set the default database connection for models in the development       *
    * environment (see config/connections.js and config/models.js )           *
