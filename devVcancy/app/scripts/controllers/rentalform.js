@@ -634,9 +634,9 @@ vcancyApp
 					if($('#uploadfile')[0].files[0].size > 3145728) {
 						return 'File size should be 3 MB or less.'
 					} else if(!(_fileName.endsWith('.png')) 
-						|| !(_fileName.endsWith('.jpg'))
-						|| !(_fileName.endsWith('.pdf'))
-						|| !(_fileName.endsWith('.jpeg')))  {
+						&& !(_fileName.endsWith('.jpg'))
+						&& !(_fileName.endsWith('.pdf'))
+						&& !(_fileName.endsWith('.jpeg')))  {
 							return 'Invalid file type.'
 					}
 				}
@@ -689,7 +689,7 @@ vcancyApp
 
 				var appfiles = $('#appfiles').val();
 				var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-				var filepath = filename != '' ? "http://vcancy.ca/login/images/" + filename : appfiles;
+				var filepath = filename != '' ? "http://vcancy.ca/login/uploads/" + filename : appfiles;
 
 				console.log(filename, filepath, appfiles);
 
