@@ -105,7 +105,7 @@ vcancyApp
 			
 			firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
 				firebase.database().ref('users/'+snapshot.val().tenantID).once("value", function(snap) {
-					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing request for '+snapshot.val().address+' at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been accepted.</p><p>If you wish you complete your rental application beforehand, please log in  http://www.vcancy.ca/login/#/ and go to “Applications”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing request for '+snapshot.val().address+' at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been accepted.</p><p>If you wish you complete your rental application beforehand, please log in at http://vcancy.ca/login/ and go to “Applications”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 					
 					emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Viewing request for '+snapshot.val().address, 'confirmstatus', emailData);
 				});

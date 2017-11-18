@@ -230,13 +230,13 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				
 				firebase.database().ref('users/'+landlordID).once("value", function(snapshot) {
 					// Mail to Landlord
-					var emailData = '<p>Hello, </p><p>'+name+' has requested a viewing at '+dateslot+', '+timerange+'for '+address+'.</p><p>To accept this invitation and view renter details, please log in http://www.vcancy.ca/login/#/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello, </p><p>'+name+' has requested a viewing at '+dateslot+', '+timerange+'for '+address+'.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.ca/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 					// Send Email
 					emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name+' has requested a viewing for '+address, 'newviewingreq', emailData);
 				});
 				
 				// Mail to Tenant
-				var emailData = '<p>Hello '+name+', </p><p>Your viewing request for '+address+' at '+dateslot+', '+timerange+' has been sent.</p><p>To view your requests, please log in http://www.vcancy.ca/login/#/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+				var emailData = '<p>Hello '+name+', </p><p>Your viewing request for '+address+' at '+dateslot+', '+timerange+' has been sent.</p><p>To view your requests, please log in at http://vcancy.ca/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 				// Send Email
 				emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Viewing request for '+address, 'viewingreq', emailData);
 			})	
