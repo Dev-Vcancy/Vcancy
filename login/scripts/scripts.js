@@ -6124,7 +6124,7 @@ vcancyApp
 
 				var appfiles = $('#appfiles').val();
 				var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-				var filepath = filename != '' ? "http://vcancy.ca/login/uploads/" + filename : appfiles;
+				var filepath = filename != '' ? "https://vcancy.ca/login/uploads/" + filename : appfiles;
 
 				console.log(filename, filepath, appfiles);
 
