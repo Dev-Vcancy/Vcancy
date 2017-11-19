@@ -124,8 +124,8 @@
 									</div>
 
 									<div class="col-sm-2 m-b-10">
-										<div><p class="m-b-10">Persons Limit</p></div>
-										<input type="text" required id="limit"  ng-pattern="/^([1-9][0-9]*)$/" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.limit[$index]" name="limit[]" class="form-control person_limit" placeholder="Person Limit">
+										<div><p class="m-b-10">Invitation Limit</p></div>
+										<input type="text" required id="limit"  ng-pattern="/^([1-9][0-9]*)$/" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.limit[$index]" name="limit[]" class="form-control person_limit" placeholder="Enter a number e.g 20">
 
 									</div>
 									<div class="col-sm-2 m-b-10">
@@ -167,7 +167,7 @@
 								<div class="col-xs-2 col-md-1">
 									<button type="button" class="btn btn-info" tooltip-class="tooltip-cyan" uib-tooltip="{{propctrl.copy}}" ng-copy="propctrl.prop.propertylink" onSuccess="propctrl.copySuccess(e)" ><i class="zmdi zmdi-copy zmdi-hc-fw" style="font-size:25px;" ></i></button>
 								</div>
-                                <h4 class="col-xs-2 col-md-3 .p-l-0 count">Link will appear after you click save</h4>
+                                <h4 class="col-xs-2 col-md-3 .p-l-0 count">Click save to generate link</h4>
 							</div>
 							<div class="clearfix"></div>
 						</div>
