@@ -1,5 +1,6 @@
 <header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
-
+<link href = "styles/datepicker3.css"
+         rel = "stylesheet">
 <section id="main">
     <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
 
@@ -89,12 +90,12 @@
 										<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="propctrl.removeTimeSlot($index)" class="btn btn-xs btn-danger pull-right"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
 									</div>
 									<div class="col-sm-3 m-b-10">
-										<div class="col-sm-12"><p class="m-b-10">Date</p></div>
-										<div class="date-picker input-group" ng-class="{ 'is-opened': x.opened == true }">
+										<div class="col-sm-12" ><p class="m-b-10">Date</p></div>
+										<div class="date-picker input-group" ng-class="{ 'is-opened': x.opened == true }" disable-link21>
 											<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
 											<div class="fg-line" ng-class="{ 'fg-toggled': x.opened == true }">
-												<input readonly='true' ng-click="propctrl.open($event, x)" ng-change="propctrl.datetimeslotchanged($index)" type="text" class="form-control pointer" uib-datepicker-popup="{{propctrl.format}}" show-weeks="false" ng-model="propctrl.prop.date[$index]" name = "date[]" is-open="x.opened" min-date="propctrl.minDate" datepicker-options="propctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
-                                                <!--<input ng-click="propctrl.open($event, 'opened')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="dtPopup" is-open="opened" min-date="minDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" placeholder="Select Date" />-->
+												<input readonly='true' id="datepickerprop{{$index}}"  type="text" class="form-control pointer" ng-model="propctrl.prop.date[$index]" name = "date[]"  placeholder="Select Date" />
+                                               
 											</div>
 										</div>
 									</div>

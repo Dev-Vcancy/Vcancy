@@ -124,6 +124,119 @@ vcancyApp
             }
         }
     })
+
+
+vcancyApp.directive("disableLink", function() {
+	return {
+        restrict: "A",
+        link: function(scope, elem, attrs) {
+            $(elem).click(function() {
+                $().JqueryFunction();
+            });
+        }
+    }
+});
+vcancyApp.directive("disableLink1", function() {
+	return {
+        restrict: "A",
+        link: function(scope, elem, attrs) {
+            $(elem).click(function() {
+            	var test = $(this).find("input").attr( 'id' );
+                $().JqueryFunction1(scope, elem, test);
+            });
+        }
+    }
+});
+vcancyApp.directive("disableLink12", function() {
+	return {
+        restrict: "A",
+        link: function(scope, elem, attrs) {
+            $(elem).click(function() {
+            	var test = $(this).find("input").attr( 'id' );
+                $().JqueryFunction12(scope, elem, test);
+            });
+        }
+    }
+});
+vcancyApp.directive("disableLink123", function() {
+	return {
+        restrict: "A",
+        link: function(scope, elem, attrs) {
+            $(elem).click(function() {
+                $().JqueryFunction123();
+            });
+        }
+    }
+});
+
+vcancyApp.directive("disableLink21", function() {
+	return {
+        restrict: "A",
+        link: function(scope, elem, attrs) {
+            $(elem).click(function() {
+            	var test = $(this).find("input").attr( 'id' );
+            	$().JqueryFunctionprop(scope, elem, test);
+            });
+        }
+    }
+});
+
+
+$(document).ready(function() {
+  (function($){
+     $.fn.JqueryFunction = function() {
+     	  //alert("Come Here");
+          $( "#datepicker-13" ).datepicker({format: 'dd-MM-yyyy',autoclose: true});
+            $( "#datepicker-13" ).datepicker("show");
+            
+     }; 
+  })( jQuery );
+
+});
+$(document).ready(function() {
+  (function($){
+     $.fn.JqueryFunction1 = function(scope, elem, test) {
+     	  
+     	   //event.preventDefault();
+        $( "#"+test ).datepicker({format: 'dd-MM-yyyy',autoclose: true});
+        $( "#"+test ).datepicker("show");
+            
+     }; 
+  })( jQuery );
+
+});
+$(document).ready(function() {
+  (function($){
+     $.fn.JqueryFunction12 = function(scope, elem, test) {
+          $( "#"+test ).datepicker({format: 'dd-MM-yyyy',autoclose: true});
+            $( "#"+test ).datepicker("show");
+            
+     }; 
+  })( jQuery );
+
+});
+$(document).ready(function() {
+  (function($){
+     $.fn.JqueryFunction123 = function() {
+     	 
+          $( "#datepicker123-13" ).datepicker({format: 'dd-MM-yyyy',autoclose: true});
+            $( "#datepicker123-13" ).datepicker("show");
+            
+     }; 
+  })( jQuery );
+
+});
+$(document).ready(function() {
+  (function($){
+     $.fn.JqueryFunctionprop = function(scope, elem, test) {
+     	 
+          $( "#"+test ).datepicker({format: 'dd-MM-yyyy',autoclose: true});
+            $( "#"+test ).datepicker("show");
+            
+     }; 
+  })( jQuery );
+
+});
  // vcancyApp
  // .directive('fullCalendar', function(){
         // return {
