@@ -347,6 +347,7 @@ vcancyApp
 					$scope.$apply(function () {
 						if (snapshot.val() !== null) {
 							$.map(snapshot.val(), function (value, index) {
+								var date = new Date();
 								vm.draftdata = "false";
 								vm.applicationval = index;
 								vm.tenantdata.tenantID = value.tenantID;
@@ -386,7 +387,7 @@ vcancyApp
 								vm.rentaldata.reftwo_name = value.reftwo_name;
 								vm.rentaldata.reftwo_phone = value.reftwo_phone;
 								vm.rentaldata.reftwo_relation = value.reftwo_relation;
-								vm.rentaldata.dated = value.dated != '' ? new Date(value.dated) : '';
+								vm.rentaldata.dated = value.dated != '' ? $filter('date')(new Date(value.dated), 'dd-MMMM-yyyy') : '';
 
 								firebase.database().ref('applyprop/' + scheduleID).once("value", function (snapshot) {
 									// console.log(snapshot.val())
@@ -418,8 +419,9 @@ vcancyApp
 									if (snap.val() != null) {
 										$.map(snap.val(), function (v, k) {
 											console.log(v);
+											var date = new Date();
 											vm.tenantdata.tenantName = v.mainapplicant.applicantname;
-											vm.rentaldata.dob = v.mainapplicant.applicantdob != '' ? new Date(v.mainapplicant.applicantdob) : '';
+											vm.rentaldata.dob = v.mainapplicant.applicantdob != '' ? $filter('date')(new Date(v.mainapplicant.applicantdob), 'dd-MMMM-yyyy') : '';
 											vm.rentaldata.sinno = v.mainapplicant.applicantsinno;
 											vm.rentaldata.appcurrentemployer = v.mainapplicant.appcurrentemployer;
 											vm.rentaldata.appposition = v.mainapplicant.appposition;
@@ -434,14 +436,14 @@ vcancyApp
 											angular.forEach(v.minors, function (value, key) {
 												vm.minor.push(key);
 												vm.rentaldata.minorappname.push(value.minorapplicantname);
-												vm.rentaldata.minorappdob.push(value.minorapplicantdob != '' ? new Date(value.minorapplicantdob) : '');
+												vm.rentaldata.minorappdob.push(value.minorapplicantdob != '' ? $filter('date')(new Date(value.minorapplicantdob), 'dd-MMMM-yyyy') : '');
 												vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);
 											});
 
 											angular.forEach(v.otherapplicants, function (value, key) {
 												vm.adult.push(key);
 												vm.rentaldata.otherappname.push(value.adultapplicantname);
-												vm.rentaldata.otherappdob.push(value.adultapplicantdob != '' ? new Date(value.adultapplicantdob) : '');
+												vm.rentaldata.otherappdob.push(value.adultapplicantdob != '' ? $filter('date')(new Date(value.adultapplicantdob), 'dd-MMMM-yyyy') : '');
 												vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
 												vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
 												vm.rentaldata.otherappposition.push(value.otherappposition);
@@ -501,6 +503,7 @@ vcancyApp
 					console.log(snapshot.val());
 					$scope.$apply(function () {
 						if (snapshot.val() !== null) {
+							var date = new Date();
 							var value = snapshot.val();
 							vm.applicationID = $stateParams.applicationId;
 							vm.draftdata = "true";
@@ -540,7 +543,8 @@ vcancyApp
 							vm.rentaldata.reftwo_name = value.reftwo_name;
 							vm.rentaldata.reftwo_phone = value.reftwo_phone;
 							vm.rentaldata.reftwo_relation = value.reftwo_relation;
-							vm.rentaldata.dated = new Date(value.dated);
+							vm.rentaldata.dated = value.dated;
+
 
 							vm.submitemail = value.externalemail;
 							console.log(vm.submitemail);
