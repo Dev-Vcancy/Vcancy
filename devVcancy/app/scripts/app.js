@@ -356,6 +356,12 @@ vcancyApp
 			controllerAs: 'lctrl',
 			templateUrl: 'views/login.html',	
 		}) 
+		 .state ('register', {
+			url: '/register',
+			controller: 'loginCtrl',
+			controllerAs: 'lctrl',
+			templateUrl: 'views/register.html',	
+		}) 
 		
 		.state ('termsofuse', {
 			url: '/termsofuse',
