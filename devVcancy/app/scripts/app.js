@@ -35,6 +35,13 @@ vcancyApp.constant('config', {
    "sailsBaseUrl": 'https://www.vcancy.ca/nodeapi/api/v1/',
 });
 
+/* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
+vcancyApp.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
+    $ocLazyLoadProvider.config({
+        // global configs go here
+    });
+}]);
+
 vcancyApp.service('emailSendingService',function($http,config){
 	this.sendEmailViaNodeMailer = function(to,subject,mode,emailData){
 		var req = {
@@ -237,72 +244,7 @@ $(document).ready(function() {
   })( jQuery );
 
 });
- // vcancyApp
- // .directive('fullCalendar', function(){
-        // return {
-            // restrict: 'A',
-            // link: function(scope, element) {
-                // element.fullCalendar({
-                    // contentHeight: 'auto',
-                    // theme: true,
-                    // header: {
-                        // right: '',
-                        // center: 'prev, title, next',
-                        // left: ''
-                    // },
-                    // defaultDate: '2014-06-12',
-                    // editable: true,
-                    // events: [
-                        // {
-                            // title: 'All Day',
-                            // start: '2014-06-01',
-                            // className: 'bgm-cyan'
-                        // },
-                        // {
-                            // title: 'Long Event',
-                            // start: '2014-06-07',
-                            // end: '2014-06-10',
-                            // className: 'bgm-orange'
-                        // },
-                        // {
-                            // id: 999,
-                            // title: 'Repeat',
-                            // start: '2014-06-09',
-                            // className: 'bgm-lightgreen'
-                        // },
-                        // {
-                            // id: 999,
-                            // title: 'Repeat',
-                            // start: '2014-06-16',
-                            // className: 'bgm-blue'
-                        // },
-                        // {
-                            // title: 'Meet',
-                            // start: '2014-06-12',
-                            // end: '2014-06-12',
-                            // className: 'bgm-teal'
-                        // },
-                        // {
-                            // title: 'Lunch',
-                            // start: '2014-06-12',
-                            // className: 'bgm-gray'
-                        // },
-                        // {
-                            // title: 'Birthday',
-                            // start: '2014-06-13',
-                            // className: 'bgm-pink'
-                        // },
-                        // {
-                            // title: 'Google',
-                            // url: 'http://google.com/',
-                            // start: '2014-06-28',
-                            // className: 'bgm-bluegray'
-                        // }
-                    // ]
-                // });
-            // }
-        // }
-    // }) 
+
 	
 
  vcancyApp
@@ -350,17 +292,48 @@ vcancyApp
 	$urlRouterProvider.otherwise("/");
 	$stateProvider	
 		// Public Routes
+	   /*.state ('login', {
+			url: '/',
+			controller: 'loginCtrl',
+			controllerAs: 'lctrl',
+			templateUrl: 'views/login.html',	
+		}) */
 	   .state ('login', {
 			url: '/',
 			controller: 'loginCtrl',
 			controllerAs: 'lctrl',
 			templateUrl: 'views/login.html',	
+			resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'vcancyApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+                        files: [
+                            '../assets/pages/css/login-2.min.css',                            
+                            '../assets/pages/scripts/login.min.js',
+                        ] 
+                    });
+                }]
+            }
 		}) 
 		 .state ('register', {
 			url: '/register',
 			controller: 'loginCtrl',
 			controllerAs: 'lctrl',
-			templateUrl: 'views/register.html',	
+			templateUrl: 'views/register.html',
+			 resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'vcancyApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+                        files: [
+                            '../assets/pages/css/login-5.min.css',                            
+                            '../assets/global/plugins/backstretch/jquery.backstretch.min.js',
+                            '../assets/pages/scripts/login-5.min.js',
+                        ] 
+                    });
+                }]
+            }	
 		}) 
 		
 		.state ('termsofuse', {
