@@ -8,7 +8,7 @@
     background-color: #FFF;}
     .login .login-logo .form-subtitle {
     color: #c9dce9;
-    font-size: 17px;
+    font-size: 25px;
     font-weight: 300!important;
     padding-left: 10px;
     display: block;
@@ -93,7 +93,7 @@
     color: #8fc4e5;
 }
 .orsep{display:block;text-align:center;}
-.login .content h4.orsep{color:#000;font-weight:bold;}
+.login .content h4.orsep{color:#000;font-weight:300;}
 .orsep {
   width: 70%;
   margin: .7em auto;
@@ -141,4 +141,22 @@
 	.left-icons{float:none;width:81%;margin:0 auto;}
 	.fb lable,.linkedin lable,.google lable{padding:14px 10px;font-size:15px;}
 	.left-icons{float:none;width:97%;margin:0 auto;}
+}
+
+
+.login-form .form-title {
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+.login .login-form .form-title {
+    margin-bottom: 5px;
+}
+
+.login-form .form-subtitle  {
+    text-decoration: underline;
+    
 }

@@ -27,7 +27,8 @@ var vcancyApp = angular
 	'AngularPrint',
 	'ngFileUpload',
 	'ui.jq',
-	'ui.bootstrap'
+	'ui.bootstrap',
+	'socialLogin'
   ]); 
  
 	
@@ -41,6 +42,12 @@ vcancyApp.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
         // global configs go here
     });
 }]);
+/*
+vcancyApp.config(function(socialProvider){
+//socialProvider.setGoogleKey("YOUR GOOGLE CLIENT ID");
+  socialProvider.setLinkedInKey("78blzjlmkk6jbl");
+  //socialProvider.setFbKey({appId: "YOUR FACEBOOK APP ID", apiVersion: "API VERSION"});
+}); */
 
 vcancyApp.service('emailSendingService',function($http,config){
 	this.sendEmailViaNodeMailer = function(to,subject,mode,emailData){
@@ -349,12 +356,33 @@ vcancyApp
 		})
 		
 		// Landlord Routes
-		.state ('landlorddashboard', {
+		/*.state ('landlorddashboard', {
 			url: '/landlorddboard',
 			controller: 'landlorddboardlCtrl',
 			controllerAs: 'ldboardctrl',
 			templateUrl: 'views/landlord.html',
 			resolve: { authenticate: authenticate }
+		})  */
+		.state ('landlorddashboard', {
+			url: '/landlorddboard',
+			controller: 'landlorddboardlCtrl',
+			controllerAs: 'ldboardctrl',
+			templateUrl: 'views/landlord.html',
+			resolve: {authenticate: authenticate,
+				deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                    return $ocLazyLoad.load({
+	                        name: 'vcancyApp',
+	                        files: [
+	                            '../assets/layouts/layout2/css/layout.min.css',
+	                            '../assets/layouts/layout2/css/themes/blue.min.css',
+	                            '../assets/layouts/layout2/css/custom.min.css',
+	                            '../assets/global/plugins/moment.min.js',                            
+	                            '../assets/global/plugins/fullcalendar/fullcalendar.min.js',
+	                            '../assets/pages/scripts/dashboard.min.js',
+	                        ] 
+	                    });
+	                }]
+             }
 		}) 
 		.state('landordprofile', {
 		    url: '/landordprofile',
