@@ -902,3 +902,6 @@ ul.header-inner li a:hover.button:before{
     height: 750px;border:none;
 }
 
+.login.register {
+ background-color: #fff;
+}
