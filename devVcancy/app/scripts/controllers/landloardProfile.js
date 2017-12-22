@@ -16,6 +16,7 @@ vcancyApp
         vm.loader = 1;
         vm.contact = '';
         vm.address  = '';
+        vm.notification  = 'yes';
 
 		 $rootScope.invalid = '';
             $rootScope.success = '';

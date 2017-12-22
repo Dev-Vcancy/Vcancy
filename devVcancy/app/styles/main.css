@@ -905,3 +905,147 @@ ul.header-inner li a:hover.button:before{
 .login.register {
  background-color: #fff;
 }
+
+
+
+.profile-page-both .page-content-wrapper .page-content{background-color:#eef1f5;margin-left: 54px;margin-left: 0;
+    padding: 0px 0;}
+.profile-page-both .profile {
+    background: #fff;
+    padding: 20px;
+}
+.profile-page-both h1.page-title {
+    margin: 5px 0 20px;
+}
+#content.new_dashbord{padding:30px 0px;}
+
+
+.new_dashbord .tab-content .tab-pane {
+    display: block;
+}
+
+
+
+
+.tabordion {
+  color: #333;
+  display: block;
+  font-family: arial, sans-serif;
+  margin: auto;
+  position: relative;
+  width: 100%;
+  min-height: 600px;
+}
+
+.tabordion input[name="sections"] {
+  left: -9999px;
+  position: absolute;
+  top: -9999px;
+}
+
+.tabordion section {
+  display: block;
+}
+
+.tabordion section label.tablbl {
+  background: #169ef4;
+  border:1px solid #fff;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 15px 20px;
+  position: relative;
+  width: 180px;
+  z-index:100;
+}
+
+.tabordion section .tbgt {
+  display: none;
+  left: 230px;
+  min-width: 800px;
+  padding: 0px;
+  position: absolute;  
+  top: 0;
+}
+
+.tabordion section .tbgt:after {
+  bottom: 0;
+  content: "";
+  display: block;
+  left:-229px;
+  position: absolute;
+  top: 0;
+  width: 220px;
+  z-index:1;
+}
+
+.tabordion input[name="sections"]:checked + label.tablbl { 
+  background: rgba(22,158,244,0.7);
+  color: #fff;
+}
+
+.tabordion input[name="sections"]:checked ~ .tbgt {
+  display: block;
+}
+
+
+@media (max-width: 533px) {
+
+
+  .tabordion {
+    width: 100%;
+  }
+  
+  .tabordion section label.tablbl {
+    font-size: 1em;
+    width: 160px;
+  }  
+
+ .tabordion section .tbgt {
+    left: 200px;
+    min-width: 270px;
+  } 
+  
+  .tabordion section .tbgt:after {
+    background-color: #ccc;
+    bottom: 0;
+    content: "";
+    display: block;
+    left:-199px;
+    position: absolute;
+    top: 0;
+    width: 200px;
+
+  }  
+  
+}
+
+
+@media (max-width: 768px) {
+
+
+  .tabordion {
+    width: 96%;
+  }
+}
+
+
+@media (min-width: 1366px) {
+
+
+  .tabordion {
+    width: 100%;
+  }
+}
+
+.register h1.register-h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    margin: 0 auto;
+    width: 70%;
+}
