@@ -484,7 +484,21 @@ vcancyApp
 			controller: 'tenantdboardlCtrl',
 			controllerAs: 'tdboardctrl',
 			templateUrl: 'views/tenant.html',
-			resolve: { tenantauthenticate: tenantauthenticate }
+			resolve: { tenantauthenticate: tenantauthenticate,
+						deps: ['$ocLazyLoad', function($ocLazyLoad) {
+				                    return $ocLazyLoad.load({
+				                        name: 'vcancyApp',
+				                        files: [
+				                            '../assets/layouts/layout2/css/layout.min.css',
+				                            '../assets/layouts/layout2/css/themes/blue.min.css',
+				                            '../assets/layouts/layout2/css/custom.min.css',
+				                            '../assets/global/plugins/moment.min.js',                            
+				                            '../assets/global/plugins/fullcalendar/fullcalendar.min.js',
+				                            '../assets/pages/scripts/dashboard.min.js',
+				                        ] 
+				                    });
+				                }]
+	        }
 		})
 		.state('tenantprofile', {
 		    url: '/tenantprofile',
