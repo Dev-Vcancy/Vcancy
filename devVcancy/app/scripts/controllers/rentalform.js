@@ -633,18 +633,18 @@ vcancyApp
 
 
 					function checkFile() {
-				if($('#uploadfile')[0].files[0]) {
-					var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();				
-					if($('#uploadfile')[0].files[0].size > 3145728) {
-						return 'File size should be 3 MB or less.'
-					} else if(!(_fileName.endsWith('.png')) 
-						&& !(_fileName.endsWith('.jpg'))
-						&& !(_fileName.endsWith('.pdf'))
-						&& !(_fileName.endsWith('.jpeg')))  {
-							return 'Invalid file type.'
-					}
-				}
-			}
+							if($('#uploadfile')[0].files[0]) {
+								var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();				
+								if($('#uploadfile')[0].files[0].size > 3145728) {
+									return 'File size should be 3 MB or less.'
+								} else if(!(_fileName.endsWith('.png')) 
+									&& !(_fileName.endsWith('.jpg'))
+									&& !(_fileName.endsWith('.pdf'))
+									&& !(_fileName.endsWith('.jpeg')))  {
+										return 'Invalid file type.'
+								}
+							}
+						}
 			var fileCheckMsg = checkFile();
 			if(fileCheckMsg) {
 				return window.alert(fileCheckMsg);
@@ -685,7 +685,7 @@ vcancyApp
 				var pets = vm.rentaldata.pets == undefined ? '' : vm.rentaldata.pets;
 				var petsdesc = vm.rentaldata.petsdesc == undefined ? '' : vm.rentaldata.petsdesc;
 				var smoking = vm.rentaldata.smoking == undefined ? '' : vm.rentaldata.smoking;
-
+ 
 				// var file = $('#appfiles').val().split('\\').pop().split('/').pop();
 				// var filename = $('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime();
 				// var fileext = $('#appfiles').val().split('\\').pop().split('/').pop().split('.').pop().toLowerCase();

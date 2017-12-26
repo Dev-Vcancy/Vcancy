@@ -16,7 +16,9 @@ vcancyApp
         vm.loader = 1;
         vm.contact = '';
         vm.address  = '';
-        vm.notification  = 'yes';
+        vm.notification  = 'Enable';
+        vm.success = 0;
+        vm.error = 0;
 
 		 $rootScope.invalid = '';
             $rootScope.success = '';
@@ -39,6 +41,7 @@ vcancyApp
                     vm.lastname = userdata.val().lastname;
                     vm.address = userdata.val().address;
                     vm.contact = userdata.val().contact;
+                    vm.notification = userdata.val().notification;
                     vm.loader = 1;
                 }
             });
@@ -71,7 +74,12 @@ vcancyApp
             //alert(JSON.stringify(updatedata)); return false;
 
             firebase.database().ref('users/' + landLordID).update(updatedata).then(function(){
-              confirm("Your Information updated!");
+              //confirm("Your Information updated!");
+               vm.success = 1;
+            }, function(error) {
+              // The Promise was rejected.
+              console.error(error);
+              vm.error = 1;
             });
         }
 
@@ -97,6 +105,7 @@ vcancyApp
                             var newPassword = ncpassword;
                             user.updatePassword(newPassword).then(function() {
                                 console.log("success");
+                                $rootScope.success = 'Your password has been updated!';
                                 confirm("Your password has been updated!");
                                  localStorage.setItem('password', newPassword);
                              $rootScope.success = 'Your password has been updated';
@@ -122,5 +131,38 @@ vcancyApp
                 $rootScope.error = 'your Passwords don’t match with old password.';
                 $rootScope.success = '';
             }
+        }
+
+        vm.profilestore = function(){
+          vm.error = 0;
+            alert("hfgjdfg");
+            function checkFile() {
+              if($('#uploadfile')[0].files[0]) {
+                var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();        
+                if($('#uploadfile')[0].files[0].size > 3145728) {
+                  return 'File size should be 3 MB or less.'
+                } else if(!(_fileName.endsWith('.png')) 
+                  && !(_fileName.endsWith('.jpg'))
+                  && !(_fileName.endsWith('.jpeg')))  {
+                    return 'Invalid file type.'
+                }
+              }
+            }
+
+            var fileCheckMsg = checkFile();
+            if(fileCheckMsg) {
+                vm.error = 1;
+                vm.errormessage = "Invalid File Extensions."
+            }
+
+            var filename = $('#filename').val() === '' ? '' : $('#filename').val();
+            var filepath = filename != '' ? "https://vcancy.ca/login/uploads/" + filename : appfiles;
+
+            console.log(filename, filepath, appfiles);
+        }
+
+        vm.notificationSubmit = function(notificationuser){
+          //alert("fjghkdf");
+
         }
 }])
