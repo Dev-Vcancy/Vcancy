@@ -5,7 +5,7 @@
 //=================================================
 
 vcancyApp
-    .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window) {
+    .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http) {
         var vm = this;
         var landLordID = localStorage.getItem('userID');
         var password = localStorage.getItem('password');
@@ -35,14 +35,23 @@ vcancyApp
         firebase.database().ref('/users/' + landLordID).once('value').then(function (userdata) {
             $scope.$apply(function () {
                 if (userdata.val() !== null) {
-
+                  //  console.log(userdata.val());
                     vm.email = userdata.val().email;
                     vm.firstname = userdata.val().firstname;
                     vm.lastname = userdata.val().lastname;
                     vm.address = userdata.val().address;
                     vm.contact = userdata.val().contact;
-                    vm.notification = userdata.val().notification;
                     vm.loader = 1;
+                    vm.isadded = userdata.val().isadded;
+                    vm.iscancelshow = userdata.val().iscancelshow;
+                    vm.iscreditcheck = userdata.val().iscreditcheck;
+                    vm.iscriminalreport = userdata.val().iscriminalreport;
+                    vm.isexpiresoon = userdata.val().isexpiresoon;
+                    vm.ispropertydelete = userdata.val().ispropertydelete;
+                    vm.isrentalsubmit = userdata.val().isrentalsubmit ;
+                    vm.isshowingtime = userdata.val().isshowingtime;
+                    vm.profilepic = userdata.val().profilepic;
+
                 }
             });
         }); 
@@ -134,8 +143,9 @@ vcancyApp
         }
 
         vm.profilestore = function(){
+           var landLordID = localStorage.getItem('userID');
           vm.error = 0;
-            alert("hfgjdfg");
+            //alert("hfgjdfg");
             function checkFile() {
               if($('#uploadfile')[0].files[0]) {
                 var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();        
@@ -155,14 +165,151 @@ vcancyApp
                 vm.errormessage = "Invalid File Extensions."
             }
 
-            var filename = $('#filename').val() === '' ? '' : $('#filename').val();
+          var appfiles = $('#appfiles').val();
+          var filename = $('#filename').val() === '' ? '' : $('#filename').val();
+            filename = filename.replace(/\s/g,''); 
+
             var filepath = filename != '' ? "https://vcancy.ca/login/uploads/" + filename : appfiles;
+            console.log(filepath);
+            if(filename != ''){
+             vm.upload(appfiles, filename);
+               var user = firebase.auth().currentUser;
+                  if (user) { 
+                      firebase.database().ref('users/' + landLordID).update({'profilepic':filepath}).then(function(){
+                         vm.success = "Your profile updated successfully.";
+                       }, function(error) {
+                        // The Promise was rejected.
+                        console.error(error);
+                        $rootScope.error = "May Be your session is expire please login again."
+                      });
+                  } else {
+                     $rootScope.error = "May Be your session is expire please login again."
+                  }
+            }
 
             console.log(filename, filepath, appfiles);
         }
 
-        vm.notificationSubmit = function(notificationuser){
-          //alert("fjghkdf");
 
+        vm.upload = function (file, filename) {
+        file = file.replace("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", "");
+        file = file.replace("data:application/pdf;base64,", "");
+        file = file.replace(/^data:image\/\w+;base64,/, "");
+        file = file.replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,", "");
+         //console.log(file,filename);
+
+        var req = {
+          method: 'POST',
+          url: config.sailsBaseUrl + 'fileupload/upload',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            "Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+          },
+          data: {
+            file: file,
+            filename: filename
+          }
         }
+
+        $http(req).then(function successCallback(response) {
+          console.log(response);
+          console.log("Done");
+          return true;
+        }, function errorCallback(response) {
+          console.log("Fail");
+          return false;
+        });
+      };
+
+        vm.notificationSubmit = function(notificationuser){
+      //    console.log(notificationuser);
+          var landLordID = localStorage.getItem('userID');
+          if(notificationuser != undefined){
+              var notification = {};
+          
+              if( notificationuser.isadded != undefined){
+                notification['isadded'] = notificationuser.isadded;
+              }else{
+                notification['isadded'] = 0;
+              }
+
+
+              if(notificationuser.isshowingtime != undefined){
+                notification['isshowingtime'] = notificationuser.isshowingtime;
+              }else{
+                notification['isshowingtime'] = 0;
+              }
+
+
+              if(notificationuser.isrentalsubmit != undefined){
+                notification['isrentalsubmit'] = notificationuser.isrentalsubmit;
+              }else{
+                notification['isrentalsubmit'] = 0;
+              }
+
+
+
+              if(notificationuser.iscancelshow != undefined){
+                notification['iscancelshow'] = notificationuser.iscancelshow;
+              }else{
+                notification['iscancelshow'] = 0;
+              }
+
+
+              if(notificationuser.iscreditcheck != undefined){
+                notification['iscreditcheck'] = notificationuser.iscreditcheck;
+              }else{
+                notification['iscreditcheck'] = 0;
+              }
+
+
+
+              if(notificationuser.iscriminalreport != undefined){
+                notification['iscriminalreport'] = notificationuser.iscriminalreport;
+              }else{
+                notification['iscriminalreport'] = 0;
+              }
+
+
+              if(notificationuser.isexpiresoon != undefined){
+                notification['isexpiresoon'] = notificationuser.isexpiresoon;
+              }else{
+                notification['isexpiresoon'] = 0;
+              }
+
+
+
+              if(notificationuser.ispropertydelete != undefined){
+                notification['ispropertydelete'] = notificationuser.ispropertydelete;
+              }else{
+                notification['ispropertydelete'] = 0;
+              }
+
+             if(notification != null){
+                  var user = firebase.auth().currentUser;
+                  if (user) { 
+                      firebase.database().ref('users/' + landLordID).update(notification).then(function(){
+                       // confirm("Your Information updated!");
+                         vm.success = "Your notification updated successfully.";
+                      }, function(error) {
+                        // The Promise was rejected.
+                        console.error(error);
+                        $rootScope.error = "May Be your session is expire please login again."
+                      });
+                  } else {
+                     $rootScope.error = "May Be your session is expire please login again."
+                  }
+              }else{
+                  $rootScope.error = "Please Select Atleast one option."
+              }
+              
+          }else{
+                  $rootScope.error = "Please Select Atleast one option."
+          }
+          
+        }
+
+
+
 }])

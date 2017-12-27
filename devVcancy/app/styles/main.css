@@ -1050,3 +1050,15 @@ ul.header-inner li a:hover.button:before{
     width: 70%;
 }
 
+.btn.red:not(.btn-outline) {
+    color: #fff;
+    background-color: #F06C3B !important;
+    border-color: #F06C3B !important;
+    padding: 10px 25px;
+}
+
+.md-radio-sg .radio-inline{padding-left: 25px !important;}
+.header .navbar-collapse.login-header ul li a {
+    color: #fff !important;
+}
+.login .logo{padding:0px !important;}

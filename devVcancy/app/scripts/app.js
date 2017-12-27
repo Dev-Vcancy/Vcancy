@@ -384,18 +384,18 @@ vcancyApp
 	                }]
              }
 		}) 
-		.state('landordprofile1', {
-		    url: '/landordprofile1',
+		/*.state('landordprofile', {
+		    url: '/landordprofile',
 		    controller: 'landlordProfilelCtrl',
 		    controllerAs: 'ldProfilectrl',
 		    templateUrl: 'views/landloardProfile.html',
 		    resolve: { authenticate: authenticate }
-		})
+		})*/
 		.state('landordprofile', {
 		    url: '/landordprofile',
 		    controller: 'landlordProfilelCtrl',
 		    controllerAs: 'ldProfilectrl',
-		    templateUrl: 'views/landloardProfile1.html',
+		    templateUrl: 'views/landloardProfile.html',
 		    resolve: { authenticate: authenticate,
 		   			 deps: ['$ocLazyLoad', function($ocLazyLoad) {
 	                    return $ocLazyLoad.load({
