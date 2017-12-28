@@ -38,8 +38,10 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				 } 
 				 
 				 if(!firebase.auth().currentUser.emailVerified){
-					$rootScope.error = 'Your new email is not verified. Please try again after verifying your email.';
-					$rootScope.invalid = '';
+				 	localStorage.setItem('RegEmail',email);
+					localStorage.setItem('RegPass', password);
+					$rootScope.error = 'Your new email is not verified. Please try again after verifying your email. If you not get anymail please resend varification mail';
+					$rootScope.invalid = 'mail';
 					authObj.$signOut();
 					$rootScope.user = null;
 					localStorage.clear();
