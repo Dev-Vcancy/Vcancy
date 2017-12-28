@@ -11,11 +11,13 @@
                    
                         
                         <div class="" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 0 }" data-ng-if="lctrl.register === 0">            
-                                <form name="regForm" ng-submit="lctrl.registerUser(lctrl.reguser)" role="form" novalidate>
+                                <form name="regForm" ng-submit="lctrl.registerUser(lctrl.reguser)" role="form" >
                                                     
                                    <div class="form-group text-center" >
-                                   <div class='regmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div> 
-                                    <div class='regmsgvalidate' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div></div>
+                                   <div class='regmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>
+                                    
+                                    <div class='regmsgvalidate' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
+                                    <button  ng-click="lctrl.resendmail()"  class="btn red btn-block uppercase">Resend Email</button></div>
                                    <div class="md-radio-sg">
                                         <label class="radio radio-inline"> 
                                              <input type="radio" required ng-model="lctrl.reguser.usertype" ng-value="1"  name="usertype" value="1">
@@ -51,7 +53,7 @@
                                     <div class="form-group"  style='display:inherit;float: left;width: 100%;'>
                                         <div class="col-sm-12">
                                         <div class="md-input">
-                                            <input type="text" id="regemail" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'regemail')) }" required ng-model="lctrl.reguser.email" name="email" class="md-form-control" >
+                                            <input type="email" id="regemail" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'regemail')) }" required ng-model="lctrl.reguser.email" name="email" class="md-form-control" >
                                             <span class="highlight"></span>
                                             <span class="bar"></span>
                                             <label class="lbl">Email Address</label>

@@ -156,6 +156,9 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			if(cpass === pass){
 				reguserObj.$createUserWithEmailAndPassword(email, pass)
 					.then(function(firebaseUser) {
+						localStorage.setItem('RegEmail',email);
+						localStorage.setItem('RegPass', pass);
+
 					// $scope.$apply(function(){
 						firebaseUser.sendEmailVerification().then(function() {
 							// console.log("Email Sent");
@@ -252,6 +255,30 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				} 
 			});
 				
+		}
+
+		vm.resendmail = function(){
+			var email = localStorage.getItem('RegEmail');
+			var pass = localStorage.getItem('RegPass');
+			if(email != null && pass != null){
+				firebase.auth().signInWithEmailAndPassword(email, pass)
+				   .then(function(firebaseUser) {
+				       // Success 
+				       firebaseUser.sendEmailVerification().then(function() {
+							console.log("Email Sent");
+								$rootScope.success = 'Sent mail in your mail box please check your Email';
+								$rootScope.error = '';			
+					
+						}).catch(function(error) {
+							 console.log("Error in sending email"+error);
+						});
+				   })
+				  .catch(function(error) {
+				  	console.log(error);
+				       // Error Handling
+				  });
+					
+			}
 		}
 		
 }]);
