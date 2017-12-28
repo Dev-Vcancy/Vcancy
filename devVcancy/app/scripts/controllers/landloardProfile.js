@@ -19,8 +19,8 @@ vcancyApp
         vm.notification  = 'Enable';
         vm.success = 0;
         vm.error = 0;
-
-		 $rootScope.invalid = '';
+        vm.totaluser = 0;
+		        $rootScope.invalid = '';
             $rootScope.success = '';
             $rootScope.error = '';
         //alert(landLordID);
@@ -51,11 +51,28 @@ vcancyApp
                     vm.isrentalsubmit = userdata.val().isrentalsubmit ;
                     vm.isshowingtime = userdata.val().isshowingtime;
                     vm.profilepic = userdata.val().profilepic;
+                    vm.companyname = userdata.val().companyname;
+
+                   
+
 
                 }
             });
         }); 
         
+        
+         var ref = firebase.database().ref("employee");
+                    ref.orderByChild("refId").equalTo(landLordID).on("child_added", function(snapshot) {
+                      console.log(snapshot.key);
+                      vm.totaluser++;
+                    });
+
+                   var setinterval =  setInterval(function(){ if(vm.totaluser != 0){
+                    $("#totaluser").text(vm.totaluser);
+                      console.log(vm.totaluser);
+                      clearInterval(setinterval);
+                   } }, 3000);
+
         vm.profileSubmit = function (ldProfilectrl) {
         	 var landLordID = localStorage.getItem('userID');
 
@@ -80,15 +97,21 @@ vcancyApp
             }else{
                updatedata['email'] = $scope.ldProfilectrl.email;
             }
+            if($scope.ldProfilectrl.companyname === undefined || $scope.ldProfilectrl.companyname === ""){
+              vm.companyname = '';
+              updatedata['companyname'] = '';
+            }else{
+               updatedata['companyname'] = $scope.ldProfilectrl.companyname;
+            }
             //alert(JSON.stringify(updatedata)); return false;
 
             firebase.database().ref('users/' + landLordID).update(updatedata).then(function(){
               //confirm("Your Information updated!");
-               vm.success = 1;
+             ldProfilectrl.success = "Profile Updated successfully"
             }, function(error) {
               // The Promise was rejected.
               console.error(error);
-              vm.error = 1;
+              ldProfilectrl.error = "Profile Updated successfully"
             });
         }
 
@@ -190,6 +213,44 @@ vcancyApp
             console.log(filename, filepath, appfiles);
         }
 
+       
+         vm.newuserSubmit = function(newuser){
+
+          // alert(JSON.stringify(newuser));
+            var landLordID = localStorage.getItem('userID');
+            var firstname = newuser.firstname;
+            var lastname = newuser.lastname;
+            var email = newuser.email;
+            var refId = landLordID;
+            var custome =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            var reguserdbObj = firebase.database();
+           /* reguserdbObj.ref('users/' + firebaseUser.uid).set({
+            firstname: firstname,
+            lastname: lastname,
+            refId : refId,
+            email : email,
+            });   */  
+            var userarray = { firstname: firstname,
+            lastname: lastname,
+            refId : refId,
+            email : email};
+            reguserdbObj.ref('employee/' + custome).set(userarray, function(error){
+                  if(error != null ){
+                    console.log(error);
+                    $rootScope.invalid = 'regcpwd';         
+                    $rootScope.error = 'User Not added Please Try again.';
+                    $rootScope.success = '';
+                  }else{
+                    console.log('Done');
+                    $rootScope.invalid = 'regcpwd';         
+                    $rootScope.error = '';
+                    $rootScope.success = 'User Added successfully!';
+                                    
+                  }
+                });
+
+            
+        }
 
         vm.upload = function (file, filename) {
         file = file.replace("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", "");

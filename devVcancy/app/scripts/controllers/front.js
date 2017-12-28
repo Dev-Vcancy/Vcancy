@@ -173,7 +173,17 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 						firstname: first,
 						lastname: last,
 						usertype : usertype,
-						email : email
+						email : email,
+						isadded : 1,
+                   		iscancelshow : 1,
+                    	iscreditcheck : 1,
+                    	iscriminalreport : 1,
+                    	isexpiresoon : 1,
+                    	ispropertydelete : 1,
+                    	isrentalsubmit : 1,
+                    	isshowingtime : 1,
+                    	profilepic : 1,
+                    	companyname : ""
 					  });				  
 					$rootScope.success = 'Your account has been created and an email has been sent. Please verify your email to Log In!';
 					$rootScope.error = '';			

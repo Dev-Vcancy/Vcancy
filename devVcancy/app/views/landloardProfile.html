@@ -6,7 +6,7 @@
         <div class="container">
                 <div class="page-content-wrapper">
                      <div class="page-content" style="min-height: 1434px;">
-                         <h1 class="page-title">  Landlord's Profile </h1>
+                         <h1 class="page-title">  Profile and Settings </h1>
                          <div class="profile">
                              <div class="tabbable-line tabbable-full-width">
 
@@ -46,6 +46,10 @@
                                                             <a href="javascript:;"> Units Vacants
                                                               <span> 0</span> </a>
                                                         </li>
+                                                        <li>
+                                                            <a href="javascript:;"> Total Users
+                                                              <span id="totaluser"> {{ldProfilectrl.totaluser}}</span> </a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                                 <div class="col-md-9">
@@ -83,10 +87,18 @@
                                                                     <span class="sale-info"> Address </span>
                                                                     <span class="sale-num"> {{ldProfilectrl.address}}  </span>
                                                                 </li> 
+                                                               <li>
+                                                                    <span class="sale-info"> Company Name </span>
+                                                                    <span class="sale-num"> {{ldProfilectrl.companyname}}  </span>
+                                                                </li> 
                                                                
                                                             </ul>
                                                         </div>
                                                     </div>
+                                                     <div class="pull-right">
+                                                        <a href="https://vcancy.ca/faq/" target="_blank" style="text-decoration: underline;
+    font-size: 18px;">Delete Account</a>
+                                                     </div>
                                                 </div>
                                                 </div>
                                                     </div>
@@ -103,15 +115,18 @@
                                                 <div class="tbgt">
                                                
                                                   <div id="tab_1-1" class="tab-pane active">
-                                                     <form class="" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)" role="form" novalidate unsaved-warning-form>
-                                                      <div ng-if= 'ldProfilectrl.success == 1' class="alert alert-success">
+                                                    <h3 class="m-b-20 m-t-10 fw">Personal</h3>
+                                                        <div class="clearfix"></div>
+                                                    <div ng-if= "ldProfilectrl.success != ''" class="alert alert-success">
                                                       <strong>Success!</strong> User Update Suceesfully
                                                     </div>
 
-                                                    <div ng-if= 'ldProfilectrl.error == 1' class="alert alert-danger">
+                                                    <div ng-if= "ldProfilectrl.error != ''" class="alert alert-danger">
                                                           <strong>Info!</strong> User can't update. please try again.
                                                         </div>
-                                <h3 class="m-b-20 m-t-10 fw">Personal</h3>
+                                                     <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)" role="form" novalidate unsaved-warning-form>
+                                                      
+                                
                                 <div class="col-xs-12 col-sm-6">
                                     <div ng-class="{ 'has-error' : profileForm.firstName.$invalid && !profileForm.firstName.$pristine }" class="form-group fg-float m-t-30">
                                         <div class="fg-line fg-toggled ">
@@ -147,11 +162,20 @@
                                 <div class="col-xs-12 col-sm-12">
                                     <div  class="form-group fg-float m-t-30">
                                         <div class="fg-line fg-toggled ">
+                                            <input required name="companyname"  ng-model="ldProfilectrl.companyname"  type="text" class="form-control w-100 phone" id="" placeholder="">
+                                            <label class="fg-label">Company Name:</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12">
+                                    <div  class="form-group fg-float m-t-30">
+                                        <div class="fg-line fg-toggled ">
                                             <input required name="address"  ng-model="ldProfilectrl.address"  type="text" class="form-control w-100 phone" id="" placeholder="">
                                             <label class="fg-label">Address:</label>
                                         </div>
                                     </div>
                                 </div>
+                                 
                                 <div class="col-xs-12 col-sm-12 text-right">
 
                                     <button type="submit" class="btn btn-primary btn-md m-t-10 m-l-10 waves-effect">Save</button>
@@ -168,11 +192,11 @@
                                                   <div id="tab_2-2" class="tab-pane">
                                                    
                                                     <form  role="form" enctype="multipart/form-data" ng-submit="ldProfilectrl.profilestore()" role="form">
-                                                    <div ng-if= 'ldProfilectrl.success == 1' class="alert alert-success">
+                                                    <div ng-if= "$root.success != '' " class="alert alert-success">
                                                       <strong>Success!</strong> User Update Suceesfully
                                                     </div>
 
-                                                    <div ng-if= 'ldProfilectrl.error == 1' class="alert alert-danger">
+                                                    <div ng-if= "$root.error != ''" class="alert alert-danger">
                                                           {{ldProfilectrl.errormessage}}
                                                         </div>
                                                         <div class="form-group">
@@ -206,9 +230,9 @@
                                                  <div class="tbgt">
                                                     <div id="tab_3-3" class="tab-pane">
                                                     <h3 class="m-b-20 m-t-10 fw">Change Password</h3>
-                                                    <form class="" ng-submit="ldProfilectrl.changepasswordSubmit(ldProfilectrl.passworduser)" name="pwdForm" enctype="multipart/form-data" role="form" novalidate unsaved-warning-form>
+                                                    <form class="changpass_form_block" ng-submit="ldProfilectrl.changepasswordSubmit(ldProfilectrl.passworduser)" name="pwdForm" enctype="multipart/form-data" role="form" novalidate unsaved-warning-form>
 
-                                                    <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                                    <div class="col-xs-12 col-sm-6 form-group fg-float errorbox fade in">
                                                     <div class="fg-line">
                                                     <div class='regmsgvalidate' ng-if="$root.error != ''">
                                                     <div class="alert alert-danger alert-dismissable fade in">       {{$root.error}}
@@ -220,6 +244,7 @@
                                                     </div>
                                                     </div>
                                                     </div>
+
                                                     <div class="col-xs-12 pwd-wrap p-b-30">
                                                     <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
                                                     <div class="fg-line">
@@ -251,9 +276,9 @@
                                                  <div class="tbgt">
                                                     <div id="tab_3-3" class="tab-pane">
                                                     <h3 class="m-b-20 m-t-10 fw">Notification</h3>
-                                                    <form class="" ng-submit="ldProfilectrl.notificationSubmit(ldProfilectrl.notificationuser)" name="notification"  role="form" method="post">
+                                                    <form class="notification_form_block" ng-submit="ldProfilectrl.notificationSubmit(ldProfilectrl.notificationuser)" name="notification"  role="form" method="post">
 
-                                                    <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                                    <div class="col-xs-12 col-sm-6 form-group fg-float errorbox">
                                                     <div class="fg-line">
                                                     <div class='regmsgvalidate' ng-if="$root.error != ''">
                                                     <div class="alert alert-danger alert-dismissable fade in">       {{$root.error}}
@@ -266,7 +291,7 @@
                                                     </div>
                                                     </div>
                                                     <div class="col-xs-12 pwd-wrap p-b-30">
-                                                    <div class="col-xs-12 col-sm-4 ">
+                                                    <div class="col-xs-12 col-sm-4 col-md-12 col-lg-12">
                                                         <h4>Send me an email when</h4>
                                                     <div class="mt-checkbox-list">
 
@@ -308,6 +333,53 @@
                                                     </div>
                                                    
                                                     
+                                                    </div>
+
+                                                    </form>
+                                                </div>
+                                              </section>
+                                               <section id="section4">
+                                                <input type="radio" name="sections" id="option5">
+                                                <label for="option5" class="tablbl"> Add User </label>
+                                                 <div class="tbgt">
+                                                    <div id="tab_3-3" class="tab-pane">
+                                                    <h3 class="m-b-20 m-t-10 fw">Add New User</h3>
+                                                    <form class="changpass_form_block" ng-submit="ldProfilectrl.newuserSubmit(ldProfilectrl.newuser)" name="pwdForm" enctype="multipart/form-data" role="form"  unsaved-warning-form>
+
+                                                    <div class="col-xs-12 col-sm-6 form-group fg-float errorbox fade in">
+                                                    <div class="fg-line">
+                                                    <div class='regmsgvalidate' ng-if="$root.error != ''">
+                                                    <div class="alert alert-danger alert-dismissable fade in">       {{$root.error}}
+                                                    </div>
+                                                    </div> 
+                                                    <div class='regmsgvalidate' ng-if="$root.success != ''">
+                                                    <div class="alert alert-success alert-dismissable fade in">             {{$root.success}}
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="col-xs-12 pwd-wrap p-b-30">
+                                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
+                                                    <div class="fg-line">
+                                                    <input required type="text" class="form-control w-100 phone" id="" placeholder="" ng-model="ldProfilectrl.newuser.firstname" required>
+                                                    <label class="fg-label">First Name<span class="mandatory" >*</span>:</label>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
+                                                    <div class="fg-line">
+                                                    <input required type="text" ng-model="ldProfilectrl.newuser.lastname" class="form-control w-100 phone" id="" placeholder="" required>
+                                                    <label class="fg-label">Last Name<span class="mandatory" >*</span>:</label>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
+                                                    <div class="fg-line">
+                                                    <input required type="email" class="form-control w-100 phone" id="" placeholder="" ng-model="ldProfilectrl.newuser.email" required>
+                                                    <label class="fg-label">Email<span class="mandatory" >*</span>:</label>
+                                                    </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary pull-right btn-md m-t-10 waves-effect">Add User</button>
                                                     </div>
 
                                                     </form>

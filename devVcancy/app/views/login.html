@@ -11,11 +11,12 @@
 
                 <div class="form-title">
                     <span class="form-title">Sign In to Vcancy</span>
-                    <span class="form-subtitle ">Or  <a href='#/register'>create an account</a></span>
+                    <span class="form-subtitle " style="text-transform: lowercase;">Or, </span>
+                     <a href='#/register' style="text-transform: unset;" class="creatct">Create an Account</a>
                 </div>
                 
                 <div class='loginmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
-                <div ng-if="$root.invalid == 'mail'"><button  ng-click="lctrl.resendmail()"  class="btn red btn-block uppercase">Resend Email</button></div>
+                <div ng-if="$root.invalid == 'mail'"><button  ng-click="lctrl.resendmail()"  class="btn red btn-block uppercase resenmailbtn">Resend Email</button></div>
                 </div>
                 <div class='loginmsgvalidate' ng-if="$root.emailhandler"><div class="alert alert-success alert-dismissable fade in">{{$root.emailhandler}}</div></div>
                 

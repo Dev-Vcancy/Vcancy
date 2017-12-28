@@ -18,7 +18,7 @@
         padding: 10px 10px 10px 5px;
         display: block;
         border: none;
-        border-bottom: 2px solid #000;
+        border-bottom: 2px solid #d3d3d3;
         box-shadow: none;
         width: 100%;
             background: transparent;
@@ -83,7 +83,7 @@
     border-color: #e7505a;
     padding: 10px 25px;
 }
-.btn.blue:not(.btn-outline) {
+.btn.red.blue:not(.btn-outline) {
     color: #FFF;
     background-color: #3598dc;
     border-color: #3598dc;
@@ -96,3 +96,4 @@
     position: absolute;
     height: auto;
 }
+

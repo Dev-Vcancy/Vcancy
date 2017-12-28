@@ -15656,3 +15656,22 @@ a.thumbnail.active {
 #content.new_dashbord {
  padding: 15px 0;
 }
+.tab-pane form.personal_form_block {
+    margin: 0 -15px;
+}
+.tab-pane form.changpass_form_block {
+    margin: 0 -25px;
+}
+.tab-pane form.notification_form_block{
+    margin: 0 -25px;
+}
+.tab-pane form.changpass_form_block .errorbox {
+    position: absolute;
+    margin-bottom: 0;
+    top: 40px;
+}
+.tab-pane form.notification_form_block .errorbox {
+    position: absolute;
+    margin-bottom: 0;
+    top: 40px;
+}
