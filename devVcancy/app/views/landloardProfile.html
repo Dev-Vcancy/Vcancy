@@ -55,7 +55,7 @@
                                                 <div class="col-md-9">
                                                     <div class="row">
                                                     <div class="col-md-12 profile-info">
-                                                    <h1 class="font-green sbold uppercase">{{ldProfilectrl.firstname}} {{ldProfilectrl.lastname}}</h1>
+                                                    <h1 class="font-green sbold uppercase">{{ldProfilectrl.companyname}} </h1>
                                                     <div class="portlet sale-summary">
                                                         <div class="portlet-title">
                                                             <div class="caption font-red sbold"> Profile Details</div>
@@ -111,20 +111,20 @@
                                             <div class="tabordion">
                                               <section id="section1">
                                                 <input type="radio" name="sections" id="option1" checked>
-                                                <label for="option1" class="tablbl"> Personal info </label>
+                                                <label for="option1" class="tablbl"> User Profile </label>
                                                 <div class="tbgt">
                                                
                                                   <div id="tab_1-1" class="tab-pane active">
                                                     <h3 class="m-b-20 m-t-10 fw">Personal</h3>
                                                         <div class="clearfix"></div>
                                                     <div ng-if= "ldProfilectrl.success != ''" class="alert alert-success">
-                                                      <strong>Success!</strong> User Update Suceesfully
+                                                      <strong>Success!</strong> User Updated Successfully
                                                     </div>
 
                                                     <div ng-if= "ldProfilectrl.error != ''" class="alert alert-danger">
                                                           <strong>Info!</strong> User can't update. please try again.
                                                         </div>
-                                                     <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)" role="form" novalidate unsaved-warning-form>
+                                                     <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)" role="form"  unsaved-warning-form>
                                                       
                                 
                                 <div class="col-xs-12 col-sm-6">
@@ -146,7 +146,7 @@
                                 <div class="col-xs-12 col-sm-6">
                                     <div ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }" class="form-group fg-float m-t-30">
                                         <div class="fg-line fg-toggled ">
-                                            <input required name="email" ng-model="ldProfilectrl.email" type="email" class="form-control w-100" id="" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" placeholder="">
+                                            <input required name="email" ng-model="ldProfilectrl.email" type="email" class="form-control w-100" id="" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" placeholder="" required>
                                             <label class="fg-label">Email<span class="mandatory">*</span>:</label>
                                         </div>
                                     </div>
@@ -187,7 +187,7 @@
                                               </section>
                                               <section id="section2">
                                                 <input type="radio" name="sections" id="option2">
-                                                <label for="option2" class="tablbl">  Change Profile </label>
+                                                <label for="option2" class="tablbl">  Company Logo </label>
                                                  <div class="tbgt">
                                                   <div id="tab_2-2" class="tab-pane">
                                                    

@@ -16,8 +16,9 @@ var yeoman = {
 };
 
 var paths = {
-  scripts: [yeoman.app + '/scripts/**/*.js'],
+  scripts: [yeoman.app + '/scripts/**/*.js',yeoman.app + '/assets/**/*.js'],
   styles: [yeoman.app + '/styles/**/*.css'],
+   assets: [yeoman.app + '/assets/**/*.css'],
   test: ['test/spec/**/*.js'],
   testRequire: [
     yeoman.app + '/bower_components/angular/angular.js',
@@ -47,6 +48,9 @@ var lintScripts = lazypipe()
 var styles = lazypipe()
   .pipe($.autoprefixer, 'last 1 version')
   .pipe(gulp.dest, '.tmp/styles');
+var assets = lazypipe()
+  .pipe($.autoprefixer, 'last 1 version')
+  .pipe(gulp.dest, '.tmp/assets');
 
 ///////////
 // Tasks //
@@ -56,7 +60,10 @@ gulp.task('styles', function () {
   return gulp.src(paths.styles)
     .pipe(styles());
 });
-
+gulp.task('assets', function () {
+  return gulp.src(paths.assets)
+    .pipe(assets());
+});
 gulp.task('lint:scripts', function () {
   return gulp.src(paths.scripts)
     .pipe(lintScripts());
@@ -155,20 +162,23 @@ gulp.task('clean:dist', function (cb) {
   rimraf('./../login', cb);
 });
 
-gulp.task('client:build', ['html', 'styles'], function () {
+gulp.task('client:build', ['html', 'styles','assets'], function () {
   var jsFilter = $.filter('**/*.js');
+  var jsmapFilter = $.filter('**/*.map');
   var cssFilter = $.filter('**/*.css');
 
   return gulp.src(paths.views.main)
     .pipe($.useref({searchPath: [yeoman.app, '.tmp']}))
     .pipe(jsFilter)
+    .pipe(jsmapFilter)
     //.pipe($.ngAnnotate())
     //.pipe($.uglify())
     .pipe(jsFilter.restore())
+    .pipe(jsmapFilter.restore())
     .pipe(cssFilter)
     .pipe($.minifyCss({cache: true}))
     .pipe(cssFilter.restore())
-    .pipe(gulpif('*.{js,css}', $.rev()))
+    .pipe(gulpif('*.{js,css,map}', $.rev()))
     .pipe($.revReplace())
     .pipe(gulp.dest(yeoman.dist));
 });
@@ -178,14 +188,15 @@ gulp.task('html', function () {
     .pipe(gulp.dest(yeoman.dist + '/views'));
 });
 
-gulp.task('images', function () {
-  return gulp.src(yeoman.app + '/images/**/*')
-    .pipe($.cache($.imagemin({
+gulp.task('copy:images', function () {
+  return gulp.src(yeoman.app + '/images/*')
+    .pipe(gulp.dest(yeoman.dist + '/images'))
+    /*.pipe($.cache($.imagemin({
         optimizationLevel: 5,
         progressive: true,
         interlaced: true
-    })))
-    .pipe(gulp.dest(yeoman.dist + '/images'));
+    })));*/
+    
 });
 
 gulp.task('copy:extras', function () {
@@ -201,9 +212,8 @@ gulp.task('copy:assets', function () {
   return gulp.src(yeoman.app + '/assets/**/*')
     .pipe(gulp.dest(yeoman.dist + '/assets'));
 });
-
 gulp.task('build', ['clean:dist'], function () {
-  runSequence(['images', 'copy:extras', 'copy:fonts', 'client:build']);
+  runSequence(['copy:images', 'copy:extras', 'copy:fonts', 'client:build','copy:assets']);
 });
 
 gulp.task('default', ['build']);

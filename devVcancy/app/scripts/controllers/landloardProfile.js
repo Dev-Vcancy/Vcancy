@@ -153,14 +153,14 @@ vcancyApp
 
                     } else {
                         $rootScope.invalid = 'regcpwd';         
-                        $rootScope.error = 'your Passwords don’t match with confirm password.';
+                        $rootScope.error = "Passwords don't match";
                         $rootScope.success = '';
                     }
 
 
         	} else {
                 $rootScope.invalid = 'regcpwd';         
-                $rootScope.error = 'your Passwords don’t match with old password.';
+                $rootScope.error = "Passwords don't match";
                 $rootScope.success = '';
             }
         }

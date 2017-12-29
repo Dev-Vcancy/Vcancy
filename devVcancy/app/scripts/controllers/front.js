@@ -185,7 +185,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
                     	profilepic : 1,
                     	companyname : ""
 					  });				  
-					$rootScope.success = 'Your account has been created and an email has been sent. Please verify your email to Log In!';
+					$rootScope.success = "We've sent you an account confirmation email. Please check your email and Log in. Resend confirmation";
 					$rootScope.error = '';			
 					reguser.first = '';
 					reguser.last = '';
