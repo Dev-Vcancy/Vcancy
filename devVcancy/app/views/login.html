@@ -15,8 +15,9 @@
                      <a href='#/register' style="text-transform: unset;" class="creatct">Create an Account</a>
                 </div>
                 
-                <div class='loginmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
-                <div ng-if="$root.invalid == 'mail'"><button  ng-click="lctrl.resendmail()"  class="btn red btn-block uppercase resenmailbtn">Resend Email</button></div>
+                <div class='loginmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}} <div ng-if="$root.invalid == 'mail'"><a  ng-click='lctrl.resendmail()'  href='javascript:void(0)' class='' 
+                                    style="text-decoration: underline;color: blue;">Resend confirmation</a></div></div>
+                
                 </div>
                 <div class='loginmsgvalidate' ng-if="$root.emailhandler"><div class="alert alert-success alert-dismissable fade in">{{$root.emailhandler}}</div></div>
                 

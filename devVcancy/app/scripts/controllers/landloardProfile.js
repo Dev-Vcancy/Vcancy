@@ -111,7 +111,8 @@ vcancyApp
             }, function(error) {
               // The Promise was rejected.
               console.error(error);
-              ldProfilectrl.error = "Profile Updated successfully"
+                confirm("Profile Updated successfully!");
+              //ldProfilectrl.error = "Profile Updated successfully"
             });
         }
 
@@ -237,11 +238,13 @@ vcancyApp
             reguserdbObj.ref('employee/' + custome).set(userarray, function(error){
                   if(error != null ){
                     console.log(error);
+                    confirm("User Not added Please Try again.");
                     $rootScope.invalid = 'regcpwd';         
                     $rootScope.error = 'User Not added Please Try again.';
                     $rootScope.success = '';
                   }else{
                     console.log('Done');
+                    confirm("User Added successfully!");
                     $rootScope.invalid = 'regcpwd';         
                     $rootScope.error = '';
                     $rootScope.success = 'User Added successfully!';

@@ -40,7 +40,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				 if(!firebase.auth().currentUser.emailVerified){
 				 	localStorage.setItem('RegEmail',email);
 					localStorage.setItem('RegPass', password);
-					$rootScope.error = 'Your new email is not verified. Please try again after verifying your email. If you not get anymail please resend varification mail';
+					$rootScope.error = "We've sent you an account confirmation email. Please check your email and Log in.";
 					$rootScope.invalid = 'mail';
 					authObj.$signOut();
 					$rootScope.user = null;
@@ -185,7 +185,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
                     	profilepic : 1,
                     	companyname : ""
 					  });				  
-					$rootScope.success = "We've sent you an account confirmation email. Please check your email and Log in. Resend confirmation";
+					$rootScope.success = "We've sent you an account confirmation email. Please check your email and Log in. ";
 					$rootScope.error = '';			
 					reguser.first = '';
 					reguser.last = '';
@@ -256,7 +256,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			
 			var forgotuserObj = $firebaseAuth();
 			forgotuserObj.$sendPasswordResetEmail(email).then(function() {
-				$rootScope.success = 'Password reset email sent in your inbox. Please check your email.';
+				$rootScope.success = 'Password reset email sent to your inbox. Please check your email.';
 				$rootScope.error = '';
 				vm.forgotuser.email = '';		
 			}).catch(function(error) {

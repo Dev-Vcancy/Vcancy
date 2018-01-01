@@ -3,8 +3,9 @@
             <div class="row bs-reset">
                 <div class="col-md-6 bs-reset mt-login-5-bsfix">
                     <div class="login-bg" style="background-image:url(../assets/pages/img/login/bg1.jpg)">
+                    <img src="../images/vcancy_logo.png" class="login-logo register-logo" alt="" />
                      <h1 class="register-h1">More than 675,000 property managers, landlords and tenants in 16,500 ZIP Codes use Vcancy to:</h1>
-                        <img src="../images/vcancy_logo.png" class="login-logo register-logo" alt="" /> </div>
+                         </div>
                 </div>
                 <div class="col-md-6 login-container bs-reset mt-login-5-bsfix">
                     <div class="login-content">
@@ -16,8 +17,9 @@
                                    <div class="form-group text-center" >
                                    <div class='regmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>
                                     
-                                    <div class='regmsgvalidate' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
-                                    <button  ng-click="lctrl.resendmail()"  class="btn red btn-block uppercase">Resend Email</button></div>
+                                    <div class='regmsgvalidate' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}} <a  ng-click='lctrl.resendmail()'  href='javascript:void(0)' class='uppercase' 
+                                    style="text-decoration: underline;">Resend confirmation</a></div>
+                                    </div>
                                    <div class="md-radio-sg">
                                         <label class="radio radio-inline"> 
                                              <input type="radio" required ng-model="lctrl.reguser.usertype" ng-value="1"  name="usertype" value="1">
@@ -89,7 +91,7 @@
                                 <div class="clearfix"></div>
                                                 <hr>
                                                 <p class='text-center'>Already have an account?</p>
-                                                    <a href='#/login'  class="btn blue btn-block" >Sign In <i class="zmdi zmdi-arrow-forward"></i></a>
+                                                    <a href='#/login'  class="btn blue btn-block" >SING IN </a>
                             </div>
                 </div>
                         <!-- BEGIN FORGOT PASSWORD FORM -->
