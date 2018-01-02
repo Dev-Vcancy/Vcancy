@@ -107,11 +107,20 @@ vcancyApp
 
             firebase.database().ref('users/' + landLordID).update(updatedata).then(function(){
               //confirm("Your Information updated!");
-             ldProfilectrl.success = "Profile Updated successfully"
+            // ldProfilectrl.success = "Profile Updated successfully"
+             if (confirm("Profile Updated successfully!") == true) {
+               // window.reload();
+              } else {
+                return false;
+              }
             }, function(error) {
               // The Promise was rejected.
               console.error(error);
-                confirm("Profile Updated successfully!");
+              if (confirm("Profile not Updated!") == true) {
+                return false;
+               
+              }
+                
               //ldProfilectrl.error = "Profile Updated successfully"
             });
         }
@@ -141,9 +150,10 @@ vcancyApp
                                 $rootScope.success = 'Your password has been updated!';
                                 confirm("Your password has been updated!");
                                  localStorage.setItem('password', newPassword);
-                             $rootScope.success = 'Your password has been updated';
+                                 
+                            /* $rootScope.success = 'Your password has been updated';
                              $rootScope.error = '';  
-                             $rootScope.invalid = '';
+                             $rootScope.invalid = '';*/
                             }).catch(function(error) {
                               // An error happened.
                                 $rootScope.invalid = 'regcpwd';         
@@ -153,16 +163,23 @@ vcancyApp
 
 
                     } else {
-                        $rootScope.invalid = 'regcpwd';         
+                           if(confirm("Passwords don't match.") == true){
+                              return false;
+                            }
+                        /*$rootScope.invalid = 'regcpwd';         
                         $rootScope.error = "Passwords don't match";
-                        $rootScope.success = '';
+                        $rootScope.success = '';*/
                     }
 
 
         	} else {
-                $rootScope.invalid = 'regcpwd';         
+
+                if(confirm("Passwords don't match.") == true){
+                  return false;
+                }
+                /*$rootScope.invalid = 'regcpwd';         
                 $rootScope.error = "Passwords don't match";
-                $rootScope.success = '';
+                $rootScope.success = '';*/
             }
         }
 

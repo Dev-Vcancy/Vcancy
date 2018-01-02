@@ -69,12 +69,20 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				 }
 				 
 			}).catch(function(error) {
+				//console.log(error);
 				if(error.message){
-					$rootScope.error = error.message;
+
+					if(error.message == "The email address is badly formatted."){
+							$rootScope.error = "Invalid Email.";
+					}else{
+						$rootScope.error = error.message;
+					}
+					
 				} 
 								
 				if(error.code === "auth/invalid-email"){
 					$rootScope.invalid = 'loginemail';
+
 				} else if(error.code === "auth/wrong-password"){
 					$rootScope.invalid = 'loginpwd';				
 				} else if(error.code === "auth/user-not-found"){
@@ -226,9 +234,17 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 					// Ends Here
 					// });
 				  }).catch(function(error) {
+				  	//console.log(error);
 					if(error.message){
-						$rootScope.error = error.message;
-						$rootScope.success = '';
+						if(error.message == "The email address is badly formatted."){
+								$rootScope.error = "Invalid Email.";
+								$rootScope.success = '';
+						}else{
+							$rootScope.error = error.message;
+							$rootScope.success = '';
+						}
+						//$rootScope.error = error.message;
+						
 					} 		
 					
 					if(error.code === "auth/invalid-email"){
