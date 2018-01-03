@@ -19,6 +19,10 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	vm.isDisabled = false;
 	vm.googleAddress = 0;
 	var oldtimeSlotLen = 0;
+	vm.city = '';
+	vm.province = '';
+	vm.postcode = '';
+	vm.country = '';
 	// console.log(vm.isDisabled);	
 	
 	firebase.database().ref('users/'+localStorage.getItem('userID')).once("value", function(snap) {
@@ -27,8 +31,60 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 	
 	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
       var address = vm.prop.address.getPlace();
+       var arrAddress = address.address_components;
+      console.log("address");
+      console.log(address);
 	  vm.googleAddress = 1;
 	  vm.prop.address = address.formatted_address;
+
+	  	var itemRoute='';
+		var itemLocality='';
+		var itemCountry='';
+		var itemPc='';
+		var itemSnumber='';
+
+		// iterate through address_component array
+		$.each(arrAddress, function (i, address_component) {
+		    console.log('address_component:'+i);
+
+		    if (address_component.types[0] == "route"){
+		        console.log(i+": route:"+address_component.long_name);
+		        itemRoute = address_component.long_name;
+		    }
+
+		    if (address_component.types[0] == "administrative_area_level_1"){
+		        console.log(i+": administrative_area_level_1:"+address_component.long_name);
+		        itemRoute = address_component.long_name;
+		    }
+
+		    if (address_component.types[0] == "locality"){
+		        console.log("town:"+address_component.long_name);
+		        itemLocality = address_component.long_name;
+		    }
+
+		    if (address_component.types[0] == "country"){ 
+		        console.log("country:"+address_component.long_name); 
+		        itemCountry = address_component.long_name;
+		    }
+
+		    if (address_component.types[0] == "postal_code_prefix"){ 
+		        console.log("pc:"+address_component.long_name);  
+		        itemPc = address_component.long_name;
+		    }
+
+		    if (address_component.types[0] == "street_number"){ 
+		        console.log("street_number:"+address_component.long_name);  
+		        itemSnumber = address_component.long_name;
+		    }
+		    if (address_component.types[0] == "postal_code"){ 
+		        console.log("postal_code:"+address_component.long_name);  
+		        itemSnumber = address_component.long_name;
+		        vm.postcode = address_component.long_name;
+		    }
+		    //return false; // break the loop   
+		});
+
+
 	  vm.addresschange();
 	  $scope.$apply();
 	});

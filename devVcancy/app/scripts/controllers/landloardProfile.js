@@ -5,7 +5,7 @@
 //=================================================
 
 vcancyApp
-    .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http) {
+    .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http','$uibModal', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http,$uibModal) {
         var vm = this;
         var landLordID = localStorage.getItem('userID');
         var password = localStorage.getItem('password');
@@ -20,6 +20,8 @@ vcancyApp
         vm.success = 0;
         vm.error = 0;
         vm.totaluser = 0;
+        vm.profilepic = '../assets/pages/media/profile/people19.png';
+        vm.companylogo = '../assets/pages/media/profile/people19.png';
 		        $rootScope.invalid = '';
             $rootScope.success = '';
             $rootScope.error = '';
@@ -51,6 +53,7 @@ vcancyApp
                     vm.isrentalsubmit = userdata.val().isrentalsubmit ;
                     vm.isshowingtime = userdata.val().isshowingtime;
                     vm.profilepic = userdata.val().profilepic;
+                    vm.companylogo = userdata.val().companylogo;
                     vm.companyname = userdata.val().companyname;
 
                    
@@ -184,6 +187,61 @@ vcancyApp
         }
 
         vm.profilestore = function(){
+           AWS.config.update({
+                      accessKeyId : 'AKIAI6FJLQDDJXI4LORA',
+                      secretAccessKey : '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'
+            });
+            AWS.config.region = 'us-west-2';
+                      
+            var bucket = new AWS.S3({params: {Bucket: 'sagar-vcancy-test/company-logo'}});
+                            var fileChooser = document.getElementById('file');
+                            var file = fileChooser.files[0];
+                            var filename = moment().format('YYYYMMDDHHmmss')+file.name; 
+                              filename = filename.replace(/\s/g,'');
+
+                              if(file.size > 3145728) {
+                                  alert('File size should be 3 MB or less.');
+                                  return false;
+                                } else if(!(filename.endsWith('.png')) 
+                                  && !(filename.endsWith('.jpg'))
+                                  && !(filename.endsWith('.jpeg')))  {
+                                    alert('Invalid file type.');
+                                    return false;
+                                }
+
+
+                            if (file) {
+                                var params = {Key: filename, ContentType: file.type, Body: file,StorageClass: "STANDARD_IA" , ACL : 'public-read'};
+                                bucket.upload(params).on('httpUploadProgress', function(evt) {
+                                console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total)+'%');
+                                }).send(function(err, data) {
+                                    //console.log(data.Location); return false;
+                                    if(data.Location != ''){
+                                        var landLordID = localStorage.getItem('userID');
+                                               var user = firebase.auth().currentUser;
+                                                  if (user) { 
+                                                      firebase.database().ref('users/' + landLordID).update({'companylogo':data.Location}).then(function(){
+                                                       
+                                                        if (confirm("Your Company Logo Picture updated successfully.") == true) {
+                                                            
+                                                          } else {
+                                                            return false;
+                                                          }
+                                                       }, function(error) {
+                                                        // The Promise was rejected.
+                                                        console.error(error);
+                                                        
+                                                      });
+                                                  } 
+                                    }
+                               
+                                });
+                            }else{
+                                alert("File Type is Invalid.");
+                                return false;
+                            }
+        } 
+     /*   vm.profilestore = function(){
            var landLordID = localStorage.getItem('userID');
           vm.error = 0;
             //alert("hfgjdfg");
@@ -208,9 +266,9 @@ vcancyApp
 
           var appfiles = $('#appfiles').val();
           var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-            filename = filename.replace(/\s/g,''); 
+            filename = moment().format('YYYYMMDDHHmmss')+filename.replace(/\s/g,''); 
 
-            var filepath = filename != '' ? "https://vcancy.ca/login/uploads/" + filename : appfiles;
+            
             console.log(filepath);
             if(filename != ''){
              vm.upload(appfiles, filename);
@@ -229,7 +287,7 @@ vcancyApp
             }
 
             console.log(filename, filepath, appfiles);
-        }
+        } */
 
        
          vm.newuserSubmit = function(newuser){
@@ -391,6 +449,89 @@ vcancyApp
           
         }
 
+      $scope.items = ['item1', 'item2', 'item3'];
+
+      $scope.open = function (size) {
+
+        var modalInstance = $uibModal.open({
+          templateUrl: 'myModalContent.html',
+          controller: 'ModalInstanceCtrl',
+          size: size,
+         
+        });
+
+        modalInstance.result.then(function (selectedItem) {
+          $scope.selected = selectedItem;
+        }, function () {
+          //$log.info('Modal dismissed at: ' + new Date());
+        });
+      };
+
+}]);
+
+vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http','$modal', '$uibModalInstance', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http,$modal,$uibModalInstance){
+
+           AWS.config.update({
+                      accessKeyId : 'AKIAI6FJLQDDJXI4LORA',
+                      secretAccessKey : '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'
+            });
+            AWS.config.region = 'us-west-2';
+
+        $scope.ok = function () {
+        
+                  var bucket = new AWS.S3({params: {Bucket: 'sagar-vcancy-test/profile-images'}});
+                  var fileChooser = document.getElementById('file');
+                  var file = fileChooser.files[0];
+                  var filename = moment().format('YYYYMMDDHHmmss')+file.name; 
+                    filename = filename.replace(/\s/g,'');
+
+                    if(file.size > 3145728) {
+                        alert('File size should be 3 MB or less.');
+                        return false;
+                      } else if(!(filename.endsWith('.png')) 
+                        && !(filename.endsWith('.jpg'))
+                        && !(filename.endsWith('.jpeg')))  {
+                          alert('Invalid file type.');
+                          return false;
+                      }
 
 
-}])
+                  if (file) {
+                      var params = {Key: filename, ContentType: file.type, Body: file,StorageClass: "STANDARD_IA" , ACL : 'public-read'};
+                      bucket.upload(params).on('httpUploadProgress', function(evt) {
+                      console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total)+'%');
+                      }).send(function(err, data) {
+                          //console.log(data.Location); return false;
+                          if(data.Location != ''){
+                              var landLordID = localStorage.getItem('userID');
+                                     var user = firebase.auth().currentUser;
+                                        if (user) { 
+                                            firebase.database().ref('users/' + landLordID).update({'profilepic':data.Location}).then(function(){
+                                             
+                                              if (confirm("Your profile Picture updated successfully.") == true) {
+                                                  $uibModalInstance.close();
+                                                } else {
+                                                  return false;
+                                                }
+                                             }, function(error) {
+                                              // The Promise was rejected.
+                                              console.error(error);
+                                              
+                                            });
+                                        } 
+                          }
+                     
+                      });
+                  }else{
+                      alert("File Type is Invalid.");
+                      return false;
+                  }
+                  
+              
+        };  
+
+        $scope.cancel = function () {
+          $uibModalInstance.dismiss('cancel');
+        };
+
+}]);

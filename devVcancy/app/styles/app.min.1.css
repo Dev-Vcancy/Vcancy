@@ -15675,3 +15675,19 @@ a.thumbnail.active {
     margin-bottom: 0;
     top: 40px;
 }
+
+.modal.in.ng-isolate-scope .modal-dialog {
+    top: 50%;
+    transform: translateY(-50%);
+}
+.modal.ng-isolate-scope button.btn.btn-primary {
+    background: #169ef4;
+    border: solid 1px #169ef4;
+}
+.modal.ng-isolate-scope .modal-body {
+    padding: 15px 25px;
+}
+.modal.ng-isolate-scope .modal-body .form-group{margin:0px;}
+.modal.ng-isolate-scope button.btn.btn-primary:hover{background:rgba(22,158,244,0.7);}
+.modal.ng-isolate-scope button.btn.btn-warning:hover{background: #169ef4;}
+.modal.ng-isolate-scope button.btn.btn-warning{background:rgba(22,158,244,0.7);border:solid 1px rgba(22,158,244,0.7);}
