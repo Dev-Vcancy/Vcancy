@@ -420,7 +420,17 @@ vcancyApp
 			templateUrl: 'views/viewproperties.html',
 			resolve: { authenticate: authenticate }
 		}) 
-		
+		.state('addunits', {
+			 url: '/addunits',
+			 templateUrl:'views/units.html',
+			 controller:'propertyCtrl',
+			 controllerAs: 'propctrl',
+			 params: {
+			      units: { dynamic: true },
+			      name: { dynamic: true }
+			  }
+			 
+		})
 		.state ('editprop', {
 			url: '/editprop/{propId}',
 			controller: 'propertyCtrl',

@@ -41,14 +41,14 @@
                                    </div>
                                    
                                    <div class="form-group">
-                                    <label class="radio-inline"><input type="radio" name="units" ng-model="propctrl.prop.units" value="single">Single</label>
-                                    <label class="radio-inline"><input type="radio" name="units" ng-model="propctrl.prop.units" value="multipart">Multiple</label>
+                                    <label class="radio-inline"><input type="radio" name="units" ng-model="propctrl.prop.units" value="single" required="true">Single</label>
+                                    <label class="radio-inline"><input type="radio" name="units" ng-model="propctrl.prop.units" value="multiple" required="true">Multiple</label>
 
                                    </div>
 
-                                   <div class="form-group" ng-show="propctrl.prop.units == 'multipart'">
+                                   <div class="form-group" ng-show="propctrl.prop.units == 'multiple'">
                                     <label>No of Units</label>
-                                     <input type="number"  ng-model="propctrl.prop.noofunits"  required name="noofunits" class="form-control" >
+                                     <input type="number"  ng-model="propctrl.prop.noofunits"  ng-required="propctrl.prop.units == 'multiple'" name="noofunits" class="form-control" >
 
                                    </div>
                                    <div class="form-group">
@@ -57,10 +57,10 @@
                                    </div>
                                    <div class="form-group">
                                     
-                                     <input type="text"   ng-model="propctrl.prop.city"  required name="city" class="form-control" readonly="true" placeholder="City">
+                                     <input type="text"   ng-model="propctrl.prop.city"  required name="city" class="form-control"  placeholder="City">
 
-                                     <input type="text"   ng-model="propctrl.prop.province"  required name="province" class="form-control" readonly="true" placeholder="Province">
-                                     <input type="text"   ng-model="propctrl.prop.postcode"  required name="postcode" class="form-control" readonly="true" placeholder="Postcode">
+                                     <input type="text"   ng-model="propctrl.prop.province"  required name="province" class="form-control" placeholder="Province">
+                                     <input type="text"   ng-model="propctrl.prop.postcode"  required name="postcode" class="form-control"  placeholder="Postcode">
                                    </div>
 
                                    <div class="form-group">
@@ -101,7 +101,7 @@
                               <div class="col-lg-6 col-xs-12 col-sm-12">
                                  <button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
                                  <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
-                                  <button type="submit" ng-disabled="addpropForm.$invalid || propctrl.isDisabled"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
+                                  <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
                               </div>
                            </div>
 

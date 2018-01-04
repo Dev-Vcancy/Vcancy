@@ -1,0 +1,67 @@
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
+<section id="main" class="profile-page-both">
+   <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+   <section class="new_dashbord" id="content">
+      <div class="container">
+         <div class="page-content-wrapper">
+            <div class="page-content" style="min-height: 1434px;">
+               <h1 class="page-title">  {{propctrl.mode}} Units </h1>
+               <div class="profile">
+               		<h3>Create units for {{$root.propname}}</h3>  {{propctrl.noofunits}}
+               		<form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" >	
+
+               		<div class="mt-bootstrap-tables">
+                        <div class="row">
+                            <div class="col-md-12">
+									   <div class="portlet light ">
+									      
+									     	<table class="table table-bordered">
+											    <thead>
+											      <tr>
+											        <th>Units</th>
+											        <th>Address</th>
+											        <th>SQ.ft</th>
+											        <th>Rent</th>
+											        <th>Status</th>
+											        <th></th>
+											      </tr>
+											    </thead>
+											    <tbody>
+											      <tr  ng-repeat="i in propctrl.getNumber( propctrl.noofunits) track by $index">
+											        <td><input type="number" name="number" ng-model="propctrl.units.number[$index]" ></td>
+											        <td><input type="text" name="text" ng-model="propctrl.units.text[$index]" ></td>
+											        <td><input type="number" name="sqft" ng-model="propctrl.units.sqft[$index]" ></td>
+											        <td><input type="number" name="rent" ng-model="propctrl.units.rent[$index]" ></td>
+											        <td><select data-placeholder="Status" class="form-control" name="status" ng-model="propctrl.units.status[$index]"   required class="w-100 localytics-chosen" >
+                                       <option value="rented">Rented</option>
+                                       <option value="Available">Available</option>
+                                       <option value="sold">Sold</option>
+                                       
+                                    </select></td>
+											        <td>Details</td>
+											      </tr>
+											     
+											    </tbody>
+											  </table>
+									   </div>
+									</div>
+                            
+                        </div>
+                        
+<div class="row">
+                              <div class="col-lg-6 col-xs-12 col-sm-12">
+                                 <button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
+                                 <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
+                                  <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
+                              </div>
+                           </div>
+
+
+               		</form>
+
+               </div>
+            </div>
+        </div>
+    </div>
+   </section>
+  </section>
