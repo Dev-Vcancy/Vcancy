@@ -15691,3 +15691,50 @@ a.thumbnail.active {
 .modal.ng-isolate-scope button.btn.btn-primary:hover{background:rgba(22,158,244,0.7);}
 .modal.ng-isolate-scope button.btn.btn-warning:hover{background: #169ef4;}
 .modal.ng-isolate-scope button.btn.btn-warning{background:rgba(22,158,244,0.7);border:solid 1px rgba(22,158,244,0.7);}
+
+
+
+.newfrnn .fg-label {
+    top: -15px;
+}
+
+.newfrnn .fg-float .fg-toggled .fg-label{top:-5px;}
+
+.newfrnn .fg-label {
+    -webkit-transition: all;
+    -o-transition: all;
+    transition: all;
+    -webkit-transition-duration: 200ms;
+    transition-duration: 200ms;
+    position: absolute;
+    top: 5px;
+    font-weight: 400;
+    color: #959595;
+    pointer-events: none;
+    z-index: 1;
+    left: 0;
+    white-space: nowrap;
+}
+
+.newfrnn .threeside .fg-line:not(.form-group){width:33.33%;}
+.newfrnn .threeside .fg-line.fg-toggled:after {
+    width: calc(100% - 30px);
+    left: 0px;right:0;margin:0 auto;
+}
+.newfrnn .threeside .fg-label{left:15px;}
+
+.newfrnn .form-control:not(.fc-alt){-webkit-appearance:inherit;
+    -moz-appearance:inherit;
+    appearance:inherit;}
+
+    .addunitsForm input {
+    border: 0px;
+    border-bottom: 1px solid #333;
+    width: 100%;
+}
+
+.addunitsForm td {
+    padding: 10px 15px !important;
+    margin: 0 !important;
+    vertical-align: middle !important;
+}

@@ -4,7 +4,7 @@
 // PROPERTY
 //=================================================
 
-vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'slotsBuildService', 'emailSendingService', '$http',  function($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, slotsBuildService, emailSendingService, $http) {
+vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'slotsBuildService', 'emailSendingService', '$http', '$location', '$log', function($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, slotsBuildService, emailSendingService, $http,$location,$log) {
     $rootScope.invalid = '';
     $rootScope.success = '';
     $rootScope.error = '';
@@ -12,7 +12,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     var todaydate = new Date();
     var dateconfig = new Date(new Date().setMinutes(0));
     console.log(dateconfig, todaydate);
-    console.log($stateParams.units);
     var vm = this;
     vm.propsavail = 1;
     vm.timeslotmodified = "false";
@@ -23,19 +22,28 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     vm.province = '';
     vm.postcode = '';
     vm.country = '';
-    vm.noofunits = 2;
-    $rootScope.noofunits = 5;
-    $rootScope.propname = "Sagar";
-    if($stateParams.units > 0){
-        $rootScope.noofunits = $stateParams.units;
-        localStorage.setItem("noofunits",$rootScope.noofunits)
-        localStorage.setItem("propname",$rootScope.name)
+    vm.noofunits = 0;
+    $rootScope.propname = "";
+    var url = $location.absUrl();
+    
+    vm.localpropID = '';
+    vm.localunits = '';
+    vm.localpropName = '';
+
+    if( url.endsWith('addunits') == true){
+        if(localStorage.getItem("propID") != null &&  localStorage.getItem("units") != null && localStorage.getItem("propName") != null){
+               vm.localpropID =  localStorage.getItem("propID");
+            vm.localunits = vm.noofunits = parseInt(localStorage.getItem("units"));
+            vm.localpropName =   $rootScope.propname =  localStorage.getItem("propName");
+               
+        }else{
+            $state.go('addprop');
+        }
     }
 
-
-    alert(localStorage.getItem("propID"));
+   /* alert(localStorage.getItem("propID"));
     alert(localStorage.getItem("units"));
-    alert(localStorage.getItem("propName"));
+    alert(localStorage.getItem("propName"));*/
     // console.log(vm.isDisabled);	
 
     firebase.database().ref('users/' + localStorage.getItem('userID')).once("value", function(snap) {
@@ -58,7 +66,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         var street_number = '';
         // iterate through address_component array
         $.each(arrAddress, function(i, address_component) {
-            console.log('address_component:' + i);
+         //   console.log('address_component:' + i);
             if (address_component.types[0] == "street_number") {
                 console.log("street_number:" + address_component.long_name);
                 itemSnumber = address_component.long_name;
@@ -66,45 +74,45 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             }
 
             if (address_component.types[0] == "route") {
-                console.log(i + ": route:" + address_component.long_name);
+            //    console.log(i + ": route:" + address_component.long_name);
                 itemRoute = address_component.long_name;
                 var route = address_component.long_name;
                 vm.prop.address = street_number + address_component.long_name;
             }
 
             if (address_component.types[0] == "administrative_area_level_1") {
-                console.log(i + ": administrative_area_level_1:" + address_component.short_name);
+             //   console.log(i + ": administrative_area_level_1:" + address_component.short_name);
                 itemRoute = address_component.short_name;
                 vm.prop.province = address_component.short_name;
             }
 
             if (address_component.types[0] == "locality") {
-                console.log("town:" + address_component.long_name);
+            //   console.log("town:" + address_component.long_name);
                 itemLocality = address_component.long_name;
                 vm.prop.city = address_component.long_name;
             }
 
             if (address_component.types[0] == "country") {
-                console.log("country:" + address_component.long_name);
+           //     console.log("country:" + address_component.long_name);
                 itemCountry = address_component.long_name;
                 vm.prop.country = address_component.long_name;
             }
 
             if (address_component.types[0] == "postal_code_prefix") {
-                console.log("pc:" + address_component.long_name);
+           //     console.log("pc:" + address_component.long_name);
                 itemPc = address_component.long_name;
             }
 
 
             if (address_component.types[0] == "postal_code") {
-                console.log("postal_code:" + address_component.long_name);
+            //    console.log("postal_code:" + address_component.long_name);
                 itemSnumber = address_component.long_name;
 
                 vm.prop.postcode = address_component.long_name;
             }
 
             if (address_component.types[0] == "sublocality_level_1") {
-                console.log(i + ": sublocality_level_1:" + address_component.long_name);
+             //   console.log(i + ": sublocality_level_1:" + address_component.long_name);
                 itemRoute = address_component.long_name;
                 vm.prop.address = address_component.long_name;
                 //  var route = address_component.long_name;
@@ -119,9 +127,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     vm.copy = "Copy Link";
     $scope.copySuccess = function(e) {
-        console.info('Action:', e.action);
-        console.info('Text:', e.text);
-        console.info('Trigger:', e.trigger);
+       // console.info('Action:', e.action);
+        //console.info('Text:', e.text);
+        //console.info('Trigger:', e.trigger);
         vm.copy = "Copied";
         $scope.$apply();
     };
@@ -138,7 +146,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         });
         vm.prop.multiple[slotlen] = true;
         vm.newTime = true;
-        console.log(vm.newTime);
+        //console.log(vm.newTime);
     }
 
     // to remove timeslots
@@ -468,7 +476,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 localStorage.setItem("units",multiple);
                                 localStorage.setItem("propName",name);
 
-                                $state.go('addunits',{units: multiple,name:name});
+                                $state.go('addunits');
                             }else{
                                 $state.go('viewprop');
                             }
@@ -713,12 +721,98 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
     vm.submitunits = function(units){
-        console.log(units);
+
+        console.log( vm.localpropID +" "+ vm.localunits +" "+vm.localpropName);
         var num = units.number;
         var rent = units.rent;
         var sqft = units.sqft;
         var status = units.status;
         var text = units.text;
-        console.log(num);
+        var fullformarary = [];
+
+        var number = [];
+        var rentarray = [];
+        var sqftarray = [];
+        var statusarray = [];
+        var textarray = [];
+
+        for (var prop in num) {
+          if (num.hasOwnProperty(prop)) { 
+            number.push(num[prop]);
+            //alert("prop: " + prop + " value: " + num[prop])
+          }
+        }
+
+        for (var prop in rent) {
+          if (rent.hasOwnProperty(prop)) { 
+            rentarray.push(rent[prop]);
+          }
+        }
+
+        for (var prop in sqft) {
+          if (sqft.hasOwnProperty(prop)) { 
+            sqftarray.push(sqft[prop]);
+          }
+        }
+
+        for (var prop in status) {
+          if (status.hasOwnProperty(prop)) { 
+            statusarray.push(status[prop]);
+          }
+        }
+
+        for (var prop in text) {
+          if (text.hasOwnProperty(prop)) { 
+            textarray.push(text[prop]);
+          }
+        }
+
+        var totalunits = 0;
+        for(var i = 0; i < number.length; i++){
+           
+            fullformarary.push({unitnumber:number[i],address:textarray[i],rent:rentarray[i],status:statusarray[i],sqft:statusarray[i]});
+            totalunits++;
+        }
+
+        
+      
+         firebase.database().ref('properties/' + vm.localpropID).update({unitlists:fullformarary,totalunits:totalunits}).then(function(){
+              if (confirm("Units added successfully!") == true) {
+                    localStorage.removeItem('propID');
+                    localStorage.removeItem('units');
+                    localStorage.removeItem('propName');
+                    $state.go('viewprop');
+              } else {
+                return false;
+              }
+            }, function(error) {
+              if (confirm("Units Not added Please Try again!") == true) {
+                return false;
+              }
+            });
+        
     }
+
+
+     $scope.items = [
+    'The first choice!',
+    'And another choice for you.',
+    'but wait! A third!'
+  ];
+
+  $scope.status = {
+    isopen: false
+  };
+
+  $scope.toggled = function(open) {
+    $log.log('Dropdown is now: ', open);
+  };
+
+  $scope.toggleDropdown = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.status.isopen = !$scope.status.isopen;
+  };
+
+  $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
 }])

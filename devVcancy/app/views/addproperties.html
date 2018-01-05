@@ -1,187 +1,144 @@
-<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
-<link href = "styles/datepicker3.css"
-         rel = "stylesheet">
-<section id="main">
-    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
+<section id="main" class="profile-page-both">
+   <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+   <section class="new_dashbord" id="content">
+      <div class="container">
+         <div class="page-content-wrapper">
+            <div class="page-content" style="min-height: 1434px;">
+               <h1 class="page-title">  {{propctrl.mode}} a Property </h1>
+               <div class="profile">
+                  <div class="tabbable-line tabbable-full-width">
+                     <form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" role="form"  enctype="multipart/form-data"> 
+                        <input type="hidden" name="landlordID" ng-model="propctrl.prop.landlordID" class="form-control" >
+                        <input type="hidden" name="propID" ng-model="propctrl.prop.propID" class="form-control">
 
-    <section id="content">
+                           <div class='message' ng-if="$root.error != ''">
+                              <div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
+                           </div>
+                           <div class='message' ng-if="$root.success != ''">
+                              <div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
+                           </div>
 
-        <div class="container">
-			<div class="block-header text-center">
-				<h1>{{propctrl.mode}} Property</h1> 
-            </div>	
-			<div class="loader" ng-if="propctrl.loader">
-	            <div class="preloader pl-xl">
-	                <svg class="pl-circular" viewBox="25 25 50 50">
-	                    <circle class="plc-path" cx="50" cy="50" r="20"/>
-	                </svg>
-	            </div>
-	      	</div>
-			<div class="row">
-				<div class="col-sm-12 card">
-					<form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" role="form" novalidate>	
-						<input type="hidden" name="landlordID" ng-model="propctrl.prop.landlordID" class="form-control" >
-						<input type="hidden" name="propID" ng-model="propctrl.prop.propID" class="form-control">
-						
-						<div class='message' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>	
-						<div class='message' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div></div>
-						<div class="card-header" style="overflow:auto;"><h1  class="pull-left" >{{propctrl.mode}}  Property</h1>						
-							<div class="pull-right fileinput {{propctrl.prop.propimg == ''? 'fileinput-new' : 'fileinput-exists'}}" data-provides="fileinput">
-								<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100px; height: 74px; border:1px solid #ccc;">
-								<img src="{{propctrl.prop.propimg}}" style="width:100%; margin-top:0 !important;"/>
-								</div>
-								<div>
-									<span class="btn btn-info btn-file">
-										<span class="fileinput-new">Add image</span>
-										<span class="fileinput-exists">Change</span>
-										<input type="hidden" ng-model="propctrl.prop.propimg" name="propimg" id="propimg" value="{{propctrl.prop.propimg}}">
-										<input type="file" >
-									</span>
-									<a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
-								</div>
-							</div>						
-						</div>
-						<div class="card-body card-padding">						
-							
-							<div class="col-sm-2 m-b-20">
-								<div class="toggle-switch" data-ts-color="blue">
-									<label for="ts3" class="ts-label">Active</label>
-									<input name="propstatus" ng-model="propctrl.prop.propstatus" id="ts3" type="checkbox" hidden="hidden">
-									<label for="ts3" class="ts-helper"></label>
-								</div>
-							</div>
-						   <div class="col-sm-3 m-b-20" >                
-								<select chosen="" class="form-control pointer" name="proptype" ng-model="propctrl.prop.proptype" ng-change="propctrl.unitsOptional('house')"  required data-placeholder="Prop type" class="w-100 localytics-chosen" >
-									<option value="">Property type</option>
-									<option value="house">House</option>
-									<option value="townhouse">Town House</option>
-									<option value="apartment">Apartment</option>
-									<option value="condo">Condo</option>
-									<option value="coop">Co-op</option>
-									<option value="coop">Other</option>
-								</select>
-							</div>
 
-							<div class="col-sm-2 m-b-20">
-								<input type="text" id="units" name="units" ng-model="propctrl.prop.units" ng-blur="propctrl.unitsClear('house')"  required class="form-control" placeholder="Unit number">
-							</div>
-							<div class="col-sm-3 m-b-20 input-group" style="float:left;">
-								<span class="input-group-addon">$</span>
-								<input type="text" id="rent" name="rent" ng-model="propctrl.prop.rent" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" required class="form-control" placeholder="Rent">
-							</div>
+                           <div class="row">
+                           
+                                 <div class="col-lg-6 col-xs-12 col-sm-12 newfrnn">
+                                   
+<div class="form-group fg-float">
+                                   <div class="fg-line">
+<input required ng-model="propctrl.prop.name" name="name" required="true"  type="text" class="form-control w-100 phone" id="" placeholder="">
+<label class="fg-label" for="text">Property Name:</label>
+</div>
+</div>
 
-							<div class="col-sm-2 m-b-20">
-								<div class="toggle-switch" data-ts-color="blue">
-									<label for="ts1" class="ts-label">Shared</label>
-									<input name="shared" ng-model="propctrl.prop.shared" id="ts1" type="checkbox" hidden="hidden" style="display:inline">
-									<label for="ts1" class="ts-helper"></label>
-								</div>
-							</div>
-							
-							<div class="col-sm-12 m-b-20">
-								<input type="text" id="address" gm-places-autocomplete  ng-model="propctrl.prop.address" ng-change="propctrl.addresschange()" required name="address" class="form-control" placeholder="Address">
-							</div>
-							
-							<div class="col-sm-12 m-b-20 time_slot">
-								<h4 class="m-b-20 fw">Add showing time slots: <button type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="propctrl.addTimeSlot(propctrl.timeSlot.length)" class="btn btn-warning pull-right"><i class="zmdi zmdi-plus zmdi-hc-fw" style="font-size:18px;" ></i></button></h4>
-								
-								<div class="row" ng-repeat="x in propctrl.timeSlot">
-									<div class="col-sm-1 fw hidden-sm hidden-md hidden-lg">									
-										<button type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="propctrl.removeTimeSlot($index)" class="btn btn-xs btn-danger pull-right"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
-									</div>
-									<div class="col-sm-3 m-b-10">
-										<div class="col-sm-12" ><p class="m-b-10">Date</p></div>
-										<div class="date-picker input-group" ng-class="{ 'is-opened': x.opened == true }" disable-link21>
-											<span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
-											<div class="fg-line" ng-class="{ 'fg-toggled': x.opened == true }">
-												<input readonly='true' id="datepickerprop{{$index}}"  type="text" class="form-control pointer" ng-model="propctrl.prop.date[$index]" name = "date[]"  placeholder="Select Date" />
+<div class="clearfix"></div>
+                                   <div class="form-group ">
+                                    <label>Select Property Type:</label>
+                                    <select chosen="" class="form-control" name="proptype" ng-model="propctrl.prop.proptype" ng-change="propctrl.unitsOptional('house')"  required data-placeholder="Prop type" class="w-100 localytics-chosen" >
+                                       <option value="">Property type</option>
+                                       <option value="house">House</option>
+                                       <option value="townhouse">Town House</option>
+                                       <option value="apartment">Apartment</option>
+                                       <option value="condo">Condo</option>
+                                       <option value="coop">Co-op</option>
+                                       <option value="coop">Other</option>
+                                    </select>
+                                   </div>
+                                   
+                                   <div class="form-group">
+                                    <label class="radio-inline"><input type="radio" name="units" ng-model="propctrl.prop.units" value="single" required="true">Single</label>
+                                    <label class="radio-inline"><input type="radio" name="units" ng-model="propctrl.prop.units" value="multiple" required="true">Multiple</label>
+
+                                   </div>
+
+                                  
+
+                                   <div class="form-group fg-float" ng-show="propctrl.prop.units == 'multiple'">
+                                   <div class="fg-line">
+<input type="number"  ng-model="propctrl.prop.noofunits"  ng-required="propctrl.prop.units == 'multiple'" name="noofunits" class="form-control w-100 phone" id="" placeholder="Address">
+<label class="fg-label" for="text">No of Units:</label>
+</div>
+</div>
+                                   
+
+                                   <div class="form-group fg-float">
+                                   <div class="fg-line">
+<input id="address" gm-places-autocomplete  ng-model="propctrl.prop.address" ng-change="propctrl.addresschange()" required name="address" class="form-control w-100 phone" id="" placeholder="Address">
+<label class="fg-label" for="text">Street Address:</label>
+</div>
+</div>
+
+
+<div class="form-group fg-float threeside row">
+                                   <div class="fg-line col-xs-4">
+<input placeholder="City" ng-model="propctrl.prop.city" required name="city" class="form-control w-100 phone"  />
+
+</div>
+
+<div class="fg-line col-xs-4">
+<input type="text"  placeholder="Province"   ng-model="propctrl.prop.province"  required name="province" class="form-control w-100 phone" />
+
+</div>
+
+<div class="fg-line col-xs-4">
+<input type="text"   ng-model="propctrl.prop.postcode"  required name="postcode" class="form-control w-100 phone">
+<label class="fg-label" for="text">Postcode:</label>
+</div>
+<div class="clearfix"></div>
+</div>
+
+<div class="form-group fg-float">
+                                   <div class="fg-line">
+<input type="text"   ng-model="propctrl.prop.country"  required name="country" class="form-control w-100 phone" id="" placeholder="Address">
+<label class="fg-label" for="text">Street Address:</label>
+</div>
+</div>
+
+
+                                  
+
+
+
+                                 </div>
+                                 <div class="col-lg-6 col-xs-12 col-sm-12">
+                                       
+                                          <span>Upload Image</span>
+                                             <div class="form-group">
+
+                                               <div class="fileinput fileinput-new" data-provides="fileinput">
+
+                                                   <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;margin:10px 0px;">
+                                                       <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> </div>
+                                                   <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                                   <div>
+                                                       <span class="btn default btn-file">
+                                                           <span class="fileinput-new"> Select image </span>
+                                                           <span class="fileinput-exists"> Change </span>
+                                                           <input type="file" name="file" id="file" value="dataFile" required="">
+                                                        </span>
+                                                       <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                                   </div>
+                                               </div>
                                                
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-2 m-b-10">
-										<div class="col-sm-12"><p class="m-b-10">Time From</p></div>
-										<div class="time-picker input-group">
-											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
-											 <div uib-timepicker ng-model="propctrl.prop.fromtime[$index]" name = "fromtime[]" ng-change="propctrl.datetimeslotchanged($index)" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian" new-time="propctrl.newTime" id="fromtime{{$index}}"></div>
-											<!-- <div class="fg-line" ng-class="{ 'fg-toggled': x.timeopened == true }"> -->
-												<!-- <input ng-click="propctrl.timeopen($event, x)" type="text" class="form-control" uib-timepicker ng-model="propctrl.propctrl.prop.time" hour-step="1" minute-step="1" show-meridian="ismeridian" name = "time[]" is-open="x.timeopened" ng-required="true" close-text="Close" placeholder="Select Time" /> -->
-											<!-- </div> -->
-										</div>
-									</div>
-									<div class="col-sm-2 m-b-10">
-										<div class="col-sm-12"><p class="m-b-10">Time To</p></div>
-										<div class="time-picker input-group">
-											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
-											 <div uib-timepicker ng-model="propctrl.prop.to[$index]" name = "to[]" ng-change="propctrl.datetimeslotchanged($index)" hour-step="propctrl.hstep" minute-step="propctrl.mstep" show-meridian="propctrl.ismeridian" new-time="propctrl.newTime" id="to{{$index}}"></div>
-											<!-- <div class="fg-line" ng-class="{ 'fg-toggled': x.timeopened == true }"> -->
-												<!-- <input ng-click="propctrl.timeopen($event, x)" type="text" class="form-control" uib-timepicker ng-model="propctrl.propctrl.prop.time" hour-step="1" minute-step="1" show-meridian="ismeridian" name = "time[]" is-open="x.timeopened" ng-required="true" close-text="Close" placeholder="Select Time" /> -->
-											<!-- </div> -->
-										</div>
-										<!-- <div class="time-picker input-group" >  -->
-											<!-- <span class="input-group-addon"><i class="zmdi zmdi-alarm ma-icon"></i></span> -->
-											<!-- <input ng-click="open($event)" ps-input-time sy-timepicker-popup="HH:mm:ss" class="form-control" ng-model="propctrl.prop.to" show-meridian="false" is-open="opened" ng-controller="syTimepickerController"/> -->
-										<!-- </div> -->
-									</div>
+                                           </div>
 
-									<div class="col-sm-2 m-b-10">
-										<div><p class="m-b-10">Invitation Limit </p></div>
-										<input type="text" required id="limit"  ng-pattern="/^([1-9][0-9]*)$/" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.limit[$index]" name="limit[]" class="form-control person_limit" placeholder="Enter a number e.g 20">
+                                 </div>
+                                
 
-									</div>
-									<div class="col-sm-2 m-b-10">
-										<div><p class="m-b-10">Multiple Visitors</p></div>
-										<label class="custom_tooltip checkbox checkbox-inline m-r-20 multiple_visiter">
-											<input type="checkbox" tooltip-placement="bottom" uib-tooltip="" ng-change="propctrl.datetimeslotchanged($index)"  ng-model="propctrl.prop.multiple[$index]">
-											<i class="input-helper"></i>
-											<span class="tooltiptext">This allows multiple renters to view the unit at the same time</span>
-										</label>
-									</div>
-									<div class="col-sm-1 hidden-xs">									
-										<button  type="button" tooltip-class="tooltip-red" uib-tooltip="Remove" data-ng-click="propctrl.removeTimeSlot($index)" class="btn btn-xs btn-danger pull-right"><i class="zmdi zmdi-minus zmdi-hc-fw" style="font-size:18px;" ></i></button>
-									</div>
-									<div class="col-sm-12">	
-										<div  ng-if="propctrl.prop.invalid[$index]"  class="alert alert-danger" style="padding:3px !important;text-align:center">Each renter has a 30 min slot unless the checkbox is clicked</div>
-									</div>
-									<div class="col-sm-12">	
-										<div  ng-if="propctrl.prop.timeinvalid[$index]"  class="alert alert-danger" style="padding:3px !important;text-align:center">Minimum 30 min time slot is allowed.</div>
-									</div>
-									<div class="col-sm-12">	
-										<div  ng-if="propctrl.prop.timeoverlapinvalid[$index]"  class="alert alert-danger" style="padding:3px !important;text-align:center">Time slot overlapping is not allowed.</div>
-									</div>
-								</div>
-							</div>
-							
-							<div class="m-t-10 fw">
-								<div class="col-sm-12 submit_btn">
-									<button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
-									<button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
-									<!-- <button type="button" ng-click="propctrl.delprop(propctrl.prop.propID)" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Delete'">Delete</button> -->
-									<button type="submit" ng-disabled="addpropForm.$invalid || propctrl.isDisabled"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
-								</div>
-							</div>
+                           </div>
+                           <div class="row">
+                              <div class="col-lg-6 col-xs-12 col-sm-12">
+                                 <button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
+                                 <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
+                                  <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
+                              </div>
+                           </div>
 
-							<div class="m-t-10 fw">
-								<div class="col-xs-10 col-md-offset-3 col-md-5 m-b-10">
-									<input type="text" readonly="true" placeholder="LINK GENERATED HERE" ng-model="propctrl.prop.propertylink" class="form-control" name="propertylink" id="propertylink"/>
-								</div>
-								<div class="col-xs-2 col-md-1">
-									<button type="button" class="btn btn-info" tooltip-class="tooltip-cyan" uib-tooltip="{{propctrl.copy}}" ng-copy="propctrl.prop.propertylink" onSuccess="propctrl.copySuccess(e)" ><i class="zmdi zmdi-copy zmdi-hc-fw" style="font-size:25px;" ></i></button>
-								</div>
-                                <h4 class="col-xs-2 col-md-3 .p-l-0 count">Click save to generate link</h4>
-							</div>
-							<div class="clearfix"></div>
-						</div>
-					</form>			
-				</div>
-			</div>
-		</div>				
-    </section>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
 </section>
-
-<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
-<script type="text/javascript">
-	Waves.init();
-	Waves.attach('.btn');
-</script>  
-        

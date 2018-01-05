@@ -1,4 +1,4 @@
-<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header> 
 <section id="main" class="profile-page-both">
    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
    <section class="new_dashbord" id="content">
@@ -7,8 +7,8 @@
             <div class="page-content" style="min-height: 1434px;">
                <h1 class="page-title">  {{propctrl.mode}} Units </h1>
                <div class="profile">
-               		<h3>Create units for {{$root.propname}}</h3>  {{propctrl.noofunits}}
-               		<form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" >	
+               		<h3>Create units for {{$root.propname}}</h3>  
+               		<form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" class="addunitsForm">	
 
                		<div class="mt-bootstrap-tables">
                         <div class="row">
@@ -28,7 +28,7 @@
 											    </thead>
 											    <tbody>
 											      <tr  ng-repeat="i in propctrl.getNumber( propctrl.noofunits) track by $index">
-											        <td><input type="number" name="number" ng-model="propctrl.units.number[$index]" ></td>
+											        <td><input type="number" name="number" ng-model="propctrl.units.number[$index]" class=""></td>
 											        <td><input type="text" name="text" ng-model="propctrl.units.text[$index]" ></td>
 											        <td><input type="number" name="sqft" ng-model="propctrl.units.sqft[$index]" ></td>
 											        <td><input type="number" name="rent" ng-model="propctrl.units.rent[$index]" ></td>

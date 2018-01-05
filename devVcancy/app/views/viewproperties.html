@@ -1,5 +1,5 @@
 
-<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header> 
 
 <section id="main">
     <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
@@ -30,13 +30,26 @@
 			</div>
 
 			<div class="row">
-				<div class="col-sm-12">
-					<div class="col-md-6 property_view" ng-repeat="(key, x) in propctrl.viewprops" ng-show="propctrl.propsavail">
+				<div class="col-sm-12 thumbhimnshu">
+					<div class="col-md-4 property_view" ng-repeat="(key, x) in propctrl.viewprops" ng-show="propctrl.propsavail">
 						<div class="card white_block p-10">
 							<div class="property_thumb">
-								<img class="img-responsive" src="{{x.propimg}}" >
+								<div class="btn-group" uib-dropdown dropdown-append-to-body>
+            <button id="btn-append-to-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle>
+             <i class="fa fa-chevron-right"></i>
+            </button>
+           
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-to-body">
+              <li role="menuitem"><a href="#">Action</a></li>
+              <li role="menuitem"><a href="#">Another action</a></li>
+              <li role="menuitem"><a href="#">Something else here</a></li>
+              <li class="divider"></li>
+              <li role="menuitem"><a href="#">Separated link</a></li>
+            </ul>
+          </div>
+								<img width="640" height="220" class="img-responsive" src="{{x.propimg}}" />
 							</div>
-
+							<div class="clearfix"></div>
 							<div class="property_detail">					
 								<h3><a tooltip-placement="top" uib-tooltip="{{x.units}} - {{x.address}}">{{x.units}} <span ng-hide="x.units == ' '">-</span> {{x.address}}</a></h3>
         						<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===true">
@@ -51,7 +64,9 @@
 								<span class="m-l-10"><input type="hidden" disabled="true" ng-model="x.propertylink" id="propertylink"/>
 								<a class="copylink_view" ><i tooltip-class="tooltip-blue" uib-tooltip="{{propctrl.copy}}" ng-copy="x.propertylink" onSuccess="propctrl.copySuccess(e)" class="zmdi zmdi-copy zmdi-hc-fw" style="font-size:25px;" ></i></a></span></span>
 							</div>
+							<div class="clearfix"></div>
 						</div>
+						<div class="clearfix"></div>
 					</div>
 				
 				</div>
