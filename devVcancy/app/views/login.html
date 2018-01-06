@@ -14,7 +14,22 @@
                     <span class="form-subtitle " style="text-transform: lowercase;">Or, </span>
                      <a href='#/register' style="text-transform: unset;" class="creatct">Create an Account</a>
                 </div>
-                
+                <div class="container">
+   
+    
+    <!-- display profile info -->
+    <div id="profileData" style="display: none;">
+        <p><a href="javascript:void(0);" onClick="logout()">Logout</a></p>
+        <div id="picture"></div>
+        <div class="info">
+            <p id="name"></p>
+            <p id="intro"></p>
+            <p id="email"></p>
+            <p id="location"></p>
+            <p id="link"></p>
+        </div>
+    </div>
+</div>
                 <div class='loginmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}} <div ng-if="$root.invalid == 'mail'"><a  ng-click='lctrl.resendmail()'  href='javascript:void(0)' class='' 
                                     style="text-decoration: underline;color: blue;">Resend confirmation</a></div></div>
                 
@@ -56,7 +71,7 @@
                         <div class="google"  data-ng-click="lctrl.google()"><a href="#"><span><i class="fa fa-google-plus" aria-hidden="true"></i> </span> <lable>Sign in with Google+</lable>
                         <div class="clear"></div></a>
                         </div>
-                        <div class="linkedin"  data-ng-click="lctrl.linkedIn()"><a href="#"><span><i class="fa fa-linkedin" aria-hidden="true"></i> </span> <lable>Sign in with Linkedin</lable>
+                        <div class="linkedin"  data-ng-click="lctrl.linkedIn()"><script type="in/Login"></script><a href="#"><span><i class="fa fa-linkedin" aria-hidden="true"></i> </span> <lable>Sign in with Linkedin</lable>
                         <div class="clear"></div></a>
                         </div>
                         

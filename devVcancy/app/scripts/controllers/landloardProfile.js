@@ -25,13 +25,7 @@ vcancyApp
 		        $rootScope.invalid = '';
             $rootScope.success = '';
             $rootScope.error = '';
-        //alert(landLordID);
-       /* var commentsRef = firebase.database().ref('users/' + landLordID);
-		      commentsRef.once('value', function(snapshot) {
-		      	 snapshot.forEach(function(childSnapshot) {
-		      	 	alert(childSnapshot.key);
-		      	 	 });
-		      });*/
+        
         
 
         firebase.database().ref('/users/' + landLordID).once('value').then(function (userdata) {
@@ -112,7 +106,7 @@ vcancyApp
               //confirm("Your Information updated!");
             // ldProfilectrl.success = "Profile Updated successfully"
              if (confirm("Profile Updated successfully!") == true) {
-               // window.reload();
+                  $state.reload();
               } else {
                 return false;
               }
@@ -153,7 +147,7 @@ vcancyApp
                                 $rootScope.success = 'Your password has been updated!';
                                 confirm("Your password has been updated!");
                                  localStorage.setItem('password', newPassword);
-                                 
+                                 $state.reload();
                             /* $rootScope.success = 'Your password has been updated';
                              $rootScope.error = '';  
                              $rootScope.invalid = '';*/
@@ -223,7 +217,7 @@ vcancyApp
                                                       firebase.database().ref('users/' + landLordID).update({'companylogo':data.Location}).then(function(){
                                                        
                                                         if (confirm("Your Company Logo Picture updated successfully.") == true) {
-                                                            
+                                                            $state.reload();
                                                           } else {
                                                             return false;
                                                           }
@@ -300,12 +294,7 @@ vcancyApp
             var refId = landLordID;
             var custome =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             var reguserdbObj = firebase.database();
-           /* reguserdbObj.ref('users/' + firebaseUser.uid).set({
-            firstname: firstname,
-            lastname: lastname,
-            refId : refId,
-            email : email,
-            });   */  
+  
             var userarray = { firstname: firstname,
             lastname: lastname,
             refId : refId,
@@ -319,7 +308,9 @@ vcancyApp
                     $rootScope.success = '';
                   }else{
                     console.log('Done');
-                    confirm("User Added successfully!");
+                    if(confirm("User Added successfully!")){
+                        $state.reload();
+                    }
                     $rootScope.invalid = 'regcpwd';         
                     $rootScope.error = '';
                     $rootScope.success = 'User Added successfully!';

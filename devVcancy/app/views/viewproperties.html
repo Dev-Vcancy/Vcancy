@@ -40,11 +40,9 @@
             </button>
            
             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-to-body">
-              <li role="menuitem"><a href="#">Action</a></li>
-              <li role="menuitem"><a href="#">Another action</a></li>
-              <li role="menuitem"><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li role="menuitem"><a href="#">Separated link</a></li>
+              <li role="menuitem"><a href="#/editprop/{{key}}">Edit</a></li>
+              <li role="menuitem"><a href="javascript:void(0);" ng-click="propctrl.deleteproperty(key)">delete</a></li>
+              <li role="menuitem"><a href="#/viewunits/{{key}}">View Units</a></li>
             </ul>
           </div>
 								<img width="640" height="220" class="img-responsive" src="{{x.propimg}}" />
@@ -52,15 +50,9 @@
 							<div class="clearfix"></div>
 							<div class="property_detail">					
 								<h3><a tooltip-placement="top" uib-tooltip="{{x.units}} - {{x.address}}">{{x.units}} <span ng-hide="x.units == ' '">-</span> {{x.address}}</a></h3>
-        						<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===true">
-			                        <span><strong>ACTIVE</strong></span> <input ng-click="propctrl.toggleSwitch(key)" id="active{{key}}" type="checkbox" hidden="hidden">
-			                        <label  for="active{{key}}" class="ts-helper m-l-10 m-r-10 ac-inac"></label><span><strong>INACTIVE</strong></span>
-			                    </div>
-								<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===false">
-			                        <span><strong>ACTIVE</strong></span> <input ng-click="propctrl.toggleSwitch(key)" id="inac{{key}}" type="checkbox" checked="checked" hidden="hidden">
-			                        <label for="inac{{key}}"  class="ts-helper  m-l-10 m-r-10 ac-inac"></label><span><strong>INACTIVE</strong></span>
-			                    </div>
-								<span><a href="#/editprop/{{key}}">Edit</a>
+        					
+							
+								<span>
 								<span class="m-l-10"><input type="hidden" disabled="true" ng-model="x.propertylink" id="propertylink"/>
 								<a class="copylink_view" ><i tooltip-class="tooltip-blue" uib-tooltip="{{propctrl.copy}}" ng-copy="x.propertylink" onSuccess="propctrl.copySuccess(e)" class="zmdi zmdi-copy zmdi-hc-fw" style="font-size:25px;" ></i></a></span></span>
 							</div>

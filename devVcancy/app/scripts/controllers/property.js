@@ -29,6 +29,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     vm.localpropID = '';
     vm.localunits = '';
     vm.localpropName = '';
+    
+
 
     if( url.endsWith('addunits') == true){
         if(localStorage.getItem("propID") != null &&  localStorage.getItem("units") != null && localStorage.getItem("propName") != null){
@@ -256,7 +258,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             vm.isDisabled = true;
         }
 
-        vm.datetimeslotchanged(0);
+        //vm.datetimeslotchanged(0);
     }
 
     vm.datetimeslotchanged = function(key) {
@@ -354,7 +356,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     // Add/Edit Property		
     vm.submitProp = function(property) {
-       
+        
+        console.log(property);
+        return false;
         AWS.config.update({
             accessKeyId: 'AKIAI6FJLQDDJXI4LORA',
             secretAccessKey: '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'
@@ -584,9 +588,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.submitaction = "Update";
         vm.otheraction = "Delete";
         var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function(snapshot) {
+
             var propData = snapshot.val();
             vm.timeSlot = [];
-            $scope.$apply(function() {
+             $scope.$apply(function() {
                 vm.prop = {
                     propID: snapshot.key,
                     landlordID: propData.landlordID,
@@ -597,7 +602,15 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     rent: propData.rent,
                     shared: propData.shared,
                     address: propData.address,
+                    noofunits: propData.totalunits,
+                    city: propData.city,
+                    province: propData.province,
+                    postcode: propData.postcode,
+                    country: propData.country,
+                    propimage:propData.propimg,
+                    name:propData.name,
                     multiple: [],
+                    mode : 'Edit',
                     date: [],
                     fromtime: [],
                     to: [],
@@ -607,7 +620,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     timeinvalid: [0],
                     timeoverlapinvalid: [0]
                 }
-                angular.forEach(propData.date, function(value, key) {
+             /*   angular.forEach(propData.date, function(value, key) {
                     vm.timeSlot.push({
                         date: new Date(value)
                     });
@@ -616,7 +629,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     vm.prop.to.push(new Date(propData.to[key]));
                     vm.prop.limit.push(propData.limit[key]);
                     vm.prop.multiple.push(propData.multiple[key]);
-                });
+                });*/
                 vm.addresschange();
                 oldtimeSlotLen = vm.timeSlot.length;
                 vm.unitsOptional();
@@ -640,6 +653,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             rent: '',
             shared: '',
             address: '',
+            mode : 'Add',
+            propimage : 'http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image',
             date: [],
             fromtime: [],
             to: [],
@@ -652,6 +667,52 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     }
 
+    vm.deleteproperty = function(propID){
+        var propertyObj = $firebaseAuth();
+        var propdbObj = firebase.database();
+        firebase.database().ref('properties/' + propID).once("value", function(snap){
+
+            vm.property_address = snap.val().address;
+            if($window.confirm("Do you want to continue?")) {
+                 propdbObj.ref('properties/' + propID).remove();
+                     firebase.database().ref('applyprop/').orderByChild("propID").equalTo(propID).once("value", function(snapshot) {
+                        $scope.$apply(function() {
+                            vm.scheduleIDs = [];
+                            vm.tenants = [];
+
+                            if (snapshot.val() != null) {
+                                $.map(snapshot.val(), function(value, index) {
+                                    vm.scheduleIDs.push(index);
+                                    vm.tenants.push(value.tenantID);
+                                });
+                            }
+                            angular.forEach(vm.scheduleIDs, function(value, key) {
+                                firebase.database().ref('applyprop/' + value).update({
+                                    schedulestatus: "removed"
+                                })
+                            });
+
+                            var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + vm.landlordname + ',</h2><br> Your property <em>' + vm.property_address + '</em> has been successfully deleted and all viewings related to this property are also removed.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                            // Send Email
+                            emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address + ' has been deleted', 'delproperty', emailData);
+
+                            angular.forEach(vm.tenants, function(tenantID, key) {
+                                firebase.database().ref('users/' + tenantID).once("value", function(snap) {
+                                    var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + snap.val().firstname + ' ' + snap.val().lastname + ',</h2><br> Your viewing request on property <em>' + vm.property_address + '</em> has been removed as landlord has deleted his property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                                    // Send Email
+                                    emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request removed from Vcancy', 'delproperty', emailData);
+                                });
+                            });
+                        })
+                        //$state.go('viewprop');
+                        $state.reload();
+                    });
+            }
+
+        });
+    }
 
 
     // Delete Property Permanently

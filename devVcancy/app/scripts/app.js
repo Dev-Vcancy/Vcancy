@@ -427,6 +427,13 @@ vcancyApp
 			 controllerAs: 'propctrl',
 			 
 		})
+		.state('viewunits', {
+			 url: '/viewunits/{propId}',
+			 templateUrl:'views/viewunits.html',
+			 controller:'propertyCtrl',
+			 controllerAs: 'propctrl',
+			 
+		})
 		.state ('editprop', {
 			url: '/editprop/{propId}',
 			controller: 'propertyCtrl',

@@ -48,7 +48,7 @@
         <!-- BEGIN THEME GLOBAL STYLES -->
         <link href="assets/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
         <link href="assets/global/css/plugins.min.css" rel="stylesheet" type="text/css" />
-
+        <link href="styles/responsive.css" rel="stylesheet" type="text/css" />
         <!-- END THEME GLOBAL STYLES -->
         <!-- BEGIN PAGE LEVEL STYLES -->
       <!--   <link href="assets/pages/css/login-2.min.css" rel="stylesheet" type="text/css" /> -->
@@ -99,7 +99,7 @@ j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; 
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
-    <link href="styles/responsive.css" rel="stylesheet" type="text/css" />
+    
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-resource/angular-resource.min.js"></script>
@@ -197,7 +197,11 @@ j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; 
     <script src="scripts/directive/appTour.js"></script>
     <script src="scripts/modules/form.js"></script>
 
-
+    <script type="text/javascript" src="//platform.linkedin.com/in.js">
+        api_key: 78blzjlmkk6jbl
+        authorize: true
+        scope: r_basicprofile r_emailaddress
+    </script>
      <script>
             $(document).ready(function()
             {
@@ -207,6 +211,7 @@ j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; 
                 });
             })
         </script>
+        
     <!-- endbuild -->
 </body>
 </html>

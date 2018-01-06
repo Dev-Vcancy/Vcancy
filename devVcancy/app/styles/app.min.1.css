@@ -15707,7 +15707,7 @@ a.thumbnail.active {
     -webkit-transition-duration: 200ms;
     transition-duration: 200ms;
     position: absolute;
-    top: 5px;
+    top: 0px;
     font-weight: 400;
     color: #959595;
     pointer-events: none;

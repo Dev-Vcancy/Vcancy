@@ -4,7 +4,7 @@
 // LOGIN, REGISTER
 //=================================================
 
-vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$location',function($scope,$firebaseAuth,$state,$rootScope,$location) {
+vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$location','$window', function($scope,$firebaseAuth,$state,$rootScope,$location,$window) {
 		var vm = this;
         //Status
         vm.login = 1;
@@ -118,7 +118,6 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				  provider.addScope('user_birthday');
 				 
 				  firebase.auth().signInWithPopup(provider).then(function(result) {
-					  // This gives you a Facebook Access Token. You can use it to access the Facebook API.
 					  var token = result.credential.accessToken;
 					   console.log("token");
 				   	   console.log(token);
@@ -128,28 +127,94 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				   	  console.log(user);
 					  // ...
 					}).catch(function(error) {
-						console.log(error);
-					  // Handle Errors here.
-					  var errorCode = error.code;
-					  var errorMessage = error.message;
-					  // The email of the user's account used.
-					  var email = error.email;
-					  // The firebase.auth.AuthCredential type that was used.
-					  var credential = error.credential;
-					  // ...
+						 if(error.message){
+				  		IN.User.logout();
+						if(error.message == "The email address is badly formatted."){
+								$rootScope.error = "Invalid Email.";
+								$rootScope.success = '';
+						}else{
+							$rootScope.error = error.message;
+							$rootScope.success = '';
+						}
+						//$rootScope.error = error.message;
+						
+					} 		
+					
+					if(error.code === "auth/invalid-email"){
+						$rootScope.invalid = 'regemail';
+					} else if(error.code === "auth/weak-password"){
+						$rootScope.invalid = 'regpwd';					
+					}else if(error.code === "auth/email-already-in-use"){
+						$rootScope.invalid = 'regpwd';					
+					}  else {
+						$rootScope.invalid = '';
+					}
 				  });
 		}
-		vm.linkedIn = function(){
-				
-				firebase.auth().signInWithCustomToken(token).catch(function(error) {
-						console.log(error);
-					  // Handle Errors here.
-					  var errorCode = error.code;
-					  var errorMessage = error.message;
-					  // ...
-					});
-		}
+		$window.onload = function() {
+			IN.Event.on(IN, "auth", vm.getProfileData);
+		};
 		
+		vm.getProfileData = function() {
+	        IN.API.Profile("me").fields("id", "first-name", "last-name", "headline", "location", "picture-url", "public-profile-url", "email-address").result(vm.displayProfileData).error(vm.onError);
+	    }
+	    vm.displayProfileData = function(data){
+        var user = data.values[0];
+       
+        vm.saveUserData(user);
+    }
+
+     vm.saveUserData = function(userData){
+        
+        var id = userData.id;
+        var email = userData.emailAddress;
+        var firstName = userData.firstName;
+        var lastName = userData.lastName;
+        var password = "secret@1234";
+        var reguserObj = $firebaseAuth();
+
+	    reguserObj.$createUserWithEmailAndPassword(email, password).then(function(firebaseUser) {
+	    		console.log(firebaseUser)
+	    	 }).catch(function(error) {
+	    	 	console.log(error);
+				  if(error.message){
+				  		IN.User.logout();
+						if(error.message == "The email address is badly formatted."){
+								$rootScope.error = "Invalid Email.";
+								$rootScope.success = '';
+						}else{
+							$rootScope.error = error.message;
+							$rootScope.success = '';
+						}
+						//$rootScope.error = error.message;
+						
+					} 		
+					
+					if(error.code === "auth/invalid-email"){
+						$rootScope.invalid = 'regemail';
+					} else if(error.code === "auth/weak-password"){
+						$rootScope.invalid = 'regpwd';					
+					}else if(error.code === "auth/email-already-in-use"){
+						$rootScope.invalid = 'regpwd';					
+					}  else {
+						$rootScope.invalid = '';
+					}
+				});
+
+    }
+
+    vm.onError = function(error) {
+        console.log(error);
+    }
+
+    vm.logout = function(){
+        IN.User.logout(vm.removeProfileData);
+    }
+
+     vm.removeProfileData = function(){
+        
+     }
+
 		vm.registerUser = function(reguser){
 			var first = reguser.first;
 			var last = reguser.last;
