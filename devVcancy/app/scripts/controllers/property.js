@@ -25,7 +25,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     vm.noofunits = 0;
     $rootScope.propname = "";
     var url = $location.absUrl();
-    
+    vm.table = 1;
+    vm.csv = 0;
     vm.localpropID = '';
     vm.localunits = '';
     vm.localpropName = '';
@@ -43,11 +44,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
     }
 
-   /* alert(localStorage.getItem("propID"));
-    alert(localStorage.getItem("units"));
-    alert(localStorage.getItem("propName"));*/
-    // console.log(vm.isDisabled);	
-
     firebase.database().ref('users/' + localStorage.getItem('userID')).once("value", function(snap) {
         vm.landlordname = snap.val().firstname + " " + snap.val().lastname;
     });
@@ -55,8 +51,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     $scope.$on('gmPlacesAutocomplete::placeChanged', function() {
         var address = vm.prop.address.getPlace();
         var arrAddress = address.address_components;
-        // console.log("address");
-        // console.log(address);
         vm.googleAddress = 1;
         vm.prop.address = address.formatted_address;
 
@@ -66,9 +60,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         var itemPc = '';
         var itemSnumber = '';
         var street_number = '';
-        // iterate through address_component array
+ 
         $.each(arrAddress, function(i, address_component) {
-         //   console.log('address_component:' + i);
             if (address_component.types[0] == "street_number") {
                 console.log("street_number:" + address_component.long_name);
                 itemSnumber = address_component.long_name;
@@ -76,50 +69,43 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             }
 
             if (address_component.types[0] == "route") {
-            //    console.log(i + ": route:" + address_component.long_name);
                 itemRoute = address_component.long_name;
                 var route = address_component.long_name;
                 vm.prop.address = street_number + address_component.long_name;
             }
 
             if (address_component.types[0] == "administrative_area_level_1") {
-             //   console.log(i + ": administrative_area_level_1:" + address_component.short_name);
                 itemRoute = address_component.short_name;
                 vm.prop.province = address_component.short_name;
             }
 
             if (address_component.types[0] == "locality") {
-            //   console.log("town:" + address_component.long_name);
                 itemLocality = address_component.long_name;
                 vm.prop.city = address_component.long_name;
             }
 
             if (address_component.types[0] == "country") {
-           //     console.log("country:" + address_component.long_name);
                 itemCountry = address_component.long_name;
                 vm.prop.country = address_component.long_name;
             }
 
             if (address_component.types[0] == "postal_code_prefix") {
-           //     console.log("pc:" + address_component.long_name);
                 itemPc = address_component.long_name;
             }
 
 
             if (address_component.types[0] == "postal_code") {
-            //    console.log("postal_code:" + address_component.long_name);
                 itemSnumber = address_component.long_name;
 
                 vm.prop.postcode = address_component.long_name;
             }
 
             if (address_component.types[0] == "sublocality_level_1") {
-             //   console.log(i + ": sublocality_level_1:" + address_component.long_name);
                 itemRoute = address_component.long_name;
                 vm.prop.address = address_component.long_name;
-                //  var route = address_component.long_name;
+           
             }
-            ///return false; // break the loop   
+           
         });
 
 
@@ -129,16 +115,18 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     vm.copy = "Copy Link";
     $scope.copySuccess = function(e) {
-       // console.info('Action:', e.action);
-        //console.info('Text:', e.text);
-        //console.info('Trigger:', e.trigger);
         vm.copy = "Copied";
         $scope.$apply();
     };
 
+    vm.csvform = function(){
+        vm.table = 0;
+        vm.csv = 1;
+
+    }
     // timeSlot for Date and Timepicker
     vm.addTimeSlot = function(slotlen) {
-        // console.log(slotlen);
+      
         for (var i = 0; i < slotlen; i++) {
             vm.newTime = false;
         }
@@ -148,7 +136,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         });
         vm.prop.multiple[slotlen] = true;
         vm.newTime = true;
-        //console.log(vm.newTime);
+      
     }
 
     // to remove timeslots
@@ -280,7 +268,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.overlap = 0;
 
         for (var i = 0; i < vm.prop.date.length; i++) {
-            // console.log(i,key);
             if (i != key) {
                 if (vm.prop.fromtime[i] === undefined) {
                     var ftime = dateconfig;
@@ -313,7 +300,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
 
         var temp = new Date(fromtime.getTime() + 30 * 60000)
-        // console.log(moment(to).format('HH:mm'),moment(temp).format('HH:mm'));
         if (moment(to).format('HH:mm') < moment(temp).format('HH:mm') && vm.prop.timeoverlapinvalid[key] == 0) {
             vm.prop.timeinvalid[key] = 1;
             vm.isDisabled = true;
@@ -321,13 +307,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             vm.prop.timeinvalid[key] = 0;
         }
 
-        // console.log(vm.prop.multiple[key],fromtime,to);
-
         if ((vm.prop.multiple[key] === false || vm.prop.multiple[key] === undefined) && vm.prop.timeinvalid[key] == 0) {
             var minutestimediff = (to - fromtime) / 60000;
             var subslots = Math.floor(Math.ceil(minutestimediff) / 30);
-            // console.log(minutestimediff,subslots);
-
+         
             if (vm.prop.limit[key] > subslots) {
                 vm.prop.invalid[key] = 1;
                 vm.isDisabled = true;
@@ -357,8 +340,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     // Add/Edit Property		
     vm.submitProp = function(property) {
         
-        console.log(property);
-        return false;
+        
         AWS.config.update({
             accessKeyId: 'AKIAI6FJLQDDJXI4LORA',
             secretAccessKey: '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'
@@ -397,7 +379,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             bucket.upload(params).on('httpUploadProgress', function(evt) {
                 //  console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total)+'%');
             }).send(function(err, data) {
-                //console.log(data.Location); return false;
                 if (data.Location != '') {
 
                     $rootScope.invalid = '';
@@ -446,7 +427,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                      localStorage.setItem("propID",snapshot.key);
                                 });
                                 
-                                if (propstatus === false) {
+                                /*if (propstatus === false) {
                                     var emailData = '<p>Hello, </p><p>' + address + ' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.ca/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                                     // Send Email
@@ -457,7 +438,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                             var emailData = '<p>Hello ' + snap.val().firstname + ' ' + snap.val().lastname + ', </p><p>Your viewing request on property <em>' + address + '</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                                             // Send Email
-                                            emailSendingService.sendEmailViaNodeMailer("sagar@riverdeltaindia.com", 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
+                                            emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
                                         });
                                     });
                                 } else {
@@ -471,15 +452,15 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                             var emailData = '<p>Hello ' + snap.val().firstname + ' ' + snap.val().lastname + ', </p><p>Your viewing request on property <em>' + address + '</em> has been cancelled as landlord has made some changes in time slots for this property.</p><p>To reschedule the viewing and book some another available time, please log in at http://vcancy.ca/login/ and use the link initially provided to schedule the viewing or follow the link http://www.vcancy.ca/login/#/applyproperty/' + $stateParams.propId + '.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                                             // Send Email
-                                            emailSendingService.sendEmailViaNodeMailer("sagar@riverdeltaindia.com", 'Your generated viewing request cancelled on Vcancy', 'updateproperty', emailData);
+                                            emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'updateproperty', emailData);
                                         });
                                     });
-                                }
-                           
-                            if(units == 'multiple'){
+                                }*/
+                           console.log(units);
+                            if(units === 'multiple'){
+                                console.log("In "+units);
                                 localStorage.setItem("units",multiple);
                                 localStorage.setItem("propName",name);
-
                                 $state.go('addunits');
                             }else{
                                 $state.go('viewprop');
@@ -496,7 +477,90 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
 
     }
+  
+    vm.csvadd = function(){
+        console.log(vm.localpropID);
+     var fileUpload = document.getElementById("file");
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var rows = e.target.result.split("\n");
+                    var result = [];
+                    var headers=rows[0].split(",");
+                    var totalunits = 0;
+                    for(var i=1;i<parseInt(rows.length-1);i++){
+                         totalunits = i;
+                          var obj = {};
+                          var currentline=rows[i].split(",");
 
+                          for(var j=0;j<headers.length;j++){
+
+                                var headerkey = headers[j];
+                                    headerkey = headerkey.replace(/[^a-zA-Z ]/g, "")
+                                  obj[headerkey] = currentline[j];
+                              }
+                              result.push(obj);
+                          }
+                          console.log(result);
+                     firebase.database().ref('properties/' + vm.localpropID).update({unitlists:result,totalunits:totalunits}).then(function(){
+                      if (confirm("Units added successfully!") == true) {
+                            localStorage.removeItem('propID');
+                            localStorage.removeItem('units');
+                            localStorage.removeItem('propName');
+                            $state.go('viewprop');
+                      } else {
+                        return false;
+                      }
+                    }, function(error) {
+                      if (confirm("Units Not added Please Try again!") == true) {
+                        return false;
+                      }
+                    });
+                }
+                
+                reader.readAsText(fileUpload.files[0]);
+
+
+
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid CSV file.");
+        }
+
+    }
+
+     if ($state.current.name == 'viewunits') {
+        
+        var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function(snapshot) {
+             var propertiesData = snapshot.val();
+             $scope.$apply(function() {
+              vm.units = {
+                mode : 'View',
+                propID: snapshot.key,
+                address:propertiesData.address,
+                city:propertiesData.city,
+                country:propertiesData.country,
+                date:propertiesData.date,
+                landlordID:propertiesData.landlordID,
+                name:propertiesData.name,
+                postcode:propertiesData.postcode,
+                propimg:propertiesData.propimg,
+                propstatus:propertiesData.propstatus,
+                proptype:propertiesData.proptype,
+                province:propertiesData.province,
+                shared:propertiesData.shared,
+                totalunits:propertiesData.totalunits,
+                units:propertiesData.units,
+                unitlists:propertiesData.unitlists,
+             } 
+            });    
+        });
+        
+    } 
 
     // View Property
     if ($state.current.name == 'viewprop') {

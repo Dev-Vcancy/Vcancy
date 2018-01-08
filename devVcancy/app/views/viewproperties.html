@@ -50,11 +50,9 @@
 							<div class="clearfix"></div>
 							<div class="property_detail">					
 								<h3><a tooltip-placement="top" uib-tooltip="{{x.units}} - {{x.address}}">{{x.units}} <span ng-hide="x.units == ' '">-</span> {{x.address}}</a></h3>
-        					
-							
-								<span>
-								<span class="m-l-10"><input type="hidden" disabled="true" ng-model="x.propertylink" id="propertylink"/>
-								<a class="copylink_view" ><i tooltip-class="tooltip-blue" uib-tooltip="{{propctrl.copy}}" ng-copy="x.propertylink" onSuccess="propctrl.copySuccess(e)" class="zmdi zmdi-copy zmdi-hc-fw" style="font-size:25px;" ></i></a></span></span>
+        						<strong ng-if="x.totalunits > 0"><span>{{x.totalunits}}</span> Units</strong>
+        						<br>
+        						<strong ng-if="x.totalunits > 0"><span>{{x.totalunits}}</span> Vacants</strong>
 							</div>
 							<div class="clearfix"></div>
 						</div>

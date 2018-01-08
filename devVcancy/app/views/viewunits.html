@@ -1,1 +1,53 @@
-Unit listing coming soon
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header> 
+<section id="main" class="profile-page-both">
+   <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+   <section class="new_dashbord" id="content">
+      <div class="container">
+         <div class="page-content-wrapper">
+            <div class="page-content" style="min-height: 1434px;">
+               <h1 class="page-title">  {{propctrl.units.mode}} Units </h1>
+               <div class="profile">
+               		<h3>View units of {{propctrl.units.name}}</h3> 
+                 	
+                  <!-- Table View Start -->
+                  <div >
+               		<form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" class="addunitsForm">	
+
+               		<div class="mt-bootstrap-tables">
+						   <div class="row">
+						      <div class="col-md-12">
+						         <div class="portlet light ">
+						         	  <table class="table table-bordered">
+						               <thead>
+						                  <tr>
+						                     <th>Units</th>
+						                     <th>Address</th>
+						                     <th>SQ.ft</th>
+						                     <th>Rent</th>
+						                     <th>Status</th>
+						                     <th></th>
+						                  </tr>
+						               </thead>
+						               <tbody>
+						                  <tr  ng-repeat="unitlist in propctrl.units.unitlists">
+
+						                     <td ng-repeat = "unit in unitlist ">{{unit}}</td>
+						                     
+						                     <td><a href="javascript:void(0)">Details</a></td>
+						                  </tr>
+						               </tbody>
+						            </table>
+						         </div>
+						      </div>
+						   </div>
+						</div>
+						</form>
+						</div>
+<!-- Table View End -->
+
+               </div>
+            </div>
+        </div>
+    </div>
+   </section>
+  </section>
