@@ -456,14 +456,20 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                         });
                                     });
                                 }*/
-                           console.log(units);
-                            if(units === 'multiple'){
-                                console.log("In "+units);
-                                localStorage.setItem("units",multiple);
-                                localStorage.setItem("propName",name);
-                                $state.go('addunits');
+                           if(units === 'multiple'){
+                                if(confirm("Your Property added successfully. Do you want add units?")){
+                                    localStorage.setItem("units",multiple);
+                                    localStorage.setItem("propName",name);
+                                    $state.go('addunits');
+                                }else{
+                                       $state.go('viewprop');    
+                                }
                             }else{
-                                $state.go('viewprop');
+                                if(confirm("Your Property added successfully.")){
+                                    $state.go('viewprop');    
+                                }else{
+                                    return false;
+                                }
                             }
                             
                         });

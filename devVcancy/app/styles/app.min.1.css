@@ -15738,3 +15738,10 @@ a.thumbnail.active {
     margin: 0 !important;
     vertical-align: middle !important;
 }
+.row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}

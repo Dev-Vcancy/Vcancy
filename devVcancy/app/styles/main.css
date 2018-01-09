@@ -1112,7 +1112,7 @@ ul.header-inner li a:hover.button:before{
 
 .property_view .property_thumb img {
     width: 100%;
-    height: auto;
+    height: 350px;
     margin: 0 auto;
     image-rendering: pixelated;
 }
@@ -1144,7 +1144,7 @@ ul.header-inner li a:hover.button:before{
   left: 0;
   right: 0;
 }
-.property_view .white_block{border:solid 1px #ccc;}
+.property_view .white_block{border:solid 1px #ccc;height:90%;}
 .property_view .property_detail h3{height:auto;margin-bottom:5px;line-height: 26px;}
 .property_thumb .btn-group.dropdown {
     position: absolute;
