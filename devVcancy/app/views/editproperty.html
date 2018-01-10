@@ -5,7 +5,7 @@
 <section class="new_dashbord" id="content">
 <div class="container">
 <div class="page-content-wrapper">
-<div class="page-content" style="min-height: 1434px;">
+<div class="page-content">
 <h1 class="page-title">  Edit Property And Units </h1>
 
 
@@ -150,52 +150,45 @@
 <form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" class="addunitsForm">    
 
                     <div class="mt-bootstrap-tables">
-                        <div class="row">
-                            <div class="col-md-12">
-                                               <div class="portlet light ">
-                                                  
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                          <tr>
-                                                            <th>Units</th>
-                                                            <th>Address</th>
-                                                            <th>SQ.ft</th>
-                                                            <th>Rent</th>
-                                                            <th>Status</th>
-                                                            <th></th>
-                                                          </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                          <tr  ng-repeat="i in propctrl.getNumber( propctrl.noofunits) track by $index">
-                                                            <td><input type="number" name="number" ng-model="propctrl.units.number[$index]" class=""></td>
-                                                            <td><input type="text" name="text" ng-model="propctrl.units.text[$index]" ></td>
-                                                            <td><input type="number" name="sqft" ng-model="propctrl.units.sqft[$index]" ></td>
-                                                            <td><input type="number" name="rent" ng-model="propctrl.units.rent[$index]" ></td>
-                                                            <td><select data-placeholder="Status" class="form-control" name="status" ng-model="propctrl.units.status[$index]"   required class="w-100 localytics-chosen" >
-                                                 <option value="rented">Rented</option>
-                                                 <option value="Available">Available</option>
-                                                 <option value="sold">Sold</option>
-                                                 
-                                              </select></td>
-                                                            <td>Details</td>
-                                                          </tr>
-                                                         
-                                                        </tbody>
-                                                      </table>
-                                               </div>
-                                            </div>
-                            
-                        </div>
-                        
-                            <div class="row">
-                              <div class="col-lg-6 col-xs-12 col-sm-12">
-                                 <button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
-                                 <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
-                                  <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
-                              </div>
-                            </div>
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="portlet light ">
+                     {{propctrl.prop.unitlists}}
+                        <table class="table table-bordered">
+                           <thead>
+                              <tr>
+                                  <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                  <th>Units No</th>
+                                  <th>Address</th>
+                                  <th>SQ.ft</th>
+                                  <th>Rent</th>
+                                  <th>Bed</th>
+                                  <th>Bath</th>
+                                  <th>Amenities</th>
+                                  <th>Status</th>
+                                  <th></th>
+                              </tr>
+                           </thead>
+                           <tbody >
 
-                      </div>
+                              <tr ng-repeat = "unit in propctrl.prop.unitlists" >
+                              <td></td>
+                              <td>{{unit.unit}}</td>
+                              <td>{{unit.adress}}</td>
+                              <td>{{unit.sqft}}</td>
+                              <td>{{unit.rent}}</td>
+                              <td>{{unit.bedroom}}</td>
+                              <td>{{unit.bathroom}}</td>
+                              <td>{{unit.type}}</td>
+                              <td>{{unit.status}}</td>
+                              <td><a href="javascript:void(0)">Details</a></td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
                     </form>
 
 
@@ -269,7 +262,6 @@
 </div>
 </div>
 
-<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
 
 <script type="text/javascript">
 Waves.init();

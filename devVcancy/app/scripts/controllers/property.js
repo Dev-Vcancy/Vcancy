@@ -590,18 +590,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         unitlists: result,
                         totalunits: totalunits
                     }).then(function() {
-                        if (confirm("Units added successfully!") == true) {
-                            localStorage.removeItem('propID');
-                            localStorage.removeItem('units');
-                            localStorage.removeItem('propName');
-                            $state.go('viewprop');
-                        } else {
-                            return false;
-                        }
+                        $rootScope.success = "Your Units added successfully!";
+                        setTimeout(function(){ $state.go('viewprop'); }, 2000);
                     }, function(error) {
-                        if (confirm("Units Not added Please Try again!") == true) {
-                            return false;
-                        }
+                       $rootScope.error = "Please Check your CSV file Having issue with the data!";
                     });
                 }
 
@@ -984,6 +976,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                          if(val === 'Mavailable'){
 
                          }
+                         if(val === 'Mranted'){
+
+                         }
                     });
                 }else{
                         alert("Select Atleast one row");
@@ -992,13 +987,15 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
        
     }
 
-    vm.addmorerow = function(){
-         $("#units tr:last").clone().find('input').val('').end().insertAfter("#units tr:last");
+    vm.addmorerow = function(val){
+            vm.units.noofunits = parseInt(val + 1);
+            
+         /*$("#units tr:last").clone().find('input').val('').end().insertAfter("#units tr:last");*/
     }
 
     vm.submitunits = function(units) {
 
-        console.log(units); return false;
+        //console.log(units); return false;
         
         var num = units.number;
         var rent = units.rent;
@@ -1043,7 +1040,28 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 textarray.push(text[prop]);
             }
         }
-
+/*
+name
+type
+adress
+city
+state
+postalcode
+unit
+location
+sqft
+bedroom 
+bathroom
+rent
+description
+status
+epirydate
+cats
+dogs
+smoking
+furnished
+wheelchair
+*/
         var totalunits = 0;
         for (var i = 0; i < number.length; i++) {
 
@@ -1102,32 +1120,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
 
-    $scope.items = ['item1', 'item2', 'item3'];
-
-    vm.openmodel = function(size) {
-
-        var modalInstance = $uibModal.open({
-            templateUrl: 'myModalContent.html',
-            controller: 'ModalInstanceCtrl',
-            size: size,
-
-        });
-
-        modalInstance.result.then(function(selectedItem) {
-            $scope.selected = selectedItem;
-        }, function() {
-            //$log.info('Modal dismissed at: ' + new Date());
-        });
-    };
+  
+   
 }]);
 
-vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$modal', '$uibModalInstance', function($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $modal, $uibModalInstance) {
-
-    $scope.ok = function() {
-     };
-
-    $scope.cancel = function() {
-        $uibModalInstance.dismiss('cancel');
-    };
-
-}]);
