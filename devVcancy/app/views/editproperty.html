@@ -1,14 +1,36 @@
 <header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
 <section id="main" class="profile-page-both">
-   <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
-   <section class="new_dashbord" id="content">
-      <div class="container">
-         <div class="page-content-wrapper">
-            <div class="page-content" style="min-height: 1434px;">
-               <h1 class="page-title">  {{propctrl.mode}} a Property </h1>
-               
-               <div class="profile">
-                  <div class="tabbable-line tabbable-full-width">
+
+<aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+<section class="new_dashbord" id="content">
+<div class="container">
+<div class="page-content-wrapper">
+<div class="page-content" style="min-height: 1434px;">
+<h1 class="page-title">  Edit Property And Units </h1>
+
+
+    
+
+   
+
+<div class="profile">
+<div class="tabbable-line tabbable-full-width">
+
+<div role="tabpanel">
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist"  ng-init="tab = 1">
+<li role="presentation" class="active">
+<a href ng-click="tab = 1" data-toggle="tab" aria-expanded="true" >Property</a>
+</li>
+<li role="presentation">
+<a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true" >Units</a>
+</li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane active" id="home" ng-show="tab === 1">    <div class="row">
+<div class="">
                      <form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" role="form"  enctype="multipart/form-data">
                         <input type="hidden" name="landlordID" ng-model="propctrl.prop.landlordID" class="form-control" >
                         <input type="hidden" name="mode" ng-model="propctrl.prop.mode" class="form-control" >
@@ -83,7 +105,9 @@
                               <div class="form-group">
                                  <div class="fileinput fileinput-new" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;margin:10px 0px;">
-                                       <img src="{{propctrl.prop.propimage}}" alt="" /> 
+                                    <div ng-if="propctrl.prop.propimage == ''"><img width="640" height="220" class="img-responsive" src="../assets/pages/media/profile/people19.png" /></div>
+                      <div ng-if="propctrl.prop.propimage != ''"><img width="640" height="220" class="img-responsive" src="{{propctrl.prop.propimage}}" /></div>
+                                       
                                     </div>
                                     <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
                                     <div>
@@ -116,9 +140,138 @@
                         </div>
                      </form>
                   </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </section>
+
+    </div>
+</div>
+
+</div>
+<div role="tabpanel" class="tab-pane" id="tab" ng-show="tab === 2">
+
+<form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" class="addunitsForm">    
+
+                    <div class="mt-bootstrap-tables">
+                        <div class="row">
+                            <div class="col-md-12">
+                                               <div class="portlet light ">
+                                                  
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                          <tr>
+                                                            <th>Units</th>
+                                                            <th>Address</th>
+                                                            <th>SQ.ft</th>
+                                                            <th>Rent</th>
+                                                            <th>Status</th>
+                                                            <th></th>
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr  ng-repeat="i in propctrl.getNumber( propctrl.noofunits) track by $index">
+                                                            <td><input type="number" name="number" ng-model="propctrl.units.number[$index]" class=""></td>
+                                                            <td><input type="text" name="text" ng-model="propctrl.units.text[$index]" ></td>
+                                                            <td><input type="number" name="sqft" ng-model="propctrl.units.sqft[$index]" ></td>
+                                                            <td><input type="number" name="rent" ng-model="propctrl.units.rent[$index]" ></td>
+                                                            <td><select data-placeholder="Status" class="form-control" name="status" ng-model="propctrl.units.status[$index]"   required class="w-100 localytics-chosen" >
+                                                 <option value="rented">Rented</option>
+                                                 <option value="Available">Available</option>
+                                                 <option value="sold">Sold</option>
+                                                 
+                                              </select></td>
+                                                            <td>Details</td>
+                                                          </tr>
+                                                         
+                                                        </tbody>
+                                                      </table>
+                                               </div>
+                                            </div>
+                            
+                        </div>
+                        
+                            <div class="row">
+                              <div class="col-lg-6 col-xs-12 col-sm-12">
+                                 <button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
+                                 <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
+                                  <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
+                              </div>
+                            </div>
+
+                      </div>
+                    </form>
+
+
+
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
+</section>
+
+<!-- /.modal -->
+<div id="responsive" class="modal fade" tabindex="-1" aria-hidden="true">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">Responsive & Scrollable</h4>
+</div>
+<div class="modal-body">
+    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Some Input</h4>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+            </div>
+            <div class="col-md-6">
+                <h4>Some More Input</h4>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+                <p>
+                    <input type="text" class="col-md-12 form-control"> </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn dark btn-outline">Close</button>
+    <button type="button" class="btn green">Save changes</button>
+</div>
+</div>
+</div>
+</div>
+
+<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+
+<script type="text/javascript">
+Waves.init();
+Waves.attach('.btn');
+</script>

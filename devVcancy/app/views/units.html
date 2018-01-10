@@ -1,98 +1,149 @@
 <header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header> 
+
 <section id="main" class="profile-page-both">
    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
    <section class="new_dashbord" id="content">
-      <div class="container">
+    <div class="container">
          <div class="page-content-wrapper">
-            <div class="page-content" style="min-height: 1434px;">
+            <div class="page-content">
                <h1 class="page-title">  {{propctrl.mode}} Units </h1>
-               <div class="profile">
-               		<h3>Create units for {{$root.propname}}</h3> 
-                  <a class="pull-right" href="javascript:void(0)" ng-click="propctrl.csvform()">Upload CSV For units</a > 
-                  <!-- Table View Start -->
-                  <div data-ng-if="propctrl.table === 1">
-               		<form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" class="addunitsForm">	
+                <div class="profile">
 
-               		<div class="mt-bootstrap-tables">
-                        <div class="row">
-                            <div class="col-md-12">
-          									   <div class="portlet light ">
-          									      
-          									     	<table class="table table-bordered">
-          											    <thead>
-          											      <tr>
-          											        <th>Units</th>
-          											        <th>Address</th>
-          											        <th>SQ.ft</th>
-          											        <th>Rent</th>
-          											        <th>Status</th>
-          											        <th></th>
-          											      </tr>
-          											    </thead>
-          											    <tbody>
-          											      <tr  ng-repeat="i in propctrl.getNumber( propctrl.noofunits) track by $index">
-          											        <td><input type="number" name="number" ng-model="propctrl.units.number[$index]" class=""></td>
-          											        <td><input type="text" name="text" ng-model="propctrl.units.text[$index]" ></td>
-          											        <td><input type="number" name="sqft" ng-model="propctrl.units.sqft[$index]" ></td>
-          											        <td><input type="number" name="rent" ng-model="propctrl.units.rent[$index]" ></td>
-          											        <td><select data-placeholder="Status" class="form-control" name="status" ng-model="propctrl.units.status[$index]"   required class="w-100 localytics-chosen" >
-                                                 <option value="rented">Rented</option>
-                                                 <option value="Available">Available</option>
-                                                 <option value="sold">Sold</option>
-                                                 
-                                              </select></td>
-          											        <td>Details</td>
-          											      </tr>
-          											     
-          											    </tbody>
-          											  </table>
-          									   </div>
-          									</div>
+                  <h3>Create units for {{propctrl.units.name}}</h3> 
+                  <div class="tabbable-line tabbable-full-width">
+
+                      <div role="tabpanel">
+                        <ul class="nav nav-tabs" role="tablist"  ng-init="tab = 1">
+                             <li role="presentation" class="active">
+                                  <a href ng-click="tab = 1" data-toggle="tab" aria-expanded="true" >Units</a>
+                             </li>
+                            <li role="presentation">
+                                  <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true" >CSV</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div role="tabpanel" class="tab-pane active" id="home" ng-show="tab === 1">
+
                             
-                        </div>
-                        
+                            <form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" class="addunitsForm"> 
+
+
                             <div class="row">
-                              <div class="col-lg-6 col-xs-12 col-sm-12">
-                                 <button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
-                                 <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
-                                  <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
+                              <div class="col-md-12">
+                                  <div class="portlet light ">
+                                       <div class="pull-left">
+                                        <select name="more" ng-model="more" ng-change="propctrl.moreaction(more)">
+                                            <option value="">More</option>
+                                            <option value="DAll">Delete All</option>
+                                            <option value="Mavailable">Mark Available</option>
+                                        </select>
+                                      </div>
+                                      <div class="pull-right">
+                                        <button type="button" ng-click="propctrl.addmorerow()">Add New<i class="fa fa-plus"></i></button>
+                                      </div>
+                                  </div>
+
                               </div>
                             </div>
+                              <div class="mt-bootstrap-tables">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                           <div class="portlet light ">
+                                              
+                                              <table class="table table-bordered" id="units">
+                                                <thead>
+                                                  <tr>
+                                                    <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                    <th>Units No</th>
+                                                    <th>Address</th>
+                                                    <th>SQ.ft</th>
+                                                    <th>Rent</th>
+                                                    <th>Bed</th>
+                                                    <th>Bath</th>
+                                                    <th>Amenities</th>
+                                                    <th>Status</th>
+                                                    <th></th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr  ng-repeat="i in propctrl.getNumber(propctrl.units.noofunits) track by $index" id="{{$index}}">
+                                                    <td><input type="checkbox" name="ids" value="{{$index}}"  id="ts_checkbox"></td>
+                                                    <td><input type="number" name="number" ng-model="propctrl.units.number[$index]" class=""></td>
+                                                    <td><input type="text" name="address[$index]" ng-model="propctrl.units.address" readonly></td>
+                                                    <td><input type="number" name="sqft" ng-model="propctrl.units.sqft[$index]" ></td>
+                                                    <td><input type="number" name="rent" ng-model="propctrl.units.rent[$index]" ></td>
+                                                    <td><input type="number" name="bed" ng-model="propctrl.units.bed[$index]" ></td>
+                                                    <td><input type="number" name="bath" ng-model="propctrl.units.bath[$index]" ></td>
+                                                    <td><select data-placeholder="Status" class="form-control" name="status" ng-model="propctrl.units.Aminities[$index]"   required class="w-100 localytics-chosen" data-placeholder="Prop type"><option value="">Aminities</option>
+                                                             <option value="lobby">LOBBY</option>
+                                                             <option value="gp">GYM & POOL</option>
+                                                             <option value="outdoor">OUTDOOR</option>
+                                                             <option value="bistro">THE BISTRO</option>
+                                                             
+                                                          </select></td>
+                                                    <td><select data-placeholder="Status" class="form-control" name="status" ng-model="propctrl.units.status[$index]"   required class="w-100 localytics-chosen" data-placeholder="Prop type"><option value="">Property type</option>
+                                                             <option value="rented">Rented</option>
+                                                             <option value="Available">Available</option>
+                                                             <option value="sold">Sold</option>
+                                                             
+                                                          </select></td>
+                                                    <td>Details</td>
+                                                  </tr>
+                                                 
+                                                </tbody>
+                                              </table>
+                                           </div>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                        <div class="row">
+                                          <div class="col-lg-6 col-xs-12 col-sm-12">
+                                             <button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
+                                             <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Cancel</button>
+                                              <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
+                                          </div>
+                                        </div>
 
-                      </div>
-               		</form>
-</div>
-<!-- Table View End -->
-<!-- Csv Form Start -->
-<div data-ng-if="propctrl.csv === 1">
-
-    <form  role="form" enctype="multipart/form-data" ng-submit="propctrl.csvadd()" role="form">
-          <div class="form-group">
-              <div class="fileinput fileinput-new" data-provides="fileinput">
-                  <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                      <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> </div>
-                  <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
-                  <div>
-                      <span class="btn default btn-file">
-                          <span class="fileinput-new"> Select CSV </span>
-                          <span class="fileinput-exists"> Change </span>
-                          <input type="file" name="file" id="file" value="dataFile" required=""> </span>
-                      <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
-                  </div>
-              </div>
-              
-          </div>
-          <div class="margin-top-10">
-              <button type="submit" name="csvadd" class="btn green"> Submit </button>
-              
-          </div>
+                                  </div>
+                              </form>
+                          </div>
+                          <div role="tabpanel" class="tab-pane" id="tab" ng-show="tab === 2">
+                              <form  role="form" enctype="multipart/form-data" ng-submit="propctrl.csvadd()" role="form">
+                            <div class="form-group">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                        <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                    <div>
+                                        <span class="btn default btn-file">
+                                            <span class="fileinput-new"> Select CSV </span>
+                                            <span class="fileinput-exists"> Change </span>
+                                            <input type="file" name="file" id="file" value="dataFile" required=""> </span>
+                                        <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                          <div class="row">
+                            <div class="col-lg-2 col-xs-12 col-sm-12">
+                                  <button type="submit"  class="btn btn-success ">{{propctrl.submitaction}}</button>
+                              </div>
+                              <div class="col-lg-2 col-xs-12 col-sm-12">
+                                 <button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
+                              </div>
+                                
+                            </div>
           <div id="dvCSV">
       </form>
-</div>
-<!-- Csv Form End -->
-               </div>
+                          </div>
+                        </div>
+                      </div>
+                   </div>
+                </div>
             </div>
-        </div>
+          </div>
     </div>
    </section>
   </section>

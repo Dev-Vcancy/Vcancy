@@ -438,7 +438,7 @@ vcancyApp
 			url: '/editprop/{propId}',
 			controller: 'propertyCtrl',
 			controllerAs: 'propctrl',
-			templateUrl: 'views/addproperties.html',
+			templateUrl: 'views/editproperty.html',
 			resolve: { authenticate: authenticate }
 		})
 		

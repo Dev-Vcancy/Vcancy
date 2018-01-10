@@ -46,8 +46,12 @@ vcancyApp
                     vm.ispropertydelete = userdata.val().ispropertydelete;
                     vm.isrentalsubmit = userdata.val().isrentalsubmit ;
                     vm.isshowingtime = userdata.val().isshowingtime;
-                    vm.profilepic = userdata.val().profilepic;
-                    vm.companylogo = userdata.val().companylogo;
+                    if(userdata.val().profilepic != '' && userdata.val().profilepic != null){
+                      vm.profilepic = userdata.val().profilepic;
+                    }
+                    if(userdata.val().companylogo != '' && userdata.val().companylogo != null){
+                      vm.companylogo = userdata.val().companylogo;
+                    }
                     vm.companyname = userdata.val().companyname;
 
                    

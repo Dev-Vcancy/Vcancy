@@ -28,9 +28,18 @@
 		         	</div>
 				</div>
 			</div>
-
+			<div class="clearfix"></div>
 			<div class="row">
-				<div class="col-sm-12 thumbhimnshu">
+				<div class='message' ng-if="$root.error != ''">
+                           <div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
+                        </div>
+                        <div class='message' ng-if="$root.success != ''">
+                           <div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
+                        </div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="row" >
+				<div class="col-sm-12 thumbhimnshu row-eq-height" >
 					<div class="col-md-4 property_view" ng-repeat="(key, x) in propctrl.viewprops" ng-show="propctrl.propsavail">
 						<div class="card white_block p-10">
 							<div class="property_thumb">
@@ -44,15 +53,18 @@
               <li role="menuitem"><a href="javascript:void(0);" ng-click="propctrl.deleteproperty(key)">delete</a></li>
               <li role="menuitem"><a href="#/viewunits/{{key}}">View Units</a></li>
             </ul>
-          </div>
-								<img width="640" height="220" class="img-responsive" src="{{x.propimg}}" />
+          </div>				<div ng-if="x.propimg == ''"><img width="640" height="220" class="img-responsive" src="../assets/pages/media/profile/people19.png" /></div>
+          						<div ng-if="x.propimg != ''"><img width="640" height="220" class="img-responsive" src="{{x.propimg}}" /></div>
+								
 							</div>
 							<div class="clearfix"></div>
 							<div class="property_detail">					
 								<h3><a tooltip-placement="top" uib-tooltip="{{x.units}} - {{x.address}}">{{x.units}} <span ng-hide="x.units == ' '">-</span> {{x.address}}</a></h3>
-        						<strong ng-if="x.totalunits > 0"><span>{{x.totalunits}}</span> Units</strong>
-        						<br>
-        						<strong ng-if="x.totalunits > 0"><span>{{x.totalunits}}</span> Vacants</strong>
+								<div class="info">
+        						<strong ng-if="x.totalunits > 0" class="pull-left"><span>{{x.totalunits}}</span> Units</strong>
+        						
+        						<strong ng-if="x.totalunits > 0" class="pull-right"><span>{{x.totalunits}}</span> Vacants</strong>
+        						</div>
 							</div>
 							<div class="clearfix"></div>
 						</div>
