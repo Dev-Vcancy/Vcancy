@@ -396,6 +396,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
             bucket.upload(params).on('httpUploadProgress', function(evt) {
                 //  console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total)+'%');
+                $rootScope.$apply(function() {
+                    $rootScope.success = "Please Wait.. !";
+                });
             }).send(function(err, data) {
                 if (data.Location != '') {
                     propimg = data.Location;
