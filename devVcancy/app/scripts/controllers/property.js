@@ -995,10 +995,74 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     }
 
     vm.addmorerow = function(val){
-            vm.units.noofunits = parseInt(val + 1);
-            
-         /*$("#units tr:last").clone().find('input').val('').end().insertAfter("#units tr:last");*/
+        vm.units.noofunits = parseInt(val + 1);
     }
+    vm.addmorerowedit = function(val){
+        vm.prop.noofunits = parseInt(val + 1);
+    }
+
+    vm.submiteditunits = function(unitlists,prop){
+        //console.log(unitlists); return false;
+        var fullformarary = [];
+        var propID = prop.propID;
+        var address = prop.address;
+        var name  = prop.name;
+        var type  = prop.proptype;
+        var city  = prop.city;
+        var state  = prop.province;
+        var postalcode  = prop.postcode;
+        var location  = prop.address;
+
+        var totalunits = 0;
+        for(var i = 0; i < unitlists.length; i++) {
+                var obj = unitlists[i];
+               
+                fullformarary.push({
+                    unit: obj.unit,
+                    name : name,
+                    type : type,
+                    address : obj.address,
+                    city : city,
+                    state : state,
+                    postalcode : postalcode,
+                    location : obj.address,
+                    sqft : obj.sqft,
+                    bedroom  :obj.bathroom,
+                    bathroom : obj.bathroom,
+                    rent : obj.rent,
+                    description : '',
+                    status : obj.status,
+                    epirydate : '',
+                    Aminities : obj.Aminities,
+                    cats : '',
+                    dogs : '',
+                    smoking : '',
+                    furnished : '',
+                    wheelchair : ''
+                });
+                totalunits++;
+            }
+
+            firebase.database().ref('properties/' + propID).update({
+                unitlists: fullformarary,
+                totalunits: totalunits,
+                noofunits : totalunits
+            }).then(function() {
+                if (confirm("Units Updated successfully!") == true) {
+                    localStorage.removeItem('propID');
+                    localStorage.removeItem('units');
+                    localStorage.removeItem('propName');
+                    $state.go('viewprop');
+                } else {
+                    return false;
+                }
+            }, function(error) {
+                if (confirm("Units Not added Please Try again!") == true) {
+                    return false;
+                }
+            });
+    }
+
 
     vm.submitunits = function(units) {
       
@@ -1102,13 +1166,14 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 state : state,
                 postalcode : postalcode,
                 location : address,
-                sqft : statusarray[i],
+                sqft : sqftarray[i],
                 bedroom  :bedarray[i],
                 bathroom : batharray[i],
                 rent : rentarray[i],
                 description : '',
                 status : statusarray[i],
                 epirydate : '',
+                Aminities : Aminitiesarray[i],
                 cats : '',
                 dogs : '',
                 smoking : '',
@@ -1122,7 +1187,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
  
         firebase.database().ref('properties/' + vm.localpropID).update({
             unitlists: fullformarary,
-            totalunits: totalunits
+            totalunits: totalunits,
+             noofunits : totalunits
         }).then(function() {
             if (confirm("Units added successfully!") == true) {
                 localStorage.removeItem('propID');
