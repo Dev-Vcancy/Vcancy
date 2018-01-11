@@ -15745,3 +15745,7 @@ a.thumbnail.active {
     display: flex;
     flex-wrap: wrap;
 }
+#main #content .btn.bgm-green.pull-right.waves-effect {
+    background-color: #009999 !important;
+    color: #fff;
+}

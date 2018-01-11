@@ -15,4 +15,5 @@
 .btn.red:not(.btn-outline){color:#fff;background-color:#e7505a;border-color:#e7505a;padding:10px 25px;}
 .btn.red.blue:not(.btn-outline){color:#FFF;background-color:#3598dc;border-color:#3598dc;padding:10px 25px;}
 .user-login-5.custome-register-5 .login-container>.login-content{margin:0 0;top:50%;transform:translateY(-50%);position:absolute;height:auto;}
+.md-input .bar:before, .md-input .bar:after{background:#009999;}
 

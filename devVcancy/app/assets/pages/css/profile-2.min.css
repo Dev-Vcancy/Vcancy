@@ -35,3 +35,25 @@
     padding: 5px;
     margin: 5px 0;
 }
+
+.profile ul.profile-nav a span{background: #009999;}
+.profile ul.profile-nav li a {
+    color: #437c7c;
+    background: #9ee5e5;
+    border-left: solid 2px #009999;
+}
+.sale-summary li .sale-num{color: #009999;}
+.profile ul.profile-nav img.pic-bordered {
+    border: 1px solid #e1e7ee;
+    margin: 0 0 5px;
+}
+.profile ul.profile-nav a:hover span {
+    background: #9ee5e5;
+    color:#009999;
+}
+.profile ul.profile-nav li a:hover {
+    color: #437c7c;
+    background: #ecf5fb;
+    text-decoration: none;
+    border-left: solid 2px #009999;
+}

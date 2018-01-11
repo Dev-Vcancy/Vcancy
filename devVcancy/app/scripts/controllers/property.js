@@ -25,7 +25,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     vm.city = '';
     vm.province = '';
-    vm.postcode = '';
+    vm.postcode = ''; 
     vm.country = '';
     vm.noofunits = 0;
 
@@ -968,16 +968,17 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             var arr = [];
             var selectedCountry = new Array();
                 var n = $("#ts_checkbox:checked").length;
+
                 if (n > 0){
                     $("#ts_checkbox:checked").each(function(){
                          if(val === 'DAll'){
                             $('#'+$(this).val()).remove();
                          }
                          if(val === 'Mavailable'){
-
+                                vm.units.status  = 'Available';
                          }
                          if(val === 'Mranted'){
-
+                                vm.units.status  = 'rented';
                          }
                     });
                 }else{

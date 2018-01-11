@@ -1171,3 +1171,65 @@ ul.header-inner li a:hover.button:before{
     right: 5px;
     top: 5px;
 }
+
+
+.tabordion input[name="sections"]:checked + label.tablbl {
+    background: #9ee5e5;
+    color: #437c7c;
+}
+
+.tabordion section label.tablbl {
+    background: #009999;
+    color: #fff;
+  }
+  .fg-line:not([class*="has-"]):after {
+    background: #009999;
+}
+.tabordion .personal_form_block .btn-primary {
+    color: #fff;
+    background-color: #009999;
+    border-color: #009999;
+}
+.tabordion .personal_form_block .btn-primary:hover {
+    color: #437c7c;
+    background-color: #9ee5e5;
+    border-color: #9ee5e5;
+}
+
+.new_dashbord .btn.green:not(.btn-outline) {
+    color: #FFF;
+    background-color: #009999;
+    border-color: #009999;
+}
+
+.new_dashbord .btn.green:not(.btn-outline):hover {
+    color: #437c7c;
+    background-color: #9ee5e5;
+    border-color: #9ee5e5;
+}
+
+.new_dashbord .changpass_form_block .btn-primary {
+    color: #fff;
+    background-color: #009999;
+    border-color: #009999;
+}
+
+.new_dashbord .changpass_form_block .btn-primary:hover {
+    color: #437c7c;
+    background-color: #9ee5e5;
+    border-color: #9ee5e5;
+}
+
+.new_dashbord .notification_form_block .btn-primary {
+    color: #fff;
+    background-color: #009999;
+    border-color: #009999
+}
+
+.new_dashbord .notification_form_block .btn-primary:hover {
+    color: #437c7c;
+    background-color: #9ee5e5;
+    border-color: #9ee5e5;
+}
+
+
