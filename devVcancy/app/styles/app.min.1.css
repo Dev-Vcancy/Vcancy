@@ -15734,7 +15734,7 @@ a.thumbnail.active {
 }
 
 .addunitsForm td {
-    padding: 10px 15px !important;
+    padding: 10px 5px !important;
     margin: 0 !important;
     vertical-align: middle !important;
 }
@@ -15748,4 +15748,64 @@ a.thumbnail.active {
 #main #content .btn.bgm-green.pull-right.waves-effect {
     background-color: #009999 !important;
     color: #fff;
+}
+td.table-td {
+    width: 8%;
+}
+.home-img.ng-scope {
+ position: absolute;
+ top: 0;
+ width: 100%;
+ height: 100%;
+}
+.home-icon .fa.fa-home.fa-6 {
+ font-size: 80px;
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ height: 80px;
+ width: 80px;
+ line-height: 80px;
+ margin: 0 auto;
+ display: block;
+ color: #009999;
+ transform: translate(-50%,-50%);
+}
+
+.home-img a {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.editprop .newfrnn .threeside .fg-label {
+    left: 15px;
+    top: -15px;
+    font-size: 11px;
+}
+.property .newfrnn .threeside .fg-label {
+ left: 15px;
+ top: -5px;
+ font-size: 11px;
+}
+.property .newfrnn .fg-label {
+ left: 0px;
+ top: -5px;
+ font-size: 11px;
+}
+
+.addunits a{
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    border: solid 1px;
+    width: 15%;
+    height: 35px;
+    background-color: #009999;
+    color: #FFF;
+    padding: 5px;
+}
+.btn:not(.btn-sm):not(.btn-lg) {
+    line-height: 1.44;
+    border-radius: 10px !important;
 }

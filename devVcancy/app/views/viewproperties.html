@@ -53,7 +53,7 @@
               <li role="menuitem"><a href="javascript:void(0);" ng-click="propctrl.deleteproperty(key)">delete</a></li>
               <li role="menuitem"><a href="#/viewunits/{{key}}">View Units</a></li>
             </ul>
-          </div>				<div ng-if="x.propimg == ''"><a href="#/editprop/{{key}}"><img width="640" height="220" class="img-responsive" src="../assets/pages/media/profile/people19.png" /></a></div>
+          </div>				<div ng-if="x.propimg == ''" class="home-img"><a href="#/editprop/{{key}}"><div class="home-icon"><i class="fa fa-home fa-6" aria-hidden="true"></i></div></a></div>
           						<div ng-if="x.propimg != ''"><a href="#/editprop/{{key}}"><img width="640" height="220" class="img-responsive" src="{{x.propimg}}" /></a></div>
 								
 							</div>
@@ -64,19 +64,19 @@
 								<div class="info">
         						<ul>
 										<li>
-											<p ng-if="x.totalunits > 0"><i class="fa fa-circle"></i> <span>{{x.totalunits}}</span> Units</p>
+											<p ><i class="fa fa-circle"></i> <span>3</span> Units</p>
 										</li>	
 										<li>
-											<p ng-if="x.totalunits > 0"><i class="fa fa-circle"></i> <span>{{x.totalunits}}</span> Vacants</p>
+											<p ><i class="fa fa-circle"></i> <span>4</span> Vacants</p>
 										</li>	
 										<li>
-											<p ng-if="x.totalunits > 0"><i class="fa fa-circle"></i> <span>{{x.totalunits}}</span> Layouts</p>
+											<p ><i class="fa fa-circle"></i> <span>4</span> Layouts</p>
 										</li>
 										<li>
-											<p ng-if="x.totalunits > 0"><i class="fa fa-circle"></i> <span>{{x.totalunits}}</span> Price</p>
+											<p ><i class="fa fa-circle"></i> <span>5</span> Price</p>
 										</li>
 										<li>
-											<p ng-if="x.totalunits > 0"><i class="fa fa-circle"></i> <span>{{x.totalunits}}</span> Additional Informatiaon</p>
+											<p ><i class="fa fa-circle"></i> <span>4</span> Additional Informatiaon</p>
 										</li>
 									</ul>
         						</div>

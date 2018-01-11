@@ -70,20 +70,20 @@
                                     <tbody>
                                       <tr  ng-repeat="i in propctrl.getNumber(propctrl.units.noofunits) track by $index" id="{{$index}}">
                                         <td><input type="checkbox" name="ids" value="{{$index}}"  id="ts_checkbox"></td>
-                                        <td><input type="number" name="number[]" ng-model="propctrl.units.number[$index]" class="" value="{{$index + 1}}"><input type="hidden" name="number[]" ng-model="propctrl.units.number[$index]" class=""></td>
-                                        <td><input type="text" name="address[]" ng-model="propctrl.units.address" ></td>
-                                        <td><input type="number" name="sqft[]" ng-model="propctrl.units.sqft[$index]" ></td>
-                                        <td><input type="number" name="rent[]" ng-model="propctrl.units.rent[$index]" ></td>
-                                        <td><input type="number" name="bed[]" ng-model="propctrl.units.bed[$index]" ></td>
-                                        <td><input type="number" name="bath[]" ng-model="propctrl.units.bath[$index]" ></td>
-                                        <td><select data-placeholder="Status" class="form-control" name="status[]" ng-model="propctrl.units.Aminities[$index]"   required class="w-100 localytics-chosen" data-placeholder="Prop type"><option value="">Aminities</option>
+                                        <td class="table-td"><input type="number" name="number" ng-model="propctrl.units.number[$index]" class=""  min="0" step="0.01"><input type="hidden" name="number[]" ng-model="propctrl.units.number[$index]" class=""  min="0" step="0.01"></td>
+                                        <td><input type="text" name="address" ng-model="propctrl.units.address" ></td>
+                                        <td class="table-td"><input type="number" name="sqft" ng-model="propctrl.units.sqft[$index]"  min="0" step="0.01"></td>
+                                        <td class="table-td"><input type="number" name="rent" ng-model="propctrl.units.rent[$index]"  min="0" step="0.01"></td>
+                                        <td class="table-td"><input type="number" name="bed" ng-model="propctrl.units.bed[$index]"  min="0" step="0.01"></td>
+                                        <td class="table-td"> <input type="number" name="bath" ng-model="propctrl.units.bath[$index]"  min="0" step="0.01"></td>
+                                        <td><select data-placeholder="Status" class="form-control" name="Aminities" ng-model="propctrl.units.Aminities[$index]"   required class="w-100 localytics-chosen" data-placeholder="Prop type" multiple="true">
                                                  <option value="lobby">LOBBY</option>
                                                  <option value="gp">GYM & POOL</option>
                                                  <option value="outdoor">OUTDOOR</option>
                                                  <option value="bistro">THE BISTRO</option>
                                                  
                                               </select></td>
-                                        <td><select data-placeholder="Status" class="form-control" name="status[]" ng-model="propctrl.units.status[$index]"   required class="w-100 localytics-chosen" data-placeholder="Prop type"><option value="">Property type</option>
+                                        <td><select data-placeholder="Status" class="form-control" name="status" ng-model="propctrl.units.status[$index]"   required class="w-100 localytics-chosen" data-placeholder="Prop type"><option value="">Property type</option>
                                                  <option value="rented">Rented</option>
                                                  <option value="Available">Available</option>
                                                  <option value="sold">Sold</option>

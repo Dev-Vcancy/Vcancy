@@ -411,6 +411,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             address: address,
                             city: city,
                             province: province,
+                            noofunits:multiple,
                             country: country,
                             postcode: postcode,
                             date: moment().format('YYYY-MM-DD:HH:mm:ss'),
@@ -453,6 +454,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 province: province,
                                 country: country,
                                 postcode: postcode,
+                                noofunits:multiple,
                                 date: moment().format('YYYY-MM-DD:HH:mm:ss'),
                                 multiple: multiple,
                                 name: name
@@ -462,6 +464,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 if (units === 'multiple') {
                                      localStorage.setItem("propID",propID);
                                     $rootScope.success = "Your Property Updated successfully!";
+                                     $rootScope.message = "Add units";
                                 } else {
                                     localStorage.removeItem("propID");
                                     $rootScope.success = "Your Property Updated successfully!";
@@ -477,7 +480,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             });
 
         } else {
-            console.log("Out IF");
+            
             // Start Of property Add
             if (propID == '') {
                 propdbObj.ref('properties/').push().set({
@@ -491,6 +494,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     city: city,
                     province: province,
                     country: country,
+                    noofunits:multiple,
                     postcode: postcode,
                     date: moment().format('YYYY-MM-DD:HH:mm:ss'),
                     multiple: multiple,
@@ -523,7 +527,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             }else{
                             propdbObj.ref('properties/'+propID).update({
                                 landlordID: landlordID,
-                                propimg: propimg,
                                 propstatus: propstatus,
                                 proptype: proptype,
                                 units: units,
@@ -532,6 +535,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 city: city,
                                 province: province,
                                 country: country,
+                                noofunits:multiple,
                                 postcode: postcode,
                                 date: moment().format('YYYY-MM-DD:HH:mm:ss'),
                                 multiple: multiple,
@@ -542,6 +546,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 if (units === 'multiple') {
                                      localStorage.setItem("propID",propID);
                                     $rootScope.success = "Your Property Updated successfully!";
+                                    $rootScope.message = "Add units";
                                 } else {
                                     localStorage.removeItem("propID");
                                     $rootScope.success = "Your Property Updated successfully!";
@@ -791,6 +796,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     country: propData.country,
                     propimage: propData.propimg,
                     unitlists: propData.unitlists,
+                    noofunits: propData.noofunits,
                     name: propData.name,
                     multiple: [],
                     mode: 'Edit',
@@ -995,35 +1001,59 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     }
 
     vm.submitunits = function(units) {
-
-        //console.log(units); return false;
-        
+      
         var num = units.number;
         var rent = units.rent;
         var sqft = units.sqft;
         var status = units.status;
-        var text = units.text;
+        var bath = units.bath;
+        var bed = units.bed;
+        var aminities1 = units.Aminities;
         var fullformarary = [];
+
+        
+        var address = units.address;
+        var name  = units.name;
+        var type  = units.proptype;
+        var city  = units.city;
+        var state  = units.province;
+        var postalcode  = units.postcode;
+        var location  = units.address;
+        var bedroom   = [];
+        var bathroom  = [];
+        var description  = [];
+        var status  = units.status;
+        var epirydate  = [];
+        var cats  = [];
+        var dogs  = [];
+        var smoking  = [];
+        var furnished  = [];
+        var wheelchair  = [];
+
 
         var number = [];
         var rentarray = [];
         var sqftarray = [];
         var statusarray = [];
         var textarray = [];
+        var batharray = [];
+        var bedarray = [];
+        var Aminitiesarray = [];
 
         for (var prop in num) {
             if (num.hasOwnProperty(prop)) {
                 number.push(num[prop]);
-                //alert("prop: " + prop + " value: " + num[prop])
             }
         }
+
+ 
 
         for (var prop in rent) {
             if (rent.hasOwnProperty(prop)) {
                 rentarray.push(rent[prop]);
             }
         }
-
+ 
         for (var prop in sqft) {
             if (sqft.hasOwnProperty(prop)) {
                 sqftarray.push(sqft[prop]);
@@ -1036,48 +1066,60 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             }
         }
 
-        for (var prop in text) {
+        /*for (var prop in text) {
             if (text.hasOwnProperty(prop)) {
                 textarray.push(text[prop]);
             }
+        }*/
+
+        for (var prop in bath) {
+            if (bath.hasOwnProperty(prop)) {
+                batharray.push(bath[prop]);
+            }
         }
-/*
-name
-type
-adress
-city
-state
-postalcode
-unit
-location
-sqft
-bedroom 
-bathroom
-rent
-description
-status
-epirydate
-cats
-dogs
-smoking
-furnished
-wheelchair
-*/
+
+        for (var prop in bed) {
+            if (bed.hasOwnProperty(prop)) {
+                bedarray.push(bed[prop]);
+            }
+        }
+
+        for (var prop in aminities1) {
+            if (aminities1.hasOwnProperty(prop)) {
+                Aminitiesarray.push(aminities1[prop]);
+            }
+        }
+       
         var totalunits = 0;
         for (var i = 0; i < number.length; i++) {
 
             fullformarary.push({
-                unitnumber: number[i],
-                address: textarray[i],
-                rent: rentarray[i],
-                status: statusarray[i],
-                sqft: statusarray[i]
+                unit: number[i],
+                name : name,
+                type : type,
+                address : units.address,
+                city : city,
+                state : state,
+                postalcode : postalcode,
+                location : address,
+                sqft : statusarray[i],
+                bedroom  :bedarray[i],
+                bathroom : batharray[i],
+                rent : rentarray[i],
+                description : '',
+                status : statusarray[i],
+                epirydate : '',
+                cats : '',
+                dogs : '',
+                smoking : '',
+                furnished : '',
+                wheelchair : ''
             });
             totalunits++;
         }
 
 
-
+ 
         firebase.database().ref('properties/' + vm.localpropID).update({
             unitlists: fullformarary,
             totalunits: totalunits
