@@ -578,6 +578,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 reader.onload = function(e) {
                     var rows = e.target.result.split("\n");
                     var result = [];
+                    var units = [];
                     var headers = rows[0].split(",");
                     var totalunits = 0;
                     for (var i = 1; i < parseInt(rows.length - 1); i++) {
@@ -589,11 +590,20 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                             var headerkey = headers[j];
                             headerkey = headerkey.replace(/[^a-zA-Z ]/g, "")
+                            if(headerkey == 'unit'){
+                                units.push(currentline[j]);
+                            }
                             obj[headerkey] = currentline[j];
                         }
                         result.push(obj);
                     }
-                    console.log(result);
+
+                    if(vm.duplication(units) == true){
+                        alert("Please check your unit number are duplicate.. ")
+                        return false;  
+                    } 
+
+                 //   console.log(result);
                     firebase.database().ref('properties/' + vm.localpropID).update({
                         unitlists: result,
                         totalunits: totalunits
@@ -658,6 +668,25 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         });
     }
 
+    vm.duplication = function(data){
+       
+        var sorted_arr = data.slice().sort(); // You can define the comparing function here. 
+                                             // JS by default uses a crappy string compare.
+                                             // (we use slice to clone the array so the
+                                             // original array won't be modified)
+        var results = [];
+        for (var i = 0; i < sorted_arr.length - 1; i++) {
+            if (sorted_arr[i + 1] == sorted_arr[i]) {
+                results.push(sorted_arr[i]);
+            }
+        }
+
+        if(results.length > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     if ($state.current.name == 'viewunits') {
 
@@ -1107,13 +1136,21 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         var bedarray = [];
         var Aminitiesarray = [];
 
+
+
         for (var prop in num) {
             if (num.hasOwnProperty(prop)) {
                 number.push(num[prop]);
             }
         }
 
- 
+        if(vm.duplication(number) == true){
+           alert("Please check your unit number are duplicate.. ")
+           /*$rootScope.$apply(function() {
+                    $rootScope.error = "Please check your unit number are duplicate.. !";
+                });*/
+          return false;  
+        } 
 
         for (var prop in rent) {
             if (rent.hasOwnProperty(prop)) {

@@ -28,7 +28,15 @@
                 
                 <form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" class="addunitsForm"> 
 
-
+                <div class="clearfix"></div>
+                      <div class="row">
+                        <div class='message' ng-if="$root.error != ''">
+                           <div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
+                        </div>
+                        <div class='message' ng-if="$root.success != ''">
+                           <div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
+                        </div>
+                      </div>
                 <div class="row">
                   <div class="col-md-12">
                       <div class="portlet light ">
