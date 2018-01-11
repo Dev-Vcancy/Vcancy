@@ -977,22 +977,22 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                 if (n > 0){
                     $("#ts_checkbox:checked").each(function(){
+                       
                          if(val === 'DAll'){
                             $('#'+$(this).val()).remove();
                          }
                          if(val === 'Mavailable'){
-                                vm.units.status  = 'Available';
+                               // vm.units.status  = 'Available';
+                               propctrl.prop.unitlists.status = 'Available';
                          }
                          if(val === 'Mranted'){
-                                vm.units.status  = 'rented';
+                               propctrl.prop.unitlists.status = 'rented';
                          }
                     });
                 }else{
                         alert("Select Atleast one row");
                 }
-       
-       
-    }
+      }
 
     vm.addmorerow = function(val){
         vm.units.noofunits = parseInt(val + 1);

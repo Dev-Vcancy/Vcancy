@@ -4,46 +4,68 @@
    <section class="new_dashbord" id="content">
       <div class="container">
          <div class="page-content-wrapper">
-            <div class="page-content" style="min-height: 1434px;">
+            <div class="page-content">
                <h1 class="page-title">  {{propctrl.units.mode}} Units </h1>
                <div class="profile">
                		<h3>View units of {{propctrl.units.name}}</h3> 
                  	
                   <!-- Table View Start -->
-                  <div >
-               		<form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" class="addunitsForm">	
+            		    <div>
+               				<div class="mt-bootstrap-tables" ng-show="(propctrl.units.unitlists| filter:unit).length">
+                                 <div class="row">
+                                    <div class="col-md-12">
+                                       <div class="portlet light ">
+                                          <table class="table table-bordered">
+                                             <thead>
+                                                <tr>
+                                                   <th>Units No</th>
+                                                   <th>Address</th>
+                                                   <th>SQ.ft</th>
+                                                   <th>Rent</th>
+                                                   <th>Bed</th>
+                                                   <th>Bath</th>
+                                                   <th>Amenities</th>
+                                                   <th>Status</th>
+                                                   
+                                                </tr>
+                                             </thead>
+                                             <tbody >
 
-               		<div class="mt-bootstrap-tables">
-						   <div class="row">
-						      <div class="col-md-12">
-						         <div class="portlet light ">
-						         	  <table class="table table-bordered">
-						               <thead>
-						                  <tr>
-						                     <th>Units</th>
-						                     <th>Address</th>
-						                     <th>SQ.ft</th>
-						                     <th>Rent</th>
-						                     <th>Status</th>
-						                     <th></th>
-						                  </tr>
-						               </thead>
-						               <tbody>
-						                  <tr  ng-repeat="unitlist in propctrl.units.unitlists">
-
-						                     <td ng-repeat = "unit in unitlist ">{{unit}}</td>
-						                     
-						                     <td><a href="javascript:void(0)">Details</a></td>
-						                  </tr>
-						               </tbody>
-						            </table>
-						         </div>
-						      </div>
-						   </div>
-						</div>
-						</form>
-						</div>
-<!-- Table View End -->
+                                                <tr  ng-repeat="i in propctrl.getNumber(propctrl.units.totalunits) track by $index" id="{{$index}}">
+                                                   <td >{{propctrl.units.unitlists[$index].unit}}</td>
+                                                   <td>{{propctrl.units.unitlists[$index].address}}</td>
+                                                   <td class="table-td">{{propctrl.units.unitlists[$index].sqft}}</td>
+                                                   <td class="table-td">{{propctrl.units.unitlists[$index].rent}}</td>
+                                                   <td class="table-td"> {{propctrl.units.unitlists[$index].bathroom}}</td>
+                                                   <td>
+                                                   	
+														   <ul ng-repeat="x in propctrl.units.unitlists[$index].Aminities">
+														  	 <li>{{ x }}</li>
+														   </ul>
+                                                   </td>
+                                                   <td>
+                                                      {{propctrl.units.unitlists[$index].status}}
+                                                   </td>
+                                                   <td>Details</td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div ng-show="!(propctrl.units.unitlists| filter:unit).length" class="addunits">
+                                 <h1>There is no units for your proprty  </h1>
+                              </div>
+               				
+					 <div class="row">
+                              <div class="col-lg-6 col-xs-12 col-sm-12">
+                                 <button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
+                                
+                              </div>
+                            </div>
+					  </div>
+			<!-- Table View End -->
 
                </div>
             </div>
