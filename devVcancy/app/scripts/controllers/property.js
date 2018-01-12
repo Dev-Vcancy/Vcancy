@@ -431,10 +431,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 console.log(units);
                                 if (units === 'multiple') {
                                     $rootScope.message = "multiple";
-                                    $rootScope.success = "Your Property Added successfully!";
+                                    $rootScope.success = "Property added successfully!";
                                 } else {
                                     localStorage.removeItem("propID");
-                                    $rootScope.success = "Your Property Added successfully!";
+                                    $rootScope.success = "Property added successfully!";
                                     setTimeout(function(){ $state.go('viewprop'); }, 2000);
                                     
                                 }
@@ -466,11 +466,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 console.log(units);
                                 if (units === 'multiple') {
                                      localStorage.setItem("propID",propID);
-                                    $rootScope.success = "Your Property Updated successfully!";
+                                    $rootScope.success = "Property updated!";
                                      $rootScope.message = "Add units";
                                 } else {
                                     localStorage.removeItem("propID");
-                                    $rootScope.success = "Your Property Updated successfully!";
+                                    $rootScope.success = "Property updated!";
                                     setTimeout(function(){ $state.go('viewprop'); }, 2000);
                                     
                                 }
@@ -608,7 +608,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         unitlists: result,
                         totalunits: totalunits
                     }).then(function() {
-                        $rootScope.success = "Your Units added successfully!";
+                        $rootScope.success = "Units added successfully!";
                         setTimeout(function(){ $state.go('viewprop'); }, 2000);
                     }, function(error) {
                        $rootScope.error = "Please Check your CSV file Having issue with the data!";
@@ -927,8 +927,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             });
                         });
                     })
-                    //$state.go('viewprop');
-                    $state.reload();
+                    $state.go('viewprop');
+                    //$state.reload();
                 });
             }
 
