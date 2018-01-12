@@ -192,10 +192,10 @@ font-size: 18px;">delete Property</a>
                                                    <td>
                                                    
                                                       <select data-placeholder="Status" class="form-control" name="Aminities" ng-model="propctrl.prop.unitlists[$index].Aminities"   required class="w-100 localytics-chosen" data-placeholder="Prop type" multiple="true">
-                                                         <option value="lobby">LOBBY</option>
-                                                         <option value="gp">GYM & POOL</option>
-                                                         <option value="outdoor">OUTDOOR</option>
-                                                         <option value="bistro">THE BISTRO</option>
+                                                         <option value="Furnished">Furnished</option>
+                                                 <option value="laundry">Laundry</option>
+                                                 <option value="parking">Parking</option>
+                                                 <option value="wheelchair">wheelchair</option>
                                                       </select>
                                                    </td>
                                                    <td>
@@ -215,7 +215,7 @@ font-size: 18px;">delete Property</a>
                                  </div>
                               </div>
                               <div ng-show="!(propctrl.prop.unitlists| filter:unit).length" class="addunits">
-                                 <a href="#/addunits">Add Your Units</a>
+                                 <a href="#/addunits">Add New</a>
                               </div>
                               <div class="row">
                               <div class="col-lg-6 col-xs-12 col-sm-12">

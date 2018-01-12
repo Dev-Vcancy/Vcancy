@@ -167,9 +167,7 @@ vcancyApp
                            if(confirm("Passwords don't match.") == true){
                               return false;
                             }
-                        /*$rootScope.invalid = 'regcpwd';         
-                        $rootScope.error = "Passwords don't match";
-                        $rootScope.success = '';*/
+                      
                     }
 
 
@@ -178,9 +176,7 @@ vcancyApp
                 if(confirm("Passwords don't match.") == true){
                   return false;
                 }
-                /*$rootScope.invalid = 'regcpwd';         
-                $rootScope.error = "Passwords don't match";
-                $rootScope.success = '';*/
+               
             }
         }
 
@@ -239,54 +235,7 @@ vcancyApp
                                 return false;
                             }
         } 
-     /*   vm.profilestore = function(){
-           var landLordID = localStorage.getItem('userID');
-          vm.error = 0;
-            //alert("hfgjdfg");
-            function checkFile() {
-              if($('#uploadfile')[0].files[0]) {
-                var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();        
-                if($('#uploadfile')[0].files[0].size > 3145728) {
-                  return 'File size should be 3 MB or less.'
-                } else if(!(_fileName.endsWith('.png')) 
-                  && !(_fileName.endsWith('.jpg'))
-                  && !(_fileName.endsWith('.jpeg')))  {
-                    return 'Invalid file type.'
-                }
-              }
-            }
-
-            var fileCheckMsg = checkFile();
-            if(fileCheckMsg) {
-                vm.error = 1;
-                vm.errormessage = "Invalid File Extensions."
-            }
-
-          var appfiles = $('#appfiles').val();
-          var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-            filename = moment().format('YYYYMMDDHHmmss')+filename.replace(/\s/g,''); 
-
-            
-            console.log(filepath);
-            if(filename != ''){
-             vm.upload(appfiles, filename);
-               var user = firebase.auth().currentUser;
-                  if (user) { 
-                      firebase.database().ref('users/' + landLordID).update({'profilepic':filepath}).then(function(){
-                         vm.success = "Your profile updated successfully.";
-                       }, function(error) {
-                        // The Promise was rejected.
-                        console.error(error);
-                        $rootScope.error = "May Be your session is expire please login again."
-                      });
-                  } else {
-                     $rootScope.error = "May Be your session is expire please login again."
-                  }
-            }
-
-            console.log(filename, filepath, appfiles);
-        } */
-
+    
        
          vm.newuserSubmit = function(newuser){
 

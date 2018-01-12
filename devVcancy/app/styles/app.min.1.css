@@ -15806,6 +15806,10 @@ td.table-td {
     padding: 5px;
 }
 .btn:not(.btn-sm):not(.btn-lg) {
-    line-height: 1.44;
-    border-radius: 10px !important;
+    /*line-height: 1.44;
+    border-radius: 10px !important;*/
+        border-radius: 0.30rem !important;
+    padding: 5px 20px;
+    font-size: 16px;
+    font-weight: 600;
 }

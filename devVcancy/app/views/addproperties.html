@@ -6,7 +6,25 @@
          <div class="page-content-wrapper">
             <div class="page-content" style="min-height: 1434px;">
                <h1 class="page-title">  {{propctrl.mode}} a Property </h1>
-               
+                <script type="text/ng-template" id="myModalContent.html">
+                       <div class="profile_model_popup">
+                      
+                       <div class="modal-body">
+                            <form  role="form" enctype="multipart/form-data" id="fileUploadForm" method="post">
+                   
+                               <div class="form-group">
+                                  
+                               </div>
+                       </div>
+                       <div class="modal-footer">
+                           <button  class="btn btn-primary" ng-click="ok()">Submit</button>
+                           <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+                       </div>
+                       </form>
+                       </div>
+                   </script>
+
+
                <div class="profile">
                   <div class="tabbable-line tabbable-full-width">
                      <form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" role="form"  class="property" enctype="multipart/form-data">
@@ -111,7 +129,7 @@
 
                            <div class="col-lg-4 col-xs-12 col-sm-12" style="    margin: 25px;">
                                
-                              <a href="#/addunits" class="btn btn-info  pull-left">{{propctrl.prop.noofunits}} Units Add/View Units</a>
+                              <a href="#/addunits" class="btn btn-info  pull-left">{{propctrl.prop.noofunits}} Add New/View Units</a>
                            </div>
                            <div class="col-lg-4 col-xs-12 col-sm-12"></div>
                         </div>
