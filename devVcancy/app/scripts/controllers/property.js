@@ -453,7 +453,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 date: moment().format('YYYY-MM-DD:HH:mm:ss'),
                                 multiple: multiple,
                                 name: name
-                        }
+                        
                         }).then(function(){
                              $rootScope.$apply(function() {
                                 console.log(units);
@@ -822,6 +822,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function(snapshot) {
 
             var propData = snapshot.val();
+
             vm.timeSlot = [];
             $scope.$apply(function() {
                 vm.prop = {
@@ -1297,6 +1298,25 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
           //$log.info('Modal dismissed at: ' + new Date());
         });
       };
+
+
+      vm.opencsvmodel = function () {
+      //  console.log(vm.prop);
+        var modalInstance = $uibModal.open({
+          templateUrl: 'myModalContent1.html',
+          controller: 'ModalInstanceCtrl1',
+          controllerAs: 'ModalInstanceCtrl1',
+          
+        });
+
+        modalInstance.result.then(function (selectedItem) {
+          $scope.selected = selectedItem;
+          $scope.ModalInstanceCtrl1 = vm.prop;
+        }, function () {
+          //$log.info('Modal dismissed at: ' + new Date());
+        });
+      };
+
    
 }]);
 
@@ -1309,6 +1329,10 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
             }
         };  
         
+        $scope.submit = function(){
+            console.log($scope.items);
+        }
+
         $scope.units = function (value) {
              if(value != '' && value != null){
               //  $location.absUrl() = '#/addunits/'+value;

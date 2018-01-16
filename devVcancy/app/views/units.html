@@ -18,7 +18,7 @@
                       <a href ng-click="tab = 1" data-toggle="tab" aria-expanded="true" >Units</a>
                  </li>
                 <li role="presentation">
-                      <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true" >CSV</a>
+                      <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true" >Import Csv</a>
                 </li>
             </ul>
 
@@ -26,7 +26,7 @@
               <div role="tabpanel" class="tab-pane active" id="home" ng-show="tab === 1">
 
                 
-                <form name="addunitsForm" ng-submit="propctrl.submitunits(propctrl.units)" role="form" class="addunitsForm"> 
+                <form name="addunitsForm" ng-submit="propctrl.submiteditunits(propctrl.prop.unitlists,propctrl.prop)"  role="form" class="addunitsForm"> 
 
                 <div class="clearfix"></div>
                       <div class="row">
@@ -60,48 +60,51 @@
                             <div class="col-md-12">
                                <div class="portlet light ">
                                   
-                                  <table class="table table-bordered" id="units">
-                                    <thead>
-                                      <tr>
-                                        <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                        <th>Unit #</th>
-                                        <th>Address</th>
-                                        <th>SQ.ft</th>
-                                        <th>Rent</th>
-                                        <th>Bed</th>
-                                        <th>Bath</th>
-                                        <th>Amenities</th>
-                                        <th>Status</th>
-                                        <th></th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr  ng-repeat="i in propctrl.getNumber(propctrl.units.noofunits) track by $index" id="{{$index}}">
-                                        <td><input type="checkbox" name="ids" value="{{$index}}"  id="ts_checkbox"></td>
-                                        <td class="table-td"><input type="number" name="number" ng-model="propctrl.units.number[$index]" class=""  min="0" step="0.01"><input type="hidden" name="number[]" ng-model="propctrl.units.number[$index]" class=""  min="0" step="0.01"></td>
-                                        <td><input type="text" name="address" ng-model="propctrl.units.address" ></td>
-                                        <td class="table-td"><input type="number" name="sqft" ng-model="propctrl.units.sqft[$index]"  min="0" step="0.01"></td>
-                                        <td class="table-td"><input type="number" name="rent" ng-model="propctrl.units.rent[$index]"  min="0" step="0.01"></td>
-                                        <td class="table-td"><input type="number" name="bed" ng-model="propctrl.units.bed[$index]"  min="0" step="0.01"></td>
-                                        <td class="table-td"> <input type="number" name="bath" ng-model="propctrl.units.bath[$index]"  min="0" step="0.01"></td>
-                                        <td><select data-placeholder="Status" class="form-control" name="Aminities" ng-model="propctrl.units.Aminities[$index]"   required class="w-100 localytics-chosen" data-placeholder="Prop type" multiple="true">
-                                                 <option value="Furnished">Furnished</option>
+                                  <table class="table table-bordered">
+                                             <thead>
+                                                <tr>
+                                                   <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                   <th>Units No</th>
+                                                   <th>Address</th>
+                                                   <th>SQ.ft</th>
+                                                   <th>Rent</th>
+                                                   <th>Bed</th>
+                                                   <th>Bath</th>
+                                                   <th>Amenities</th>
+                                                   <th>Status</th>
+                                                   <th></th>
+                                                </tr>
+                                             </thead>
+                                             <tbody >
+
+                                                <tr  ng-repeat="i in propctrl.getNumber(propctrl.prop.noofunits) track by $index" id="{{$index}}">
+                                                   <td><input type="checkbox" name="ids" value="{{$index}}"  id="ts_checkbox"></td>
+                                                   <td class="table-td"><input type="number" name="unit" ng-model="propctrl.prop.unitlists[$index].unit" class=""  min="0" step="0.01"><input type="hidden" name="unit" ng-model="propctrl.prop.unitlists[$index].unit" class=""  min="0" step="0.01"></td>
+                                                   <td><input type="text" name="address" ng-model="propctrl.prop.unitlists[$index].address" ></td>
+                                                   <td class="table-td"><input type="number" name="sqft" ng-model="propctrl.prop.unitlists[$index].sqft"  min="0" step="0.01"></td>
+                                                   <td class="table-td"><input type="number" name="rent" ng-model="propctrl.prop.unitlists[$index].rent"  min="0" step="0.01"></td><td class="table-td"> <input type="number" name="bedroom" ng-model="propctrl.prop.unitlists[$index].bedroom"  min="0" step="0.01"></td>
+                                                   <td class="table-td"> <input type="number" name="bathroom" ng-model="propctrl.prop.unitlists[$index].bathroom"  min="0" step="0.01"></td>
+                                                   <td>
+                                                   
+                                                      <select data-placeholder="Status" class="form-control" name="Aminities" ng-model="propctrl.prop.unitlists[$index].Aminities"   required class="w-100 localytics-chosen" data-placeholder="Prop type" multiple="true">
+                                                         <option value="Furnished">Furnished</option>
                                                  <option value="laundry">Laundry</option>
                                                  <option value="parking">Parking</option>
                                                  <option value="wheelchair">wheelchair</option>
-                                                 
-                                              </select></td>
-                                        <td><select data-placeholder="Status" class="form-control" name="status" ng-model="propctrl.units.status[$index]"   required class="w-100 localytics-chosen" data-placeholder="Prop status"><option value="">Select</option>
-                                                 <option value="rented">Rented</option>
-                                                 <option value="Available">Available</option>
-                                                 <option value="sold">Sold</option>
-                                                 
-                                              </select></td>
-                                        <td><button>Details</button></td>
-                                      </tr>
-                                     
-                                    </tbody>
-                                  </table>
+                                                      </select>
+                                                   </td>
+                                                   <td>
+                                                      <select data-placeholder="Status" class="form-control" name="status" ng-model="propctrl.prop.unitlists[$index].status"   required class="w-100 localytics-chosen" data-placeholder="Prop status">
+                                                         <option value="">Property status</option>
+                                                         <option value="rented">Rented</option>
+                                                         <option value="Available">Available</option>
+                                                         <option value="sold">Sold</option>
+                                                      </select>
+                                                   </td>
+                                                   <td><button>Details</button></td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
                                </div>
                             </div>
                             
