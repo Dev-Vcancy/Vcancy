@@ -33,15 +33,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     vm.csv = 0;
     vm.localpropID = '';
 
-    if (url.endsWith('addunits') == true) {
-
-        if (localStorage.getItem("propID") != null) {
-            vm.localpropID = localStorage.getItem("propID");
-
-        } else {
-            $state.go('viewprop');
-        }
-    }
+    
 
     firebase.database().ref('users/' + localStorage.getItem('userID')).once("value", function(snap) {
         vm.landlordname = snap.val().firstname + " " + snap.val().lastname;
@@ -336,6 +328,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     // Add/Edit Property       
     vm.submitProp = function(property) {
 
+        //console.log(property); return false;
+
         AWS.config.update({
             accessKeyId: 'AKIAI6FJLQDDJXI4LORA',
             secretAccessKey: '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'
@@ -424,27 +418,25 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             console.log("Insert Data successfully!");
 
                             propdbObj.ref('properties/').limitToLast(1).once("child_added", function(snapshot) {
-                                localStorage.setItem("propID", snapshot.key);
+                                //localStorage.setItem("propID", snapshot.key);
+                                         $rootScope.$apply(function() {
+                                                console.log(units);
+                                                $rootScope.units = units;
+                                                $rootScope.message = units;
+                                                $rootScope.success = "Property added successfully!";
+                                                $rootScope.propID = snapshot.key;
+                                               
+
+                                            });
+                                         if(units == 'multiple'){
+                                           vm.openmodel();  
+                                         }
+                                        
                             });
-
-                            $rootScope.$apply(function() {
-                                console.log(units);
-                                if (units === 'multiple') {
-                                    $rootScope.message = "multiple";
-                                    $rootScope.success = "Property added successfully!";
-                                } else {
-                                    localStorage.removeItem("propID");
-                                    $rootScope.success = "Property added successfully!";
-                                    setTimeout(function(){ $state.go('viewprop'); }, 2000);
-                                    
-                                }
-
-
-                            });
-
 
                         });
                     }else{
+
                             propdbObj.ref('properties/'+propID).update({
                                 landlordID: landlordID,
                                 propimg: propimg,
@@ -461,20 +453,15 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 date: moment().format('YYYY-MM-DD:HH:mm:ss'),
                                 multiple: multiple,
                                 name: name
+                        }
                         }).then(function(){
-                              $rootScope.$apply(function() {
+                             $rootScope.$apply(function() {
                                 console.log(units);
-                                if (units === 'multiple') {
-                                     localStorage.setItem("propID",propID);
-                                    $rootScope.success = "Property updated!";
-                                     $rootScope.message = "Add units";
-                                } else {
-                                    localStorage.removeItem("propID");
-                                    $rootScope.success = "Property updated!";
-                                    setTimeout(function(){ $state.go('viewprop'); }, 2000);
-                                    
-                                }
-
+                                $rootScope.units = units;
+                                $rootScope.message = units;
+                                $rootScope.success = "Property Updated!";
+                                $rootScope.propID = propID;
+                               
 
                             });
                         });
@@ -506,10 +493,22 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     console.log("Insert Data successfully!");
 
                     propdbObj.ref('properties/').limitToLast(1).once("child_added", function(snapshot) {
-                        localStorage.setItem("propID", snapshot.key);
+                         $rootScope.$apply(function() {
+                                console.log(units);
+                                $rootScope.units = units;
+                                $rootScope.message = units;
+                                $rootScope.success = "Property Added successfully!";
+                                $rootScope.propID = snapshot.key;
+                               
+
+                            });
+                         //vm.openmodel();
+                          if(units == 'multiple'){
+                               vm.openmodel();  
+                             }
                     });
 
-                       $rootScope.$apply(function() {
+                       /*$rootScope.$apply(function() {
                             console.log(units);
                             if (units === 'multiple') {
                                 $rootScope.message = "multiple";
@@ -522,17 +521,22 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             }
 
 
-                        });
+                        });*/
 
 
 
                 });
             }else{
-                            propdbObj.ref('properties/'+propID).update({
+                if($('#propimg').val() != ''){
+                      propimg =  $('#propimg').val();
+                }
+
+                propdbObj.ref('properties/'+propID).update({
                                 landlordID: landlordID,
                                 propstatus: propstatus,
                                 proptype: proptype,
                                 units: units,
+                                propimg:propimg,
                                 shared: shared,
                                 address: address,
                                 city: city,
@@ -544,7 +548,16 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 multiple: multiple,
                                 name: name
                         }).then(function(){
-                              $rootScope.$apply(function() {
+                                $rootScope.$apply(function() {
+                                console.log(units);
+                                $rootScope.units = units;
+                                $rootScope.message = units;
+                                $rootScope.success = "Property Updated!";
+                                $rootScope.propID = propID;
+                               
+
+                            });
+                /*              $rootScope.$apply(function() {
                                 console.log(units);
                                 if (units === 'multiple') {
                                      localStorage.setItem("propID",propID);
@@ -558,7 +571,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 }
 
 
-                            });
+                            });*/
                         });
                     } // End OF property Add-edit
         }
@@ -630,13 +643,13 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     if($state.current.name == 'addunits'){
 
-         var ref = firebase.database().ref("/properties/" +localStorage.getItem("propID")).once('value').then(function(snapshot) {
+         var ref = firebase.database().ref("/properties/" +$stateParams.propId).once('value').then(function(snapshot) {
 
             var propData = snapshot.val();
             console.log(propData);
              vm.timeSlot = [];
             $scope.$apply(function() {
-                vm.units = {
+             vm.prop =   vm.units = {
                     propID: snapshot.key,
                     landlordID: propData.landlordID,
                     propimg: propData.propimg,
@@ -1097,7 +1110,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
     vm.submitunits = function(units) {
-      
+
         var num = units.number;
         var rent = units.rent;
         var sqft = units.sqft;
@@ -1225,7 +1238,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
  
-        firebase.database().ref('properties/' + vm.localpropID).update({
+        firebase.database().ref('properties/' + units.propID).update({
             unitlists: fullformarary,
             totalunits: totalunits,
              noofunits : totalunits
@@ -1273,7 +1286,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
         var modalInstance = $uibModal.open({
           templateUrl: 'myModalContent.html',
-          controller: 'ModalInstanceCtrl',
+          controller: 'ModalInstanceCtrl1',
           size: size,
          
         });
@@ -1287,65 +1300,21 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
    
 }]);
 
-vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http','$modal', '$uibModalInstance', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http,$modal,$uibModalInstance){
+vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http','$uibModal', '$uibModalInstance','$location', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http,$uibModal,$uibModalInstance,$location){
 
-           AWS.config.update({
-                      accessKeyId : 'AKIAI6FJLQDDJXI4LORA',
-                      secretAccessKey : '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'
-            });
-            AWS.config.region = 'us-west-2';
-
-        $scope.ok = function () {
+        $scope.ok = function (value) {
+            if(value === 'viewproperty'){
+               $uibModalInstance.close();
+                $state.go('viewprop');
+            }
+        };  
         
-                  var bucket = new AWS.S3({params: {Bucket: 'sagar-vcancy-test/profile-images'}});
-                  var fileChooser = document.getElementById('file');
-                  var file = fileChooser.files[0];
-                  var filename = moment().format('YYYYMMDDHHmmss')+file.name; 
-                    filename = filename.replace(/\s/g,'');
-
-                    if(file.size > 3145728) {
-                        alert('File size should be 3 MB or less.');
-                        return false;
-                      } else if(!(filename.endsWith('.png')) 
-                        && !(filename.endsWith('.jpg'))
-                        && !(filename.endsWith('.jpeg')))  {
-                          alert('Invalid file type.');
-                          return false;
-                      }
-
-
-                  if (file) {
-                      var params = {Key: filename, ContentType: file.type, Body: file,StorageClass: "STANDARD_IA" , ACL : 'public-read'};
-                      bucket.upload(params).on('httpUploadProgress', function(evt) {
-                      console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total)+'%');
-                      }).send(function(err, data) {
-                          //console.log(data.Location); return false;
-                          if(data.Location != ''){
-                              var landLordID = localStorage.getItem('userID');
-                                     var user = firebase.auth().currentUser;
-                                        if (user) { 
-                                            firebase.database().ref('users/' + landLordID).update({'profilepic':data.Location}).then(function(){
-                                             
-                                              if (confirm("Your profile Picture updated successfully.") == true) {
-                                                  $uibModalInstance.close();
-                                                } else {
-                                                  return false;
-                                                }
-                                             }, function(error) {
-                                              // The Promise was rejected.
-                                              console.error(error);
-                                              
-                                            });
-                                        } 
-                          }
-                     
-                      });
-                  }else{
-                      alert("File Type is Invalid.");
-                      return false;
-                  }
-                  
-              
+        $scope.units = function (value) {
+             if(value != '' && value != null){
+              //  $location.absUrl() = '#/addunits/'+value;
+              $uibModalInstance.close();
+                $window.location.href = '#/addunits/'+value;
+             }
         };  
 
         $scope.cancel = function () {

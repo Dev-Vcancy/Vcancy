@@ -13,14 +13,33 @@
                             <form  role="form" enctype="multipart/form-data" id="fileUploadForm" method="post">
                    
                                <div class="form-group">
-                                  
+                                 <div class="" ng-show="$root.units == 'multiple'">
+                                          <div class='message' ng-if="$root.error != ''">
+                                             <div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
+                                          </div>
+                                          <div class='message' ng-if="$root.success != ''">
+                                             <div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
+                                          </div>
+                                          <div style="margin: 0 auto;display: block;  width: 55%;">
+                                                <a  class="btn btn-primary" ng-click="units($root.propID)">Add Units</a>
+                                                <a class="btn btn-warning" ng-click="ok('viewproperty')">View Properties</a>
+                                             </div>
+                                  </div>
+                                  <div class="" ng-show="$root.units == 'single'">
+                                     <div class='message' ng-if="$root.error != ''">
+                                       <div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
+                                    </div>
+                                    <div class='message' ng-if="$root.success != ''">
+                                       <div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
+                                    </div>
+                                       <a  class="btn btn-primary" ng-click="ok('viewproperty')">View Property</a>
+                                    
+                                  </div>
                                </div>
+                               </form>
                        </div>
-                       <div class="modal-footer">
-                           <button  class="btn btn-primary" ng-click="ok()">Submit</button>
-                           <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-                       </div>
-                       </form>
+                      
+                       
                        </div>
                    </script>
 
@@ -125,13 +144,17 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="row" ng-if="$root.message != ''">
-                           <div class="col-lg-4 col-xs-12 col-sm-12"></div>
-
-                           <div class="col-lg-4 col-xs-12 col-sm-12" style="    margin: 25px;">
-                               
-                              <a href="#/addunits" class="btn btn-info  pull-left">{{propctrl.prop.noofunits}} Add New/View Units</a>
+                           <div class="col-lg-4 col-xs-12 col-sm-12">
+                              <a  data-ng-click="propctrl.backtoviewprop()" class="btn btn-info">View Property</a>
                            </div>
-                           <div class="col-lg-4 col-xs-12 col-sm-12"></div>
+                           
+                           <div class="col-lg-4 col-xs-12 col-sm-12">
+                                 <a href="#/editprop/{{$root.propID}}" class="btn btn-info  pull-left">Edit Property</a>
+
+                           </div>
+                           <div class="col-lg-4 col-xs-12 col-sm-12">
+                              <a  ng-click="propctrl.deleteproperty($root.propID)" class="btn btn-info">Delete Property</a>
+                           </div>
                         </div>
                      </form>
                   </div>

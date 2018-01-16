@@ -423,7 +423,7 @@ vcancyApp
 			resolve: { authenticate: authenticate }
 		}) 
 		.state('addunits', {
-			 url: '/addunits',
+			 url: '/addunits/{propId}',
 			 templateUrl:'views/units.html',
 			 controller:'propertyCtrl',
 			 controllerAs: 'propctrl',
