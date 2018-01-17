@@ -1232,4 +1232,9 @@ ul.header-inner li a:hover.button:before{
     border-color: #9ee5e5;
 }
 
+.buttonvancy {
+    background: #009999;
+    border: solid 1px #009999;
+}
 
+.buttonvancy:hover { background: #26bfbf; border: solid 1px #009999; }

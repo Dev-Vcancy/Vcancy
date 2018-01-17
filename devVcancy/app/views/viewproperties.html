@@ -50,7 +50,7 @@
            
             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-to-body">
               <li role="menuitem"><a href="#/editprop/{{key}}">Edit</a></li>
-              <li role="menuitem"><a href="javascript:void(0);" ng-click="propctrl.deleteproperty(key)">delete</a></li>
+              <li role="menuitem"><a href="javascript:void(0);" ng-click="propctrl.deleteproperty(key,'samepage')">delete</a></li>
               <li role="menuitem" ng-show="x.units == 'multiple'"><a href="#/viewunits/{{key}}">View Units</a></li>
             </ul>
           </div>				<div ng-if="x.propimg == ''" class="home-img"><a href="#/editprop/{{key}}"><div class="home-icon"><i class="fa fa-home fa-6" aria-hidden="true"></i></div></a></div>

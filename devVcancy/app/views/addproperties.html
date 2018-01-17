@@ -15,14 +15,15 @@
                                <div class="form-group">
                                  <div class="" ng-show="$root.units == 'multiple'">
                                           <div class='message' ng-if="$root.error != ''">
-                                             <div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
+                                             <div class="fade in" style="margin: 0 auto;display: block;padding: 15px;width: 50%;color: #009999;"><strong>{{$root.error}}</strong></div>
                                           </div>
                                           <div class='message' ng-if="$root.success != ''">
-                                             <div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
+                                             <div class="fade in" style="margin: 0 auto;display: block;padding: 15px;width: 50%;color: #009999;">
+                                             <strong>{{$root.success}}</strong></div>
                                           </div>
-                                          <div style="margin: 0 auto;display: block;  width: 55%;">
+                                          <div style="margin: 0 auto;display: block;  width: 35%;">
                                                 <a  class="btn btn-primary" ng-click="units($root.propID)">Add Units</a>
-                                                <a class="btn btn-warning" ng-click="ok('viewproperty')">View Properties</a>
+                                                <!-- <a class="btn btn-warning" ng-click="ok('viewproperty')">View Properties</a> -->
                                              </div>
                                   </div>
                                   <div class="" ng-show="$root.units == 'single'">
@@ -32,7 +33,7 @@
                                     <div class='message' ng-if="$root.success != ''">
                                        <div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
                                     </div>
-                                       <a  class="btn btn-primary" ng-click="ok('viewproperty')">View Property</a>
+                                       <a  class="btn btn-primary" ng-click="ok('viewproperty')">Back</a>
                                     
                                   </div>
                                </div>
@@ -83,7 +84,7 @@
                               </div>
                               <div class="form-group fg-float" ng-show="propctrl.prop.units == 'multiple'">
                                  <div class="fg-line">
-                                    <input type="number"  ng-model="propctrl.prop.noofunits"  ng-required="propctrl.prop.units == 'multiple'" name="noofunits" class="form-control w-100 phone" id="" placeholder="Address">
+                                    <input type="number"  ng-model="propctrl.prop.noofunits"  ng-required="propctrl.prop.units == 'multiple'" name="noofunits" class="form-control w-100 phone" id="" placeholder="Address" min="1">
                                     <label class="fg-label" for="text">No of Units:</label>
                                  </div>
                               </div>
@@ -145,7 +146,7 @@
                         <div class="clearfix"></div>
                         <div class="row" ng-if="$root.message != ''">
                            <div class="col-lg-4 col-xs-12 col-sm-12">
-                              <a  data-ng-click="propctrl.backtoviewprop()" class="btn btn-info">View Property</a>
+                              <a  data-ng-click="propctrl.backtoviewprop()" class="btn btn-info">&lt;&lt; Back</a>
                            </div>
                            
                            <div class="col-lg-4 col-xs-12 col-sm-12">
@@ -153,7 +154,7 @@
 
                            </div>
                            <div class="col-lg-4 col-xs-12 col-sm-12">
-                              <a  ng-click="propctrl.deleteproperty($root.propID)" class="btn btn-info">Delete Property</a>
+                              <a  ng-click="propctrl.deleteproperty($root.propID,'innerpage')" class="btn btn-info">Delete Property</a>
                            </div>
                         </div>
                      </form>

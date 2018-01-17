@@ -508,23 +508,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                              }
                     });
 
-                       /*$rootScope.$apply(function() {
-                            console.log(units);
-                            if (units === 'multiple') {
-                                $rootScope.message = "multiple";
-                                $rootScope.success = "Your Property Added successfully!";
-                            } else {
-                                localStorage.removeItem("propID");
-                                $rootScope.success = "Your Property Added successfully!";
-                                setTimeout(function(){ $state.go('viewprop'); }, 2000);
-                                
-                            }
-
-
-                        });*/
-
-
-
                 });
             }else{
                 if($('#propimg').val() != ''){
@@ -557,21 +540,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                
 
                             });
-                /*              $rootScope.$apply(function() {
-                                console.log(units);
-                                if (units === 'multiple') {
-                                     localStorage.setItem("propID",propID);
-                                    $rootScope.success = "Your Property Updated successfully!";
-                                    $rootScope.message = "Add units";
-                                } else {
-                                    localStorage.removeItem("propID");
-                                    $rootScope.success = "Your Property Updated successfully!";
-                                    setTimeout(function(){ $state.go('viewprop'); }, 2000);
-                                    
-                                }
-
-
-                            });*/
+               
                         });
                     } // End OF property Add-edit
         }
@@ -580,6 +549,136 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
     }
+
+   vm.csvsubmitdata = function(prop){
+                  
+                    var propID = prop.propID;
+                    var unitlists = prop.unitlists; 
+                    var totalunits = prop.totalunits;
+                    var noofunits = prop.noofunits; 
+                    var name = prop.name;
+                    var address = prop.address;
+                    var city = prop.city;
+                    var country = prop.country;
+                    var proptype = prop.proptype;
+                    var postcode = prop.postcode;
+                    var province = prop.province;
+
+                  
+                    var fileUpload = document.getElementById("file123");
+                    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+                    if (regex.test(fileUpload.value.toLowerCase())) {
+                        if (typeof(FileReader) != "undefined") {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                var rows = e.target.result.split("\n");
+                                var result = [];
+                                var units = [];
+                                var headers = rows[0].split(",");
+                                var totalrowunits = 0;
+                                for (var i = 1; i < parseInt(rows.length - 1); i++) {
+                                    
+                                    var obj = {};
+                                    var currentline = rows[i].split(",");
+
+                                    for (var j = 0; j < headers.length; j++) {
+
+                                        var headerkey = headers[j];
+                                        headerkey = headerkey.replace(/[^a-zA-Z ]/g, "")
+
+                                        headerkey =  headerkey.toLowerCase();
+                                        if(headerkey == 'unit'){
+                                            units.push(currentline[j]);
+                                        }
+
+                                        if(headerkey == 'unit' && currentline[j] == ''){
+                                            alert("Unit number must be value Please make as CSV data as per instructions");
+                                            return false;
+                                        }
+                                        if(headerkey == 'rent' && currentline[j] == ''){
+                                            alert("Rent must be value Please make as CSV data as per instructions");
+                                            return false;
+                                        }
+                                         if(headerkey == 'sqft' && currentline[j] == ''){
+                                            alert("Sqft must be value Please make as CSV data as per instructions");
+                                            return false;
+                                        }
+                                       
+                                       if(headerkey == 'status' && currentline[j] == ''){
+                                            alert("status must be value Please make as CSV data as per instructions");
+                                            return false;
+                                        }
+                                        if(headerkey == 'amenities' && currentline[j] == ''){
+                                            alert("Amenities must be value Please make as CSV data as per instructions");
+                                            return false;
+                                        }
+
+                                        
+                                        if(headerkey == 'amenities' && currentline[j] != ''){
+                                            console.log(currentline[j]);
+                                            var amenities = currentline[j];
+                                            var str_array = amenities.split('|');
+                                            console.log(str_array);
+                                            obj['Aminities'] = str_array;
+                                        }else{
+                                            obj[headerkey] = currentline[j];
+                                        }
+                                        
+                                        obj['name'] =name;
+                                        obj['type'] =proptype;
+                                        obj['address'] =address;
+                                        obj['location'] =address;
+                                        obj['city'] =city;
+                                        obj['state'] =province;
+                                        obj['postcode'] =postcode;
+                                    }
+                                    result.push(obj);
+                                    totalrowunits++;
+                                }
+
+                                for(var i = 0; i < totalrowunits; i++) {
+                                    var objres = result[i];
+                                    unitlists.push(objres);
+                                }
+                                
+                                console.log(totalrowunits);
+                                console.log(unitlists);
+                                
+
+
+                                if(vm.duplication(units) == true){
+                                    alert("Please check your unit number are duplicate.. ")
+                                    return false;  
+                                } 
+
+                               noofunits = parseInt(totalrowunits+noofunits);
+                                firebase.database().ref('properties/' + propID).update({
+                                    unitlists: unitlists,
+                                    totalunits: noofunits,noofunits:noofunits
+                                }).then(function() {
+                                    
+                                    if(confirm("Units added successfully!")){
+                                        $state.go('viewprop');
+                                    }
+                                    $rootScope.success = "Units added successfully!";
+                                    //setTimeout(function(){ $state.go('viewprop'); }, 2000);
+                                }, function(error) {
+                                   $rootScope.error = "Please Check your CSV file Having issue with the data!";
+                                });
+                            }
+
+                            reader.readAsText(fileUpload.files[0]);
+
+
+
+                        } else {
+                            alert("This browser does not support HTML5.");
+                        }
+                    } else {
+                        alert("Please upload a valid CSV file.");
+                    }
+
+        }
 
     vm.csvadd = function() {
         console.log(vm.localpropID);
@@ -659,7 +758,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     rent: propData.rent,
                     shared: propData.shared,
                     address: propData.address,
-                    noofunits: propData.multiple,
+                    noofunits: propData.noofunits,
+                    totalunits: propData.totalunits,
                     city: propData.city,
                     province: propData.province,
                     postcode: propData.postcode,
@@ -902,13 +1002,14 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     }
 
-    vm.deleteproperty = function(propID) {
+    vm.deleteproperty = function(propID,page) {
+        var propID = propID;
         var propertyObj = $firebaseAuth();
         var propdbObj = firebase.database();
         firebase.database().ref('properties/' + propID).once("value", function(snap) {
 
             vm.property_address = snap.val().address;
-            if ($window.confirm("Do you want to continue?")) {
+            if ($window.confirm("Are you sure you want to delete this property? All details and units will be deleted!")) {
                 propdbObj.ref('properties/' + propID).remove();
                 firebase.database().ref('applyprop/').orderByChild("propID").equalTo(propID).once("value", function(snapshot) {
                     $scope.$apply(function() {
@@ -941,15 +1042,19 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             });
                         });
                     })
-                    $state.go('viewprop');
-                    //$state.reload();
+
+                    if(page === 'innerpage'){
+                        $state.go('viewprop');    
+                    }else{
+                        $state.reload();
+                    }
                 });
             }
 
         });
     }
 
-
+    
     // Delete Property Permanently
     this.delprop = function(propID) {
         var propertyObj = $firebaseAuth();
@@ -1048,7 +1153,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     }
 
     vm.submiteditunits = function(unitlists,prop){
-        //console.log(unitlists); return false;
+        /*console.log(unitlists); 
+        console.log(prop); return false;*/
         var fullformarary = [];
         var propID = prop.propID;
         var address = prop.address;
@@ -1060,34 +1166,26 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         var location  = prop.address;
 
         var totalunits = 0;
-        for(var i = 0; i < unitlists.length; i++) {
+        for(var i = 0; i < prop.noofunits; i++) {
                 var obj = unitlists[i];
+                    obj['name'] = name;
+                    obj['type'] = type;
+                    obj['address'] = address;
+                    obj['city'] = city;
+                    obj['state'] = state;
+                    obj['postalcode'] = postalcode;
+                    obj['location'] = address;
+                    obj['description'] =  '';
+                    obj['epirydate'] =  '';
+                    obj['cats'] =  '';
+                    obj['dogs'] =  '';
+                    obj['smoking'] =  '';
                
-                fullformarary.push({
-                    unit: obj.unit,
-                    name : name,
-                    type : type,
-                    address : obj.address,
-                    city : city,
-                    state : state,
-                    postalcode : postalcode,
-                    location : obj.address,
-                    sqft : obj.sqft,
-                    bedroom  :obj.bathroom,
-                    bathroom : obj.bathroom,
-                    rent : obj.rent,
-                    description : '',
-                    status : obj.status,
-                    epirydate : '',
-                    Aminities : obj.Aminities,
-                    cats : '',
-                    dogs : '',
-                    smoking : '',
-                    furnished : '',
-                    wheelchair : ''
-                });
+                fullformarary.push(obj);
+               
                 totalunits++;
             }
+            //console.log(fullformarary);
 
             firebase.database().ref('properties/' + propID).update({
                 unitlists: fullformarary,
@@ -1284,11 +1382,16 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
 
     vm.openmodel = function (size) {
-
+        $scope.items1 = [];
         var modalInstance = $uibModal.open({
           templateUrl: 'myModalContent.html',
           controller: 'ModalInstanceCtrl1',
           size: size,
+          resolve: {
+            items1: function () {
+              return $scope.items1;
+            }
+          }
          
         });
 
@@ -1299,19 +1402,23 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         });
       };
 
-
-      vm.opencsvmodel = function () {
-      //  console.log(vm.prop);
+      
+      vm.opencsvmodel = function (prop) {
+        
+        $scope.items1 = prop;
         var modalInstance = $uibModal.open({
           templateUrl: 'myModalContent1.html',
           controller: 'ModalInstanceCtrl1',
-          controllerAs: 'ModalInstanceCtrl1',
+          resolve: {
+            items1: function () {
+              return $scope.items1;
+            }
+          }
           
         });
 
-        modalInstance.result.then(function (selectedItem) {
-          $scope.selected = selectedItem;
-          $scope.ModalInstanceCtrl1 = vm.prop;
+        modalInstance.result.then(function () {
+          
         }, function () {
           //$log.info('Modal dismissed at: ' + new Date());
         });
@@ -1320,8 +1427,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
    
 }]);
 
-vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http','$uibModal', '$uibModalInstance','$location', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http,$uibModal,$uibModalInstance,$location){
+vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http','$uibModal', '$uibModalInstance','$location', 'items1', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http,$uibModal,$uibModalInstance,$location,items1){
 
+   var vm = this;
+    $scope.items1 = items1;
         $scope.ok = function (value) {
             if(value === 'viewproperty'){
                $uibModalInstance.close();
@@ -1330,7 +1439,134 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
         };  
         
         $scope.submit = function(){
-            console.log($scope.items);
+                  
+                    var propID = $scope.items1.propID;
+                    var unitlists = $scope.items1.unitlists; 
+                    var totalunits = $scope.items1.totalunits;
+                    var noofunits = $scope.items1.noofunits; 
+                    var name = $scope.items1.name;
+                    var address = $scope.items1.address;
+                    var city = $scope.items1.city;
+                    var country = $scope.items1.country;
+                    var proptype = $scope.items1.proptype;
+                    var postcode = $scope.items1.postcode;
+                    var province = $scope.items1.province;
+
+                  
+                    var fileUpload = document.getElementById("file123");
+                    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+                    if (regex.test(fileUpload.value.toLowerCase())) {
+                        if (typeof(FileReader) != "undefined") {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                var rows = e.target.result.split("\n");
+                                var result = [];
+                                var units = [];
+                                var headers = rows[0].split(",");
+                                var totalrowunits = 0;
+                                for (var i = 1; i < parseInt(rows.length - 1); i++) {
+                                    
+                                    var obj = {};
+                                    var currentline = rows[i].split(",");
+
+                                    for (var j = 0; j < headers.length; j++) {
+
+                                        var headerkey = headers[j];
+                                        headerkey = headerkey.replace(/[^a-zA-Z ]/g, "")
+
+                                        headerkey =  headerkey.toLowerCase();
+                                        if(headerkey == 'unit'){
+                                            units.push(currentline[j]);
+                                        }
+
+                                        if(headerkey == 'unit' && currentline[j] == ''){
+                                            alert("Unit number must be value Please make as CSV data as per instructions");
+                                            return false;
+                                        }
+                                        if(headerkey == 'rent' && currentline[j] == ''){
+                                            alert("Rent must be value Please make as CSV data as per instructions");
+                                            return false;
+                                        }
+                                         if(headerkey == 'sqft' && currentline[j] == ''){
+                                            alert("Sqft must be value Please make as CSV data as per instructions");
+                                            return false;
+                                        }
+                                       
+                                       if(headerkey == 'status' && currentline[j] == ''){
+                                            alert("status must be value Please make as CSV data as per instructions");
+                                            return false;
+                                        }
+                                        if(headerkey == 'amenities' && currentline[j] == ''){
+                                            alert("Amenities must be value Please make as CSV data as per instructions");
+                                            return false;
+                                        }
+
+                                        
+                                        if(headerkey == 'amenities' && currentline[j] != ''){
+                                            console.log(currentline[j]);
+                                            var amenities = currentline[j];
+                                            var str_array = amenities.split('|');
+                                            console.log(str_array);
+                                            obj['Aminities'] = str_array;
+                                        }else{
+                                            obj[headerkey] = currentline[j];
+                                        }
+                                        
+                                        obj['name'] =name;
+                                        obj['type'] =proptype;
+                                        obj['address'] =address;
+                                        obj['location'] =address;
+                                        obj['city'] =city;
+                                        obj['state'] =province;
+                                        obj['postcode'] =postcode;
+                                    }
+                                    result.push(obj);
+                                    totalrowunits++;
+                                }
+
+                                for(var i = 0; i < totalrowunits; i++) {
+                                    var objres = result[i];
+                                    unitlists.push(objres);
+                                }
+                                
+                                console.log(totalrowunits);
+                                console.log(unitlists);
+                                
+
+
+                                if(vm.duplication(units) == true){
+                                    alert("Please check your unit number are duplicate.. ")
+                                    return false;  
+                                } 
+
+                               noofunits = parseInt(totalrowunits+noofunits);
+                                firebase.database().ref('properties/' + propID).update({
+                                    unitlists: unitlists,
+                                    totalunits: noofunits,noofunits:noofunits
+                                }).then(function() {
+                                    
+                                    if(confirm("Units added successfully!")){
+                                        $uibModalInstance.close();
+                                        $state.go('viewprop');
+                                    }
+                                    $rootScope.success = "Units added successfully!";
+                                    //setTimeout(function(){ $state.go('viewprop'); }, 2000);
+                                }, function(error) {
+                                   $rootScope.error = "Please Check your CSV file Having issue with the data!";
+                                });
+                            }
+
+                            reader.readAsText(fileUpload.files[0]);
+
+
+
+                        } else {
+                            alert("This browser does not support HTML5.");
+                        }
+                    } else {
+                        alert("Please upload a valid CSV file.");
+                    }
+
         }
 
         $scope.units = function (value) {
@@ -1344,6 +1580,26 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
         $scope.cancel = function () {
           $uibModalInstance.dismiss('cancel');
         };
+
+        vm.duplication = function(data){
+       
+        var sorted_arr = data.slice().sort(); // You can define the comparing function here. 
+                                             // JS by default uses a crappy string compare.
+                                             // (we use slice to clone the array so the
+                                             // original array won't be modified)
+        var results = [];
+        for (var i = 0; i < sorted_arr.length - 1; i++) {
+            if (sorted_arr[i + 1] == sorted_arr[i]) {
+                results.push(sorted_arr[i]);
+            }
+        }
+
+        if(results.length > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 }]);
 

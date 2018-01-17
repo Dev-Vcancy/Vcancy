@@ -43,13 +43,14 @@
                            <div class="pull-left">
                             <select name="more" ng-model="more" ng-change="propctrl.moreaction(more)">
                                 <option value="">More</option>
-                                <option value="DAll">Delete All</option>
+                                <option value="DAll">Delete</option>
                                 <option value="Mavailable">Mark Available</option>
                                 <option value="Mranted">Mark Rented</option>
+                                 <option value="Msold">Mark Sold</option>
                             </select>
                           </div>
                           <div class="pull-right">
-                            <button type="button" ng-click="propctrl.addmorerow(propctrl.units.noofunits)">Add New<i class="fa fa-plus"></i></button>
+                            <button type="button" ng-click="propctrl.addmorerow(propctrl.units.noofunits)">Add Unit<i class="fa fa-plus"></i></button>
                           </div>
                       </div>
 
@@ -60,11 +61,16 @@
                             <div class="col-md-12">
                                <div class="portlet light ">
                                   
-                                  <table class="table table-bordered">
+                                  <div class="mt-bootstrap-tables" >
+                                 <div class="row">
+
+                                    <div class="col-md-12">
+                                       <div class="portlet light ">
+                                          <table class="table table-bordered">
                                              <thead>
                                                 <tr>
                                                    <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                                   <th>Units No</th>
+                                                   <th>Units #</th>
                                                    <th>Address</th>
                                                    <th>SQ.ft</th>
                                                    <th>Rent</th>
@@ -76,21 +82,22 @@
                                                 </tr>
                                              </thead>
                                              <tbody >
-
+                                 
+<!-- ng-show="(propctrl.prop.unitlists| filter:unit).length" -->
                                                 <tr  ng-repeat="i in propctrl.getNumber(propctrl.prop.noofunits) track by $index" id="{{$index}}">
                                                    <td><input type="checkbox" name="ids" value="{{$index}}"  id="ts_checkbox"></td>
-                                                   <td class="table-td"><input type="number" name="unit" ng-model="propctrl.prop.unitlists[$index].unit" class=""  min="0" step="0.01"><input type="hidden" name="unit" ng-model="propctrl.prop.unitlists[$index].unit" class=""  min="0" step="0.01"></td>
-                                                   <td><input type="text" name="address" ng-model="propctrl.prop.unitlists[$index].address" ></td>
-                                                   <td class="table-td"><input type="number" name="sqft" ng-model="propctrl.prop.unitlists[$index].sqft"  min="0" step="0.01"></td>
-                                                   <td class="table-td"><input type="number" name="rent" ng-model="propctrl.prop.unitlists[$index].rent"  min="0" step="0.01"></td><td class="table-td"> <input type="number" name="bedroom" ng-model="propctrl.prop.unitlists[$index].bedroom"  min="0" step="0.01"></td>
-                                                   <td class="table-td"> <input type="number" name="bathroom" ng-model="propctrl.prop.unitlists[$index].bathroom"  min="0" step="0.01"></td>
+                                                   <td class="table-td"><input type="text" name="unit" ng-model="propctrl.prop.unitlists[$index].unit" class=""  min="0" step="0.01" integer><input type="hidden" name="unit" ng-model="propctrl.prop.unitlists[$index].unit" class=""  min="0" step="0.01" integer></td>
+                                                   <td><input type="text" name="address" ng-model="propctrl.prop.address" readonly></td>
+                                                   <td class="table-td"><input type="text" name="sqft" ng-model="propctrl.prop.unitlists[$index].sqft"  min="0" step="0.01" integer></td>
+                                                   <td class="table-td"><input type="text" name="rent" ng-model="propctrl.prop.unitlists[$index].rent"  min="0" step="0.01" integer></td>
+                                                   <td class="table-td"> <input type="text" name="bedroom" ng-model="propctrl.prop.unitlists[$index].bedroom"  min="0" step="0.01" integer></td><td class="table-td"> <input type="text" name="bathroom" ng-model="propctrl.prop.unitlists[$index].bathroom"  min="0" step="0.01" integer></td>
                                                    <td>
                                                    
                                                       <select data-placeholder="Status" class="form-control" name="Aminities" ng-model="propctrl.prop.unitlists[$index].Aminities"   required class="w-100 localytics-chosen" data-placeholder="Prop type" multiple="true">
-                                                         <option value="Furnished">Furnished</option>
+                                                         <option value="furnished">Furnished</option>
                                                  <option value="laundry">Laundry</option>
                                                  <option value="parking">Parking</option>
-                                                 <option value="wheelchair">wheelchair</option>
+                                                 <option value="wheelchair">Wheelchair</option>
                                                       </select>
                                                    </td>
                                                    <td>
@@ -105,6 +112,11 @@
                                                 </tr>
                                              </tbody>
                                           </table>
+                                       </div>
+                                    </div>
+                                 </div>
+                              
+                              </div>
                                </div>
                             </div>
                             
@@ -122,7 +134,14 @@
                   </form>
               </div>
               <div role="tabpanel" class="tab-pane" id="tab" ng-show="tab === 2">
-                  <form  role="form" enctype="multipart/form-data" ng-submit="propctrl.csvadd()" role="form">
+                  <form  role="form" enctype="multipart/form-data" ng-submit="propctrl.csvsubmitdata(propctrl.prop)" role="form">
+                  <div class="form-group">
+                  <p>
+                  Data Must be in a specific format to import.
+                  </p>
+                  <p>Please use this file for as a sample <a href="../assets/test.csv">Sample CSV</a></p>
+                  <p>If you are having difficulty for import data please <a href="https://vcancy.ca/contact/">Contact Support</a>and we will upload for you</p>
+                  </div>
                 <div class="form-group">
                     <div class="fileinput fileinput-new" data-provides="fileinput">
                         <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
@@ -132,7 +151,7 @@
                             <span class="btn default btn-file">
                                 <span class="fileinput-new"> Select CSV </span>
                                 <span class="fileinput-exists"> Change </span>
-                                <input type="file" name="file" id="file" value="dataFile" required=""> </span>
+                                <input type="file" name="file" id="file123" value="dataFile" required=""> </span>
                             <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
                         </div>
                     </div>
