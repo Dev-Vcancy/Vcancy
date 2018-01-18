@@ -197,9 +197,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     //  TIMEPICKER
     vm.mytime = new Date();
-
+    vm.ck = [];
     vm.getNumber = function(num) {
-        return new Array(num);
+        vm.ck = new Array(num);
+        console.log( vm.ck );
+        return  vm.ck;
     }
 
     vm.hstep = 1;
@@ -229,7 +231,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
     vm.addresschange = function() {
-        console.log(vm.prop.address);
+      /*  console.log(vm.prop.address);*/
         if (vm.prop.address != undefined && (typeof vm.prop.address == "string" || vm.googleAddress == 1)) {
             vm.isDisabled = false;
         } else {
@@ -641,8 +643,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                     unitlists.push(objres);
                                 }
                                 
-                                console.log(totalrowunits);
-                                console.log(unitlists);
+                                /*console.log(totalrowunits);
+                                console.log(unitlists);*/
                                 
 
 
@@ -767,6 +769,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     propimage: propData.propimg,
                     unitlists: propData.unitlists,
                     name: propData.name,
+                    noofunitsarray: vm.getarray(propData.noofunits),
                     multiple: [],
                     date: [],
                     fromtime: [],
@@ -779,6 +782,14 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 }
             });
         });
+    }
+
+    vm.getarray = function(num){
+        var data = [];
+        for (var i = 0; i <= num - 1; i++) {
+            data.push(i);
+        }
+        return data;
     }
 
     vm.duplication = function(data){
@@ -1120,33 +1131,179 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
     }
 
+    vm.checkAll = function(){
+        if ($scope.selectedAll) {
+            $scope.selectedAll = true;
+        } else {
+            $scope.selectedAll = false;
+        }
+        var datalen = vm.prop.noofunitsarray;
+        for (var i = 0; i <= datalen.length - 1; i++) {
+            datalen[i] = $scope.selectedAll;
+        }
+    }
     vm.moreaction = function(val){
-       
+        
             var arr = [];
-            var selectedCountry = new Array();
+            var selectedvalue = new Array();
                 var n = $("#ts_checkbox:checked").length;
-
+                
                 if (n > 0){
-                    $("#ts_checkbox:checked").each(function(){
-                       
-                         if(val === 'DAll'){
-                            $('#'+$(this).val()).remove();
-                         }
+                    $("#ts_checkbox:checked").each(function(index){
+                        selectedvalue.push($(this).val());
+                    });
+
+                    
+                    var rowlength = selectedvalue.length;
+                    var tablerowlength = vm.prop.noofunitsarray;
+
+                    if(val === 'DAll'){
+                        for (var i = 0; i < rowlength; i++) {
+                            vm.units.noofunits = parseInt(vm.units.noofunits - 1);
+                            vm.prop.noofunits = vm.units.noofunits
+                            vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
+                            vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
+                        }
+                    }
+
+                    if(val === 'Mavailable'){
+
+                        if(vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined){
+
+                        }else{
+                            vm.units.unitlists = [];
+                            for(var i = 0; i < tablerowlength.length; i++){
+                                vm.units.unitlists.push({status:''});
+                            }
+
+                            for(var i = 0; i < rowlength; i++){
+                             var index = parseInt(selectedvalue[i]);
+                             vm.units.unitlists[index]['status'] = 'Available';
+                            }
+                            
+                        }
+                             
+                    }
+
+                }else{
+                    if(val === 'DAll'){
+                        var rowlength = vm.prop.noofunitsarray;
+                        for (var i = 0; i < rowlength.length; i++) {
+                            vm.units.noofunits = parseInt(vm.units.noofunits - 1);
+                            vm.prop.noofunits = vm.units.noofunits
+                            vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
+                            vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
+                        }
+                        
+                      }
+                          
                          if(val === 'Mavailable'){
-                               // vm.units.status  = 'Available';
-                               propctrl.prop.unitlists.status = 'Available';
+
+                               if(vm.units.unitlists != undefined){
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.units.unitlists.push({status : 'Available'});
+                                    }
+                               }else{
+                                vm.units.unitlists = [];
+                                
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.units.unitlists.push({status : 'Available'});
+                                    }
+                               }
+
+                               if(vm.prop.unitlists != undefined){
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.prop.unitlists.push({status : 'Available'});
+                                    }
+                               }else{
+                                vm.prop.unitlists = [];
+                                var rowlength = vm.prop.noofunitsarray;
+                                for (var i = 0; i <= rowlength.length - 1; i++) {
+                                    vm.prop.unitlists.push({status : 'Available'});
+                                }
+                                
+                               }
+                               
                          }
                          if(val === 'Mranted'){
-                               propctrl.prop.unitlists.status = 'rented';
+                               
+                               if(vm.units.unitlists != undefined){
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.units.unitlists.push({status : 'rented'});
+                                    }
+                               }else{
+                                vm.units.unitlists = [];
+                                
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.units.unitlists.push({status : 'rented'});
+                                    }
+                               }
+
+                               if(vm.prop.unitlists != undefined){
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.prop.unitlists.push({status : 'rented'});
+                                    }
+                               }else{
+                                    vm.prop.unitlists = [];
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.prop.unitlists.push({status : 'rented'});
+                                    }
+                                
+                               }
                          }
-                    });
-                }else{
-                        alert("Select Atleast one row");
+                         if(val === 'Msold'){
+                               
+                                  if(vm.units.unitlists != undefined){
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.units.unitlists.push({status : 'sold'});
+                                    }
+                               }else{
+                                vm.units.unitlists = [];
+                                
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.units.unitlists.push({status : 'sold'});
+                                    }
+                               }
+
+                               if(vm.prop.unitlists != undefined){
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.prop.unitlists.push({status : 'sold'});
+                                    }
+                               }else{
+                                    vm.prop.unitlists = [];
+                                    var rowlength = vm.prop.noofunitsarray;
+                                    for (var i = 0; i <= rowlength.length - 1; i++) {
+                                        vm.prop.unitlists.push({status : 'sold'});
+                                    }
+                                
+                               }
+                         }
                 }
       }
 
-    vm.addmorerow = function(val){
+    vm.setscope = function(){
+
+    }
+
+    vm.addmorerow = function(val1){
+        var val = val1;
+        if(isNaN(val)){
+            val = 0;
+        }
+        
         vm.units.noofunits = parseInt(val + 1);
+        vm.prop.noofunits = parseInt(val + 1);
+        vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits)
     }
     vm.addmorerowedit = function(val){
         vm.prop.noofunits = parseInt(val + 1);
@@ -1503,10 +1660,10 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
 
                                         
                                         if(headerkey == 'amenities' && currentline[j] != ''){
-                                            console.log(currentline[j]);
+                                            //console.log(currentline[j]);
                                             var amenities = currentline[j];
                                             var str_array = amenities.split('|');
-                                            console.log(str_array);
+                                            //console.log(str_array);
                                             obj['Aminities'] = str_array;
                                         }else{
                                             obj[headerkey] = currentline[j];
@@ -1529,8 +1686,8 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                                     unitlists.push(objres);
                                 }
                                 
-                                console.log(totalrowunits);
-                                console.log(unitlists);
+                                /*console.log(totalrowunits);
+                                console.log(unitlists);*/
                                 
 
 
