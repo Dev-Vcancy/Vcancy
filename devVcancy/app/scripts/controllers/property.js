@@ -178,6 +178,12 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         opened.opened = true;
     };
 
+    vm.units = function (value) {
+         if(value != '' && value != null){
+            $window.location.href = '#/addunits/'+value;
+         }
+    };  
+
     vm.dateOptions = {
         formatYear: 'yy',
         startingDay: 1
@@ -202,6 +208,29 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.ck = new Array(num);
         console.log( vm.ck );
         return  vm.ck;
+    }
+
+    vm.arraytest = function(){
+
+        var listToDelete = ['abc', 'efg'];
+
+        var arrayOfObjects = [{id:'abc',name:'oh'}, // delete me
+                              {id:'efg',name:'em'}, // delete me
+                              {id:'hij',name:'ge'}] // all that should remain
+        console.log(arrayOfObjects);
+        //var animals = [{"status":"Available"},{"status":"Available"},{"status":"Available"},{"status":"Available"}];
+        
+        for(var i = 0; i < arrayOfObjects.length; i++) {
+                var obj = arrayOfObjects[i];
+
+                if(listToDelete.indexOf(obj.id) !== -1) {
+                    arrayOfObjects.splice(i, 1);
+                }
+                console.log(arrayOfObjects);
+            }
+
+            console.log(arrayOfObjects);
+        
     }
 
     vm.hstep = 1;
@@ -1169,7 +1198,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     if(val === 'Mavailable'){
 
                         if(vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined){
-
+                            for(var i = 0; i < rowlength; i++){
+                                 var index = parseInt(selectedvalue[i]);
+                                 vm.units.unitlists[index]['status'] = 'Available';
+                            }
                         }else{
                             vm.units.unitlists = [];
                             for(var i = 0; i < tablerowlength.length; i++){
@@ -1185,6 +1217,47 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                              
                     }
 
+                    if(val === 'Mranted'){
+                        if(vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined){
+                                    for(var i = 0; i < rowlength; i++){
+                                     var index = parseInt(selectedvalue[i]);
+                                     vm.units.unitlists[index]['status'] = 'rented';
+                                    }
+                            }else{
+                                vm.units.unitlists = [];
+                                for(var i = 0; i < tablerowlength.length; i++){
+                                    vm.units.unitlists.push({status:''});
+                                }
+
+                                for(var i = 0; i < rowlength; i++){
+                                 var index = parseInt(selectedvalue[i]);
+                                 vm.units.unitlists[index]['status'] = 'rented';
+                                }
+                                
+                            }
+                        }
+
+
+                    if(val === 'Msold'){
+                            if(vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined){
+                                
+                                    for(var i = 0; i < rowlength; i++){
+                                     var index = parseInt(selectedvalue[i]);
+                                     vm.units.unitlists[index]['status'] = 'sold';
+                                    }
+                            }else{
+                                vm.units.unitlists = [];
+                                for(var i = 0; i < tablerowlength.length; i++){
+                                    vm.units.unitlists.push({status:''});
+                                }
+
+                                for(var i = 0; i < rowlength; i++){
+                                 var index = parseInt(selectedvalue[i]);
+                                 vm.units.unitlists[index]['status'] = 'sold';
+                                }
+                                
+                            }
+                    }
                 }else{
                     if(val === 'DAll'){
                         var rowlength = vm.prop.noofunitsarray;
@@ -1200,9 +1273,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                          if(val === 'Mavailable'){
 
                                if(vm.units.unitlists != undefined){
+                                    console.log("vm.units.unitlists Mavailable");
+                                    console.log(vm.units.unitlists);
                                     var rowlength = vm.prop.noofunitsarray;
                                     for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.units.unitlists.push({status : 'Available'});
+                                        vm.units.unitlists[i]['status'] = 'Available';
                                     }
                                }else{
                                 vm.units.unitlists = [];
@@ -1216,7 +1291,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                if(vm.prop.unitlists != undefined){
                                     var rowlength = vm.prop.noofunitsarray;
                                     for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.prop.unitlists.push({status : 'Available'});
+                                        /*vm.prop.unitlists.push({status : 'Available'});*/
+                                        vm.prop.unitlists[i]['status'] = 'Available';
                                     }
                                }else{
                                 vm.prop.unitlists = [];
@@ -1233,7 +1309,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                if(vm.units.unitlists != undefined){
                                     var rowlength = vm.prop.noofunitsarray;
                                     for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.units.unitlists.push({status : 'rented'});
+                                        vm.units.unitlists[i]['status'] = 'rented';
                                     }
                                }else{
                                 vm.units.unitlists = [];
@@ -1247,7 +1323,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                if(vm.prop.unitlists != undefined){
                                     var rowlength = vm.prop.noofunitsarray;
                                     for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.prop.unitlists.push({status : 'rented'});
+                                         vm.prop.unitlists[i]['status'] = 'rented';
                                     }
                                }else{
                                     vm.prop.unitlists = [];
@@ -1263,7 +1339,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                   if(vm.units.unitlists != undefined){
                                     var rowlength = vm.prop.noofunitsarray;
                                     for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.units.unitlists.push({status : 'sold'});
+                                        //vm.units.unitlists.push({status : 'sold'});
+                                         vm.units.unitlists[i]['status'] = 'sold';
                                     }
                                }else{
                                 vm.units.unitlists = [];
@@ -1277,7 +1354,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                if(vm.prop.unitlists != undefined){
                                     var rowlength = vm.prop.noofunitsarray;
                                     for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.prop.unitlists.push({status : 'sold'});
+                                        /*vm.prop.unitlists.push({status : 'sold'});*/
+                                        vm.prop.unitlists[i]['status'] = 'sold';
                                     }
                                }else{
                                     vm.prop.unitlists = [];
@@ -1543,6 +1621,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         var modalInstance = $uibModal.open({
           templateUrl: 'myModalContent.html',
           controller: 'ModalInstanceCtrl1',
+          backdrop: 'static',
           size: size,
           resolve: {
             items1: function () {

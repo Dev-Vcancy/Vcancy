@@ -8,7 +8,13 @@
                <h1 class="page-title">  {{propctrl.mode}} a Property </h1>
                 <script type="text/ng-template" id="myModalContent.html">
                        <div class="profile_model_popup">
-                      
+                           <div class="modal-header">
+                               <button type="button" class="close" data-dismiss="dialog" ng-click="cancel()">
+                                 <span aria-hidden="true">&times;</span>
+                                 <span class="sr-only">Close</span>
+                              </button>
+                       </div>
+                          
                        <div class="modal-body">
                             <form  role="form" enctype="multipart/form-data" id="fileUploadForm" method="post">
                    
@@ -145,15 +151,19 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="row" ng-if="$root.message != ''">
-                           <div class="col-lg-4 col-xs-12 col-sm-12">
+                           <div class="col-lg-3 col-xs-12 col-sm-12">
                               <a  data-ng-click="propctrl.backtoviewprop()" class="btn btn-info">&lt;&lt; Back</a>
                            </div>
                            
-                           <div class="col-lg-4 col-xs-12 col-sm-12">
+                           <div class="col-lg-3 col-xs-12 col-sm-12">
+                                 <a  class="btn btn-primary" ng-click="propctrl.units($root.propID)">Add Units</a>
+                                 
+                           </div>
+                            <div class="col-lg-3 col-xs-12 col-sm-12">
                                  <a href="#/editprop/{{$root.propID}}" class="btn btn-info  pull-left">Edit Property</a>
 
                            </div>
-                           <div class="col-lg-4 col-xs-12 col-sm-12">
+                           <div class="col-lg-3 col-xs-12 col-sm-12">
                               <a  ng-click="propctrl.deleteproperty($root.propID,'innerpage')" class="btn btn-info">Delete Property</a>
                            </div>
                         </div>
