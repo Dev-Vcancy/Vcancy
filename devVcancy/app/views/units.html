@@ -8,7 +8,7 @@
 <div class="page-content">
    <h1 class="page-title">  {{propctrl.mode}} Units </h1>
     <div class="profile">
-
+      <div class="container" style="margin-top:20px;">
       <h3>Create units for {{propctrl.units.name}}</h3> 
       <div class="tabbable-line tabbable-full-width">
 
@@ -41,7 +41,7 @@
                   <div class="col-md-12">
                       <div class="portlet light ">
                            <div class="pull-left">
-                            <select name="more" ng-model="more" ng-change="propctrl.moreaction(more)">
+                            <select name="more" ng-model="more" ng-click="propctrl.moreaction(more)">
                                 <option value="">More</option>
                                 <option value="DAll">Delete</option>
                                 <option value="Mavailable">Mark Available</option>
@@ -69,7 +69,7 @@
                                           <table class="table table-bordered">
                                              <thead>
                                                 <tr>
-                                                   <th><input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" ng-click="propctrl.checkAll()"></th>
+                                                   <th><input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" ng-click="propctrl.checkAll()" class="checkbox"></th>
                                                    <th>Units #</th>
                                                    <th>Address</th>
                                                    <th>SQ.ft</th>
@@ -91,13 +91,13 @@
                                                    <td class="table-td"><input type="text" name="sqft" ng-model="propctrl.prop.unitlists[$index].sqft"  min="0" step="0.01" integer></td>
                                                    <td class="table-td"><input type="text" name="rent" ng-model="propctrl.prop.unitlists[$index].rent"  min="0" step="0.01" integer></td>
                                                    <td class="table-td"> <input type="text" name="bedroom" ng-model="propctrl.prop.unitlists[$index].bedroom"  min="0" step="0.01" integer></td><td class="table-td"> <input type="text" name="bathroom" ng-model="propctrl.prop.unitlists[$index].bathroom"  min="0" step="0.01" integer></td>
-                                                   <td>
+                                                   <td class="multiple-select-dropdown">
                                                    
-                                                      <select data-placeholder="Status" class="form-control" name="Aminities" ng-model="propctrl.prop.unitlists[$index].Aminities"   required class="w-100 localytics-chosen" data-placeholder="Prop type" multiple="true">
-                                                         <option value="furnished">Furnished</option>
-                                                 <option value="laundry">Laundry</option>
-                                                 <option value="parking">Parking</option>
-                                                 <option value="wheelchair">Wheelchair</option>
+                                                      <select data-placeholder="Status" class="form-control" id="multidropdown" name="Aminities" ng-model="propctrl.prop.unitlists[$index].Aminities"   required class="w-100 localytics-chosen" data-placeholder="Prop type" multiple="true" >
+                                                         <option value="furnished" ng-click='propctrl.selectMe($event)'>Furnished</option>
+                                                         <option value="laundry" ng-click='propctrl.selectMe($event)'>Laundry</option>
+                                                         <option value="parking" ng-click='propctrl.selectMe($event)'>Parking</option>
+                                                         <option value="wheelchair" ng-click='propctrl.selectMe($event)'>Wheelchair</option>
                                                       </select>
                                                    </td>
                                                    <td>
@@ -178,3 +178,22 @@
 </div>
 </section>
 </section>
+
+ <!-- <script type="text/javascript">
+    jQuery( document ).ready(function() {
+      $('#multidropdown option.test').on('change', function(){
+        alert("click");
+      });
+        /*jQuery("").change(function() {
+              alert("click");
+            //$( this ).toggleClass( "selected");
+          })*/
+         /* $('option').mousedown(function(e) {
+         e.preventDefault();
+         $(this).toggleClass('selected');
+         
+         $(this).prop('selected', !$(this).prop('selected'));
+         return false;
+        });*/
+       });
+    </script> -->

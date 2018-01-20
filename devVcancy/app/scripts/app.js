@@ -474,6 +474,13 @@ vcancyApp
 			templateUrl: 'views/addproperties.html',
 			resolve: { authenticate: authenticate }
 		})
+		 .state ('addprop1', {
+			url: '/addprop1',
+			controller: 'propertyCtrl',
+			controllerAs: 'propctrl',
+			templateUrl: 'views/addproperties1.html',
+			resolve: { authenticate: authenticate }
+		})
 		
 		.state ('schedule', {
 			url: '/schedule',

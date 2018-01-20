@@ -219,17 +219,17 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                               {id:'hij',name:'ge'}] // all that should remain
         console.log(arrayOfObjects);
         //var animals = [{"status":"Available"},{"status":"Available"},{"status":"Available"},{"status":"Available"}];
-        
+        var test = [];
         for(var i = 0; i < arrayOfObjects.length; i++) {
                 var obj = arrayOfObjects[i];
 
-                if(listToDelete.indexOf(obj.id) !== -1) {
-                    arrayOfObjects.splice(i, 1);
+                if(i != 0) {
+                   test.push(obj)
                 }
                 console.log(arrayOfObjects);
             }
 
-            console.log(arrayOfObjects);
+            console.log(test);
         
     }
 
@@ -1017,31 +1017,48 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.timeSlot = [{
             date: dateconfig
         }];
-        vm.prop = {
-            propID: '',
-            landlordID: '',
-            propimg: '',
-            propstatus: true,
-            proptype: '',
-            units: '',
-            multiple: [true],
-            rent: '',
-            shared: '',
-            address: '',
-            mode: 'Add',
-            propimage: 'http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image',
-            date: [],
-            fromtime: [],
-            to: [],
-            limit: [],
-            propertylink: '',
-            invalid: [0],
-            timeinvalid: [0],
-            timeoverlapinvalid: [0]
-        }
+        vm.prop = vm.units = {
+                                    propID: '',
+                                    landlordID: '',
+                                    propimg: '',
+                                    propstatus: true,
+                                    proptype: '',
+                                    units: '',
+                                    multiple: [true],
+                                    rent: '',
+                                    shared: '',
+                                    address: '',
+                                    noofunits: 0,
+                                    city:'',
+                                    province:'',
+                                    postcode:'',
+                                    country:'',
+                                    propimage:'',
+                                    unitlists:[],
+                                    noofunits:0,
+                                    name:name,
+                                    noofunitsarray: vm.getarray(0),
+                                    mode: 'Add',
+                                    date: [],
+                                    fromtime: [],
+                                    to: [],
+                                    limit: [],
+                                    propertylink: '',
+                                    invalid: [0],
+                                    timeinvalid: [0],
+                                    timeoverlapinvalid: [0]
+                                }
+
 
     }
 
+    vm.noofunitsarray = function(){
+        return vm.getarray(vm.prop.noofunits);
+    }
+
+    vm.selectMe = function (event){
+       $(event.target).toggleClass('selected');
+    }
     vm.deleteproperty = function(propID,page) {
         var propID = propID;
         var propertyObj = $firebaseAuth();
@@ -1094,7 +1111,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         });
     }
 
-    
+    vm.stringModel = []; 
+    vm.stringData = [ 'David', 'Jhon', 'Danny', ]; 
+    vm.stringSettings = { template: '{{option}}', smartButtonTextConverter(skip, option) { return option; }, };
+
     // Delete Property Permanently
     this.delprop = function(propID) {
         var propertyObj = $firebaseAuth();
@@ -1187,12 +1207,26 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     var tablerowlength = vm.prop.noofunitsarray;
 
                     if(val === 'DAll'){
+                        if(vm.units.unitlists !== undefined){
+                          for(var i = 0; i < rowlength; i++){
+                                delete vm.units.unitlists[parseInt(selectedvalue[i])];
+                          }
+                        }
                         for (var i = 0; i < rowlength; i++) {
                             vm.units.noofunits = parseInt(vm.units.noofunits - 1);
                             vm.prop.noofunits = vm.units.noofunits
                             vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
                             vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
                         }
+                        var list = [];
+                        for (var i = 0; i < vm.units.unitlists.length; i++) {
+                            if (typeof vm.units.unitlists[i] !== 'undefined') {
+                                list.push(vm.units.unitlists[i]);
+                            }
+                        }
+                        
+                            vm.units.unitlists = list;
+                        
                     }
 
                     if(val === 'Mavailable'){
@@ -1200,12 +1234,18 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         if(vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined){
                             for(var i = 0; i < rowlength; i++){
                                  var index = parseInt(selectedvalue[i]);
-                                 vm.units.unitlists[index]['status'] = 'Available';
+                                 console.log(vm.units.unitlists[index]);
+                                 if(vm.units.unitlists[index] !== undefined){
+                                    vm.units.unitlists[index]['status'] = 'Available';   
+                                 }else{
+                                        vm.units.unitlists.push({status:'Available'});    
+                                 }
+                                 
                             }
                         }else{
                             vm.units.unitlists = [];
                             for(var i = 0; i < tablerowlength.length; i++){
-                                vm.units.unitlists.push({status:''});
+                                
                             }
 
                             for(var i = 0; i < rowlength; i++){
@@ -1221,7 +1261,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         if(vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined){
                                     for(var i = 0; i < rowlength; i++){
                                      var index = parseInt(selectedvalue[i]);
-                                     vm.units.unitlists[index]['status'] = 'rented';
+                                     if(vm.units.unitlists[index] !== undefined){
+                                        vm.units.unitlists[index]['status'] = 'rented';
+                                     }else{
+                                        vm.units.unitlists.push({status:'rented'});          
+                                     }
                                     }
                             }else{
                                 vm.units.unitlists = [];
@@ -1243,7 +1287,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 
                                     for(var i = 0; i < rowlength; i++){
                                      var index = parseInt(selectedvalue[i]);
-                                     vm.units.unitlists[index]['status'] = 'sold';
+                                      if(vm.units.unitlists[index] !== undefined){
+                                          vm.units.unitlists[index]['status'] = 'sold';
+                                      }else{
+                                            vm.units.unitlists.push({status:'sold'});
+                                      }
                                     }
                             }else{
                                 vm.units.unitlists = [];
@@ -1261,6 +1309,13 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 }else{
                     if(val === 'DAll'){
                         var rowlength = vm.prop.noofunitsarray;
+                         if(vm.units.unitlists !== undefined){
+                          for(var i = 0; i < rowlength.length; i++){
+                                delete vm.units.unitlists[parseInt(i)];
+                          }
+                          vm.units.unitlists = [];
+                        }
+                        
                         for (var i = 0; i < rowlength.length; i++) {
                             vm.units.noofunits = parseInt(vm.units.noofunits - 1);
                             vm.prop.noofunits = vm.units.noofunits
@@ -1273,12 +1328,24 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                          if(val === 'Mavailable'){
 
                                if(vm.units.unitlists != undefined){
-                                    console.log("vm.units.unitlists Mavailable");
-                                    console.log(vm.units.unitlists);
+                                    
                                     var rowlength = vm.prop.noofunitsarray;
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.units.unitlists[i]['status'] = 'Available';
+                                    var uniltlength = vm.units.unitlists;
+                                   
+                                   if(uniltlength.length > 0){
+                                        for (var i = 0; i < rowlength.length; i++) {
+                                            if(vm.units.unitlists[i] !== undefined){
+                                                vm.units.unitlists[i]['status'] = 'Available';
+                                            }else{
+                                                 vm.units.unitlists.push({status : 'Available'});
+                                            }
+                                          }    
+                                    }else{
+                                       for (var i = 0; i <= rowlength.length - 1; i++) {
+                                            vm.units.unitlists.push({status : 'Available'});
+                                        } 
                                     }
+                                    
                                }else{
                                 vm.units.unitlists = [];
                                 
@@ -1287,60 +1354,52 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                         vm.units.unitlists.push({status : 'Available'});
                                     }
                                }
-
-                               if(vm.prop.unitlists != undefined){
-                                    var rowlength = vm.prop.noofunitsarray;
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        /*vm.prop.unitlists.push({status : 'Available'});*/
-                                        vm.prop.unitlists[i]['status'] = 'Available';
-                                    }
-                               }else{
-                                vm.prop.unitlists = [];
-                                var rowlength = vm.prop.noofunitsarray;
-                                for (var i = 0; i <= rowlength.length - 1; i++) {
-                                    vm.prop.unitlists.push({status : 'Available'});
-                                }
-                                
-                               }
-                               
                          }
                          if(val === 'Mranted'){
                                
                                if(vm.units.unitlists != undefined){
                                     var rowlength = vm.prop.noofunitsarray;
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.units.unitlists[i]['status'] = 'rented';
+                                    var uniltlength = vm.prop.unitlists;
+                                     if(uniltlength.length > 0){
+                                        for (var i = 0; i <= rowlength.length - 1; i++) {
+                                            if(vm.units.unitlists[i] !== undefined){
+                                                vm.units.unitlists[i]['status'] = 'rented';
+                                            }else{
+                                                vm.units.unitlists.push({status : 'rented'});    
+                                            }
+                                        }
+                                    }else{
+                                        for (var i = 0; i <= rowlength.length - 1; i++) {
+                                            vm.units.unitlists.push({status : 'rented'});
+                                        }
                                     }
                                }else{
-                                vm.units.unitlists = [];
+                                    vm.units.unitlists = [];
                                 
                                     var rowlength = vm.prop.noofunitsarray;
                                     for (var i = 0; i <= rowlength.length - 1; i++) {
                                         vm.units.unitlists.push({status : 'rented'});
                                     }
                                }
-
-                               if(vm.prop.unitlists != undefined){
-                                    var rowlength = vm.prop.noofunitsarray;
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                         vm.prop.unitlists[i]['status'] = 'rented';
-                                    }
-                               }else{
-                                    vm.prop.unitlists = [];
-                                    var rowlength = vm.prop.noofunitsarray;
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.prop.unitlists.push({status : 'rented'});
-                                    }
-                                
-                               }
-                         }
+                             }
                          if(val === 'Msold'){
                                
                                   if(vm.units.unitlists != undefined){
                                     var rowlength = vm.prop.noofunitsarray;
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        //vm.units.unitlists.push({status : 'sold'});
-                                         vm.units.unitlists[i]['status'] = 'sold';
+                                    var uniltlength = vm.prop.unitlists.length;
+                                    if(uniltlength > 0){
+                                        for (var i = 0; i <= rowlength.length - 1; i++) {
+                                             if(vm.units.unitlists[i] !== undefined){
+                                                vm.units.unitlists[i]['status'] = 'sold';
+                                             }else{
+                                                vm.units.unitlists.push({status : 'sold'});    
+                                             }
+
+                                        }
+                                    }else{
+                                        for (var i = 0; i <= rowlength.length - 1; i++) {
+                                            vm.units.unitlists.push({status : 'sold'});
+                                        }
                                     }
                                }else{
                                 vm.units.unitlists = [];
@@ -1350,22 +1409,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                         vm.units.unitlists.push({status : 'sold'});
                                     }
                                }
-
-                               if(vm.prop.unitlists != undefined){
-                                    var rowlength = vm.prop.noofunitsarray;
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        /*vm.prop.unitlists.push({status : 'sold'});*/
-                                        vm.prop.unitlists[i]['status'] = 'sold';
-                                    }
-                               }else{
-                                    vm.prop.unitlists = [];
-                                    var rowlength = vm.prop.noofunitsarray;
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.prop.unitlists.push({status : 'sold'});
-                                    }
-                                
-                               }
-                         }
+                             }
                 }
       }
 
@@ -1645,6 +1689,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         var modalInstance = $uibModal.open({
           templateUrl: 'myModalContent1.html',
           controller: 'ModalInstanceCtrl1',
+          backdrop: 'static',
           resolve: {
             items1: function () {
               return $scope.items1;

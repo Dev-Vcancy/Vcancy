@@ -62,6 +62,7 @@
                            <div role="tabpanel" class="tab-pane active" id="home" ng-show="tab === 1">
                               <div class="">
                                  <div class="">
+                                  
                                     <form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" class="property editprop" role="form"  enctype="multipart/form-data">
                                        <input type="hidden" name="landlordID" ng-model="propctrl.prop.landlordID" class="form-control" >
                                        <input type="hidden" name="mode" ng-model="propctrl.prop.mode" class="form-control" >
@@ -73,6 +74,8 @@
                                           <div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
                                        </div>
                                        <div class="row">
+
+
                                           <div class="col-lg-9 col-xs-12 col-sm-12 newfrnn">
                                              <div class="form-group fg-float">
                                                 <div class="fg-line">
