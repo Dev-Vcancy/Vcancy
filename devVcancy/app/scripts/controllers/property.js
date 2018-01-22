@@ -15,6 +15,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     var url = $location.absUrl();
     var oldtimeSlotLen = 0;
 
+    
+
     console.log(dateconfig, todaydate);
 
     var vm = this;
@@ -22,7 +24,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     vm.timeslotmodified = "false";
     vm.isDisabled = false;
     vm.googleAddress = 0;
-
+    vm.more = '';
     vm.city = '';
     vm.province = '';
     vm.postcode = ''; 
@@ -368,7 +370,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     // Add/Edit Property       
     vm.submitProp = function(property) {
 
-        //console.log(property); return false;
+        console.log(property); //return false;
 
         AWS.config.update({
             accessKeyId: 'AKIAI6FJLQDDJXI4LORA',
@@ -394,7 +396,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         var propstatus = property.propstatus == '' ? false : property.propstatus;
         var proptype = property.proptype;
         var units = property.units;
-        var multiple = property.units == 'single' ? '' : property.noofunits;
+        var multiple = property.noofunits;
         var shared = property.shared == '' ? false : property.shared;
         var address = property.address;
         var city = property.city;
@@ -1238,6 +1240,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         
                             vm.units.unitlists = list;
                             $scope.selectedAll = false;
+                            vm.more = '';
                     }
 
                     if(val === 'Mavailable'){
@@ -1265,7 +1268,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             }
                             
                         }
-                          $scope.selectedAll = false;   
+                          $scope.selectedAll = false;  
+                          vm.more = ''; 
                     }
 
                     if(val === 'Mranted'){
@@ -1291,6 +1295,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 
                             }
                             $scope.selectedAll = false;
+                            vm.more = '';
                         }
 
 
@@ -1318,6 +1323,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 
                             }
                             $scope.selectedAll = false;
+                            vm.more = '';
                     }
                 }else{
                     if(val === 'DAll'){
@@ -1337,6 +1343,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                            // vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
                         }
                         $scope.selectedAll = false;
+                        vm.more = '';
                         
                       }
                           
@@ -1372,6 +1379,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                     }
                                }
                                $scope.selectedAll = false;
+                               vm.more = '';
                          }
                          if(val === 'Mranted'){
                                
@@ -1402,6 +1410,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                     }
                                }
                                $scope.selectedAll = false;
+                               vm.more = '';
                              }
                          if(val === 'Msold'){
                                
@@ -1433,6 +1442,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                     }
                                }
                                $scope.selectedAll = false;
+                               vm.more = '';
                              }
                 }
       }
@@ -1449,8 +1459,46 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         
         vm.units.noofunits = parseInt(val + 1);
         vm.prop.noofunits = parseInt(val + 1);
+        $scope.selectedAll = false;
         //vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits)
     }
+
+    vm.copyrowofunits = function(){
+        
+        var rowlength = vm.prop.unitlists;
+        
+         var arr = [];
+            var selectedvalue = new Array();
+                var n = $("#ts_checkbox:checked").length;
+                
+                if (n > 0){
+                    $("#ts_checkbox:checked").each(function(index){
+                        selectedvalue.push($(this).val());
+                    });
+
+                    for (var i = 0; i < selectedvalue.length; i++) {
+                        if(rowlength[i] != undefined){
+                            rowlength[i].unit = parseInt(parseInt(rowlength[parseInt(rowlength.length - 1)].unit) + 1);
+                            var obj = rowlength[i];    
+                        }else{
+                            var obj = rowlength[i];
+                        }
+                        rowlength.push(obj);
+                    }
+                    vm.prop.unitlists = rowlength;
+
+                }else{
+                    for (var i = 0; i < rowlength.length; i++) {
+                        console.log(rowlength[i] );
+                        rowlength[i].unit = parseInt(parseInt(rowlength[parseInt(rowlength.length - 1)].unit) + 1);
+                         var obj = rowlength[i];
+                         rowlength.push(obj);
+                        /*vm.prop.unitlists.push(rowlength[i]);*/
+                    } 
+                    vm.prop.unitlists = rowlength;
+                }
+        }
+
     vm.addmorerowedit = function(val){
         vm.prop.noofunits = parseInt(val + 1);
     }
@@ -1847,12 +1895,14 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                                noofunits = parseInt(totalrowunits+noofunits);
                                 firebase.database().ref('properties/' + propID).update({
                                     unitlists: unitlists,
-                                    totalunits: noofunits,noofunits:noofunits
+                                    totalunits: noofunits,noofunits:noofunits,
+                                    units : 'multiple'
                                 }).then(function() {
                                     
                                     if(confirm("Units added successfully!")){
                                         $uibModalInstance.close();
-                                        $state.go('viewprop');
+                                       // $state.go('viewprop');
+                                        $state.reload();
                                     }
                                     $rootScope.success = "Units added successfully!";
                                     //setTimeout(function(){ $state.go('viewprop'); }, 2000);

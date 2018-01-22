@@ -169,11 +169,11 @@
                                           <div class="col-lg-3 col-xs-12 col-sm-12">
                                           </div>  
                                           <div class="col-lg-3 col-xs-12 col-sm-12">
-                                                <a  class="btn btn-primary" ng-click="propctrl.units($root.propID)">Add Units</a>
+                                                <!-- <a  class="btn btn-primary" ng-click="propctrl.units($root.propID)">Add Units</a> -->
                                                 
                                           </div>
                                            <div class="col-lg-3 col-xs-12 col-sm-12">
-                                                <a href="#/editprop/{{$root.propID}}" class="btn btn-info  pull-left">Edit Property</a>
+                                                <!-- <a href="#/editprop/{{$root.propID}}" class="btn btn-info  pull-left">Edit Property</a> -->
 
                                           </div>
                                           <div class="col-lg-3 col-xs-12 col-sm-12">
@@ -211,13 +211,19 @@
                            <div class="pull-left">
                             <select name="more" ng-model="more" ng-click="propctrl.moreaction(more)">
                                 <option value="">More</option>
-                                <option value="DAll">Delete</option>
+                                <!-- <option value="DAll">Delete</option> -->
                                 <option value="Mavailable">Mark Available</option>
                                 <option value="Mranted">Mark Rented</option>
                                  <option value="Msold">Mark Sold</option>
                             </select>
                           </div>
+                          <div style="margin-left: 13%;font-size: 17px; margin-top: 0px;">
+                              <a ng-click="propctrl.moreaction('DAll')">Delete<i class="fa fa-trash-o"></i>
+                              </a>
+
+                          </div>
                           <div class="pull-right">
+                            <button type="button" ng-click="propctrl.copyrowofunits()">Copy Unit</button>
                             <button type="button" ng-click="propctrl.addmorerow(propctrl.units.noofunits)">Add Unit</button>
                           </div>
                       </div>
@@ -289,7 +295,7 @@
                         
                             <div class="row">
                               <div class="col-lg-6 col-xs-12 col-sm-12">
-                                 <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Reset</button>
+                               
                                   <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
                               </div>
                             </div>

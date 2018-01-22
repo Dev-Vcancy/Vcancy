@@ -160,7 +160,7 @@
                                        </div>
                                        <div class="row" ng-if="$root.message == ''">
                                           <div class="col-lg-6 col-xs-12 col-sm-12">
-                                             <button data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</button>
+                                             <a data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</a>
                                              <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Reset</button>
                                              <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
                                           </div>
@@ -212,7 +212,7 @@
                   <div class="col-md-12">
                       <div class="portlet light ">
                            <div class="pull-left">
-                            <select name="more" ng-model="more" ng-click="propctrl.moreaction(more)">
+                            <select name="more" ng-model="propctrl.more" ng-click="propctrl.moreaction(more)">
                                 <option value="">More</option>
                                 <option value="DAll">Delete</option>
                                 <option value="Mavailable">Mark Available</option>
@@ -292,7 +292,6 @@
                         
                             <div class="row">
                               <div class="col-lg-6 col-xs-12 col-sm-12">
-                                 <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Reset</button>
                                   <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
                               </div>
                             </div>
