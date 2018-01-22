@@ -445,6 +445,13 @@ vcancyApp
 			 controllerAs: 'propctrl',
 			 
 		})
+		/*.state ('editprop', {
+			url: '/editprop/{propId}',
+			controller: 'propertyCtrl',
+			controllerAs: 'propctrl',
+			templateUrl: 'views/editproperty.html',
+			resolve: { authenticate: authenticate }
+		})*/
 		.state ('editprop', {
 			url: '/editprop/{propId}',
 			controller: 'propertyCtrl',
@@ -467,18 +474,18 @@ vcancyApp
 			templateUrl: 'views/addproperties.html',
 			resolve: { authenticate: authenticate }
 		})*/
-		 .state ('addprop', {
+		 /*.state ('addprop', {
 			url: '/addprop',
 			controller: 'propertyCtrl',
 			controllerAs: 'propctrl',
 			templateUrl: 'views/addproperties.html',
 			resolve: { authenticate: authenticate }
-		})
-		 .state ('addprop1', {
-			url: '/addprop1',
+		})*/
+		 .state ('addprop', {
+			url: '/addprop',
 			controller: 'propertyCtrl',
 			controllerAs: 'propctrl',
-			templateUrl: 'views/addproperties1.html',
+			templateUrl: 'views/addproperties.html',
 			resolve: { authenticate: authenticate }
 		})
 		

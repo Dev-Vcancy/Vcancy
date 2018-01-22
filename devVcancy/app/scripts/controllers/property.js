@@ -352,8 +352,17 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     };
 
     // Go Back To View Property
-    vm.backtoviewprop = function() {
-        $state.go('viewprop');
+    vm.backtoviewprop = function(value = '') {
+         if(value != ''){
+            if(confirm('If you go back without update value your changes will be lost!')){
+                $state.go('viewprop');        
+            }else{
+                return false;
+            }
+         }else{
+            $state.go('viewprop');
+         }
+        
     }
 
     // Add/Edit Property       
@@ -955,7 +964,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     }
 
     // Edit Property
-    if ($state.current.name == 'editprop') {
+    if ($state.current.name == 'editprop' || $state.current.name == 'editprop1') {
         vm.mode = 'Edit';
         vm.submitaction = "Update";
         vm.otheraction = "Delete";
@@ -965,7 +974,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
             vm.timeSlot = [];
             $scope.$apply(function() {
-                vm.prop = {
+                vm.prop = vm.units = {
                     propID: snapshot.key,
                     landlordID: propData.landlordID,
                     propimg: propData.propimg,
@@ -1017,43 +1026,43 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.timeSlot = [{
             date: dateconfig
         }];
-        vm.prop = vm.units = {
-                                    propID: '',
-                                    landlordID: '',
-                                    propimg: '',
-                                    propstatus: true,
-                                    proptype: '',
-                                    units: '',
-                                    multiple: [true],
-                                    rent: '',
-                                    shared: '',
-                                    address: '',
-                                    noofunits: 0,
-                                    city:'',
-                                    province:'',
-                                    postcode:'',
-                                    country:'',
-                                    propimage:'',
-                                    unitlists:[],
-                                    noofunits:0,
-                                    name:name,
-                                    noofunitsarray: vm.getarray(0),
-                                    mode: 'Add',
-                                    date: [],
-                                    fromtime: [],
-                                    to: [],
-                                    limit: [],
-                                    propertylink: '',
-                                    invalid: [0],
-                                    timeinvalid: [0],
-                                    timeoverlapinvalid: [0]
-                                }
-
-
-    }
-
+         vm.prop = vm.units = {
+                        propID: '',
+                        landlordID: '',
+                        propimg: '',
+                        propstatus: true,
+                        proptype: '',
+                        units: '',
+                        multiple: [true],
+                        rent: '',
+                        shared: '',
+                        address: 'dgdfgdf',
+                        noofunits: 0,
+                        city:'',
+                        province:'',
+                        postcode:'',
+                        country:'',
+                        propimage:'',
+                        unitlists:[],
+                        noofunits:0,
+                        name:name,
+                        noofunitsarray: vm.getarray(0),
+                        mode: 'Add',
+                        date: [],
+                        fromtime: [],
+                        to: [],
+                        limit: [],
+                        propertylink: '',
+                        invalid: [0],
+                        timeinvalid: [0],
+                        timeoverlapinvalid: [0]
+                    }
+}
+    //noofunitsarray Return array value
     vm.noofunitsarray = function(){
+
         return vm.getarray(vm.prop.noofunits);
+    
     }
 
     vm.selectMe = function (event){
@@ -1186,9 +1195,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         } else {
             $scope.selectedAll = false;
         }
-        var datalen = vm.prop.noofunitsarray;
+        var datalen = vm.noofunitsarray();
+        
         for (var i = 0; i <= datalen.length - 1; i++) {
-            datalen[i] = $scope.selectedAll;
+            vm.prop.noofunitsarray[i] = $scope.selectedAll;
         }
     }
     vm.moreaction = function(val){
@@ -1204,7 +1214,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                     
                     var rowlength = selectedvalue.length;
-                    var tablerowlength = vm.prop.noofunitsarray;
+                    //var tablerowlength = vm.prop.noofunitsarray;
+                    var tablerowlength = vm.noofunitsarray();
 
                     if(val === 'DAll'){
                         if(vm.units.unitlists !== undefined){
@@ -1215,8 +1226,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         for (var i = 0; i < rowlength; i++) {
                             vm.units.noofunits = parseInt(vm.units.noofunits - 1);
                             vm.prop.noofunits = vm.units.noofunits
-                            vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
-                            vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
+                            //vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
+                           // vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
                         }
                         var list = [];
                         for (var i = 0; i < vm.units.unitlists.length; i++) {
@@ -1226,7 +1237,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         }
                         
                             vm.units.unitlists = list;
-                        
+                            $scope.selectedAll = false;
                     }
 
                     if(val === 'Mavailable'){
@@ -1254,7 +1265,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             }
                             
                         }
-                             
+                          $scope.selectedAll = false;   
                     }
 
                     if(val === 'Mranted'){
@@ -1279,6 +1290,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 }
                                 
                             }
+                            $scope.selectedAll = false;
                         }
 
 
@@ -1305,10 +1317,12 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 }
                                 
                             }
+                            $scope.selectedAll = false;
                     }
                 }else{
                     if(val === 'DAll'){
-                        var rowlength = vm.prop.noofunitsarray;
+                        //var rowlength = vm.prop.noofunitsarray;
+                        var rowlength = vm.noofunitsarray();
                          if(vm.units.unitlists !== undefined){
                           for(var i = 0; i < rowlength.length; i++){
                                 delete vm.units.unitlists[parseInt(i)];
@@ -1319,9 +1333,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         for (var i = 0; i < rowlength.length; i++) {
                             vm.units.noofunits = parseInt(vm.units.noofunits - 1);
                             vm.prop.noofunits = vm.units.noofunits
-                            vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
-                            vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
+                           // vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
+                           // vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
                         }
+                        $scope.selectedAll = false;
                         
                       }
                           
@@ -1329,7 +1344,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                                if(vm.units.unitlists != undefined){
                                     
-                                    var rowlength = vm.prop.noofunitsarray;
+                                    var rowlength = vm.noofunitsarray();
+                                    //var rowlength = vm.prop.noofunitsarray;
                                     var uniltlength = vm.units.unitlists;
                                    
                                    if(uniltlength.length > 0){
@@ -1349,16 +1365,19 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                }else{
                                 vm.units.unitlists = [];
                                 
-                                    var rowlength = vm.prop.noofunitsarray;
+                                   // var rowlength = vm.prop.noofunitsarray;
+                                    var rowlength = vm.noofunitsarray();
                                     for (var i = 0; i <= rowlength.length - 1; i++) {
                                         vm.units.unitlists.push({status : 'Available'});
                                     }
                                }
+                               $scope.selectedAll = false;
                          }
                          if(val === 'Mranted'){
                                
                                if(vm.units.unitlists != undefined){
-                                    var rowlength = vm.prop.noofunitsarray;
+                                   // var rowlength = vm.prop.noofunitsarray;
+                                    var rowlength = vm.noofunitsarray();
                                     var uniltlength = vm.prop.unitlists;
                                      if(uniltlength.length > 0){
                                         for (var i = 0; i <= rowlength.length - 1; i++) {
@@ -1376,16 +1395,19 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                }else{
                                     vm.units.unitlists = [];
                                 
-                                    var rowlength = vm.prop.noofunitsarray;
+                                   // var rowlength = vm.prop.noofunitsarray;
+                                    var rowlength = vm.noofunitsarray();
                                     for (var i = 0; i <= rowlength.length - 1; i++) {
                                         vm.units.unitlists.push({status : 'rented'});
                                     }
                                }
+                               $scope.selectedAll = false;
                              }
                          if(val === 'Msold'){
                                
                                   if(vm.units.unitlists != undefined){
-                                    var rowlength = vm.prop.noofunitsarray;
+                                   // var rowlength = vm.prop.noofunitsarray;
+                                    var rowlength = vm.noofunitsarray();
                                     var uniltlength = vm.prop.unitlists.length;
                                     if(uniltlength > 0){
                                         for (var i = 0; i <= rowlength.length - 1; i++) {
@@ -1404,11 +1426,13 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                }else{
                                 vm.units.unitlists = [];
                                 
-                                    var rowlength = vm.prop.noofunitsarray;
+                                    //var rowlength = vm.prop.noofunitsarray;
+                                    var rowlength = vm.noofunitsarray();
                                     for (var i = 0; i <= rowlength.length - 1; i++) {
                                         vm.units.unitlists.push({status : 'sold'});
                                     }
                                }
+                               $scope.selectedAll = false;
                              }
                 }
       }
@@ -1425,7 +1449,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         
         vm.units.noofunits = parseInt(val + 1);
         vm.prop.noofunits = parseInt(val + 1);
-        vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits)
+        //vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits)
     }
     vm.addmorerowedit = function(val){
         vm.prop.noofunits = parseInt(val + 1);
