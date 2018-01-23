@@ -1464,39 +1464,23 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     }
 
     vm.copyrowofunits = function(){
-        
-        var rowlength = vm.prop.unitlists;
-        
-         var arr = [];
-            var selectedvalue = new Array();
-                var n = $("#ts_checkbox:checked").length;
-                
-                if (n > 0){
-                    $("#ts_checkbox:checked").each(function(index){
-                        selectedvalue.push($(this).val());
-                    });
 
-                    for (var i = 0; i < selectedvalue.length; i++) {
-                        if(rowlength[i] != undefined){
-                            rowlength[i].unit = parseInt(parseInt(rowlength[parseInt(rowlength.length - 1)].unit) + 1);
-                            var obj = rowlength[i];    
-                        }else{
-                            var obj = rowlength[i];
-                        }
-                        rowlength.push(obj);
-                    }
-                    vm.prop.unitlists = rowlength;
+        var tempArray = vm.prop.unitlists;
+        var b = vm.prop.unitlists;
+        var chutiya = [];
+        var tempArrayl = tempArray.length;
+        var object3 = tempArray.concat(b);
+        var newlen = parseInt(object3.length/2);
+        vm.prop.noofunits = parseInt(vm.prop.noofunits + newlen);
+            console.log(object3);
+          /* for (var i = 0; i < parseInt(newlen-1); i--) {
+                console.log(object3[i]);
+                if(vm.prop.unitlists[i]['unit'] != undefined){
+                    vm.prop.unitlists[i]['unit'] = "Sagar";
+                }  
+            }*/
 
-                }else{
-                    for (var i = 0; i < rowlength.length; i++) {
-                        console.log(rowlength[i] );
-                        rowlength[i].unit = parseInt(parseInt(rowlength[parseInt(rowlength.length - 1)].unit) + 1);
-                         var obj = rowlength[i];
-                         rowlength.push(obj);
-                        /*vm.prop.unitlists.push(rowlength[i]);*/
-                    } 
-                    vm.prop.unitlists = rowlength;
-                }
+            vm.prop.unitlists = object3;
         }
 
     vm.addmorerowedit = function(val){
@@ -1792,6 +1776,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
         };  
         
         $scope.submit = function(){
+
                   
                     var propID = $scope.items1.propID;
                     var unitlists = $scope.items1.unitlists; 
@@ -1876,10 +1861,15 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                                     result.push(obj);
                                     totalrowunits++;
                                 }
-
+                                var unitsarray = [];
                                 for(var i = 0; i < totalrowunits; i++) {
                                     var objres = result[i];
+                                    
                                     unitlists.push(objres);
+                                }
+
+                                for (var i = 0; i < unitlists.length; i++) {
+                                    unitsarray.push(unitlists[i]['unit']);
                                 }
                                 
                                 /*console.log(totalrowunits);
@@ -1889,6 +1879,11 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
 
                                 if(vm.duplication(units) == true){
                                     alert("Please check your unit number are duplicate.. ")
+                                    return false;  
+                                }
+
+                                if(vm.duplication(unitsarray) == true){
+                                    alert("Please check your unit number are conflict with manually units.. ")
                                     return false;  
                                 } 
 
