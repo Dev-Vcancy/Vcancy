@@ -6,7 +6,49 @@
          <div class="page-content-wrapper">
             <div class="page-content">
                <h1 class="page-title">  {{propctrl.mode}} a Property </h1>
-
+              <script type="text/ng-template" id="myModalContent.html">
+                       <div class="profile_model_popup">
+                           <div class="modal-header">
+                               <button type="button" class="close" data-dismiss="dialog" ng-click="cancel()">
+                                 <span aria-hidden="true">&times;</span>
+                                 <span class="sr-only">Close</span>
+                              </button>
+                       </div>
+                          
+                       <div class="modal-body">
+                            <form  role="form" enctype="multipart/form-data" id="fileUploadForm" method="post">
+                   
+                               <div class="form-group">
+                                 <div class="" ng-show="$root.units == 'multiple'">
+                                          <div class='message' ng-if="$root.error != ''">
+                                             <div class="fade in" style="margin: 0 auto;display: block;padding: 15px;width: 50%;color: #009999;"><strong>{{$root.error}}</strong></div>
+                                          </div>
+                                          <div class='message' ng-if="$root.success != ''">
+                                             <div class="fade in" style="margin: 0 auto;display: block;padding: 15px;width: 50%;color: #009999;">
+                                             <strong>{{$root.success}}</strong></div>
+                                          </div>
+                                          <div style="margin: 0 auto;display: block;  width: 35%;">
+                                                <a  class="btn btn-primary" ng-click="units($root.propID)">Add Units</a>
+                                                <!-- <a class="btn btn-warning" ng-click="ok('viewproperty')">View Properties</a> -->
+                                             </div>
+                                  </div>
+                                  <div class="" ng-show="$root.units == 'single'">
+                                     <div class='message' ng-if="$root.error != ''">
+                                       <div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
+                                    </div>
+                                    <div class='message' ng-if="$root.success != ''">
+                                       <div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
+                                    </div>
+                                       <a  class="btn btn-primary" ng-click="ok('viewproperty')">Back</a>
+                                    
+                                  </div>
+                               </div>
+                               </form>
+                       </div>
+                      
+                       
+                       </div>
+                   </script>
                <script type="text/ng-template" id="myModalContent1.html">
         <div class="profile_model_popup">
         <div class="modal-header">
@@ -58,9 +100,9 @@
                            <li role="presentation" class="active">
                               <a href ng-click="tab = 1" data-toggle="tab" aria-expanded="true" >Property</a>
                            </li>
-                           <li role="presentation" ng-show="propctrl.prop.units == 'multiple'">
+                           <!-- <li role="presentation" ng-show="propctrl.prop.units == 'multiple'">
                               <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true" >Units</a>
-                           </li>
+                           </li> -->
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content">
@@ -105,6 +147,7 @@
                                              </div>
                                              <div class="form-group fg-float" ng-show="propctrl.prop.units == 'multiple'">
                                                 <div class="fg-line">
+                                                <input type="hidden"  ng-model="propctrl.prop.noofunits"    name="noofunits" class="form-control w-100 phone" id="" placeholder="" min="1">
                                                    <input type="number"  ng-model="propctrl.prop.noofunits"  ng-required="propctrl.prop.units == 'multiple'" ng-show="propctrl.prop.units == 'multiple'" name="noofunits" class="form-control w-100 phone" id="" placeholder="Address" min="1">
                                                    <label class="fg-label" for="text">No of Units:</label>
                                                 </div>
@@ -141,7 +184,7 @@
                                              <span>Upload Image</span>
                                              <div class="form-group">
                                                 <div class="fileinput {{propctrl.prop.propimg == ''? 'fileinput-new' : 'fileinput-exists'}}" data-provides="fileinput">
-                                 
+                                
                         <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100px; height: 74px; border:1px solid #ccc;">
                         <img src="{{propctrl.prop.propimg}}" style="width:100%; margin-top:0 !important;"/>
                         </div>
@@ -158,7 +201,7 @@
                                              </div>
                                           </div>
                                        </div>
-                                       <div class="row" ng-if="$root.message == ''">
+                                       <div class="row" >
                                           <div class="col-lg-6 col-xs-12 col-sm-12">
                                              <a data-ng-click="propctrl.backtoviewprop()" class="btn btn-info  pull-left">&lt;&lt; Back</a>
                                              <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'">Reset</button>
@@ -166,13 +209,13 @@
                                           </div>
                                        </div>
                                        <div class="clearfix"></div>
-                                       <div class="row" ng-if="$root.message != ''">
+                                       <div class="row" ng-if="$root.message != ''" style="margin: 25px;">
                                           <div class="col-lg-3 col-xs-12 col-sm-12">
-                                             <a  data-ng-click="propctrl.backtoviewprop()" class="btn btn-info">&lt;&lt; Back</a>
+                                             
                                           </div>
                                           
-                                          <div class="col-lg-3 col-xs-12 col-sm-12" ng-show="propctrl.prop.units == 'multiple'">
-                                                <a  class="btn btn-primary" ng-click="propctrl.units($root.propID)">Add Units</a>
+                                          <div class="col-lg-3 col-xs-12 col-sm-12" >
+                                                <a  ng-show="propctrl.prop.units == 'multiple'" class="btn btn-primary" ng-click="propctrl.units($root.propID)">Add Units</a>
                                                 
                                           </div>
                                            <div class="col-lg-3 col-xs-12 col-sm-12">
@@ -212,15 +255,21 @@
                   <div class="col-md-12">
                       <div class="portlet light ">
                            <div class="pull-left">
-                            <select name="more" ng-model="propctrl.more" ng-click="propctrl.moreaction(more)">
+                            <select name="more" ng-model="more" ng-click="propctrl.moreaction(more)">
                                 <option value="">More</option>
-                                <option value="DAll">Delete</option>
+                                <!-- <option value="DAll">Delete</option> -->
                                 <option value="Mavailable">Mark Available</option>
                                 <option value="Mranted">Mark Rented</option>
                                  <option value="Msold">Mark Sold</option>
                             </select>
                           </div>
+                          <div style="margin-left: 13%;font-size: 17px; margin-top: 0px;">
+                              <a ng-click="propctrl.moreaction('DAll')">Delete<i class="fa fa-trash-o"></i>
+                              </a>
+
+                          </div>
                           <div class="pull-right">
+                            <button type="button" ng-click="propctrl.copyrowofunits()">Copy Unit</button>
                             <button type="button" ng-click="propctrl.addmorerow(propctrl.units.noofunits)">Add Unit</button>
                           </div>
                       </div>

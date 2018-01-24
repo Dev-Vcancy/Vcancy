@@ -15840,3 +15840,44 @@ option.selected:focus {
     background: #009999;
     color: white;
 }
+
+.mt-bootstrap-tables.tblebig .portlet.light{padding:12px 0px 15px;}
+.table.table-bordered input#selectall {
+    width: 36px;
+    padding: 0;
+    margin: 0;
+}
+.m-tb-30{margin-bottom:10px;}
+.mt-bootstrap-tables .table > thead > tr > th:first-child{padding-left:16px;}
+.modal-body.prptyadd .pd-l-0{padding-left:0px;}
+.modal-body.prptyadd .pd-r-0{padding-right:0px;}
+.prptyadd .fg-float .fg-toggled .fg-label {
+  top: -5px;
+  font-size: 11px;
+}
+.modal .modal-header {
+    padding: 5px 20px;
+}
+.modal .modal-header h3 {
+    font-weight: 300;
+    float: left;
+}
+.modal .modal-header .close {
+    margin-top: 15px!important;
+}
+.chkbx label.text-center{width:100%;}
+.chkbx input#selectall{margin:0 auto;}
+.chkbxx input#selectall{margin:0;float:left;}
+.chkbxx label {
+    float: left;
+    line-height: 10px;
+    margin: 0 0 0 5px;
+}
+.m-tb-30.usrlbll .fg-line label.fg-label {
+    margin-bottom: 0;
+    display: block;
+    position: relative;
+}
+.pull-right.imgright {
+    margin-right: 15px;
+}

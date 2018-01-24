@@ -15,7 +15,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     var url = $location.absUrl();
     var oldtimeSlotLen = 0;
 
-    
+    var swal = window.swal;
 
     console.log(dateconfig, todaydate);
 
@@ -36,6 +36,21 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     vm.localpropID = '';
 
     
+    vm.testsweet = function(){
+            swal({
+                title: "Success!",
+                text: "Your Property Created successfully!",
+                type: "success",
+                confirmButtonColor: '#009999',
+                 confirmButtonText: "Add Units"
+                },function(isConfirm){
+                      if (isConfirm) {
+                        window.location.href = "http://google.com";
+                      }
+                    });
+         //swal("Your Property Created successfully!", "You clicked the button And add units!", "success")
+    }
+
 
     firebase.database().ref('users/' + localStorage.getItem('userID')).once("value", function(snap) {
         vm.landlordname = snap.val().firstname + " " + snap.val().lastname;
@@ -181,6 +196,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     };
 
     vm.units = function (value) {
+
          if(value != '' && value != null){
             $window.location.href = '#/addunits/'+value;
          }
@@ -461,6 +477,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                             propdbObj.ref('properties/').limitToLast(1).once("child_added", function(snapshot) {
                                 //localStorage.setItem("propID", snapshot.key);
+                                         if(units == 'multiple'){
+                                           vm.opensuccesssweet(snapshot.key);  
+                                         }
                                          $rootScope.$apply(function() {
                                                 console.log(units);
                                                 $rootScope.units = units;
@@ -470,9 +489,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                                
 
                                             });
-                                         if(units == 'multiple'){
-                                           vm.openmodel();  
-                                         }
+                                         
                                         
                             });
 
@@ -535,6 +552,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     console.log("Insert Data successfully!");
 
                     propdbObj.ref('properties/').limitToLast(1).once("child_added", function(snapshot) {
+                            if(units == 'multiple'){
+                               vm.opensuccesssweet(snapshot.key);  
+                            }
                          $rootScope.$apply(function() {
                                 console.log(units);
                                 $rootScope.units = units;
@@ -545,9 +565,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                             });
                          //vm.openmodel();
-                          if(units == 'multiple'){
-                               vm.openmodel();  
-                             }
+                         /* if(units == 'multiple'){
+                               //vm.openmodel();  
+                               vm.opensuccesssweet(snapshot.key);  
+                             }*/
                     });
 
                 });
@@ -1240,7 +1261,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         
                             vm.units.unitlists = list;
                             $scope.selectedAll = false;
-                            vm.more = '';
+                            var datalen = vm.noofunitsarray();
+        
+                            for (var i = 0; i <= datalen.length - 1; i++) {
+                                vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                            }
                     }
 
                     if(val === 'Mavailable'){
@@ -1268,8 +1293,13 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             }
                             
                         }
-                          $scope.selectedAll = false;  
-                          vm.more = ''; 
+                           
+                          $scope.selectedAll = false;
+                            var datalen = vm.noofunitsarray();
+        
+                            for (var i = 0; i <= datalen.length - 1; i++) {
+                                vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                            } 
                     }
 
                     if(val === 'Mranted'){
@@ -1294,8 +1324,13 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 }
                                 
                             }
+                           
                             $scope.selectedAll = false;
-                            vm.more = '';
+                            var datalen = vm.noofunitsarray();
+        
+                            for (var i = 0; i <= datalen.length - 1; i++) {
+                                vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                            }
                         }
 
 
@@ -1322,8 +1357,13 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 }
                                 
                             }
+                            
                             $scope.selectedAll = false;
-                            vm.more = '';
+                            var datalen = vm.noofunitsarray();
+        
+                            for (var i = 0; i <= datalen.length - 1; i++) {
+                                vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                            }
                     }
                 }else{
                     if(val === 'DAll'){
@@ -1342,8 +1382,13 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                            // vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
                            // vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
                         }
+                        
                         $scope.selectedAll = false;
-                        vm.more = '';
+                            var datalen = vm.noofunitsarray();
+        
+                            for (var i = 0; i <= datalen.length - 1; i++) {
+                                vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                            }
                         
                       }
                           
@@ -1379,7 +1424,12 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                     }
                                }
                                $scope.selectedAll = false;
-                               vm.more = '';
+                              
+                                var datalen = vm.noofunitsarray();
+            
+                                for (var i = 0; i <= datalen.length - 1; i++) {
+                                    vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                                }
                          }
                          if(val === 'Mranted'){
                                
@@ -1410,7 +1460,12 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                     }
                                }
                                $scope.selectedAll = false;
-                               vm.more = '';
+                               
+                                var datalen = vm.noofunitsarray();
+            
+                                for (var i = 0; i <= datalen.length - 1; i++) {
+                                    vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                                }
                              }
                          if(val === 'Msold'){
                                
@@ -1442,7 +1497,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                     }
                                }
                                $scope.selectedAll = false;
-                               vm.more = '';
+                                var datalen = vm.noofunitsarray();
+            
+                                for (var i = 0; i <= datalen.length - 1; i++) {
+                                    vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                                }
                              }
                 }
       }
@@ -1465,23 +1524,85 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     vm.copyrowofunits = function(){
 
-        var tempArray = vm.prop.unitlists;
-        var b = vm.prop.unitlists;
-        var chutiya = [];
-        var tempArrayl = tempArray.length;
-        var object3 = tempArray.concat(b);
-        var newlen = parseInt(object3.length/2);
-        vm.prop.noofunits = parseInt(vm.prop.noofunits + newlen);
-            console.log(object3);
-          /* for (var i = 0; i < parseInt(newlen-1); i--) {
-                console.log(object3[i]);
-                if(vm.prop.unitlists[i]['unit'] != undefined){
-                    vm.prop.unitlists[i]['unit'] = "Sagar";
-                }  
-            }*/
+            var arr = [];
+            var selectedvalue = new Array();
+            var n = $("#ts_checkbox:checked").length;
+            var tempArray = vm.prop.unitlists;
+            var b = [];
+            if (n > 0){
 
-            vm.prop.unitlists = object3;
-        }
+                $("#ts_checkbox:checked").each(function(index){
+                    selectedvalue.push($(this).val());
+                });
+
+                for (var i = 0; i < selectedvalue.length; i++) {
+                    //console.log(vm.prop.unitlists[i]);
+                    units = parseInt(vm.prop.unitlists[i]['unit']) + parseInt(vm.prop.unitlists.length);
+
+                    b.push({
+                            unit: units,
+                            name : vm.prop.unitlists[i]['name'],
+                            type : vm.prop.unitlists[i]['type'],
+                            address : vm.prop.unitlists[i]['address'],
+                            city : vm.prop.unitlists[i]['city'],
+                            state : vm.prop.unitlists[i]['state'],
+                            postalcode : vm.prop.unitlists[i]['postalcode'],
+                            location : vm.prop.unitlists[i]['location'],
+                            sqft : vm.prop.unitlists[i]['sqft'],
+                            bedroom  :vm.prop.unitlists[i]['bedroom'],
+                            bathroom : vm.prop.unitlists[i]['bathroom'],
+                            rent : vm.prop.unitlists[i]['rent'],
+                            description : vm.prop.unitlists[i]['description'],
+                            status : vm.prop.unitlists[i]['status'],
+                            epirydate : vm.prop.unitlists[i]['epirydate'],
+                            Aminities : vm.prop.unitlists[i]['Aminities'],
+                            cats : vm.prop.unitlists[i]['cats'],
+                            dogs : vm.prop.unitlists[i]['dogs'],
+                            smoking : vm.prop.unitlists[i]['smoking']
+                            
+                        });
+                    vm.prop.noofunits = parseInt(vm.prop.noofunits + 1);
+                }
+
+                
+                     for(var i = 0; i< b.length; i++){
+                        vm.prop.unitlists.push(b[i]);  
+                     }
+            }else{
+                vm.prop.noofunits = parseInt(vm.prop.noofunits + vm.prop.unitlists.length);
+
+                for(var i=0; i<vm.prop.unitlists.length; i++){
+                var units = parseInt(vm.prop.unitlists[i]['unit']) + parseInt(vm.prop.unitlists.length);
+                b.push({
+                    unit: units,
+                    name : vm.prop.unitlists[i]['name'],
+                    type : vm.prop.unitlists[i]['type'],
+                    address : vm.prop.unitlists[i]['address'],
+                    city : vm.prop.unitlists[i]['city'],
+                    state : vm.prop.unitlists[i]['state'],
+                    postalcode : vm.prop.unitlists[i]['postalcode'],
+                    location : vm.prop.unitlists[i]['location'],
+                    sqft : vm.prop.unitlists[i]['sqft'],
+                    bedroom  :vm.prop.unitlists[i]['bedroom'],
+                    bathroom : vm.prop.unitlists[i]['bathroom'],
+                    rent : vm.prop.unitlists[i]['rent'],
+                    description : vm.prop.unitlists[i]['description'],
+                    status : vm.prop.unitlists[i]['status'],
+                    epirydate : vm.prop.unitlists[i]['epirydate'],
+                    Aminities : vm.prop.unitlists[i]['Aminities'],
+                    cats : vm.prop.unitlists[i]['cats'],
+                    dogs : vm.prop.unitlists[i]['dogs'],
+                    smoking : vm.prop.unitlists[i]['smoking']
+                    
+                });
+            }
+
+            for(var i = 0; i< b.length; i++){
+                console.log(b[i]);  
+                vm.prop.unitlists.push(b[i]);  
+            } 
+            }
+         }
 
     vm.addmorerowedit = function(val){
         vm.prop.noofunits = parseInt(val + 1);
@@ -1531,7 +1652,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     localStorage.removeItem('propID');
                     localStorage.removeItem('units');
                     localStorage.removeItem('propName');
-                    $state.go('viewprop');
+                    //$state.go('viewprop');
+                     $state.reload();
                 } else {
                     return false;
                 }
@@ -1716,10 +1838,47 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
 
+    vm.opensuccesssweet = function(value){
+            swal({
+                title: "Success!",
+                text: "Your Property Created successfully!",
+                type: "success",
+                confirmButtonColor: '#009999',
+                 confirmButtonText: "Add Units"
+                },function(isConfirm){
+                      if (isConfirm) {
+                        window.location.href = '#/addunits/'+value;
+                      }
+                    });
+         //swal("Your Property Created successfully!", "You clicked the button And add units!", "success")
+    }
+
     vm.openmodel = function (size) {
         $scope.items1 = [];
         var modalInstance = $uibModal.open({
           templateUrl: 'myModalContent.html',
+          controller: 'ModalInstanceCtrl1',
+          backdrop: 'static',
+          size: size,
+          resolve: {
+            items1: function () {
+              return $scope.items1;
+            }
+          }
+         
+        });
+
+        modalInstance.result.then(function (selectedItem) {
+          $scope.selected = selectedItem;
+        }, function () {
+          //$log.info('Modal dismissed at: ' + new Date());
+        });
+      };
+
+      vm.openDetailModel = function (size) {
+        $scope.items1 = [];
+        var modalInstance = $uibModal.open({
+          templateUrl: 'myModalDetailsContent.html',
           controller: 'ModalInstanceCtrl1',
           backdrop: 'static',
           size: size,

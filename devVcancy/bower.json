@@ -34,7 +34,7 @@
     "simpleWeather": "~3.0.2",
     "string-mask": "~0.2.0",
     "summernote": "~0.6.7",
-    "sweetalert": "~1.0.1",
+    "sweetalert": "^2.1.0",
     "Waves": "waves#^0.7.5",
     "angular": "1.4.7",
     "angularfire": "^2.3.0",
