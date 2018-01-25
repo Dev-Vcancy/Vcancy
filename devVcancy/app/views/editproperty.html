@@ -162,6 +162,9 @@
                                              <button type="reset" class="btn btn-danger pull-right m-l-10" ng-show="propctrl.otheraction == 'Cancel'" ng-if="$root.message == ''">Reset</button>
                                              <button type="submit"  class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
                                           </div>
+                                          <div class="col-lg-6 col-xs-12 col-sm-12">
+                                             <a  ng-click="propctrl.deleteproperty(propctrl.prop.propID,'innerpage')" class="btn btn-info pull-right">Delete Property</a>
+                                          </div>
                                        </div>
                                        <div class="clearfix"></div><div class="clearfix"></div>
                                        <div class="row" ng-if="$root.message != ''" style="margin-top: 15px;">

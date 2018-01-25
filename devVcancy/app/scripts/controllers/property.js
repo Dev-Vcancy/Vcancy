@@ -1875,13 +1875,14 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         });
       };
 
-      vm.openDetailModel = function (size) {
-        $scope.items1 = [];
+      vm.openDetailModel = function (prop,index) {
+
+        $scope.items1 = prop;
+        $scope.items1.indexofDetails = index;
         var modalInstance = $uibModal.open({
           templateUrl: 'myModalDetailsContent.html',
           controller: 'ModalInstanceCtrl1',
           backdrop: 'static',
-          size: size,
           resolve: {
             items1: function () {
               return $scope.items1;
@@ -1924,8 +1925,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 }]);
 
 vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http','$uibModal', '$uibModalInstance','$location', 'items1', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http,$uibModal,$uibModalInstance,$location,items1){
-
+    
    var vm = this;
+    vm.prop = items1;
     $scope.items1 = items1;
         $scope.ok = function (value) {
             if(value === 'viewproperty'){

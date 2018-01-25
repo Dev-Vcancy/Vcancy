@@ -27,11 +27,12 @@
                              </span>
                             
                         </div>
+                        {{items1}}
                         <div class="clearfix"></div>
                  <div class="col-xs-12 col-sm-12 m-tb-30">
                     <div class="form-group fg-float">
                       <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                        <input required="true" name="title" ng-model="items1.title" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                         <label class="fg-label">Posting Title:</label>
                       </div>
                     </div>
@@ -40,7 +41,7 @@
                   <div class="col-xs-6 col-sm-6 m-tb-30">
                     <div class="form-group fg-float">
                       <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                        <input required="" name="address" ng-model="items1.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                         <label class="fg-label">Specific Area:</label>
                       </div>
                     </div>
@@ -49,7 +50,7 @@
                   <div class="col-xs-6 col-sm-6 m-tb-30">
                     <div class="form-group fg-float">
                       <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                        <input required="" name="desc" ng-model="item.desc" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                         <label class="fg-label">Description text area:</label>
                       </div>
                     </div>
@@ -68,7 +69,7 @@
                     <div class="col-xs-6 col-sm-6 pd-r-0">
                     <div class="form-group fg-float">
                       <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                        <input required="" name="rent" ng-model="items1.unitlists[items1.indexofDetails].rent" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                         <label class="fg-label">Rent:</label>
                       </div>
                     </div>
@@ -311,7 +312,7 @@
                                                          <option value="sold">Sold</option>
                                                       </select>
                                                    </td>
-                                                   <td><a  ng-click="propctrl.openDetailModel()">Details</a></td>
+                                                   <td><a  ng-click="propctrl.openDetailModel(propctrl.prop,$index)">Details</a></td>
                                                 </tr>
                                              </tbody>
                                           </table>
