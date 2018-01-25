@@ -1366,143 +1366,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             }
                     }
                 }else{
-                    if(val === 'DAll'){
-                        //var rowlength = vm.prop.noofunitsarray;
-                        var rowlength = vm.noofunitsarray();
-                         if(vm.units.unitlists !== undefined){
-                          for(var i = 0; i < rowlength.length; i++){
-                                delete vm.units.unitlists[parseInt(i)];
-                          }
-                          vm.units.unitlists = [];
-                        }
-                        
-                        for (var i = 0; i < rowlength.length; i++) {
-                            vm.units.noofunits = parseInt(vm.units.noofunits - 1);
-                            vm.prop.noofunits = vm.units.noofunits
-                           // vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
-                           // vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
-                        }
-                        
-                        $scope.selectedAll = false;
-                            var datalen = vm.noofunitsarray();
-        
-                            for (var i = 0; i <= datalen.length - 1; i++) {
-                                vm.prop.noofunitsarray[i] = $scope.selectedAll;
-                            }
-                        
-                      }
-                          
-                         if(val === 'Mavailable'){
-
-                               if(vm.units.unitlists != undefined){
-                                    
-                                    var rowlength = vm.noofunitsarray();
-                                    //var rowlength = vm.prop.noofunitsarray;
-                                    var uniltlength = vm.units.unitlists;
-                                   
-                                   if(uniltlength.length > 0){
-                                        for (var i = 0; i < rowlength.length; i++) {
-                                            if(vm.units.unitlists[i] !== undefined){
-                                                vm.units.unitlists[i]['status'] = 'Available';
-                                            }else{
-                                                 vm.units.unitlists.push({status : 'Available'});
-                                            }
-                                          }    
-                                    }else{
-                                       for (var i = 0; i <= rowlength.length - 1; i++) {
-                                            vm.units.unitlists.push({status : 'Available'});
-                                        } 
-                                    }
-                                    
-                               }else{
-                                vm.units.unitlists = [];
-                                
-                                   // var rowlength = vm.prop.noofunitsarray;
-                                    var rowlength = vm.noofunitsarray();
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.units.unitlists.push({status : 'Available'});
-                                    }
-                               }
-                               $scope.selectedAll = false;
-                              
-                                var datalen = vm.noofunitsarray();
-            
-                                for (var i = 0; i <= datalen.length - 1; i++) {
-                                    vm.prop.noofunitsarray[i] = $scope.selectedAll;
-                                }
-                         }
-                         if(val === 'Mranted'){
-                               
-                               if(vm.units.unitlists != undefined){
-                                   // var rowlength = vm.prop.noofunitsarray;
-                                    var rowlength = vm.noofunitsarray();
-                                    var uniltlength = vm.prop.unitlists;
-                                     if(uniltlength.length > 0){
-                                        for (var i = 0; i <= rowlength.length - 1; i++) {
-                                            if(vm.units.unitlists[i] !== undefined){
-                                                vm.units.unitlists[i]['status'] = 'rented';
-                                            }else{
-                                                vm.units.unitlists.push({status : 'rented'});    
-                                            }
-                                        }
-                                    }else{
-                                        for (var i = 0; i <= rowlength.length - 1; i++) {
-                                            vm.units.unitlists.push({status : 'rented'});
-                                        }
-                                    }
-                               }else{
-                                    vm.units.unitlists = [];
-                                
-                                   // var rowlength = vm.prop.noofunitsarray;
-                                    var rowlength = vm.noofunitsarray();
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.units.unitlists.push({status : 'rented'});
-                                    }
-                               }
-                               $scope.selectedAll = false;
-                               
-                                var datalen = vm.noofunitsarray();
-            
-                                for (var i = 0; i <= datalen.length - 1; i++) {
-                                    vm.prop.noofunitsarray[i] = $scope.selectedAll;
-                                }
-                             }
-                         if(val === 'Msold'){
-                               
-                                  if(vm.units.unitlists != undefined){
-                                   // var rowlength = vm.prop.noofunitsarray;
-                                    var rowlength = vm.noofunitsarray();
-                                    var uniltlength = vm.prop.unitlists.length;
-                                    if(uniltlength > 0){
-                                        for (var i = 0; i <= rowlength.length - 1; i++) {
-                                             if(vm.units.unitlists[i] !== undefined){
-                                                vm.units.unitlists[i]['status'] = 'sold';
-                                             }else{
-                                                vm.units.unitlists.push({status : 'sold'});    
-                                             }
-
-                                        }
-                                    }else{
-                                        for (var i = 0; i <= rowlength.length - 1; i++) {
-                                            vm.units.unitlists.push({status : 'sold'});
-                                        }
-                                    }
-                               }else{
-                                vm.units.unitlists = [];
-                                
-                                    //var rowlength = vm.prop.noofunitsarray;
-                                    var rowlength = vm.noofunitsarray();
-                                    for (var i = 0; i <= rowlength.length - 1; i++) {
-                                        vm.units.unitlists.push({status : 'sold'});
-                                    }
-                               }
-                               $scope.selectedAll = false;
-                                var datalen = vm.noofunitsarray();
-            
-                                for (var i = 0; i <= datalen.length - 1; i++) {
-                                    vm.prop.noofunitsarray[i] = $scope.selectedAll;
-                                }
-                             }
+                    if(confirm("Please select row for apply your selected action")){
+                        return false;
+                    }
                 }
       }
 
@@ -1925,7 +1791,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 }]);
 
 vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http','$uibModal', '$uibModalInstance','$location', 'items1', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http,$uibModal,$uibModalInstance,$location,items1){
-    
+    console.log(items1);
    var vm = this;
     vm.prop = items1;
     $scope.items1 = items1;
