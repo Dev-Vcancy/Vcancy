@@ -1866,10 +1866,11 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
         var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
         if (regex.test(fileUpload.value.toLowerCase())) {
             if (typeof (FileReader) != "undefined") {
+                var unitsImported = [];
                 var reader = new FileReader();
+
                 reader.onload = function (e) {
                     var rows = e.target.result.split("\n");
-                    var result = [];
                     var units = [];
                     var headers = rows[0].split(",");
                     var totalrowunits = 0;
@@ -1929,52 +1930,53 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                             obj['state'] = province;
                             obj['postcode'] = postcode;
                         }
-                        result.push(obj);
+                        unitsImported.push(obj);
                         totalrowunits++;
                     }
-                    var unitsarray = [];
-                    for (var i = 0; i < totalrowunits; i++) {
-                        var objres = result[i];
+                    vm.prop.unitlists = unitsImported;
+                    $uibModalInstance.close();
+                    // for (var i = 0; i < result.length; i++) {
+                    //     var objres = result[i];
 
-                        unitlists.push(objres);
-                    }
+                    //     unitlists.push(objres);
+                    // }
 
-                    for (var i = 0; i < unitlists.length; i++) {
-                        unitsarray.push(unitlists[i]['unit']);
-                    }
+                    // for (var i = 0; i < unitlists.length; i++) {
+                    //     unitsarray.push(unitlists[i]['unit']);
+                    // }
 
                     /*console.log(totalrowunits);
                     console.log(unitlists);*/
 
 
 
-                    if (vm.duplication(units) == true) {
-                        alert("Please check your unit number are duplicate.. ")
-                        return false;
-                    }
+                    // if (vm.duplication(units) == true) {
+                    //     alert("Please check your unit number are duplicate.. ")
+                    //     return false;
+                    // }
 
-                    if (vm.duplication(unitsarray) == true) {
-                        alert("Please check your unit number are conflict with manually units.. ")
-                        return false;
-                    }
+                    // if (vm.duplication(unitsarray) == true) {
+                    //     alert("Please check your unit number are conflict with manually units.. ")
+                    //     return false;
+                    // }
 
-                    noofunits = parseInt(totalrowunits + noofunits);
-                    firebase.database().ref('properties/' + propID).update({
-                        unitlists: unitlists,
-                        totalunits: noofunits, noofunits: noofunits,
-                        units: 'multiple'
-                    }).then(function () {
+                    // noofunits = parseInt(totalrowunits + noofunits);
+                    // firebase.database().ref('properties/' + propID).update({
+                    //     unitlists: unitlists,
+                    //     totalunits: noofunits, noofunits: noofunits,
+                    //     units: 'multiple'
+                    // }).then(function () {
 
-                        if (confirm("Units added successfully!")) {
-                            $uibModalInstance.close();
-                            // $state.go('viewprop');
-                            $state.reload();
-                        }
-                        $rootScope.success = "Units added successfully!";
-                        //setTimeout(function(){ $state.go('viewprop'); }, 2000);
-                    }, function (error) {
-                        $rootScope.error = "Please Check your CSV file Having issue with the data!";
-                    });
+                    //     if (confirm("Units added successfully!")) {
+                    //         $uibModalInstance.close();
+                    //         // $state.go('viewprop');
+                    //         $state.reload();
+                    //     }
+                    //     $rootScope.success = "Units added successfully!";
+                    //     //setTimeout(function(){ $state.go('viewprop'); }, 2000);
+                    // }, function (error) {
+                    //     $rootScope.error = "Please Check your CSV file Having issue with the data!";
+                    // });
                 }
 
                 reader.readAsText(fileUpload.files[0]);
