@@ -1398,9 +1398,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             "location": vm.prop.address,
             "name": vm.prop.name,
             "postalcode": vm.prop.postcode,
-            "rent": "11111",
+            "rent": "1",
             "smoking": "",
-            "sqft": "111",
+            "sqft": "1",
             "state": "BC",
             "status": "Available",
             "type": "apartment",
@@ -1554,7 +1554,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         //     totalunits++;
         // }
         //console.log(fullformarary);
-
+        
+        unitlists.forEach((unit) => {
+            delete unit.$$hashKey;
+        });
         firebase.database().ref('properties/' + prop.propID).update({
             unitlists: unitlists,
             totalunits: unitlists.length,
@@ -1745,17 +1748,18 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
 
     vm.opensuccesssweet = function (value) {
-        swal({
-            title: "Success!",
-            text: "Your Property Created successfully!",
-            type: "success",
-            confirmButtonColor: '#009999',
-            confirmButtonText: "Add Units"
-        }, function (isConfirm) {
-            if (isConfirm) {
-                window.location.href = '#/addunits/' + value;
-            }
-        });
+        // swal({
+        //     title: "Success!",
+        //     text: "Your Property Created successfully!",
+        //     type: "success",
+        //     confirmButtonColor: '#009999',
+        //     confirmButtonText: "Add Units"
+        // }, function (isConfirm) {
+        //     if (isConfirm) {
+        //         window.location.href = '#/addunits/' + value;
+        //     }
+        // });
+        alert('Property Created successfully!');
         //swal("Your Property Created successfully!", "You clicked the button And add units!", "success")
     }
 
