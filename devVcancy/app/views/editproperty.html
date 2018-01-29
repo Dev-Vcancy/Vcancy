@@ -235,23 +235,25 @@
                 <div class="form-group">
                     <div class="fileinput fileinput-new" data-provides="fileinput">
 
-                        <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> </div>
-                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                        <!-- <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                        </div> -->
                         <div>
-                            <span class="btn default btn-file">
+                            <span class="btn btn-info btn-file">
                                 <span class="fileinput-new"> Select CSV </span>
                                 <span class="fileinput-exists"> Change </span>
                                <input type="file" name="file" id="file123" value="dataFile" required="true">
                              </span>
                             <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                            <span class="fileinput-exists">Selected File:</span> <span class="fileinput-preview fileinput-exists" style=""> </span>
                         </div>
+                        
                     </div>
                     
                 </div>
         </div>
         <div class="modal-footer">
-            <button type="submit"  class="btn btn-primary" ng-click="submit()">Submit</button>
+            <button type="submit"  class="btn btn-primary" ng-click="submit()"><i ng-if="propctrl.isFileUploading" class="fa fa-spinner fa-pulse fa-3x fa-fw" aria-hidden="true"></i> Upload</button>
             <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
         </div>
         </form>
@@ -435,8 +437,8 @@
                               <div class="form-group m-form__group row">
                                 <label for="example-time-input" class="col-2 col-form-label"> Actions</label>
                                 <div class="col-10">
-                                  <select title="{{propctrl.Utils.keys(propctrl.checkedRow).length === 0?'Please select units from table.':''}}"
-                                    class="form-control m-input" name="more" ng-model="propctrl.more" ng-change="propctrl.moreaction(propctrl.more)">
+                                  <select title="{{propctrl.Utils.keys(propctrl.checkedRow).length === 0?'Please select units from table.':''}}" class="form-control m-input"
+                                    name="more" ng-model="propctrl.more" ng-change="propctrl.moreaction(propctrl.more)">
                                     <option value="">Select action to perform on below selected units</option>
                                     <option value="Available">Mark Available</option>
                                     <option value="ranted">Mark Rented</option>
@@ -509,8 +511,8 @@
                                       </td>
                                       <td class="multiple-select-dropdown">
 
-                                        <select data-placeholder="Status" class="form-control" id="multidropdown" name="Aminities" ng-model="unit.Aminities"
-                                          data-placeholder="Prop type" multiple="true">
+                                        <select data-placeholder="Status" class="form-control" id="multidropdown" name="Aminities" ng-model="unit.Aminities" data-placeholder="Prop type"
+                                          multiple="true">
                                           <option value="furnished">Furnished</option>
                                           <option value="laundry">Laundry</option>
                                           <option value="parking">Parking</option>
@@ -518,8 +520,8 @@
                                         </select>
                                       </td>
                                       <td>
-                                        <select data-placeholder="Status" class="form-control" name="status" ng-model="unit.status" required
-                                          class="w-100 localytics-chosen" data-placeholder="Prop status">
+                                        <select data-placeholder="Status" class="form-control" name="status" ng-model="unit.status" required class="w-100 localytics-chosen"
+                                          data-placeholder="Prop status">
                                           <option value="">Status</option>
                                           <option value="rented">Rented</option>
                                           <option value="Available">Available</option>

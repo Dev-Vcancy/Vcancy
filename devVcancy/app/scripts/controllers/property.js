@@ -1412,11 +1412,17 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     vm.deleteSelected = function () {
         if (Object.keys(vm.checkedRow) && Object.keys(vm.checkedRow).length > 0) {
-            for (var index in vm.checkedRow) {
-                if (vm.checkedRow[index]) {
-                    vm.prop.unitlists.splice(index, 1);
-                }
-            }
+
+            // for (var index in vm.checkedRow) {
+            //     if (vm.checkedRow[index]) {
+            //         vm.prop.unitlists.splice(index, 1);
+            //     }
+            // }
+            vm.prop.unitlists = vm.prop.unitlists.filter(function (unit, key) {
+                if (!vm.checkedRow[key]) return true;
+            })
+            vm.submiteditunits(vm.prop.unitlists, vm.prop);
+            vm.checkedRow = {};
         } else {
             alert('Please select any unit from row');
         }
@@ -1521,40 +1527,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     }
 
     vm.submiteditunits = function (unitlists, prop) {
-        /*console.log(unitlists); 
-        console.log(prop); return false;*/
-        // var fullformarary = [];
-        // var propID = prop.propID;
-        // var address = prop.address;
-        // var name = prop.name;
-        // var type = prop.proptype;
-        // var city = prop.city;
-        // var state = prop.province;
-        // var postalcode = prop.postcode;
-        // var location = prop.address;
 
-        // var totalunits = 0;
-        // for (var i = 0; i < prop.noofunits; i++) {
-        //     var obj = unitlists[i];
-        //     obj['name'] = name;
-        //     obj['type'] = type;
-        //     obj['address'] = address;
-        //     obj['city'] = city;
-        //     obj['state'] = state;
-        //     obj['postalcode'] = postalcode;
-        //     obj['location'] = address;
-        //     obj['description'] = '';
-        //     obj['epirydate'] = '';
-        //     obj['cats'] = '';
-        //     obj['dogs'] = '';
-        //     obj['smoking'] = '';
-
-        //     fullformarary.push(obj);
-
-        //     totalunits++;
-        // }
-        //console.log(fullformarary);
-        
         unitlists.forEach((unit) => {
             delete unit.$$hashKey;
         });
@@ -1848,7 +1821,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
 
     $scope.submit = function () {
 
-
+        vm.isFileUploading = true;
         var propID = $scope.items1.propID;
         var unitlists = $scope.items1.unitlists;
         var totalunits = $scope.items1.totalunits;
@@ -1934,7 +1907,11 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                         totalrowunits++;
                     }
                     vm.prop.unitlists = unitsImported;
-                    $uibModalInstance.close();
+                    vm.isFileUploading = false;
+                    setTimeout(function () {
+                        $uibModalInstance.close();
+                        alert('File Imported successfully. You need to save units or changes will be lost');
+                    }, 1000);
                     // for (var i = 0; i < result.length; i++) {
                     //     var objres = result[i];
 
