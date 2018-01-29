@@ -2,14 +2,19 @@ vcancyApp
     // =========================================================================
     // Header
     // =========================================================================
-    .controller('headerCtrl', function($timeout, $firebaseAuth, $rootScope, $state){
+    .controller('headerCtrl', function($timeout, $firebaseAuth, $rootScope, $state,$window){
 		var authObj = $firebaseAuth();		
 		
 		this.userLogout = function(){
 			authObj.$signOut();
 			$rootScope.user = null;
 			localStorage.clear();
-			$state.go('login', {}, {reload: true});
+			//$state.go('login', {}, {reload: true});
+            $('body').hide();
+            localStorage.setItem("justOnce", "true");
+            window.location = '#/login';
+
+
 		}
 		
         

@@ -91,7 +91,7 @@
                                 <div class="clearfix"></div>
                                                 <hr>
                                                 <p class='text-center'>Already have an account?</p>
-                                                    <a href='#/login'  class="btn blue btn-block" >SING IN </a>
+                                                    <a href='#/login'  class="btn blue btn-block" onclick="storelocal();">SING IN </a>
                             </div>
                 </div>
                         <!-- BEGIN FORGOT PASSWORD FORM -->
@@ -104,6 +104,11 @@
         </div>
       <script type="text/javascript">
     $( document ).ready(function() {
-        $(document.body).addClass('register');
+        $('body').addClass('register');
+        $('body').removeClass('login');
     });
+    function storelocal(){
+        $('body').hide();
+        localStorage.setItem("justOnce", "true");
+    }
 </script>    

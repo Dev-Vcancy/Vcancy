@@ -5,6 +5,7 @@
 //=================================================
 
 vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$location','$window', function($scope,$firebaseAuth,$state,$rootScope,$location,$window) {
+		 
 		var vm = this;
         //Status
         vm.login = 1;
@@ -359,7 +360,8 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				       // Success 
 				       firebaseUser.sendEmailVerification().then(function() {
 							console.log("Email Sent");
-								$rootScope.success = 'Sent mail in your mail box please check your Email';
+								$rootScope.success = 'Confirmation email resent';
+								//$rootScope.success = 'Sent mail in your mail box please check your Email';
 								$rootScope.error = '';			
 					
 						}).catch(function(error) {

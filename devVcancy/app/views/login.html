@@ -15,7 +15,7 @@
                      <a href='#/register' style="text-transform: unset;" class="creatct">Create an Account</a>
                 </div>
                 <div class="container">
-   
+    
     
     <!-- display profile info -->
     <div id="profileData" style="display: none;">
@@ -105,8 +105,15 @@
 
 
 <script type="text/javascript">
+    if(localStorage.getItem("justOnce")){
+            window.location.reload();
+            localStorage.clear();
+    }
     $( document ).ready(function() {
-        $(document.body).addClass('login');
+         $(document.body).addClass('login');
          $(document.body).removeClass('register');
+          
     });
+
+   
 </script> 

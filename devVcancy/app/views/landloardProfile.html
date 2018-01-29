@@ -67,7 +67,7 @@
             <img src="{{ldProfilectrl.profilepic}}" class="img-responsive pic-bordered" alt="">
             <a class="profile-edit"  href="javascript:void(0)" ng-click="open()"> edit </a>
         </li>
-        <li>
+        <!--li>
             <a href="javascript:;"> Applications <span> 0 </span>  </a> 
         </li>
         <li>
@@ -86,7 +86,7 @@
         <li>
             <a href="javascript:;"> Total Users
               <span id="totaluser"> {{ldProfilectrl.totaluser}}</span> </a>
-        </li>
+        </li-->
     </ul>
 </div>
 <div class="col-md-9 col-sm-9">
@@ -375,7 +375,7 @@ font-size: 18px;">Delete Account</a>
 </section>
 <section id="section4">
 <input type="radio" name="sections" id="option5">
-<label for="option5" class="tablbl"> Add User </label>
+<label for="option5" class="tablbl"> Users </label>
  <div class="tbgt">
     <div id="tab_3-3" class="tab-pane">
     <h3 class="m-b-20 m-t-10 fw">Add New User</h3>
@@ -419,6 +419,32 @@ font-size: 18px;">Delete Account</a>
 
     </form>
     <div class="clearfix"></div>
+    <div>
+        <h3 class="m-b-20 m-t-10 fw">Users List </h3>
+        
+        <table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th> 
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="i in ldProfilectrl.users track by $index">
+      <th scope="row">{{$index + 1}}</th>
+      <td>{{i.firstname}}</td>
+      <td>{{i.lastname}}</td>
+      <td>{{i.email}}</td>
+      <td><button class="btn btn-primary" href="javascript:void()" ng-click="ldProfilectrl.deleteusers(i.key)">Delete</button></td>
+    </tr>
+    
+    
+  </tbody>
+</table>
+    </div>
 </div>
 <div class="clearfix"></div>
 </section>

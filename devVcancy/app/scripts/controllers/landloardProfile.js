@@ -20,6 +20,7 @@ vcancyApp
         vm.success = 0;
         vm.error = 0;
         vm.totaluser = 0;
+        vm.users = [];
         vm.profilepic = '../assets/pages/media/profile/people19.png';
         vm.companylogo = '../assets/pages/media/profile/people19.png';
 		        $rootScope.invalid = '';
@@ -60,19 +61,15 @@ vcancyApp
                 }
             });
         }); 
-        
+      
         
          var ref = firebase.database().ref("employee");
                     ref.orderByChild("refId").equalTo(landLordID).on("child_added", function(snapshot) {
-                      console.log(snapshot.key);
-                      vm.totaluser++;
+                      var userdata = snapshot.val();
+                      userdata['key'] = snapshot.key;
+                      vm.users.push(userdata);
                     });
 
-                   var setinterval =  setInterval(function(){ if(vm.totaluser != 0){
-                    $("#totaluser").text(vm.totaluser);
-                      console.log(vm.totaluser);
-                      clearInterval(setinterval);
-                   } }, 3000);
 
         vm.profileSubmit = function (ldProfilectrl) {
         	 var landLordID = localStorage.getItem('userID');
@@ -140,6 +137,11 @@ vcancyApp
               var landLordID = localStorage.getItem('userID');
 
             if(password === oldpassword){
+
+                    if(password === ncpassword){
+                      alert("Your old password and new password must be different");
+                      return false;
+                    }
 
                     if(ncpassword === npassword){
                         
@@ -272,6 +274,18 @@ vcancyApp
                 });
 
             
+        }
+
+        vm.deleteusers = function(val){
+            if(confirm('are you sure for delete user?')){
+              var propertyObj = $firebaseAuth();
+              var propdbObj = firebase.database();
+              propdbObj.ref('employee/' + val).remove();  
+              alert("User deleted successfully!");
+              $state.reload();
+            }
+            
+             
         }
 
         vm.upload = function (file, filename) {
