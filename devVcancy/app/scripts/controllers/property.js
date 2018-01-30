@@ -431,9 +431,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             if (file.size > 3145728) {
                 alert('File size should be 3 MB or less.');
                 return false;
-            } else if (!(filename.endsWith('.png')) &&
-                !(filename.endsWith('.jpg')) &&
-                !(filename.endsWith('.jpeg'))) {
+            } else if (
+                file.type != 'image/png' &&
+                file.type != 'image/jpeg' &&
+                file.type != 'image/jpg') {
                 alert('Invalid file type.');
                 return false;
             }
@@ -457,12 +458,14 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 if (data.Location != '') {
                     propimg = data.Location;
                     // Start Of property Add
+                    var unitlists = vm.createNewPropertyWithUnits(property)
                     if (propID == '') {
                         propdbObj.ref('properties/').push().set({
                             landlordID: landlordID,
                             propimg: propimg,
                             propstatus: propstatus,
                             proptype: proptype,
+                            unitlists: unitlists,
                             units: units,
                             shared: shared,
                             address: address,
@@ -476,21 +479,20 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             name: name
                         }).then(function () {
                             console.log("Insert Data successfully!");
-
+                        
                             propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
                                 //localStorage.setItem("propID", snapshot.key);
                                 if (units == 'multiple') {
                                     vm.opensuccesssweet(snapshot.key);
                                 }
-                                $rootScope.$apply(function () {
-                                    console.log(units);
-                                    $rootScope.units = units;
-                                    $rootScope.message = units;
-                                    $rootScope.success = "Property added successfully!";
-                                    $rootScope.propID = snapshot.key;
-
-
-                                });
+                                $state.go('editprop',{propId:snapshot.key})
+                                // $rootScope.$apply(function () {
+                                //     console.log(units);
+                                //     $rootScope.units = units;
+                                //     $rootScope.message = units;
+                                //     $rootScope.success = "Property added successfully!";
+                                //     $rootScope.propID = snapshot.key;
+                                // });
 
 
                             });
@@ -534,9 +536,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
             // Start Of property Add
             if (propID == '') {
+                var unitlists = vm.createNewPropertyWithUnits(property)
                 propdbObj.ref('properties/').push().set({
                     landlordID: landlordID,
                     propimg: propimg,
+                    unitlists: unitlists,
                     propstatus: propstatus,
                     proptype: proptype,
                     units: units,
@@ -552,25 +556,20 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     name: name
                 }).then(function () {
                     console.log("Insert Data successfully!");
-
                     propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
                         if (units == 'multiple') {
                             vm.opensuccesssweet(snapshot.key);
                         }
-                        $rootScope.$apply(function () {
-                            console.log(units);
-                            $rootScope.units = units;
-                            $rootScope.message = units;
-                            $rootScope.success = "Property Added successfully!";
-                            $rootScope.propID = snapshot.key;
+                        $state.go('editprop',{propId:snapshot.key})
+                        // $rootScope.$apply(function () {
+                        //     console.log(units);
+                        //     $rootScope.units = units;
+                        //     $rootScope.message = units;
+                        //     $rootScope.success = "Property Added successfully!";
+                        //     $rootScope.propID = snapshot.key;
 
 
-                        });
-                        //vm.openmodel();
-                        /* if(units == 'multiple'){
-                              //vm.openmodel();  
-                              vm.opensuccesssweet(snapshot.key);  
-                            }*/
+//                        });
                     });
 
                 });
@@ -609,10 +608,34 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 });
             } // End OF property Add-edit
         }
+    }
 
-
-
-
+    vm.createNewPropertyWithUnits = function (property) {
+        var unitlists = [];
+        for (var i = 0; i < property.noofunits; i++) {
+            unitlists.push({
+                "Aminities": [],
+                "address": property.address,
+                "bathroom": "1",
+                "bedroom": 1,
+                "cats": "",
+                "city": property.city,
+                "description": "",
+                "dogs": "",
+                "epirydate": "",
+                "location": property.city,
+                "name": property.name,
+                "postalcode": property.postcode,
+                "rent": "1",
+                "smoking": "",
+                "sqft": "1",
+                "state": property.province,
+                "status": "available",
+                "type": property.proptype,
+                "unit": parseInt(Math.random() * 1000)
+            });
+        }
+        return unitlists;
     }
 
     vm.csvsubmitdata = function (prop) {
@@ -1401,9 +1424,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             "rent": "1",
             "smoking": "",
             "sqft": "1",
-            "state": "BC",
-            "status": "Available",
-            "type": "apartment",
+            "state": vm.prop.state,
+            "status": "available",
+            "type": "",
             "unit": parseInt(Math.random() * 1000)
         }
         if (!vm.prop.unitlists) vm.prop.unitlists = [];
@@ -1879,30 +1902,65 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                                 alert("status must be value Please make as CSV data as per instructions");
                                 return false;
                             }
-                            if (headerkey == 'amenities' && currentline[j] == '') {
-                                alert("Amenities must be value Please make as CSV data as per instructions");
-                                return false;
+
+                            var actualHeaderKey = '';
+                            var aminitiesHeaderKeys = [
+                                'amenities  furnished',
+                                'amenities  laundry',
+                                'amenities  parking',
+                                'amenities  wheelchair access'
+                            ]
+                            var ignorKeys = [
+                                'propertyAddress',
+                                'lease expiry date',
+                            ]
+                            if (ignorKeys.includes(headerkey)) {
+                                continue;
                             }
-
-
-                            if (headerkey == 'amenities' && currentline[j] != '') {
-                                //console.log(currentline[j]);
-                                var amenities = currentline[j];
-                                var str_array = amenities.split('|');
-                                //console.log(str_array);
-                                obj['Aminities'] = str_array;
+                            if (aminitiesHeaderKeys.includes(headerkey)) {
+                                actualHeaderKey = 'Aminities';
+                            } else if (headerkey === 'cats ok') {
+                                actualHeaderKey = 'cats';
+                            } else if (headerkey === 'Dogs ok') {
+                                actualHeaderKey = 'Dogs';
                             } else {
-                                obj[headerkey] = currentline[j];
+                                actualHeaderKey = headerkey.trim();
                             }
 
-                            obj['name'] = name;
-                            obj['type'] = proptype;
-                            obj['address'] = address;
-                            obj['location'] = address;
-                            obj['city'] = city;
-                            obj['state'] = province;
-                            obj['postcode'] = postcode;
+                            if (headerkey === 'amenities  furnished') {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('furnished')
+                                }
+                            } else if (headerkey === 'amenities  laundry') {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('laundry')
+                                }
+                            } else if (headerkey === 'amenities  parking') {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('parking')
+                                }
+                            } else if (headerkey === "amenities  wheelchair access") {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('wheelchair')
+                                }
+                            } else if (headerkey === 'status') {
+                                obj[actualHeaderKey] = currentline[j].toLowerCase();
+                            } else {
+                                obj[actualHeaderKey] = currentline[j];
+                            }
                         }
+
+                        obj['name'] = name;
+                        obj['type'] = proptype;
+                        obj['address'] = address;
+                        obj['location'] = address;
+                        obj['city'] = city;
+                        obj['state'] = province;
+                        obj['postcode'] = postcode;
                         unitsImported.push(obj);
                         totalrowunits++;
                     }
@@ -1912,6 +1970,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                         $uibModalInstance.close();
                         alert('File Imported successfully. You need to save units or changes will be lost');
                     }, 1000);
+
                     // for (var i = 0; i < result.length; i++) {
                     //     var objres = result[i];
 

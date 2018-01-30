@@ -238,6 +238,7 @@
                         <!-- <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
                             <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
                         </div> -->
+                        <span class="fileinput-exists">Selected File:</span> <span class="fileinput-preview fileinput-exists" style=""> </span>
                         <div>
                             <span class="btn btn-info btn-file">
                                 <span class="fileinput-new"> Select CSV </span>
@@ -245,7 +246,6 @@
                                <input type="file" name="file" id="file123" value="dataFile" required="true">
                              </span>
                             <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
-                            <span class="fileinput-exists">Selected File:</span> <span class="fileinput-preview fileinput-exists" style=""> </span>
                         </div>
                         
                     </div>
@@ -440,7 +440,7 @@
                                   <select title="{{propctrl.Utils.keys(propctrl.checkedRow).length === 0?'Please select units from table.':''}}" class="form-control m-input"
                                     name="more" ng-model="propctrl.more" ng-change="propctrl.moreaction(propctrl.more)">
                                     <option value="">Select action to perform on below selected units</option>
-                                    <option value="Available">Mark Available</option>
+                                    <option value="available">Mark Available</option>
                                     <option value="ranted">Mark Rented</option>
                                     <option value="sold">Mark Sold</option>
                                   </select>
@@ -524,7 +524,7 @@
                                           data-placeholder="Prop status">
                                           <option value="">Status</option>
                                           <option value="rented">Rented</option>
-                                          <option value="Available">Available</option>
+                                          <option value="available">Available</option>
                                           <option value="sold">Sold</option>
                                         </select>
                                       </td>
