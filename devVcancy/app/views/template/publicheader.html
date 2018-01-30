@@ -14,11 +14,17 @@
 		<li><a href="http://vcancy.ca/blog/" class="hvr-underline-from-center">Blog</a></li>
 		<li><a href="http://vcancy.ca/contact/" class="hvr-underline-from-center">Contact</a></li>
 		<li><a class="button" href="http://localhost:9000/#/">Log in</a></li>
-    <li><a class="button" href="http://localhost:9000/#/register">Sign Up</a></li>
+    <li><a class="button" href="http://localhost:9000/#/register" onclick="storelocal();">Sign Up</a></li>
     
       </ul>
     </div>
-  </div>
+  </div>  
 </nav>
 
     <div class="container">
+    <script type="text/javascript">
+    function storelocal(){
+        $('body').hide();
+        localStorage.setItem("justOnce", "true");
+    }
+</script>    

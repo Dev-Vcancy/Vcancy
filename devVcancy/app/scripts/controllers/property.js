@@ -382,11 +382,17 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
          }
         
     }
+    vm.undisable = function(val){
+        if(val == true){
+            $("#noofunitsinput").attr('type', 'number');    
+        }else{
+            $("#noofunitsinput").attr('type', 'hidden');
+        }
+        
+    }
 
     // Add/Edit Property       
     vm.submitProp = function(property) {
-
-        console.log(property); //return false;
 
         AWS.config.update({
             accessKeyId: 'AKIAI6FJLQDDJXI4LORA',

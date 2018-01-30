@@ -12,12 +12,12 @@
                    
                         
                         <div class="" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 0 }" data-ng-if="lctrl.register === 0">            
-                                <form name="regForm" ng-submit="lctrl.registerUser(lctrl.reguser)" role="form" >
+                                <form name="regForm" ng-submit="lctrl.registerUser(lctrl.reguser)" role="form" > 
                                                     
                                    <div class="form-group text-center" >
-                                   <div class='regmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>
+                                   <div class='regmsgvalidate' ng-if="$root.error != ''" style="margin-top: 18%;"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>
                                     
-                                    <div class='regmsgvalidate' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}} <a  ng-click='lctrl.resendmail()'  href='javascript:void(0)' class='uppercase' 
+                                    <div class='regmsgvalidate' ng-if="$root.success != ''" style="margin-top: 18%;"><div class="alert alert-success alert-dismissable fade in">{{$root.success}} <a  ng-click='lctrl.resendmail()'  href='javascript:void(0)' class='uppercase' 
                                     style="text-decoration: underline;">Resend confirmation</a></div>
                                     </div>
                                    <div class="md-radio-sg">
@@ -110,5 +110,9 @@
     function storelocal(){
         $('body').hide();
         localStorage.setItem("justOnce", "true");
+    }
+      if(localStorage.getItem("justOnce")){
+            window.location.reload();
+            localStorage.clear();
     }
 </script>    

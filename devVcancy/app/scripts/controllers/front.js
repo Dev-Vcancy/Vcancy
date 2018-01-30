@@ -214,7 +214,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 
      vm.removeProfileData = function(){
         
-     }
+     }  
 
 		vm.registerUser = function(reguser){
 			var first = reguser.first;

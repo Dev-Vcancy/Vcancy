@@ -41,7 +41,7 @@
                                     </div>
                                        <a  class="btn btn-primary" ng-click="ok('viewproperty')">Back</a>
                                     
-                                  </div>
+                                  </div> 
                                </div>
                                </form>
                        </div>
@@ -110,7 +110,7 @@
                            <div role="tabpanel" class="tab-pane active" id="home" ng-show="tab === 1">
                               <div class="">
                                  <div class="">
-                                    <form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" role="form"  class="property" enctype="multipart/form-data" novalidate>
+                                    <form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" role="form"  class="property" enctype="multipart/form-data" >
                                        <input type="hidden" name="landlordID" ng-model="propctrl.prop.landlordID" class="form-control" >
                                        <input type="hidden" name="mode" ng-model="propctrl.prop.mode" class="form-control" >
                                        <input type="hidden" name="propID" ng-model="propctrl.prop.propID" class="form-control">
@@ -127,6 +127,7 @@
                                                    <input required ng-model="propctrl.prop.name" name="name" required="true"  type="text" class="form-control w-100 phone" id="" placeholder="">
                                                    <label class="fg-label" for="text">Property Name:</label>
                                                 </div>
+
                                              </div>
                                              <div class="clearfix"></div>
                                              <div class="form-group ">
@@ -142,14 +143,14 @@
                                                 </select>
                                              </div>
                                              <div class="form-group">
-                                                <label class="radio-inline"><input type="radio" name="units" ng-model="propctrl.prop.units" value="single" required="true" ng-checked="propctrl.prop.units == 'single'">Single Unit</label>
-                                                <label class="radio-inline"><input type="radio" name="units" ng-model="propctrl.prop.units" value="multiple" required="true" ng-checked="propctrl.prop.units == 'multiple'">Multiple Units</label>
+                                                <label class="radio-inline"><input type="radio" name="units" ng-model="propctrl.prop.units" value="single" required="true" ng-checked="propctrl.prop.units == 'single'" ng-click="propctrl.undisable(false)">Single Unit</label>
+                                                <label class="radio-inline"><input type="radio" name="units" ng-model="propctrl.prop.units" value="multiple" required="true" ng-checked="propctrl.prop.units == 'multiple'" ng-click="propctrl.undisable(true)">Multiple Units</label>
                                              </div>
-                                             <div class="form-group fg-float" ng-show="propctrl.prop.units == 'multiple'">
-                                                <div class="fg-line">
-                                                <input type="hidden"  ng-model="propctrl.prop.noofunits"    name="noofunits" class="form-control w-100 phone" id="" placeholder="" min="1">
-                                                   <input type="number"  ng-model="propctrl.prop.noofunits"  ng-required="propctrl.prop.units == 'multiple'" ng-show="propctrl.prop.units == 'multiple'" name="noofunits" class="form-control w-100 phone" id="" placeholder="Address" min="1">
-                                                   <label class="fg-label" for="text">No of Units:</label>
+                                             <div class="form-group fg-float" >
+                                                <div class="fg-line" ng-show="propctrl.prop.units == 'multiple'">
+                                                
+                                                   <input type="hidden"  ng-model="propctrl.prop.noofunits"    name="noofunits" class="form-control w-100 phone" id="noofunitsinput" placeholder="Address" min="1" required="true" >
+                                                   <label class="fg-label" for="text" >No of Units:</label>
                                                 </div>
                                              </div>
                                              <div class="form-group fg-float">
