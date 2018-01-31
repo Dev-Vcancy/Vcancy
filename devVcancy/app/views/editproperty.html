@@ -227,10 +227,11 @@
              <form  role="form" enctype="multipart/form-data" id="fileUploadForm" method="post" >
               <div class="form-group">
                   <p>
-                  Data Must be in a specific format to import.
+                      Data must be in a specific format to import. 
+                      Please use this file - <a href="../assets/test.csv">Sample Spreadsheet</a>. 
+                      If you are having problems uploading units then please contact <a href="https://vcancy.ca/contact/">support</a>
+                      and we will upload it for you.
                   </p>
-                  <p>Please use this file for as a sample <a href="../assets/test.csv">Sample CSV</a></p>
-                  <p>If you are having difficulty for import data please <a href="https://vcancy.ca/contact/">Contact Support</a>and we will upload for you</p>
                   </div>
                 <div class="form-group">
                     <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -241,10 +242,10 @@
                         <span class="fileinput-exists">Selected File:</span> <span class="fileinput-preview fileinput-exists" style=""> </span>
                         <div>
                             <span class="btn btn-info btn-file">
-                                <span class="fileinput-new"> Select CSV </span>
+                                <span class="fileinput-new"> Select file </span>
                                 <span class="fileinput-exists"> Change </span>
                                <input type="file" name="file" id="file123" value="dataFile" required="true">
-                             </span>
+                             </span> &nbsp;<small> (Only csv format supported.)</small>
                             <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
                         </div>
                         
@@ -427,19 +428,19 @@
                                 <i class="fa fa-plus" /> Add Unit
                               </button>
                               <button type="button" class="btn btn-success" ng-click="propctrl.opencsvmodel(propctrl.prop)">
-                                <i class="fa fa-file-excel-o" /> Import Csv
+                                <i class="fa fa-file-excel-o" /> Import Data
                               </button>
                             </div>
                           </div>
 
                           <div class="row">
-                            <div class="col">
+                            <div class="col-sm-6">
                               <div class="form-group m-form__group row">
-                                <label for="example-time-input" class="col-2 col-form-label"> Actions</label>
-                                <div class="col-10">
-                                  <select title="{{propctrl.Utils.keys(propctrl.checkedRow).length === 0?'Please select units from table.':''}}" class="form-control m-input"
-                                    name="more" ng-model="propctrl.more" ng-change="propctrl.moreaction(propctrl.more)">
-                                    <option value="">Select action to perform on below selected units</option>
+                                <label for="example-time-input" class="col-sm-8 col-form-label"> Select action to perform on below selected units:</label>
+                                <div class="col-sm-4">
+
+                                  <select class="m-input m-input--square" name="more" ng-model="propctrl.more" ng-change="propctrl.moreaction(propctrl.more)">
+                                    <option value="">Actions</option>
                                     <option value="available">Mark Available</option>
                                     <option value="rented">Mark Rented</option>
                                     <option value="sold">Mark Sold</option>
@@ -448,7 +449,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="col text-right">
+                            <div class="col-sm-6 text-right">
                               <button class="btn btn-danger" type="button" ng-click="propctrl.deleteSelected()"> Delete Selected
                                 <i class="fa fa-trash-o"></i>
                               </button>
@@ -542,7 +543,7 @@
                                         </select>
                                       </td>
                                       <td>
-                                        <!-- <a ng-click="propctrl.openDetailModel(propctrl.prop,$index)">Details</a> -->
+                                        <a ng-click="propctrl.openDetailModel(propctrl.prop,$index)">Details</a>
                                       </td>
                                     </tr>
                                   </tbody>
