@@ -17,9 +17,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     var swal = window.swal;
 
-
-    console.log(dateconfig, todaydate);
-
     var vm = this;
     vm.propsavail = 1;
     vm.timeslotmodified = "false";
