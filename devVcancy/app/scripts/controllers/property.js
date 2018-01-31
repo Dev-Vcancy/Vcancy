@@ -1570,15 +1570,16 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             totalunits: unitlists.length,
             noofunits: unitlists.length
         }).then(function () {
-            if (confirm("Units Updated successfully!") == true) {
-                localStorage.removeItem('propID');
-                localStorage.removeItem('units');
-                localStorage.removeItem('propName');
-                //$state.go('viewprop');
-                $state.reload();
-            } else {
-                return false;
-            }
+            // if (confirm("Units Updated successfully!") == true) {
+            //     // localStorage.removeItem('propID');
+            //     // localStorage.removeItem('units');
+            //     // localStorage.removeItem('propName');
+            //     //$state.go('viewprop');
+            //     // $state.reload();
+            // } else {
+            //     return false;
+            // }
+            alert('unit updated successfully');
         }, function (error) {
             if (confirm("Units Not added Please Try again!") == true) {
                 return false;
