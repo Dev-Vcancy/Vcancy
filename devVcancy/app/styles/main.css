@@ -16,7 +16,9 @@ body {
   padding-left: 15px;
   padding-right: 15px;
 }
-
+.line-height-4{
+  line-height:4 !important;
+}
 .checkbox-position {
   position: absolute;
   left:30px;
