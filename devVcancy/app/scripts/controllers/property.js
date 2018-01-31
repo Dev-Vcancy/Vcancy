@@ -385,6 +385,17 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     }
 
+    vm.selectCheckbox = function (value, index) {
+        if (!vm.prop.unitlists[index].Aminities || !(vm.prop.unitlists[index].Aminities instanceof Array)) {
+            vm.prop.unitlists[index].Aminities = [];
+        }
+        if (vm.prop.unitlists[index].Aminities.includes(value)) {
+            vm.prop.unitlists[index].Aminities.splice(vm.prop.unitlists[index].Aminities.indexOf(value), 1);
+        } else {
+            vm.prop.unitlists[index].Aminities.push(value);
+        }
+    }
+
     // Add/Edit Property       
     vm.submitProp = function (property) {
 
@@ -479,13 +490,13 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             name: name
                         }).then(function () {
                             console.log("Insert Data successfully!");
-                        
+
                             propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
                                 //localStorage.setItem("propID", snapshot.key);
                                 if (units == 'multiple') {
                                     vm.opensuccesssweet(snapshot.key);
                                 }
-                                $state.go('editprop',{propId:snapshot.key})
+                                $state.go('editprop', { propId: snapshot.key })
                                 // $rootScope.$apply(function () {
                                 //     console.log(units);
                                 //     $rootScope.units = units;
@@ -560,7 +571,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         if (units == 'multiple') {
                             vm.opensuccesssweet(snapshot.key);
                         }
-                        $state.go('editprop',{propId:snapshot.key})
+                        $state.go('editprop', { propId: snapshot.key })
                         // $rootScope.$apply(function () {
                         //     console.log(units);
                         //     $rootScope.units = units;
@@ -569,7 +580,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         //     $rootScope.propID = snapshot.key;
 
 
-//                        });
+                        //                        });
                     });
 
                 });

@@ -17,6 +17,16 @@ body {
   padding-right: 15px;
 }
 
+.checkbox-position {
+  position: absolute;
+  left:-39px
+ }
+ .checkbox-div{
+   display: block;
+   position: relative;
+   padding-left: 15px;
+ }
+
 /* Custom page header */
 .header {
   border-bottom: 1px solid #e5e5e5;

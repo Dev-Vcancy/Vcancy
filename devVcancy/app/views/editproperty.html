@@ -443,6 +443,7 @@
                                     <option value="available">Mark Available</option>
                                     <option value="ranted">Mark Rented</option>
                                     <option value="sold">Mark Sold</option>
+                                    <option value="availablesoon">Mark Available Soon</option>
                                   </select>
                                 </div>
                               </div>
@@ -487,7 +488,6 @@
                                   <tbody>
                                     <tr ng-repeat="unit in propctrl.prop.unitlists">
                                       <td>
-                                        {{i}}
                                         <!-- propctrl.prop.noofunitsarray[$index] -->
                                         <input type="checkbox" name="ids" id="ts_checkbox" ng-model="propctrl.checkedRow[$index]">
                                       </td>
@@ -510,14 +510,26 @@
                                         <input type="text" name="bathroom" ng-model="unit.bathroom" min="0" step="0.01" required="true">
                                       </td>
                                       <td class="multiple-select-dropdown">
-
-                                        <select data-placeholder="Status" class="form-control" id="multidropdown" name="Aminities" ng-model="unit.Aminities" data-placeholder="Prop type"
-                                          multiple="true">
-                                          <option value="furnished">Furnished</option>
-                                          <option value="laundry">Laundry</option>
-                                          <option value="parking">Parking</option>
-                                          <option value="wheelchair">Wheelchair</option>
-                                        </select>
+                                        <div class="checkbox-div">
+                                          <label>
+                                            <input type="checkbox" class="checkbox-position" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+                                            /> Furnished</label>
+                                        </div>
+                                        <div class="checkbox-div">
+                                          <label>
+                                            <input type="checkbox" class="checkbox-position" ng-checked="unit.Aminities.includes('laundry')" ng-click="propctrl.selectCheckbox('laundry',$index)"
+                                            /> Laundry</label>
+                                        </div>
+                                        <div class="checkbox-div">
+                                          <label>
+                                            <input type="checkbox" class="checkbox-position" ng-checked="unit.Aminities.includes('parking')" ng-click="propctrl.selectCheckbox('parking',$index)"
+                                            /> Parking</label>
+                                        </div>
+                                        <div class="checkbox-div">
+                                          <label>
+                                            <input type="checkbox" class="checkbox-position" ng-checked="unit.Aminities.includes('whelchair')" ng-click="propctrl.selectCheckbox('wheelchair',$index)"
+                                            /> Wheelchair</label>
+                                        </div>
                                       </td>
                                       <td>
                                         <select data-placeholder="Status" class="form-control" name="status" ng-model="unit.status" required class="w-100 localytics-chosen"
@@ -525,6 +537,7 @@
                                           <option value="">Status</option>
                                           <option value="rented">Rented</option>
                                           <option value="available">Available</option>
+                                          <option value="availablesoon">Available Soon</option>
                                           <option value="sold">Sold</option>
                                         </select>
                                       </td>
