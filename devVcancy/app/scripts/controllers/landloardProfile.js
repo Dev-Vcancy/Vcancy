@@ -27,8 +27,6 @@ vcancyApp
 		        $rootScope.invalid = '';
             $rootScope.success = '';
             $rootScope.error = '';
-        
-
         firebase.database().ref('/users/' + landLordID).once('value').then(function (userdata) {
             $scope.$apply(function () {
                 if (userdata.val() !== null) {
@@ -110,30 +108,15 @@ vcancyApp
 
             firebase.database().ref('users/' + landLordID).update(updatedata).then(function(){
               vm.opensuccesssweet("Profile Updated successfully!");  
-              //confirm("Your Information updated!");
-            // ldProfilectrl.success = "Profile Updated successfully"
-             /*if (confirm("Profile Updated successfully!") == true) {
-                  $state.reload();
-              } else {
-                return false; 
-              }*/
-            }, function(error) {
+              }, function(error) {
               
               vm.openerrorsweet("Profile Not Updated! Try again!");  
-              // The Promise was rejected.
-              /*console.error(error);
-              if (confirm("Profile not Updated!") == true) {
-                return false;
-               
-              }*/
-                
-              //ldProfilectrl.error = "Profile Updated successfully"
-            });
+              return false;
+             });
         }
 
         vm.changepasswordSubmit = function(passworduser){
 
-            //alert(JSON.stringify(passworduser));
             $rootScope.invalid = '';
             $rootScope.success = '';
             $rootScope.error = '';
@@ -148,51 +131,33 @@ vcancyApp
 
                     if(password === ncpassword){
                       vm.openerrorsweet("Your old password and new password must be different");
-                     // alert("Your old password and new password must be different");
-                     // return false;
+                      return false;
                     }
 
                     if(ncpassword === npassword){
                         
-                          //  alert(JSON.stringify(firebase.auth().currentUser));
                             var user = firebase.auth().currentUser;
                             var newPassword = ncpassword;
                             user.updatePassword(newPassword).then(function() {
-                             //   console.log("success");
-                             //   $rootScope.success = 'Your password has been updated!';
-                               // confirm("Your password has been updated!");
                                  localStorage.setItem('password', newPassword);
-                                vm.opensuccesssweet("Your password has been updated!"); 
-                                 //$state.reload();
-                            /* $rootScope.success = 'Your password has been updated';
-                             $rootScope.error = '';  
-                             $rootScope.invalid = '';*/
+                                  vm.opensuccesssweet("Your password has been updated!"); 
                             }).catch(function(error) {
                               
 
                               vm.openerrorsweet("your Passwords not updated please try again."); 
-                              // An error happened.
-                              /*  $rootScope.invalid = 'regcpwd';         
-                                $rootScope.error = 'your Passwords not updated please try again.';
-                                $rootScope.success = '';*/
+                                return false;
                             });
 
 
                     } else {
-                           /*if(confirm("Passwords don't match.") == true){
-                              return false;
-                            }*/
                        vm.openerrorsweet("Passwords don't match.");
+                       return false;
                     }
 
 
         	} else {
-
-                /*if(confirm("Passwords don't match.") == true){
-                  return false;
-                }*/
-                vm.openerrorsweet("Passwords don't match.");
-               
+              vm.openerrorsweet("Passwords don't match with your current password.");
+               return false;
             }
         }
 
@@ -234,17 +199,9 @@ vcancyApp
                                                         
                                                           
                                                             vm.opensuccesssweet("Your Company Logo Picture updated successfully."); 
-                                                        /*if (confirm("Your Company Logo Picture updated successfully.") == true) {
-                                                            $state.reload();
-                                                          } else {
-                                                            return false;
-                                                          }*/
                                                        }, function(error) {
-                                                        // The Promise was rejected.
-                                                        //console.error(error);
-
                                                         vm.openerrorsweet("Company Logo Not Added! Try again!"); 
-                                                        
+                                                        return false;
                                                       });
                                                   } 
                                     }
@@ -258,8 +215,6 @@ vcancyApp
     
        
          vm.newuserSubmit = function(newuser){
-
-          // alert(JSON.stringify(newuser));
             var landLordID = localStorage.getItem('userID');
             var firstname = newuser.firstname;
             var lastname = newuser.lastname;
@@ -267,30 +222,78 @@ vcancyApp
             var refId = landLordID;
             var custome =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             var reguserdbObj = firebase.database();
-  
+           
+            var pass = 'test@1234'; 
+            var usertype = 2;
+
             var userarray = { firstname: firstname,
             lastname: lastname,
             refId : refId,
             email : email};
-            reguserdbObj.ref('employee/' + custome).set(userarray, function(error){
-                  if(error != null ){
-                   /* console.log(error);
-                    confirm("User Not added Please Try again.");
-                    $rootScope.invalid = 'regcpwd';         
-                    $rootScope.error = 'User Not added Please Try again.';
-                    $rootScope.success = '';*/
-                    vm.openerrorsweet("User Not added Please Try again."); 
-                  }else{
-                   /* console.log('Done');
-                    if(confirm("User Added successfully!")){
-                        $state.reload();
-                    }
-                    $rootScope.invalid = 'regcpwd';         
-                    $rootScope.error = '';
-                    $rootScope.success = 'User Added successfully!';*/
+           
+            reguserObj.$createUserWithEmailAndPassword(email, pass)
+            .then(function(firebaseUser) {
+                var reguserdbObj = firebase.database();
+                    reguserdbObj.ref('users/' + firebaseUser.uid).set({
+                    firstname: firstname,
+                    lastname: lastname,
+                    usertype : usertype,
+                    email : email,
+                    isadded : 1,
+                    iscancelshow : 1,
+                    iscreditcheck : 1,
+                    iscriminalreport : 1,
+                    isexpiresoon : 1,
+                    ispropertydelete : 1,
+                    isrentalsubmit : 1,
+                    isshowingtime : 1,
+                    profilepic : "",
+                    companyname : ""
+                });     
 
+
+                    firebase.auth().signInWithEmailAndPassword(email, pass)
+                     .then(function(firebaseUser) {
+                         // Success 
+                         firebaseUser.sendEmailVerification().then(function() {
+                        console.log("Email Sent");
+                          $rootScope.success = 'Confirmation email resent';
+                          $rootScope.error = '';      
+                    
+                      }).catch(function(error) {
+                         console.log("Error in sending email"+error);
+                      });
+                     })
+            }).catch(function(error) {
+                  //console.log(error);
+                if(error.message){
+                  if(error.message == "The email address is badly formatted."){
+                      $rootScope.error = "Invalid Email.";
+                      $rootScope.success = '';
+                  }else{
+                    $rootScope.error = error.message;
+                    $rootScope.success = '';
+                  }
+                  //$rootScope.error = error.message;
+                  
+                }     
+                
+                if(error.code === "auth/invalid-email"){
+                  $rootScope.invalid = 'regemail';
+                } else if(error.code === "auth/weak-password"){
+                  $rootScope.invalid = 'regpwd';          
+                }  else {
+                  $rootScope.invalid = '';
+                }
+            });
+
+             reguserdbObj.ref('employee/' + custome).set(userarray, function(error){
+                  if(error != null ){
+                  
+                    vm.openerrorsweet("User Not added Please Try again.");
+                    return false; 
+                  }else{
                     vm.opensuccesssweet("User Added successfully!"); 
-                                    
                   }
                 });
 
@@ -306,23 +309,25 @@ vcancyApp
              confirmButtonColor: "#DD6B55",
              confirmButtonText: "Yes, delete it!",
              closeOnConfirm: false}, 
-            function(){ 
-                var propertyObj = $firebaseAuth();
-                var propdbObj = firebase.database();
-                propdbObj.ref('employee/' + val).remove();  
-                vm.opensuccesssweet("User deleted successfully!"); 
-                //$state.reload();
+            function(isConfirm){ 
+                if (isConfirm) {
+                  var propertyObj = $firebaseAuth();
+                  var propdbObj = firebase.database();
+                  propdbObj.ref('employee/' + val).remove(); 
+                   swal({
+                    title: "Success!",
+                    text: "User has been deleted.",
+                    type: "success",
+                    confirmButtonColor: '#009999',
+                     confirmButtonText: "Ok"
+                    },function(isConfirm){
+                        if (isConfirm) {
+                          $state.reload();
+                        }
+                      }); 
+                 } 
             });
-           /* if(confirm('are you sure for delete user?')){
-              var propertyObj = $firebaseAuth();
-              var propdbObj = firebase.database();
-              propdbObj.ref('employee/' + val).remove();  
-              alert("User deleted successfully!");
-              $state.reload();
-            }*/
-            
-             
-        }
+          }
 
         vm.upload = function (file, filename) {
         file = file.replace("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", "");
@@ -423,25 +428,24 @@ vcancyApp
                   var user = firebase.auth().currentUser;
                   if (user) { 
                       firebase.database().ref('users/' + landLordID).update(notification).then(function(){
-                       // confirm("Your Information updated!");
-                        // vm.success = "Your notification updated successfully.";
-                        vm.opensuccesssweet("Your notification updated successfully!"); 
+                      vm.opensuccesssweet("Your notification updated successfully!"); 
                       }, function(error) {
-                        // The Promise was rejected.
-                       // console.error(error);
-                       // $rootScope.error = "May Be your session is expire please login again."
                        vm.openerrorsweet("May Be your session is expire please login again."); 
+                       return false;
                       });
                   } else {
                      vm.openerrorsweet("May Be your session is expire please login again."); 
+                     return false;
                   }
               }else{
                  
                   vm.openerrorsweet("Please Select Atleast one option."); 
+                  return false;
               }
               
           }else{
                  vm.openerrorsweet("Please Select Atleast one option."); 
+                 return false;
           }
           
         }
@@ -460,8 +464,7 @@ vcancyApp
         modalInstance.result.then(function (selectedItem) {
           $scope.selected = selectedItem;
         }, function () {
-          //$log.info('Modal dismissed at: ' + new Date());
-        });
+         });
       };
 
        vm.opensuccesssweet = function(value){
@@ -515,7 +518,8 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
                     filename = filename.replace(/\s/g,'');
 
                     if(file.size > 3145728) {
-                        alert('File size should be 3 MB or less.');
+                       // alert('File size should be 3 MB or less.');
+                        vm.openerrorsweet('File size should be 3 MB or less.'); 
                         return false;
                       } else if(!(filename.endsWith('.png')) 
                         && !(filename.endsWith('.jpg'))
@@ -538,15 +542,9 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
                                         if (user) { 
                                             firebase.database().ref('users/' + landLordID).update({'profilepic':data.Location}).then(function(){
                                               vm.opensuccesssweet("Your profile Picture updated successfully."); 
-                                              /*if (confirm("Your profile Picture updated successfully.") == true) {
-                                                  $uibModalInstance.close();
-                                                } else {
-                                                  return false;
-                                                }*/
-                                             }, function(error) {
-                                              // The Promise was rejected.
-                                             // console.error(error);
-                                              
+                                              //$state.reload();
+                                               }, function(error) {
+                                               
                                             });
                                         } 
                           }
@@ -555,11 +553,8 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
                   }else{
                       vm.openerrorsweet("File Type is Invalid."); 
                       return false;
-                      /*alert("File Type is Invalid.");
-                      return false;*/
+                      
                   }
-                  
-              
         };  
 
         $scope.cancel = function () {
@@ -576,27 +571,23 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
                    confirmButtonText: "Ok"
                   },function(isConfirm){
                       if (isConfirm) {
-                        //$state.reload();
-                        $uibModalInstance.close();
+                       $uibModalInstance.close();
+                        $state.reload();
                       }
                     });
-
-                    
-           
       }
 
       vm.openerrorsweet = function(value){
-            swal({ 
-                 title:"Error",
-                 text: value,
-                 type: "warning",
-                 confirmButtonColor: "#DD6B55",
-                 confirmButtonText: "Ok",
-                 closeOnConfirm: true}, 
-                function(){ 
-                 return false;
-                });
-           
-      }
+        swal({ 
+             title:"Error",
+             text: value,
+             type: "warning",
+             confirmButtonColor: "#DD6B55",
+             confirmButtonText: "Ok",
+             closeOnConfirm: true}, 
+            function(){ 
+             return false;
+            });
+       }
         
 }]);

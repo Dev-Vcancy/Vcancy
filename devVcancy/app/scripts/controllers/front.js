@@ -352,6 +352,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 		}
 
 		vm.resendmail = function(){
+			$rootScope.success = 'Confirmation email resent';
 			var email = localStorage.getItem('RegEmail');
 			var pass = localStorage.getItem('RegPass');
 			if(email != null && pass != null){

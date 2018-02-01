@@ -483,6 +483,28 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                             propdbObj.ref('properties/').limitToLast(1).once("child_added", function(snapshot) {
                                 //localStorage.setItem("propID", snapshot.key);
+                                         /*if(snapshot.key != "undefined"){
+                                                var propertylink = "http://www.vcancy.ca/login/#/applyproperty/"+snapshot.key;
+                                                vm.prop.propertylink = propertylink;    
+                                                
+                                                // link generated and property added message
+                                                localStorage.setItem('propertysuccessmsg','Property added successfully. Property Link is also generated.');
+                                                $window.scrollTo(0, 0);
+                                                
+                                                vm.prop.propertylink = propertylink;                
+                                                $('#propertylink').val(propertylink);   
+                                                
+                                                // update the property link to property table
+                                                propdbObj.ref('properties/'+snapshot.key).update({  
+                                                    propertylink: propertylink
+                                                })
+                                                
+                                                var emailData = '<p>Hello, </p><p>Thanks for adding your rental property '+address+',</p><p> Here’s your dedicated property link:</p><p>'+propertylink+'</p><p>Share this link on your online listing, social media, email and with any perspective tenant.</p><p>Please don’t delete this email for future use.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                                
+                                                // Send Email
+                                                emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your rental property link', 'addproperty', emailData);
+                                             }*/
+
                                          if(units == 'multiple'){
                                            vm.opensuccesssweet(snapshot.key);  
                                          }
@@ -495,10 +517,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                                
 
                                             });
-                                         
-                                        
-                            });
-
+                             });
                         });
                     }else{
 
@@ -531,6 +550,44 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             });
                         });
                     } // End OF property Add - Edit
+
+                   /* localStorage.setItem('propertysuccessmsg','Property updated successfully.');
+                            angular.forEach(vm.scheduleIDs, function(value, key) {
+                                firebase.database().ref('applyprop/'+value).update({    
+                                    schedulestatus: "cancelled"
+                                })
+                                // console.log(value);
+                            });     
+
+                            if(propstatus === false){
+                                var emailData = '<p>Hello, </p><p>'+address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.ca/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                    
+                                // Send Email
+                                emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), address+' has been deactivated', 'deactivateproperty', emailData);
+                         
+                                angular.forEach(vm.tenants, function(tenantID, key) {
+                                    firebase.database().ref('users/'+tenantID).once("value", function(snap) {
+                                        var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                    
+                                        // Send Email
+                                        emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
+                                    });
+                                });
+                            } else {
+                                var emailData = '<p>Hello, </p><p>Your property <em>'+address+'</em>   has been successfully updated and all your property viewings affected by the updated time slots are cancelled. </p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                        
+                                // Send Email
+                                emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Property Time Slots updated on Vcancy', 'updateproperty', emailData);
+                         
+                                angular.forEach(vm.tenants, function(tenantID, key) {
+                                    firebase.database().ref('users/'+tenantID).once("value", function(snap) {
+                                        var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has made some changes in time slots for this property.</p><p>To reschedule the viewing and book some another available time, please log in at http://vcancy.ca/login/ and use the link initially provided to schedule the viewing or follow the link http://www.vcancy.ca/login/#/applyproperty/'+$stateParams.propId+'.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                    
+                                        // Send Email
+                                        emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'updateproperty', emailData);
+                                    });
+                                });
+                            } */
                 }
             });
 
@@ -612,6 +669,45 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                
                         });
                     } // End OF property Add-edit
+
+/*
+                    localStorage.setItem('propertysuccessmsg','Property updated successfully.');
+                            angular.forEach(vm.scheduleIDs, function(value, key) {
+                                firebase.database().ref('applyprop/'+value).update({    
+                                    schedulestatus: "cancelled"
+                                })
+                                // console.log(value);
+                            });     
+
+                            if(propstatus === false){
+                                var emailData = '<p>Hello, </p><p>'+address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.ca/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                    
+                                // Send Email
+                                emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), address+' has been deactivated', 'deactivateproperty', emailData);
+                         
+                                angular.forEach(vm.tenants, function(tenantID, key) {
+                                    firebase.database().ref('users/'+tenantID).once("value", function(snap) {
+                                        var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                    
+                                        // Send Email
+                                        emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
+                                    });
+                                });
+                            } else {
+                                var emailData = '<p>Hello, </p><p>Your property <em>'+address+'</em>   has been successfully updated and all your property viewings affected by the updated time slots are cancelled. </p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                        
+                                // Send Email
+                                emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Property Time Slots updated on Vcancy', 'updateproperty', emailData);
+                         
+                                angular.forEach(vm.tenants, function(tenantID, key) {
+                                    firebase.database().ref('users/'+tenantID).once("value", function(snap) {
+                                        var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has made some changes in time slots for this property.</p><p>To reschedule the viewing and book some another available time, please log in at http://vcancy.ca/login/ and use the link initially provided to schedule the viewing or follow the link http://www.vcancy.ca/login/#/applyproperty/'+$stateParams.propId+'.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                    
+                                        // Send Email
+                                        emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'updateproperty', emailData);
+                                    });
+                                });
+                            }*/
         }
 
 
