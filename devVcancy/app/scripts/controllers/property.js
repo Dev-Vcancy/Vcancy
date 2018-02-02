@@ -30,7 +30,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     vm.postcode = ''; 
     vm.country = '';
     vm.noofunits = 0;
-
+    vm.formtrack = 0;
     vm.table = 1;
     vm.csv = 0;
     vm.localpropID = '';
@@ -132,6 +132,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     }
 
+    vm.doSomething = function(){
+        console.log("Form Edit changes something");
+    }
     // timeSlot for Date and Timepicker
     vm.addTimeSlot = function(slotlen) {
 
@@ -371,15 +374,15 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
     // Go Back To View Property
     vm.backtoviewprop = function(value = '') {
-         if(value != ''){
+     /*    if(value != ''){
             if(confirm('If you go back without update value your changes will be lost!')){
                 $state.go('viewprop');        
             }else{
                 return false;
             }
-         }else{
+         }else{*/
             $state.go('viewprop');
-         }
+        // }
         
     }
     vm.undisable = function(val){

@@ -186,7 +186,7 @@ font-size: 18px;">Delete Account</a>
 <div class="col-xs-12 col-sm-6">
 <div ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }" class="form-group fg-float m-t-30">
 <div class="fg-line fg-toggled ">
-<input required name="email" ng-model="ldProfilectrl.email" type="email" class="form-control w-100" id="" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" placeholder="" required>
+<input required name="email" ng-model="ldProfilectrl.email" type="email" class="form-control w-100" id="" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" placeholder="" readonly>
 <label class="fg-label">Email<span class="mandatory">*</span>:</label>
 </div>
 </div>
