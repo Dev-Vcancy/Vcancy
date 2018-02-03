@@ -9,7 +9,7 @@
           <script type="text/ng-template" id="myModalDetailsContent.html">
             <div class="profile_model_popup">
             <div class="modal-header">
-                <h3 class="modal-title">Listing Details For Test</h3>
+                <h3 class="modal-title">Detail for {{selectedUnitDetail.data.unit}}</h3>
                 <button type="button" class="close" data-dismiss="dialog" ng-click="cancel()">
                    <span aria-hidden="true">&times;</span>
                    <span class="sr-only">Close</span>
@@ -29,181 +29,194 @@
                         
                         <div class="clearfix"></div>
                  <div class="col-xs-12 col-sm-12 m-tb-30">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="true" name="title" ng-model="items1.title" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Posting Title:</label>
+                    <div class="form-group">
+                      <div class="">
+                          <label class='m-0'>Posting Title:</label>
+                        <input required="true" name="title" ng-model="selectedUnitDetail.data.title" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required" id="" placeholder="">
                       </div>
                     </div>
                   </div>
 
-                  <div class="col-xs-6 col-sm-6 m-tb-30">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="items1.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Specific Area:</label>
+                  <div class="col-xs-6 col-sm-6 m-tb-30 newfrnn">
+                    <div class="form-group">
+                      <div class="">
+                          <label class='m-0'>Street address:</label>
+                        <input required="" name="address" ng-model="selectedUnitDetail.data.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                       </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-6 col-sm-6 m-tb-30">
+                      <div class="col-xs-6 col-sm-6 pd-l-0">
+                      <div class="form-group">
+                        <div class="">
+                          <label class='m-0'>City:</label>
+                          <input required="" name="address" ng-model="selectedUnitDetail.data.city" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                        </div>
+                      </div>
+                      </div>
+  
+                      <div class="col-xs-6 col-sm-6 pd-r-0">
+                      <div class="form-group">
+                        <div class="">
+                          <label class='m-0'>Post/Zip code:</label>
+                          <input required="" name="rent" ng-model="selectedUnitDetail.data.postalcode" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+  
+                    <div class="col-xs-6 col-sm-6 m-tb-30">
+                      <div class="form-group">
+                        <div class="">
+                          <label class='m-0'>Specific area:</label>
+                          <input required="" name="address" ng-model="selectedUnitDetail.data.specificArea" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                        </div>
+                      </div>
+                    </div>
+
+                  <div class="col-xs-6 col-sm-6 m-tb-30">
+                    <div class="col-xs-6 col-sm-6 pd-l-0">
+                    <div class="form-group">
+                      <div class="">
+                        <label class='m-0'>Country:</label>
+                        <input required="" name="address" ng-model="selectedUnitDetail.data.country" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                      </div>
+                    </div>
+                    </div>
+
+                    <div class="col-xs-6 col-sm-6 pd-r-0">
+                    <div class="form-group">
+                      <div class="">
+                        <label class='m-0'>Rent:</label>
+                        <input required="" name="rent" ng-model="selectedUnitDetail.data.rent" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                      </div>
+                    </div>
                     </div>
                   </div>
 
                   <div class="col-xs-6 col-sm-6 m-tb-30">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="desc" ng-model="item.desc" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Description:</label>
+                    <div class="form-group">
+                      <div class="">
+                        <label class='m-0'>Status:</label>
+                        <input required="" name="address" ng-model="selectedUnitDetail.data.status" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                       </div>
                     </div>
                   </div>
 
                   <div class="col-xs-6 col-sm-6 m-tb-30">
                     <div class="col-xs-6 col-sm-6 pd-l-0">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Saft:</label>
+                    <div class="form-group">
+                      <div class="">
+                        <label class='m-0'>Beds:</label>
+                        <input required="" name="address" ng-model="selectedUnitDetail.data.bedroom" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="" readonly="true">
                       </div>
                     </div>
                     </div>
 
                     <div class="col-xs-6 col-sm-6 pd-r-0">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="rent" ng-model="items1.unitlists[items1.indexofDetails].rent" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Rent:</label>
+                    <div class="form-group">
+                      <div class="">
+                        <label class='m-0'>Bath:</label>
+                        <input required="" name="address" ng-model="selectedUnitDetail.data.bathroom" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                       </div>
                     </div>
                     </div>
                   </div>
 
                   <div class="col-xs-6 col-sm-6 m-tb-30">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Available:</label>
+                    <div class="form-group">
+                      <div class="">
+                        <label class='m-0'>Phone:</label>
+                        <input required="" name="address" ng-model="selectedUnitDetail.data.phone" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                       </div>
                     </div>
                   </div>
 
                   <div class="col-xs-6 col-sm-6 m-tb-30">
-                    <div class="col-xs-6 col-sm-6 pd-l-0">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="" readonly="true">
-                        <label class="fg-label">Beds:</label>
+                    <div class="form-group">
+                      <div class="">
+                        <label class='m-0'>Email:</label>
+                        <input required="" name="address" ng-model="selectedUnitDetail.data.email" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                       </div>
-                    </div>
-                    </div>
-
-                    <div class="col-xs-6 col-sm-6 pd-r-0">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Bath:</label>
-                      </div>
-                    </div>
                     </div>
                   </div>
-
                   <div class="col-xs-6 col-sm-6 m-tb-30">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Type:</label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-xs-6 col-sm-6 m-tb-30">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Laundry:</label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-xs-6 col-sm-6 m-tb-30">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Address:</label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
-                      <label class="text-center">test</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
-                  </div>
-                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
-                      <label class="text-center">test</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
-                  </div>
-                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
-                      <label class="text-center">test</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
-                  </div>
-                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
-                      <label class="text-center">test</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
-                  </div>
-                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
-                      <label class="text-center">test</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
-                  </div>
-                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
-                      <label class="text-center">test</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
-                  </div>
-
-                  <div class="col-xs-6 col-sm-6 m-tb-30">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Phone:</label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-xs-6 col-sm-6 m-tb-30">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">Email:</label>
-                      </div>
-                    </div>
-                  </div>
-
-                   <div class="col-xs-12 col-sm-12 m-tb-30 usrlbll">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <label class="fg-label">User can contact by:</label>
-                        <br />
-                        <div class="col-xs-2 col-sm-2 m-tb-30 chkbxx">
-                          
-                          <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
-                          <label>phone</label>
-                        </div>
-                        <div class="col-xs-2 col-sm-2 m-tb-30 chkbxx">
-                          
-                          <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
-                          <label>text</label>
+                      <div class="form-group">
+                        <div class="">
+                          <label class='m-0'>Property Type:</label>
+                          <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                         </div>
                       </div>
                     </div>
-                  </div>
-
+                    <div class="col-xs-6 col-sm-6 m-tb-30" ng-if="selectedUnitDetail.data.Aminities.includes('parking')">
+                        <div class="form-group">
+                          <div class="">
+                            <label class='m-0'>Parking:</label>
+                            <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-6 col-sm-6 m-tb-30" ng-if="selectedUnitDetail.data.Aminities.includes('laundry')">
+                          <div class="form-group">
+                            <div class="">
+                              <label class='m-0'>Laundry:</label>
+                              <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                            </div>
+                          </div>
+                        </div>
                   <div class="col-xs-12 col-sm-12 m-tb-30">
-                    <div class="form-group fg-float">
-                      <div class="fg-line">
-                        <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
-                        <label class="fg-label">lease duration:</label>
+                      <div class="form-group">
+                        <div class="">
+                          <label class='m-0'>lease duration:</label>
+                          <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                        </div>
                       </div>
                     </div>
+                    <div class="col-xs-12 col-sm-12 m-tb-30">
+                        <div class="form-group">
+                          <div class="">
+                            <label class='m-0'>Description:</label>
+                            <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                          </div>
+                        </div>
+                      </div>
+                      
+                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
+                      <label class="text-center">Dogs ok</label>
+                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
+                      <label class="text-center">Cats ok</label>
+                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
+                      <label class="text-center">Furnished</label>
+                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
+                      <label class="text-center">Wheelchair</label>
+                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
+                      <label class="text-center">No Smoking</label>
+                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
                   </div>
 
-                  
-
+                   <div class="col-xs-12 col-sm-12 m-tb-30 mt-3">
+                    <div class="form-group row">
+                        <label class="p-0">Renters can contact me:</label>
+                        <div class="col-xs-2 col-sm-2 m-tb-30 chkbxx m-1" >
+                          
+                          <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                          <label>By phone</label>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 m-tb-30 chkbxx m-1">
+                          
+                          <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                          <label>By email</label>
+                        </div>
+                    </div>
+                  </div>
               </div>
               <div class="clearfix"></div>    
             </div>

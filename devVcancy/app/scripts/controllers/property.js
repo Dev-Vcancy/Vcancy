@@ -1791,25 +1791,17 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
     };
 
     vm.openDetailModel = function (prop, index) {
-
+        $scope.selectedUnitDetail = {};
+        $scope.selectedUnitDetail.data = vm.prop.unitlists[index];
+        $scope.selectedUnitDetail.index = index;
         $scope.items1 = prop;
         $scope.items1.indexofDetails = index;
         var modalInstance = $uibModal.open({
             templateUrl: 'myModalDetailsContent.html',
-            controller: 'ModalInstanceCtrl1',
+            controller: 'propertyCtrl',
             backdrop: 'static',
-            resolve: {
-                items1: function () {
-                    return $scope.items1;
-                }
-            }
-
-        });
-
-        modalInstance.result.then(function (selectedItem) {
-            $scope.selected = selectedItem;
-        }, function () {
-            //$log.info('Modal dismissed at: ' + new Date());
+            size:'lg',
+            scope:$scope
         });
     };
 
