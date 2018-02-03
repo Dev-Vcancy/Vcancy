@@ -87,6 +87,13 @@ vcancyApp
                             var user = firebase.auth().currentUser;
                             var newPassword = ncpassword;
                             user.updatePassword(newPassword).then(function() {
+                              
+                               var emailData = '<p>Hello, </p><p>Your password has been changed. If you didn’t change the password then please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                    
+                                    // Send Email
+                                      emailSendingService.sendEmailViaNodeMailer(userEmail, 'Password changed', 'changepassword', emailData);
+
+
                                 console.log("success");
                                  confirm("Your password has been updated!");
                                  localStorage.setItem('password', newPassword);

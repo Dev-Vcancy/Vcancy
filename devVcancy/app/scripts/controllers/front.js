@@ -5,6 +5,7 @@
 //=================================================
 
 vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$location','$window', function($scope,$firebaseAuth,$state,$rootScope,$location,$window) {
+		 
 		var vm = this;
         //Status
         vm.login = 1;
@@ -213,7 +214,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 
      vm.removeProfileData = function(){
         
-     }
+     }  
 
 		vm.registerUser = function(reguser){
 			var first = reguser.first;
@@ -257,7 +258,21 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
                     	isshowingtime : 1,
                     	profilepic : 1,
                     	companyname : ""
-					  });				  
+					  });	
+
+					  if(usertype == 0){
+					  		  var emailData = '<p>Hello '+firstname+', </p><p>Thanks for signing up for Vcancy!</p><p>We’ve built Vcancy from the heart to help renters find a place faster and standout from the crowd. You can schedule multiple same-day viewings and submit your rental applications online. </p><p>Our team is working hard to make the rental process seamless and automated. We would love to have your feedback on our the web-app. You can reach us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                    
+							    // Send Email
+							    emailSendingService.sendEmailViaNodeMailer(email, 'Welcome to Vcancy', 'Welcome', emailData);
+					  }	
+					  if(usertype == 1){
+					  		  var emailData = '<p>Hello, </p><p>Thanks for signing up!</p><p>We’ve built Vcancy from the heart to help busy landlords and property management companies find the best tenants faster by saving them time and labour costs. </p><p>We are always working hard make the tenant onboarding process seamless and automated. Please feel free to reach out to us if you have any suggestions about the web-app at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                    
+    						// Send Email
+    							emailSendingService.sendEmailViaNodeMailer(email, 'Welcome to Vcancy', 'Welcome', emailData);
+					  }	
+
 					$rootScope.success = "We've sent you an account confirmation email. Please check your email and Log in. ";
 					$rootScope.error = '';			
 					reguser.first = '';
@@ -351,6 +366,7 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 		}
 
 		vm.resendmail = function(){
+			$rootScope.success = 'Confirmation email resent';
 			var email = localStorage.getItem('RegEmail');
 			var pass = localStorage.getItem('RegPass');
 			if(email != null && pass != null){
@@ -359,7 +375,8 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 				       // Success 
 				       firebaseUser.sendEmailVerification().then(function() {
 							console.log("Email Sent");
-								$rootScope.success = 'Sent mail in your mail box please check your Email';
+								$rootScope.success = 'Confirmation email resent';
+								//$rootScope.success = 'Sent mail in your mail box please check your Email';
 								$rootScope.error = '';			
 					
 						}).catch(function(error) {

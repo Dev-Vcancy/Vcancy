@@ -12,10 +12,10 @@
                 <div class="form-title">
                     <span class="form-title">Sign In to Vcancy</span>
                     <span class="form-subtitle " style="text-transform: lowercase;">Or, </span>
-                     <a href='#/register' style="text-transform: unset;" class="creatct">Create an Account</a>
+                     <a href='#/register' style="text-transform: unset;" class="creatct" onclick="storelocal();">Create an Account</a>
                 </div>
                 <div class="container">
-   
+    
     
     <!-- display profile info -->
     <div id="profileData" style="display: none;">
@@ -26,7 +26,7 @@
             <p id="intro"></p>
             <p id="email"></p>
             <p id="location"></p>
-            <p id="link"></p>
+            <p id="link"></p> 
         </div>
     </div>
 </div>
@@ -105,8 +105,18 @@
 
 
 <script type="text/javascript">
+    if(localStorage.getItem("justOnce")){
+            window.location.reload();
+            localStorage.clear();
+    }
     $( document ).ready(function() {
-        $(document.body).addClass('login');
+         $(document.body).addClass('login');
          $(document.body).removeClass('register');
+          
     });
+
+    function storelocal(){
+        $('body').hide();
+        localStorage.setItem("justOnce", "true");
+    }
 </script> 

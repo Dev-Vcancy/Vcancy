@@ -12,13 +12,13 @@
                    
                         
                         <div class="" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 0 }" data-ng-if="lctrl.register === 0">            
-                                <form name="regForm" ng-submit="lctrl.registerUser(lctrl.reguser)" role="form" >
+                                <form name="regForm" ng-submit="lctrl.registerUser(lctrl.reguser)" role="form" > 
                                                     
                                    <div class="form-group text-center" >
-                                   <div class='regmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>
+                                   <div class='regmsgvalidate' ng-if="$root.error != ''" style="margin-top: 18%;"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>
                                     
-                                    <div class='regmsgvalidate' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}} <a  ng-click='lctrl.resendmail()'  href='javascript:void(0)' class='uppercase' 
-                                    style="text-decoration: underline;">Resend confirmation</a></div>
+                                    <div class='regmsgvalidate' ng-if="$root.success != ''" style="margin-top: 18%;"><div class="alert alert-success alert-dismissable fade in">{{$root.success}} <a  ng-click='lctrl.resendmail()'  href='javascript:void(0)' class='' 
+                                    style="text-decoration: underline;">Resend Confirmation</a></div>
                                     </div>
                                    <div class="md-radio-sg">
                                         <label class="radio radio-inline"> 
@@ -91,7 +91,7 @@
                                 <div class="clearfix"></div>
                                                 <hr>
                                                 <p class='text-center'>Already have an account?</p>
-                                                    <a href='#/login'  class="btn blue btn-block" >SING IN </a>
+                                                    <a href='#/login'  class="btn blue btn-block" onclick="storelocal();">SING IN </a>
                             </div>
                 </div>
                         <!-- BEGIN FORGOT PASSWORD FORM -->
@@ -104,6 +104,15 @@
         </div>
       <script type="text/javascript">
     $( document ).ready(function() {
-        $(document.body).addClass('register');
+        $('body').addClass('register');
+        $('body').removeClass('login');
     });
+    function storelocal(){
+        $('body').hide();
+        localStorage.setItem("justOnce", "true");
+    }
+      if(localStorage.getItem("justOnce")){
+            window.location.reload();
+            localStorage.clear();
+    }
 </script>    
