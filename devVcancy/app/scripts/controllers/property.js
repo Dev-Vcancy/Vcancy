@@ -637,6 +637,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 "rent": "",
                 "smoking": "",
                 "sqft": "",
+                "country": property.country,
                 "state": property.province,
                 "status": "",
                 "type": property.proptype,
@@ -1429,6 +1430,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             "location": vm.prop.address,
             "name": vm.prop.name,
             "postalcode": vm.prop.postcode,
+            "country": vm.prop.country,
             "rent": "",
             "smoking": "",
             "sqft": "",
@@ -1562,7 +1564,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         unitlists.forEach((unit) => {
             delete unit.$$hashKey;
         });
-        firebase.database().ref('properties/' + prop.propID).update({
+        return firebase.database().ref('properties/' + prop.propID).update({
             unitlists: unitlists,
             totalunits: unitlists.length,
             noofunits: unitlists.length
@@ -1796,12 +1798,12 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         $scope.selectedUnitDetail.index = index;
         $scope.items1 = prop;
         $scope.items1.indexofDetails = index;
-        var modalInstance = $uibModal.open({
+        $scope.modalInstance = $uibModal.open({
             templateUrl: 'myModalDetailsContent.html',
             controller: 'propertyCtrl',
             backdrop: 'static',
-            size:'lg',
-            scope:$scope
+            size: 'lg',
+            scope: $scope
         });
     };
 
@@ -1828,6 +1830,29 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         });
     };
 
+    $scope.cancel = function () {
+        $scope.modalInstance.dismiss('cancel');
+    };
+
+    $scope.submitDetails = function () {
+        var index = $scope.selectedUnitDetail.index;
+
+        vm.prop.unitlists[index] = angular.copy($scope.selectedUnitDetail.data);
+
+        vm.submiteditunits(vm.prop.unitlists, vm.prop)
+            .then(function () {
+                $scope.cancel();
+            });
+    };
+
+    $scope.onChangeCheckbox = function (type) {
+        if ($scope.selectedUnitDetail.data.Aminities && $scope.selectedUnitDetail.data.Aminities.includes(type)) {
+            $scope.selectedUnitDetail.data.Aminities.splice($scope.selectedUnitDetail.data.Aminities.indexOf(type), 1);
+        } else {
+            if (!$scope.selectedUnitDetail.data.Aminities) $scope.selectedUnitDetail.data.Aminities = [];
+            $scope.selectedUnitDetail.data.Aminities.push(type);
+        }
+    }
 
 }]);
 

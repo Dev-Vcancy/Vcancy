@@ -16,7 +16,7 @@
                 </button>
             </div>
             <div class="modal-body prptyadd">
-                 <form  role="form" enctype="multipart/form-data" id="fileUploadForm" method="post" >
+                 <form  role="form" enctype="multipart/form-data" method="post" >
                  <div class="row">
                  <div class="pull-right imgright">
                             <span class="btn default btn-file">
@@ -32,7 +32,7 @@
                     <div class="form-group">
                       <div class="">
                           <label class='m-0'>Posting Title:</label>
-                        <input required="true" name="title" ng-model="selectedUnitDetail.data.title" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required" id="" placeholder="">
+                        <input required="true" name="title" ng-model="selectedUnitDetail.data.title" placeholder="Posting title (70 character max) eg:(Beautiful Bedroom)" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required" id="">
                       </div>
                     </div>
                   </div>
@@ -122,6 +122,12 @@
                     </div>
                     </div>
                   </div>
+                  <div class="col-xs-6 col-sm-6 m-tb-30">
+                      <div class="form-group">
+                          <label class='m-0'>Sq ft:</label>
+                          <input name="address" ng-model="selectedUnitDetail.data.sqft" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                      </div>
+                    </div>
 
                   <div class="col-xs-6 col-sm-6 m-tb-30">
                     <div class="form-group">
@@ -144,23 +150,44 @@
                       <div class="form-group">
                         <div class="">
                           <label class='m-0'>Property Type:</label>
-                          <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                          <select chosen="" class="form-control" name="proptype" ng-model="selectedUnitDetail.data.type" data-placeholder="Prop type" class="">
+                                  <option value="">Select</option>
+                                  <option value="house">House</option>
+                                  <option value="townhouse">Town House</option>
+                                  <option value="apartment">Apartment</option>
+                                  <option value="condo">Condo</option>
+                                  <option value="coop">Co-op</option>
+                                  <option value="coop">Other</option>
+                                </select>
                         </div>
                       </div>
                     </div>
-                    <div class="col-xs-6 col-sm-6 m-tb-30" ng-if="selectedUnitDetail.data.Aminities.includes('parking')">
+                    <div class="col-xs-6 col-sm-6 m-tb-30">
                         <div class="form-group">
                           <div class="">
                             <label class='m-0'>Parking:</label>
-                            <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                            <select chosen="" class="form-control" name="proptype" ng-model="selectedUnitDetail.data.parking" required data-placeholder="Prop type">
+                                  <option value="">Select</option>
+                                  <option value="carport">Carport</option>
+                                  <option value="detachedGarage">Detached garage</option>
+                                  <option value="attachedGarage">Attached garage</option>
+                                  <option value="OffStreetParking">Off-street parking </option>
+                                  <option value="noParking">no parking</option>
+                                </select>
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-6 col-sm-6 m-tb-30" ng-if="selectedUnitDetail.data.Aminities.includes('laundry')">
+                      <div class="col-xs-6 col-sm-6 m-tb-30">
                           <div class="form-group">
                             <div class="">
                               <label class='m-0'>Laundry:</label>
-                              <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                              <select chosen="" class="form-control" name="proptype" ng-model="selectedUnitDetail.data.laundry" required data-placeholder="Prop type">
+                                  <option value="">Select</option>
+                                  <option value="W/dInUnit">W/d in unit</option>
+                                  <option value="LaundryOnSite">Laundry on site</option>
+                                  <option value="LaundryInBldg">Laundry in bldg</option>
+                                  <option value="noLaundryOnSite">no Laundry on site</option>
+                                </select>
                             </div>
                           </div>
                         </div>
@@ -168,7 +195,7 @@
                       <div class="form-group">
                         <div class="">
                           <label class='m-0'>lease duration:</label>
-                          <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                          <input required="" name="address" ng-model="selectedUnitDetail.data.leaseDuration" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                         </div>
                       </div>
                     </div>
@@ -176,30 +203,30 @@
                         <div class="form-group">
                           <div class="">
                             <label class='m-0'>Description:</label>
-                            <input required="" name="address" ng-model="ldProfilectrl.address" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
+                            <input required="" name="address" ng-model="selectedUnitDetail.data.description" type="text" class="form-control w-100 phone ng-dirty ng-valid-parse ng-invalid ng-invalid-required ng-touched" id="" placeholder="">
                           </div>
                         </div>
                       </div>
                       
                   <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
                       <label class="text-center">Dogs ok</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedUnitDetail.data.dogs" class="checkbox">
                   </div>
                   <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
                       <label class="text-center">Cats ok</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedUnitDetail.data.cats" class="checkbox">
                   </div>
                   <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
                       <label class="text-center">Furnished</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                      <input type="checkbox" name="all" value="all" id="selectall" ng-checked="selectedUnitDetail.data.Aminities.includes('furnished')" ng-click="onChangeCheckbox('furnished')" class="checkbox">
                   </div>
                   <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
                       <label class="text-center">Wheelchair</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                      <input type="checkbox" name="all" value="all" id="selectall" ng-checked="selectedUnitDetail.data.Aminities.includes('wheelchair')" ng-click="onChangeCheckbox('wheelchair')" class="checkbox">
                   </div>
                   <div class="col-xs-2 col-sm-2 m-tb-30 chkbx">
                       <label class="text-center">No Smoking</label>
-                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                      <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedUnitDetail.data.smoking" class="checkbox">
                   </div>
 
                    <div class="col-xs-12 col-sm-12 m-tb-30 mt-3">
@@ -207,12 +234,12 @@
                         <label class="p-0">Renters can contact me:</label>
                         <div class="col-xs-2 col-sm-2 m-tb-30 chkbxx m-1" >
                           
-                          <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                          <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" ng-model="selectedUnitDetail.data.contactByPhone" class="checkbox">
                           <label>By phone</label>
                         </div>
                         <div class="col-xs-2 col-sm-2 m-tb-30 chkbxx m-1">
                           
-                          <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedAll" class="checkbox">
+                          <input type="checkbox" name="all" value="all" id="selectall" ng-model="selectedUnitDetail.data.contactByEmail"  class="checkbox">
                           <label>By email</label>
                         </div>
                     </div>
@@ -221,7 +248,7 @@
               <div class="clearfix"></div>    
             </div>
             <div class="modal-footer">
-                <button type="submit"  class="btn btn-primary" ng-click="">Submit</button>
+                <button class="btn btn-primary" ng-click="submitDetails()">Submit</button>
                 <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
             </div>
         </form>
