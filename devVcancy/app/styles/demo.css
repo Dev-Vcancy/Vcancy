@@ -14,6 +14,27 @@
     margin-top: 25px;
 }
 
+.modal{
+    z-index: 99999 !important;
+}
+
+.modal-dialog.modal-lg{
+    margin-top:135px
+}
+
+.checkbox-width{
+    width: 17px !important;
+}
+
+.sweet-alert.showSweetAlert.visible{
+    z-index:9999999
+}
+.margin-top-15{
+    margin-top:15px !important;
+}
+.padding-20{
+    padding:20px !important;
+}
 .dropdown-basic-demo {
     display: inline-block;
     margin: 0 15px 20px 0;
@@ -68,6 +89,10 @@
 .color-block .color {
     font-size: 14px;
     text-transform: uppercase;
+}
+
+.width-40{
+    width:40px;
 }
 
 .color-block .code {
