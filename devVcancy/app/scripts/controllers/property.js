@@ -682,7 +682,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     "state": property.province,
                     "status": "",
                     "type": property.proptype,
-                    "unit": parseInt(Math.random() * 1000)
+                    "unit": ''
                 });
             }
             return unitlists;
@@ -1490,7 +1490,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 "state": vm.prop.province || vm.prop.city,
                 "status": "available",
                 "type": "",
-                "unit": parseInt(Math.random() * 1000)
+                "unit": ''
             }
             if (!vm.prop.unitlists) vm.prop.unitlists = [];
             vm.prop.unitlists.push(newUnit);
@@ -1499,18 +1499,17 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.deleteSelected = function () {
             if (Object.keys(vm.checkedRow) && Object.keys(vm.checkedRow).length > 0) {
 
-                // for (var index in vm.checkedRow) {
-                //     if (vm.checkedRow[index]) {
-                //         vm.prop.unitlists.splice(index, 1);
-                //     }
-                // }
                 vm.prop.unitlists = vm.prop.unitlists.filter(function (unit, key) {
                     if (!vm.checkedRow[key]) return true;
                 })
-                vm.submiteditunits(vm.prop.unitlists, vm.prop);
+                vm.submiteditunits(vm.prop.unitlists, vm.prop, true);
                 vm.checkedRow = {};
             } else {
-                alert('Please select any unit from row');
+                swal({
+                    title: "Alert!",
+                    text: "Please select any unit from row",
+                    type: "warning",
+                });
             }
         }
 
@@ -1528,33 +1527,44 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.filesArray = [];
         $scope.uploadDetailsImages = function (event) {
             var filesToUpload = event.target.files;
-            if (filesToUpload.length > 24) {
-                alert('Max files can be aded is 24');
+            var alreadyAddedImages = $scope.selectedUnitDetail.data.images ? $scope.selectedUnitDetail.data.images.length : 0
+            if (filesToUpload.length + alreadyAddedImages > 24) {
+                swal({
+                    title: "Warning!",
+                    text: "Images uploading is limited to 24 images only.",
+                    type: "warning",
+                });
                 return
             }
-
+            swal({
+                title: 'Alert',
+                text: "Please wait photos are uploading",
+                icon: "info",
+            });
             for (var i = 0; i < filesToUpload.length; i++) {
                 var file = filesToUpload[i];
                 vm.filesArray.push(vm.singleFileUpload(file));
             }
 
             $q
-            .all(vm.filesArray)
-            .then((data)=>{
-                swal({
-                    title: "Success!",
-                    text: "Photos uploaded successfully!",
-                    type: "success",
-                });
-                if(!$scope.selectedUnitDetail.data.images) $scope.selectedUnitDetail.data.images = [];
-                $scope.selectedUnitDetail.data.images = $scope.selectedUnitDetail.data.images.concat(data);
-            })
+                .all(vm.filesArray)
+                .then((data) => {
+                    swal.close();
+                    if (!$scope.selectedUnitDetail.data.images) $scope.selectedUnitDetail.data.images = [];
+                    $scope.selectedUnitDetail.data.images = $scope.selectedUnitDetail.data.images.concat(data);
+                    setTimeout(function () {
+                        swal({
+                            title: "Success!",
+                            text: "Photos uploaded successfully!",
+                            type: "success",
+                        });
+                    }, 100)
+                })
         }
 
         vm.singleFileUpload = function (file) {
             var fileUploadDefer = $q.defer();
             if (file) {
-                console.log('called')
                 AWS.config.update({
                     accessKeyId: 'AKIAI6FJLQDDJXI4LORA',
                     secretAccessKey: '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'
@@ -1591,8 +1601,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                 })
                     .send(function (err, data) {
-                        if(err){
-                            return fileUploadDefer.reject(data);    
+                        if (err) {
+                            return fileUploadDefer.reject(data);
                         }
                         return fileUploadDefer.resolve(data);
                     });
@@ -1687,30 +1697,40 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             vm.prop.noofunits = parseInt(val + 1);
         }
 
-        vm.submiteditunits = function (unitlists, prop) {
+        vm.submiteditunits = function (unitlists, prop, isDeleted) {
 
+            let unitIds = [];
             unitlists.forEach((unit) => {
+                unitIds.push(unit.unit);
                 delete unit.$$hashKey;
             });
+            var hasDuplicateIds = vm.duplication(unitIds);
+            if (hasDuplicateIds) {
+                swal({
+                    title: "Error!",
+                    text: "More than 1 unit shares same id.",
+                    type: "error",
+                });
+                return;
+            }
             return firebase.database().ref('properties/' + prop.propID).update({
                 unitlists: unitlists,
                 totalunits: unitlists.length,
                 noofunits: unitlists.length
             }).then(function () {
-                // if (confirm("Units Updated successfully!") == true) {
-                //     // localStorage.removeItem('propID');
-                //     // localStorage.removeItem('units');
-                //     // localStorage.removeItem('propName');
-                //     //$state.go('viewprop');
-                //     // $state.reload();
-                // } else {
-                //     return false;
-                // }
-                swal({
-                    title: "Success!",
-                    text: "Unit saved successfully.",
-                    type: "success",
-                });
+                if (isDeleted) {
+                    swal({
+                        title: "Success!",
+                        text: "Unit deleted successfully.",
+                        type: "success",
+                    });
+                } else {
+                    swal({
+                        title: "Success!",
+                        text: "Unit saved successfully.",
+                        type: "success",
+                    });
+                }
             }, function (error) {
                 if (confirm("Units Not added Please Try again!") == true) {
                     return false;
@@ -1917,7 +1937,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             });
         };
 
-        $scope.openImageModal = function(){
+        $scope.openImageModal = function () {
             $scope.imageModal = $uibModal.open({
                 templateUrl: 'viewimages.html',
                 controller: 'propertyCtrl',
@@ -1927,7 +1947,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             });
         }
 
-        $scope.closeImageModal = function(){
+        $scope.closeImageModal = function () {
             $scope.imageModal.dismiss('cancel');
         }
 
@@ -1945,7 +1965,26 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 scope: $scope
             });
         };
+        vm.duplication = function (data) {
 
+            var sorted_arr = data.slice().sort(); // You can define the comparing function here. 
+            // JS by default uses a crappy string compare.
+            // (we use slice to clone the array so the
+            // original array won't be modified)
+            var results = [];
+            for (var i = 0; i < sorted_arr.length - 1; i++) {
+                if (sorted_arr[i + 1] == sorted_arr[i]) {
+                    results.push(sorted_arr[i]);
+                    break;
+                }
+            }
+
+            if (results.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
         vm.opencsvmodel = function (prop) {
 
@@ -2130,55 +2169,28 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                         unitsImported.push(obj);
                         totalrowunits++;
                     }
-                    vm.prop.unitlists = unitsImported;
+                    var hasDuplicateId = vm.duplication(units);
+                    if (hasDuplicateId) {
+                        swal({
+                            title: 'Error',
+                            text: 'File has Duplicate unit ids.',
+                            type: 'error'
+                        })
+                        return;
+                    }
+                    if (!vm.prop.unitlists) vm.prop.unitlists = [];
+                    vm.prop.unitlists = vm.prop.unitlists.concat(unitsImported);
+                    vm.prop.totalunits = vm.prop.unitlists.length;
+                    vm.prop.noofunits = vm.prop.unitlists.length;
                     vm.isFileUploading = false;
                     setTimeout(function () {
                         $uibModalInstance.close();
-                        alert('File Imported successfully. You need to save units or changes will be lost');
+                        swal({
+                            title: 'Alert',
+                            text: 'File Imported successfully. You need to save units or changes will be lost',
+                            type: 'success'
+                        })
                     }, 1000);
-
-                    // for (var i = 0; i < result.length; i++) {
-                    //     var objres = result[i];
-
-                    //     unitlists.push(objres);
-                    // }
-
-                    // for (var i = 0; i < unitlists.length; i++) {
-                    //     unitsarray.push(unitlists[i]['unit']);
-                    // }
-
-                    /*console.log(totalrowunits);
-                    console.log(unitlists);*/
-
-
-
-                    // if (vm.duplication(units) == true) {
-                    //     alert("Please check your unit number are duplicate.. ")
-                    //     return false;
-                    // }
-
-                    // if (vm.duplication(unitsarray) == true) {
-                    //     alert("Please check your unit number are conflict with manually units.. ")
-                    //     return false;
-                    // }
-
-                    // noofunits = parseInt(totalrowunits + noofunits);
-                    // firebase.database().ref('properties/' + propID).update({
-                    //     unitlists: unitlists,
-                    //     totalunits: noofunits, noofunits: noofunits,
-                    //     units: 'multiple'
-                    // }).then(function () {
-
-                    //     if (confirm("Units added successfully!")) {
-                    //         $uibModalInstance.close();
-                    //         // $state.go('viewprop');
-                    //         $state.reload();
-                    //     }
-                    //     $rootScope.success = "Units added successfully!";
-                    //     //setTimeout(function(){ $state.go('viewprop'); }, 2000);
-                    // }, function (error) {
-                    //     $rootScope.error = "Please Check your CSV file Having issue with the data!";
-                    // });
                 }
 
                 reader.readAsText(fileUpload.files[0]);

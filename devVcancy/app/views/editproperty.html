@@ -278,7 +278,7 @@
                     </div>
                 </div>
                 <div class="row mt-4">
-                  <div class="col-sm-1 p-0" ng-repeat="image in selectedUnitDetail.data.images">
+                  <div class="col-sm-1 p-0 mb-2" ng-repeat="image in selectedUnitDetail.data.images">
                     <img ng-src="{{image.Location}}" style="height:35px;width:57%;">
                   </div>
                 </div>
@@ -288,6 +288,53 @@
             </div>
         </div>
       </script>
+      <script type="text/ng-template" id="myModalContent1.html">
+        <div class="profile_model_popup">
+        <div class="modal-header">
+            <h3 class="modal-title">Import CSV File</h3>
+            <button type="button" class="close" data-dismiss="dialog" ng-click="cancel()">
+               <span aria-hidden="true">&times;</span>
+               <span class="sr-only">Close</span>
+            </button>
+        </div>
+        <div class="modal-body">
+             <form  role="form" enctype="multipart/form-data" id="fileUploadForm" method="post" >
+              <div class="form-group">
+                  <p>
+                      Data must be in a specific format to import.<br/><br/>
+                      Please use this file - <a href="../assets/test.csv">Sample Spreadsheet</a>. <br/><br/>
+                      If you are having problems uploading units then please contact <a href="https://vcancy.ca/contact/">support</a>
+                      and we will upload it for you.
+                  </p>
+                  </div>
+                <div class="form-group">
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+
+                        <!-- <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                        </div> -->
+                        <span class="fileinput-exists">Selected File:</span> <span class="fileinput-preview fileinput-exists line-height-4" style=""> </span>
+                        <div>
+                            <span class="btn btn-info btn-file">
+                                <span class="fileinput-new"> Select file </span>
+                                <span class="fileinput-exists"> Change </span>
+                               <input type="file" name="file" id="file123" value="dataFile" required="true">
+                             </span> 
+                            <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                            &nbsp;<small>(Only csv format supported.)</small>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit"  class="btn btn-primary" ng-click="submit()"><i ng-if="propctrl.isFileUploading" class="fa fa-spinner fa-pulse fa-3x fa-fw" aria-hidden="true"></i> Upload</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+        </form>
+        </div>
+    </script>
           <div class="profile">
             <div class="tabbable-line tabbable-full-width">
               <div role="tabpanel">
@@ -475,7 +522,7 @@
                               <button type="button" type="button" class="btn btn-primary" ng-click="propctrl.addNewUnit()">
                                 <i class="fa fa-plus" /> Add Unit
                               </button>
-                              <button class="btn btn-danger" type="button" ng-click="propctrl.deleteSelected()"> Delete Selected
+                              <button class="btn btn-danger" type="button" ng-click="propctrl.deleteSelected()">
                                 <i class="fa fa-trash-o"></i>
                               </button>
                             </div>
