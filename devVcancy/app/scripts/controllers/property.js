@@ -4,7 +4,7 @@
 // PROPERTY
 //=================================================
 
-vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'slotsBuildService', 'emailSendingService', '$http', '$location', '$log', '$uibModal', function($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, slotsBuildService, emailSendingService, $http, $location, $log, $uibModal) {
+vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'slotsBuildService', 'emailSendingService', '$http', '$location', '$log', '$uibModal','emailSendingService', function($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, slotsBuildService, emailSendingService, $http, $location, $log, $uibModal,emailSendingService) {
     $rootScope.invalid = '';
     $rootScope.success = '';
     $rootScope.error = '';
@@ -1217,7 +1217,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
         swal({
                 title: "Are you sure?",
-                text: "you want to delete this property? All details and units will be deleted!",
+                text: "All details and units will be deleted!",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: '#DD6B55',

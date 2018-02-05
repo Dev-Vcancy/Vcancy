@@ -4,7 +4,7 @@
 // LOGIN, REGISTER
 //=================================================
 
-vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$location','$window', function($scope,$firebaseAuth,$state,$rootScope,$location,$window) {
+vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$location','$window','emailSendingService', function($scope,$firebaseAuth,$state,$rootScope,$location,$window,emailSendingService) {
 		 
 		var vm = this;
         //Status
@@ -156,6 +156,11 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 			IN.Event.on(IN, "auth", vm.getProfileData);
 		};
 		
+		vm.linkedIn = function(){
+				console.log("In linkedIn");
+				IN.Event.on(IN, "auth", vm.getProfileData);
+		}
+
 		vm.getProfileData = function() {
 	        IN.API.Profile("me").fields("id", "first-name", "last-name", "headline", "location", "picture-url", "public-profile-url", "email-address").result(vm.displayProfileData).error(vm.onError);
 	    }

@@ -89,9 +89,25 @@
                                     <button type="submit" ng-disabled="regForm.$invalid"  class="btn redorng btn-block uppercase">Create an account</button>
                                 </form>
                                 <div class="clearfix"></div>
+                                <div class="login-options">
+                                        <!-- <h4 class="pull-left">Or login with</h4>  -->
+                                        <ul class="social-icons pull-right" style="margin:15px;">
+                                            <li>
+                                                <a class="social-icon-color facebook" data-original-title="facebook" href="javascript:;" data-ng-click="lctrl.facebook()"></a>
+                                            </li>
+                                            <li>
+                                                <a class="social-icon-color googleplus" data-original-title="Goole Plus" href="javascript:;" data-ng-click="lctrl.google()"></a>
+                                            </li>
+                                            <li>
+                                                <a class="social-icon-color linkedin" data-original-title="Linkedin"  linked-in  href="javascript:;"></a>
+                                            </li>
+                                                         
+                    </ul>
+                </div>
+                                <div class="clearfix"></div>
                                                 <hr>
-                                                <p class='text-center'>Already have an account?</p>
-                                                    <a href='#/login'  class="btn blue btn-block" onclick="storelocal();">SING IN </a>
+                                                <p class='text-center'>Already have an account? <a href='#/login'   onclick="storelocal();">Sign in </a></p>
+                                                    
                             </div>
                 </div>
                         <!-- BEGIN FORGOT PASSWORD FORM -->

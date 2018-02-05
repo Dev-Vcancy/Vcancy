@@ -5,7 +5,7 @@
 //=================================================
 
 vcancyApp
-    .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http','$uibModal', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http,$uibModal) {
+    .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http','$uibModal','emailSendingService', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http,$uibModal,emailSendingService) {
         var vm = this;
         var landLordID = localStorage.getItem('userID');
         var password = localStorage.getItem('password');
@@ -22,8 +22,8 @@ vcancyApp
         vm.totaluser = 0;
         vm.users = [];
 
-        vm.profilepic = '../assets/pages/media/profile/people19.png';
-        vm.companylogo = '../assets/pages/media/profile/people19.png';
+        vm.profilepic = 'http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+profile';
+        vm.companylogo = 'http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image';
 		        $rootScope.invalid = '';
             $rootScope.success = '';
             $rootScope.error = '';
@@ -177,7 +177,11 @@ vcancyApp
             var bucket = new AWS.S3({params: {Bucket: 'sagar-vcancy-test/company-logo'}});
                             var fileChooser = document.getElementById('file');
                             var file = fileChooser.files[0];
-                            var filename = moment().format('YYYYMMDDHHmmss')+file.name; 
+                            
+
+
+                            if (file) {
+                              var filename = moment().format('YYYYMMDDHHmmss')+file.name; 
                               filename = filename.replace(/\s/g,'');
 
                               if(file.size > 3145728) {
@@ -190,8 +194,6 @@ vcancyApp
                                     return false;
                                 }
 
-
-                            if (file) {
                                 var params = {Key: filename, ContentType: file.type, Body: file,StorageClass: "STANDARD_IA" , ACL : 'public-read'};
                                 bucket.upload(params).on('httpUploadProgress', function(evt) {
                                 console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total)+'%');
@@ -214,13 +216,27 @@ vcancyApp
                                
                                 });
                             }else{
-                                alert("File Type is Invalid.");
-                                return false;
+
+                                var landLordID = localStorage.getItem('userID');
+                                   var user = firebase.auth().currentUser;
+                                      if (user) { 
+                                          firebase.database().ref('users/' + landLordID).update({'companylogo':''}).then(function(){
+                                               vm.opensuccesssweet("Your Company Logo Picture updated successfully."); 
+                                           }, function(error) {
+                                            vm.openerrorsweet("Company Logo Not Added! Try again!"); 
+                                            return false;
+                                          });
+                                      } 
+                               /* alert("File Type is Invalid.");
+                                return false;*/
                             }
         } 
     
        
          vm.newuserSubmit = function(newuser){
+
+
+
             var landLordID = localStorage.getItem('userID');
             var firstname = newuser.firstname;
             var lastname = newuser.lastname;
@@ -228,16 +244,18 @@ vcancyApp
             var refId = landLordID;
             var custome =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             var reguserdbObj = firebase.database();
-           
+            var landLordID = localStorage.getItem('userID');  
             var pass = 'test@1234'; 
             var usertype = 2;
-
+            var reguserObj = $firebaseAuth();
             var userarray = { firstname: firstname,
             lastname: lastname,
             refId : refId,
             email : email};
-           
-            reguserObj.$createUserWithEmailAndPassword(email, pass)
+           firebase.database().ref('/users/' + landLordID).once('value').then(function (userdata) {
+             var isadded = userdata.val().isadded;
+
+               reguserObj.$createUserWithEmailAndPassword(email, pass)
             .then(function(firebaseUser) {
                 var reguserdbObj = firebase.database();
                     reguserdbObj.ref('users/' + firebaseUser.uid).set({
@@ -261,16 +279,29 @@ vcancyApp
                     firebase.auth().signInWithEmailAndPassword(email, pass)
                      .then(function(firebaseUser) {
 
+                         reguserdbObj.ref('employee/' + custome).set(userarray, function(error){
+                            if(error != null ){
+                            
+                              vm.openerrorsweet("User Not added Please Try again.");
+                              return false; 
+                            }else{
+                              vm.opensuccesssweet("User Added successfully!"); 
+                            }
+                          });
+
                           var emailData = '<p>Hello, </p><p>A new user,'+firstname+' ,has been added to on https://vcancy.ca/ .</p><p>Your email is '+email+'.</p><p>Your password : <strong>test@1234</strong></p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
                                     
                           // Send Email
                           emailSendingService.sendEmailViaNodeMailer(email, 'A new user account has been added to your portal', 'Welcome', emailData);
                          // Success 
                          firebaseUser.sendEmailVerification().then(function(){
-                                  var emailData = '<p>Hello, </p><p>A new user,'+firstname+' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at '+email+'.</p><p>To view/edit user details, please log in https://vcancy.ca/ and go to “Profile” and click on “Users”</p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                          if(isadded === 1){
+                               var emailData = '<p>Hello, </p><p>A new user,'+firstname+' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at '+email+'.</p><p>To view/edit user details, please log in https://vcancy.ca/ and go to “Profile” and click on “Users”</p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
                                                                     
                                     // Send Email
                                     emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
+                          }
+                                 
 
                           console.log("Email Sent");
                           $rootScope.success = 'Confirmation email resent';
@@ -303,16 +334,9 @@ vcancyApp
                 }
             });
 
-             reguserdbObj.ref('employee/' + custome).set(userarray, function(error){
-                  if(error != null ){
-                  
-                    vm.openerrorsweet("User Not added Please Try again.");
-                    return false; 
-                  }else{
-                    vm.opensuccesssweet("User Added successfully!"); 
-                  }
-                });
-
+          });
+           
+           
             
         }
 
@@ -492,7 +516,7 @@ vcancyApp
                    confirmButtonText: "Ok"
                   },function(isConfirm){
                       if (isConfirm) {
-                        $state.reload();
+                       // $state.reload();
                       }
                     });
 
@@ -588,7 +612,7 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
                   },function(isConfirm){
                       if (isConfirm) {
                        $uibModalInstance.close();
-                        $state.reload();
+                      //  $state.reload();
                       }
                     });
       }
