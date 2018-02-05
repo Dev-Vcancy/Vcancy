@@ -304,7 +304,7 @@ vcancyApp
                                  
 
                           console.log("Email Sent");
-                          $rootScope.success = 'Confirmation email resent';
+                         // $rootScope.success = 'Confirmation email resent';
                           $rootScope.error = '';      
                     
                       }).catch(function(error) {
