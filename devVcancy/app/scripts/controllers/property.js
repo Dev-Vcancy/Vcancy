@@ -1004,10 +1004,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             });
 
             vm.toggleSwitch = function (key) {
-                // console.log(key);
-                console.log(vm.viewprops[key].propstatus);
                 var propstatus = !vm.viewprops[key].propstatus;
-                console.log(!vm.viewprops[key].propstatus);
 
                 firebase.database().ref('properties/' + key).once("value", function (snap) {
                     vm.property_address = snap.val().address;
@@ -1954,6 +1951,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.openDetailModel = function (prop, index) {
             $scope.selectedUnitDetail = {};
             $scope.selectedUnitDetail.data = vm.prop.unitlists[index];
+            $scope.selectedUnitDetail.data.email = localStorage.getItem('userEmail');
             $scope.selectedUnitDetail.index = index;
             $scope.items1 = prop;
             $scope.items1.indexofDetails = index;
@@ -2022,6 +2020,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     $scope.cancel();
                 });
         };
+
+        $scope.deleteImageFromDetail = function (index) {
+            $scope.selectedUnitDetail.data.images.splice(index, 1);
+        }
 
         $scope.onChangeCheckbox = function (type) {
             if ($scope.selectedUnitDetail.data.Aminities && $scope.selectedUnitDetail.data.Aminities.includes(type)) {

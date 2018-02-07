@@ -39,7 +39,19 @@
     display: inline-block;
     margin: 0 15px 20px 0;
 }
-
+.deletebutton {
+    position: absolute;
+    /* right: 0; */
+    left: 29px;
+    top: -6px;
+    color: #a99999;
+    padding: 2px;
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 4px;
+}
+.deletebutton:hover{
+    color:white;
+}
 .dropdown-basic-demo .dropdown-menu {
     display: block;
     position: relative;
@@ -83,6 +95,9 @@
 }
 .original-form-control{
     border:1px solid #c2cad8 !important;
+}
+ textarea.original-form-control, input[type=text].original-form-control, input[type=number].original-form-control {
+    padding: 6px !important; 
 }
 .color-block span {
     display: block;
