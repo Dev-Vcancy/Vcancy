@@ -81,7 +81,9 @@
     border-radius: 2px;
     margin-bottom: 25px;
 }
-
+.original-form-control{
+    border:1px solid #c2cad8 !important;
+}
 .color-block span {
     display: block;
 }
