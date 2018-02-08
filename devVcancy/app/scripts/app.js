@@ -501,7 +501,7 @@ vcancyApp
 			url: '/app',
 			controller: 'landlordappCtrl',
 			controllerAs: 'lappctrl',
-			templateUrl: 'views/app.html',
+			templateUrl: 'views/peoples.html',
 			resolve: { authenticate: authenticate }
 		})  
 		
