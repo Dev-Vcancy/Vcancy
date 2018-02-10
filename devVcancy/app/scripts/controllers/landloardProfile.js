@@ -172,9 +172,9 @@ vcancyApp
                       accessKeyId : 'AKIAIYOGBYOBPRSZSOYQ',
                       secretAccessKey : '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'
             });
-            AWS.config.region = 'us-west-2';
+            AWS.config.region = 'ca-central-1';
                       
-            var bucket = new AWS.S3({params: {Bucket: 'sagar-vcancy-test/company-logo'}});
+            var bucket = new AWS.S3({params: {Bucket: 'vcancy-final/company-logo'}});
                             var fileChooser = document.getElementById('file');
                             var file = fileChooser.files[0];
                             
@@ -206,7 +206,7 @@ vcancyApp
                                                       firebase.database().ref('users/' + landLordID).update({'companylogo':data.Location}).then(function(){
                                                         
                                                           
-                                                            vm.opensuccesssweet("Your Company Logo Picture updated successfully."); 
+                                                            vm.opensuccesssweet("Company logo updated successfully."); 
                                                        }, function(error) {
                                                         vm.openerrorsweet("Company Logo Not Added! Try again!"); 
                                                         return false;
@@ -221,7 +221,7 @@ vcancyApp
                                    var user = firebase.auth().currentUser;
                                       if (user) { 
                                           firebase.database().ref('users/' + landLordID).update({'companylogo':''}).then(function(){
-                                               vm.opensuccesssweet("Your Company Logo Picture updated successfully."); 
+                                               vm.opensuccesssweet("Company Logo Updated Successfully."); 
                                            }, function(error) {
                                             vm.openerrorsweet("Company Logo Not Added! Try again!"); 
                                             return false;
@@ -468,23 +468,23 @@ vcancyApp
                   var user = firebase.auth().currentUser;
                   if (user) { 
                       firebase.database().ref('users/' + landLordID).update(notification).then(function(){
-                      vm.opensuccesssweet("Your notification updated successfully!"); 
+                      vm.opensuccesssweet("Your notification settings are updated successfully!"); 
                       }, function(error) {
-                       vm.openerrorsweet("May Be your session is expire please login again."); 
+                       vm.openerrorsweet("Maybe your session has expired, please login again."); 
                        return false;
                       });
                   } else {
-                     vm.openerrorsweet("May Be your session is expire please login again."); 
+                     vm.openerrorsweet("Maybe your session has expire, please login again."); 
                      return false;
                   }
               }else{
                  
-                  vm.openerrorsweet("Please Select Atleast one option."); 
+                  vm.openerrorsweet("Please select at least one option."); 
                   return false;
               }
               
           }else{
-                 vm.openerrorsweet("Please Select Atleast one option."); 
+                 vm.openerrorsweet("Please select at least one option."); 
                  return false;
           }
           
@@ -511,7 +511,7 @@ vcancyApp
             swal({
                   title: "Success!",
                   text: value,
-                  type: "success",
+                  type: "Success!",
                   confirmButtonColor: '#009999',
                    confirmButtonText: "Ok"
                   },function(isConfirm){
@@ -528,7 +528,7 @@ vcancyApp
             swal({ 
                  title:"Error",
                  text: value,
-                 type: "warning",
+                 type: "Warning",
                  confirmButtonColor: "#DD6B55",
                  confirmButtonText: "Ok",
                  closeOnConfirm: true}, 
@@ -547,11 +547,11 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
                       accessKeyId : 'AKIAIYOGBYOBPRSZSOYQ',
                       secretAccessKey : '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'
             });
-            AWS.config.region = 'us-west-2';
+            AWS.config.region = 'ca-central-1';
 
         $scope.ok = function () {
         
-                  var bucket = new AWS.S3({params: {Bucket: 'sagar-vcancy-test/profile-images'}});
+                  var bucket = new AWS.S3({params: {Bucket: 'vcancy-final/profile-images'}});
                   var fileChooser = document.getElementById('file321');
                   var file = fileChooser.files[0];
                   var filename = moment().format('YYYYMMDDHHmmss')+file.name; 
@@ -606,7 +606,7 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
             swal({
                   title: "Success!",
                   text: value,
-                  type: "success",
+                  type: "Success!",
                   confirmButtonColor: '#009999',
                    confirmButtonText: "Ok"
                   },function(isConfirm){
@@ -621,7 +621,7 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
         swal({ 
              title:"Error",
              text: value,
-             type: "warning",
+             type: "Warning",
              confirmButtonColor: "#DD6B55",
              confirmButtonText: "Ok",
              closeOnConfirm: true}, 
