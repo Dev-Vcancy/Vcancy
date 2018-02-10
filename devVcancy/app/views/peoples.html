@@ -18,35 +18,54 @@
 				</div>
 			</div>
 			<div class="card white-block p-20">
-				<div class="card-header row ">
-					<!-- <div class="col-sm-4" ng-repeat="(key,w) in lappctrl.apppropaddress">
+				<div class="card-header row">
+					<div class="col-sm-6">
+						<!-- <div class="col-sm-4" ng-repeat="(key,w) in lappctrl.apppropaddress">
 						 <label class="checkbox checkbox-inline m-r-20">
 							<input type="checkbox" value="{{w.propID}}" checked="{{lappctrl.propcheck[w.propID]}}" ng-click="lappctrl.tablefilterdata(w.propID)">
 							<i class="input-helper"></i>
 							{{w.units}}  <span ng-hide="w.units == ' '">-</span>  {{w.address}} 
 						</label>
 					</div> -->
-					<select class="m-input m-input--square" name="more" ng-model="propctrl.more" ng-change="propctrl.moreaction(propctrl.more)">
-						<option value="">Property</option>
-						<option ng-value="property.name" ng-repeat="property in lappctrl.properties">
-							{{property.name}}
-						</option>
-						
-					</select>
-					<select class="m-input m-input--square" name="more" ng-model="propctrl.more" ng-change="propctrl.moreaction(propctrl.more)">
-						<option value="">Unit</option>
-						<option value="available">Mark Available</option>
-						<option value="rented">Mark Rented</option>
-						<option value="sold">Mark Sold</option>
-						<option value="availablesoon">Mark Available Soon</option>
-					</select>
-					<select class="m-input m-input--square" name="more" ng-model="propctrl.more" ng-change="propctrl.moreaction(propctrl.more)">
-						<option value="">Questions</option>
-						<option value="available">Mark Available</option>
-						<option value="rented">Mark Rented</option>
-						<option value="sold">Mark Sold</option>
-						<option value="availablesoon">Mark Available Soon</option>
-					</select>
+						<select class="m-input m-input--square" name="more" ng-model="lappctrl.filters.property">
+							<option value="">Property</option>
+							<option ng-value="key" ng-repeat="(key, property) in lappctrl.properties">
+								{{property.name}}
+							</option>
+
+						</select>
+						<select class="m-input m-input--square ml-2" name="more" ng-model="lappctrl.filters.unit" multiple>
+							<option value="">All Units</option>
+							<option ng-value="unit.unit" ng-repeat="unit in lappctrl.properties[lappctrl.filters.property].unitlists">{{unit.unit}}</option>
+						</select>
+						<select class="m-input m-input--square ml-2" name="more" multiple>
+								<option> Job title</option>
+								<option> Pets</option>
+								<option> DOB</option>
+								<option> Name</option>
+								<option> Tell me a bit about yourself</option>
+								<option> No. of Applicants</option>
+								<option> Smoking</option>
+								<option> Move-in date</option>
+						</select>
+					</div>
+					<div class="col-sm-6">
+						<div class="row mb-2">
+							<div class="col text-right">
+								<button class="btn btn-sm btn-primary" ng-click="lappctrl.openPrescremingQuestions()">Pre-screening Questions</button>
+							</div>
+						</div>
+						<div class="row  mb-2">
+							<div class="col text-right">
+								<button class="btn btn-sm btn-primary">Custom rental application</button>
+							</div>
+						</div>
+						<div class="row  mb-2">
+							<div class="col text-right">
+								<button class="btn btn-sm btn-primary">Run credit and criminal check</button>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -70,6 +89,81 @@
 				</div>
 			</div>
 		</div>
+
+		<script type="text/ng-template" id="prescremingquestions.html">
+            <div class="profile_model_popup">
+            <div class="modal-header padding-20" >
+                <h3 class="modal-title">
+						Pre-screening Questions for Prospective Tenants
+				</h3>
+                <button type="button" class="close margin-top-15" data-dismiss="dialog" ng-click="closePrescreeningModal()" style='margin-top:8px !important'>
+                  <span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> Job title
+					</label>
+				</div>
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> Pets
+					</label>
+				</div>
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> DOB
+					</label>
+				</div>
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> Name
+					</label>
+				</div>
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> Tell me a bit about yourself
+					</label>
+				</div>
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> No. of Applicants
+					</label>
+				</div>
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> Smoking
+					</label>
+				</div>
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> Move-in date
+					</label>
+				</div>	  
+				Add custom question below<br/>
+				<div class="row">
+					<div class="col">
+						<input type="text" style="margin-top:9px" class="form-group"/>
+						<button class="btn btn-sm btn-info"><i class="fa fa-plus"></i></button>
+					</div>
+				</div>
+            </div>
+            <div class="modal-footer">
+				<button class="btn btn-primary" ng-click="closePrescreeningModal()">Close</button>
+				<button class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
+            </div>
+        </div>
+      </script>
 	</section>
 </section>
 

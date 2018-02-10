@@ -983,7 +983,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             vm.loader = 1;
             var landlordID = localStorage.getItem('userID');
             var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-                console.log(snapshot)
+                console.log(snapshot.val())
                 $scope.$apply(function () {
                     vm.success = 0;
                     if (snapshot.val()) {
