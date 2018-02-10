@@ -169,8 +169,8 @@ vcancyApp
 
         vm.profilestore = function(){
            AWS.config.update({
-                      accessKeyId : 'AKIAI6FJLQDDJXI4LORA',
-                      secretAccessKey : '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'
+                      accessKeyId : 'AKIAIYOGBYOBPRSZSOYQ',
+                      secretAccessKey : '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'
             });
             AWS.config.region = 'us-west-2';
                       
@@ -544,8 +544,8 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
             var swal = window.swal;
             var vm = this;
            AWS.config.update({
-                      accessKeyId : 'AKIAI6FJLQDDJXI4LORA',
-                      secretAccessKey : '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'
+                      accessKeyId : 'AKIAIYOGBYOBPRSZSOYQ',
+                      secretAccessKey : '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'
             });
             AWS.config.region = 'us-west-2';
 
