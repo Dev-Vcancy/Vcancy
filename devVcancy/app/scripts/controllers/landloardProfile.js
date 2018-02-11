@@ -9,6 +9,7 @@ vcancyApp
     function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $uibModal, emailSendingService) {
       var vm = this;
       var landLordID = localStorage.getItem('userID');
+      vm.refId = localStorage.getItem('refId');
       var password = localStorage.getItem('password');
       var swal = window.swal;
       vm.userData = {};
@@ -22,7 +23,7 @@ vcancyApp
       vm.success = 0;
       vm.error = 0;
       vm.totaluser = 0;
-      vm.users = [];
+      vm.companyUsers = [];
 
       // vm.companylogo = '../assets/pages/img/no_image_found.jpg';
       $rootScope.invalid = '';
@@ -70,54 +71,103 @@ vcancyApp
       });
 
 
-      var ref = firebase.database().ref("employee");
+      var ref = firebase.database().ref("users");
       ref.orderByChild("refId").equalTo(landLordID).on("child_added", function (snapshot) {
-        var userdata = snapshot.val();
-        userdata['key'] = snapshot.key;
-        vm.users.push(userdata);
+        var companyUser = snapshot.val();
+        companyUser.key = snapshot.key;
+        vm.companyUsers.push(companyUser);
       });
 
 
       vm.profileSubmit = function (ldProfilectrl) {
         var landLordID = localStorage.getItem('userID');
 
-
-        var updatedata = {};
-        //var tenantID = localStorage.getItem('userID');
-        if ($scope.ldProfilectrl.contact === undefined || $scope.ldProfilectrl.contact === "") {
-          vm.contact = '';
-          updatedata['contact'] = '';
-        } else {
-          updatedata['contact'] = $scope.ldProfilectrl.contact;
-        }
-        if ($scope.ldProfilectrl.address === undefined || $scope.ldProfilectrl.address === "") {
-          vm.address = '';
-          updatedata['address'] = '';
-        } else {
-          updatedata['address'] = $scope.ldProfilectrl.address;
-        }
-        if ($scope.ldProfilectrl.email === undefined || $scope.ldProfilectrl.email === "") {
-          vm.email = '';
-          updatedata['email'] = '';
-        } else {
-          updatedata['email'] = $scope.ldProfilectrl.email;
-        }
-        if ($scope.ldProfilectrl.companyname === undefined || $scope.ldProfilectrl.companyname === "") {
-          vm.companyname = '';
-          updatedata['companyname'] = '';
-        } else {
-          updatedata['companyname'] = $scope.ldProfilectrl.companyname;
-        }
+        // var updatedata = {};
+        // //var tenantID = localStorage.getItem('userID');
+        // if ($scope.ldProfilectrl.contact === undefined || $scope.ldProfilectrl.contact === "") {
+        //   vm.contact = '';
+        //   updatedata['contact'] = '';
+        // } else {
+        //   updatedata['contact'] = $scope.ldProfilectrl.contact;
+        // }
+        // if ($scope.ldProfilectrl.address === undefined || $scope.ldProfilectrl.address === "") {
+        //   vm.address = '';
+        //   updatedata['address'] = '';
+        // } else {
+        //   updatedata['address'] = $scope.ldProfilectrl.address;
+        // }
+        // if ($scope.ldProfilectrl.email === undefined || $scope.ldProfilectrl.email === "") {
+        //   vm.email = '';
+        //   updatedata['email'] = '';
+        // } else {
+        //   updatedata['email'] = $scope.ldProfilectrl.email;
+        // }
+        // if ($scope.ldProfilectrl.companyname === undefined || $scope.ldProfilectrl.companyname === "") {
+        //   vm.companyname = '';
+        //   updatedata['companyname'] = '';
+        // } else {
+        //   updatedata['companyname'] = $scope.ldProfilectrl.companyname;
+        // }
         //alert(JSON.stringify(updatedata)); return false;
 
-        firebase.database().ref('users/' + landLordID).update(updatedata).then(function () {
+        firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
           vm.opensuccesssweet("Profile Updated successfully!");
         }, function (error) {
 
           vm.openerrorsweet("Profile Not Updated! Try again!");
           return false;
         });
+      };
+
+      //update company image
+      $scope.uploadDetailsImages = function (event) {
+        var file = event.target.files[0];
+        AWS.config.update({
+          accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
+          secretAccessKey: '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'
+        });
+        AWS.config.region = 'us-west-2';
+
+        var bucket = new AWS.S3({
+          params: {
+            Bucket: 'vcancy-final/company-logo'
+          }
+        });
+        var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+        filename = filename.replace(/\s/g, '');
+
+        if (file.size > 3145728) {
+          alert('File size should be 3 MB or less.');
+          return false;
+        } else if (file.type.indexOf('image') === -1) {
+          alert('Only files are accepted.');
+          return false;
+        }
+
+        var params = {
+          Key: filename,
+          ContentType: file.type,
+          Body: file,
+          StorageClass: "STANDARD_IA",
+          ACL: 'public-read'
+        };
+
+        bucket.upload(params).on('httpUploadProgress', function (evt) { })
+          .send(function (err, data) {
+            if (data && data.target) {
+              vm.userData.companylogo = data.target;
+              firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+                vm.opensuccesssweet("Profile Updated successfully!");
+              }, function (error) {
+
+                vm.openerrorsweet("Profile Not Updated! Try again!");
+                return false;
+              });
+            }
+          });
       }
+
+
 
       vm.changepasswordSubmit = function (passworduser) {
 
@@ -147,6 +197,9 @@ vcancyApp
               vm.opensuccesssweet("Your password has been updated!");
               var emailData = '<p>Hello, </p><p>Your password has been changed. If you didn’t change the password then please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
               // Send Email
+              passworduser.npassword = '';
+              passworduser.password = '';
+              passworduser.ncpassword = '';
               emailSendingService.sendEmailViaNodeMailer(userEmail, 'Password changed', 'changepassword', emailData);
 
 
@@ -228,20 +281,20 @@ vcancyApp
         var firstname = newuser.firstname;
         var lastname = newuser.lastname;
         var email = newuser.email;
-        var refId = landLordID;
-        var custome = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        console.log(landLordID);
+        // var custome = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         var reguserdbObj = firebase.database();
 
         var pass = 'test@1234';
         var usertype = 2;
 
-        var userarray = {
-          firstname: firstname,
-          lastname: lastname,
-          refId: refId,
-          email: email
-        };
-
+        // var userarray = {
+        //   firstname: firstname,
+        //   lastname: lastname,
+        //   refId: refId,
+        //   email: email
+        // };
+        var reguserObj = $firebaseAuth();
         reguserObj.$createUserWithEmailAndPassword(email, pass)
           .then(function (firebaseUser) {
             var reguserdbObj = firebase.database();
@@ -249,6 +302,7 @@ vcancyApp
               firstname: firstname,
               lastname: lastname,
               usertype: usertype,
+              refId: landLordID,
               email: email,
               isadded: 1,
               iscancelshow: 1,
@@ -260,7 +314,7 @@ vcancyApp
               isshowingtime: 1,
               companyname: ""
             });
-
+            vm.opensuccesssweet("User Added successfully!");
 
             firebase.auth().signInWithEmailAndPassword(email, pass)
               .then(function (firebaseUser) {
@@ -307,20 +361,20 @@ vcancyApp
             }
           });
 
-        reguserdbObj.ref('employee/' + custome).set(userarray, function (error) {
-          if (error != null) {
+        // reguserdbObj.ref('employee/' + custome).set(userarray, function (error) {
+        //   if (error != null) {
 
-            vm.openerrorsweet("User Not added Please Try again.");
-            return false;
-          } else {
-            vm.opensuccesssweet("User Added successfully!");
-          }
-        });
+        //     vm.openerrorsweet("User Not added Please Try again.");
+        //     return false;
+        //   } else {
+        //     vm.opensuccesssweet("User Added successfully!");
+        //   }
+        // });
 
 
       }
 
-      vm.deleteusers = function (val) {
+      vm.deleteCompanyUsers = function (val) {
         swal({
           title: "Are you sure?",
           text: "Your will not be able to recover this user again!",
@@ -334,18 +388,21 @@ vcancyApp
             if (isConfirm) {
               var propertyObj = $firebaseAuth();
               var propdbObj = firebase.database();
-              propdbObj.ref('employee/' + val).remove();
-              swal({
-                title: "Success!",
-                text: "User has been deleted.",
-                type: "success",
-                confirmButtonColor: '#009999',
-                confirmButtonText: "Ok"
-              }, function (isConfirm) {
-                if (isConfirm) {
+              propdbObj.ref('users/' + val).remove()
+                .then(function () {
+                  var indexOfDeletedUser = vm.companyUsers.find(function (user) {
+                    if (user.key === val) return true;
+                  });
+                  vm.companyUsers.splice(indexOfDeletedUser, 1);
+                  swal({
+                    title: "Success!",
+                    text: "User has been deleted.",
+                    type: "success",
+                    confirmButtonColor: '#009999',
+                    confirmButtonText: "Ok"
+                  });
                   $state.reload();
-                }
-              });
+                });
             }
           });
       }

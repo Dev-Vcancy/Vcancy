@@ -51,9 +51,14 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             // });
             //swal("Your Property Created successfully!", "You clicked the button And add units!", "success")
         }
+        var landlordID = ''
+        if (localStorage.getItem('refId')) {
+            landlordID = localStorage.getItem('refId')
+        } else {
+            landlordID = localStorage.getItem('userID');
+        }
 
-
-        firebase.database().ref('users/' + localStorage.getItem('userID')).once("value", function (snap) {
+        firebase.database().ref('users/' + landlordID).once("value", function (snap) {
             vm.landlordname = snap.val().firstname + " " + snap.val().lastname;
         });
 
@@ -433,7 +438,12 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             var country = property.country;
             var postcode = property.postcode;
             var name = property.name;
-            var landlordID = localStorage.getItem('userID');
+            var landlordID = ''
+            if (localStorage.getItem('refId')) {
+                landlordID = localStorage.getItem('refId')
+            } else {
+                landlordID = localStorage.getItem('userID');
+            }
 
             if (file != undefined) {
                 var filename = moment().format('YYYYMMDDHHmmss') + file.name;
@@ -981,7 +991,12 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         // View Property
         if ($state.current.name == 'viewprop') {
             vm.loader = 1;
-            var landlordID = localStorage.getItem('userID');
+            var landlordID = ''
+            if (localStorage.getItem('refId')) {
+                landlordID = localStorage.getItem('refId')
+            } else {
+                landlordID = localStorage.getItem('userID');
+            }
             var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
                 console.log(snapshot.val())
                 $scope.$apply(function () {

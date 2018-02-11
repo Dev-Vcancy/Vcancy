@@ -9,7 +9,12 @@ vcancyApp
 		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, $uibModal) {
 
 			var vm = this;
-			var landlordID = localStorage.getItem('userID');
+			var landlordID = ''
+			if (localStorage.getItem('refId')) {
+				landlordID = localStorage.getItem('refId')
+			} else {
+				landlordID = localStorage.getItem('userID');
+			}
 			vm.propcheck = [];
 			vm.filters = {};
 			vm.apppropaddress = [];

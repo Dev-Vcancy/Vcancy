@@ -73,8 +73,14 @@
                                                             </div>
                                                             <div class="portlet-body">
                                                                 <span class="sale-num">Company Logo</span>
-                                                                <img src="{{ldProfilectrl.userData.companylogo?ldProfilectrl.userData.companylogo:'../assets/pages/img/no_image_found.jpg'}}"
+                                                                <div style="position:relative;width:38%" class="edit-div-hover">
+                                                                    <label style="position:absolute;top:50%;left:50%">
+                                                                        <i class="fa fa-pencil fa-2x"></i>
+                                                                        <input type="file" accept='image/*' file-upload  style="display:none"/>
+                                                                    </label>
+                                                                    <img src="{{ldProfilectrl.userData.companylogo?ldProfilectrl.userData.companylogo:'../assets/pages/img/no_image_found.jpg'}}"
                                                                     class="img-responsive pic-bordered" alt="">
+                                                                </div>
                                                                 <ul class="list-unstyled">
                                                                     <li>
                                                                         <span class="sale-info"> Firsname
@@ -173,11 +179,11 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-xs-12 col-sm-6">
-                                                            <div class="form-group fg-float m-t-30">
+                                                            <div ng-class="{ 'has-error' : profileForm.contactNo.$invalid && !profileForm.contactNo.$pristine }" class="form-group fg-float m-t-30" >
                                                                 <div class="fg-line fg-toggled ">
-                                                                    <input required name="contactNo" ng-model="ldProfilectrl.userData.contact" type="text" class="form-control w-100 phone" placeholder=""
+                                                                    <input required name="contactNo" ng-model="ldProfilectrl.userData.contact" ng-change="console.log($event)" type="text" class="form-control w-100 phone"
                                                                         ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
-                                                                        ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
+                                                                        >
                                                                     <label class="fg-label">Contact No.:</label>
                                                                 </div>
                                                             </div>
@@ -341,7 +347,7 @@
                                                     <div class="clearfix"></div>
                                                 </div>
                                         </section>
-                                        <section id="section5">
+                                        <section id="section5" ng-if="!ldProfilectrl.refId">
                                             <input type="radio" name="sections" id="option5">
                                             <label for="option5" class="tablbl"> Users </label>
                                             <div class="tbgt">
@@ -405,13 +411,15 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr ng-repeat="i in ldProfilectrl.users track by $index">
+                                                                <tr ng-repeat="i in ldProfilectrl.companyUsers">
                                                                     <th scope="row">{{$index + 1}}</th>
                                                                     <td>{{i.firstname}}</td>
                                                                     <td>{{i.lastname}}</td>
                                                                     <td>{{i.email}}</td>
-                                                                    <td>
-                                                                        <button class="btn btn-primary" href="javascript:void()" ng-click="ldProfilectrl.deleteusers(i.key)">Delete</button>
+                                                                    <td class="text-right">
+                                                                        <button class="btn btn-outline-danger" ng-click="ldProfilectrl.deleteCompanyUsers(i.key)">
+                                                                            <i class="fa fa-trash"></i>
+                                                                        </button>
                                                                     </td>
                                                                 </tr>
 
