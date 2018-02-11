@@ -38,40 +38,40 @@ vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootSc
 
 			}
 
-			// if (!firebase.auth().currentUser.emailVerified) {
-			// 	localStorage.setItem('RegEmail', email);
-			// 	localStorage.setItem('RegPass', password);
-			// 	$rootScope.error = "We've sent you an account confirmation email. Please check your email and Log in.";
-			// 	$rootScope.invalid = 'mail';
-			// 	authObj.$signOut();
-			// 	$rootScope.user = null;
-			// 	localStorage.clear();
-			// 	$state.go('login');
-			// } else {
-			firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function (userdata) {
-				if (userdata.val().usertype === 0) {
-					$rootScope.usertype = 0;
-					localStorage.setItem('usertype', 0);
-					console.log("Signed in as tenant:", firebaseUser.uid);
+			if (!firebase.auth().currentUser.emailVerified) {
+				localStorage.setItem('RegEmail', email);
+				localStorage.setItem('RegPass', password);
+				$rootScope.error = "We've sent you an account confirmation email. Please check your email and Log in.";
+				$rootScope.invalid = 'mail';
+				authObj.$signOut();
+				$rootScope.user = null;
+				localStorage.clear();
+				$state.go('login');
+			} else {
+				firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function (userdata) {
+					if (userdata.val().usertype === 0) {
+						$rootScope.usertype = 0;
+						localStorage.setItem('usertype', 0);
+						console.log("Signed in as tenant:", firebaseUser.uid);
 
-					if (localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1) {
-						window.location.href = localStorage.getItem('applyhiturl');
-						localStorage.setItem('applyhiturl', '');
+						if (localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1) {
+							window.location.href = localStorage.getItem('applyhiturl');
+							localStorage.setItem('applyhiturl', '');
+						} else {
+							$state.go("tenantdashboard");
+						}
 					} else {
-						$state.go("tenantdashboard");
+						console.log(userdata.val());
+						$rootScope.usertype = 1;
+						localStorage.setItem('usertype', 1);
+						console.log("Signed in as landlord:", firebaseUser.uid);
+						if (userdata.val().refId) {
+							localStorage.setItem('refId', userdata.val().refId);
+						}
+						$state.go("landlorddashboard");
 					}
-				} else {
-					console.log(userdata.val());
-					$rootScope.usertype = 1;
-					localStorage.setItem('usertype', 1);
-					console.log("Signed in as landlord:", firebaseUser.uid);
-					if(userdata.val().refId){
-						localStorage.setItem('refId', userdata.val().refId);
-					}
-					$state.go("landlorddashboard");
-				}
-			});
-			// }
+				});
+			}
 
 		}).catch(function (error) {
 			//console.log(error);
