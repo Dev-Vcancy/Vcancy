@@ -388,7 +388,9 @@ vcancyApp
             if (isConfirm) {
               var propertyObj = $firebaseAuth();
               var propdbObj = firebase.database();
-              propdbObj.ref('users/' + val).remove()
+              propdbObj.ref('users/' + val).set({
+                isDeleted: true,
+              })
                 .then(function () {
                   var indexOfDeletedUser = vm.companyUsers.find(function (user) {
                     if (user.key === val) return true;

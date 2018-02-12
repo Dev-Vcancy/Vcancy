@@ -74,18 +74,18 @@
                                                             <div class="portlet-body">
                                                                 <span class="sale-num">Company Logo</span>
                                                                 <div id="imgDiv" style="position:relative;width:38%;color:lightgray" class="edit-div-hover">
-                                                                                                                   
+
                                                                     <img src="{{ldProfilectrl.userData.companylogo?ldProfilectrl.userData.companylogo:'../assets/pages/img/no_image_found.jpg'}}"
-                                                                    class="img-responsive pic-bordered image" alt="">
+                                                                        class="img-responsive pic-bordered image" alt="">
                                                                     <div class="middle">
-                                                                            <div class="text">
-                                                                                    <label style="position:absolute;top:50%;left:50%;" >
-                                                                                    <i class="fa fa-pencil fa-2x"></i>
-                                                                                    <input type="file" accept='image/*' file-upload  style="display:none"/>
-                                                                                </label>
-                                                                            </div>
-                                                                 </div>
-                                                                </img>
+                                                                        <div class="text">
+                                                                            <label style="position:absolute;top:50%;left:50%;">
+                                                                                <i class="fa fa-pencil fa-2x"></i>
+                                                                                <input type="file" accept='image/*' file-upload style="display:none" />
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    </img>
                                                                 </div>
                                                                 <ul class="list-unstyled">
                                                                     <li>
@@ -185,11 +185,10 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-xs-12 col-sm-6">
-                                                            <div ng-class="{ 'has-error' : profileForm.contactNo.$invalid && !profileForm.contactNo.$pristine }" class="form-group fg-float m-t-30" >
+                                                            <div ng-class="{ 'has-error' : profileForm.contactNo.$invalid && !profileForm.contactNo.$pristine }" class="form-group fg-float m-t-30">
                                                                 <div class="fg-line fg-toggled ">
                                                                     <input required name="contactNo" ng-model="ldProfilectrl.userData.contact" ng-change="console.log($event)" type="text" class="form-control w-100 phone"
-                                                                        ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
-                                                                        >
+                                                                        ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }">
                                                                     <label class="fg-label">Contact No.:</label>
                                                                 </div>
                                                             </div>
@@ -197,7 +196,8 @@
                                                         <div class="col-xs-12 col-sm-12">
                                                             <div class="form-group fg-float m-t-30">
                                                                 <div class="fg-line fg-toggled ">
-                                                                    <input required name="companyname" ng-model="ldProfilectrl.userData.companyname" type="text" class="form-control w-100 phone" placeholder="">
+                                                                    <input required name="companyname" ng-model="ldProfilectrl.userData.companyname" type="text" class="form-control w-100 phone"
+                                                                        placeholder="">
                                                                     <label class="fg-label">Company Name:</label>
                                                                 </div>
                                                             </div>
@@ -281,8 +281,7 @@
                                             <div class="tbgt">
                                                 <div id="tab_3-3" class="tab-pane">
                                                     <h3 class="m-b-20 m-t-10 fw">Notification</h3>
-                                                    <form class="notification_form_block" ng-submit="ldProfilectrl.notificationSubmit()" name="notification"
-                                                        role="form" method="post">
+                                                    <form class="notification_form_block" ng-submit="ldProfilectrl.notificationSubmit()" name="notification" role="form" method="post">
 
                                                         <div class="col-xs-12 col-sm-6 form-group fg-float errorbox">
                                                             <div class="fg-line">
@@ -302,8 +301,7 @@
                                                                 <div class="mt-checkbox-list">
 
                                                                     <label class="mt-checkbox mt-checkbox-outline">
-                                                                        <input type="checkbox" ng-model="ldProfilectrl.userData.isadded" name="isadded" ng-true-value="1" ng-false-value="0"
-                                                                            ng-checked="ldProfilectrl.isadded ==   1">Whem new user is added
+                                                                        <input type="checkbox" ng-model="ldProfilectrl.userData.isadded" name="isadded" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.isadded ==   1">Whem new user is added
                                                                         <span></span>
                                                                     </label>
                                                                     <label class="mt-checkbox mt-checkbox-outline">
@@ -322,8 +320,8 @@
                                                                         <span></span>
                                                                     </label>
                                                                     <label class="mt-checkbox mt-checkbox-outline">
-                                                                        <input type="checkbox" ng-model="ldProfilectrl.userData.iscriminalreport" name="iscriminalreport" ng-true-value="1"
-                                                                            ng-false-value="0" ng-checked="ldProfilectrl.iscriminalreport ==   1"> Whem criminal record check report is generated
+                                                                        <input type="checkbox" ng-model="ldProfilectrl.userData.iscriminalreport" name="iscriminalreport" ng-true-value="1" ng-false-value="0"
+                                                                            ng-checked="ldProfilectrl.iscriminalreport ==   1"> Whem criminal record check report is generated
                                                                         <span></span>
                                                                     </label>
                                                                     <label class="mt-checkbox mt-checkbox-outline">
@@ -332,8 +330,8 @@
                                                                         <span></span>
                                                                     </label>
                                                                     <label class="mt-checkbox mt-checkbox-outline">
-                                                                        <input type="checkbox" ng-model="ldProfilectrl.userData.ispropertydelete" name="ispropertydelete" ng-true-value="1"
-                                                                            ng-false-value="0" ng-checked="ldProfilectrl.ispropertydelete ==   1">Whem property is deleted
+                                                                        <input type="checkbox" ng-model="ldProfilectrl.userData.ispropertydelete" name="ispropertydelete" ng-true-value="1" ng-false-value="0"
+                                                                            ng-checked="ldProfilectrl.ispropertydelete ==   1">Whem property is deleted
                                                                         <span></span>
                                                                     </label>
                                                                     <label class="mt-checkbox mt-checkbox-outline">

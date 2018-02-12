@@ -62,6 +62,11 @@ vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootSc
 						}
 					} else {
 						console.log(userdata.val());
+						if (userdata.val().isDeleted) {
+							$state.go('login');
+							$rootScope.error = 'User is deleted.';
+							return;
+						}
 						$rootScope.usertype = 1;
 						localStorage.setItem('usertype', 1);
 						console.log("Signed in as landlord:", firebaseUser.uid);
