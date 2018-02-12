@@ -61,7 +61,6 @@ vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootSc
 							$state.go("tenantdashboard");
 						}
 					} else {
-						console.log(userdata.val());
 						if (userdata.val().isDeleted) {
 							$state.go('login');
 							$rootScope.error = 'User is deleted.';
