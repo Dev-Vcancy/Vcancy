@@ -424,6 +424,7 @@ vcancyApp
 
 	        }
 		})
+
 		.state ('viewprop', {
 			url: '/myprop',
 			controller: 'propertyCtrl',
@@ -567,12 +568,35 @@ vcancyApp
 				                }]
 	        }
 		})
+		// .state('tenantprofile', {
+		//     url: '/tenantprofile',
+		//     controller: 'tenantProfilelCtrl',
+		//     controllerAs: 'tdProfilectrl',
+		//     templateUrl: 'views/tenantProfile.html',
+		//     resolve: { tenantauthenticate: tenantauthenticate }
+		// })
 		.state('tenantprofile', {
 		    url: '/tenantprofile',
 		    controller: 'tenantProfilelCtrl',
 		    controllerAs: 'tdProfilectrl',
 		    templateUrl: 'views/tenantProfile.html',
-		    resolve: { tenantauthenticate: tenantauthenticate }
+		    resolve: { tenantauthenticate: tenantauthenticate,
+		   			 deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                    return $ocLazyLoad.load({
+	                        name: 'vcancyApp',
+	                        files: [
+	                            '../assets/pages/css/profile-2.min.css',
+	                            '../assets/layouts/layout2/css/layout.min.css',
+	                            '../assets/layouts/layout2/css/themes/blue.min.css',
+	                            '../assets/layouts/layout2/css/custom.min.css',
+	                            '../assets/layouts/layout2/scripts/layout.min.js',
+	                            '../assets/layouts/global/scripts/quick-nav.min.js',
+	                            '../styles/cmsdev.css',
+	                        ] 
+	                    });
+	                }]
+
+	        }
 		})
 		.state ('tenantapply', {
 			url: '/applyproperty/{propId}',
