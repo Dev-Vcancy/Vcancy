@@ -27,6 +27,8 @@ vcancyApp
 					}
 				});
 			};
+	
+
 
 			vm.init = function () {
 				vm.getProperty();
@@ -58,6 +60,22 @@ vcancyApp
 
 			$scope.closeruncreditcriminalcheckModal = function () {
 				vm.runcreditcriminalcheck.close();
+			}
+
+			$scope.deleteAlert = function (){
+				swal({
+					title: "Are you sure?",
+					text: "Your will not be able to recover this imaginary file!",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonClass: "btn-danger",
+					confirmButtonText: "Yes, delete it!",
+					closeOnConfirm: false
+				  },
+				  function(){
+					swal("Deleted!", "Your imaginary file has been deleted.", "success");
+				  });
+
 			}
 			vm.tablefilterdata = function (propID = '') {
 				if (propID != '') {
