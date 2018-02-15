@@ -44,7 +44,7 @@
                       </div>
                     </div>
                     <div class="row mt-2">
-                      <div class="col-sm-6">
+                      <div class="col-sm-4">
                           <div class="form-group">
                               <div class="">
                                   <label class='m-0'>Street address:</label>
@@ -60,6 +60,19 @@
                               </div>
                             </div>
                       </div>
+                      <div class="col-sm-4">
+                        <div class="form-group">
+                          <label class='m-0'>Lease Length:</label>
+                          <select data-placeholder="Status" name="status" ng-model="selectedUnitDetail.data.leaseLength" required class="form-control original-form-control select-height"
+                                      data-placeholder="Prop status">
+                            <option value="">select</option>
+                            <option value="month-to-month">month-to-month</option>
+                            <option value="6months">6 months</option>
+                            <option value="9months">9 months</option>
+                            <option value="12months">12 months</option>
+                          </select>
+                      </div>
+                    </div>
                     </div>
                     <div class="row mt-2">
                       <div class="col-sm-4">
@@ -118,7 +131,7 @@
                           <div class="form-group">
                         
                               <label class='m-0'>Property Type:</label>
-                              <select chosen="" class="form-control original-form-control" name="proptype" ng-model="selectedUnitDetail.data.type" data-placeholder="Prop type" class="">
+                              <select chosen="" class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.type" data-placeholder="Prop type" class="">
                                       <option value="">Select</option>
                                       <option value="house">House</option>
                                       <option value="townhouse">Town House</option>
@@ -134,7 +147,7 @@
                           <div class="form-group">
                           
                               <label class='m-0'>Parking:</label>
-                              <select chosen="" class="form-control original-form-control" name="proptype" ng-model="selectedUnitDetail.data.parking" required data-placeholder="Prop type">
+                              <select chosen="" class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.parking" required data-placeholder="Prop type">
                                     <option value="">Select</option>
                                     <option value="carport">Carport</option>
                                     <option value="detachedGarage">Detached garage</option>
@@ -149,7 +162,7 @@
                           <div class="form-group">
                             
                               <label class='m-0'>Laundry:</label>
-                              <select chosen="" class="form-control original-form-control" name="proptype" ng-model="selectedUnitDetail.data.laundry" required data-placeholder="Prop type">
+                              <select chosen="" class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.laundry" required data-placeholder="Prop type">
                                   <option value="">Select</option>
                                   <option value="W/dInUnit">W/d in unit</option>
                                   <option value="LaundryOnSite">Laundry on site</option>
@@ -230,7 +243,7 @@
                       <div class="col-sm-4">
                           <div class="form-group">
                               <label class='m-0'>Status:</label>
-                              <select data-placeholder="Status" name="status" ng-model="selectedUnitDetail.data.status" required class="form-control original-form-control"
+                              <select data-placeholder="Status" name="status" ng-model="selectedUnitDetail.data.status" required class="form-control original-form-control select-height"
                                           data-placeholder="Prop status">
                                 <option value="">Status</option>
                                 <option value="rented">Rented</option>
@@ -653,6 +666,7 @@
 </section>
 <style>
   .modal-dialog.modal-lg {
-    margin-top: 135px
+    margin-top: 135px;
+    min-width: 1100px;
   }
 </style>
