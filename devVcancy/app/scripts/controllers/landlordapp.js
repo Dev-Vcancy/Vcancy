@@ -43,10 +43,22 @@ vcancyApp
 				});
 			};
 
+			vm.openruncreditcriminalcheck = function () {
+				vm.runcreditcriminalcheck = $uibModal.open({
+					templateUrl: 'runcreditcriminalcheck.html',
+					backdrop: 'static',
+					size: 'lg',
+					scope: $scope
+				});
+			};
+
 			$scope.closePrescreeningModal = function () {
 				vm.prescremingQuestion.close();
 			}
 
+			$scope.closeruncreditcriminalcheckModal = function () {
+				vm.runcreditcriminalcheck.close();
+			}
 			vm.tablefilterdata = function (propID = '') {
 				if (propID != '') {
 					vm.propcheck[propID] = !vm.propcheck[propID];

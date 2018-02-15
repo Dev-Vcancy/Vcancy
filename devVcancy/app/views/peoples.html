@@ -62,7 +62,7 @@
 						</div>
 						<div class="row  mb-2">
 							<div class="col text-right">
-								<button class="btn btn-sm btn-primary">Run credit and criminal check</button>
+								<button class="btn btn-sm btn-primary" ng-click="lappctrl.openruncreditcriminalcheck()">Run credit and criminal check</button>
 							</div>
 						</div>
 					</div>
@@ -163,7 +163,55 @@
 				<button class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
             </div>
         </div>
-      </script>
+	  </script>
+	  
+	  <script type="text/ng-template" id="runcreditcriminalcheck.html">
+		<div class="profile_model_popup">
+		<div class="modal-header padding-20" >
+			<h3 class="modal-title">
+					Request Credit and Criminal Check Reports
+			</h3>
+			<button type="button" class="close margin-top-15" data-dismiss="dialog" ng-click="closeruncreditcriminalcheckModal()" style='margin-top:8px !important'>
+			  <span aria-hidden="true">&times;</span>
+			  <span class="sr-only">Close</span>
+			</button>
+		</div>
+		<div class="col-xs-12 modal-body">
+		<div class="col-xs-12 col-sm-6">
+				<select class="m-input m-input--square" name="more" ng-model="lappctrl.filters.property">
+						<option value="">Select Tenant</option>
+
+
+				</select>
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div class="checkbox-div">
+				<label>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+					/> Credit Report (Transunion) $15/Report
+				</label>
+			</div>
+			<div class="checkbox-div">
+				<label>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+					/> Criminal Record Check $35/Report
+				</label>
+			</div>
+			<div class="checkbox-div">
+				<label>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+					/> Both of the above $45/Report
+				</label>
+			</div>
+		</div>
+		</div>
+		<div class="modal-footer mofo">
+				
+			<button class="btn btn-success"><i class="fa fa-floppy-o"></i> Submit</button>
+				
+		</div>
+	</div>
+  </script>
 	</section>
 </section>
 

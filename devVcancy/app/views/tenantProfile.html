@@ -54,7 +54,7 @@
                                             <a href ng-click="tab = 1" data-toggle="tab" aria-expanded="true">Overview</a>
                                         </li>
                                         <li role="presentation" ng-class="tab==2?'active':''">
-                                            <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true">Account</a>
+                                            <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true">Profile</a>
                                         </li>
                                     </ul>
     
@@ -68,11 +68,11 @@
                                                             <h1 class="font-green sbold uppercase">{{tdProfilectrl.userData.companyname}} </h1>
                                                             <div class="portlet sale-summary">
                                                                 <div class="portlet-title">
-                                                                    <div class="caption font-red sbold"> Profile Details</div>
+                                                                    <div class="caption font-red sbold"> User Details</div>
     
                                                                 </div>
                                                                 <div class="portlet-body">
-                                                                    <span class="sale-num">Company Logo</span>
+                                                                    <!-- <span class="sale-num">Company Logo</span>
                                                                     <div id="imgDiv" style="position:relative;width:38%;color:lightgray" class="edit-div-hover">
     
                                                                         <img src="{{tdProfilectrl.userData.companylogo?tdProfilectrl.userData.companylogo:'../assets/pages/img/no_image_found.jpg'}}"
@@ -86,7 +86,7 @@
                                                                             </div>
                                                                         </div>
                                                                         </img>
-                                                                    </div>
+                                                                    </div> -->
                                                                     <ul class="list-unstyled">
                                                                         <li>
                                                                             <span class="sale-info"> Firsname
@@ -154,7 +154,7 @@
                                                                 <div ng-class="{ 'has-error' : profileForm.firstName.$invalid && !profileForm.firstName.$pristine }" class="form-group fg-float m-t-30">
                                                                     <div class="fg-line fg-toggled ">
                                                                         <input required name="firstName" type="text" value="" ng-model="tdProfilectrl.userData.firstname" class="input-sm form-control w-100 fg-input"
-                                                                            placeholder="" readonly="true">
+                                                                            placeholder="">
                                                                         <label class="fg-label">First Name
                                                                             <span class="mandatory">*</span>:</label>
                                                                     </div>
@@ -164,7 +164,7 @@
                                                                 <div ng-class="{ 'has-error' : profileForm.lastName.$invalid && !profileForm.lastName.$pristine }" class="form-group fg-float m-t-30">
                                                                     <div class="fg-line fg-toggled ">
                                                                         <input required name="lastName" ng-model="tdProfilectrl.userData.lastname" type="text" value="" class="input-sm form-control w-100 fg-input"
-                                                                            placeholder="" readonly="true">
+                                                                            placeholder="">
                                                                         <label class="fg-label">Last Name
                                                                             <span class="mandatory">*</span>:</label>
                                                                     </div>
@@ -477,64 +477,7 @@
 </script>
 <script>
     // $(".phone").mask("999-999-9999");
-</script> -->
-
-<!-- /.modal -->
-<div id="responsive" class="modal fade" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Responsive & Scrollable</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4>Some Input</h4>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                            </div>
-                            <div class="col-md-6">
-                                <h4>Some More Input</h4>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                                <p>
-                                    <input type="text" class="col-md-12 form-control"> </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">Close</button>
-                    <button type="button" class="btn green">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+</script> -->    
     
     <script src="../assets/pages/scripts/ui-modals.min.js" type="text/javascript"></script>
     <script type="text/javascript">

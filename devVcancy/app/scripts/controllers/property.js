@@ -1976,6 +1976,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 controller: 'propertyCtrl',
                 backdrop: 'static',
                 size: 'lg',
+                windowClass:'detailmodalcss',
                 scope: $scope
             });
         };

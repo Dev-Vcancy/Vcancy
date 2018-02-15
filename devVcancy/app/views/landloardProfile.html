@@ -49,6 +49,7 @@
 
                             <div role="tabpanel">
                                 <!-- Nav tabs -->
+                                
                                 <ul class="nav nav-tabs" role="tablist" ng-init="tab = 1">
                                     <li role="presentation" ng-class="tab==1?'active':''">
                                         <a href ng-click="tab = 1" data-toggle="tab" aria-expanded="true">Overview</a>
@@ -57,6 +58,10 @@
                                         <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true">Account</a>
                                     </li>
                                 </ul>
+
+                                <span style="position: absolute;top: 13px;right: 20px;">
+                                        <button type="submit" class="btn btn-primary btn-md m-t-10 m-l-10 waves-effect">Billing</button>
+                                </span>
 
                                 <!-- Tab panes -->
                                 <div class="tab-content">
@@ -434,6 +439,60 @@
                                                 </div>
                                                 <div class="clearfix"></div>
                                         </section>
+
+                                        <section id="section6" ng-if="!ldProfilectrl.refId">
+                                                <input type="radio" name="sections" id="option6">
+                                            <label for="option6" class="tablbl"> Craigslist</label>
+                                            <div class="tbgt">
+
+                                                    <div id="tab_3-3" class="tab-pane">
+                                                            <h3 class="m-b-20 m-t-10 fw">Craigslist</h3>
+                                                        <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)"
+                                                        role="form" unsaved-warning-form>
+        
+                                                            
+                                                                    <div class="fg-line">
+                                                                        <div class='regmsgvalidate' ng-if="$root.error != ''">
+                                                                            <div class="alert alert-danger alert-dismissable fade in"> {{$root.error}}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class='regmsgvalidate' ng-if="$root.success != ''">
+                                                                            <div class="alert alert-success alert-dismissable fade in"> {{$root.success}}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="clearfix"></div>
+                                                                
+                                                                <div class="clearfix"></div>
+                                                                <div class="col-xs-12 pwd-wrap p-b-30">
+
+                                                                    <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                                                        <div class="fg-line">
+                                                                            <input required type="text" ng-model="ldProfilectrl.userData.craigslistUserID" class="form-control w-100 phone" placeholder="" required>
+                                                                            <label class="fg-label">UserID
+                                                                                <span class="mandatory">*</span>:</label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                                                            <div class="fg-line">
+                                                                                <input required type="password" class="form-control w-100 phone" placeholder="" ng-model="ldProfilectrl.userData.craigslistpassword"
+                                                                                    required>
+                                                                                <label class="fg-label">Password
+                                                                                    <span class="mandatory">*</span>:</label>
+                                                                            </div>
+                                                                        </div>
+                                                                          <button type="submit" class="btn btn-primary pull-right btn-md m-t-10 waves-effect">Save</button>       
+                                                                </div>
+        
+                                                            </form>
+                                                        
+        
+                                                        </div>
+
+                                    
+                                        </section>
+
                                         </div>
 
 
