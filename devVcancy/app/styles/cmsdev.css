@@ -10,7 +10,7 @@ span.IN-widget span{width:100%!important;height:41px!important;}
 a#li_ui_li_gen_1515497646428_0-link{width:100%!important;}
 span.IN-widget span a{width:100%!important;height:41px!important;}
 span.IN-widget span a #li_ui_li_gen_1515498079756_0 #li_ui_li_gen_1515498079756_0-title{height:33px!important;}
-.login .linkedin a{position:relative;top:-42px;z-index:1;display:block;}
+.login .linkedin a{position:relative;/*top:-42px;z-index:1;*/display:block;}
 .login .custom-login .btn:hover{color:#fff!important;}
 #sidebar.toggled{width:280px;}
 .property_view .white_block{box-shadow:0 5px 10px #d3d3d3;}
