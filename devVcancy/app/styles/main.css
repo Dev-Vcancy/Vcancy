@@ -43,6 +43,11 @@ body {
   text-align: center;
 }
 
+.select-height{
+  padding:5px !important;
+  height:34px !important;
+}
+
 .edit-div-hover:hover .image {
   opacity: 0.3;
 }
