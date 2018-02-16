@@ -407,8 +407,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.submitProp = function (property) {
 
             AWS.config.update({
-                accessKeyId: 'AKIAI6FJLQDDJXI4LORA',
-                secretAccessKey: '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'
+                accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
+                secretAccessKey: '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'
             });
             AWS.config.region = 'us-west-2';
 
@@ -1976,7 +1976,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 controller: 'propertyCtrl',
                 backdrop: 'static',
                 size: 'lg',
-                windowClass:'detailmodalcss',
+                windowClass: 'detailmodalcss',
                 scope: $scope
             });
         };

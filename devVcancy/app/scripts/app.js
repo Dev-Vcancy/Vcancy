@@ -42,12 +42,12 @@ vcancyApp.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
         // global configs go here
     });
 }]);
-/*
+
 vcancyApp.config(function(socialProvider){
 //socialProvider.setGoogleKey("YOUR GOOGLE CLIENT ID");
   socialProvider.setLinkedInKey("78blzjlmkk6jbl");
   //socialProvider.setFbKey({appId: "YOUR FACEBOOK APP ID", apiVersion: "API VERSION"});
-}); */
+}); 
 
 vcancyApp.service('emailSendingService',function($http,config){
 	this.sendEmailViaNodeMailer = function(to,subject,mode,emailData){
