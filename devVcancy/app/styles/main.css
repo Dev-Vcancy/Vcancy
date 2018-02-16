@@ -11,6 +11,9 @@
 body {
   padding: 0;
 }
+.m-width{
+  width: 100%;
+}
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
@@ -25,6 +28,9 @@ body {
 .checkbox-position {
   position: absolute;
   left:-3px;
+ }
+ .check{
+   padding: 3px;
  }
  .checkbox-div{
    display: block;
