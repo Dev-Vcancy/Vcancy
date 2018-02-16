@@ -59,9 +59,9 @@
                                     </li>
                                 </ul>
 
-                                <span style="position: absolute;top: 13px;right: 20px;">
+                                <!-- <span style="position: absolute;top: 13px;right: 20px;">
                                         <button type="submit" class="btn btn-primary btn-md m-t-10 m-l-10 waves-effect">Billing</button>
-                                </span>
+                                </span> -->
 
                                 <!-- Tab panes -->
                                 <div class="tab-content">
@@ -493,11 +493,25 @@
                                     
                                         </section>
 
+                                            <section id="section7" ng-if="!ldProfilectrl.refId">
+                                                <input type="radio" name="sections" id="option7">
+                                            <label for="option7" class="tablbl"> Billing</label>
+                                            <div class="tbgt">
+
+                                                    <div id="tab_3-3" class="tab-pane">
+                                                            <h3 class="m-b-20 m-t-10 fw">Billing</h3>
+                                                        <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)"
+                                                        role="form" unsaved-warning-form>
+        
+                                                            
+        
+                                                        </form>
+                                                
+
+                                
+                                        </section>
+                                        
                                         </div>
-
-
-
-
                                         </div>
                                         </div>
                                     </div>

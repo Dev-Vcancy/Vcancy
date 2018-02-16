@@ -40,7 +40,7 @@ vcancyApp
 				vm.prescremingQuestion = $uibModal.open({
 					templateUrl: 'prescremingquestions.html',
 					backdrop: 'static',
-					size: 'md',
+					size: 'lg',
 					scope: $scope
 				});
 			};

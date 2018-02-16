@@ -284,8 +284,14 @@ vcancyApp
         console.log(landLordID);
         // var custome = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         var reguserdbObj = firebase.database();
-
-        var pass = 'test@1234';
+        var random = parseInt(Math.random() * 10000);
+        var characterArray = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        var pass = '';
+        for (var i = 0; i < 6; i++) {
+          var num = Math.floor((Math.random() * 62) + 1);
+          pass += characterArray[num];
+        }
+        //console.log(pass);
         var usertype = 2;
 
         // var userarray = {
