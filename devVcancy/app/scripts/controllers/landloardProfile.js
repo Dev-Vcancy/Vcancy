@@ -126,7 +126,7 @@ vcancyApp
           accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
           secretAccessKey: '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'
         });
-        AWS.config.region = 'us-west-2';
+        AWS.config.region = 'ca-central-1';
 
         var bucket = new AWS.S3({
           params: {

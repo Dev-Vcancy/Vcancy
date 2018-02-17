@@ -1579,14 +1579,14 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             var fileUploadDefer = $q.defer();
             if (file) {
                 AWS.config.update({
-                    accessKeyId: 'AKIAI6FJLQDDJXI4LORA',
-                    secretAccessKey: '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'
+                    accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
+                    secretAccessKey: '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'
                 });
-                AWS.config.region = 'us-west-2';
+                AWS.config.region = 'ca-central-1';
 
                 var bucket = new AWS.S3({
                     params: {
-                        Bucket: 'sagar-vcancy-test/property-images'
+                        Bucket: 'vcancy-final/property-images'
                     }
                 });
                 var filename = moment().format('YYYYMMDDHHmmss') + file.name;
