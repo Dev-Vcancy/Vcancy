@@ -28,7 +28,8 @@ var vcancyApp = angular
 	'ngFileUpload',
 	'ui.jq',
 	'ui.bootstrap',
-	'socialLogin'
+	'socialLogin',
+	'angularjs-dropdown-multiselect'
   ]); 
  
 	

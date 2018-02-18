@@ -603,14 +603,14 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
   var swal = window.swal;
   var vm = this;
   AWS.config.update({
-    accessKeyId: 'AKIAI6FJLQDDJXI4LORA',
-    secretAccessKey: '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'
+    accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
+    secretAccessKey: '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'
   });
-  AWS.config.region = 'us-west-2';
+  AWS.config.region = 'ca-central-1';
 
   $scope.ok = function () {
 
-    var bucket = new AWS.S3({ params: { Bucket: 'sagar-vcancy-test/profile-images' } });
+    var bucket = new AWS.S3({ params: { Bucket: 'vacancy-final/profile-images' } });
     var fileChooser = document.getElementById('file321');
     var file = fileChooser.files[0];
     var filename = moment().format('YYYYMMDDHHmmss') + file.name;

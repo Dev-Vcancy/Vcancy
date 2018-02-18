@@ -3,6 +3,8 @@
   <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
   <section class="new_dashbord" id="content">
     <div class="container">
+      
+    
       <div class="page-content-wrapper">
         <div class="page-content">
           <h1 class="page-title"> {{propctrl.mode}} a Property </h1>
@@ -283,7 +285,19 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class='m-0'>Amenities:</label>
-                                <textarea ng-model="selectedUnitDetail.data.aminities" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing" />
+                                <textarea ng-model="selectedUnitDetail.data.aminities" rows="5"  class="form-control original-form-control" 
+                                
+ placeholder="Rooms and Interior
+      .Hardwood floors
+      .Carpet floors
+      .Family room
+  Kitchen and Bath
+      .Dishwasher
+      .Refrigerator
+      .Stove / oven
+      .Microwave
+      .Garbage disposal
+      .Tile floors" />
                             </div>
                         </div>
                       </div>
@@ -372,6 +386,13 @@
         </div>
     </script>
           <div class="profile">
+              <div class="loader" ng-if="loader">
+                  <div class="preloader pl-xl">
+                      <svg class="pl-circular" viewBox="25 25 50 50">
+                          <circle class="plc-path" cx="50" cy="50" r="20"/>
+                      </svg>
+                  </div>
+              </div>
             <div class="tabbable-line tabbable-full-width">
               <div role="tabpanel">
                 <!-- Nav tabs -->
@@ -405,7 +426,7 @@
                                 <div class="fg-line">
                                   <input required ng-model="propctrl.prop.name" name="name" required="true" type="text" class="form-control w-100 phone" id=""
                                     placeholder="">
-                                  <label class="fg-label" for="text">Property Name:</label>
+                                  <label class="fg-label" for="text">Property Name:{{propctrl.loader}}</label>
                                 </div>
                               </div>
                               <div class="clearfix"></div>
