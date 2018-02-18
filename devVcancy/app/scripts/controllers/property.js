@@ -31,6 +31,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.noofunits = 0;
         vm.checkedRow = {};
         $scope.imageCount = 0;
+        $scope.loader = 0;
 
         vm.table = 1;
         vm.csv = 0;
@@ -990,7 +991,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
         // View Property
         if ($state.current.name == 'viewprop') {
-            vm.loader = 1;
+            $scope.loader = 1;
             var landlordID = ''
             if (localStorage.getItem('refId')) {
                 landlordID = localStorage.getItem('refId')
@@ -998,7 +999,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 landlordID = localStorage.getItem('userID');
             }
             var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-                console.log(snapshot.val())
                 $scope.$apply(function () {
                     vm.success = 0;
                     if (snapshot.val()) {
@@ -1009,7 +1009,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         vm.propsavail = 0;
                         vm.propsuccess = localStorage.getItem('propertysuccessmsg');
                     }
-                    vm.loader = 0;
+                    $scope.loader = 0;
                     // console.log($rootScope.$previousState.name);
                     if (($rootScope.$previousState.name == "editprop" || $rootScope.$previousState.name == "addprop") && vm.propsuccess != '') {
                         vm.success = 1;
@@ -1080,10 +1080,12 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             vm.mode = 'Edit';
             vm.submitaction = "Update";
             vm.otheraction = "Delete";
+            $scope.loader = 1;
             var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function (snapshot) {
 
                 var propData = snapshot.val();
                 console.log(propData);
+
                 vm.timeSlot = [];
                 $scope.$apply(function () {
                     vm.prop = vm.units = {
@@ -1116,6 +1118,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         timeinvalid: [0],
                         timeoverlapinvalid: [0]
                     }
+                    $scope.loader = 0;
                     /*   angular.forEach(propData.date, function(value, key) {
                            vm.timeSlot.push({
                                date: new Date(value)
@@ -1575,14 +1578,26 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 })
         }
 
+        $scope.copyUnitDetails = function (from, to) {
+            var datatoCopy = vm.prop.unitlists.find(function (unit) {
+                return unit.unit == from;
+            })
+            for (var i in datatoCopy) {
+                if(i != 'unit')
+                {
+                    $scope.selectedUnitDetail.data[i]  = datatoCopy[i]
+                }
+            }
+        }
+
         vm.singleFileUpload = function (file) {
             var fileUploadDefer = $q.defer();
             if (file) {
                 AWS.config.update({
                     accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
                     secretAccessKey: '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'
-                });
-                AWS.config.region = 'ca-central-1';
+                  });
+                  AWS.config.region = 'ca-central-1';
 
                 var bucket = new AWS.S3({
                     params: {
@@ -2055,7 +2070,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 ]);
 
 vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$uibModal', '$uibModalInstance', '$location', 'items1', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $uibModal, $uibModalInstance, $location, items1) {
-    console.log(items1);
     var vm = this;
     vm.prop = items1;
     $scope.items1 = items1;
@@ -2068,7 +2082,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
 
     $scope.submit = function () {
 
-        vm.isFileUploading = true;
+        $scope.loader = 1;
         var propID = $scope.items1.propID;
         var unitlists = $scope.items1.unitlists;
         var totalunits = $scope.items1.totalunits;
@@ -2201,7 +2215,6 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                     vm.prop.unitlists = vm.prop.unitlists.concat(unitsImported);
                     vm.prop.totalunits = vm.prop.unitlists.length;
                     vm.prop.noofunits = vm.prop.unitlists.length;
-                    vm.isFileUploading = false;
                     setTimeout(function () {
                         $uibModalInstance.close();
                         swal({
@@ -2209,6 +2222,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                             text: 'File Imported successfully. You need to save units or changes will be lost',
                             type: 'success'
                         })
+                        $scope.loader = 0;
                     }, 1000);
                 }
 

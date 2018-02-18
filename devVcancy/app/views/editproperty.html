@@ -3,6 +3,8 @@
   <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
   <section class="new_dashbord" id="content">
     <div class="container">
+      
+    
       <div class="page-content-wrapper">
         <div class="page-content">
           <h1 class="page-title"> {{propctrl.mode}} a Property </h1>
@@ -18,6 +20,14 @@
             <div class="modal-body prptyadd">
                  <form  role="form" enctype="multipart/form-data" method="post" >
                   <div class="row">
+                    
+                    <div class="col">
+                      <label> Select unit to copy details from</label>
+                      <select ng-model="copyof" ng-change="copyUnitDetails(copyof,selectedUnitDetail.data.unit)">
+                        <option value=''>units</option>
+                        <option ng-value="unit.unit" ng-if="unit.unit != selectedUnitDetail.data.unit" ng-repeat="unit in propctrl.prop.unitlists">{{unit.unit}}</option>
+                      </select>
+                    </div>
                     <div class="col text-right">
                       <button class="btn btn-primary" ng-click="openImageModal()" ng-if="selectedUnitDetail.data.images.length>0"> View images({{selectedUnitDetail.data.images?selectedUnitDetail.data.images.length:0}}) </button>
                       <label class="btn btn-info">
@@ -283,7 +293,19 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class='m-0'>Amenities:</label>
-                                <textarea ng-model="selectedUnitDetail.data.aminities" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing" />
+                                <textarea ng-model="selectedUnitDetail.data.aminities" rows="5"  class="form-control original-form-control" 
+                                
+ placeholder="Rooms and Interior
+      .Hardwood floors
+      .Carpet floors
+      .Family room
+  Kitchen and Bath
+      .Dishwasher
+      .Refrigerator
+      .Stove / oven
+      .Microwave
+      .Garbage disposal
+      .Tile floors" />
                             </div>
                         </div>
                       </div>
@@ -372,6 +394,13 @@
         </div>
     </script>
           <div class="profile">
+              <div class="loader" ng-if="loader">
+                  <div class="preloader pl-xl">
+                      <svg class="pl-circular" viewBox="25 25 50 50">
+                          <circle class="plc-path" cx="50" cy="50" r="20"/>
+                      </svg>
+                  </div>
+              </div>
             <div class="tabbable-line tabbable-full-width">
               <div role="tabpanel">
                 <!-- Nav tabs -->
@@ -389,7 +418,7 @@
                     <div class="">
                       <div class="">
                         <form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" role="form" class="property" enctype="multipart/form-data"
-                          novalidate>
+                          novalidate  unsaved-warning-form>
                           <input type="hidden" name="landlordID" ng-model="propctrl.prop.landlordID" class="form-control">
                           <input type="hidden" name="mode" ng-model="propctrl.prop.mode" class="form-control">
                           <input type="hidden" name="propID" ng-model="propctrl.prop.propID" class="form-control">
@@ -405,7 +434,7 @@
                                 <div class="fg-line">
                                   <input required ng-model="propctrl.prop.name" name="name" required="true" type="text" class="form-control w-100 phone" id=""
                                     placeholder="">
-                                  <label class="fg-label" for="text">Property Name:</label>
+                                  <label class="fg-label" for="text">Property Name:{{propctrl.loader}}</label>
                                 </div>
                               </div>
                               <div class="clearfix"></div>
@@ -521,7 +550,7 @@
                   <div role="tabpanel" class="tab-pane" id="tab" ng-show="tab === 2">
                     <div class="">
                       <div class="">
-                        <form name="addunitsForm" ng-submit="propctrl.submiteditunits(propctrl.prop.unitlists,propctrl.prop)" role="form" class="addunitsForm">
+                        <form name="addunitsForm" ng-submit="propctrl.submiteditunits(propctrl.prop.unitlists,propctrl.prop)" role="form" class="addunitsForm" unsaved-warning-form>
 
                           <div class="clearfix"></div>
                           <div class="row">
@@ -584,7 +613,7 @@
                                         <input type="checkbox" ng-model="propctrl.selectedAll" ng-click="propctrl.checkAll()" />
                                       </td>
                                       <th>Units #</th>
-                                      <th>Address</th>
+                                      <!-- <th>Address</th> -->
                                       <th>SQ.ft</th>
                                       <th>Rent</th>
                                       <th>Bed</th>
@@ -603,9 +632,9 @@
                                       <td class="table-td">
                                         <input type="text" name="unit" ng-model="unit.unit" class="" min="0" step="0.01" required="true">
                                       </td>
-                                      <td>
+                                      <!-- <td>
                                         <input type="text" name="address" ng-value="propctrl.prop.address" disabled>
-                                      </td>
+                                      </td> -->
                                       <td class="table-td">
                                         <input type="text" name="sqft" ng-model="unit.sqft" min="0" step="0.01" required="true">
                                       </td>
