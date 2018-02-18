@@ -1085,7 +1085,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                 var propData = snapshot.val();
                 console.log(propData);
-                
+
                 vm.timeSlot = [];
                 $scope.$apply(function () {
                     vm.prop = vm.units = {
@@ -1576,6 +1576,18 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         });
                     }, 100)
                 })
+        }
+
+        $scope.copyUnitDetails = function (from, to) {
+            var datatoCopy = vm.prop.unitlists.find(function (unit) {
+                return unit.unit == from;
+            })
+            for (var i in datatoCopy) {
+                if(i != 'unit')
+                {
+                    $scope.selectedUnitDetail.data[i]  = datatoCopy[i]
+                }
+            }
         }
 
         vm.singleFileUpload = function (file) {
