@@ -408,8 +408,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.submitProp = function (property) {
 
             AWS.config.update({
-                accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
-                secretAccessKey: '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'
+                accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+                secretAccessKey: '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'
             });
             AWS.config.region = 'ca-central-1';
 
@@ -1594,8 +1594,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             var fileUploadDefer = $q.defer();
             if (file) {
                 AWS.config.update({
-                    accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
-                    secretAccessKey: '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'
+                    accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+                    secretAccessKey: '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'
                   });
                   AWS.config.region = 'ca-central-1';
 
