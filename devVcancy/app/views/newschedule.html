@@ -1,0 +1,39 @@
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header>
+</header>
+
+<section id="main">
+  <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+  <section id="content">
+
+    <div class="container">
+      <div class="block-header text-center">
+        <h1>Schedule & Listings</h1>
+      </div>
+      <div class="loader" ng-if="newschedulectrl.loader">
+        <div class="preloader pl-xl">
+          <svg class="pl-circular" viewBox="25 25 50 50">
+            <circle class="plc-path" cx="50" cy="50" r="20" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+      <div class="card white-block card-body col-sm-4">
+        <div class="text-center">Add Availability</div>
+        <div class="row">
+          
+        </div>
+      </div>
+
+      <!-- Calendar -->
+      <div id="calendar-widget" ng-if="newschedulectrl.showCal" data-full-calendar calendardata="newschedulectrl.calendardata"></div>
+    </div>
+  </section>
+
+</section>
+
+<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+<script type="text/javascript">
+  Waves.init();
+  Waves.attach('.btn');
+</script>

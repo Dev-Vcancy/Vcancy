@@ -498,6 +498,14 @@ vcancyApp
 			resolve: { authenticate: authenticate }
 		})
 		
+		.state ('nnewschedule', {
+			url: '/newschedule',
+			controller: 'newscheduleCtrl',
+			controllerAs: 'newschedulectrl',
+			templateUrl: 'views/newschedule.html',
+			resolve: { authenticate: authenticate }
+		})
+		
 		.state ('app', {
 			url: '/app',
 			controller: 'landlordappCtrl',

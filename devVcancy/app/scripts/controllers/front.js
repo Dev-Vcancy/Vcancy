@@ -53,7 +53,7 @@ vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootSc
 						$rootScope.usertype = 0;
 						localStorage.setItem('usertype', 0);
 						console.log("Signed in as tenant:", firebaseUser.uid);
-
+						localStorage.setItem('userData', JSON.stringify(userdata.val()));
 						if (localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1) {
 							window.location.href = localStorage.getItem('applyhiturl');
 							localStorage.setItem('applyhiturl', '');
@@ -68,6 +68,7 @@ vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootSc
 						}
 						$rootScope.usertype = 1;
 						localStorage.setItem('usertype', 1);
+						localStorage.setItem('userData', JSON.stringify(userdata.val()));			
 						console.log("Signed in as landlord:", firebaseUser.uid);
 						if (userdata.val().refId) {
 							localStorage.setItem('refId', userdata.val().refId);
