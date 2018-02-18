@@ -33,7 +33,6 @@ vcancyApp
 
         $scope.$apply(function () {
           vm.userData = userdata.val();
-          console.log(vm.userData)
           // if (userdata.val() !== null) {
 
           //   if(userdata.val().email != ''){
@@ -154,7 +153,9 @@ vcancyApp
 
         bucket.upload(params).on('httpUploadProgress', function (evt) { })
           .send(function (err, data) {
+            console.log(data);
             if (data && data.target) {
+
               vm.userData.companylogo = data.target;
               firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
                 vm.opensuccesssweet("Profile Updated successfully!");
