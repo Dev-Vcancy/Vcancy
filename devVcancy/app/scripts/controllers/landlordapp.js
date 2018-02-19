@@ -55,6 +55,15 @@ vcancyApp
 					scope: $scope
 				});
 			};
+			
+			vm.opencustomrentalapp = function () {
+				vm.customrentalapp = $uibModal.open({
+					templateUrl: 'customrentalapp.html',
+					backdrop: 'static',
+					size: 'lg',
+					scope: $scope
+				});
+			};
 
 			vm.openruncreditcriminalcheck = function () {
 				vm.runcreditcriminalcheck = $uibModal.open({
@@ -67,6 +76,10 @@ vcancyApp
 
 			$scope.closePrescreeningModal = function () {
 				vm.prescremingQuestion.close();
+			}
+
+			$scope.closecustomrentalappModal = function () {
+				vm.customrentalapp.close();
 			}
 
 			$scope.closeruncreditcriminalcheckModal = function () {

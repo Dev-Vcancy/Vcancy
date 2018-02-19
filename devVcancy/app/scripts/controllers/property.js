@@ -408,8 +408,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.submitProp = function (property) {
 
             AWS.config.update({
-                accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
-                secretAccessKey: '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'
+                accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+                secretAccessKey: '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'
             });
             AWS.config.region = 'ca-central-1';
 
@@ -1583,9 +1583,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 return unit.unit == from;
             })
             for (var i in datatoCopy) {
-                if(i != 'unit')
-                {
-                    $scope.selectedUnitDetail.data[i]  = datatoCopy[i]
+                if (i != 'unit') {
+                    $scope.selectedUnitDetail.data[i] = datatoCopy[i]
                 }
             }
         }
@@ -1594,10 +1593,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             var fileUploadDefer = $q.defer();
             if (file) {
                 AWS.config.update({
-                    accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
-                    secretAccessKey: '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'
-                  });
-                  AWS.config.region = 'ca-central-1';
+                    accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+                    secretAccessKey: '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'
+                });
+                AWS.config.region = 'ca-central-1';
 
                 var bucket = new AWS.S3({
                     params: {
@@ -1726,7 +1725,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
 
         vm.submiteditunits = function (unitlists, prop, isDeleted) {
-
             let unitIds = [];
             unitlists.forEach((unit) => {
                 unitIds.push(unit.unit);
@@ -1753,6 +1751,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         type: "success",
                     });
                 } else {
+                    vm.prop.noofunits = unitlists.length;
+                    vm.prop.totalunits = unitlists.length;
                     swal({
                         title: "Success!",
                         text: "Unit saved successfully.",
