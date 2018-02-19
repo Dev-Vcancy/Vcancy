@@ -202,46 +202,265 @@
 	
 			<div class="checkbox-div mb-3">
 				<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
-				<select class="m-input m-input--square m-width" name="more">
-					<option value=""> Primary Applicant Details</option>
-				</select>
+				<uib-accordion close-others="oneAtATime">
+					<div uib-accordion-group class="panel-default" heading="Primary Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+						<div class="row mt-3">
+							<div class="col-sm-3">
+								<input type='text' placeholder="firstname" class="form-control original-form-control" />
+							</div>
+							<div class="col-sm-3">
+									<input type='text' placeholder="lastname" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-4">
+									<div class="row">
+										<div class="col-sm-6" style="margin:auto">
+												Date of Birth
+										</div>
+										<div class="col-sm-6" >
+											<input type='date' class="form-control original-form-control" style="width:150px"/>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="row mt-3">
+							<div class="col-sm-3">
+								<input type='text' placeholder="telephone" class="form-control original-form-control" />
+							</div>
+							<div class="col-sm-3">
+									<input type='text' placeholder="home" class="form-control original-form-control"/>
+							</div>
+							<div class="col-sm-4">
+									<input type='text' placeholder="email" class="form-control original-form-control"/>
+							</div>
+						</div>
+						<div class="row mt-3">
+							<div class="col-sm-5">	
+									<div class="row">
+										<div class="col-sm-4" style="margin:auto">
+												Mairtal Status:
+										</div>
+										<div class="col-sm-8">
+											<input type="radio" /> Single
+											<input type="radio" /> Married
+										</div>
+									</div>
+							</div>
+							<div class="col-sm-3">
+									<input type='text' placeholder="sin" class="form-control original-form-control"/>
+							</div>
+						</div>
+						<div class="row mt-3">
+								<div class="col-sm-5">	
+									<div class="row">
+										<div class="col-sm-4" style="margin:auto">
+												Pets:
+										</div>
+										<div class="col-sm-8">
+											<input type="radio"> Yes
+											<input type="radio"> No
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-5">	
+									<div class="row">
+										<div class="col-sm-4" style="margin:auto">
+												Smoking:
+										</div>
+										<div class="col-sm-8">
+											<input type="radio"> Yes
+											<input type="radio"> No
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
-					<select class="m-input m-input--square m-width" name="more">
-						<option value="">Additional Applicant Details</option>
-					</select>
+					<uib-accordion close-others="oneAtATime">
+						<div uib-accordion-group class="panel-default" heading="Current Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+							<div class="row mt-3">
+								<div class="col-sm-3">
+									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+								</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-3">
+									<input type='text' placeholder="zipcode" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-3">
+										<input type='text' placeholder="country" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-6">
+										<div class="row">
+												<div class="col-sm-4" style="margin:auto">
+														Do you rent or own this address
+												</div>
+												<div class="col-sm-8">
+													<input type="radio" /> Rent
+													<input type="radio" /> Own
+												</div>
+											</div>
+								</div>
+							</div>
+							<div class="row mt-3">
+									<div class="col-sm-6">
+										<input type='text' placeholder="How long have you lived at this address" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-6">
+											<input type='text' placeholder="Rent $" class="form-control original-form-control"/>
+									</div>
+							</div>
+							<div class="row mt-3">
+									<div class="col-sm-12">
+										<input type='text' placeholder="Reason for vacating " class="form-control original-form-control" />
+									</div>
+							</div>
+							<div class="row mt-3">
+									<div class="col-sm-6">
+										<input type='text' placeholder="Landlord Full Name" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-6">
+											<input type='text' placeholder="Landlord's daytime phone #" class="form-control original-form-control"/>
+									</div>
+							</div>
+							</div>
+					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
-					<select class="m-input m-input--square m-width" name="more">
-						<option value="">Additional Minor/s Details</option>
-					</select>
+					<uib-accordion close-others="oneAtATime">
+						<div uib-accordion-group class="panel-default" heading="Additional Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+							<div class="row">
+								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-3">
+									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+								</div>
+							</div>
+						</div>
+					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
-					<select class="m-input m-input--square m-width" name="more">
-						<option value="">Employment Status and Income</option>
-					</select>
+					<uib-accordion close-others="oneAtATime">
+						<div uib-accordion-group class="panel-default" heading="Employment Status & Income Verification" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+							<div class="row">
+								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-3">
+									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+								</div>
+							</div>
+						</div>
+					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
-					<select class="m-input m-input--square m-width" name="more">
-						<option value="">Vehicle information</option>
-					</select>
+					<uib-accordion close-others="oneAtATime">
+						<div uib-accordion-group class="panel-default" heading="Vehical Information" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+							<div class="row">
+								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-3">
+									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+								</div>
+							</div>
+						</div>
+					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
-					<select class="m-input m-input--square m-width" name="more">
-						<option value="">References</option>
-					</select>
+					<uib-accordion close-others="oneAtATime">
+						<div uib-accordion-group class="panel-default" heading="Emergancy Contact" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+							<div class="row">
+								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-3">
+									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+								</div>
+							</div>
+						</div>
+					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
-					<select class="m-input m-input--square m-width" name="more">
-						<option value="">Emergency contact</option>
-					</select>
+					<uib-accordion close-others="oneAtATime">
+						<div uib-accordion-group class="panel-default" heading="References" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+							<div class="row">
+								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-3">
+									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+								</div>
+							</div>
+						</div>
+					</uib-accordion>
 			</div>
+			<div class="checkbox-div mb-3">
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+					<uib-accordion close-others="oneAtATime">
+						<div uib-accordion-group class="panel-default" heading="Unit details (added from property details provided)" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+							<div class="row">
+								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-3">
+									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-3">
+									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+								</div>
+							</div>
+						</div>
+					</uib-accordion>
+			</div>
+			
 			<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
 					<textarea rows="6" class="m-input m-input--square m-width" name="more" style="white-space: nowrap;">

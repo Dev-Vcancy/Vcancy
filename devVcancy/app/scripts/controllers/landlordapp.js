@@ -7,7 +7,7 @@
 vcancyApp
 	.controller('landlordappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', '$uibModal',
 		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, $uibModal) {
-
+			$scope.oneAtATime = true;
 			var vm = this;
 			var landlordID = ''
 			if (localStorage.getItem('refId')) {
@@ -73,6 +73,8 @@ vcancyApp
 					scope: $scope
 				});
 			};
+
+			
 
 			$scope.closePrescreeningModal = function () {
 				vm.prescremingQuestion.close();
