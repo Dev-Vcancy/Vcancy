@@ -282,14 +282,13 @@ vcancyApp
         var firstname = newuser.firstname;
         var lastname = newuser.lastname;
         var email = newuser.email;
-        console.log(landLordID);
         // var custome = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         var reguserdbObj = firebase.database();
         var random = parseInt(Math.random() * 10000);
         var characterArray = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         var pass = '';
         for (var i = 0; i < 6; i++) {
-          var num = Math.floor((Math.random() * 62) + 1);
+          var num = Math.floor((Math.random() * 60) + 1);
           pass += characterArray[num];
         }
         //console.log(pass);
@@ -326,12 +325,13 @@ vcancyApp
             firebase.auth().signInWithEmailAndPassword(email, pass)
               .then(function (firebaseUser) {
 
-                var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to on https://vcancy.ca/ .</p><p>Your email is ' + email + '.</p><p>Your password : <strong>test@1234</strong></p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to on https://vcancy.ca/ .</p><p>Your email is ' + email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                 // Send Email
                 emailSendingService.sendEmailViaNodeMailer(email, 'A new user account has been added to your portal', 'Welcome', emailData);
                 // Success 
                 firebaseUser.sendEmailVerification().then(function () {
+
                   var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at ' + email + '.</p><p>To view/edit user details, please log in https://vcancy.ca/ and go to “Profile” and click on “Users”</p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                   // Send Email
@@ -340,7 +340,7 @@ vcancyApp
                   console.log("Email Sent");
                   $rootScope.success = 'Confirmation email resent';
                   $rootScope.error = '';
-
+                  setTimeout(function () { $rootScope.success = '' }, 1000);
                 }).catch(function (error) {
                   console.log("Error in sending email" + error);
                 });
@@ -353,6 +353,7 @@ vcancyApp
                 $rootScope.success = '';
               } else {
                 $rootScope.error = error.message;
+                setTimeout(function () { $rootScope.error = '' }, 1000);
                 $rootScope.success = '';
               }
               //$rootScope.error = error.message;
