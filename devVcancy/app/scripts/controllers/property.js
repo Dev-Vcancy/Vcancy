@@ -1725,7 +1725,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
 
         vm.submiteditunits = function (unitlists, prop, isDeleted) {
-            console.log('unit submited')
             let unitIds = [];
             unitlists.forEach((unit) => {
                 unitIds.push(unit.unit);
@@ -1740,7 +1739,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 });
                 return;
             }
-            console.log('noofunits', unitlists.length)
             return firebase.database().ref('properties/' + prop.propID).update({
                 unitlists: unitlists,
                 totalunits: unitlists.length,
