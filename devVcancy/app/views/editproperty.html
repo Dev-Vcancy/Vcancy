@@ -22,7 +22,7 @@
                   <div class="row">
                     
                     <div class="col">
-                      <label> Select unit to copy details from</label>
+                      <label> Select unit from the same property to copy listing details from</label>
                       <select ng-model="copyof" ng-change="copyUnitDetails(copyof,selectedUnitDetail.data.unit)">
                         <option value=''>units</option>
                         <option ng-value="unit.unit" ng-if="unit.unit != selectedUnitDetail.data.unit" ng-repeat="unit in propctrl.prop.unitlists">{{unit.unit}}</option>

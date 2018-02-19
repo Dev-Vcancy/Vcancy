@@ -1583,9 +1583,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 return unit.unit == from;
             })
             for (var i in datatoCopy) {
-                if(i != 'unit')
-                {
-                    $scope.selectedUnitDetail.data[i]  = datatoCopy[i]
+                if (i != 'unit') {
+                    $scope.selectedUnitDetail.data[i] = datatoCopy[i]
                 }
             }
         }
@@ -1596,8 +1595,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 AWS.config.update({
                     accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
                     secretAccessKey: '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'
-                  });
-                  AWS.config.region = 'ca-central-1';
+                });
+                AWS.config.region = 'ca-central-1';
 
                 var bucket = new AWS.S3({
                     params: {
@@ -1726,7 +1725,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
 
         vm.submiteditunits = function (unitlists, prop, isDeleted) {
-
+            console.log('unit submited')
             let unitIds = [];
             unitlists.forEach((unit) => {
                 unitIds.push(unit.unit);
@@ -1741,6 +1740,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 });
                 return;
             }
+            console.log('noofunits', unitlists.length)
             return firebase.database().ref('properties/' + prop.propID).update({
                 unitlists: unitlists,
                 totalunits: unitlists.length,
@@ -1753,6 +1753,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         type: "success",
                     });
                 } else {
+                    vm.prop.noofunits = unitlists.length;
+                    vm.prop.totalunits = unitlists.length;
                     swal({
                         title: "Success!",
                         text: "Unit saved successfully.",
