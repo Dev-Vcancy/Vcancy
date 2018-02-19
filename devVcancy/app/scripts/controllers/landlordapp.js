@@ -22,14 +22,14 @@ vcancyApp
 			vm.apppropaddress = [];
 			vm.loader = 1;
 			vm.questionDropDown = [
-				{ id: 1, label: 'Job title' },
-				{ id: 2, label: 'Pets' },
-				{ id: 3, label: 'DOB' },
-				{ id: 4, label: 'Name' },
-				{ id: 5, label: 'Tell me a bit about yourself' },
-				{ id: 6, label: 'No. of Applicants' },
-				{ id: 7, label: 'Smoking' },
-				{ id: 8, label: 'Move-in date' },
+				{ id: 'jobTitle', label: 'Job title' },
+				{ id: 'pets', label: 'Pets' },
+				{ id: 'dob', label: 'DOB' },
+				{ id: 'name', label: 'Name' },
+				{ id: 'tellMeAbtYourself', label: 'Tell me a bit about yourself' },
+				{ id: 'noOfApplicants', label: 'No. of Applicants' },
+				{ id: 'smoking', label: 'Smoking' },
+				{ id: 'moveInData', label: 'Move-in date' },
 			];
 			vm.getProperty = function () {
 				var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
