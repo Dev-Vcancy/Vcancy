@@ -33,7 +33,6 @@ vcancyApp
 
         $scope.$apply(function () {
           vm.userData = userdata.val();
-          console.log(vm.userData)
           // if (userdata.val() !== null) {
 
           //   if(userdata.val().email != ''){
@@ -123,10 +122,10 @@ vcancyApp
       $scope.uploadDetailsImages = function (event) {
         var file = event.target.files[0];
         AWS.config.update({
-          accessKeyId: 'AKIAIYOGBYOBPRSZSOYQ',
-          secretAccessKey: '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'
+          accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+          secretAccessKey: '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'
         });
-        AWS.config.region = 'us-west-2';
+        AWS.config.region = 'ca-central-1';
 
         var bucket = new AWS.S3({
           params: {
@@ -154,7 +153,9 @@ vcancyApp
 
         bucket.upload(params).on('httpUploadProgress', function (evt) { })
           .send(function (err, data) {
+            console.log(data);
             if (data && data.target) {
+
               vm.userData.companylogo = data.target;
               firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
                 vm.opensuccesssweet("Profile Updated successfully!");
@@ -225,12 +226,12 @@ vcancyApp
 
       vm.profilestore = function () {
         AWS.config.update({
-          accessKeyId: 'AKIAI6FJLQDDJXI4LORA',
-          secretAccessKey: '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'
+          accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+          secretAccessKey: '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'
         });
-        AWS.config.region = 'us-west-2';
+        AWS.config.region = 'ca-central-1';
 
-        var bucket = new AWS.S3({ params: { Bucket: 'sagar-vcancy-test/company-logo' } });
+        var bucket = new AWS.S3({ params: { Bucket: 'vcancy-final/company-logo' } });
         var fileChooser = document.getElementById('file');
         var file = fileChooser.files[0];
         var filename = moment().format('YYYYMMDDHHmmss') + file.name;
@@ -603,14 +604,14 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
   var swal = window.swal;
   var vm = this;
   AWS.config.update({
-    accessKeyId: 'AKIAI6FJLQDDJXI4LORA',
-    secretAccessKey: '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'
+    accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+    secretAccessKey: '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'
   });
-  AWS.config.region = 'us-west-2';
+  AWS.config.region = 'ca-central-1';
 
   $scope.ok = function () {
 
-    var bucket = new AWS.S3({ params: { Bucket: 'sagar-vcancy-test/profile-images' } });
+    var bucket = new AWS.S3({ params: { Bucket: 'vacancy-final/profile-images' } });
     var fileChooser = document.getElementById('file321');
     var file = fileChooser.files[0];
     var filename = moment().format('YYYYMMDDHHmmss') + file.name;

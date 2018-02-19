@@ -34,10 +34,13 @@
 							</option>
 
 						</select>
+
+						<div ng-dropdown-multiselect="" options="lappctrl.questionDropDown" selected-model="lappctrl.filters.questions"></div>
 						<select class="m-input m-input--square ml-2" name="more" ng-model="lappctrl.filters.unit" multiple>
 							<option value="">All Units</option>
 							<option ng-value="unit.unit" ng-repeat="unit in lappctrl.properties[lappctrl.filters.property].unitlists">{{unit.unit}}</option>
 						</select>
+<<<<<<< HEAD
 						<select class="m-input m-input--square ml-2" name="more" multiple>
 							<option> Job title</option>
 							<option> Pets</option>
@@ -48,6 +51,10 @@
 							<option> Smoking</option>
 							<option> Move-in date</option>
 						</select>
+=======
+						
+						<div ng-dropdown-multiselect="" options="lappctrl.questionDropDown" selected-model="lappctrl.filters.questions"></div>
+>>>>>>> 6eb2a9889c274af02305a2e15642b7234e60116b
 					</div>
 					<div class="col-sm-6">
 						<div class="row mb-2">

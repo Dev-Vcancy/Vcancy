@@ -16,10 +16,21 @@ vcancyApp
 				landlordID = localStorage.getItem('userID');
 			}
 			vm.propcheck = [];
-			vm.filters = {};
+			vm.filters = {
+				questions:[]
+			};
 			vm.apppropaddress = [];
 			vm.loader = 1;
-
+			vm.questionDropDown = [
+				{ id: 1, label: 'Job title' },
+				{ id: 2, label: 'Pets' },
+				{ id: 3, label: 'DOB' },
+				{ id: 4, label: 'Name' },
+				{ id: 5, label: 'Tell me a bit about yourself' },
+				{ id: 6, label: 'No. of Applicants' },
+				{ id: 7, label: 'Smoking' },
+				{ id: 8, label: 'Move-in date' },
+			];
 			vm.getProperty = function () {
 				var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					if (snapshot.val()) {
