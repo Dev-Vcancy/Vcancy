@@ -5,8 +5,8 @@
 //=================================================
 
 vcancyApp
-	.controller('landlordappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', '$uibModal',
-		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, $uibModal) {
+	.controller('landlordappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', '$uibModal', '_',
+		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, $uibModal, _) {
 			$scope.oneAtATime = true;
 			var vm = this;
 			var landlordID = ''
@@ -15,22 +15,49 @@ vcancyApp
 			} else {
 				landlordID = localStorage.getItem('userID');
 			}
+			vm.landLordID = landlordID;
+			var userData = JSON.parse(localStorage.getItem('userData'));
+
 			vm.propcheck = [];
 			vm.filters = {
-				questions:[]
+				questions: []
 			};
 			vm.apppropaddress = [];
+
 			vm.loader = 1;
+
+			// Function to generate Random Id
+			function generateToken() {
+				var result = '',
+					length = 6,
+					chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+				for (var i = 0; i < length; i++)
+					result += chars[Math.floor(Math.random() * chars.length)];
+
+				return result;
+			}
+
 			vm.questionDropDown = [
-				{ id: 'jobTitle', label: 'Job title' },
-				{ id: 'pets', label: 'Pets' },
-				{ id: 'dob', label: 'DOB' },
-				{ id: 'name', label: 'Name' },
-				{ id: 'tellMeAbtYourself', label: 'Tell me a bit about yourself' },
-				{ id: 'noOfApplicants', label: 'No. of Applicants' },
-				{ id: 'smoking', label: 'Smoking' },
-				{ id: 'moveInData', label: 'Move-in date' },
+				{ id: 'WKRX6Q', label: 'Job title', isChecked: false },
+				{ id: 'MV5SML', label: 'Pets', isChecked: false },
+				{ id: 'N1F5MO', label: 'DOB', isChecked: false },
+				{ id: 'OU489L', label: 'Name', isChecked: false },
+				{ id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: false },
+				{ id: 'A9OG32', label: 'No. of Applicants', isChecked: false },
+				{ id: 'UH7JZS', label: 'Smoking', isChecked: false },
+				{ id: 'ZGJQ60', label: 'Move-in date', isChecked: false },
 			];
+
+			function refreshScreeningQuestions() {
+				userData = JSON.parse(localStorage.getItem('userData'));
+				if (userData && userData.screeningQuestions) {
+					vm.screeningQuestions = userData.screeningQuestions;
+				} else {
+					vm.screeningQuestions = angular.copy(vm.questionDropDown);
+				}
+			}
+			refreshScreeningQuestions();
 			vm.getProperty = function () {
 				var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					if (snapshot.val()) {
@@ -38,11 +65,18 @@ vcancyApp
 					}
 				});
 			};
-	
 
+			vm.getApplyProp = function () {
+				var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+					if (snapshot.val()) {
+						vm.apppropaddress = snapshot.val();
+					}
+				});
+			};
 
 			vm.init = function () {
 				vm.getProperty();
+				vm.getApplyProp();
 			};
 
 			vm.init();
@@ -55,7 +89,41 @@ vcancyApp
 					scope: $scope
 				});
 			};
-			
+
+			vm.customQuestion = null;
+			vm.addCustomQuestion = function () {
+				debugger;
+				if (!vm.customQuestion) {
+					return;
+				}
+				var data = {
+					label: vm.customQuestion,
+					id: generateToken(),
+					isChecked: false
+				}
+
+				vm.screeningQuestions.push(data);
+				vm.customQuestion = null;
+			}
+
+			vm.saveScreeningQuestions = function () {
+				vm.loader = 1;
+				var ques = angular.copy(vm.screeningQuestions);
+				_.omit(ques, '$$hashKey');
+				firebase.database().ref('users/' + this.landLordID).update({
+					screeningQuestions: ques
+				}).then(function () {
+					userData.screeningQuestions = ques;
+					localStorage.setItem('userData', JSON.stringify(userData));
+					refreshScreeningQuestions();
+					vm.loader = 0;
+					vm.prescremingQuestion.close();
+				}, function (error) {
+					vm.loader = 0;
+					return false;
+				});
+			}
+
 			vm.opencustomrentalapp = function () {
 				vm.customrentalapp = $uibModal.open({
 					templateUrl: 'customrentalapp.html',
@@ -74,8 +142,6 @@ vcancyApp
 				});
 			};
 
-			
-
 			$scope.closePrescreeningModal = function () {
 				vm.prescremingQuestion.close();
 			}
@@ -88,7 +154,7 @@ vcancyApp
 				vm.runcreditcriminalcheck.close();
 			}
 
-			$scope.deleteAlert = function (){
+			$scope.deleteAlert = function () {
 				swal({
 					title: "Are you sure?",
 					text: "Your will not be able to recover this imaginary file!",
@@ -97,12 +163,13 @@ vcancyApp
 					confirmButtonClass: "btn-danger",
 					confirmButtonText: "Yes, delete it!",
 					closeOnConfirm: false
-				  },
-				  function(){
-					swal("Deleted!", "Your imaginary file has been deleted.", "success");
-				  });
+				},
+					function () {
+						swal("Deleted!", "Your imaginary file has been deleted.", "success");
+					});
 
 			}
+
 			vm.tablefilterdata = function (propID = '') {
 				if (propID != '') {
 					vm.propcheck[propID] = !vm.propcheck[propID];
@@ -205,7 +272,4 @@ vcancyApp
 
 			}
 			vm.tablefilterdata();
-
-
-
 		}])
