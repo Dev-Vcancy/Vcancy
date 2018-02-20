@@ -11,14 +11,17 @@ vcancyApp
 		var userID = localStorage.getItem('userID');
 		var userData = JSON.parse(localStorage.getItem('userData'));
 		var landlordID = userData.refId || userID;
-
+		vm.moment = moment;
 		vm.propertySelected = '';
+		vm.unitSelected = '';
+		vm.selectedUnitId = '';
 		vm.units = [];
 		vm.fromDate = '';
 		vm.toDate = '';
 		vm.fromTime = '';
 		vm.toTime = '';
-
+		vm.properties = [];
+		vm.listings = [];
 		vm.selectedListings = [];
 
 		function getListings() {
@@ -29,6 +32,10 @@ vcancyApp
 					vm.success = 0;
 					if (snapshot.val()) {
 						vm.listings = snapshot.val();
+						$.map(vm.listings, function (value, key) {
+							value.parsedFromDate = parseInt(new moment(value.fromDate).format('x'))
+							value.parsedToDate = parseInt(new moment(value.toDate).format('x'))
+						});
 						vm.listingsAvailable = 1;
 					} else {
 						vm.listingsAvailable = 0;
@@ -46,6 +53,7 @@ vcancyApp
 					if (snapshot.val()) {
 						vm.properties = snapshot.val();
 						vm.propertiesAvailable = 1;
+						debugger;
 					} else {
 						vm.propertiesAvailable = 0;
 					}
@@ -62,7 +70,25 @@ vcancyApp
 
 		init();
 
+		vm.clearAll = function ($event) {
+			vm.propertySelected = '';
+			vm.unitSelected = '';
+			vm.selectedUnitId = '';
+			vm.units = [];
+			vm.fromDate = '';
+			vm.toDate = '';
+			vm.fromTime = '';
+			vm.toTime = '';
+			$event.preventDefault();
+		}
+
+		vm.checkAllListing = function () {
+			$.map(vm.listings, function (value, key) {
+				value.inputCheck = vm.selectedAllListing;
+			});
+		}
 		vm.addAvailability = function ($event) {
+			debugger;
 			$event.preventDefault();
 			if (!vm.propertySelected || !vm.fromDate || !vm.toDate || !vm.fromTime || !vm.toTime) {
 				return;
@@ -70,15 +96,18 @@ vcancyApp
 			var availabilities = [];
 			var availability = {
 				propertyId: vm.propertySelected,
-				fromDate: vm.fromDate,
+				fromDate: moment(vm.fromDate.toString()).toDate().toString(),
 				fromTime: vm.fromTime,
-				toDate: vm.toDate,
+				toDate: moment(vm.toDate.toString()).toDate().toString(),
 				toTime: vm.toTime,
 				landlordID: landlordID,
 				userID: userID,
 				link: 'https://vcancy.ca/login/#/applyprop/' + vm.propertySelected,
 				status: 'Not Listed',
 				listOnCraigslist: false
+			}
+			if (vm.properties[vm.propertySelected].units == 'multiple') {
+				vm.units = [vm.selectedUnitId];
 			}
 			if (vm.units.length > 0) {
 				vm.units.forEach(function (unit) {
@@ -103,6 +132,8 @@ vcancyApp
 				vm.loader = 0;
 				vm.propertySelected = '';
 				vm.units = [];
+				vm.unitSelected = '';
+				vm.selectedUnitId = '';
 				vm.fromDate = '';
 				vm.toDate = '';
 				vm.fromTime = '';
@@ -112,19 +143,27 @@ vcancyApp
 		};
 
 		vm.deleteListings = function ($event) {
-			if (vm.selectedListings.length == 0) {
+			var selectedListings = [];
+			$.map(vm.listings, function (value, key) {
+				if (value.inputCheck) {
+					selectedListings.push(key);
+				}
+			});
+			if (selectedListings.length == 0) {
 				return;
 			}
 			var promises = [];
 			vm.loader = 1;
 			var fbObj = firebase.database();
-			vm.selectedListings.forEach(function (listing) {
+			selectedListings.forEach(function (listing) {
 				var promiseObj = fbObj.ref('propertiesSchedule/' + listing).remove();
 				promises.push(promiseObj);
 			});
 			$q.all(promises).then(function () {
 				vm.loader = 0;
 				vm.selectedListings = [];
+				vm.listings = [];
+				vm.selectedAllListing = false;
 				getListings();
 			});
 		}
