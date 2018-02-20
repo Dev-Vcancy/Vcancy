@@ -230,8 +230,7 @@
 							</div>
 						</div>
 				</uib-accordion>
-			</div>
-			<div class="checkbox-div mb-3">
+				<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Current Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
@@ -288,65 +287,66 @@
 							</div>
 							</div>
 					</uib-accordion>
+				</div>
+				<div class="checkbox-div mb-3">
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+					<uib-accordion close-others="oneAtATime">
+						<div uib-accordion-group class="panel-default" heading="Previous Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+							<div class="row mt-3">
+								<div class="col-sm-4">
+									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-4">
+									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-4">
+									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+								</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-3">
+									<input type='text' placeholder="zipcode" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-3">
+										<input type='text' placeholder="country" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-6">
+										<div class="row">
+												<div class="col-sm-8" style="margin:auto">
+														Do you rent or own this address
+												</div>
+												<div class="col-sm-4">
+													<input type="radio" /> Rent
+													<input type="radio" /> Own
+												</div>
+											</div>
+								</div>
+							</div>
+							<div class="row mt-3">
+									<div class="col-sm-6">
+										<input type='text' placeholder="How long have you lived at this address" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-6">
+											<input type='text' placeholder="Rent $" class="form-control original-form-control"/>
+									</div>
+							</div>
+							<div class="row mt-3">
+									<div class="col-sm-12">
+										<input type='text' placeholder="Reason for vacating " class="form-control original-form-control" />
+									</div>
+							</div>
+							<div class="row mt-3">
+									<div class="col-sm-6">
+										<input type='text' placeholder="Landlord Full Name" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-6">
+											<input type='text' placeholder="Landlord's daytime phone #" class="form-control original-form-control"/>
+									</div>
+							</div>
+							</div>
+					</uib-accordion>
+				</div>
 			</div>
-			<div class="checkbox-div mb-3">
-				<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
-				<uib-accordion close-others="oneAtATime">
-					<div uib-accordion-group class="panel-default" heading="Previous Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
-						<div class="row mt-3">
-							<div class="col-sm-4">
-								<input type='text' placeholder="State Address" class="form-control original-form-control" />
-							</div>
-							<div class="col-sm-4">
-								<input type='text' placeholder="City" class="form-control original-form-control"/>
-							</div>
-							<div class="col-sm-4">
-								<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
-							</div>
-						</div>
-						<div class="row mt-3">
-							<div class="col-sm-3">
-								<input type='text' placeholder="zipcode" class="form-control original-form-control" />
-							</div>
-							<div class="col-sm-3">
-									<input type='text' placeholder="country" class="form-control original-form-control"/>
-							</div>
-							<div class="col-sm-6">
-									<div class="row">
-											<div class="col-sm-8" style="margin:auto">
-													Do you rent or own this address
-											</div>
-											<div class="col-sm-4">
-												<input type="radio" /> Rent
-												<input type="radio" /> Own
-											</div>
-										</div>
-							</div>
-						</div>
-						<div class="row mt-3">
-								<div class="col-sm-6">
-									<input type='text' placeholder="How long have you lived at this address" class="form-control original-form-control" />
-								</div>
-								<div class="col-sm-6">
-										<input type='text' placeholder="Rent $" class="form-control original-form-control"/>
-								</div>
-						</div>
-						<div class="row mt-3">
-								<div class="col-sm-12">
-									<input type='text' placeholder="Reason for vacating " class="form-control original-form-control" />
-								</div>
-						</div>
-						<div class="row mt-3">
-								<div class="col-sm-6">
-									<input type='text' placeholder="Landlord Full Name" class="form-control original-form-control" />
-								</div>
-								<div class="col-sm-6">
-										<input type='text' placeholder="Landlord's daytime phone #" class="form-control original-form-control"/>
-								</div>
-						</div>
-						</div>
-				</uib-accordion>
-		</div>
 			<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
 					<uib-accordion close-others="oneAtATime">
