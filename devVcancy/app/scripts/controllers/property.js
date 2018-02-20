@@ -693,7 +693,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     "state": property.province,
                     "status": "",
                     "type": property.proptype,
-                    "unit": ''
+                    "unit": '',
+                    isIncomplete: true,
                 });
             }
             return unitlists;
@@ -1506,7 +1507,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 "state": vm.prop.province || vm.prop.city,
                 "status": "available",
                 "type": "",
-                "unit": ''
+                "unit": '',
+                isIncomplete: true,
             }
             if (!vm.prop.unitlists) vm.prop.unitlists = [];
             vm.prop.unitlists.push(newUnit);
@@ -2041,12 +2043,33 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         $scope.cancel = function () {
             $scope.modalInstance.dismiss('cancel');
         };
+        vm.checkIfDetailIsIncomplete = function (value) {
 
+            var keyToCheck = [
+                "address",
+                "city",
+                "location",
+                "name",
+                "postalcode",
+                "country",
+                "rent",
+                "sqft",
+                "state",
+                "status",
+                "unit",
+                "type"
+            ]
+            for (var i = 0; i < keyToCheck.length; i++) {
+                if (!value[keyToCheck[i]]) {
+                    return true;
+                }
+            }
+            return false;
+        }
         $scope.submitDetails = function () {
             var index = $scope.selectedUnitDetail.index;
-
             vm.prop.unitlists[index] = angular.copy($scope.selectedUnitDetail.data);
-
+            vm.prop.unitlists[index].isIncomplete = vm.checkIfDetailIsIncomplete(angular.copy($scope.selectedUnitDetail.data));
             vm.submiteditunits(vm.prop.unitlists, vm.prop)
                 .then(function () {
                     $scope.cancel();
