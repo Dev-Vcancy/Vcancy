@@ -27,10 +27,11 @@
 					<div ng-if="applyctrl.alreadyBookedSlot == 1" ng-hide="applyctrl.propinactive == 1">
 						<h4>You have already booked a time slot for this property, please cancel your time slot if you want to reschedule.</h4>
 					</div>
-					<div ng-if="applyctrl.propinactive == 1" >
+					<!-- <div ng-if="applyctrl.propinactive == 1" >
 						<h4>This property isnt available now.</h4>										
-					</div>
-					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="applyctrl.applyprop.availableslots.length" ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1">	
+					</div> -->
+					<!-- ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1" -->
+					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="applyctrl.applyprop.availableslots.length" >	
 						<input type="hidden" name="landlordID" ng-model="applyctrl.applyprop.landlordID" class="form-control" >
 						<input type="hidden" name="propID" ng-model="applyctrl.applyprop.propID" class="form-control">	
 						<input type="hidden" name="address" ng-model="applyctrl.applyprop.address" class="form-control">						

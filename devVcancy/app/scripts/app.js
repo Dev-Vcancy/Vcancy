@@ -613,7 +613,6 @@ vcancyApp
 			controller: 'applypropCtrl',
 			controllerAs: 'applyctrl',
 			templateUrl: 'views/applyproperty.html',
-			resolve: { tenantauthenticate: tenantauthenticate }
 		})
 		
 		.state ('applicationThanks', {
