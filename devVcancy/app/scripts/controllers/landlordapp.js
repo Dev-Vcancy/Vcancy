@@ -43,10 +43,10 @@ vcancyApp
 				{ id: 'MV5SML', label: 'Pets', isChecked: false },
 				{ id: 'N1F5MO', label: 'DOB', isChecked: false },
 				{ id: 'OU489L', label: 'Name', isChecked: false },
-				{ id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: false },
-				{ id: 'A9OG32', label: 'No. of Applicants', isChecked: false },
+				{ id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: true },
+				{ id: 'A9OG32', label: 'No. of Applicants', isChecked: true },
 				{ id: 'UH7JZS', label: 'Smoking', isChecked: false },
-				{ id: 'ZGJQ60', label: 'Move-in date', isChecked: false },
+				{ id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
 			];
 
 			function refreshScreeningQuestions() {
