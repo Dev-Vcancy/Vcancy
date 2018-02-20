@@ -159,7 +159,7 @@
 			</div>	
 	
 			<div class="checkbox-div mb-3">
-				<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+				<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.PAPPD"/>
 				<uib-accordion close-others="oneAtATime">
 					<div uib-accordion-group class="panel-default" heading="Primary Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 						<div class="row mt-3">
@@ -232,7 +232,7 @@
 				</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.CADDR"/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Current Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row mt-3">
@@ -290,7 +290,7 @@
 					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
-				<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+				<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.PADDR"/>
 				<uib-accordion close-others="oneAtATime">
 					<div uib-accordion-group class="panel-default" heading="Previous Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 						<div class="row mt-3">
@@ -348,11 +348,11 @@
 				</uib-accordion>
 		</div>
 			<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.AAPPD"/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Additional Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row">
-								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+								<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.AAPP1"> Additional Applicant</div>
 							</div>
 							<div class="row mt-3">
 								<div class="col-sm-4">
@@ -367,7 +367,7 @@
 							</div>
 
 							<div class="row">
-								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+								<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.AAPP2"> Additional Applicant</div>
 							</div>
 							<div class="row mt-3">
 								<div class="col-sm-6">
@@ -381,11 +381,11 @@
 					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.ESIV"/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Employment Status & Income Verification" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row">
-								<div class="col-sm-12"><input type="checkbox"> Employment Status & Income Verification</div>
+								<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.ESIV1"> Employment Status & Income Verification</div>
 							</div>
 							<div class="row mt-3">
 								<div class="col-sm-6">
@@ -415,7 +415,7 @@
 					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.VI"/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Vehical Information" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row mt-3">
@@ -433,11 +433,11 @@
 					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.EC"/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Emergancy Contact" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row">
-								<div class="col-sm-12"><input type="checkbox">Name and Phone number of Personal/Family reference who may be contacted in the case of emergency</div>
+								<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.EC1">Name and Phone number of Personal/Family reference who may be contacted in the case of emergency</div>
 							</div>
 							<div class="row mt-3">
 								<div class="col-sm-6">
@@ -451,11 +451,11 @@
 					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.REF"/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="References" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row">
-								<div class="col-sm-12"><input type="checkbox">References 1</div>
+								<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF1">References 1</div>
 							</div>
 							<div class="row mt-3">
 								<div class="col-sm-4">
@@ -470,7 +470,7 @@
 							</div>
 
 							<div class="row">
-									<div class="col-sm-12"><input type="checkbox">References 2</div>
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF2">References 2</div>
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-4">
@@ -487,11 +487,11 @@
 					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.UD"/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Unit details (added from property details provided)" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row">
-								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+								<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.UDAAPP"> Additional Applicant</div>
 							</div>
 							<div class="row mt-3">
 								<div class="col-sm-3">We offer to rent</div>
@@ -521,7 +521,7 @@
 			</div>
 			
 			<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.TC"/>
 					<textarea rows="6" class="m-input m-input--square m-width" name="more" style="white-space: nowrap;">
 You are authorized to obtaining credit checks & verifying details contained in this Application.
 		
@@ -552,7 +552,7 @@ in the interested of the owner of the rental unit.</textarea>
 		</div>
 		
 		<div class="modal-footer mofo">	
-			<button class="btn btn-success"><i class="fa fa-floppy-o" ></i> Save</button>			
+			<button class="btn btn-success" ng-click="lappctrl.saveCustomRentalApplicationCheck()"><i class="fa fa-floppy-o" ></i> Save</button>			
 		</div>
 	</div>
   </script>

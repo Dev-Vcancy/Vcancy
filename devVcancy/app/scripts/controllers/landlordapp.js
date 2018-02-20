@@ -49,6 +49,36 @@ vcancyApp
 				{ id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
 			];
 
+			vm.defaultRentalApplicationCheck = {
+				'PAPPD': false,
+				'CADDR': false,
+				'PADDR': false,
+				'AAPPD': false,
+				'AAPP1': false,
+				'AAPP2': false,
+				'ESIV': false,
+				'ESIV1': false,
+				'V1': false,
+				'EC': false,
+				'EC1': false,
+				'REF': false,
+				'REF1': false,
+				'REF2': false,
+				'UD': false,
+				'UDAAPP': false,
+				'TC': false
+			}
+
+			function refreshCustomRentalApplicationCheck() {
+				userData = JSON.parse(localStorage.getItem('userData'));
+				if (userData && userData.customRentalApplicationCheck) {
+					vm.customRentalApplicationCheck = userData.customRentalApplicationCheck;
+				} else {
+					vm.customRentalApplicationCheck = angular.copy(vm.defaultRentalApplicationCheck);
+				}
+			}
+			refreshCustomRentalApplicationCheck();
+
 			function refreshScreeningQuestions() {
 				userData = JSON.parse(localStorage.getItem('userData'));
 				if (userData && userData.screeningQuestions) {
@@ -92,7 +122,6 @@ vcancyApp
 
 			vm.customQuestion = null;
 			vm.addCustomQuestion = function () {
-				debugger;
 				if (!vm.customQuestion) {
 					return;
 				}
@@ -118,6 +147,24 @@ vcancyApp
 					refreshScreeningQuestions();
 					vm.loader = 0;
 					vm.prescremingQuestion.close();
+				}, function (error) {
+					vm.loader = 0;
+					return false;
+				});
+			}
+
+			vm.saveCustomRentalApplicationCheck = function () {
+				vm.loader = 1;
+				var customChecks = angular.copy(vm.customRentalApplicationCheck);
+				_.omit(customChecks, '$$hashKey');
+				firebase.database().ref('users/' + this.landLordID).update({
+					customRentalApplicationCheck: customChecks
+				}).then(function () {
+					userData.customRentalApplicationCheck = customChecks;
+					localStorage.setItem('userData', JSON.stringify(userData));
+					refreshCustomRentalApplicationCheck();
+					vm.loader = 0;
+					vm.customrentalapp.close();
 				}, function (error) {
 					vm.loader = 0;
 					return false;
