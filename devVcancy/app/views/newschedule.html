@@ -27,14 +27,16 @@
                     <label for="example-time-input" class="col-sm-12 col-form-label">
                       Property
                       <select class="m-input m-input--square" name="selectProperty" ng-model="newschedulectrl.propertySelected" ng-options="key as value.address for (key, value) in newschedulectrl.properties">
+                          <option value=''>Select property</option>
                       </select>
 
                     </label>
                   </div>
-                  <div class="col-sm-6 pl-0" ng-if="newschedulectrl.propertySelected && newschedulectrl.properties[newschedulectrl.propertySelected].units == 'multiple'">
+                  <div class="col-sm-6 pl-0" ng-if="newschedulectrl.propertySelected && newschedulectrl.properties[newschedulectrl.propertySelected].units == 'multiple'" >
                     <label for="example-time-input" class="col-sm-12 col-form-label">
                       Unit
-                      <select class="m-input m-input--square" name="selectProperty" ng-model="newschedulectrl.selectedUnitId" ng-options="value.unit as value.unit for value in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
+                      <select class="m-input m-input--square" name="selectProperty" style="min-width: 150px;" ng-model="newschedulectrl.selectedUnitId" ng-options="value.unit as value.unit for value in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
+                        <option value=''>Select unit</option>
                       </select>
                     </label>
                   </div>

@@ -53,7 +53,6 @@ vcancyApp
 					if (snapshot.val()) {
 						vm.properties = snapshot.val();
 						vm.propertiesAvailable = 1;
-						debugger;
 					} else {
 						vm.propertiesAvailable = 0;
 					}
@@ -88,7 +87,6 @@ vcancyApp
 			});
 		}
 		vm.addAvailability = function ($event) {
-			debugger;
 			$event.preventDefault();
 			if (!vm.propertySelected || !vm.fromDate || !vm.toDate || !vm.fromTime || !vm.toTime) {
 				return;

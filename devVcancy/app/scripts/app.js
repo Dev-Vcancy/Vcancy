@@ -491,16 +491,16 @@ vcancyApp
 			resolve: { authenticate: authenticate }
 		})
 		
+		// .state ('schedule', {
+		// 	url: '/schedule',
+		// 	controller: 'scheduleCtrl',
+		// 	controllerAs: 'schedulectrl',
+		// 	templateUrl: 'views/schedule.html',
+		// 	resolve: { authenticate: authenticate }
+		// })
+		
 		.state ('schedule', {
 			url: '/schedule',
-			controller: 'scheduleCtrl',
-			controllerAs: 'schedulectrl',
-			templateUrl: 'views/schedule.html',
-			resolve: { authenticate: authenticate }
-		})
-		
-		.state ('nnewschedule', {
-			url: '/newschedule',
 			controller: 'newscheduleCtrl',
 			controllerAs: 'newschedulectrl',
 			templateUrl: 'views/newschedule.html',
