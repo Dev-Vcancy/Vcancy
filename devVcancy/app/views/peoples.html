@@ -205,28 +205,26 @@
 				<uib-accordion close-others="oneAtATime">
 					<div uib-accordion-group class="panel-default" heading="Primary Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 						<div class="row mt-3">
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 								<input type='text' placeholder="firstname" class="form-control original-form-control" />
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 									<input type='text' placeholder="lastname" class="form-control original-form-control"/>
 								</div>
 								<div class="col-sm-4">
 									<div class="row">
-										<div class="col-sm-6" style="margin:auto">
-												Date of Birth
-										</div>
-										<div class="col-sm-6" >
-											<input type='date' class="form-control original-form-control" style="width:150px"/>
+										<div class="col-sm-3">DOB</div>
+										<div class="col-sm-9" >
+											<input type='date' class="form-control original-form-control"/>
 										</div>
 									</div>
 								</div>
 						</div>
 						<div class="row mt-3">
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 								<input type='text' placeholder="telephone" class="form-control original-form-control" />
 							</div>
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 									<input type='text' placeholder="home" class="form-control original-form-control"/>
 							</div>
 							<div class="col-sm-4">
@@ -234,20 +232,19 @@
 							</div>
 						</div>
 						<div class="row mt-3">
-							<div class="col-sm-5">	
-									<div class="row">
-										<div class="col-sm-4" style="margin:auto">
-												Mairtal Status:
-										</div>
-										<div class="col-sm-8">
-											<input type="radio" /> Single
-											<input type="radio" /> Married
-										</div>
+
+									<div class="col-sm-4">
+											Mairtal Status:
 									</div>
-							</div>
-							<div class="col-sm-3">
-									<input type='text' placeholder="sin" class="form-control original-form-control"/>
-							</div>
+									
+									<div class="col-sm-4">
+											<input type="radio" /> Single																	
+											<input type="radio" /> Married
+									</div>
+									<div class="col-sm-4">
+											<input type='text' placeholder="sin" class="form-control original-form-control"/>
+									</div>					
+							
 						</div>
 						<div class="row mt-3">
 								<div class="col-sm-5">	
@@ -281,13 +278,13 @@
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Current Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row mt-3">
-								<div class="col-sm-3">
+								<div class="col-sm-4">
 									<input type='text' placeholder="State Address" class="form-control original-form-control" />
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-4">
 									<input type='text' placeholder="City" class="form-control original-form-control"/>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-4">
 									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
 								</div>
 							</div>
@@ -300,10 +297,10 @@
 								</div>
 								<div class="col-sm-6">
 										<div class="row">
-												<div class="col-sm-4" style="margin:auto">
+												<div class="col-sm-8" style="margin:auto">
 														Do you rent or own this address
 												</div>
-												<div class="col-sm-8">
+												<div class="col-sm-4">
 													<input type="radio" /> Rent
 													<input type="radio" /> Own
 												</div>
@@ -335,6 +332,64 @@
 					</uib-accordion>
 			</div>
 			<div class="checkbox-div mb-3">
+				<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
+				<uib-accordion close-others="oneAtATime">
+					<div uib-accordion-group class="panel-default" heading="Previous Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+						<div class="row mt-3">
+							<div class="col-sm-4">
+								<input type='text' placeholder="State Address" class="form-control original-form-control" />
+							</div>
+							<div class="col-sm-4">
+								<input type='text' placeholder="City" class="form-control original-form-control"/>
+							</div>
+							<div class="col-sm-4">
+								<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+							</div>
+						</div>
+						<div class="row mt-3">
+							<div class="col-sm-3">
+								<input type='text' placeholder="zipcode" class="form-control original-form-control" />
+							</div>
+							<div class="col-sm-3">
+									<input type='text' placeholder="country" class="form-control original-form-control"/>
+							</div>
+							<div class="col-sm-6">
+									<div class="row">
+											<div class="col-sm-8" style="margin:auto">
+													Do you rent or own this address
+											</div>
+											<div class="col-sm-4">
+												<input type="radio" /> Rent
+												<input type="radio" /> Own
+											</div>
+										</div>
+							</div>
+						</div>
+						<div class="row mt-3">
+								<div class="col-sm-6">
+									<input type='text' placeholder="How long have you lived at this address" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-6">
+										<input type='text' placeholder="Rent $" class="form-control original-form-control"/>
+								</div>
+						</div>
+						<div class="row mt-3">
+								<div class="col-sm-12">
+									<input type='text' placeholder="Reason for vacating " class="form-control original-form-control" />
+								</div>
+						</div>
+						<div class="row mt-3">
+								<div class="col-sm-6">
+									<input type='text' placeholder="Landlord Full Name" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-6">
+										<input type='text' placeholder="Landlord's daytime phone #" class="form-control original-form-control"/>
+								</div>
+						</div>
+						</div>
+				</uib-accordion>
+		</div>
+			<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Additional Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
@@ -342,15 +397,27 @@
 								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
 							</div>
 							<div class="row mt-3">
-								<div class="col-sm-3">
-									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								<div class="col-sm-4">
+									<input type='text' placeholder="Full Name" class="form-control original-form-control" />
 								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								<div class="col-sm-4">
+									<input type='date' placeholder="Date Of Birth" class="form-control original-form-control"/>
+								</div>	
+								<div class="col-sm-4">
+									<input type='text' placeholder="SIN number" class="form-control original-form-control"/>
 								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-6">
+										<input type='date' placeholder="Date Of Birth" class="form-control original-form-control" />
 								</div>
+								<div class="col-sm-6">
+									<input type='text' placeholder="Full Name" class="form-control original-form-control"/>
+								</div>		
 							</div>
 						</div>
 					</uib-accordion>
@@ -360,18 +427,31 @@
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Employment Status & Income Verification" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row">
-								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+								<div class="col-sm-12"><input type="checkbox"> Employment Status & Income Verification</div>
 							</div>
 							<div class="row mt-3">
-								<div class="col-sm-3">
-									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								<div class="col-sm-6">
+									<input type='text' placeholder="Current Employer" class="form-control original-form-control" />
 								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="City" class="form-control original-form-control"/>
-								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
-								</div>
+								<div class="col-sm-6">
+									<input type='text' placeholder="Position" class="form-control original-form-control"/>
+								</div>								
+							</div>
+							<div class="row mt-3">
+									<div class="col-sm-6">
+										<input type='text' placeholder="Employer Phone " class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-6">
+										<input type='text' placeholder="How long have you worked in this company(Month/Year)" class="form-control original-form-control"/>
+									</div>								
+							</div>
+							<div class="row mt-3">
+										<div class="col-sm-6">
+											<input type='text' placeholder="Gross monthly income" class="form-control original-form-control" />
+										</div>
+										<div class="col-sm-6">
+											<input type='text' placeholder="Other income description(eg.Disability,Income Assistance,Savings)" class="form-control original-form-control"/>
+										</div>								
 							</div>
 						</div>
 					</uib-accordion>
@@ -380,18 +460,15 @@
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Vehical Information" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
-							<div class="row">
-								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
-							</div>
 							<div class="row mt-3">
-								<div class="col-sm-3">
-									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								<div class="col-sm-4">
+									<input type='text' placeholder="Make" class="form-control original-form-control" />
 								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								<div class="col-sm-4">
+									<input type='text' placeholder="Model" class="form-control original-form-control"/>
 								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+								<div class="col-sm-4">
+									<input type='text' placeholder="Year" class="form-control original-form-control"/>
 								</div>
 							</div>
 						</div>
@@ -402,18 +479,15 @@
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Emergancy Contact" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row">
-								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+								<div class="col-sm-12"><input type="checkbox">Name and Phone number of Personal/Family reference who may be contacted in the case of emergency</div>
 							</div>
 							<div class="row mt-3">
-								<div class="col-sm-3">
-									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								<div class="col-sm-6">
+									<input type='text' placeholder="Full Name" class="form-control original-form-control" />
 								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="City" class="form-control original-form-control"/>
-								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
-								</div>
+								<div class="col-sm-6">
+									<input type='text' placeholder="Phone" class="form-control original-form-control"/>
+								</div>								
 							</div>
 						</div>
 					</uib-accordion>
@@ -423,19 +497,34 @@
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="References" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row">
-								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
+								<div class="col-sm-12"><input type="checkbox">References 1</div>
 							</div>
 							<div class="row mt-3">
-								<div class="col-sm-3">
-									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+								<div class="col-sm-4">
+									<input type='text' placeholder="Full Name" class="form-control original-form-control" />
 								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="City" class="form-control original-form-control"/>
+								<div class="col-sm-4">
+									<input type='text' placeholder="Phone" class="form-control original-form-control"/>
 								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+								<div class="col-sm-4">
+									<input type='text' placeholder="Relationship(previous landlord,employer)" class="form-control original-form-control"/>
 								</div>
 							</div>
+
+							<div class="row">
+									<div class="col-sm-12"><input type="checkbox">References 2</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-sm-4">
+										<input type='text' placeholder="Full Name" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-4">
+										<input type='text' placeholder="Phone" class="form-control original-form-control"/>
+									</div>
+									<div class="col-sm-4">
+										<input type='text' placeholder="Relationship(previous landlord,employer)" class="form-control original-form-control"/>
+									</div>
+								</div>
 						</div>
 					</uib-accordion>
 			</div>
@@ -447,15 +536,27 @@
 								<div class="col-sm-12"><input type="checkbox"> Additional Applicant</div>
 							</div>
 							<div class="row mt-3">
-								<div class="col-sm-3">
-									<input type='text' placeholder="State Address" class="form-control original-form-control" />
-								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="City" class="form-control original-form-control"/>
-								</div>
-								<div class="col-sm-3">
-									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
-								</div>
+								<div class="col-sm-3">We offer to rent</div>
+								<div class="col-sm-9"><input type='text' placeholder="Address" class="form-control original-form-control" />
+								</div>	
+							</div>
+
+							<div class="row mt-3">
+									<div class="col-sm-3">(the "Rental Unit" at monthly rent of</div>
+									<div class="col-sm-3"><input type='text' placeholder="Address" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-3">for a term of</div>
+									<div class="col-sm-3"><input type='text' placeholder="Address" class="form-control original-form-control" />
+									</div>	
+							</div>
+
+							<div class="row mt-3">
+									<div class="col-sm-3">months starting </div>
+									<div class="col-sm-3"><input type='text' placeholder="Address" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-3">Parking is required for</div>
+									<div class="col-sm-3"><input type='text' placeholder="Address" class="form-control original-form-control" />
+									</div>	
 							</div>
 						</div>
 					</uib-accordion>
