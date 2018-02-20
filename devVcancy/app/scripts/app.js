@@ -32,7 +32,8 @@ var vcancyApp = angular
 	'angularjs-dropdown-multiselect'
   ]); 
  
-	
+vcancyApp.constant('_', window._);
+
 vcancyApp.constant('config', {
    "sailsBaseUrl": 'https://www.vcancy.ca/nodeapi/api/v1/',
 });

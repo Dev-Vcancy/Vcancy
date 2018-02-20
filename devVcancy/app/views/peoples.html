@@ -43,7 +43,7 @@
 
 						<select class="m-input m-input--square ml-2" name="more" ng-model="lappctrl.filters.options">
 							<option value="">Options</option>
-							<option ng-value="ques.id" ng-repeat="ques in lappctrl.questionDropDown">{{ques.label}}</option>
+							<option ng-value="ques.id" ng-repeat="ques in lappctrl.screeningQuestions">{{ques.label}}</option>
 						</select>
 						<!-- <div ng-dropdown-multiselect="" options="lappctrl.questionDropDown" selected-model=""></div> -->
 					</div>
@@ -100,65 +100,23 @@
                 </button>
             </div>
             <div class="modal-body">
-				<div class="checkbox-div">
+				<div class="checkbox-div" ng-repeat="value in lappctrl.screeningQuestions track by $index" id="{{$index}}">
 					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
-						/> Job title
-					</label>
-				</div>
-				<div class="checkbox-div">
-					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
-						/> Pets
-					</label>
-				</div>
-				<div class="checkbox-div">
-					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
-						/> DOB
-					</label>
-				</div>
-				<div class="checkbox-div">
-					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
-						/> Name
-					</label>
-				</div>
-				<div class="checkbox-div">
-					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
-						/> Tell me a bit about yourself
-					</label>
-				</div>
-				<div class="checkbox-div">
-					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
-						/> No. of Applicants
-					</label>
-				</div>
-				<div class="checkbox-div">
-					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
-						/> Smoking
-					</label>
-				</div>
-				<div class="checkbox-div">
-					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
-						/> Move-in date
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="value.isChecked"
+						/> {{value.label}}
 					</label>
 				</div>	  
 				Add custom question below<br/>
 				<div class="row">
 					<div class="col">
-						<input type="text" style="margin-top:9px" class="form-group"/>
-						<button class="btn btn-sm btn-info"><i class="fa fa-plus"></i></button>
+						<input type="text" ng-model="lappctrl.customQuestion" style="margin-top:9px" class="form-group"/>
+						<button class="btn btn-sm btn-info" ng-click="lappctrl.addCustomQuestion()"><i class="fa fa-plus"></i></button>
 					</div>
 				</div>
             </div>
             <div class="modal-footer">
 				<button class="btn btn-primary" ng-click="closePrescreeningModal()">Close</button>
-				<button class="btn btn-success"><i class="fa fa-floppy-o"></i> Save</button>
+				<button class="btn btn-success" ng-click="lappctrl.saveScreeningQuestions()"><i class="fa fa-floppy-o"></i> Save</button>
             </div>
         </div>
 	  </script>
