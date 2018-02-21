@@ -353,6 +353,11 @@ ul.header-inner li a:hover.button:before{
     left: 50%;
     transform: translate(-50%);
 }
+
+.modal-width{
+  max-height:500px;
+  overflow: scroll;
+}
 .sidebar-inner .main-menu:last-child{
   position: absolute;
   bottom: 0;

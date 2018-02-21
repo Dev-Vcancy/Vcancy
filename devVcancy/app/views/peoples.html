@@ -55,12 +55,12 @@
 							</div>
 							<div class="row  mb-2">
 								<div class="col text-right">
-									<button class="btn btn-sm bgm-purple btn-round" ng-click="lappctrl.opencustomrentalapp()">Custom rental application</button>
+									<button class="btn btn-sm bgm-purple btn-round" ng-click="lappctrl.opencustomrentalapp()">Custom Rental Application</button>
 								</div>
 							</div>
 							<div class="row  mb-2">
 								<div class="col text-right">
-									<button class="btn btn-sm bgm-indigo btn-round" ng-click="lappctrl.openruncreditcriminalcheck()">Run credit and criminal check</button>
+									<button class="btn btn-sm bgm-indigo btn-round" ng-click="lappctrl.openruncreditcriminalcheck()">Run Credit and Criminal Check</button>
 								</div>
 							</div>
 						</div>
@@ -110,7 +110,7 @@
 					<div class="row">
 						<div class="col">
 							<input type="text" ng-model="lappctrl.customQuestion" style="margin-top:9px" class="form-group"/>
-							<button class="btn btn-sm btn-info" ng-click="lappctrl.addCustomQuestion()"><i class="fa fa-plus"></i></button>
+							<button class="btn btn-sm btn-info btn-round" ng-click="lappctrl.addCustomQuestion()"><i class="fa fa-plus"></i></button>
 						</div>
 					</div>
 							</div>
@@ -132,7 +132,7 @@
 					<span class="sr-only">Close</span>
 				</button>
 			</div>
-			<div class="col-xs-12 modal-body">
+			<div class="col-xs-12 modal-body modal-width">
 				<div class="row text-center">
 					<div class="col-sm-12">
 					<div class="edit-div-hover mb-3" id="imgDiv" style="position:relative;width:25%;color:lightgray;left:37%" >
@@ -148,8 +148,11 @@
 								</div>
 							</div>
 							</img>
-						</div>
 					</div>
+					</div>
+					<div class="col-sm-12">
+						<input type="text" class="form-control original-form-control" placeholder=" Company name, address and phone number" style="width:100%;"/>
+					</div>	
 				</div>
 	
 				<div class="input-sm form-control w-100 fg-input mb-3"></div>
