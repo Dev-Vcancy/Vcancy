@@ -569,6 +569,9 @@ ul.header-inner li a:hover.button:before{
   width: 40%;
   max-width: 100%;
 }
+.btn-round{
+  border-radius:0.3rem !important;
+}
 .app_form .form-control.w-3_5{
   width: 35%;
   max-width: 100%;
