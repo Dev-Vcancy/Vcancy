@@ -565,12 +565,16 @@ ul.header-inner li a:hover.button:before{
   width: 50%;
   max-width: 100%;
 }
+.m-border{
+  border:1px solid gray;
+}
 .app_form .form-control.w-4{
   width: 40%;
   max-width: 100%;
 }
 .btn-round{
   border-radius:0.3rem !important;
+  color:#fff;
 }
 .app_form .form-control.w-3_5{
   width: 35%;
