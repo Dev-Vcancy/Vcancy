@@ -687,9 +687,10 @@
 								
 
 								<div print-remove>
-									<button type="submit" ng-disabled="rentalForm.$invalid" class="btn bgm-orange btn-lg m-t-10">Submit</button> 
-									<button type="submit"  ng-click="rctrl.draft = 'true';" ng-model="rctrl.draft" class="btn bgm-orange btn-lg m-t-10">Save as Draft</button> 
-									<a id="draft" ng-click="rctrl.savechanges()" style="display:none;">Save Changes as Draft</a>
+                                    
+									<button type="submit" ng-if="!isFormOpenToSaveInDraft" ng-disabled="rentalForm.$invalid" class="btn bgm-orange btn-lg m-t-10">Submit</button> 
+									<button type="button"  ng-click="rctrl.savechanges()" class="btn btn-info btn-lg m-t-10">Save as Draft</button> 
+									<!-- <a id="draft" ng-click="rctrl.savechanges()" style="display:none;">Save Changes as Draft</a> -->
 									<!--button type="button" ng-click="rctrl.printApp()" class="btn bgm-orange btn-lg m-t-10">Print</button--> 
 								</div>
 								</div>
@@ -703,7 +704,7 @@
     </section>
 </section>
 
-<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+<!-- <footer id="footer" data-ng-include="'views/template/footer.html'"></footer> -->
 <script type="text/javascript">
 	Waves.init();
 	Waves.attach('.btn');
