@@ -258,7 +258,11 @@ vcancyApp
 			}
 		}
 		
-		
+		vm.openRentalForm = function(){
+			$rootScope.isFormOpenToSaveInDraft = true;
+			window.location.href = "#/rentalform/0/0";
+		}
+
 		vm.gotoRental = function(event){
 			if(vm.disablebutton == 0){
 				$rootScope.renterExternalEmail = vm.email;

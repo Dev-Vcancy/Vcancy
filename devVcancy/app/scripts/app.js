@@ -28,10 +28,12 @@ var vcancyApp = angular
 	'ngFileUpload',
 	'ui.jq',
 	'ui.bootstrap',
-	'socialLogin'
+	'socialLogin',
+	'angularjs-dropdown-multiselect'
   ]); 
  
-	
+vcancyApp.constant('_', window._);
+
 vcancyApp.constant('config', {
    "sailsBaseUrl": 'https://www.vcancy.ca/nodeapi/api/v1/',
 });
@@ -294,7 +296,7 @@ vcancyApp
  .config(function ($stateProvider, $urlRouterProvider){	
 	  // Initialize Firebase
 	  var config = {
-		apiKey: "AIzaSyDO18QznZ7mvAezkQ1M80nUz1OhaHjuwSA",
+		apiKey: "AIzaSyCR720Fl1Q6UIuvyy_0U980Z8y1mLschsI",
 		authDomain: "vcancy-5e3b4.firebaseapp.com",
 		databaseURL: "https://vcancy-5e3b4.firebaseio.com",
 		projectId: "vcancy-5e3b4",
@@ -424,6 +426,7 @@ vcancyApp
 
 	        }
 		})
+
 		.state ('viewprop', {
 			url: '/myprop',
 			controller: 'propertyCtrl',
@@ -489,11 +492,19 @@ vcancyApp
 			resolve: { authenticate: authenticate }
 		})
 		
+		// .state ('schedule', {
+		// 	url: '/schedule',
+		// 	controller: 'scheduleCtrl',
+		// 	controllerAs: 'schedulectrl',
+		// 	templateUrl: 'views/schedule.html',
+		// 	resolve: { authenticate: authenticate }
+		// })
+		
 		.state ('schedule', {
 			url: '/schedule',
-			controller: 'scheduleCtrl',
-			controllerAs: 'schedulectrl',
-			templateUrl: 'views/schedule.html',
+			controller: 'newscheduleCtrl',
+			controllerAs: 'newschedulectrl',
+			templateUrl: 'views/newschedule.html',
 			resolve: { authenticate: authenticate }
 		})
 		
@@ -501,7 +512,7 @@ vcancyApp
 			url: '/app',
 			controller: 'landlordappCtrl',
 			controllerAs: 'lappctrl',
-			templateUrl: 'views/app.html',
+			templateUrl: 'views/peoples.html',
 			resolve: { authenticate: authenticate }
 		})  
 		
@@ -567,19 +578,41 @@ vcancyApp
 				                }]
 	        }
 		})
+		// .state('tenantprofile', {
+		//     url: '/tenantprofile',
+		//     controller: 'tenantProfilelCtrl',
+		//     controllerAs: 'tdProfilectrl',
+		//     templateUrl: 'views/tenantProfile.html',
+		//     resolve: { tenantauthenticate: tenantauthenticate }
+		// })
 		.state('tenantprofile', {
 		    url: '/tenantprofile',
 		    controller: 'tenantProfilelCtrl',
 		    controllerAs: 'tdProfilectrl',
 		    templateUrl: 'views/tenantProfile.html',
-		    resolve: { tenantauthenticate: tenantauthenticate }
+		    resolve: { tenantauthenticate: tenantauthenticate,
+		   			 deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                    return $ocLazyLoad.load({
+	                        name: 'vcancyApp',
+	                        files: [
+	                            '../assets/pages/css/profile-2.min.css',
+	                            '../assets/layouts/layout2/css/layout.min.css',
+	                            '../assets/layouts/layout2/css/themes/blue.min.css',
+	                            '../assets/layouts/layout2/css/custom.min.css',
+	                            '../assets/layouts/layout2/scripts/layout.min.js',
+	                            '../assets/layouts/global/scripts/quick-nav.min.js',
+	                            '../styles/cmsdev.css',
+	                        ] 
+	                    });
+	                }]
+
+	        }
 		})
 		.state ('tenantapply', {
 			url: '/applyproperty/{propId}',
 			controller: 'applypropCtrl',
 			controllerAs: 'applyctrl',
 			templateUrl: 'views/applyproperty.html',
-			resolve: { tenantauthenticate: tenantauthenticate }
 		})
 		
 		.state ('applicationThanks', {

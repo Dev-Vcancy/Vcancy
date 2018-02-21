@@ -1,0 +1,612 @@
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header>
+	</header>
+	
+	<section id="main">
+		<aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+		<section id="content">
+	
+			<div class="container">
+				<div class="block-header text-center">
+					<h1>Showings and Applications</h1>
+	
+				</div>
+				<div class="loader" ng-if="lappctrl.loader">
+					<div class="preloader pl-xl">
+						<svg class="pl-circular" viewBox="25 25 50 50">
+							<circle class="plc-path" cx="50" cy="50" r="20" />
+						</svg>
+					</div>
+				</div>
+				<div class="card white-block p-20">
+					<div class="card-header row">
+						<div class="col-sm-6">
+							<!-- <div class="col-sm-4" ng-repeat="(key,w) in lappctrl.apppropaddress">
+							 <label class="checkbox checkbox-inline m-r-20">
+								<input type="checkbox" value="{{w.propID}}" checked="{{lappctrl.propcheck[w.propID]}}" ng-click="lappctrl.tablefilterdata(w.propID)">
+								<i class="input-helper"></i>
+								{{w.units}}  <span ng-hide="w.units == ' '">-</span>  {{w.address}} 
+							</label>
+						</div> -->
+							<select class="m-input m-input--square" name="more" ng-model="lappctrl.filters.property">
+								<option value="">Property</option>
+								<option ng-value="key" ng-repeat="(key, property) in lappctrl.properties">
+									{{property.name}}
+								</option>
+	
+							</select>
+	
+							<!-- <div ng-dropdown-multiselect="" options="lappctrl.questionDropDown" selected-model="lappctrl.filters.questions"></div> -->
+							<select class="m-input m-input--square ml-2" name="more" ng-model="lappctrl.filters.unit">
+								<option value="">All Units</option>
+								<option ng-value="unit.unit" ng-repeat="unit in lappctrl.properties[lappctrl.filters.property].unitlists">{{unit.unit}}</option>
+							</select>
+	
+							<select class="m-input m-input--square ml-2" name="more" ng-model="lappctrl.filters.options">
+								<option value="">Options</option>
+								<option ng-value="ques.id" ng-repeat="ques in lappctrl.screeningQuestions">{{ques.label}}</option>
+							</select>
+							<!-- <div ng-dropdown-multiselect="" options="lappctrl.questionDropDown" selected-model=""></div> -->
+						</div>
+						<div class="col-sm-6">
+							<div class="row mb-2">
+								<div class="col text-right">
+									<button class="btn btn-sm btn-primary" ng-click="lappctrl.openPrescremingQuestions()">Pre-screening Questions</button>
+								</div>
+							</div>
+							<div class="row  mb-2">
+								<div class="col text-right">
+									<button class="btn btn-sm btn-primary" ng-click="lappctrl.opencustomrentalapp()">Custom rental application</button>
+								</div>
+							</div>
+							<div class="row  mb-2">
+								<div class="col text-right">
+									<button class="btn btn-sm btn-primary" ng-click="lappctrl.openruncreditcriminalcheck()">Run credit and criminal check</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<div class="table-responsive">
+								<table ng-table-dynamic="lappctrl.submitappsSorting with lappctrl.submitappscols" class="table table-striped table-vmiddle">
+									<tr ng-repeat="row in $data">
+										<td ng-repeat="col in $columns">{{row[col.field]}}</td>
+										<td ng-repeat="col in lappctrl.submitappsextracols">
+	
+											<a href="https://www.vcancy.ca/checksforlandlords" target="_blank" class="btn bgm-cyan m-b-5">Run Credit Check</a>
+											<a href="#/viewapplication/{{row[col.field]}}" target="_blank" class="btn bgm-blue m-b-5">Application</a>
+	
+										</td>
+									</tr>
+									<tr ng-if="lappctrl.submittedappsavail == 0">
+										No submitted applications yet </td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	
+			<script type="text/ng-template" id="prescremingquestions.html">
+							<div class="profile_model_popup">
+							<div class="modal-header padding-20" >
+									<h3 class="modal-title">
+							Pre-screening Questions for Prospective Tenants
+					</h3>
+									<button type="button" class="close margin-top-15" data-dismiss="dialog" ng-click="closePrescreeningModal()" style='margin-top:8px !important'>
+										<span aria-hidden="true">&times;</span>
+										<span class="sr-only">Close</span>
+									</button>
+							</div>
+							<div class="modal-body">
+					<div class="checkbox-div" ng-repeat="value in lappctrl.screeningQuestions track by $index" id="{{$index}}">
+						<label>
+							<input type="checkbox" class="checkbox-position checkbox-width" ng-model="value.isChecked"
+							/> {{value.label}}
+						</label>
+					</div>	  
+					Add custom question below<br/>
+					<div class="row">
+						<div class="col">
+							<input type="text" ng-model="lappctrl.customQuestion" style="margin-top:9px" class="form-group"/>
+							<button class="btn btn-sm btn-info" ng-click="lappctrl.addCustomQuestion()"><i class="fa fa-plus"></i></button>
+						</div>
+					</div>
+							</div>
+							<div class="modal-footer">
+					<button class="btn btn-primary" ng-click="closePrescreeningModal()">Close</button>
+					<button class="btn btn-success" ng-click="lappctrl.saveScreeningQuestions()"><i class="fa fa-floppy-o"></i> Save</button>
+							</div>
+					</div>
+			</script>
+	
+			<script type="text/ng-template" id="customrentalapp.html">
+			<div class="profile_model_popup">
+			<div class="modal-header padding-20" >
+				<h3 class="modal-title">
+						Custom Rental Application Form
+				</h3>
+				<button type="button" class="close margin-top-15" data-dismiss="dialog" ng-click="closecustomrentalappModal()" style='margin-top:8px !important'>
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+			</div>
+			<div class="col-xs-12 modal-body">
+				<div class="row text-center">
+					<div class="col-sm-12">
+					<div class="edit-div-hover mb-3" id="imgDiv" style="position:relative;width:25%;color:lightgray;left:37%" >
+	
+							<img src="{{ldProfilectrl.userData.companylogo?ldProfilectrl.userData.companylogo:'../assets/pages/img/no_image_found.jpg'}}"
+								class="img-responsive pic-bordered image" alt="">
+							<div class="middle">
+								<div class="text">
+									<label style="position:absolute;top:50%;left:50%;">
+										<i class="fa fa-pencil fa-2x"></i>
+										<input type="file" accept='image/*' file-upload style="display:none" />
+									</label>
+								</div>
+							</div>
+							</img>
+						</div>
+					</div>
+				</div>
+	
+				<div class="input-sm form-control w-100 fg-input mb-3"></div>
+	
+				<div class="mb-3">
+						Select the sections that you want to include in your rental application form that prospective tenants complete
+				</div>	
+		
+				<div class="checkbox-div mb-3">
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.PAPPD"/>
+					<uib-accordion close-others="oneAtATime">
+						<div uib-accordion-group class="panel-default" heading="Primary Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+							<div class="row mt-3">
+								<div class="col-sm-4">
+									<input type='text' placeholder="firstname" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-4">
+										<input type='text' placeholder="lastname" class="form-control original-form-control"/>
+									</div>
+									<div class="col-sm-4">
+										<div class="row">
+											<div class="col-sm-3">DOB</div>
+											<div class="col-sm-9" >
+												<input type='date' class="form-control original-form-control"/>
+											</div>
+										</div>
+									</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-sm-4">
+									<input type='text' placeholder="telephone" class="form-control original-form-control" />
+								</div>
+								<div class="col-sm-4">
+										<input type='text' placeholder="home" class="form-control original-form-control"/>
+								</div>
+								<div class="col-sm-4">
+										<input type='text' placeholder="email" class="form-control original-form-control"/>
+								</div>
+							</div>
+							<div class="row mt-3">
+	
+										<div class="col-sm-4">
+												Mairtal Status:
+										</div>
+										
+										<div class="col-sm-4">
+												<input type="radio" /> Single																	
+												<input type="radio" /> Married
+										</div>
+										<div class="col-sm-4">
+												<input type='text' placeholder="sin" class="form-control original-form-control"/>
+										</div>					
+								
+							</div>
+							<div class="row mt-3">
+									<div class="col-sm-5">	
+										<div class="row">
+											<div class="col-sm-4" style="margin:auto">
+													Pets:
+											</div>
+											<div class="col-sm-8">
+												<input type="radio"> Yes
+												<input type="radio"> No
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-5">	
+										<div class="row">
+											<div class="col-sm-4" style="margin:auto">
+													Smoking:
+											</div>
+											<div class="col-sm-8">
+												<input type="radio"> Yes
+												<input type="radio"> No
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+					</uib-accordion>
+					<div class="checkbox-div mb-3">
+							<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.CADDR"/>
+							<uib-accordion close-others="oneAtATime">
+								<div uib-accordion-group class="panel-default" heading="Current Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+									<div class="row mt-3">
+										<div class="col-sm-4">
+											<input type='text' placeholder="State Address" class="form-control original-form-control" />
+										</div>
+										<div class="col-sm-4">
+											<input type='text' placeholder="City" class="form-control original-form-control"/>
+										</div>
+										<div class="col-sm-4">
+											<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+										</div>
+									</div>
+									<div class="row mt-3">
+										<div class="col-sm-3">
+											<input type='text' placeholder="zipcode" class="form-control original-form-control" />
+										</div>
+										<div class="col-sm-3">
+												<input type='text' placeholder="country" class="form-control original-form-control"/>
+										</div>
+										<div class="col-sm-6">
+												<div class="row">
+														<div class="col-sm-8" style="margin:auto">
+																Do you rent or own this address
+														</div>
+														<div class="col-sm-4">
+															<input type="radio" /> Rent
+															<input type="radio" /> Own
+														</div>
+													</div>
+										</div>
+									</div>
+									<div class="row mt-3">
+											<div class="col-sm-6">
+												<input type='text' placeholder="How long have you lived at this address" class="form-control original-form-control" />
+											</div>
+											<div class="col-sm-6">
+													<input type='text' placeholder="Rent $" class="form-control original-form-control"/>
+											</div>
+									</div>
+									<div class="row mt-3">
+											<div class="col-sm-12">
+												<input type='text' placeholder="Reason for vacating " class="form-control original-form-control" />
+											</div>
+									</div>
+									<div class="row mt-3">
+											<div class="col-sm-6">
+												<input type='text' placeholder="Landlord Full Name" class="form-control original-form-control" />
+											</div>
+											<div class="col-sm-6">
+													<input type='text' placeholder="Landlord's daytime phone #" class="form-control original-form-control"/>
+											</div>
+									</div>
+									</div>
+							</uib-accordion>
+					</div>
+					<div class="checkbox-div mb-3">
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.PADDR"/>
+						<uib-accordion close-others="oneAtATime">
+							<div uib-accordion-group class="panel-default" heading="Previous Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+								<div class="row mt-3">
+									<div class="col-sm-4">
+										<input type='text' placeholder="State Address" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-4">
+										<input type='text' placeholder="City" class="form-control original-form-control"/>
+									</div>
+									<div class="col-sm-4">
+										<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+									</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-sm-3">
+										<input type='text' placeholder="zipcode" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-3">
+											<input type='text' placeholder="country" class="form-control original-form-control"/>
+									</div>
+									<div class="col-sm-6">
+											<div class="row">
+													<div class="col-sm-8" style="margin:auto">
+															Do you rent or own this address
+													</div>
+													<div class="col-sm-4">
+														<input type="radio" /> Rent
+														<input type="radio" /> Own
+													</div>
+												</div>
+									</div>
+								</div>
+								<div class="row mt-3">
+										<div class="col-sm-6">
+											<input type='text' placeholder="How long have you lived at this address" class="form-control original-form-control" />
+										</div>
+										<div class="col-sm-6">
+												<input type='text' placeholder="Rent $" class="form-control original-form-control"/>
+										</div>
+								</div>
+								<div class="row mt-3">
+										<div class="col-sm-12">
+											<input type='text' placeholder="Reason for vacating " class="form-control original-form-control" />
+										</div>
+								</div>
+								<div class="row mt-3">
+										<div class="col-sm-6">
+											<input type='text' placeholder="Landlord Full Name" class="form-control original-form-control" />
+										</div>
+										<div class="col-sm-6">
+												<input type='text' placeholder="Landlord's daytime phone #" class="form-control original-form-control"/>
+										</div>
+								</div>
+								</div>
+						</uib-accordion>
+					</div>
+				</div>
+				<div class="checkbox-div mb-3">
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.AAPPD"/>
+						<uib-accordion close-others="oneAtATime">
+							<div uib-accordion-group class="panel-default" heading="Additional Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+								<div class="row">
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.AAPP1"> Additional Applicant</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-sm-4">
+										<input type='text' placeholder="Full Name" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-4">
+										<input type='date' placeholder="Date Of Birth" class="form-control original-form-control"/>
+									</div>	
+									<div class="col-sm-4">
+										<input type='text' placeholder="SIN number" class="form-control original-form-control"/>
+									</div>
+								</div>
+	
+								<div class="row">
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.AAPP2"> Additional Applicant</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-sm-6">
+											<input type='date' placeholder="Date Of Birth" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-6">
+										<input type='text' placeholder="Full Name" class="form-control original-form-control"/>
+									</div>		
+								</div>
+							</div>
+						</uib-accordion>
+				</div>
+				<div class="checkbox-div mb-3">
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.ESIV"/>
+						<uib-accordion close-others="oneAtATime">
+							<div uib-accordion-group class="panel-default" heading="Employment Status & Income Verification" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+								<div class="row">
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.ESIV1"> Employment Status & Income Verification</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-sm-6">
+										<input type='text' placeholder="Current Employer" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-6">
+										<input type='text' placeholder="Position" class="form-control original-form-control"/>
+									</div>								
+								</div>
+								<div class="row mt-3">
+										<div class="col-sm-6">
+											<input type='text' placeholder="Employer Phone " class="form-control original-form-control" />
+										</div>
+										<div class="col-sm-6">
+											<input type='text' placeholder="How long have you worked in this company(Month/Year)" class="form-control original-form-control"/>
+										</div>								
+								</div>
+								<div class="row mt-3">
+											<div class="col-sm-6">
+												<input type='text' placeholder="Gross monthly income" class="form-control original-form-control" />
+											</div>
+											<div class="col-sm-6">
+												<input type='text' placeholder="Other income description(eg.Disability,Income Assistance,Savings)" class="form-control original-form-control"/>
+											</div>								
+								</div>
+							</div>
+						</uib-accordion>
+				</div>
+				<div class="checkbox-div mb-3">
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.VI"/>
+						<uib-accordion close-others="oneAtATime">
+							<div uib-accordion-group class="panel-default" heading="Vehical Information" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+								<div class="row mt-3">
+									<div class="col-sm-4">
+										<input type='text' placeholder="Make" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-4">
+										<input type='text' placeholder="Model" class="form-control original-form-control"/>
+									</div>
+									<div class="col-sm-4">
+										<input type='text' placeholder="Year" class="form-control original-form-control"/>
+									</div>
+								</div>
+							</div>
+						</uib-accordion>
+				</div>
+				<div class="checkbox-div mb-3">
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.EC"/>
+						<uib-accordion close-others="oneAtATime">
+							<div uib-accordion-group class="panel-default" heading="Emergancy Contact" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+								<div class="row">
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.EC1">Name and Phone number of Personal/Family reference who may be contacted in the case of emergency</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-sm-6">
+										<input type='text' placeholder="Full Name" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-6">
+										<input type='text' placeholder="Phone" class="form-control original-form-control"/>
+									</div>								
+								</div>
+							</div>
+						</uib-accordion>
+				</div>
+				<div class="checkbox-div mb-3">
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.REF"/>
+						<uib-accordion close-others="oneAtATime">
+							<div uib-accordion-group class="panel-default" heading="References" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+								<div class="row">
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF1">References 1</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-sm-4">
+										<input type='text' placeholder="Full Name" class="form-control original-form-control" />
+									</div>
+									<div class="col-sm-4">
+										<input type='text' placeholder="Phone" class="form-control original-form-control"/>
+									</div>
+									<div class="col-sm-4">
+										<input type='text' placeholder="Relationship(previous landlord,employer)" class="form-control original-form-control"/>
+									</div>
+								</div>
+	
+								<div class="row">
+										<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF2">References 2</div>
+									</div>
+									<div class="row mt-3">
+										<div class="col-sm-4">
+											<input type='text' placeholder="Full Name" class="form-control original-form-control" />
+										</div>
+										<div class="col-sm-4">
+											<input type='text' placeholder="Phone" class="form-control original-form-control"/>
+										</div>
+										<div class="col-sm-4">
+											<input type='text' placeholder="Relationship(previous landlord,employer)" class="form-control original-form-control"/>
+										</div>
+									</div>
+							</div>
+						</uib-accordion>
+				</div>
+				<div class="checkbox-div mb-3">
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.UD"/>
+						<uib-accordion close-others="oneAtATime">
+							<div uib-accordion-group class="panel-default" heading="Unit details (added from property details provided)" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+								<div class="row">
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.UDAAPP"> Additional Applicant</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-sm-3">We offer to rent</div>
+									<div class="col-sm-9"><input type='text' placeholder="Address" class="form-control original-form-control" />
+									</div>	
+								</div>
+	
+								<div class="row mt-3">
+										<div class="col-sm-3">(the "Rental Unit" at monthly rent of</div>
+										<div class="col-sm-3"><input type='text' placeholder="Address" class="form-control original-form-control" />
+										</div>
+										<div class="col-sm-3">for a term of</div>
+										<div class="col-sm-3"><input type='text' placeholder="Address" class="form-control original-form-control" />
+										</div>	
+								</div>
+	
+								<div class="row mt-3">
+										<div class="col-sm-3">months starting </div>
+										<div class="col-sm-3"><input type='text' placeholder="Address" class="form-control original-form-control" />
+										</div>
+										<div class="col-sm-3">Parking is required for</div>
+										<div class="col-sm-3"><input type='text' placeholder="Address" class="form-control original-form-control" />
+										</div>	
+								</div>
+							</div>
+						</uib-accordion>
+				</div>
+				
+				<div class="checkbox-div mb-3">
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.TC"/>
+						<textarea rows="6" class="m-input m-input--square m-width" name="more" style="white-space: nowrap;">
+	You are authorized to obtaining credit checks & verifying details contained in this Application.
+			
+	This unit/s is strictly NON SMOKING. This offer is subject to acceptance by the landlord/property
+	management company that listed the property.This application is made on the understanding that no 
+	betterments will be provided to the Rental Unit except those which may be specifically requested in 
+	this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.
+	
+	It is understood that this application will not be processed unless fully completed.
+	
+	If the landlord/property management company accepts this Application, we will sign a Fixed 
+	Term Tenancy Agreement at the offices of the property management company or in person with
+	the landlord and pay the security deposit. The Rental Unit will not be considered rented
+	until the Fixed Term Tenancy Agreement is signed by the Tenant and the Landlord.
+	
+	We will ensure that the collection, use, disclosure and retention of information will comply with 
+	the provisions of the Freedom of information and Protection of Privacy Act. 
+	Information will be collected and used only as necessary and for the intended purpose and will 
+	not be disclosed as required by law.
+	
+	I hereby state that the information contained herein is true and I authorize my References
+	as listed above to release information regarding my employment and/or past/current tenancies.
+	
+	Tenants are not chosen on a first come – first served basis. We choose the most suitable 
+	application for the unit at our sole discretion. This application form is to be used only
+	in the interested of the owner of the rental unit.</textarea>
+				</div>
+			</div>
+			
+			<div class="modal-footer mofo">	
+				<button class="btn btn-success" ng-click="lappctrl.saveCustomRentalApplicationCheck()"><i class="fa fa-floppy-o" ></i> Save</button>			
+			</div>
+		</div>
+		</script>
+	
+			<script type="text/ng-template" id="runcreditcriminalcheck.html">
+			<div class="profile_model_popup">
+			<div class="modal-header padding-20" >
+				<h3 class="modal-title">
+						Request Credit and Criminal Check Reports
+				</h3>
+				<button type="button" class="close margin-top-15" data-dismiss="dialog" ng-click="closeruncreditcriminalcheckModal()" style='margin-top:8px !important'>
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+			</div>
+			<div class="col-xs-12 modal-body">
+			<div class="col-xs-12 col-sm-6">
+					<select class="m-input m-input--square" name="more" ng-model="lappctrl.filters.property">
+							<option value="">Select Tenant</option>
+	
+	
+					</select>
+			</div>
+			<div class="col-xs-12 col-sm-6">
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> Credit Report (Transunion) $15/Report
+					</label>
+				</div>
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> Criminal Record Check $35/Report
+					</label>
+				</div>
+				<div class="checkbox-div">
+					<label>
+						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						/> Both of the above $45/Report
+					</label>
+				</div>
+			</div>
+			</div>
+			<div class="modal-footer mofo">	
+				<button class="btn btn-success" ng-click="deleteAlert()"><i class="fa fa-floppy-o" ></i> Submit</button>			
+			</div>
+		</div>
+		</script>
+		</section>
+	</section>
+	
+	<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+	<script type="text/javascript">
+		Waves.init();
+		Waves.attach('.btn');
+	</script>

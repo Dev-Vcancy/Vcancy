@@ -1,48 +1,83 @@
-<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
 <style>
-.radio .input-helper:before {
-    top: -11px !important;
-}
-.radio .input-helper:after {
-       top: -6px !important;
-}
+	.radio .input-helper:before {
+		top: -11px !important;
+	}
+
+	.radio .input-helper:after {
+		top: -6px !important;
+	}
 </style>
 <section id="main">
-    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+	<aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
 
-    <section id="content"> 
+	<section id="content">
 
-        <div class="container">
+		<div class="container">
 			<div class="block-header text-center">
-				<h1>Schedule Viewing</h1>
-            </div>	
-            <div class="row text-center">
-				<div class="alert alert-danger alert-dismissable" ng-if="applyctrl.emailVerifiedError"><h4>{{applyctrl.emailVerifiedError}}</h4></div>	
-			</div>		
+				<!-- <h1>Schedule Viewing</h1> -->
+			</div>
+			<div class="row text-center">
+				<div class="alert alert-danger alert-dismissable" ng-if="applyctrl.emailVerifiedError">
+					<h4>{{applyctrl.emailVerifiedError}}</h4>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-sm-12 card">
 					<div ng-if="applyctrl.applyprop.availableslots.length == 0" ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1">
-						<h4>No Time Slot Available to Schedule your application for Property.</h4>										
+						<h4>No Time Slot Available to Schedule your application for Property.</h4>
 					</div>
 					<div ng-if="applyctrl.alreadyBookedSlot == 1" ng-hide="applyctrl.propinactive == 1">
 						<h4>You have already booked a time slot for this property, please cancel your time slot if you want to reschedule.</h4>
 					</div>
-					<div ng-if="applyctrl.propinactive == 1" >
+					<!-- <div ng-if="applyctrl.propinactive == 1" >
 						<h4>This property isnt available now.</h4>										
-					</div>
-					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="applyctrl.applyprop.availableslots.length" ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1">	
-						<input type="hidden" name="landlordID" ng-model="applyctrl.applyprop.landlordID" class="form-control" >
-						<input type="hidden" name="propID" ng-model="applyctrl.applyprop.propID" class="form-control">	
-						<input type="hidden" name="address" ng-model="applyctrl.applyprop.address" class="form-control">						
-						
-						<div class="card-header text-center">
+					</div> -->
+					<!-- ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1" -->
+					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="applyctrl.applyprop.availableslots.length">
+						<input type="hidden" name="landlordID" ng-model="applyctrl.applyprop.landlordID" class="form-control">
+						<input type="hidden" name="propID" ng-model="applyctrl.applyprop.propID" class="form-control">
+						<input type="hidden" name="address" ng-model="applyctrl.applyprop.address" class="form-control">
+
+						<!-- <div class="card-header text-center">
 							<h1>Enter basic info and select viewing time</h1>
 							<p><i class="zmdi zmdi-home zmdi-hc-fw"></i> {{applyctrl.applyprop.units}}  <span ng-hide="applyctrl.applyprop.units == ' '">-</span>  {{applyctrl.applyprop.address}}</p>
-						</div>
-						<div class="card-body card-padding">				
+						</div> -->
+						<div class="card-body card-padding">
 							<div class="col-sm-6">
-								<div class="form-group col-sm-12">
-									<input type="text" placeholder="Full name" readonly="true" ng-model="applyctrl.applyprop.name" required  class="form-control"/>
+								<div class="row mt-3">Property Name</div>
+								<div class="row mt-3">Unit - Address XYZ, City, Post code</div>
+								<div class="row mt-3">$1200 - 1 Bed, 1 Bath , 666 sqft</div>
+								<div class="row mt-3">
+									<div id="imgDiv" style="position:relative;width:38%;color:lightgray" class="edit-div-hover">
+
+										<img src="{{ldProfilectrl.userData.companylogo?ldProfilectrl.userData.companylogo:'../assets/pages/img/no_image_found.jpg'}}"
+										 class="img-responsive pic-bordered image" alt="">
+										<div class="middle">
+											<div class="text">
+												<label style="position:absolute;top:50%;left:50%;">
+													<i class="fa fa-pencil fa-2x"></i>
+													<input type="file" accept='image/*' file-upload style="display:none" />
+												</label>
+											</div>
+										</div>
+										</img>
+									</div>
+
+								</div>
+								<div class="row mt-3">Description</div>
+								<div class="row mt-3">
+									<div class="col-sm-12">
+										<textarea rows="6" cols="55" class="m-input m-input--square" name="more"></textarea>
+									</div>
+								</div>
+								<div class="row mt-3">Parking: </div>
+								<div class="row mt-3">Laundry: </div>
+								<div class="row mt-3">Pets: </div>
+								<div class="row mt-3">Lease Terms:</div>
+								<div class="row mt-3">Amenities: </div>
+								<!-- <div class="form-group col-sm-1<div class="row">Property Name</div>2">
+									<input type="text" placeholder="Full name" readonly="true" ng-model=<div class="row">Property Name</div>"applyctrl.applyprop.name" required  class="form-control"/>
 								</div>
 								<div class="form-group col-sm-6">
 									<input type="text" placeholder="City" ng-model="applyctrl.applyprop.tenantlocation" required  class="form-control"/>
@@ -58,11 +93,156 @@
 								</div>
 								<div class="form-group col-sm-12 m-t-10">
 									<textarea auto-size placeholder="Tell me a little about yourself" ng-model="applyctrl.applyprop.description"  required  class="form-control"></textarea>
+								</div> -->
+							</div>
+							<div class="col-sm-6">
+								<div class="row mt-3">Select a Showing Date and Time OR Propose new time</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="row mt-3">Date</div>
+									</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											<i class="fa fa-calander"></i> Thu
+											<br/> Feb 19th
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											<i class="fa fa-calander"></i> Thu
+											<br/> Feb 19th
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											<i class="fa fa-calander"></i> Thu
+											<br/> Feb 19th
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											<i class="fa fa-calander"></i> Thu
+											<br/> Feb 19th
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											<i class="fa fa-calander"></i> Thu
+											<br/> Feb 19th
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											<i class="fa fa-calander"></i> Thu
+											<br/> Feb 19th
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											<i class="fa fa-calander"></i> Thu
+											<br/> Feb 19th
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											<i class="fa fa-calander"></i> Thu
+											<br/> Feb 19th
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											<i class="fa fa-calander"></i> Thu
+											<br/> Feb 19th
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											<i class="fa fa-calander"></i> Thu
+											<br/> Feb 19th
+										</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="row mt-3">Time</div>
+									</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											10:00 AM
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											10:00 AM
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											10:00 AM
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											10:00 AM
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											10:00 AM
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											10:00 AM
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											10:00 AM
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											10:00 AM
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											10:00 AM
+										</button>
+									</div>
+									<div class="col-sm-3 mb-3">
+										<button class="btn btnoutline success btn-outline-success">
+											10:00 AM
+										</button>
+									</div>
+								</div>
+
+								<div>
+										<div class="row text text-center">
+											Already have an account? [Sign in]
+										</div>
+										<div class="row mt-4">
+											<div class="col-sm-6 mb-3">
+												<input type="text" placeholder="First Name" class="form-control original-form-control"/>
+											</div>
+											<div class="col-sm-6 mb-3">
+												<input type="text" placeholder="Last Name" class="form-control original-form-control"/>
+											</div>
+											<div class="col-sm-6 mb-3">
+												<input type="text" placeholder="Email" class="form-control original-form-control"/>
+											</div>
+											<div class="col-sm-6 mb-3">
+												<input type="text" placeholder="Phone" class="form-control original-form-control"/>
+											</div>
+										</div>
 								</div>
 							</div>
-							<div class="col-sm-6" >
-								<h3>Time Slots available</h3>
-								<div class="table-responsive">
+							<!-- <div class="table-responsive">
 									<table class="table">
 										<thead >
 											<tr>
@@ -85,25 +265,24 @@
 										</tbody>
 										
 									</table>							
-								</div>							
-							</div>
-							<div class="clearfix"></div>
-							<div class="col-sm-12 text-center">
+								</div>							 -->
+						</div>
+						<div class="clearfix"></div>
+						<!-- <div class="col-sm-12 text-center">
 								<button type="submit" ng-disabled="applypropForm.$invalid"  class="btn btn-success">Send</button>
 							</div>
-							
-							<div class="clearfix"></div>
-						</div>
-					</form>
+							 -->
+						<div class="clearfix"></div>
 				</div>
-			</div>	
+				</form>
+			</div>
+		</div>
 		</div>
 	</section>
 </section>
 
-<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+<!-- <footer id="footer" data-ng-include="'views/template/footer.html'"></footer> -->
 <script type="text/javascript">
 	Waves.init();
 	Waves.attach('.btn');
-</script>  
-        
+</script>

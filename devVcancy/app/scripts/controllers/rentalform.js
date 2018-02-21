@@ -1027,6 +1027,7 @@ vcancyApp
 
 			vm.savechanges = function () {
 				vm.draft = "true";
+				$rootScope.isFormOpenToSaveInDraft = false;
 				// alert(vm.draft);
 				vm.rentalAppSubmit();
 			}
