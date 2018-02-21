@@ -19,27 +19,31 @@
             </div>
 
             <div class="row">
-              <div class="col-sm-4" style="border:1px solid black">
+              <div class="col-sm-4" style="border:1px solid #e7ecf1">
                 <h4>
                   <span class="fa fa-info-circle"></span> Add Availablity</h4>
                 <div class="row">
-                  <div class="col-sm-6 pl-0">
-                    <label for="example-time-input" class="col-sm-12 col-form-label">
+                  <div class="col-sm-12 pl-0">
+                    <label for="example-time-input" class="col-sm-4 col-form-label">
                       Property
+                    </label>
+                    <div class="col-sm-8">
                       <select class="m-input m-input--square" name="selectProperty" ng-model="newschedulectrl.propertySelected" ng-options="key as value.address for (key, value) in newschedulectrl.properties">
                         <option value=''>Select property</option>
                       </select>
-
-                    </label>
+                      </div>
+                  
                   </div>
-                  <div class="col-sm-6 pl-0" ng-if="newschedulectrl.propertySelected && newschedulectrl.properties[newschedulectrl.propertySelected].units == 'multiple'">
-                    <label for="example-time-input" class="col-sm-12 col-form-label">
+                  <div class="col-sm-12 pl-0" ng-if="newschedulectrl.propertySelected && newschedulectrl.properties[newschedulectrl.propertySelected].units == 'multiple'">
+                    <label for="example-time-input" class="col-sm-4 col-form-label">
                       Unit
+                    </label>
+                    <div class="col-sm-8">
                       <select class="m-input m-input--square" name="selectProperty" style="min-width: 150px;" ng-model="newschedulectrl.selectedUnitId"
                         ng-options="value.unit as value.unit for value in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
                         <option value=''>Select unit</option>
                       </select>
-                    </label>
+                    </div>
                   </div>
                 </div>
                 <div class="row mt-3">
@@ -49,7 +53,7 @@
                         From Date
                       </label>
                       <div class="col-sm-8">
-                        <input type="date" class="m-input m-input--square" name="fromDate" ng-model="newschedulectrl.fromDate" />
+                        <input type="date" class="m-input m-input--square m-border" name="fromDate" ng-model="newschedulectrl.fromDate" />
                       </div>
                     </div>
                     <div class="row">
@@ -57,7 +61,7 @@
                         To Date
                       </label>
                       <div class="col-sm-8">
-                        <input type="date" class="m-input m-input--square" name="toDate" ng-model="newschedulectrl.toDate" />
+                        <input type="date" class="m-input m-input--square m-border" name="toDate" ng-model="newschedulectrl.toDate" />
                       </div>
                     </div>
                   </div>
@@ -71,9 +75,9 @@
                       <div class="col-sm-9">
                         <div class="row">
                           <div class="col-sm-6">
-                            <label for="example-time-input" class="col-sm-12 col-form-label">
+                            <label for="example-time-input" class="col-sm-6 col-form-label">
                               From
-                              <select class="m-input m-input--square" name="more" ng-model="newschedulectrl.fromTime">
+                               <select class="m-input m-input--square" name="more" ng-model="newschedulectrl.fromTime">
                                 <option value="00:00 am">0 am</option>
                                 <option value="01:00 am">1 am</option>
                                 <option value="02:00 am">2 am</option>
@@ -102,7 +106,7 @@
                             </label>
                           </div>
                           <div class="col-sm-6">
-                            <label for="example-time-input" class="col-sm-12 col-form-label">
+                            <label for="example-time-input" class="col-sm-6 col-form-label">
                               To
                               <select class="m-input m-input--square" name="more" ng-model="newschedulectrl.toTime">
                                 <option value="00:00 am">0 am</option>
@@ -137,24 +141,23 @@
                     </div>
                   </div>
                 </div>
-                <div class="row mt-2" style="margin-bottom: 10px">
-                  <div class="offset-sm-3 col-sm-3">
-                    <button class="btn btn-sm btn-success" ng-click="newschedulectrl.addAvailability($event)">Add</button>
-                  </div>
-                  <div class="offset-sm-1 col-sm-3">
-                    <button class="btn btn-sm btn-danger" ng-click="newschedulectrl.clearAll($event)">Reset</button>
-                  </div>
+                <div class="row mt-3 col-sm-offset-3" style="margin-bottom: 10px;">
+                  
+                    <button class="btn btn-success btn-round" ng-click="newschedulectrl.addAvailability($event)">Add</button>
+                    &nbsp;
+                    <button class="btn btn-danger btn-round" ng-click="newschedulectrl.clearAll($event)">Reset</button>
+                  
                 </div>
               </div>
-              <div class="col-sm-8 text-center" style="margin:auto; ">
+              <div class="col-sm-6 text-center" style="margin:auto; ">
                 <label>Calander coming soon</label>
               </div>
             </div>
 
             <div class="row mt-5">
               <div class="col-sm-6">
-                <button class="btn btn-sm btn-success" ng-click="newschedulectrl.deleteListings($event)">Delete</button>
-                <button class="btn btn-sm btn-success" ng-click="craigslistopen(true)">Craigslist Settings</button>
+                <button class="btn btn-sm btn-success btn-round" ng-click="newschedulectrl.deleteListings($event)">Delete</button>
+                <button class="btn btn-sm btn-success btn-round" ng-click="craigslistopen(true)">Craigslist Settings</button>
               </div>
             </div>
 

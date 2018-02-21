@@ -9,6 +9,10 @@ vcancyApp
 		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, Upload, $http, emailSendingService, config) {
 
 			var vm = this;
+			$scope.active = 0;
+			$scope.activateTab = function (tab) {
+				$scope.active = tab;
+			};
 			var tenantID = localStorage.getItem('userID');
 			var scheduleID = $stateParams.scheduleId;
 			var applicationID = $stateParams.applicationId;
@@ -1027,6 +1031,7 @@ vcancyApp
 
 			vm.savechanges = function () {
 				vm.draft = "true";
+				$rootScope.isFormOpenToSaveInDraft = false;
 				// alert(vm.draft);
 				vm.rentalAppSubmit();
 			}

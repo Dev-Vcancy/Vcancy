@@ -360,7 +360,7 @@
               <div class="form-group">
                   <p>
                       Data must be in a specific format to import.<br/><br/>
-                      Please use this file - <a href="../assets/test.csv">Sample Spreadsheet</a>. <br/><br/>
+                      Please use this file - <a href="../assets/file/Vcancy_Units_Upload_Template.csv">Sample Spreadsheet</a>. <br/><br/>
                       If you are having problems uploading units then please contact <a href="https://vcancy.ca/contact/">support</a>
                       and we will upload it for you.
                   </p>
@@ -522,7 +522,7 @@
                               <button type="submit" class="btn btn-success pull-right">{{propctrl.submitaction}}</button>
                             </div>
                             <div class="col-lg-6 col-xs-12 col-sm-12">
-                              <a ng-click="propctrl.deleteproperty(propctrl.prop.propID,'innerpage')" class="btn btn-info pull-right">Delete Property</a>
+                              <a ng-click="propctrl.deleteproperty(propctrl.prop.propID,'innerpage')" style="color:white" class="btn btn-info pull-right btn-round">Delete Property</a>
                             </div>
                           </div>
                           <div class="clearfix"></div>
@@ -564,7 +564,7 @@
                           <div class="row text-right">
                             <div class='col'>
                               <!-- <button type="button" ng-click="propctrl.copyrowofunits()">Copy Unit</button> -->
-                              <button type="button" class="btn btn-success btn-sm" ng-click="propctrl.opencsvmodel(propctrl.prop)">
+                              <button type="button" class="btn btn-success btn-sm btn-round" ng-click="propctrl.opencsvmodel(propctrl.prop)">
                                 <i class="fa fa-file-excel-o" /> Import Data
                               </button>
                             </div>
@@ -584,10 +584,10 @@
                               </label>
                             </div>
                             <div class="col-sm-6 text-right">
-                              <button type="button" type="button" class="btn btn-primary btn-sm" ng-click="propctrl.addNewUnit()">
+                              <button type="button" type="button" class="btn btn-primary btn-sm btn-round" ng-click="propctrl.addNewUnit()">
                                 <i class="fa fa-plus" /> Add Unit
                               </button>
-                              <button class="btn btn-danger btn-sm" type="button" ng-click="propctrl.deleteSelected()">
+                              <button class="btn btn-danger btn-sm btn-round" type="button" ng-click="propctrl.deleteSelected()">
                                 <i class="fa fa-trash-o"></i>
                               </button>
                             </div>
