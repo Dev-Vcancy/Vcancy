@@ -2068,6 +2068,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
         $scope.submitDetails = function () {
             var index = $scope.selectedUnitDetail.index;
+            if(!vm.prop.unitlists[index]) {
+                vm.prop = angular.copy($scope.prop);
+            }
             vm.prop.unitlists[index] = angular.copy($scope.selectedUnitDetail.data);
             vm.prop.unitlists[index].isIncomplete = vm.checkIfDetailIsIncomplete(angular.copy($scope.selectedUnitDetail.data));
             vm.submiteditunits(vm.prop.unitlists, vm.prop)

@@ -5,8 +5,8 @@
 //================================================= 
 
 vcancyApp
-	.controller('newscheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'emailSendingService', '$q', '$uibModal'
-		, function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, emailSendingService, $q, $uibModal) {
+	.controller('newscheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'emailSendingService', '$q', '$uibModal', '_'
+		, function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, emailSendingService, $q, $uibModal, _) {
 
 			var vm = this;
 			var userID = localStorage.getItem('userID');
@@ -82,13 +82,12 @@ vcancyApp
 				$event.preventDefault();
 			}
 
-
-
 			vm.checkAllListing = function () {
 				$.map(vm.listings, function (value, key) {
 					value.inputCheck = vm.selectedAllListing;
 				});
 			}
+
 			vm.addAvailability = function ($event) {
 				$event.preventDefault();
 				if (!vm.propertySelected || !vm.fromDate || !vm.toDate || !vm.fromTime || !vm.toTime) {
@@ -197,5 +196,35 @@ vcancyApp
 					.catch(function () {
 						vm.loader = 0;
 					});
+			}
+
+			vm.openDetailModel = function (propId, unitId) {
+				var index = _.findIndex(vm.properties[propId].unitlists, ['unit', unitId]);
+				var prop = vm.properties[propId];
+				$scope.selectedUnitDetail = {};
+				$scope.selectedUnitDetail.data = vm.properties[propId].unitlists[index];
+				$scope.selectedUnitDetail.data.email = localStorage.getItem('userEmail');
+				$scope.selectedUnitDetail.index = index;
+				$scope.items1 = prop;
+				$scope.items1.indexofDetails = index;
+				$scope.prop = angular.copy(prop);
+				$scope.prop.propID = propId;
+				$scope.modalInstance = $uibModal.open({
+					templateUrl: 'myModalDetailsContent.html',
+					controller: 'propertyCtrl',
+					backdrop: 'static',
+					size: 'lg',
+					windowClass: 'detailmodalcss',
+					scope: $scope
+				});
+			};
+
+			vm.checkIsIncomplete = function(propId, unitId) {
+				if(!unitId) {
+					return false;
+				}
+				var unit = _.find(vm.properties[propId].unitlists, ['unit', unitId]);
+				var prop = vm.properties[propId];
+				return unit.isIncomplete == false ? false: true;
 			}
 		}])
