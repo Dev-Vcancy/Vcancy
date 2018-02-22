@@ -29,7 +29,9 @@ var vcancyApp = angular
 	'ui.jq',
 	'ui.bootstrap',
 	'socialLogin',
-	'angularjs-dropdown-multiselect'
+	'angularjs-dropdown-multiselect',
+	'ngSanitize',
+	'ui.select'
   ]); 
  
 vcancyApp.constant('_', window._);

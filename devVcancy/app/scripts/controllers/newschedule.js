@@ -181,7 +181,8 @@ vcancyApp
 					getListings();
 				});
 			}
-
+			vm.availableColors = ['Red','Green','Blue','Yellow','Magenta','Maroon','Umbra','Turquoise'];
+			
 			vm.toggleCraigsList = function (listingId, value, $event) {
 				vm.loader = 1;
 				var fbObj = firebase.database();

@@ -28,7 +28,7 @@
                       Property
                     </label>
                     <div class="col-sm-8">
-                      <select class="m-input m-input--square" name="selectProperty" ng-model="newschedulectrl.propertySelected" ng-options="key as value.address for (key, value) in newschedulectrl.properties">
+                      <select class="custom-form-element" name="selectProperty" ng-model="newschedulectrl.propertySelected" ng-options="key as value.address for (key, value) in newschedulectrl.properties">
                         <option value=''>Select property</option>
                       </select>
                       </div>
@@ -39,10 +39,16 @@
                       Unit
                     </label>
                     <div class="col-sm-8">
-                      <select class="m-input m-input--square" name="selectProperty" style="min-width: 150px;" ng-model="newschedulectrl.selectedUnitId"
+                      <!-- <select class="m-input m-input--square" name="selectProperty" style="min-width: 150px;" ng-model="newschedulectrl.selectedUnitId"
                         ng-options="value.unit as value.unit for value in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
                         <option value=''>Select unit</option>
-                      </select>
+                      </select> -->
+                      <ui-select multiple tagging tagging-label="(custom 'new' label)" style="min-width: 150px;"  ng-model="newschedulectrl.selectedUnitId" theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
+                          <ui-select-match placeholder="Select Units...">{{$item.unit}}</ui-select-match>
+                          <ui-select-choices repeat="unit in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
+                            {{unit.unit}}
+                          </ui-select-choices>
+                        </ui-select>
                     </div>
                   </div>
                 </div>
@@ -150,7 +156,21 @@
                 </div>
               </div>
               <div class="col-sm-6 text-center" style="margin:auto; ">
-                <label>Calander coming soon</label>
+                                    <div class="col-lg-6 col-xs-12 col-sm-12">
+                                        <!-- BEGIN PORTLET-->
+                        <div class="portlet light calendar ">
+                            <div class="portlet-title ">
+                                <div class="caption">
+                                    <i class="icon-calendar font-dark hide"></i>
+                                    <span class="caption-subject font-dark bold uppercase">Viewing</span>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div id="calendar1"> </div>
+                            </div>
+                        </div>
+                        <!-- END PORTLET-->
+                    </div>
               </div>
             </div>
 
