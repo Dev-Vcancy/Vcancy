@@ -34,7 +34,7 @@
                       </div>
                   
                   </div>
-                  <div class="col-sm-12 pl-0" ng-if="newschedulectrl.propertySelected && newschedulectrl.properties[newschedulectrl.propertySelected].units == 'multiple'">
+                  <div class="col-sm-12 pl-0 mt-3" ng-if="newschedulectrl.propertySelected && newschedulectrl.properties[newschedulectrl.propertySelected].units == 'multiple'">
                     <label for="example-time-input" class="col-sm-4 col-form-label">
                       Unit
                     </label>
@@ -43,7 +43,7 @@
                         ng-options="value.unit as value.unit for value in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
                         <option value=''>Select unit</option>
                       </select> -->
-                      <ui-select multiple tagging tagging-label="(custom 'new' label)" style="min-width: 150px;"  ng-model="newschedulectrl.selectedUnitId" theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
+                      <ui-select multiple tagging tagging-label="(custom 'new' label)" style="min-width: 150px;border: 1px solid #ccc;"  ng-model="newschedulectrl.selectedUnitId" theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
                           <ui-select-match placeholder="Select Units...">{{$item.unit}}</ui-select-match>
                           <ui-select-choices repeat="unit in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
                             {{unit.unit}}

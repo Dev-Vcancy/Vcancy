@@ -579,10 +579,7 @@ vcancyApp
             // $state.reload();
           }
         });
-
-
-
-      }
+      };
 
       vm.openerrorsweet = function (value) {
         swal({
@@ -597,7 +594,7 @@ vcancyApp
             return false;
           });
 
-      }
+      };
 
     }]);
 
