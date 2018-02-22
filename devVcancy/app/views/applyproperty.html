@@ -12,7 +12,29 @@
 	<aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
 
 	<section id="content">
-
+		<script type="text/ng-template" id="signin.html">
+				<div class="profile_model_popup">
+				<div class="modal-header padding-20" >
+					<h3 class="modal-title">Sign In</h3>
+					<button type="button" class="close margin-top-15" data-dismiss="dialog" ng-click="closeImageModal()" style='margin-top:8px !important'>
+					  <span aria-hidden="true">&times;</span>
+					  <span class="sr-only">Close</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<input type="text" class="custom-form-element" ng-model="applyctrl.signIn.email" placeholder="email" required/>
+					</div>
+					<div class="form-group mt-3">
+						<input type="password" class="custom-form-element" ng-model="applyctrl.signIn.password" placeholder="password" required/>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-info btn-sm btn-round" ng-click="applyctrl.closeModal()">Close</button>
+					<button class="btn btn-primary btn-sm btn-round" ng-click="applyctrl.signInFunction(applyctrl.signIn)">SignIn</button>
+				</div>
+			</div>
+		  </script>
 		<div class="container">
 			<div class="block-header text-center">
 				<!-- <h1>Schedule Viewing</h1> -->
@@ -225,7 +247,7 @@
 								<div>
 									<div class="row text-center mt-5">
 										Already have an account? &nbsp;&nbsp;
-										<button class="btn btn-primary btn-sm btn-round">Sign in</button>
+										<button class="btn btn-primary btn-sm btn-round" type="button" ng-click="applyctrl.openSignInmodel()">Sign in</button>
 									</div>
 
 									<ng-form role="form" name="createuserform" novalidate>
@@ -246,7 +268,7 @@
 												<input type="number" placeholder="Phone" id="phone" name="phone" ng-model="applyctrl.registerUser.phone" class="form-control original-form-control"
 												/>
 											</div>
-											<div class="col-sm-6 mb-3">
+											<div class="col-sm-12 mb-3 text-center">
 												<button type="button" class="btn btn-info" ng-disabled="createuserform.$invalid || createuserform.$pristine" ng-click="applyctrl.createUser(applyctrl.registerUser)">
 													<i class="fa fa-plus"></i> Create</button>
 											</div>
