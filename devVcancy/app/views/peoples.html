@@ -50,17 +50,17 @@
 						<div class="col-sm-6">
 							<div class="row mb-2">
 								<div class="col text-right">
-									<button class="btn btn-sm bgm-deeppurple  btn-round" ng-click="lappctrl.openPrescremingQuestions()">Pre-screening Questions</button>
+									<button class="btn btn-sm bgm-teal  btn-round" ng-click="lappctrl.openPrescremingQuestions()">Pre-screening Questions</button>
 								</div>
 							</div>
 							<div class="row  mb-2">
 								<div class="col text-right">
-									<button class="btn btn-sm bgm-purple btn-round" ng-click="lappctrl.opencustomrentalapp()">Custom Rental Application</button>
+									<button class="btn btn-sm bgm-blue btn-round" ng-click="lappctrl.opencustomrentalapp()">Custom Rental Application</button>
 								</div>
 							</div>
 							<div class="row  mb-2">
 								<div class="col text-right">
-									<button class="btn btn-sm bgm-indigo btn-round" ng-click="lappctrl.openruncreditcriminalcheck()">Run Credit and Criminal Check</button>
+									<button class="btn btn-sm bgm-lightblue btn-round" ng-click="lappctrl.openruncreditcriminalcheck()">Run Credit and Criminal Check</button>
 								</div>
 							</div>
 						</div>
@@ -151,7 +151,7 @@
 					</div>
 					</div>
 					<div class="col-sm-12">
-						<input type="text" class="form-control original-form-control" placeholder=" Company name, address and phone number" style="width:100%;"/>
+						<input type="text" class="form-control original-form-control" placeholder=" Company name, address and phone number" style="width:100%;" readonly/>
 					</div>	
 				</div>
 	
@@ -163,33 +163,33 @@
 		
 				<div class="checkbox-div mb-3">
 					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.PAPPD"/>
-					<uib-accordion close-others="oneAtATime">
+					<uib-accordion close-others="oneAtATime"> 
 						<div uib-accordion-group class="panel-default" heading="Primary Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row mt-3">
 								<div class="col-sm-4">
-									<input type='text' placeholder="firstname" class="form-control original-form-control" />
+									<input type='text' placeholder="firstname" class="form-control original-form-control" readonly/>
 								</div>
 								<div class="col-sm-4">
-										<input type='text' placeholder="lastname" class="form-control original-form-control"/>
+										<input type='text' placeholder="lastname" class="form-control original-form-control" readonly/>
 									</div>
 									<div class="col-sm-4">
 										<div class="row">
 											<div class="col-sm-3">DOB</div>
 											<div class="col-sm-9" >
-												<input type='date' class="form-control original-form-control"/>
+												<input type='date' class="form-control original-form-control" readonly/>
 											</div>
 										</div>
 									</div>
 							</div>
 							<div class="row mt-3">
 								<div class="col-sm-4">
-									<input type='text' placeholder="telephone" class="form-control original-form-control" />
+									<input type='text' placeholder="telephone" class="form-control original-form-control" readonly />
 								</div>
 								<div class="col-sm-4">
-										<input type='text' placeholder="home" class="form-control original-form-control"/>
+										<input type='text' placeholder="home" class="form-control original-form-control" readonly/>
 								</div>
 								<div class="col-sm-4">
-										<input type='text' placeholder="email" class="form-control original-form-control"/>
+										<input type='text' placeholder="email" class="form-control original-form-control" readonly/>
 								</div>
 							</div>
 							<div class="row mt-3">
@@ -199,11 +199,11 @@
 										</div>
 										
 										<div class="col-sm-4">
-												<input type="radio" /> Single																	
-												<input type="radio" /> Married
+												<input type="radio" id="single" name="single1" value="single2" readonly/> Single																	
+												<input type="radio" id="married" name="married1" value="married2" readonly/> Married
 										</div>
 										<div class="col-sm-4">
-												<input type='text' placeholder="sin" class="form-control original-form-control"/>
+												<input type='text' placeholder="sin" class="form-control original-form-control" readonly/>
 										</div>					
 								
 							</div>
@@ -214,8 +214,8 @@
 													Pets:
 											</div>
 											<div class="col-sm-8">
-												<input type="radio"> Yes
-												<input type="radio"> No
+												<input type="radio" readonly> Yes
+												<input type="radio" readonly> No
 											</div>
 										</div>
 									</div>
@@ -225,8 +225,8 @@
 													Smoking:
 											</div>
 											<div class="col-sm-8">
-												<input type="radio"> Yes
-												<input type="radio"> No
+												<input type="radio" readonly> Yes
+												<input type="radio" readonly> No
 											</div>
 										</div>
 									</div>
@@ -240,21 +240,21 @@
 							<div uib-accordion-group class="panel-default" heading="Current Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row mt-3">
 									<div class="col-sm-4">
-										<input type='text' placeholder="State Address" class="form-control original-form-control" />
+										<input type='text' placeholder="State Address" class="form-control original-form-control" readonly/>
 									</div>
 									<div class="col-sm-4">
-										<input type='text' placeholder="City" class="form-control original-form-control"/>
+										<input type='text' placeholder="City" class="form-control original-form-control" readonly/>
 									</div>
 									<div class="col-sm-4">
-										<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+										<input type='text' placeholder="Province/State" class="form-control original-form-control" readonly/>
 									</div>
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-3">
-										<input type='text' placeholder="zipcode" class="form-control original-form-control" />
+										<input type='text' placeholder="zipcode" class="form-control original-form-control" readonly/>
 									</div>
 									<div class="col-sm-3">
-											<input type='text' placeholder="country" class="form-control original-form-control"/>
+											<input type='text' placeholder="country" class="form-control original-form-control" readonly/>
 									</div>
 									<div class="col-sm-6">
 											<div class="row">
@@ -262,57 +262,57 @@
 															Do you rent or own this address
 													</div>
 													<div class="col-sm-4">
-														<input type="radio" /> Rent
-														<input type="radio" /> Own
+														<input type="radio" readonly /> Rent
+														<input type="radio" readonly /> Own
 													</div>
 												</div>
 									</div>
 								</div>
 								<div class="row mt-3">
 										<div class="col-sm-6">
-											<input type='text' placeholder="How long have you lived at this address" class="form-control original-form-control" />
+											<input type='text' placeholder="How long have you lived at this address" class="form-control original-form-control" readonly/>
 										</div>
 										<div class="col-sm-6">
-												<input type='text' placeholder="Rent $" class="form-control original-form-control"/>
+												<input type='text' placeholder="Rent $" class="form-control original-form-control" readonly/>
 										</div>
 								</div>
 								<div class="row mt-3">
 										<div class="col-sm-12">
-											<input type='text' placeholder="Reason for vacating " class="form-control original-form-control" />
+											<input type='text' placeholder="Reason for vacating " class="form-control original-form-control" readonly />
 										</div>
 								</div>
 								<div class="row mt-3">
 										<div class="col-sm-6">
-											<input type='text' placeholder="Landlord Full Name" class="form-control original-form-control" />
+											<input type='text' placeholder="Landlord Full Name" class="form-control original-form-control" readonly />
 										</div>
 										<div class="col-sm-6">
-												<input type='text' placeholder="Landlord's daytime phone #" class="form-control original-form-control"/>
+												<input type='text' placeholder="Landlord's daytime phone #" class="form-control original-form-control" readonly/>
 										</div>
 								</div>
 								</div>
 						</uib-accordion>
 				</div>
 				<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.PADDR"/>
+					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.PADDR" readonly/>
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Previous Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row mt-3">
 								<div class="col-sm-4">
-									<input type='text' placeholder="State Address" class="form-control original-form-control" />
+									<input type='text' placeholder="State Address" class="form-control original-form-control" readonly />
 								</div>
 								<div class="col-sm-4">
-									<input type='text' placeholder="City" class="form-control original-form-control"/>
+									<input type='text' placeholder="City" class="form-control original-form-control" readonly/>
 								</div>
 								<div class="col-sm-4">
-									<input type='text' placeholder="Province/State" class="form-control original-form-control"/>
+									<input type='text' placeholder="Province/State" class="form-control original-form-control" readonly/>
 								</div>
 							</div>
 							<div class="row mt-3">
 								<div class="col-sm-3">
-									<input type='text' placeholder="zipcode" class="form-control original-form-control" />
+									<input type='text' placeholder="zipcode" class="form-control original-form-control" readonly />
 								</div>
 								<div class="col-sm-3">
-										<input type='text' placeholder="country" class="form-control original-form-control"/>
+										<input type='text' placeholder="country" class="form-control original-form-control" readonly/>
 								</div>
 								<div class="col-sm-6">
 										<div class="row">
@@ -328,23 +328,23 @@
 							</div>
 							<div class="row mt-3">
 									<div class="col-sm-6">
-										<input type='text' placeholder="How long have you lived at this address" class="form-control original-form-control" />
+										<input type='text' placeholder="How long have you lived at this address" class="form-control original-form-control" readonly />
 									</div>
 									<div class="col-sm-6">
-											<input type='text' placeholder="Rent $" class="form-control original-form-control"/>
+											<input type='text' placeholder="Rent $" class="form-control original-form-control" readonly/>
 									</div>
 							</div>
 							<div class="row mt-3">
 									<div class="col-sm-12">
-										<input type='text' placeholder="Reason for vacating " class="form-control original-form-control" />
+										<input type='text' placeholder="Reason for vacating " class="form-control original-form-control" readonly />
 									</div>
 							</div>
 							<div class="row mt-3">
 									<div class="col-sm-6">
-										<input type='text' placeholder="Landlord Full Name" class="form-control original-form-control" />
+										<input type='text' placeholder="Landlord Full Name" class="form-control original-form-control" readonly />
 									</div>
 									<div class="col-sm-6">
-											<input type='text' placeholder="Landlord's daytime phone #" class="form-control original-form-control"/>
+											<input type='text' placeholder="Landlord's daytime phone #" class="form-control original-form-control" readonly/>
 									</div>
 							</div>
 							</div>
@@ -359,13 +359,13 @@
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-4">
-										<input type='text' placeholder="Full Name" class="form-control original-form-control" />
+										<input type='text' placeholder="Full Name" class="form-control original-form-control" readonly />
 									</div>
 									<div class="col-sm-4">
-										<input type='date' placeholder="Date Of Birth" class="form-control original-form-control"/>
+										<input type='date' placeholder="Date Of Birth" class="form-control original-form-control" readonly/>
 									</div>	
 									<div class="col-sm-4">
-										<input type='text' placeholder="SIN number" class="form-control original-form-control"/>
+										<input type='text' placeholder="SIN number" class="form-control original-form-control" readonly/>
 									</div>
 								</div>
 	
@@ -374,10 +374,10 @@
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-6">
-											<input type='date' placeholder="Date Of Birth" class="form-control original-form-control" />
+											<input type='date' placeholder="Date Of Birth" class="form-control original-form-control" readonly/>
 									</div>
 									<div class="col-sm-6">
-										<input type='text' placeholder="Full Name" class="form-control original-form-control"/>
+										<input type='text' placeholder="Full Name" class="form-control original-form-control" readonly/>
 									</div>		
 								</div>
 							</div>
@@ -388,30 +388,30 @@
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="Employment Status & Income Verification" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row">
-									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.ESIV1"> Employment Status & Income Verification</div>
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.ESIV1" readonly> Employment Status & Income Verification</div>
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-6">
-										<input type='text' placeholder="Current Employer" class="form-control original-form-control" />
+										<input type='text' placeholder="Current Employer" class="form-control original-form-control" readonly />
 									</div>
 									<div class="col-sm-6">
-										<input type='text' placeholder="Position" class="form-control original-form-control"/>
+										<input type='text' placeholder="Position" class="form-control original-form-control" readonly/>
 									</div>								
 								</div>
 								<div class="row mt-3">
 										<div class="col-sm-6">
-											<input type='text' placeholder="Employer Phone " class="form-control original-form-control" />
+											<input type='text' placeholder="Employer Phone " class="form-control original-form-control" readonly/>
 										</div>
 										<div class="col-sm-6">
-											<input type='text' placeholder="How long have you worked in this company(Month/Year)" class="form-control original-form-control"/>
+											<input type='text' placeholder="How long have you worked in this company(Month/Year)" class="form-control original-form-control" readonly/>
 										</div>								
 								</div>
 								<div class="row mt-3">
 											<div class="col-sm-6">
-												<input type='text' placeholder="Gross monthly income" class="form-control original-form-control" />
+												<input type='text' placeholder="Gross monthly income" class="form-control original-form-control" readonly />
 											</div>
 											<div class="col-sm-6">
-												<input type='text' placeholder="Other income description(eg.Disability,Income Assistance,Savings)" class="form-control original-form-control"/>
+												<input type='text' placeholder="Other income description(eg.Disability,Income Assistance,Savings)" class="form-control original-form-control" readonly/>
 											</div>								
 								</div>
 							</div>
@@ -423,13 +423,13 @@
 							<div uib-accordion-group class="panel-default" heading="Vehical Information" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row mt-3">
 									<div class="col-sm-4">
-										<input type='text' placeholder="Make" class="form-control original-form-control" />
+										<input type='text' placeholder="Make" class="form-control original-form-control" readonly />
 									</div>
 									<div class="col-sm-4">
-										<input type='text' placeholder="Model" class="form-control original-form-control"/>
+										<input type='text' placeholder="Model" class="form-control original-form-control" readonly/>
 									</div>
 									<div class="col-sm-4">
-										<input type='text' placeholder="Year" class="form-control original-form-control"/>
+										<input type='text' placeholder="Year" class="form-control original-form-control" readonly/>
 									</div>
 								</div>
 							</div>
@@ -440,14 +440,14 @@
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="Emergancy Contact" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row">
-									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.EC1">Name and Phone number of Personal/Family reference who may be contacted in the case of emergency</div>
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.EC1" readonly>Name and Phone number of Personal/Family reference who may be contacted in the case of emergency</div>
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-6">
-										<input type='text' placeholder="Full Name" class="form-control original-form-control" />
+										<input type='text' placeholder="Full Name" class="form-control original-form-control" readonly/>
 									</div>
 									<div class="col-sm-6">
-										<input type='text' placeholder="Phone" class="form-control original-form-control"/>
+										<input type='text' placeholder="Phone" class="form-control original-form-control" readonly/>
 									</div>								
 								</div>
 							</div>
@@ -458,32 +458,32 @@
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="References" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row">
-									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF1"> References 1</div>
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF1" readonly> References 1</div>
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-4">
-										<input type='text' placeholder="Full Name" class="form-control original-form-control" />
+										<input type='text' placeholder="Full Name" class="form-control original-form-control" readonly />
 									</div>
 									<div class="col-sm-4">
-										<input type='text' placeholder="Phone" class="form-control original-form-control"/>
+										<input type='text' placeholder="Phone" class="form-control original-form-control" readonly/>
 									</div>
 									<div class="col-sm-4">
-										<input type='text' placeholder="Relationship(previous landlord,employer)" class="form-control original-form-control"/>
+										<input type='text' placeholder="Relationship(previous landlord,employer)" class="form-control original-form-control" readonly/>
 									</div>
 								</div>
 	
 								<div class="row">
-										<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF2"> References 2</div>
+										<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF2" readonly> References 2</div>
 									</div>
 									<div class="row mt-3">
 										<div class="col-sm-4">
-											<input type='text' placeholder="Full Name" class="form-control original-form-control" />
+											<input type='text' placeholder="Full Name" class="form-control original-form-control" readonly />
 										</div>
 										<div class="col-sm-4">
-											<input type='text' placeholder="Phone" class="form-control original-form-control"/>
+											<input type='text' placeholder="Phone" class="form-control original-form-control" readonly/>
 										</div>
 										<div class="col-sm-4">
-											<input type='text' placeholder="Relationship(previous landlord,employer)" class="form-control original-form-control"/>
+											<input type='text' placeholder="Relationship(previous landlord,employer)" class="form-control original-form-control" readonly/>
 										</div>
 									</div>
 							</div>
@@ -498,25 +498,25 @@
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-3">We offer to rent</div>
-									<div class="col-sm-9"><input type='text' placeholder="Address" class="form-control original-form-control" />
+									<div class="col-sm-9"><input type='text' placeholder="Address" class="form-control original-form-control" readonly />
 									</div>	
 								</div>
 	
 								<div class="row mt-3">
 										<div class="col-sm-3">(the "Rental Unit" at monthly rent of</div>
-										<div class="col-sm-3"><input type='text' placeholder="$" class="form-control original-form-control" />
+										<div class="col-sm-3"><input type='text' placeholder="$" class="form-control original-form-control" readonly/>
 										</div>
 										<div class="col-sm-3">for a term of</div>
-										<div class="col-sm-3"><input type='text' placeholder="Months" class="form-control original-form-control" />
+										<div class="col-sm-3"><input type='text' placeholder="Months" class="form-control original-form-control" readonly />
 										</div>	
 								</div>
 	
 								<div class="row mt-3">
 										<div class="col-sm-3">months starting </div>
-										<div class="col-sm-3"><input type='text' placeholder="Date" class="form-control original-form-control" />
+										<div class="col-sm-3"><input type='text' placeholder="Date" class="form-control original-form-control" readonly/>
 										</div>
 										<div class="col-sm-3">Parking is required for</div>
-										<div class="col-sm-3"><input type='text' placeholder="No. of vehicle" class="form-control original-form-control" />
+										<div class="col-sm-3"><input type='text' placeholder="No. of vehicle" class="form-control original-form-control" readonly />
 										</div>	
 								</div>
 							</div>
@@ -525,7 +525,7 @@
 				
 				<div class="checkbox-div mb-3">
 						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.TC"/>
-						<textarea rows="6" class="m-input m-input--square m-width" name="more" style="white-space: nowrap;">
+						<textarea rows="6" class="m-input m-input--square m-width" name="more" style="white-space: nowrap;" >
 	You are authorized to obtaining credit checks & verifying details contained in this Application.
 			
 	This unit/s is strictly NON SMOKING. This offer is subject to acceptance by the landlord/property
