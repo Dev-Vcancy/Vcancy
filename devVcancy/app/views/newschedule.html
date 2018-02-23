@@ -31,8 +31,8 @@
                       <select class="custom-form-element" name="selectProperty" ng-model="newschedulectrl.propertySelected" ng-options="key as value.address for (key, value) in newschedulectrl.properties">
                         <option value=''>Select property</option>
                       </select>
-                      </div>
-                  
+                    </div>
+
                   </div>
                   <div class="col-sm-12 pl-0 mt-3" ng-if="newschedulectrl.propertySelected && newschedulectrl.properties[newschedulectrl.propertySelected].units == 'multiple'">
                     <label for="example-time-input" class="col-sm-4 col-form-label">
@@ -43,12 +43,13 @@
                         ng-options="value.unit as value.unit for value in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
                         <option value=''>Select unit</option>
                       </select> -->
-                      <ui-select multiple tagging tagging-label="(custom 'new' label)" style="min-width: 150px;border: 1px solid #ccc;"  ng-model="newschedulectrl.selectedUnitId" theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
-                          <ui-select-match placeholder="Select Units...">{{$item.unit}}</ui-select-match>
-                          <ui-select-choices repeat="unit in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
-                            {{unit.unit}}
-                          </ui-select-choices>
-                        </ui-select>
+                      <ui-select multiple tagging tagging-label="(custom 'new' label)" style="min-width: 150px;border: 1px solid #ccc;" ng-model="newschedulectrl.selectedUnitId"
+                        theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
+                        <ui-select-match placeholder="Select Units...">{{$item.unit}}</ui-select-match>
+                        <ui-select-choices repeat="unit in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
+                          {{unit.unit}}
+                        </ui-select-choices>
+                      </ui-select>
                     </div>
                   </div>
                 </div>
@@ -83,7 +84,7 @@
                           <div class="col-sm-6">
                             <label for="example-time-input" class="col-sm-6 col-form-label">
                               From
-                               <select class="m-input m-input--square" name="more" ng-model="newschedulectrl.fromTime">
+                              <select class="m-input m-input--square" name="more" ng-model="newschedulectrl.fromTime">
                                 <option value="00:00 am">0 am</option>
                                 <option value="01:00 am">1 am</option>
                                 <option value="02:00 am">2 am</option>
@@ -148,29 +149,15 @@
                   </div>
                 </div>
                 <div class="row mt-3 col-sm-offset-3" style="margin-bottom: 10px;">
-                  
-                    <button class="btn btn-success btn-round" ng-click="newschedulectrl.addAvailability($event)">Add</button>
-                    &nbsp;
-                    <button class="btn btn-danger btn-round" ng-click="newschedulectrl.clearAll($event)">Reset</button>
-                  
+
+                  <button class="btn btn-success btn-round" ng-click="newschedulectrl.addAvailability($event)">Add</button>
+                  &nbsp;
+                  <button class="btn btn-danger btn-round" ng-click="newschedulectrl.clearAll($event)">Reset</button>
+
                 </div>
               </div>
-              <div class="col-sm-6 text-center" style="margin:auto; ">
-                                    <div class="col-lg-6 col-xs-12 col-sm-12">
-                                        <!-- BEGIN PORTLET-->
-                        <div class="portlet light calendar ">
-                            <div class="portlet-title ">
-                                <div class="caption">
-                                    <i class="icon-calendar font-dark hide"></i>
-                                    <span class="caption-subject font-dark bold uppercase">Viewing</span>
-                                </div>
-                            </div>
-                            <div class="portlet-body">
-                                <div id="calendar1"> </div>
-                            </div>
-                        </div>
-                        <!-- END PORTLET-->
-                    </div>
+              <div class="col-sm-6 text-center" style="margin:auto;">
+                  <div ui-calendar ng-model="eventSources"></div>
               </div>
             </div>
 

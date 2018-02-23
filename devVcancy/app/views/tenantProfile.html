@@ -184,7 +184,7 @@
                                                                 <div ng-class="{ 'has-error' : profileForm.contactNo.$invalid && !profileForm.contactNo.$pristine }" class="form-group fg-float m-t-30">
                                                                     <div class="fg-line fg-toggled ">
                                                                         <input required name="contactNo" ng-model="tdProfilectrl.userData.contact" ng-change="console.log($event)" type="text" class="form-control w-100 phone"
-                                                                            ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }">
+                                                                            ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
                                                                         <label class="fg-label">Contact No.:</label>
                                                                     </div>
                                                                 </div>

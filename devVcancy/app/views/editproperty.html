@@ -246,7 +246,7 @@
                           <div class="form-group">
                       
                               <label class='m-0'>Phone:</label>
-                              <input required="" name="address" ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"  ng-model="selectedUnitDetail.data.phone" type="text" class="form-control original-form-control" id="" placeholder="">
+                              <input required="" name="address" ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"  ng-model="selectedUnitDetail.data.phone" type="text" class="form-control original-form-control" id="" placeholder="" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
                             
                           </div>
                       </div>

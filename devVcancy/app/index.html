@@ -15,7 +15,7 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
     <link href="bower_components/animate.css/animate.min.css" rel="stylesheet">
     <link href="bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css" rel="stylesheet">
@@ -28,6 +28,7 @@
     <link href="bower_components/chosen/chosen.min.css" rel="stylesheet">
     <!--<link href="bower_components/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet">-->
     <link href="bower_components/Waves/dist/waves.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.css"/>
     <link href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css" />
     <link media="print" rel="stylesheet" href="bower_components/angularPrint/angularPrint.css">
     <!-- endbower -->
@@ -114,6 +115,7 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
         crossorigin="anonymous"></script>
     <script src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
     <script src="bower_components/angular-resource/angular-resource.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -124,6 +126,9 @@
     <script src="bower_components/angularfire/dist/angularfire.min.js"></script>
     <script src="bower_components/angular-nouislider/src/nouislider.min.js"></script>
     <script src="bower_components/bootstrap-sweetalert/lib/sweet-alert.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-calendar/src/calendar.js"></script>
+    <script type="text/javascript" src="bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="bower_components/fullcalendar/dist/gcal.js"></script>
 
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/ng-clipboard/dist/ng-clipboard.js"></script>
@@ -180,7 +185,7 @@
 
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
-    
+
     <!-- END THEME GLOBAL SCRIPTS -->
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
     <!--   <script src="assets/pages/scripts/login.min.js" type="text/javascript"></script> -->
@@ -215,7 +220,7 @@
     <script src="scripts/directive/fileupload.js"></script>
     <script src="scripts/modules/form.js"></script>
     <script src="scripts/modules/select.js"></script>
-   <!--  <script type="text/javascript" src="//platform.linkedin.com/in.js">
+    <!--  <script type="text/javascript" src="//platform.linkedin.com/in.js">
         api_key: 78blzjlmkk6jbl
         authorize: true
         scope: r_basicprofile r_emailaddress

@@ -31,7 +31,8 @@ var vcancyApp = angular
 	'socialLogin',
 	'angularjs-dropdown-multiselect',
 	'ngSanitize',
-	'ui.select'
+	'ui.select',
+	'ui.calendar'
   ]); 
  
 vcancyApp.constant('_', window._);
@@ -507,7 +508,20 @@ vcancyApp
 			controller: 'newscheduleCtrl',
 			controllerAs: 'newschedulectrl',
 			templateUrl: 'views/newschedule.html',
-			resolve: { authenticate: authenticate }
+			resolve: { authenticate: authenticate,
+				deps: ['$ocLazyLoad', function($ocLazyLoad) {
+					return $ocLazyLoad.load({
+						name: 'vcancyApp',
+						files: [
+							'../assets/layouts/layout2/css/layout.min.css',
+							'../assets/layouts/layout2/css/themes/blue.min.css',
+							'../assets/layouts/layout2/css/custom.min.css',
+							'../assets/global/plugins/moment.min.js',                            
+							'../assets/global/plugins/fullcalendar/fullcalendar.min.js',
+							'../assets/pages/scripts/dashboard.min.js',
+						] 
+					});
+				}] }
 		})
 		
 		.state ('app', {
