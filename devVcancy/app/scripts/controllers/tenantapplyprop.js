@@ -19,6 +19,8 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 			email: '',
 			phone: ''
 		};
+		vm.preScreeningAns={};
+		vm.landlordData = {};
 		if(vm.userData) {
 			vm.registerUser.firstName = vm.userData.firstname;
 			vm.registerUser.lastName = vm.userData.lastname;
@@ -43,10 +45,13 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		}
 		// console.log(vm.isEmailVerified);
 
-		function getLandlord() {
+		vm.getLandlord = function () {
 			firebase.database().ref('/users/' + vm.propData.landlordID).once('value').then(function (snap) {
-				vm.landlordData = snap.val();
-				vm.landlordData.id = snap.key;
+				$scope.$apply(function () {
+					vm.landlordData = snap.val();
+					console.log('vm.landlordData',vm.landlordData);
+					vm.landlordData.id = snap.key;
+				})
 			});
 		}
 
@@ -123,7 +128,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					}
 					console.log(vm.selectedUnit)
 					getScheduledProp();
-					getLandlord();
+					vm.getLandlord();
 				} else {
 					$state.go('tenantdashboard');
 				}
