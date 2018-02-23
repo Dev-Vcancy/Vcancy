@@ -67,9 +67,9 @@
 						</div> -->
 						<div class="card-body card-padding">
 							<div class="col-sm-6">
-								<div class="row mt-3">Property Name</div>
-								<div class="row mt-3">Unit - Address XYZ, City, Post code</div>
-								<div class="row mt-3">$1200 - 1 Bed, 1 Bath , 666 sqft</div>
+								<div class="row mt-3"><h4>{{applyctrl.propData.name}} - {{applyctrl.selectedUnit.title}}</h4></div>
+								<div class="row mt-3"> {{applyctrl.unitId}} - {{applyctrl.selectedUnit.address}} {{applyctrl.selectedUnit.city}}, {{applyctrl.selectedUnit.postalcode}}</div>
+								<div class="row mt-3">${{applyctrl.selectedUnit.rent}} - {{applyctrl.selectedUnit.bedroom}} Bed ,{{applyctrl.selectedUnit.bathroom}} Bath ,{{applyctrl.selectedUnit.sqft}} sqft</div>
 								<div class="row mt-3">
 									<div id="imgDiv" style="position:relative;width:38%;color:lightgray" class="edit-div-hover">
 
@@ -90,14 +90,16 @@
 								<div class="row mt-3">Description</div>
 								<div class="row mt-3">
 									<div class="col-sm-12">
-										<textarea rows="6" cols="55" class="m-input m-input--square" name="more"></textarea>
+										<textarea rows="6" cols="55" class="m-input m-input--square" name="more">
+											{{applyctrl.selectedUnit.description}}
+										</textarea>
 									</div>
 								</div>
-								<div class="row mt-3">Parking: </div>
-								<div class="row mt-3">Laundry: </div>
-								<div class="row mt-3">Pets: </div>
-								<div class="row mt-3">Lease Terms:</div>
-								<div class="row mt-3">Amenities: </div>
+								<div class="row mt-3">Parking : {{applyctrl.selectedUnit.parking}}</div>
+								<div class="row mt-3">Laundry : {{applyctrl.selectedUnit.laundry}}</div>
+								<div class="row mt-3">Pets : Cats - {{applyctrl.selectedUnit.cats ? 'YES':'NO'}} , Dogs - {{applyctrl.selectedUnit.dogs? 'YES':'NO'}}</div>
+								<div class="row mt-3">Lease Terms : {{applyctrl.selectedUnit.leaseLength}}</div>
+								<div class="row mt-3">Amenities : {{applyctrl.selectedUnit.Aminities.join(',')}} </div>
 								<!-- <div class="form-group col-sm-1<div class="row">Property Name</div>2">
 									<input type="text" placeholder="Full name" readonly="true" ng-model=<div class="row">Property Name</div>"applyctrl.applyprop.name" required  class="form-control"/>
 								</div>
