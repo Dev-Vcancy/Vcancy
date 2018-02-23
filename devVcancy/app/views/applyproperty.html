@@ -56,7 +56,7 @@
 						<h4>This property isnt available now.</h4>										
 					</div> -->
 					<!-- ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1" -->
-					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="applyctrl.applyprop.availableslots.length">
+					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="true">
 						<input type="hidden" name="landlordID" ng-model="applyctrl.applyprop.landlordID" class="form-control">
 						<input type="hidden" name="propID" ng-model="applyctrl.applyprop.propID" class="form-control">
 						<input type="hidden" name="address" ng-model="applyctrl.applyprop.address" class="form-control">
@@ -125,64 +125,12 @@
 									</div>
 								</div>
 								<div class="row mt-3">
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											<i class="fa fa-calander"></i> Thu
-											<br/> Feb 19th
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											<i class="fa fa-calander"></i> Thu
-											<br/> Feb 19th
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											<i class="fa fa-calander"></i> Thu
-											<br/> Feb 19th
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											<i class="fa fa-calander"></i> Thu
-											<br/> Feb 19th
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											<i class="fa fa-calander"></i> Thu
-											<br/> Feb 19th
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											<i class="fa fa-calander"></i> Thu
-											<br/> Feb 19th
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											<i class="fa fa-calander"></i> Thu
-											<br/> Feb 19th
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											<i class="fa fa-calander"></i> Thu
-											<br/> Feb 19th
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											<i class="fa fa-calander"></i> Thu
-											<br/> Feb 19th
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											<i class="fa fa-calander"></i> Thu
-											<br/> Feb 19th
+									<div class="col-sm-3 mb-3" ng-repeat="(key, value) in applyctrl.availableSlots">
+										<button class="btn btnoutline success btn-outline-success" ng-click="applyctrl.selectSlotDate(key)">
+											<i class="fa fa-calander"></i> {{applyctrl.formatDay(key)}}
+											<br/> {{applyctrl.formatDate(key)}}
+											<!-- {{moment(key, 'MM/DD/YYYY').format('ddd')}}  -->
+											<!-- {{moment(key, 'MM/DD/YYYY').format('MMM dd')}} -->
 										</button>
 									</div>
 								</div>
@@ -192,54 +140,9 @@
 									</div>
 								</div>
 								<div class="row mt-3">
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											10:00 AM
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											10:00 AM
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											10:00 AM
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											10:00 AM
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											10:00 AM
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											10:00 AM
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											10:00 AM
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											10:00 AM
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											10:00 AM
-										</button>
-									</div>
-									<div class="col-sm-3 mb-3">
-										<button class="btn btnoutline success btn-outline-success">
-											10:00 AM
+									<div class="col-sm-3 mb-3" ng-repeat="value in applyctrl.availableSlots[applyctrl.selectedDate] track by $index">
+										<button class="btn btnoutline success btn-outline-success" ng-click="applyctrl.selectSlotTime(value)">
+											{{value}}
 										</button>
 									</div>
 								</div>
@@ -253,15 +156,15 @@
 									<ng-form role="form" name="createuserform" novalidate>
 										<div class="row mt-4">
 											<div class="col-sm-6 mb-3">
-												<input type="text" placeholder="First Name" id="firstname" name="firstname" ng-model="applyctrl.registerUser.firstname" class="form-control original-form-control"
+												<input type="text" placeholder="First Name" id="firstname" name="firstname" ng-model="applyctrl.registerUser.firstName" class="form-control original-form-control"
 												 required/>
 											</div>
 											<div class="col-sm-6 mb-3">
-												<input type="text" placeholder="Last Name" id="lastname" name="lastname" ng-model="applyctrl.registerUser.lastname" class="form-control original-form-control"
+												<input type="text" placeholder="Last Name" id="lastname" name="lastname" ng-model="applyctrl.registerUser.lastName" class="form-control original-form-control"
 												 required/>
 											</div>
 											<div class="col-sm-6 mb-3">
-												<input type="email" placeholder="Email" id="email" name="email" ng-model="applyctrl.registerUser.email" class="form-control original-form-control"
+												<input type="email" ng-disabled="userData" placeholder="Email" id="email" name="email" ng-model="applyctrl.registerUser.email" class="form-control original-form-control"
 												 required/>
 											</div>
 											<div class="col-sm-6 mb-3">
