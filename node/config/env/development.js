@@ -13,7 +13,7 @@
 module.exports = {
   SMTP: {
     email: 'support@vcancy.com',
-    password: 'Mvp2019('
+    password: 'Mvp2018!'
   },
   // fileUploadPath: 'C:\\xampp\\htdocs\\Vcancy\\login\\images\\'
   fileUploadPath: process.env.FILE_UPLOAD_PATH || '/var/www/html/login/uploads/'
