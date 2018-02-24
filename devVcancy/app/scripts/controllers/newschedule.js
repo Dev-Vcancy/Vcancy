@@ -163,7 +163,10 @@ vcancyApp
 					listOnCraigslist: false
 				}
 				if (vm.properties[vm.propertySelected].units == 'multiple') {
-					vm.units = [vm.selectedUnitId];
+					vm.units = _.map(vm.selectedUnitId, 'unit');
+					if(vm.units.length == 0) {
+						return;
+					}
 				}
 				if (vm.units.length > 0) {
 					vm.units.forEach(function (unit) {
