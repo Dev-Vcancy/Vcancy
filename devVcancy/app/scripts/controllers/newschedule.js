@@ -65,6 +65,7 @@ vcancyApp
 			vm.toTime = '';
 			vm.properties = [];
 			vm.listings = [];
+			vm.mergeListing = {};
 			vm.selectedListings = [];
 
 			function getListings() {
@@ -75,6 +76,7 @@ vcancyApp
 						vm.success = 0;
 						if (snapshot.val()) {
 							vm.listings = snapshot.val();
+							vm.generateMergeListing();
 							console.log(vm.listings);
 							$.map(vm.listings, function (value, key) {
 								value.parsedFromDate = parseInt(new moment(value.fromDate).format('x'))
@@ -126,6 +128,22 @@ vcancyApp
 
 			init();
 
+			vm.generateMergeListing = function () {
+				_.forEach(vm.listings, function (list, key) {
+					if (!vm.mergeListing[list.link]) {
+						vm.mergeListing[list.link] = vm.listings[key];
+						vm.mergeListing[list.link].fromToDate = [];
+						var date = moment(vm.listings[key].fromDate).format('DD MMM') + '-' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						vm.mergeListing[list.link].fromToDate.push(date);
+						vm.mergeListing[list.link].key = key;
+					} else {
+						var date = moment(vm.listings[key].fromDate).format('DD MMM') + ' - ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						vm.mergeListing[list.link].fromToDate.push(date);
+					}
+				});
+				console.log(vm.mergeListing);
+			};
+
 			vm.clearAll = function ($event) {
 				vm.propertySelected = '';
 				vm.unitSelected = '';
@@ -169,7 +187,7 @@ vcancyApp
 				}
 				if (vm.properties[vm.propertySelected].units == 'multiple') {
 					vm.units = _.map(vm.selectedUnitId, 'unit');
-					if(vm.units.length == 0) {
+					if (vm.units.length == 0) {
 						return;
 					}
 				}

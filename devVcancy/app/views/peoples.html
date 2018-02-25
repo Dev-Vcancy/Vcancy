@@ -38,7 +38,7 @@
 								</select>
 							</div>
 							<div class="col-sm-12 mt-3" ng-if="lappctrl.filters.property">
-								<ui-select class=" m-input m-input--square" multiple tagging tagging-label="(custom 'new' label)" style="min-width:100px;"
+								<ui-select class=" m-input m-input--square" multiple tagging tagging-label="(custom 'new' label)" style="min-width:100px;border: 1px solid #ccc;"
 								 ng-model="lappctrl.filters.unit" theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
 									<ui-select-match placeholder="Select Units">{{$item.unit}}</ui-select-match>
 									<ui-select-choices repeat="unit in lappctrl.properties[lappctrl.filters.property].unitlists">
@@ -48,7 +48,7 @@
 							</div>
 
 							<div class="col-sm-12 mt-3">
-									<ui-select class=" m-input m-input--square" multiple tagging tagging-label="(custom 'new' label)" style="min-width:100px;"
+									<ui-select class=" m-input m-input--square" multiple tagging tagging-label="(custom 'new' label)" style="min-width:100px;border: 1px solid #ccc;"
 									ng-model="lappctrl.filters.options" theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
 									   <ui-select-match placeholder="Select questions">{{$item.label}}</ui-select-match>
 									   <ui-select-choices repeat="ques in lappctrl.screeningQuestions">
