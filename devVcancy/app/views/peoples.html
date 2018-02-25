@@ -29,7 +29,7 @@
 												{{w.units}}  <span ng-hide="w.units == ' '">-</span>  {{w.address}} 
 											</label>
 										</div> -->
-								<select class="custom-form-element" name="more" ng-model="lappctrl.filters.property">
+								<select class="custom-form-element" name="more" ng-model="lappctrl.filters.property" ng-change="lappctrl.filterData(true)">
 									<option value="">Select property</option>
 									<option ng-value="key" ng-repeat="(key, property) in lappctrl.properties">
 										{{property.name}}
@@ -37,8 +37,8 @@
 
 								</select>
 							</div>
-							<div class="col-sm-12 mt-3" ng-if="lappctrl.filters.property">
-								<ui-select class=" m-input m-input--square" multiple tagging tagging-label="(custom 'new' label)" style="min-width:100px;border: 1px solid #ccc;"
+							<div class="col-sm-12 mt-3" ng-if="lappctrl.filters.property" >
+								<ui-select class=" m-input m-input--square" multiple tagging tagging-label="(custom 'new' label)" ng-change="lappctrl.filterData()" style="min-width:100px;border: 1px solid #ccc;"
 								 ng-model="lappctrl.filters.unit" theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
 									<ui-select-match placeholder="Select Units">{{$item.unit}}</ui-select-match>
 									<ui-select-choices repeat="unit in lappctrl.properties[lappctrl.filters.property].unitlists">
@@ -48,17 +48,13 @@
 							</div>
 
 							<div class="col-sm-12 mt-3">
-									<ui-select class=" m-input m-input--square" multiple tagging tagging-label="(custom 'new' label)" style="min-width:100px;border: 1px solid #ccc;"
-									ng-model="lappctrl.filters.options" theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
-									   <ui-select-match placeholder="Select questions">{{$item.label}}</ui-select-match>
-									   <ui-select-choices repeat="ques in lappctrl.screeningQuestions">
-										   {{ques.label}}
-									   </ui-select-choices>
-								   </ui-select>
-								<!-- <select class="m-input m-input--square" name="more" ng-model="lappctrl.filters.options">
-									<option value="">Options</option>
-									<option ng-value="ques.id" ng-repeat="ques in lappctrl.screeningQuestions">{{ques.label}}</option>
-								</select> -->
+								<ui-select class=" m-input m-input--square" multiple tagging tagging-label="(custom 'new' label)" style="min-width:100px;border: 1px solid #ccc;"
+								 ng-model="lappctrl.filters.options" theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
+									<ui-select-match placeholder="Select questions">{{$item.label}}</ui-select-match>
+									<ui-select-choices repeat="ques in lappctrl.screeningQuestions">
+										{{ques.label}}
+									</ui-select-choices>
+								</ui-select>
 							</div>
 						</div>
 					</div>
@@ -82,22 +78,34 @@
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
-						<div class="table-responsive">
-							<table ng-table-dynamic="lappctrl.submitappsSorting with lappctrl.submitappscols" class="table table-striped table-vmiddle">
-								<tr ng-repeat="row in $data">
-									<td ng-repeat="col in $columns">{{row[col.field]}}</td>
-									<td ng-repeat="col in lappctrl.submitappsextracols">
+						<!-- <table ng-table-dynamic="lappctrl.submitappsSorting with lappctrl.apppropaddress" class="table table-striped table-vmiddle">
+							<tr ng-repeat="row in $data">
+								<td ng-repeat="col in $columns">{{row[col.field]}}</td>
+								<td ng-repeat="col in lappctrl.submitappsextracols">
 
-										<a href="https://www.vcancy.ca/checksforlandlords" target="_blank" class="btn bgm-cyan m-b-5">Run Credit Check</a>
-										<a href="#/viewapplication/{{row[col.field]}}" target="_blank" class="btn bgm-blue m-b-5">Application</a>
+									<a href="https://www.vcancy.ca/checksforlandlords" target="_blank" class="btn bgm-cyan m-b-5">Run Credit Check</a>
+									<a href="#/viewapplication/{{row[col.field]}}" target="_blank" class="btn bgm-blue m-b-5">Application</a>
 
-									</td>
-								</tr>
-								<tr ng-if="lappctrl.submittedappsavail == 0">
-									No submitted applications yet </td>
-								</tr>
-							</table>
-						</div>
+								</td>
+							</tr>
+							<tr ng-if="lappctrl.submittedappsavail == 0">
+								<td>No submitted applications yet </td>
+							</tr>
+						</table> -->
+						<table class="table table-border table-hover" style="border:1px solid #e7ecf1">
+							<tr>
+								<th>Property/Unit</th>
+								<th>Date-Time</th>
+								<th ng-repeat="ques in lappctrl.filters.options">
+									{{ques.label}}
+								</th>
+							</tr>
+							<tr ng-repeat="(key, value) in lappctrl.apppropaddress">
+								<td>{{value.address}}-{{value.unitID}}</td>
+								<td>{{ formatDay(value.dateSlot) }}  {{ formatDate(value.dateSlot) }}<br/> {{value.fromTimeslot}} : {{value.toTimeSlot}}</td>
+								<td ng-repeat="ques in lappctrl.filters.options">{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'N/A'}}</td>
+							</tr>
+						</table>
 					</div>
 				</div>
 			</div>
