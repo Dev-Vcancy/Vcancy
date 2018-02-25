@@ -129,18 +129,21 @@ vcancyApp
 			init();
 
 			vm.generateMergeListing = function () {
+				vm.mergeListing = {};
 				_.forEach(vm.listings, function (list, key) {
 					if (!vm.mergeListing[list.link]) {
 						vm.mergeListing[list.link] = angular.copy(vm.listings[key]);
 						vm.mergeListing[list.link].fromToDate = [];
 						var date = moment(vm.listings[key].fromDate).format('DD MMM') + '-' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
 						vm.mergeListing[list.link].fromToDate.push(date);
-						vm.mergeListing[list.link].key = key;
+						vm.mergeListing[list.link].keys = [key];
 					} else {
 						var date = moment(vm.listings[key].fromDate).format('DD MMM') + ' - ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
 						vm.mergeListing[list.link].fromToDate.push(date);
+						vm.mergeListing[list.link].keys.push(key);						
 					}
 				});
+				debugger;
 			};
 
 			vm.clearAll = function ($event) {
@@ -239,9 +242,9 @@ vcancyApp
 
 			vm.deleteListings = function ($event) {
 				var selectedListings = [];
-				$.map(vm.listings, function (value, key) {
+				$.map(vm.mergeListing, function (value, key) {
 					if (value.inputCheck) {
-						selectedListings.push(key);
+						selectedListings = _.concat(selectedListings, value.keys);
 					}
 				});
 				if (selectedListings.length == 0) {
