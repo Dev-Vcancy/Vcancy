@@ -20,7 +20,7 @@
 
             <div class="row">
               <div class="col-sm-4">
-                <div style="border:1px solid #e7ecf1">
+                <div style="border:1px solid #e7ecf1;padding: 5px;">
                   <h4>
                     <span class="fa fa-info-circle"></span> Add Availablity</h4>
                   <div class="row">
@@ -196,13 +196,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="(key, value) in newschedulectrl.listings track by $index" id="{{$index}}">
+                  <tr ng-repeat="(key, value) in newschedulectrl.mergeListing track by $index" id="{{$index}}">
                     <td>
                       <input type="checkbox" ng-model="newschedulectrl.listings[key].inputCheck" />
                     </td>
                     <td>{{value.unitID}} - {{newschedulectrl.properties[value.propertyId].address}}</td>
-                    <td>{{newschedulectrl.moment(value.fromDate).format('DD MMM')}} - {{newschedulectrl.moment(value.toDate).format('DD
-                      MMM')}} {{value.fromTime}}-{{value.toTime}}</td>
+                    <td>{{value.fromToDate.join(',')}}</td>
                     <td>
                       <a ng-href='{{value.link}}'>{{value.link}}</a>
                     </td>
