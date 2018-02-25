@@ -1736,7 +1736,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             if (hasDuplicateIds) {
                 swal({
                     title: "Error!",
-                    text: "Duplicate unit number/s added, please check uni # column",
+                    text: "Duplicate unit number/s added, please check unit # column",
                     type: "error",
                 });
                 return;

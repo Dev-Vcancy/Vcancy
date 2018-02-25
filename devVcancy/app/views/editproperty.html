@@ -22,9 +22,9 @@
                   <div class="row">
                     
                     <div class="col">
-                      <label> Select unit from the same property to copy listing details from</label>
+                      <label> Copy listing details </label>
                       <select ng-model="copyof" ng-change="copyUnitDetails(copyof,selectedUnitDetail.data.unit)">
-                        <option value=''>units</option>
+                        <option value=''>Select unit</option>
                         <option ng-value="unit.unit" ng-if="unit.unit != selectedUnitDetail.data.unit" ng-repeat="unit in propctrl.prop.unitlists">{{unit.unit}}</option>
                       </select>
                     </div>
@@ -48,7 +48,7 @@
                           <div class="form-group">
                               <div class="">
                                   <label class='m-0'>Posting Title:</label>
-                                <input required="true" name="title" ng-model="selectedUnitDetail.data.title" placeholder="Posting title (70 character max) eg:(Beautiful Bedroom)" type="text" class="form-control original-form-control" id="">
+                                <input required="true" name="title" ng-model="selectedUnitDetail.data.title" placeholder="Beautiful one bedroom in the heart of downtown (70 characters max)" type="text" class="form-control original-form-control" id="">
                               </div>
                             </div>
                       </div>
@@ -57,7 +57,7 @@
                       <div class="col-sm-4">
                           <div class="form-group">
                               <div class="">
-                                  <label class='m-0'>Street address:</label>
+                                  <label class='m-0'>Street Address:</label>
                                 <input required="" name="address" ng-model="selectedUnitDetail.data.address" type="text" class="form-control original-form-control" id="" placeholder="">
                               </div>
                             </div>
@@ -65,7 +65,7 @@
                       <div class="col-sm-4">
                           <div class="form-group">
                               <div class="">
-                                <label class='m-0'>Unit:</label>
+                                <label class='m-0'>Unit # </label>
                                 <input name="rent" ng-model="selectedUnitDetail.data.unit" type="text" class="form-control original-form-control" id="" placeholder="">
                               </div>
                             </div>
@@ -75,8 +75,8 @@
                           <label class='m-0'>Lease Length:</label>
                           <select data-placeholder="Status" name="status" ng-model="selectedUnitDetail.data.leaseLength" required class="form-control original-form-control select-height"
                                       data-placeholder="Prop status">
-                            <option value="">select</option>
-                            <option value="month-to-month">month-to-month</option>
+                            <option value="">Select</option>
+                            <option value="month-to-month">Month-to-month</option>
                             <option value="6months">6 months</option>
                             <option value="9months">9 months</option>
                             <option value="12months">12 months</option>
@@ -122,7 +122,7 @@
                       <div class="col-sm-4">
                           <div class="form-group">
                         
-                              <label class='m-0'>lease expiry:</label>
+                              <label class='m-0'>Lease expiry:</label>
                               <input name="address" ng-model="selectedUnitDetail.data.leaseDuration" type="date" class="form-control original-form-control" id="" placeholder="">
                             
                           </div>
@@ -130,7 +130,7 @@
                       <div class="col-sm-4">
                               <div class="form-group">
                         
-                                  <label class='m-0'>Rent:</label>
+                                  <label class='m-0'>Rent $:</label>
                                   <input required="" name="rent" ng-model="selectedUnitDetail.data.rent" type="text" class="form-control original-form-control" id="" placeholder="">
                               
                               </div>
@@ -163,7 +163,7 @@
                                     <option value="detachedGarage">Detached garage</option>
                                     <option value="attachedGarage">Attached garage</option>
                                     <option value="OffStreetParking">Off-street parking </option>
-                                    <option value="noParking">no parking</option>
+                                    <option value="noParking">No parking</option>
                                   </select>
                             
                           </div>
@@ -177,7 +177,7 @@
                                   <option value="W/dInUnit">W/d in unit</option>
                                   <option value="LaundryOnSite">Laundry on site</option>
                                   <option value="LaundryInBldg">Laundry in bldg</option>
-                                  <option value="noLaundryOnSite">no laundry on site</option>
+                                  <option value="noLaundryOnSite">No laundry on site</option>
                                 </select>
                             
                           </div>
@@ -292,7 +292,7 @@
                     <div class="row mt-2">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class='m-0'>Amenities:</label>
+                                <label class='m-0'>Amenities and Features:</label>
                                 <textarea ng-model="selectedUnitDetail.data.aminities" rows="5"  class="form-control original-form-control" 
                                 
  placeholder="Rooms and Interior
@@ -483,7 +483,7 @@
                                 </div>
                                 <div class="fg-line col-xs-4">
                                   <input type="text" ng-model="propctrl.prop.postcode" required name="postcode" class="form-control w-100 phone">
-                                  <label class="fg-label" for="text">Postcode:</label>
+                                  <label class="fg-label" for="text">Zip/Postcode:</label>
                                 </div>
                                 <div class="clearfix"></div>
                               </div>
@@ -576,17 +576,17 @@
                               <label for="example-time-input" class="col-sm-12 col-form-label">
                                 Select action to perform on below selected units:&nbsp;&nbsp;
                                 <select class="m-input m-input--square" name="more" ng-model="propctrl.more" ng-change="propctrl.moreaction(propctrl.more)">
-                                  <option value="">Actions</option>
-                                  <option value="available">Mark Available</option>
-                                  <option value="rented">Mark Rented</option>
-                                  <option value="sold">Mark Sold</option>
+                                  <option value="">Status</option>
+                                  <option value="available">Mark as Available</option>
+                                  <option value="rented">Mark as Rented</option>
+                                  <option value="sold">Mark as Sold</option>
                                   <option value="availablesoon">Mark Available Soon</option>
                                 </select>
                               </label>
                             </div>
                             <div class="col-sm-6 text-right">
                               <button type="button" type="button" class="btn btn-primary btn-sm btn-round" ng-click="propctrl.addNewUnit()">
-                                <i class="fa fa-plus" /> Add Unit
+                                <i class="fa fa-plus" /> Add Units
                               </button>
                               <button class="btn btn-danger btn-sm btn-round" type="button" ng-click="propctrl.deleteSelected()">
                                 <i class="fa fa-trash-o"></i>
@@ -613,9 +613,9 @@
                                       <td class="width-40">
                                         <input type="checkbox" ng-model="propctrl.selectedAll" ng-click="propctrl.checkAll()" />
                                       </td>
-                                      <th>Units #</th>
+                                      <th>Unit #</th>
                                       <!-- <th>Address</th> -->
-                                      <th>SQ.ft</th>
+                                      <th>Sq.ft</th>
                                       <th>Rent</th>
                                       <th>Bed</th>
                                       <th>Bath</th>
