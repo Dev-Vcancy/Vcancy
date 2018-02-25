@@ -153,10 +153,10 @@ vcancyApp
 
         bucket.upload(params).on('httpUploadProgress', function (evt) { })
           .send(function (err, data) {
-            console.log(data);
-            if (data && data.target) {
-
-              vm.userData.companylogo = data.Location;
+            if (data && data.Location) {
+              $scope.$apply(function () {
+                vm.userData.companylogo = data.Location;
+              });
               firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
                 vm.opensuccesssweet("Profile Updated successfully!");
               }, function (error) {
