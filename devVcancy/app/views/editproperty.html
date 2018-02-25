@@ -29,8 +29,8 @@
                       </select>
                     </div>
                     <div class="col text-right">
-                      <button class="btn btn-primary" ng-click="openImageModal()" ng-if="selectedUnitDetail.data.images.length>0"> View images({{selectedUnitDetail.data.images?selectedUnitDetail.data.images.length:0}}) </button>
-                      <label class="btn btn-info">
+                      <button class="btn bgm-teal btn-sm btn-round waves-effect" ng-click="openImageModal()" ng-if="selectedUnitDetail.data.images.length>0"> View images({{selectedUnitDetail.data.images?selectedUnitDetail.data.images.length:0}}) </button>
+                      <label class="btn bgm-blue btn-sm btn-round">
                           Upload images <small>(max 24)</small>
                           <input type="file" name="file" id="file" 
                           value="dataFile" 
@@ -311,8 +311,8 @@
                       </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" ng-click="submitDetails()">Save</button>
-                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+                <button class="btn bgm-teal btn-sm btn-round" ng-click="submitDetails()">Save</button>
+                <button class="btn bgm-blue btn-sm btn-round" ng-click="cancel()">Cancel</button>
             </div>
         </form>
         </div>
@@ -565,7 +565,7 @@
                           <div class="row text-right">
                             <div class='col'>
                               <!-- <button type="button" ng-click="propctrl.copyrowofunits()">Copy Unit</button> -->
-                              <button type="button" class="btn btn-success btn-sm btn-round" ng-click="propctrl.opencsvmodel(propctrl.prop)">
+                              <button type="button" class="btn bgm-teal btn-sm btn-round" ng-click="propctrl.opencsvmodel(propctrl.prop)">
                                 <i class="fa fa-file-excel-o" /> Import Data
                               </button>
                             </div>
@@ -585,7 +585,7 @@
                               </label>
                             </div>
                             <div class="col-sm-6 text-right">
-                              <button type="button" type="button" class="btn btn-primary btn-sm btn-round" ng-click="propctrl.addNewUnit()">
+                              <button type="button" type="button" class="btn bgm-blue btn-sm btn-round" ng-click="propctrl.addNewUnit()">
                                 <i class="fa fa-plus" /> Add Units
                               </button>
                               <button class="btn btn-danger btn-sm btn-round" type="button" ng-click="propctrl.deleteSelected()">
