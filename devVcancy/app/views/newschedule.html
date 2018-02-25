@@ -19,207 +19,210 @@
             </div>
 
             <div class="row">
-              <div class="col-sm-4" style="border:1px solid #e7ecf1">
-                <h4>
-                  <span class="fa fa-info-circle"></span> Add Availablity</h4>
-                <div class="row">
-                  <div class="col-sm-12 pl-0">
-                    <label for="example-time-input" class="col-sm-4 col-form-label">
-                      Property
-                    </label>
-                    <div class="col-sm-8">
-                      <select class="custom-form-element" name="selectProperty" ng-model="newschedulectrl.propertySelected" ng-options="key as value.address for (key, value) in newschedulectrl.properties">
-                        <option value=''>Select property</option>
-                      </select>
-                    </div>
+              <div class="col-sm-4">
+                <div style="border:1px solid #e7ecf1">
+                  <h4>
+                    <span class="fa fa-info-circle"></span> Add Availablity</h4>
+                  <div class="row">
+                    <div class="col-sm-12 pl-0">
+                      <label for="example-time-input" class="col-sm-4 col-form-label">
+                        Property
+                      </label>
+                      <div class="col-sm-8">
+                        <select class="custom-form-element" name="selectProperty" ng-model="newschedulectrl.propertySelected" ng-options="key as value.address for (key, value) in newschedulectrl.properties">
+                          <option value=''>Select property</option>
+                        </select>
+                      </div>
 
-                  </div>
-                  <div class="col-sm-12 pl-0 mt-3" ng-if="newschedulectrl.propertySelected && newschedulectrl.properties[newschedulectrl.propertySelected].units == 'multiple'">
-                    <label for="example-time-input" class="col-sm-4 col-form-label">
-                      Unit
-                    </label>
-                    <div class="col-sm-8">
-                      <!-- <select class="m-input m-input--square" name="selectProperty" style="min-width: 150px;" ng-model="newschedulectrl.selectedUnitId"
+                    </div>
+                    <div class="col-sm-12 pl-0 mt-3" ng-if="newschedulectrl.propertySelected && newschedulectrl.properties[newschedulectrl.propertySelected].units == 'multiple'">
+                      <label for="example-time-input" class="col-sm-4 col-form-label">
+                        Unit
+                      </label>
+                      <div class="col-sm-8">
+                        <!-- <select class="m-input m-input--square" name="selectProperty" style="min-width: 150px;" ng-model="newschedulectrl.selectedUnitId"
                         ng-options="value.unit as value.unit for value in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
                         <option value=''>Select unit</option>
                       </select> -->
-                      <ui-select multiple tagging tagging-label="(custom 'new' label)" style="min-width: 150px;border: 1px solid #ccc;" ng-model="newschedulectrl.selectedUnitId"
-                        theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
-                        <ui-select-match placeholder="Select Units...">{{$item.unit}}</ui-select-match>
-                        <ui-select-choices repeat="unit in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
-                          {{unit.unit}}
-                        </ui-select-choices>
-                      </ui-select>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-3">
-                  <div class="col-sm-12">
-                    <div class="row">
-                      <label for="example-time-input" class="col-sm-4 col-form-label">
-                        From Date
-                      </label>
-                      <div class="col-sm-8">
-                        <input type="date" class="m-input m-input--square m-border" name="fromDate" ng-model="newschedulectrl.fromDate" />
-                      </div>
-                    </div>
-                    <div class="row">
-                      <label for="example-time-input" class="col-sm-4 col-form-label">
-                        To Date
-                      </label>
-                      <div class="col-sm-8">
-                        <input type="date" class="m-input m-input--square m-border" name="toDate" ng-model="newschedulectrl.toDate" />
+                        <ui-select multiple tagging tagging-label="(custom 'new' label)" style="min-width: 150px;border: 1px solid #ccc;" ng-model="newschedulectrl.selectedUnitId"
+                          theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
+                          <ui-select-match placeholder="Select Units...">{{$item.unit}}</ui-select-match>
+                          <ui-select-choices repeat="unit in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
+                            {{unit.unit}}
+                          </ui-select-choices>
+                        </ui-select>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="row mt-3">
-                  <div class="col-sm-8">
-                    <div class="row">
-                      <label for="example-time-input" class="col-sm-3 col-form-label" style="margin:auto">
-                        Time
-                      </label>
-                      <div class="col-sm-9">
-                        <div class="row">
-                          <div class="col-sm-6">
-                            <label for="example-time-input" class="col-sm-6 col-form-label">
-                              From
-                              <select class="m-input m-input--square" name="more" ng-model="newschedulectrl.fromTime">
-                                <option value="00:00 am">0 am</option>
-                                <option value="01:00 am">1 am</option>
-                                <option value="02:00 am">2 am</option>
-                                <option value="03:00 am">3 am</option>
-                                <option value="04:00 am">4 am</option>
-                                <option value="05:00 am">5 am</option>
-                                <option value="06:00 am">6 am</option>
-                                <option value="07:00 am">7 am</option>
-                                <option value="08:00 am">8 am</option>
-                                <option value="09:00 am">9 am</option>
-                                <option value="10:00 am">10 am</option>
-                                <option value="11:00 am">11 am</option>
-                                <option value="12:00 am">12 am</option>
-                                <option value="01:00 pm">1 pm</option>
-                                <option value="02:00 pm">2 pm</option>
-                                <option value="03:00 pm">3 pm</option>
-                                <option value="04:00 pm">4 pm</option>
-                                <option value="05:00 pm">5 pm</option>
-                                <option value="06:00 pm">6 pm</option>
-                                <option value="07:00 pm">7 pm</option>
-                                <option value="08:00 pm">8 pm</option>
-                                <option value="09:00 pm">9 pm</option>
-                                <option value="10:00 pm">10 pm</option>
-                                <option value="11:00 pm">11 pm</option>
-                              </select>
-                            </label>
-                          </div>
-                          <div class="col-sm-6">
-                            <label for="example-time-input" class="col-sm-6 col-form-label">
-                              To
-                              <select class="m-input m-input--square" name="more" ng-model="newschedulectrl.toTime">
-                                <option value="00:00 am">0 am</option>
-                                <option value="01:00 am">1 am</option>
-                                <option value="02:00 am">2 am</option>
-                                <option value="03:00 am">3 am</option>
-                                <option value="04:00 am">4 am</option>
-                                <option value="05:00 am">5 am</option>
-                                <option value="06:00 am">6 am</option>
-                                <option value="07:00 am">7 am</option>
-                                <option value="08:00 am">8 am</option>
-                                <option value="09:00 am">9 am</option>
-                                <option value="10:00 am">10 am</option>
-                                <option value="11:00 am">11 am</option>
-                                <option value="12:00 am">12 am</option>
-                                <option value="01:00 pm">1 pm</option>
-                                <option value="02:00 pm">2 pm</option>
-                                <option value="03:00 pm">3 pm</option>
-                                <option value="04:00 pm">4 pm</option>
-                                <option value="05:00 pm">5 pm</option>
-                                <option value="06:00 pm">6 pm</option>
-                                <option value="07:00 pm">7 pm</option>
-                                <option value="08:00 pm">8 pm</option>
-                                <option value="09:00 pm">9 pm</option>
-                                <option value="10:00 pm">10 pm</option>
-                                <option value="11:00 pm">11 pm</option>
-                              </select>
-                            </label>
+                  <div class="row mt-3">
+                    <div class="col-sm-12">
+                      <div class="row">
+                        <label for="example-time-input" class="col-sm-4 col-form-label">
+                          From Date
+                        </label>
+                        <div class="col-sm-8">
+                          <input type="date" class="m-input m-input--square m-border" name="fromDate" ng-model="newschedulectrl.fromDate" />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <label for="example-time-input" class="col-sm-4 col-form-label">
+                          To Date
+                        </label>
+                        <div class="col-sm-8">
+                          <input type="date" class="m-input m-input--square m-border" name="toDate" ng-model="newschedulectrl.toDate" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col-sm-8">
+                      <div class="row">
+                        <label for="example-time-input" class="col-sm-3 col-form-label" style="margin:auto">
+                          Time
+                        </label>
+                        <div class="col-sm-9">
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <label for="example-time-input" class="col-sm-6 col-form-label">
+                                From
+                                <select class="m-input m-input--square" name="more" ng-model="newschedulectrl.fromTime">
+                                  <option value="00:00 am">12 am</option>
+                                  <option value="01:00 am">1 am</option>
+                                  <option value="02:00 am">2 am</option>
+                                  <option value="03:00 am">3 am</option>
+                                  <option value="04:00 am">4 am</option>
+                                  <option value="05:00 am">5 am</option>
+                                  <option value="06:00 am">6 am</option>
+                                  <option value="07:00 am">7 am</option>
+                                  <option value="08:00 am">8 am</option>
+                                  <option value="09:00 am">9 am</option>
+                                  <option value="10:00 am">10 am</option>
+                                  <option value="11:00 am">11 am</option>
+                                  <option value="12:00 am">12 am</option>
+                                  <option value="01:00 pm">1 pm</option>
+                                  <option value="02:00 pm">2 pm</option>
+                                  <option value="03:00 pm">3 pm</option>
+                                  <option value="04:00 pm">4 pm</option>
+                                  <option value="05:00 pm">5 pm</option>
+                                  <option value="06:00 pm">6 pm</option>
+                                  <option value="07:00 pm">7 pm</option>
+                                  <option value="08:00 pm">8 pm</option>
+                                  <option value="09:00 pm">9 pm</option>
+                                  <option value="10:00 pm">10 pm</option>
+                                  <option value="11:00 pm">11 pm</option>
+                                </select>
+                              </label>
+                            </div>
+                            <div class="col-sm-6">
+                              <label for="example-time-input" class="col-sm-6 col-form-label">
+                                To
+                                <select class="m-input m-input--square" name="more" ng-model="newschedulectrl.toTime">
+                                  <option value="00:00 am">12 am</option>
+                                  <option value="01:00 am">1 am</option>
+                                  <option value="02:00 am">2 am</option>
+                                  <option value="03:00 am">3 am</option>
+                                  <option value="04:00 am">4 am</option>
+                                  <option value="05:00 am">5 am</option>
+                                  <option value="06:00 am">6 am</option>
+                                  <option value="07:00 am">7 am</option>
+                                  <option value="08:00 am">8 am</option>
+                                  <option value="09:00 am">9 am</option>
+                                  <option value="10:00 am">10 am</option>
+                                  <option value="11:00 am">11 am</option>
+                                  <option value="12:00 am">12 am</option>
+                                  <option value="01:00 pm">1 pm</option>
+                                  <option value="02:00 pm">2 pm</option>
+                                  <option value="03:00 pm">3 pm</option>
+                                  <option value="04:00 pm">4 pm</option>
+                                  <option value="05:00 pm">5 pm</option>
+                                  <option value="06:00 pm">6 pm</option>
+                                  <option value="07:00 pm">7 pm</option>
+                                  <option value="08:00 pm">8 pm</option>
+                                  <option value="09:00 pm">9 pm</option>
+                                  <option value="10:00 pm">10 pm</option>
+                                  <option value="11:00 pm">11 pm</option>
+                                </select>
+                              </label>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="row mt-3 col-sm-offset-3" style="margin-bottom: 10px;">
+                  <div class="row mt-3 col-sm-offset-3" style="margin-bottom: 10px;">
 
-                  <button class="btn btn-success btn-round" ng-click="newschedulectrl.addAvailability($event)">Add</button>
-                  &nbsp;
-                  <button class="btn btn-danger btn-round" ng-click="newschedulectrl.clearAll($event)">Reset</button>
+                    <button class="btn btn-success btn-round" ng-click="newschedulectrl.addAvailability($event)">Add</button>
+                    &nbsp;
+                    <button class="btn btn-danger btn-round" ng-click="newschedulectrl.clearAll($event)">Reset</button>
+                  </div>
                 </div>
               </div>
               <div class="col-sm-6 text-center" style="margin:auto;">
-                  <div ui-calendar ng-model="eventSources"></div>
+                <div ui-calendar ng-model="eventSources"></div>
               </div>
             </div>
-
-            <div class="row mt-5">
-              <div class="col-sm-6">
-                <button class="btn btn-sm btn-success btn-round" ng-click="newschedulectrl.deleteListings($event)">Delete</button>
-                <button class="btn btn-sm btn-success btn-round" ng-click="craigslistopen(true)">Craigslist Settings</button>
-              </div>
-            </div>
-
-            <div class="row mt-5">
-              <div class="col-sm-12">
-                <table class="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th>
-                        <input type="checkbox" ng-model="newschedulectrl.selectedAllListing" ng-click="newschedulectrl.checkAllListing()" />
-                      </th>
-                      <th>
-                        Unit/Property
-                      </th>
-                      <th>
-                        Showing Date/Time
-                      </th>
-                      <th>
-                        Scheduling Link (info)
-                      </th>
-                      <th>
-                        List on Craiglist
-                      </th>
-                      <th>
-                        Listing Status
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr ng-repeat="(key, value) in newschedulectrl.listings track by $index" id="{{$index}}">
-                      <td>
-                        <input type="checkbox" ng-model="newschedulectrl.listings[key].inputCheck" />
-                      </td>
-                      <td>{{value.unitID}} - {{newschedulectrl.properties[value.propertyId].address}}</td>
-                      <td>{{newschedulectrl.moment(value.fromDate).format('DD MMM')}} - {{newschedulectrl.moment(value.toDate).format('DD
-                        MMM')}} {{value.fromTime}}-{{value.toTime}}</td>
-                      <td>
-                        <a ng-href='{{value.link}}'>{{value.link}}</a>
-                      </td>
-                      <td>
-                        <span ng-if="value.unitID && newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)">Incomplete Details</span>
-                        <span ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)">Craigslist</span>
-                      </td>
-                      <td>{{value.status}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-
           </div>
-          <!-- Calendar -->
-          <!-- <div id="calendar-widget" ng-if="schedulectrl.showCal" data-full-calendar calendardata="schedulectrl.calendardata"></div> -->
+
+          <div class="row mt-5">
+            <div class="col-sm-6">
+              <button class="btn btn-sm btn-success btn-round" ng-click="newschedulectrl.deleteListings($event)">Delete</button>
+              <button class="btn btn-sm btn-success btn-round" ng-click="craigslistopen(true)">Craigslist Settings</button>
+            </div>
+          </div>
+
+          <div class="row mt-5">
+            <div class="col-sm-12">
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" ng-model="newschedulectrl.selectedAllListing" ng-click="newschedulectrl.checkAllListing()" />
+                    </th>
+                    <th>
+                      Unit/Property
+                    </th>
+                    <th>
+                      Showing Date/Time
+                    </th>
+                    <th>
+                      Scheduling Link (info)
+                    </th>
+                    <th>
+                      List on Craiglist
+                    </th>
+                    <th>
+                      Listing Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="(key, value) in newschedulectrl.listings track by $index" id="{{$index}}">
+                    <td>
+                      <input type="checkbox" ng-model="newschedulectrl.listings[key].inputCheck" />
+                    </td>
+                    <td>{{value.unitID}} - {{newschedulectrl.properties[value.propertyId].address}}</td>
+                    <td>{{newschedulectrl.moment(value.fromDate).format('DD MMM')}} - {{newschedulectrl.moment(value.toDate).format('DD
+                      MMM')}} {{value.fromTime}}-{{value.toTime}}</td>
+                    <td>
+                      <a ng-href='{{value.link}}'>{{value.link}}</a>
+                    </td>
+                    <td>
+                      <span ng-if="value.unitID && newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)">Incomplete Details</span>
+                      <span ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)">Craigslist</span>
+                    </td>
+                    <td>{{value.status}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+
         </div>
+        <!-- Calendar -->
+        <!-- <div id="calendar-widget" ng-if="schedulectrl.showCal" data-full-calendar calendardata="schedulectrl.calendardata"></div> -->
       </div>
+    </div>
     </div>
 
   </section>

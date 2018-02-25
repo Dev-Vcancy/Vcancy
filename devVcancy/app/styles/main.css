@@ -42,6 +42,10 @@ body {
    padding:0
  }
 
+ .fc-day-grid-event.fc-h-event.fc-event{
+   color:white;
+ }
+
 .middle {
   transition: .5s ease;
   opacity: 0;
