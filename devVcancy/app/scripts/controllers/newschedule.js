@@ -150,6 +150,11 @@ vcancyApp
 					return;
 				}
 				var availabilities = [];
+
+				let url = 'https://vcancy.ca/login/#/applyproperty/'
+				if(window.location.host.startsWith('localhost')) {
+					url = 'http://localhost:9000/#/applyproperty/'
+				}
 				var availability = {
 					propertyId: vm.propertySelected,
 					fromDate: moment(vm.fromDate.toString()).toDate().toString(),
@@ -158,7 +163,7 @@ vcancyApp
 					toTime: vm.toTime,
 					landlordID: landlordID,
 					userID: userID,
-					link: 'https://vcancy.ca/login/#/applyprop/' + vm.propertySelected,
+					link: url + vm.propertySelected,
 					status: 'Not Listed',
 					listOnCraigslist: false
 				}

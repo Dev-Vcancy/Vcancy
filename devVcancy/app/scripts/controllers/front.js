@@ -4,7 +4,7 @@
 // LOGIN, REGISTER
 //=================================================
 
-vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$location', '$window', function ($scope, $firebaseAuth, $state, $rootScope, $location, $window) {
+vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$location', '$window', 'emailSendingService', function ($scope, $firebaseAuth, $state, $rootScope, $location, $window, emailSendingService) {
 
 	var vm = this;
 	//Status

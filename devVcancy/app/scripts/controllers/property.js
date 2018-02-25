@@ -415,7 +415,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
             var bucket = new AWS.S3({
                 params: {
-                    Bucket: 'vcancy-final/property-images'
+                    Bucket: 'vcancy-final'
                 }
             });
             var fileChooser = document.getElementById('file');
@@ -464,7 +464,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
                 var params = {
-                    Key: filename,
+                    Key: 'property-images/'+filename,
                     ContentType: file.type,
                     Body: file,
                     StorageClass: "STANDARD_IA",
@@ -1602,7 +1602,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                 var bucket = new AWS.S3({
                     params: {
-                        Bucket: 'vcancy-final/property-images'
+                        Bucket: 'vcancy-final'
                     }
                 });
                 var filename = moment().format('YYYYMMDDHHmmss') + file.name;
@@ -1619,7 +1619,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
                 var params = {
-                    Key: filename,
+                    Key: 'property-images/'+filename,
                     ContentType: file.type,
                     Body: file,
                     StorageClass: "STANDARD_IA",

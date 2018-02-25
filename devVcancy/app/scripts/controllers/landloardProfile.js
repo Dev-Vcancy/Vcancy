@@ -129,7 +129,7 @@ vcancyApp
 
         var bucket = new AWS.S3({
           params: {
-            Bucket: 'vcancy-final/company-logo'
+            Bucket: 'vcancy-final'
           }
         });
         var filename = moment().format('YYYYMMDDHHmmss') + file.name;
@@ -144,7 +144,7 @@ vcancyApp
         }
 
         var params = {
-          Key: filename,
+          Key: 'company-logo/' + filename,
           ContentType: file.type,
           Body: file,
           StorageClass: "STANDARD_IA",
@@ -156,7 +156,7 @@ vcancyApp
             console.log(data);
             if (data && data.target) {
 
-              vm.userData.companylogo = data.target;
+              vm.userData.companylogo = data.Location;
               firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
                 vm.opensuccesssweet("Profile Updated successfully!");
               }, function (error) {
@@ -231,7 +231,7 @@ vcancyApp
         });
         AWS.config.region = 'ca-central-1';
 
-        var bucket = new AWS.S3({ params: { Bucket: 'vcancy-final/company-logo' } });
+        var bucket = new AWS.S3({ params: { Bucket: 'vcancy-final' } });
         var fileChooser = document.getElementById('file');
         var file = fileChooser.files[0];
         var filename = moment().format('YYYYMMDDHHmmss') + file.name;
@@ -249,7 +249,7 @@ vcancyApp
 
 
         if (file) {
-          var params = { Key: filename, ContentType: file.type, Body: file, StorageClass: "STANDARD_IA", ACL: 'public-read' };
+          var params = { Key: 'company-logo/'+filename, ContentType: file.type, Body: file, StorageClass: "STANDARD_IA", ACL: 'public-read' };
           bucket.upload(params).on('httpUploadProgress', function (evt) {
             console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total) + '%');
           }).send(function (err, data) {
@@ -609,7 +609,7 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
 
   $scope.ok = function () {
 
-    var bucket = new AWS.S3({ params: { Bucket: 'vacancy-final/profile-images' } });
+    var bucket = new AWS.S3({ params: { Bucket: 'vacancy-final' } });
     var fileChooser = document.getElementById('file321');
     var file = fileChooser.files[0];
     var filename = moment().format('YYYYMMDDHHmmss') + file.name;
@@ -629,7 +629,7 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
 
 
     if (file) {
-      var params = { Key: filename, ContentType: file.type, Body: file, StorageClass: "STANDARD_IA", ACL: 'public-read' };
+      var params = { Key: 'profile-images/'+filename, ContentType: file.type, Body: file, StorageClass: "STANDARD_IA", ACL: 'public-read' };
       bucket.upload(params).on('httpUploadProgress', function (evt) {
         console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total) + '%');
       }).send(function (err, data) {
