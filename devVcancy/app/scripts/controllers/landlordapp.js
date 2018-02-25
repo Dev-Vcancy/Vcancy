@@ -19,11 +19,9 @@ vcancyApp
 			var userData = JSON.parse(localStorage.getItem('userData'));
 
 			vm.propcheck = [];
-			vm.filters = {
-				questions: []
-			};
-			vm.apppropaddress = [];
 
+			vm.apppropaddress = [];
+			vm.originalPropAddress = [];
 			vm.loader = 1;
 
 			// Function to generate Random Id
@@ -48,6 +46,10 @@ vcancyApp
 				{ id: 'UH7JZS', label: 'Smoking', isChecked: false },
 				{ id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
 			];
+
+			vm.filters = {
+				options: vm.questionDropDown,
+			};
 
 			vm.defaultRentalApplicationCheck = {
 				'PAPPD': false,
@@ -100,8 +102,19 @@ vcancyApp
 				var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					if (snapshot.val()) {
 						vm.apppropaddress = snapshot.val();
+						vm.originalPropAddress = angular.copy(snapshot.val());
+						console.log(vm.apppropaddress)
 					}
 				});
+			};
+
+
+			$scope.formatDay = function (key) {
+				return moment(key, 'MM/DD/YYYY').format('ddd')
+			};
+
+			$scope.formatDate = function (key) {
+				return moment(key, 'MM/DD/YYYY').format('MMM DD')
 			};
 
 			vm.init = function () {
@@ -119,6 +132,37 @@ vcancyApp
 					scope: $scope
 				});
 			};
+			vm.filterData = function (forProperty) {
+				var properties = angular.copy(vm.originalPropAddress);
+				vm.apppropaddress = properties;
+				if (vm.filters.property) {
+					var obj = {};
+					_.filter(properties, function (value, key) {
+						if (value.propID == vm.filters.property) {
+							obj[key] = value;
+						}
+					});
+					vm.apppropaddress = obj;
+				}
+				if (vm.filters.unit && vm.filters.unit.length > 0) {
+					var unitItems = {};
+					var unitIds = _.reduce(vm.filters.unit, function (previousValue, currentValue, key) {
+						if (currentValue.unit) {
+							previousValue.push(parseInt(currentValue.unit));
+						}
+						return previousValue;
+					}, []);
+					_.filter(properties, function (value, key) {
+						if (value.propID == vm.filters.property && unitIds.includes(parseInt(value.unitID))) {
+							unitItems[key] = value;
+						}
+					});
+					vm.apppropaddress = unitItems;
+					return
+				}
+
+				vm.apppropaddress = obj;
+			}
 
 			vm.customQuestion = null;
 			vm.addCustomQuestion = function () {
