@@ -206,7 +206,7 @@
                       <a ng-href='{{value.link}}'>{{value.link}}</a>
                     </td>
                     <td>
-                      <span ng-if="value.unitID && newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)">Incomplete Details</span>
+                      <span ng-if="value.unitID && newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)" class="text-primary">Incomplete Details</span>
                       <span ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)">Craigslist</span>
                     </td>
                     <td>{{value.status}}</td>
