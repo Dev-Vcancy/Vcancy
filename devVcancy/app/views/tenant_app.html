@@ -20,8 +20,8 @@
 			<div class="card white-block p-20">
 				<div class="card-body">
 					<div class="col-sm-12">
-						<button class="btn btn-info" ng-click="tappctrl.openRentalForm()">Rental Application Form</button>
-						Incomplete/Complete (just a text. Red colour for incomplete and green for complete)
+						<button class="btn bgm-teal btn-sm btn-round" ng-click="tappctrl.openRentalForm()">Rental Application Form</button>
+		     &nbsp;&nbsp;Incomplete/Complete (just a text. Red colour for incomplete and green for complete)
 					</div>
 					<div class="clearfix"></div>
 				</div>
@@ -36,7 +36,7 @@
 						 class="form-control m-b-5 w-3">
 					</div>
 					<div class="col-sm-4">
-						<a ng-disabled="tappctrl.disablebutton" ng-click="tappctrl.gotoRental()" class="btn bgm-cyan">Submit</a>
+						<a ng-disabled="tappctrl.disablebutton" ng-click="tappctrl.gotoRental()" class="btn bgm-teal btn-sm btn-round">Submit</a>
 					</div>
 					<div class="clearfix"></div>
 				</div>
@@ -54,7 +54,7 @@
 							<tr ng-repeat="row in $data">
 								<td ng-repeat="col in $columns">{{row[col.field]}}</td>
 								<td ng-repeat="col in tappctrl.extracols">
-									<a href="#/rentalform/{{row[col.field]}}/{{row.applicationID}}" class="btn bgm-cyan">Submit</a>
+									<a href="#/rentalform/{{row[col.field]}}/{{row.applicationID}}" class="btn bgm-teal btn-sm btn-round">Submit</a>
 								</td>
 							</tr>
 							<tr ng-if="tappctrl.pendingappsavail == 0">
@@ -80,7 +80,7 @@
 							<tr ng-repeat="row in $data">
 								<td ng-repeat="col in $columns">{{row[col.field]}}</td>
 								<td ng-repeat="col in tappctrl.submitappsextracols">
-									<a href="#/viewapp/{{row[col.field]}}" target="_blank" class="btn bgm-blue m-b-5">Application</a>
+									<a href="#/viewapp/{{row[col.field]}}" target="_blank" class="btn bgm-teal btn-sm btn-round m-b-5">Application</a>
 								</td>
 							</tr>
 							<tr ng-if="tappctrl.submitappsavail == 0">
