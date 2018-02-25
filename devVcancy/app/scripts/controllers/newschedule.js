@@ -131,7 +131,7 @@ vcancyApp
 			vm.generateMergeListing = function () {
 				_.forEach(vm.listings, function (list, key) {
 					if (!vm.mergeListing[list.link]) {
-						vm.mergeListing[list.link] = vm.listings[key];
+						vm.mergeListing[list.link] = angular.copy(vm.listings[key]);
 						vm.mergeListing[list.link].fromToDate = [];
 						var date = moment(vm.listings[key].fromDate).format('DD MMM') + '-' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
 						vm.mergeListing[list.link].fromToDate.push(date);
@@ -141,7 +141,6 @@ vcancyApp
 						vm.mergeListing[list.link].fromToDate.push(date);
 					}
 				});
-				console.log(vm.mergeListing);
 			};
 
 			vm.clearAll = function ($event) {
@@ -170,7 +169,7 @@ vcancyApp
 				var availabilities = [];
 
 				let url = 'https://vcancy.ca/login/#/applyproperty/'
-				if(window.location.host.startsWith('localhost')) {
+				if (window.location.host.startsWith('localhost')) {
 					url = 'http://localhost:9000/#/applyproperty/'
 				}
 				var availability = {
