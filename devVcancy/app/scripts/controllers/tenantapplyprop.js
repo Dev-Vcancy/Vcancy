@@ -160,9 +160,9 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				var timeRange = fromTime.format('hh:mm a') + '-' + toTime.format('hh:mm a');
 				var fromTimeSlot = fromTime.format('hh:mm a');
 				var toTimeSlot = toTime.format('hh:mm a');
+				var preScreeningAns = angular.copy(vm.preScreeningAns)
 
 				// console.log(dateslot,fslot,tslot);
-
 
 				var applypropObj = $firebaseAuth();
 				var applypropdbObj = firebase.database();
@@ -178,7 +178,8 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					toTimeSlot: toTimeSlot,
 					landlordID: landlordID,
 					timeRange: timeRange,
-					unitID: unitID
+					unitID: unitID,
+					preScreeningAns: preScreeningAns
 				}).then(function () {
 					$state.go('applicationThanks');
 					// $rootScope.success = 'Application for property successfully sent!';	
@@ -194,7 +195,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					// Mail to Tenant
 					var emailData = '<p>Hello ' + name + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.ca/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 					// Send Email
-					emailSendingService.sendEmailViaNodeMailer(userInfo.email, 'Viewing request for ' + address, 'viewingreq', emailData);
+					emailSendingService.sendEmailViaNodeMailer(userDetails.email, 'Viewing request for ' + address, 'viewingreq', emailData);
 				})
 			} else {
 				vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'
@@ -291,13 +292,20 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					localStorage.setItem('userID', firebase.auth().currentUser.uid);
 					localStorage.setItem('userEmail', firebase.auth().currentUser.email);
 					localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
-					localStorage.setItem('password', pass);
+					localStorage.setItem('password', userdetails.password);
 					firebase.database().ref('/users/' + firebase.auth().currentUser.uid).once('value').then(function (userdata) {
 						$rootScope.usertype = 0;
 						localStorage.setItem('usertype', 0);
 						console.log("Signed in as tenant:", firebase.auth().currentUser.uid);
 						localStorage.setItem('userData', JSON.stringify(userdata.val()));
+						vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')): null;
+						if(vm.userData) {
+							vm.registerUser.firstName = vm.userData.firstname;
+							vm.registerUser.lastName = vm.userData.lastname;
+							vm.registerUser.email = vm.userData.email;			
+						}
 						vm.closeModal();
+						$scope.$apply();
 					});
 				})
 				.catch(function (error) {

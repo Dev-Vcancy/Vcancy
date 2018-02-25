@@ -131,7 +131,8 @@
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-3 mb-3" ng-repeat="(key, value) in applyctrl.availableSlots">
-										<button class="btn btnoutline success btn-outline-success" ng-class="{ 'btn-active': applyctrl.selectedDate == value }" type="button" ng-click="applyctrl.selectSlotDate(key)">
+										<button class="btn btnoutline success btn-outline-success" ng-class="{ 'btn-active': applyctrl.selectedDate == value }" type="button"
+										 ng-click="applyctrl.selectSlotDate(key)">
 											<i class="fa fa-calander"></i> {{applyctrl.formatDay(key)}}
 											<br/> {{applyctrl.formatDate(key)}}
 											<!-- {{moment(key, 'MM/DD/YYYY').format('ddd')}}  -->
@@ -146,42 +147,41 @@
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-3 mb-3" ng-repeat="value in applyctrl.availableSlots[applyctrl.selectedDate] track by $index">
-										<button class="btn btnoutline success btn-outline-success" ng-class="{ 'btn-active': applyctrl.selectedTime == value }" type='button' ng-click="applyctrl.selectSlotTime(value)">
+										<button class="btn btnoutline success btn-outline-success" ng-class="{ 'btn-active': applyctrl.selectedTime == value }" type='button'
+										 ng-click="applyctrl.selectSlotTime(value)">
 											{{value}}
 										</button>
 									</div>
 								</div>
 
 								<div>
-									<div class="row text-center mt-5">
+									<div class="row text-center mt-5" ng-if="!applyctrl.userData">
 										Already have an account? &nbsp;&nbsp;
 										<button class="btn btn-primary btn-sm btn-round" type="button" ng-click="applyctrl.openSignInmodel()">Sign in</button>
 									</div>
 
-									<ng-form role="form" name="createuserform" novalidate>
-										<div class="row mt-4">
-											<div class="col-sm-6 mb-3">
-												<input type="text" placeholder="First Name" id="firstname" name="firstname" ng-model="applyctrl.registerUser.firstName" class="form-control original-form-control"
-												 required/>
-											</div>
-											<div class="col-sm-6 mb-3">
-												<input type="text" placeholder="Last Name" id="lastname" name="lastname" ng-model="applyctrl.registerUser.lastName" class="form-control original-form-control"
-												 required/>
-											</div>
-											<div class="col-sm-6 mb-3">
-												<input type="email" ng-disabled="userData" placeholder="Email" id="email" name="email" ng-model="applyctrl.registerUser.email"
-												 class="form-control original-form-control" required/>
-											</div>
-											<div class="col-sm-6 mb-3">
-												<input type="number" placeholder="Phone" id="phone" name="phone" ng-model="applyctrl.registerUser.phone" class="form-control original-form-control"
-												/>
-											</div>
-											<div class="col-sm-12 mb-3 text-center">
+									<div class="row mt-4">
+										<div class="col-sm-6 mb-3">
+											<input type="text" placeholder="First Name" id="firstname" name="firstname" ng-model="applyctrl.registerUser.firstName" class="form-control original-form-control"
+											 required/>
+										</div>
+										<div class="col-sm-6 mb-3">
+											<input type="text" placeholder="Last Name" id="lastname" name="lastname" ng-model="applyctrl.registerUser.lastName" class="form-control original-form-control"
+											 required/>
+										</div>
+										<div class="col-sm-6 mb-3">
+											<input type="email" ng-disabled="userData" placeholder="Email" id="email" name="email" ng-model="applyctrl.registerUser.email"
+											 class="form-control original-form-control" required/>
+										</div>
+										<div class="col-sm-6 mb-3">
+											<input type="number" placeholder="Phone" id="phone" name="phone" ng-model="applyctrl.registerUser.phone" class="form-control original-form-control"
+											/>
+										</div>
+										<!-- <div class="col-sm-12 mb-3 text-center">
 												<button type="button" class="btn btn-info" ng-disabled="createuserform.$invalid || createuserform.$pristine" ng-click="applyctrl.createUser(applyctrl.registerUser)">
 													<i class="fa fa-plus"></i> Create</button>
-											</div>
-										</div>
-									</ng-form>
+											</div> -->
+									</div>
 								</div>
 								<ng-form role="form" name="scheduleForm" novalidate>
 									<div class="row mt-3 p-20" style="border:1px solid #c2cad8">
