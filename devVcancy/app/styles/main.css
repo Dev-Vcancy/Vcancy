@@ -42,6 +42,12 @@ body {
    padding:0
  }
 
+ .btn-active{
+  color: #fff !important;
+  background-color: #28a745 !important;
+  border-color: #28a745 !important;
+ }
+
  .fc-day-grid-event.fc-h-event.fc-event{
    color:white;
  }
