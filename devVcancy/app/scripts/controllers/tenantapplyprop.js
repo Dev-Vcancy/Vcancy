@@ -11,7 +11,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		vm.moment = moment;
 		vm.emailVerifiedError = '';
 		var tenantID = localStorage.getItem('userID');
-		vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')): null;
+		vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
 		vm.propinactive = 0;
 		vm.registerUser = {
 			firstName: '',
@@ -19,12 +19,12 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 			email: '',
 			phone: ''
 		};
-		vm.preScreeningAns={};
+		vm.preScreeningAns = {};
 		vm.landlordData = {};
-		if(vm.userData) {
+		if (vm.userData) {
 			vm.registerUser.firstName = vm.userData.firstname;
 			vm.registerUser.lastName = vm.userData.lastname;
-			vm.registerUser.email = vm.userData.email;			
+			vm.registerUser.email = vm.userData.email;
 		}
 		vm.signIn = {
 			username: '',
@@ -49,7 +49,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 			firebase.database().ref('/users/' + vm.propData.landlordID).once('value').then(function (snap) {
 				$scope.$apply(function () {
 					vm.landlordData = snap.val();
-					console.log('vm.landlordData',vm.landlordData);
+					console.log('vm.landlordData', vm.landlordData);
 					vm.landlordData.id = snap.key;
 				})
 			});
@@ -95,11 +95,11 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 
 		vm.selectSlotDate = function (key) {
 			vm.selectedDate = key;
-		}
+		};
 
-		vm.selectSlotDate = function (key) {
+		vm.selectSlotTime = function (key) {
 			vm.selectedTime = key;
-		}
+		};
 
 		function getScheduledProp() {
 			firebase.database().ref('propertiesSchedule/').orderByChild("propertyId").equalTo($stateParams.propId).once("value", function (snap) {
@@ -121,9 +121,9 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					var propData = snap.val();
 					vm.propData = angular.copy(propData);
 					console.log(propData)
-					if(propData && propData.unitlists && propData.unitlists.length > 0){
-						vm.selectedUnit = propData.unitlists.find(function(unit){
-							if(unit.unit == vm.unitId) return true;
+					if (propData && propData.unitlists && propData.unitlists.length > 0) {
+						vm.selectedUnit = propData.unitlists.find(function (unit) {
+							if (unit.unit == vm.unitId) return true;
 						})
 					}
 					console.log(vm.selectedUnit)
@@ -144,8 +144,8 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		// Property Application form - Data of tenant save		
 		vm.tenantapply = function () {
 			if (localStorage.getItem('userEmailVerified') !== 'false') {
-				var userInfo = vm.userInfo?angular.copy(vm.userInfo): null;
-				var userDetails = localStorage.getItem('userData')?JSON.parse(localStorage.getItem('userData')):userInfo;
+				var userInfo = vm.userInfo ? angular.copy(vm.userInfo) : null;
+				var userDetails = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : userInfo;
 				vm.emailVerifiedError = '';
 				var tenantID = localStorage.getItem('userID') || vm.userInfo.id;
 				var propID = $stateParams.propId;
@@ -203,7 +203,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		}
 
 		vm.createUser = function (user) {
-			if(vm.userData){
+			if (vm.userData) {
 				vm.tenantapply();
 				return;
 			}
@@ -298,11 +298,11 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 						localStorage.setItem('usertype', 0);
 						console.log("Signed in as tenant:", firebase.auth().currentUser.uid);
 						localStorage.setItem('userData', JSON.stringify(userdata.val()));
-						vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')): null;
-						if(vm.userData) {
+						vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
+						if (vm.userData) {
 							vm.registerUser.firstName = vm.userData.firstname;
 							vm.registerUser.lastName = vm.userData.lastname;
-							vm.registerUser.email = vm.userData.email;			
+							vm.registerUser.email = vm.userData.email;
 						}
 						vm.closeModal();
 						$scope.$apply();

@@ -131,7 +131,8 @@
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-3 mb-3" ng-repeat="(key, value) in applyctrl.availableSlots">
-										<button class="btn btnoutline success btn-outline-success" ng-class="{ 'btn-active': applyctrl.selectedDate == value }" type="button"
+										
+										<button class="btn btnoutline success btn-outline-success" ng-class="{ 'btn-active': applyctrl.selectedDate == key }" type="button"
 										 ng-click="applyctrl.selectSlotDate(key)">
 											<i class="fa fa-calander"></i> {{applyctrl.formatDay(key)}}
 											<br/> {{applyctrl.formatDate(key)}}
