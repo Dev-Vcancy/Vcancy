@@ -32,6 +32,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.checkedRow = {};
         $scope.imageCount = 0;
         $scope.loader = 0;
+        // $scope.unitVacant = [];
 
         vm.table = 1;
         vm.csv = 0;
@@ -337,7 +338,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     }
                 }
             }
-            console.log(vm.overlap);
 
             if (vm.overlap == 1) {
                 vm.prop.timeoverlapinvalid[key] = 1;
@@ -464,7 +464,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
                 var params = {
-                    Key: 'property-images/'+filename,
+                    Key: 'property-images/' + filename,
                     ContentType: file.type,
                     Body: file,
                     StorageClass: "STANDARD_IA",
@@ -499,7 +499,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 date: moment().format('YYYY-MM-DD:HH:mm:ss'),
                                 multiple: multiple,
                                 name: name
-                            }).then(function () {
+                            }).then(function (data) {
+                                console.log(data)
                                 console.log("Insert Data successfully!");
 
                                 propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
@@ -507,7 +508,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                     if (units == 'multiple') {
                                         vm.opensuccesssweet(snapshot.key);
                                     }
-                                    $state.go('editprop', { propId: snapshot.key })
+                                    $state.go('editprop', { propId: snapshot.key }) //unitlist
                                     // $rootScope.$apply(function () {
                                     //     console.log(units);
                                     //     $rootScope.units = units;
@@ -614,7 +615,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         date: moment().format('YYYY-MM-DD:HH:mm:ss'),
                         multiple: multiple,
                         name: name
-                    }).then(function () {
+                    }).then(function (data) {
+                        console.log(data)
                         console.log("Insert Data successfully!");
                         propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
                             if (units == 'multiple') {
@@ -897,7 +899,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 var propData = snapshot.val();
 
                 vm.timeSlot = [];
-                console.log(propData);
                 $scope.$apply(function () {
                     vm.prop = vm.units = {
                         propID: snapshot.key,
@@ -1003,7 +1004,18 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 $scope.$apply(function () {
                     vm.success = 0;
                     if (snapshot.val()) {
+                        var props = angular.copy(snapshot.val());
+                        var vacantSums = {};
+                        _.forEach(props, function (prop, key) {
+                            vacantSums[key] = _.sumBy(prop.unitlists, function (o) {
+                                if (!o.status || o.status == 'available') {
+                                    return 1;
+                                }
+                            });
+                        })
+                        vm.vacantSums = vacantSums;
                         vm.viewprops = snapshot.val();
+
                         vm.propsavail = 1;
                         vm.propsuccess = localStorage.getItem('propertysuccessmsg');
                     } else {
@@ -1619,7 +1631,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
                 var params = {
-                    Key: 'property-images/'+filename,
+                    Key: 'property-images/' + filename,
                     ContentType: file.type,
                     Body: file,
                     StorageClass: "STANDARD_IA",
@@ -2068,7 +2080,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
         $scope.submitDetails = function () {
             var index = $scope.selectedUnitDetail.index;
-            if(!vm.prop.unitlists[index]) {
+            if (!vm.prop.unitlists[index]) {
                 vm.prop = angular.copy($scope.prop);
             }
             vm.prop.unitlists[index] = angular.copy($scope.selectedUnitDetail.data);
