@@ -696,15 +696,8 @@
               <div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
                   <div uib-slide ng-repeat="image in selectedUnitDetail.data.images track by $index" index="$index">
                     <img ng-src="{{image.Location}}" style="margin:auto;height: 305px">
-                    <!-- <div class="carousel-caption">
-                    </div> -->
                   </div>
                 </div>
-              <!-- <div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
-                <div uib-slide ng-repeat="image in selectedUnitDetail.data.images track by $index" index="slide.id">
-                  <img src="{{image.Location}}" style="margin:auto;max-height:300px">
-                </div>
-              </div> -->
           </div>
           <div class="row mt-4">
             <div class="col-sm-1 p-0 mb-2" ng-repeat="image in selectedUnitDetail.data.images">
