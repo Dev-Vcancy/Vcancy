@@ -203,7 +203,7 @@
                     <td>{{value.unitID}} - {{newschedulectrl.properties[value.propertyId].address}}</td>
                     <td>{{value.fromToDate.join(',')}}</td>
                     <td>
-                      <a ng-href='{{value.link}}'>{{value.link}}</a>
+                      <a ng-href='{{value.link}}' target="_blank">{{value.link}}</a>
                     </td>
                     <td>
                       <span ng-if="value.unitID && newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)" class="text-primary">Incomplete Details</span>

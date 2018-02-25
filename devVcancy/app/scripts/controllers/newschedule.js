@@ -143,7 +143,6 @@ vcancyApp
 						vm.mergeListing[list.link].keys.push(key);						
 					}
 				});
-				debugger;
 			};
 
 			vm.clearAll = function ($event) {
