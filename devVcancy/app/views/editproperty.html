@@ -3,8 +3,8 @@
   <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
   <section class="new_dashbord" id="content">
     <div class="container">
-      
-    
+
+
       <div class="page-content-wrapper">
         <div class="page-content">
           <h1 class="page-title"> {{propctrl.mode}} a Property </h1>
@@ -394,13 +394,13 @@
         </div>
     </script>
           <div class="profile">
-              <div class="loader" ng-if="loader">
-                  <div class="preloader pl-xl">
-                      <svg class="pl-circular" viewBox="25 25 50 50">
-                          <circle class="plc-path" cx="50" cy="50" r="20"/>
-                      </svg>
-                  </div>
+            <div class="loader" ng-if="loader">
+              <div class="preloader pl-xl">
+                <svg class="pl-circular" viewBox="25 25 50 50">
+                  <circle class="plc-path" cx="50" cy="50" r="20" />
+                </svg>
               </div>
+            </div>
             <div class="tabbable-line tabbable-full-width">
               <div role="tabpanel">
                 <!-- Nav tabs -->
@@ -418,7 +418,7 @@
                     <div class="">
                       <div class="">
                         <form name="addpropForm" ng-submit="propctrl.submitProp(propctrl.prop)" role="form" class="property" enctype="multipart/form-data"
-                          novalidate  unsaved-warning-form>
+                          novalidate unsaved-warning-form>
                           <input type="hidden" name="landlordID" ng-model="propctrl.prop.landlordID" class="form-control">
                           <input type="hidden" name="mode" ng-model="propctrl.prop.mode" class="form-control">
                           <input type="hidden" name="propID" ng-model="propctrl.prop.propID" class="form-control">
@@ -550,7 +550,8 @@
                   <div role="tabpanel" class="tab-pane" id="tab" ng-show="tab === 2">
                     <div class="">
                       <div class="">
-                        <form name="addunitsForm" ng-submit="propctrl.submiteditunits(propctrl.prop.unitlists,propctrl.prop)" role="form" class="addunitsForm" unsaved-warning-form>
+                        <form name="addunitsForm" ng-submit="propctrl.submiteditunits(propctrl.prop.unitlists,propctrl.prop)" role="form" class="addunitsForm"
+                          unsaved-warning-form>
 
                           <div class="clearfix"></div>
                           <div class="row">
@@ -680,7 +681,7 @@
                                         </select>
                                       </td>
                                       <td>
-                                        <a ng-click="propctrl.openDetailModel(propctrl.prop,$index)">Details</a>
+                                        <a ng-click="propctrl.openDetailModel(propctrl.prop,$index)" class='text-primary'>Details</a>
                                       </td>
                                     </tr>
                                   </tbody>
