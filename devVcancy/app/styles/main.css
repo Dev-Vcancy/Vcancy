@@ -1290,7 +1290,7 @@ ul.header-inner li a:hover.button:before{
 .property_thumb .btn-group.dropdown {
     position: absolute;
     right: -15px;
-    z-index: 999;
+    z-index: 99;
     top: -15px;
     box-shadow:none;
 }
