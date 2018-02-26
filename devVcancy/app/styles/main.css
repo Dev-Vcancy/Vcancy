@@ -198,12 +198,17 @@ body {
   height: 45px;
 }
 
+.checkbox-clr{
+  position: absolute;
+  margin-left: -21px;
+}
+
 header.header, nav.header {
   text-align: left;
   background-color: #1f2833 !important;
   color: #fff;
   padding: 3px 20px 3px 0px;
-  z-index: 9999;
+  z-index: 101;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
   min-height: 70px;
   -webkit-touch-callout: none;
@@ -579,6 +584,7 @@ ul.header-inner li a:hover.button:before{
 .fc-toolbar > .fc-left > h2 {
   COLOR:black;
 }
+
 .app_form .form-control.w-5{
   width: 50%;
   max-width: 100%;

@@ -24,6 +24,26 @@ vcancyApp
 		var d = date.getDate();
 		var m = date.getMonth();
 		var y = date.getFullYear();
+
+		$scope.uiConfig = {
+			calendar: {
+				height: 500,
+				editable: true,
+				header: {
+					left: 'title',
+					center: '',
+					right: 'today prev,next'
+					
+				},
+				buttonText:{
+					today: 'Today',
+				},
+				eventClick: $scope.alertEventOnClick,
+				eventDrop: $scope.alertOnDrop,
+				eventResize: $scope.alertOnResize
+			}
+		};
+
 		
 		$scope.events = [];
 

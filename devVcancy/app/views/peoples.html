@@ -184,8 +184,12 @@
 						Select the sections that you want to include in your rental application form that prospective tenants complete
 				</div>	
 		
-				<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.PAPPD"/>
+				<div class="checkbox-div">
+					
+					<div class="checkbox checkbox-clr">		
+						<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.PAPPD"/>
+						<i class="input-helper"></i>					
+					</div>
 					<uib-accordion close-others="oneAtATime"> 
 						<div uib-accordion-group class="panel-default" heading="Primary Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row mt-3">
@@ -258,7 +262,11 @@
 					</uib-accordion>
 				</div>
 				<div class="checkbox-div mb-3">
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.CADDR"/>
+						<div class="checkbox checkbox-clr">		
+								<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.CADDR"/>
+								<i class="input-helper"></i>					
+							</div>
+						
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="Current Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row mt-3">
@@ -316,7 +324,12 @@
 						</uib-accordion>
 				</div>
 				<div class="checkbox-div mb-3">
-					<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.PADDR" readonly/>
+						<div class="checkbox checkbox-clr">		
+								<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.PADDR" readonly/>
+								<i class="input-helper"></i>					
+						</div>
+						
+					
 					<uib-accordion close-others="oneAtATime">
 						<div uib-accordion-group class="panel-default" heading="Previous Address" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 							<div class="row mt-3">
@@ -374,7 +387,12 @@
 					</uib-accordion>
 			</div>
 				<div class="checkbox-div mb-3">
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.AAPPD"/>
+						<div class="checkbox checkbox-clr">		
+								<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.AAPPD"/>
+								<i class="input-helper"></i>					
+						</div>
+						
+						
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="Additional Applicant Details" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row">
@@ -407,7 +425,11 @@
 						</uib-accordion>
 				</div>
 				<div class="checkbox-div mb-3">
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.ESIV"/>
+						<div class="checkbox checkbox-clr">		
+								<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.ESIV"/>
+								<i class="input-helper"></i>					
+						</div>
+						
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="Employment Status & Income Verification" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row">
@@ -441,7 +463,11 @@
 						</uib-accordion>
 				</div>
 				<div class="checkbox-div mb-3">
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.VI"/>
+						<div class="checkbox checkbox-clr">		
+								<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.VI"/>
+								<i class="input-helper"></i>					
+						</div>
+						
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="Vehical Information" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row mt-3">
@@ -459,7 +485,11 @@
 						</uib-accordion>
 				</div>
 				<div class="checkbox-div mb-3">
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.EC"/>
+						<div class="checkbox checkbox-clr">		
+								<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.EC"/>
+								<i class="input-helper"></i>					
+						</div>
+						
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="Emergancy Contact" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row">
@@ -477,7 +507,11 @@
 						</uib-accordion>
 				</div>
 				<div class="checkbox-div mb-3">
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.REF"/>
+						<div class="checkbox checkbox-clr">		
+								<input type="checkbox"  ng-model="lappctrl.customRentalApplicationCheck.REF"/>
+								<i class="input-helper"></i>					
+						</div>
+						
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="References" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row">
@@ -496,7 +530,8 @@
 								</div>
 	
 								<div class="row">
-										<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF2" readonly> References 2</div>
+									<div class="col-sm-12">
+										<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF2" readonly> References 2</div>
 									</div>
 									<div class="row mt-3">
 										<div class="col-sm-4">
@@ -513,7 +548,11 @@
 						</uib-accordion>
 				</div>
 				<div class="checkbox-div mb-3">
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.UD"/>
+						<div class="checkbox checkbox-clr">		
+								<input type="checkbox"  ng-model="lappctrl.customRentalApplicationCheck.UD"/>
+								<i class="input-helper"></i>					
+						</div>
+						
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="Unit details (added from property details provided)" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row">
@@ -547,7 +586,17 @@
 				</div>
 				
 				<div class="checkbox-div mb-3">
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-model="lappctrl.customRentalApplicationCheck.TC"/>
+						<div class="row">
+								<div class="col-sm-12 mt-4" >
+									Enter custom agreement terms or use the default text
+								</div>
+							</div>
+
+							<div class="checkbox checkbox-clr">		
+									<input type="checkbox"  ng-model="lappctrl.customRentalApplicationCheck.TC"/>
+									<i class="input-helper"></i>					
+							</div>
+						
 						<textarea rows="6" class="m-input m-input--square m-width" name="more" style="white-space: nowrap;" >
 	You are authorized to obtaining credit checks & verifying details contained in this Application.
 			
