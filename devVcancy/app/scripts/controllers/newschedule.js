@@ -32,9 +32,9 @@ vcancyApp
 					buttonText:{
 						today: 'Today',
 					},
-					eventClick: $scope.alertEventOnClick,
-					eventDrop: $scope.alertOnDrop,
-					eventResize: $scope.alertOnResize
+					//eventClick: $scope.alertEventOnClick,
+					//eventDrop: $scope.alertOnDrop,
+					//eventResize: $scope.alertOnResize
 				}
 			};
 
