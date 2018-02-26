@@ -18,6 +18,13 @@
                 </button>
             </div>
             <div class="modal-body prptyadd" style="max-height:600px;overflow-y:auto;">
+                <div class="loader" ng-if="loader" style="z-index:99999;">
+                    <div class="preloader pl-xl">
+                      <svg class="pl-circular" viewBox="25 25 50 50">
+                        <circle class="plc-path" cx="50" cy="50" r="20" />
+                      </svg>
+                    </div>
+                  </div>
                  <form  role="form" enctype="multipart/form-data" method="post" >
                   <div class="row">
                     
@@ -364,7 +371,7 @@
             </div>
     </script>
           <div class="profile">
-            <div class="loader" ng-if="loader">
+            <div class="loader" ng-if="loader" style="z-index:99999;">
               <div class="preloader pl-xl">
                 <svg class="pl-circular" viewBox="25 25 50 50">
                   <circle class="plc-path" cx="50" cy="50" r="20" />

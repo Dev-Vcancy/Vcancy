@@ -1565,11 +1565,12 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 });
                 return
             }
-            swal({
-                title: 'Alert',
-                text: "Please wait photos are uploading",
-                icon: "info",
-            });
+            // swal({
+            //     title: 'Alert',
+            //     text: "Please wait photos are uploading",
+            //     icon: "info",
+            // });
+            $scope.loader = 1;
             for (var i = 0; i < filesToUpload.length; i++) {
                 var file = filesToUpload[i];
                 vm.filesArray.push(vm.singleFileUpload(file));
@@ -1588,6 +1589,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             type: "success",
                         });
                     }, 100)
+                    $scope.loader = 0;
                 })
         }
 
@@ -2082,6 +2084,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
         $scope.submitDetails = function () {
             var index = $scope.selectedUnitDetail.index;
+            if (!vm.prop.unitlists) {
+                vm.prop.unitlists = [];
+            }
             if (!vm.prop.unitlists[index]) {
                 vm.prop = angular.copy($scope.prop);
             }
