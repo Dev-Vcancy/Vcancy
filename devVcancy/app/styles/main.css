@@ -576,6 +576,9 @@ ul.header-inner li a:hover.button:before{
   width: 60%;
   max-width: 100%;
 }
+.fc-toolbar > .fc-left > h2 {
+  COLOR:black;
+}
 .app_form .form-control.w-5{
   width: 50%;
   max-width: 100%;
