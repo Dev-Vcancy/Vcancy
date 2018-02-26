@@ -301,7 +301,7 @@ vcancyApp
 					controller: 'propertyCtrl',
 					backdrop: 'static',
 					size: 'lg',
-					windowClass: 'detailmodalcss',
+					windowClass: '',
 					scope: $scope
 				});
 			};

@@ -2070,7 +2070,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 "state",
                 "status",
                 "unit",
-                "type"
+                "type",
+                "title",
+                "description"
             ]
             for (var i = 0; i < keyToCheck.length; i++) {
                 if (!value[keyToCheck[i]]) {
