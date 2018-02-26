@@ -231,7 +231,7 @@
 
 </section>
 
-<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+<!-- <footer id="footer" data-ng-include="'views/template/footer.html'"></footer> -->
 <script type="text/javascript">
   Waves.init();
   Waves.attach('.btn');
@@ -285,7 +285,7 @@
          <span class="sr-only">Close</span>
       </button>
   </div>
-  <div class="modal-body prptyadd">
+  <div class="modal-body prptyadd" style="max-height:600px;overflow-y:auto;">
        <form  role="form" enctype="multipart/form-data" method="post" >
         <div class="row">
           <div class="col text-right">
@@ -579,7 +579,6 @@ Kitchen and Bath
 </script>
 <style>
   .modal-dialog.modal-lg {
-    margin-top: 135px;
     min-width: 1100px;
   }
 </style>

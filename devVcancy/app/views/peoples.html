@@ -92,18 +92,20 @@
 								<td>No submitted applications yet </td>
 							</tr>
 						</table> -->
-						<table class="table table-border table-hover" style="border:1px solid #e7ecf1">
+						<table class="table table-border table-hover" style="border:1px solid #e7ecf1;overflow-x:auto;max-width:100vw">
 							<tr>
 								<th>Property/Unit</th>
-								<th>Date-Time</th>
+								<th style="min-width: 150px;">Date-Time</th>
 								<th ng-repeat="ques in lappctrl.filters.options">
 									{{ques.label}}
 								</th>
+								<th></th>
 							</tr>
 							<tr ng-repeat="(key, value) in lappctrl.apppropaddress">
 								<td>{{value.address}}-{{value.unitID}}</td>
 								<td>{{ formatDay(value.dateSlot) }}  {{ formatDate(value.dateSlot) }}<br/> {{value.fromTimeslot}} : {{value.toTimeSlot}}</td>
 								<td ng-repeat="ques in lappctrl.filters.options">{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'N/A'}}</td>
+								<td><button class="btn btn-sm btn-danger btn-round"><i class="fa fa-trash"></i></button></td>
 							</tr>
 						</table>
 					</div>
@@ -680,7 +682,7 @@
 	</section>
 </section>
 
-<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
+<!-- <footer id="footer" data-ng-include="'views/template/footer.html'"></footer> -->
 <script type="text/javascript">
 	Waves.init();
 	Waves.attach('.btn');
