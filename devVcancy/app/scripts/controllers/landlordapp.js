@@ -9,6 +9,7 @@ vcancyApp
 		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, $uibModal, _) {
 			$scope.oneAtATime = true;
 			var vm = this;
+			vm.moment = moment;
 			var landlordID = ''
 			if (localStorage.getItem('refId')) {
 				landlordID = localStorage.getItem('refId')
@@ -91,20 +92,29 @@ vcancyApp
 			}
 			refreshScreeningQuestions();
 			vm.getProperty = function () {
+				vm.loader = 1;				
 				var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					if (snapshot.val()) {
 						vm.properties = snapshot.val();
 					}
+					vm.loader = 0;					
 				});
 			};
 
 			vm.getApplyProp = function () {
+				vm.loader = 1;								
+				vm.apppropaddress = {};
 				var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					if (snapshot.val()) {
-						vm.apppropaddress = snapshot.val();
-						vm.originalPropAddress = angular.copy(snapshot.val());
-						console.log(vm.apppropaddress)
+						$scope.$apply(function() {
+							vm.apppropaddress = snapshot.val();
+							vm.originalPropAddress = angular.copy(snapshot.val());
+							console.log(vm.apppropaddress);
+						});
 					}
+					$scope.$apply(function() {
+						vm.loader = 0;
+					});
 				});
 			};
 
@@ -265,7 +275,7 @@ vcancyApp
 				if (propID != '') {
 					vm.propcheck[propID] = !vm.propcheck[propID];
 				}
-
+				vm.loader = 1;
 				firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					// console.log(snapshot.val())
 					$scope.$apply(function () {
@@ -362,5 +372,15 @@ vcancyApp
 				});
 
 			}
-			vm.tablefilterdata();
+			// vm.tablefilterdata();
+
+			vm.deleteApplyProp = function(key) {
+				firebase.database().ref('applyprop/'+key).remove().then(function(){
+					vm.getApplyProp();
+					// vm.tablefilterdata();
+				})
+				.catch(function(err) {
+					console.error('ERROR', err);
+				});
+			}
 		}])

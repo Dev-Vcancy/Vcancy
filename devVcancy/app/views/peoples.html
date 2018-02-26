@@ -107,7 +107,7 @@
 								<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
 									<br/> {{value.fromTimeslot}} : {{value.toTimeSlot}}</td>
 								<td ng-repeat="ques in lappctrl.filters.options">{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'N/A'}}</td>
-								<td><button class="btn btn-sm btn-danger btn-round"><i class="fa fa-trash"></i></button></td>
+								<td><button class="btn btn-sm btn-danger btn-round" ng-click="lappctrl.deleteApplyProp(key)"><i class="fa fa-trash"></i></button></td>
 							</tr>
 						</table>
 					</div>
