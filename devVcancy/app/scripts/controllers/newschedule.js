@@ -28,9 +28,9 @@ vcancyApp
 						left: 'title',
 						center: '',
 						right: 'today prev,next'
-						
+
 					},
-					buttonText:{
+					buttonText: {
 						today: 'Today',
 					},
 					//eventClick: $scope.alertEventOnClick,
@@ -78,13 +78,13 @@ vcancyApp
 			function getListings() {
 				vm.loader = 1;
 				var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-				
+
 					$scope.$apply(function () {
 						vm.success = 0;
 						if (snapshot.val()) {
 							vm.listings = snapshot.val();
 							vm.generateMergeListing();
-						
+
 							$.map(vm.listings, function (value, key) {
 								value.parsedFromDate = parseInt(new moment(value.fromDate).format('x'))
 								value.parsedToDate = parseInt(new moment(value.toDate).format('x'))
@@ -144,7 +144,7 @@ vcancyApp
 					} else {
 						var date = moment(vm.listings[key].fromDate).format('DD MMM') + ' - ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
 						vm.mergeListing[list.link].fromToDate.push(date);
-						vm.mergeListing[list.link].keys.push(key);						
+						vm.mergeListing[list.link].keys.push(key);
 					}
 				});
 			};
@@ -231,6 +231,13 @@ vcancyApp
 
 			$scope.craigslistopen = function (isOpen) {
 				if (isOpen) {
+					userData = JSON.parse(localStorage.getItem('userData')) || {};
+					$scope.craigslist = {
+						username: userData.craigslistUserID || '',
+						password: userData.craigslistpassword || '',
+						renewAds: userData.craigslistRenewAds || false,
+						removeAds: userData.craigslistRemoveAds || false
+					}
 					vm.Craigslistopenapp = $uibModal.open({
 						templateUrl: 'craigslist.html',
 						backdrop: 'static',
@@ -242,6 +249,25 @@ vcancyApp
 					vm.Craigslistopenapp.close();
 				}
 			};
+
+			$scope.saveCraigslistDetails = function () {
+				var fbObj = firebase.database();
+				var promiseObj = fbObj.ref('users/' + landlordID).update({
+					craigslistUserID: $scope.craigslist.username,
+					craigslistpassword: $scope.craigslist.password,
+					craigslistRenewAds: $scope.craigslist.renewAds,
+					craigslistRemoveAds: $scope.craigslist.removeAds
+				}).then(function() {
+					userData = JSON.parse(localStorage.getItem('userData')) || {};
+					
+					userData['craigslistUserID'] = $scope.craigslist.username,
+					userData['craigslistpassword'] = $scope.craigslist.password,
+					userData['craigslistRenewAds'] = $scope.craigslist.renewAds,
+					userData['craigslistRemoveAds'] = $scope.craigslist.removeAds,
+					localStorage.setItem('userData', JSON.stringify(userData));
+				})
+				vm.Craigslistopenapp.close();
+			}
 
 			vm.deleteListings = function ($event) {
 				var selectedListings = [];
