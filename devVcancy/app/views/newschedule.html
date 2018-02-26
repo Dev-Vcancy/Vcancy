@@ -308,7 +308,7 @@
                 <div class="form-group">
                     <div class="">
                         <label class='m-0'>Posting Title:</label>
-                      <input required="true" name="title" ng-model="selectedUnitDetail.data.title" placeholder="Posting title (70 character max) eg:(Beautiful Bedroom)" type="text" class="form-control original-form-control" id="">
+                      <input required="true" name="title" ng-model="selectedUnitDetail.data.title" placeholder="Posting title (70 character max) eg:(Beautiful Bedroom)(Required)" type="text" class="form-control original-form-control" id="">
                     </div>
                   </div>
             </div>
@@ -326,7 +326,7 @@
                 <div class="form-group">
                     <div class="">
                       <label class='m-0'>Unit:</label>
-                      <input name="rent" ng-model="selectedUnitDetail.data.unit" type="text" class="form-control original-form-control" id="" placeholder="">
+                      <input name="rent" ng-model="selectedUnitDetail.data.unit" type="text" class="form-control original-form-control" id="" placeholder="Required">
                     </div>
                   </div>
             </div>
@@ -349,7 +349,7 @@
                 <div class="form-group">
                     <div class="">
                       <label class='m-0'>City:</label>
-                      <input required="" name="address" ng-model="selectedUnitDetail.data.city" type="text" class="form-control original-form-control" id="" placeholder="">
+                      <input required="" name="address" ng-model="selectedUnitDetail.data.city" type="text" class="form-control original-form-control" id="" placeholder="Required">
                     </div>
                   </div>
             </div>
@@ -365,7 +365,7 @@
                 <div class="form-group">
                     <div class="">
                       <label class='m-0'>Post/Zip code:</label>
-                      <input required="" name="rent" ng-model="selectedUnitDetail.data.postalcode" type="text" class="form-control original-form-control" id="" placeholder="">
+                      <input required="" name="rent" ng-model="selectedUnitDetail.data.postalcode" type="text" class="form-control original-form-control" id="" placeholder="Required">
                     </div>
                   </div>
             </div>
@@ -375,7 +375,7 @@
                 <div class="form-group">
             
                     <label class='m-0'>Country:</label>
-                    <input required="" name="address" ng-model="selectedUnitDetail.data.country" type="text" class="form-control original-form-control" id="" placeholder="">
+                    <input required="" name="address" ng-model="selectedUnitDetail.data.country" type="text" class="form-control original-form-control" id="" placeholder="Required">
                   
                 </div>
             </div>
@@ -391,7 +391,7 @@
                     <div class="form-group">
               
                         <label class='m-0'>Rent:</label>
-                        <input required="" name="rent" ng-model="selectedUnitDetail.data.rent" type="text" class="form-control original-form-control" id="" placeholder="">
+                        <input required="" name="rent" ng-model="selectedUnitDetail.data.rent" type="text" class="form-control original-form-control" id="" placeholder="Required">
                     
                     </div>
             </div>
@@ -402,7 +402,7 @@
               
                     <label class='m-0'>Property Type:</label>
                     <select chosen="" class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.type" data-placeholder="Prop type" class="">
-                            <option value="">Select</option>
+                            <option value="">Select (Required)</option>
                             <option value="house">House</option>
                             <option value="townhouse">Town House</option>
                             <option value="apartment">Apartment</option>
@@ -469,7 +469,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class='m-0'>Description:</label>
-                    <textarea ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing" />
+                    <textarea ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" />
                 </div>
             </div>
           </div>
@@ -489,7 +489,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label class='m-0'>Sq ft:</label>
-                    <input name="address" ng-model="selectedUnitDetail.data.sqft" type="text" class="form-control original-form-control" id="" placeholder="">
+                    <input name="address" ng-model="selectedUnitDetail.data.sqft" type="text" class="form-control original-form-control" id="" placeholder="Required">
                 </div>
             </div>
           </div>
@@ -506,7 +506,7 @@
                 <div class="form-group">
             
                     <label class='m-0'>Phone:</label>
-                    <input required="" name="address" ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"  ng-model="selectedUnitDetail.data.phone" type="text" class="form-control original-form-control" id="" placeholder="">
+                    <input required="" name="address"   ng-model="selectedUnitDetail.data.phone" type="text" class="form-control original-form-control" id="" placeholder="">
                   
                 </div>
             </div>
@@ -514,7 +514,7 @@
               <div class="form-group">
           
                   <label class='m-0'>Extension number:</label>
-                  <input required="" name="address" ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"  ng-model="selectedUnitDetail.data.extensionNumber" type="text" class="form-control original-form-control" id="" placeholder="">
+                  <input required="" name="address"   ng-model="selectedUnitDetail.data.extensionNumber" type="text" class="form-control original-form-control" id="" placeholder="">
                 
               </div>
           </div>
@@ -525,7 +525,7 @@
                       <label class='m-0'>Status:</label>
                       <select data-placeholder="Status" name="status" ng-model="selectedUnitDetail.data.status" required class="form-control original-form-control select-height"
                                   data-placeholder="Prop status">
-                        <option value="">Status</option>
+                        <option value="">Status (Required)</option>
                         <option value="rented">Rented</option>
                         <option value="available">Available</option>
                         <option value="availablesoon">Available Soon</option>

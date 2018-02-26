@@ -37,9 +37,10 @@
 
 								</select>
 							</div>
-							<div class="col-sm-12 mt-3" ng-if="lappctrl.filters.property" >
-								<ui-select class=" m-input m-input--square" multiple tagging tagging-label="(custom 'new' label)" ng-change="lappctrl.filterData()" style="min-width:100px;border: 1px solid #ccc;"
-								 ng-model="lappctrl.filters.unit" theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled" title="Choose a color">
+							<div class="col-sm-12 mt-3" ng-if="lappctrl.filters.property">
+								<ui-select class=" m-input m-input--square" multiple tagging tagging-label="(custom 'new' label)" ng-change="lappctrl.filterData()"
+								 style="min-width:100px;border: 1px solid #ccc;" ng-model="lappctrl.filters.unit" theme="bootstrap" sortable="true"
+								 ng-disabled="ctrl.disabled" title="Choose a color">
 									<ui-select-match placeholder="Select Units">{{$item.unit}}</ui-select-match>
 									<ui-select-choices repeat="unit in lappctrl.properties[lappctrl.filters.property].unitlists">
 										{{unit.unit}}
@@ -103,7 +104,8 @@
 							</tr>
 							<tr ng-repeat="(key, value) in lappctrl.apppropaddress">
 								<td>{{value.address}}-{{value.unitID}}</td>
-								<td>{{ formatDay(value.dateSlot) }}  {{ formatDate(value.dateSlot) }}<br/> {{value.fromTimeslot}} : {{value.toTimeSlot}}</td>
+								<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
+									<br/> {{value.fromTimeslot}} : {{value.toTimeSlot}}</td>
 								<td ng-repeat="ques in lappctrl.filters.options">{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'N/A'}}</td>
 								<td><button class="btn btn-sm btn-danger btn-round"><i class="fa fa-trash"></i></button></td>
 							</tr>
@@ -127,8 +129,12 @@
 							<div class="modal-body">
 					<div class="checkbox-div" ng-repeat="value in lappctrl.screeningQuestions track by $index" id="{{$index}}">
 						<label>
-							<input type="checkbox" class="checkbox-position checkbox-width" ng-model="value.isChecked"
-							/> {{value.label}}
+								<div class="checkbox">		
+								<input type="checkbox" ng-model="value.isChecked"/>&nbsp;&nbsp;
+								&nbsp;&nbsp;&nbsp;&nbsp;{{value.label}}
+								<i class="input-helper"></i>					
+								</div>
+						
 						</label>
 					</div>	  
 					Add custom question below<br/>
@@ -655,21 +661,27 @@
 			</div>
 			<div class="col-xs-12 col-sm-6">
 				<div class="checkbox-div">
-					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+					<label>	
+						<input type="checkbox"  ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
 						/> Credit Report (Transunion) $15/Report
+							<i class="input-helper"></i>					
+						
 					</label>
 				</div>
 				<div class="checkbox-div">
-					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+					<label>	
+					<input type="checkbox" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
 						/> Criminal Record Check $35/Report
+								<i class="input-helper"></i>	
+						
 					</label>
 				</div>
 				<div class="checkbox-div">
-					<label>
-						<input type="checkbox" class="checkbox-position checkbox-width" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+					<label>	
+						<input type="checkbox"  ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
 						/> Both of the above $45/Report
+						<i class="input-helper"></i>	
+						
 					</label>
 				</div>
 			</div>
