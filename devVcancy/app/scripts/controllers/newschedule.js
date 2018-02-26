@@ -13,6 +13,7 @@ vcancyApp
 			var userData = JSON.parse(localStorage.getItem('userData'));
 			var landlordID = userData.refId || userID;
 			vm.moment = moment;
+			vm.todayDate = moment().format('YYYY-MM-DD');
 			$scope.eventSources = [];
 			var date = new Date();
 			var d = date.getDate();

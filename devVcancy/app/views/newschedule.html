@@ -62,7 +62,7 @@
                             From Date
                         </label>
                         <div class="col-sm-8">
-                            <input type="date" class="custom-form-element" name="fromDate" ng-model="newschedulectrl.fromDate" />
+                            <input type="date" class="custom-form-element" name="fromDate" min="{{newschedulectrl.todayDate}}" ng-model="newschedulectrl.fromDate" />
                         </div>
   
                       </div>
@@ -71,7 +71,7 @@
                             To Date
                         </label>
                         <div class="col-sm-8">
-                            <input type="date" class="custom-form-element" name="toDate" ng-model="newschedulectrl.toDate" />
+                            <input type="date" class="custom-form-element" name="toDate" min="{{newschedulectrl.fromDate | date: 'yyyy-MM-dd'}}" ng-model="newschedulectrl.toDate" />
                         </div>
                       </div>
                     </div>
