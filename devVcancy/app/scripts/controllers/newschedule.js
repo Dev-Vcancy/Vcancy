@@ -18,20 +18,26 @@ vcancyApp
 			var d = date.getDate();
 			var m = date.getMonth();
 			var y = date.getFullYear();
-			// $scope.uiConfig = {
-			// 	calendar: {
-			// 		height: 500,
-			// 		editable: true,
-			// 		header: {
-			// 			left: 'month basicWeek basicDay agendaWeek agendaDay',
-			// 			center: 'title',
-			// 			right: 'today prev,next'
-			// 		},
-			// 		eventClick: $scope.alertEventOnClick,
-			// 		eventDrop: $scope.alertOnDrop,
-			// 		eventResize: $scope.alertOnResize
-			// 	}
-			// };
+
+			$scope.uiConfig = {
+				calendar: {
+					height: 500,
+					editable: true,
+					header: {
+						left: 'title',
+						center: '',
+						right: 'today prev,next'
+						
+					},
+					buttonText:{
+						today: 'Today',
+					},
+					eventClick: $scope.alertEventOnClick,
+					eventDrop: $scope.alertOnDrop,
+					eventResize: $scope.alertOnResize
+				}
+			};
+
 			/* event source that pulls from google.com */
 			// $scope.eventSource = {
 			// 	url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
@@ -71,27 +77,24 @@ vcancyApp
 			function getListings() {
 				vm.loader = 1;
 				var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-					console.log(snapshot.val())
+				
 					$scope.$apply(function () {
 						vm.success = 0;
 						if (snapshot.val()) {
 							vm.listings = snapshot.val();
 							vm.generateMergeListing();
-							console.log(vm.listings);
+						
 							$.map(vm.listings, function (value, key) {
 								value.parsedFromDate = parseInt(new moment(value.fromDate).format('x'))
 								value.parsedToDate = parseInt(new moment(value.toDate).format('x'))
-								console.log(new Date(value.fromDate))
-								console.log(new Date(value.toDate))
-								console.log(new Date(value.fromDate).setHours(parseFloat(value.fromTime)))
-								console.log(new Date(value.toDate).setHours(parseFloat(value.toTime)))
 								var startDate = new Date(value.fromDate).setHours(parseFloat(value.fromTime));
 								var endDate = new Date(value.toDate).setHours(parseFloat(value.toTime));
 								$scope.events.push(
 									{
 										title: value.unitID + '-' + vm.properties[value.propertyId].address,
 										start: new Date(startDate),
-										end: new Date(endDate)
+										end: new Date(endDate),
+										className: 'bgm-teal'
 									}
 								)
 							});
