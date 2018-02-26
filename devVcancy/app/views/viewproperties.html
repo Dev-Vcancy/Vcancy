@@ -61,9 +61,6 @@
 										<li role="menuitem">
 											<a href="javascript:void(0);" ng-click="propctrl.deleteproperty(key,'samepage')">Delete</a>
 										</li>
-										<li role="menuitem" ng-show="x.units == 'multiple'">
-											<a href="#/viewunits/{{key}}">View Units</a>
-										</li>
 									</ul>
 								</div>
 								<div ng-if="x.propimg == ''" class="home-img">
@@ -94,7 +91,7 @@
 												<span>{{x.name}}</span>
 											</p>
 										</li>
-										<li ng-show="x.units == 'multiple'">
+										<li>
 											<p ng-if="x.noofunits > 0">
 												<i class="fa fa-circle"></i>
 												<span>{{x.noofunits}}</span> Units</p>

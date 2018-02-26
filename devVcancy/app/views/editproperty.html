@@ -332,8 +332,8 @@
                   <div class="form-group">
                       <p>
                           Data must be in a specific format to be imported without errors.<br/><br/>
-                          Please use this file - <a href="../assets/file/Vcancy_Units_Upload_Template.csv">Sample Spreadsheet</a>. <br/><br/>
-                          If you are having problems uploading units then please contact <a href="https://vcancy.ca/contact/">support</a>
+                          Please use this file - <a target='_blank' href="../assets/file/Vcancy_Units_Upload_Template.csv">Sample Spreadsheet</a>. <br/><br/>
+                          If you are having problems uploading units then please contact <a target='_blank' href="https://vcancy.ca/contact/">support</a>
                           and we will upload it for you.
                       </p>
                       </div>
@@ -378,7 +378,7 @@
                   <li role="presentation" ng-class="{'active':tab===1}">
                     <a href ng-click="tab = 1" data-toggle="tab" aria-expanded="true">Property</a>
                   </li>
-                  <li role="presentation" ng-show="propctrl.prop.units == 'multiple'" ng-class="{'active':tab===2}">
+                  <li role="presentation"  ng-class="{'active':tab===2}">
                     <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true">Units</a>
                   </li>
                 </ul>
@@ -421,15 +421,15 @@
                                   <option value="coop">Other</option>
                                 </select>
                               </div>
-                              <div class="form-group">
+                              <!-- <div class="form-group">
                                 <label class="radio-inline">
                                   <input type="radio" name="units" ng-model="propctrl.prop.units" value="single" required="true" ng-checked="propctrl.prop.units == 'single'">Single Unit</label>
                                 <label class="radio-inline">
                                   <input type="radio" name="units" ng-model="propctrl.prop.units" value="multiple" required="true" ng-checked="propctrl.prop.units == 'multiple'">Multiple Units</label>
-                              </div>
-                              <div class="form-group fg-float" ng-show="propctrl.prop.units == 'multiple'">
+                              </div> -->
+                              <div class="form-group fg-float">
                                 <div class="fg-line">
-                                  <input type="number" ng-model="propctrl.prop.noofunits" ng-required="propctrl.prop.units == 'multiple'" ng-show="propctrl.prop.units == 'multiple'"
+                                  <input type="number" ng-model="propctrl.prop.noofunits" ng-required="propctrl.prop.units == 'multiple'"
                                     name="noofunits" class="form-control w-100 phone" id="" placeholder="Address" min="1">
                                   <label class="fg-label" for="text">No of Units:</label>
                                 </div>

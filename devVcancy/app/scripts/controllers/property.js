@@ -833,7 +833,6 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
 
         vm.csvadd = function () {
-            console.log(vm.localpropID);
             var fileUpload = document.getElementById("file");
             var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
             if (regex.test(fileUpload.value.toLowerCase())) {
@@ -906,7 +905,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         propimg: propData.propimg,
                         propstatus: propData.propstatus,
                         proptype: propData.proptype,
-                        units: propData.units,
+                        units: 'multiple',
                         rent: propData.rent,
                         shared: propData.shared,
                         address: propData.address,
