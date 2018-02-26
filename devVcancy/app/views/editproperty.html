@@ -299,7 +299,8 @@
       .Hardwood floors
       .Carpet floors
       .Family room
-  Kitchen and Bath
+  
+      Kitchen and Bath
       .Dishwasher
       .Refrigerator
       .Stove / oven
@@ -330,7 +331,7 @@
                 <form  role="form" enctype="multipart/form-data" id="fileUploadForm" method="post" >
                   <div class="form-group">
                       <p>
-                          Data must be in a specific format to import.<br/><br/>
+                          Data must be in a specific format to be imported without errors.<br/><br/>
                           Please use this file - <a href="../assets/file/Vcancy_Units_Upload_Template.csv">Sample Spreadsheet</a>. <br/><br/>
                           If you are having problems uploading units then please contact <a href="https://vcancy.ca/contact/">support</a>
                           and we will upload it for you.
@@ -547,13 +548,13 @@
                           <div class="row pt-2">
                             <div class="col-sm-6">
                               <label for="example-time-input" class="col-sm-12 col-form-label">
-                                Select action to perform on below selected units:&nbsp;&nbsp;
+                                Mark selected:&nbsp;&nbsp;
                                 <select class="m-input m-input--square" name="more" ng-model="propctrl.more" ng-change="propctrl.moreaction(propctrl.more)">
-                                  <option value="">Status</option>
+                                  <option value="">Unit Status</option>
                                   <option value="available">Mark as Available</option>
                                   <option value="rented">Mark as Rented</option>
                                   <option value="sold">Mark as Sold</option>
-                                  <option value="availablesoon">Mark Available Soon</option>
+                                  <option value="availablesoon">Mark as Available soon</option>
                                 </select>
                               </label>
                             </div>
