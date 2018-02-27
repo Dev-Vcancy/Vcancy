@@ -39,12 +39,12 @@ vcancyApp
 
 			vm.questionDropDown = [
 				{ id: 'WKRX6Q', label: 'Job title', isChecked: false },
-				{ id: 'MV5SML', label: 'Pets', isChecked: false },
-				{ id: 'N1F5MO', label: 'DOB', isChecked: false },
-				{ id: 'OU489L', label: 'Name', isChecked: false },
+				{ id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
+				{ id: 'N1F5MO', label: 'Are you able to provide references', isChecked: false },
+				{ id: 'OU489L', label: 'Why are you moving', isChecked: false },
 				{ id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: true },
 				{ id: 'A9OG32', label: 'No. of Applicants', isChecked: true },
-				{ id: 'UH7JZS', label: 'Smoking', isChecked: false },
+				{ id: 'UH7JZS', label: 'Do you smoke?', isChecked: true },
 				{ id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
 			];
 
