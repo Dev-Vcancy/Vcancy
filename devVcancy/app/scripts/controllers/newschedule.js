@@ -5,8 +5,8 @@
 //================================================= 
 
 vcancyApp
-	.controller('newscheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'emailSendingService', '$q', '$uibModal', '_'
-		, function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, emailSendingService, $q, $uibModal, _) {
+	.controller('newscheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'emailSendingService', '$q', '$uibModal', '_','$compile','uiCalendarConfig'
+		, function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, emailSendingService, $q, $uibModal, _,$compile,uiCalendarConfig) {
 
 			var vm = this;
 			var userID = localStorage.getItem('userID');
@@ -28,41 +28,26 @@ vcancyApp
 						left: 'title',
 						center: '',
 						right: 'today prev,next',
-						
+
 					},
 					buttonText: {
 						today: 'Today',
 					},
-					
-					//eventClick: $scope.alertEventOnClick,
-					//eventDrop: $scope.alertOnDrop,
-					//eventResize: $scope.alertOnResize
 				}
 			};
 
 			/* event source that pulls from google.com */
-			// $scope.eventSource = {
-			// 	url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-			// 	className: 'gcal-event',           // an option!
-			// 	currentTimezone: 'America/Chicago' // an option!
-			// };
+			$scope.eventSource = {
+				className: 'gcal-event',           // an option!
+				currentTimezone: 'America/Chicago' // an option!
+			};
+			
 			$scope.events = [];
-			// $scope.events = [
-			// 	{ title: 'All Day Event', start: new Date(y, m, 1) },
-			// 	{ title: 'Long Event', start: new Date(y, m, d - 5), end: new Date(y, m, d - 2) },
-			// 	{ id: 999, title: 'Repeating Event', start: new Date(y, m, d - 3, 16, 0), allDay: false },
-			// 	{ id: 999, title: 'Repeating Event', start: new Date(y, m, d + 4, 16, 0), allDay: false },
-			// 	{ title: 'Birthday Party', start: new Date(y, m, d + 1, 19, 0), end: new Date(y, m, d + 1, 22, 30), allDay: false },
-			// 	{ title: 'Click for Google', start: new Date(y, m, 28), end: new Date(y, m, 29), url: 'http://google.com/' }
-			// ];
-			// $scope.eventsF = function (start, end, timezone, callback) {
-			// 	var s = new Date(start).getTime() / 1000;
-			// 	var e = new Date(end).getTime() / 1000;
-			// 	var m = new Date(start).getMonth();
-			// 	var events = [{ title: 'Feed Me ' + m, start: s + (50000), end: s + (100000), allDay: false, className: ['customFeed'] }];
-			// 	callback(events);
-			// };
-			$scope.eventSources = [$scope.events]
+
+			$scope.eventsF = function (start, end, timezone, callback) {
+				callback();
+			}
+
 			vm.propertySelected = '';
 			vm.unitSelected = '';
 			vm.selectedUnitId = '';
@@ -97,7 +82,7 @@ vcancyApp
 										start: new Date(startDate),
 										end: new Date(endDate),
 										className: 'bgm-teal'
-														
+
 									}
 								)
 							});
@@ -110,20 +95,20 @@ vcancyApp
 				});
 			}
 
-			 $scope.openImageModal = function () {
-            $scope.imageModal = $uibModal.open({
-                templateUrl: 'viewimages.html',
-                controller: 'propertyCtrl',
-                backdrop: 'static',
-                size: 'lg',
-                windowClass: 'zIndex',
-                scope: $scope
-            });
-        }
+			$scope.openImageModal = function () {
+				$scope.imageModal = $uibModal.open({
+					templateUrl: 'viewimages.html',
+					controller: 'propertyCtrl',
+					backdrop: 'static',
+					size: 'lg',
+					windowClass: 'zIndex',
+					scope: $scope
+				});
+			}
 
-        $scope.closeImageModal = function () {
-            $scope.imageModal.dismiss('cancel');
-        }
+			$scope.closeImageModal = function () {
+				$scope.imageModal.dismiss('cancel');
+			}
 
 			function getProperties() {
 				var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
@@ -274,14 +259,14 @@ vcancyApp
 					craigslistpassword: $scope.craigslist.password,
 					craigslistRenewAds: $scope.craigslist.renewAds,
 					craigslistRemoveAds: $scope.craigslist.removeAds
-				}).then(function() {
+				}).then(function () {
 					userData = JSON.parse(localStorage.getItem('userData')) || {};
-					
+
 					userData['craigslistUserID'] = $scope.craigslist.username,
-					userData['craigslistpassword'] = $scope.craigslist.password,
-					userData['craigslistRenewAds'] = $scope.craigslist.renewAds,
-					userData['craigslistRemoveAds'] = $scope.craigslist.removeAds,
-					localStorage.setItem('userData', JSON.stringify(userData));
+						userData['craigslistpassword'] = $scope.craigslist.password,
+						userData['craigslistRenewAds'] = $scope.craigslist.renewAds,
+						userData['craigslistRemoveAds'] = $scope.craigslist.removeAds,
+						localStorage.setItem('userData', JSON.stringify(userData));
 				})
 				vm.Craigslistopenapp.close();
 			}
@@ -358,4 +343,5 @@ vcancyApp
 				var prop = vm.properties[propId];
 				return unit.isIncomplete == false ? false : true;
 			}
+			$scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF]
 		}])
