@@ -1288,6 +1288,10 @@ ul.header-inner li a:hover.button:before{
   padding: 75% 0 0 0;
 }
 
+.uib-tab.nav-item.ng-isolate-scope.active.disabled > a {
+  color:#007bff;
+}
+
 .property_view .property_thumb img.img-responsive {
   display: block;
   max-width: 100%;

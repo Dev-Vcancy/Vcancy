@@ -17,7 +17,7 @@
                     <input type="hidden" name="propID" ng-model="rctrl.propdata.propID" class="form-control">
                     <input type="hidden" name="landlordID" ng-model="rctrl.propdata.landlordID" class="form-control">
                     <uib-tabset active="active" justified="true">
-                        <uib-tab index="0" heading="Applicant Details" disable="true">
+                        <uib-tab index="0" heading="Step 1" disable="true">
                             <div class="card-body card-padding clearfix ">
                                 <div class="printview">
                                     <h3 class="m-b-20 m-t-10 fw">Applicant Details</h3>
@@ -392,12 +392,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 text-right pr-0">
+                                <div class="col-sm-12 text-right pr-0 mt-5">
+                                    <button class="btn bgm-blue btn-round" href="#/tenantapplications">Main Page</button>
                                     <button class="btn bgm-teal btn-round" type="button" ng-click="activateTab(1)">Next</button>
                                 </div>
                             </div>
                         </uib-tab>
-                        <uib-tab index="1" heading="Employment info" disable="true">
+                        <uib-tab index="1" heading="Step 2" disable="true">
                             <div class="card-body card-padding clearfix ">
                                 <div class="printview">
                                     <h3 class="m-b-20 m-t-10 fw">Employment Status & Income Verification</h3>
@@ -571,13 +572,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 text-right pr-0">
+                                <div class="col-sm-12 text-right pr-0 mt-5">
                                     <button class="btn bgm-blue btn-round" type="button" ng-click="activateTab(0)">Previous</button>
                                     <button class="btn bgm-teal btn-round" type="button" ng-click="activateTab(2)">Next</button>
                                 </div>
                             </div>
                         </uib-tab>
-                        <uib-tab index="2" heading="Others" disable="true">
+                        <uib-tab index="2" heading="Step 3" disable="true">
                             <div class="card-body card-padding clearfix ">
                                 <div class="printview">
                                     <h3 class="m-b-20 m-t-10 fw">Vehicle Information</h3>
@@ -777,13 +778,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 text-right pr-0">
+                                <div class="col-sm-12 text-right pr-0 mt-5">
                                     <button class="btn bgm-blue btn-round" type="button" ng-click="activateTab(1)">Previous</button>
                                     <button class="btn bgm-teal btn-round" type="button" ng-click="activateTab(3)">Next</button>
                                 </div>
                             </div>
                         </uib-tab>
-                        <uib-tab index="3" heading="Confirm" disable="true">
+                        <uib-tab index="3" heading="Step 4" disable="true">
                             <div class="col-xs-12 clearfix p-0 m-t-10">
 
                                 <p class="m-t-20"> vehicles (licensed only). This unit is strictly
