@@ -97,7 +97,7 @@
                                   <option value="09:00 am">9 am</option>
                                   <option value="10:00 am">10 am</option>
                                   <option value="11:00 am">11 am</option>
-                                  <option value="12:00 am">12 am</option>
+                                  <option value="12:00 am">12 pm</option>
                                   <option value="01:00 pm">1 pm</option>
                                   <option value="02:00 pm">2 pm</option>
                                   <option value="03:00 pm">3 pm</option>
@@ -132,7 +132,7 @@
                                   <option value="09:00 am">9 am</option>
                                   <option value="10:00 am">10 am</option>
                                   <option value="11:00 am">11 am</option>
-                                  <option value="12:00 am">12 am</option>
+                                  <option value="12:00 am">12 pm</option>
                                   <option value="01:00 pm">1 pm</option>
                                   <option value="02:00 pm">2 pm</option>
                                   <option value="03:00 pm">3 pm</option>
@@ -167,14 +167,23 @@
           </div>
 
           <div class="row mt-5">
-            <div class="col-sm-6">
-              <button class="btn btn-sm btn-danger btn-round" ng-click="newschedulectrl.deleteListings($event)">Delete</button>
-              <button class="btn btn-sm bgm-teal btn-round" ng-click="craigslistopen(true)">Craigslist Settings</button>
-            </div>
+            
+              <div class="col-sm-5">
+                  <button class="btn btn-sm btn-danger btn-round" ng-click="newschedulectrl.deleteListings($event)">Delete</button>
+                  <button class="btn btn-sm bgm-teal btn-round" ng-click="craigslistopen(true)">Craigslist Settings</button>
+              </div>
+             <div class="col-sm-7 list">
+                  Listings 
+                    <span class="fa fa-info-circle"  title="This link refers to craigslist"> 
+                    </span>
+              </div>
+                
+            
           </div>
 
           <div class="row mt-5">
-            <div class="col-sm-12">
+            
+              <div class="col-sm-12">
               <table class="table table-bordered table-hover">
                 <thead>
                   <tr>
@@ -188,7 +197,7 @@
                       Showing Date/Time
                     </th>
                     <th>
-                      Scheduling Link (info)
+                      Scheduling Link  <span class="fa fa-info-circle"  title="This link refers to craigslist"> 
                     </th>
                     <th>
                       List on Craiglist
@@ -256,12 +265,12 @@
           </div>
           <div class="row mt-3 text-center">
               <div class="col-sm-offset-3 col-sm-6 md-3">
-                <input type="text" placeholder="Password" ng-model="craigslist.password" class="form-control original-form-control" />
+                <input type="Password" placeholder="Password" ng-model="craigslist.password" class="form-control original-form-control" />
               </div>
           </div>
           <div class="row mt-3 text-center">
               <div class="col-sm-12 md-3">
-                <input type="checkbox" ng-model="craigslist.renewAds">  Renew my ads after 48 hours of posting <i class="fa fa-info-circle" title="This helps you push your listing on the first page of a craigslist search"></i></div>
+                 <input type="checkbox" ng-model="craigslist.renewAds">  Renew my ads after 48 hours of posting <i class="fa fa-info-circle" title="This helps you push your listing on the first page of a craigslist search"></i></div>
             </div>
             <div class="row mt-3 text-center">
 								<div class="col-sm-12 md-3">
