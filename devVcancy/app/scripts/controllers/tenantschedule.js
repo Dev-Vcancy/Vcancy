@@ -18,10 +18,10 @@ vcancyApp
 				if(snapshot.val() !== null) {
 					vm.calendardata = $.map(snapshot.val(), function(value, index) {
 						if(value.schedulestatus == "confirmed") {
-							if(value.units === ' '){
+							if(value.unitId === ' ' || !value.unitId){
 								var units = '';
 							} else {
-								var units = value.units+" - ";								
+								var units = value.unitId+" - ";								
 							}
 							return [{scheduleID:index, className: 'bgm-cyan', title: units+value.address, start: new Date(value.dateslot)}];
 						}
@@ -37,12 +37,12 @@ vcancyApp
 					vm.tabledata = $.map(snapshot.val(), function(value, index) {
 						if(value.schedulestatus !== "removed") {
 							vm.schedulesavail = 1;
-							if(value.units === ' '){
+							if(value.unitId === ' ' || !value.unitId){
 								var units = '';
 							} else {
-								var units = value.units+" - ";								
+								var units = value.unitId+" - ";								
 							}
-							return [{scheduleID:index, address:units+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
+							return [{scheduleID:index, address:units+value.address, dateslot: moment(value.dateSlot, 'MM/DD/YYYY').format('DD MMMM YYYY'), timerange: value.timeRange,  schedulestatus: value.schedulestatus}];
 						} 
 					});	
 					
@@ -59,8 +59,8 @@ vcancyApp
 					
 				vm.cols = [
 					  { field: "address", title: "Address", sortable: "address", show: true },
-					  { field: "dateslot", title: "Date", sortable: "dateslot", show: true },					  
-					  { field: "timerange", title: "Time", sortable: "timerange", show: true },
+					  { field: "dateslot", title: "Date", show: true },					  
+					  { field: "timerange", title: "Time", show: true },
 					  { field: "schedulestatus", title: "Status", sortable: "schedulestatus", show: true }
 					];
 					
@@ -69,9 +69,11 @@ vcancyApp
 				
 				//Sorting
 				vm.tableSorting = new NgTableParams({
-					sorting: {address: 'asc'}}, 
+					sorting: {address: 'asc'}},
 					
-					{dataset: vm.tabledata
+					{dataset: vm.tabledata,
+						counts: [],
+						paginate: false
 				      
 				/*, {
 					total: vm.tabledata.length, // length of data
@@ -85,7 +87,7 @@ vcancyApp
 					 // dataset: vm.tabledata
 				})
 				
-				vm.showCal = true;
+				vm.showCal = false;
 			});
 		});
 		

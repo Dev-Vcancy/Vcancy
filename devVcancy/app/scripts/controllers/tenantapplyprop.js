@@ -179,6 +179,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					landlordID: landlordID,
 					timeRange: timeRange,
 					unitID: unitID,
+					units: unitID,
 					preScreeningAns: preScreeningAns
 				}).then(function () {
 					$state.go('applicationThanks');

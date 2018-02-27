@@ -23,17 +23,16 @@ vcancyApp
 					if ($rootScope.$previousState.name == "rentalform") {
 						$state.reload();
 					}
-
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function (value, index) {
 						if (value.schedulestatus == "confirmed") { // && moment(value.dateslot).isBefore(new Date())
 							vm.pendingappsavail = 1;
-							if (value.units === ' ') {
+							if (value.unitId === ' ' || !value.unitId) {
 								var units = '';
 							} else {
-								var units = value.units + " - ";
+								var units = value.unitId + " - ";
 							}
-							return [{ applicationID: 0, scheduleID: index, address: units + value.address, dateslot: value.dateslot, timerange: value.timerange, schedulestatus: value.schedulestatus }];
+							return [{ applicationID: 0, scheduleID: index, address: units + value.address, dateslot: value.dateSlot, timerange: value.timeRange, schedulestatus: value.schedulestatus }];
 						}
 					});
 
