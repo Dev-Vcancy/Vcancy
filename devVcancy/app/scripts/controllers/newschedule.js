@@ -108,6 +108,21 @@ vcancyApp
 				});
 			}
 
+			 $scope.openImageModal = function () {
+            $scope.imageModal = $uibModal.open({
+                templateUrl: 'viewimages.html',
+                controller: 'propertyCtrl',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'zIndex',
+                scope: $scope
+            });
+        }
+
+        $scope.closeImageModal = function () {
+            $scope.imageModal.dismiss('cancel');
+        }
+
 			function getProperties() {
 				var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 

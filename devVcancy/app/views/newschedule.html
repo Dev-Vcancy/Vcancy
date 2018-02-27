@@ -298,8 +298,8 @@
        <form  role="form" enctype="multipart/form-data" method="post" >
         <div class="row">
           <div class="col text-right">
-            <button class="btn btn-primary" ng-click="openImageModal()" ng-if="selectedUnitDetail.data.images.length>0"> View images({{selectedUnitDetail.data.images?selectedUnitDetail.data.images.length:0}}) </button>
-            <label class="btn btn-info">
+              <button class="btn bgm-teal btn-sm btn-round waves-effect" ng-click="openImageModal()" ng-if="selectedUnitDetail.data.images.length>0"> View images({{selectedUnitDetail.data.images?selectedUnitDetail.data.images.length:0}}) </button>
+            <label class="btn bgm-blue btn-sm btn-round waves-effect">
                 Upload images <small>(max 24)</small>
                 <input type="file" name="file" id="file" 
                 value="dataFile" 
@@ -523,7 +523,7 @@
               <div class="form-group">
           
                   <label class='m-0'>Extension number:</label>
-                  <input required="" name="address"   ng-model="selectedUnitDetail.data.extensionNumber" type="text" class="form-control original-form-control" id="" placeholder="">
+                  <input name="address"   ng-model="selectedUnitDetail.data.extensionNumber" type="text" class="form-control original-form-control" id="" placeholder="">
                 
               </div>
           </div>
@@ -581,11 +581,40 @@ Kitchen and Bath
             </div>
   </div>
   <div class="modal-footer">
-      <button class="btn btn-primary" ng-click="submitDetails()">Save</button>
-      <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+      <button class="btn bgm-teal btn-sm btn-round waves-effect" ng-click="submitDetails()">Save</button>
+      <button class="btn bgm-blue btn-sm btn-round waves-effect" ng-click="cancel()">Cancel</button>
   </div>
 </form>
 </div>
+</script>
+<script type="text/ng-template" id="viewimages.html">
+  <div class="profile_model_popup">
+  <div class="modal-header padding-20" >
+      <h3 class="modal-title">Images</h3>
+      <button type="button" class="close margin-top-15" data-dismiss="dialog" ng-click="closeImageModal()" style='margin-top:8px !important'>
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+      </button>
+  </div>
+  <div class="modal-body">
+    
+      <div style="height: 305px">
+          <div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides">
+              <div uib-slide ng-repeat="image in selectedUnitDetail.data.images track by $index" index="$index">
+                <img ng-src="{{image.Location}}" style="margin:auto;height: 305px">
+              </div>
+            </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-sm-1 p-0 mb-2" ng-repeat="image in selectedUnitDetail.data.images">
+          <img ng-src="{{image.Location}}" style="height:35px;width:57%;">
+          <i class="fa fa-times deletebutton" ng-click="deleteImageFromDetail($index)"></i>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+      <button class="btn btn-primary" ng-click="closeImageModal()">Close</button>
+  </div>
 </script>
 <style>
   .modal-dialog.modal-lg {
