@@ -23,16 +23,17 @@ vcancyApp
 			$scope.uiConfig = {
 				calendar: {
 					height: 500,
-					editable: true,
+					editable: false,
 					header: {
 						left: 'title',
 						center: '',
-						right: 'today prev,next'
-
+						right: 'today prev,next',
+						
 					},
 					buttonText: {
 						today: 'Today',
 					},
+					
 					//eventClick: $scope.alertEventOnClick,
 					//eventDrop: $scope.alertOnDrop,
 					//eventResize: $scope.alertOnResize
@@ -96,6 +97,7 @@ vcancyApp
 										start: new Date(startDate),
 										end: new Date(endDate),
 										className: 'bgm-teal'
+														
 									}
 								)
 							});

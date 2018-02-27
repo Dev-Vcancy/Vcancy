@@ -28,7 +28,7 @@ vcancyApp
 		$scope.uiConfig = {
 			calendar: {
 				height: 500,
-				editable: true,
+				editable: false,
 				header: {
 					left: 'title',
 					center: '',
@@ -38,6 +38,7 @@ vcancyApp
 				buttonText:{
 					today: 'Today',
 				},
+				
 			//	eventClick: $scope.alertEventOnClick,
 			//	eventDrop: $scope.alertOnDrop,
 			//	eventResize: $scope.alertOnResize
