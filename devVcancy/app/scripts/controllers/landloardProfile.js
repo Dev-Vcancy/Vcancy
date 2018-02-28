@@ -10,6 +10,7 @@ vcancyApp
       var vm = this;
       var landLordID = localStorage.getItem('userID');
       vm.refId = localStorage.getItem('refId');
+      
       var password = localStorage.getItem('password');
       var swal = window.swal;
       vm.userData = {};
@@ -32,6 +33,7 @@ vcancyApp
       firebase.database().ref('/users/' + landLordID).once('value').then(function (userdata) {
 
         $scope.$apply(function () {
+          console.log(userdata.val());
           vm.userData = userdata.val();
           // if (userdata.val() !== null) {
 
@@ -249,7 +251,7 @@ vcancyApp
 
 
         if (file) {
-          var params = { Key: 'company-logo/'+filename, ContentType: file.type, Body: file, StorageClass: "STANDARD_IA", ACL: 'public-read' };
+          var params = { Key: 'company-logo/' + filename, ContentType: file.type, Body: file, StorageClass: "STANDARD_IA", ACL: 'public-read' };
           bucket.upload(params).on('httpUploadProgress', function (evt) {
             console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total) + '%');
           }).send(function (err, data) {
@@ -629,7 +631,7 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
 
 
     if (file) {
-      var params = { Key: 'profile-images/'+filename, ContentType: file.type, Body: file, StorageClass: "STANDARD_IA", ACL: 'public-read' };
+      var params = { Key: 'profile-images/' + filename, ContentType: file.type, Body: file, StorageClass: "STANDARD_IA", ACL: 'public-read' };
       bucket.upload(params).on('httpUploadProgress', function (evt) {
         console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total) + '%');
       }).send(function (err, data) {
