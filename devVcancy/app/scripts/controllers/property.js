@@ -2142,8 +2142,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
 
 
         var fileUpload = document.getElementById("file123");
-        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
-        if (regex.test(fileUpload.value.toLowerCase())) {
+        if (fileUpload.value.indexOf('.csv') > -1) {
             if (typeof (FileReader) != "undefined") {
                 var unitsImported = [];
                 var reader = new FileReader();
@@ -2233,7 +2232,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                             } else if (headerkey === 'status') {
                                 if (currentline[j].toLowerCase() === "available soon") {
                                     obj[actualHeaderKey] = 'availablesoon';
-                                } 
+                                }
                                 else {
                                     obj[actualHeaderKey] = currentline[j].toLowerCase();
                                 }
