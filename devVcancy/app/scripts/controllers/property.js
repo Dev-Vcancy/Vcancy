@@ -2231,7 +2231,12 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                                     obj[actualHeaderKey].push('wheelchair')
                                 }
                             } else if (headerkey === 'status') {
-                                obj[actualHeaderKey] = currentline[j].toLowerCase();
+                                if (currentline[j].toLowerCase() === "available soon") {
+                                    obj[actualHeaderKey] = 'availablesoon';
+                                } 
+                                else {
+                                    obj[actualHeaderKey] = currentline[j].toLowerCase();
+                                }
                             } else {
                                 obj[actualHeaderKey] = currentline[j];
                             }
