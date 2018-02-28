@@ -19,6 +19,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 			email: '',
 			phone: ''
 		};
+		vm.proposeDiv = false;
 		vm.preScreeningAns = {};
 		vm.landlordData = {};
 		if (vm.userData) {
@@ -84,7 +85,10 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				vm.selectedTime = vm.availableSlots[vm.selectedDate][0];
 			});
 		}
-
+		vm.openproposemodal = function () {
+			vm.proposeDiv = !vm.proposeDiv;
+		};
+	
 		vm.formatDay = function (key) {
 			return moment(key, 'MM/DD/YYYY').format('ddd')
 		}

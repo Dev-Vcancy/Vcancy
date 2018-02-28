@@ -122,16 +122,20 @@
 									<textarea auto-size placeholder="Tell me a little about yourself" ng-model="applyctrl.applyprop.description"  required  class="form-control"></textarea>
 								</div> -->
 							</div>
-							<div class="col-sm-6">
-								<div class="row mt-3">Select a Showing Date and Time OR Propose new time</div>
-								<div class="row">
+							
+							<div class="col-sm-6" >
+								<div class="row mt-3">Select a Showing Date and Time OR &nbsp;
+									<a class="text-primary" ng-click="applyctrl.openproposemodal()" ng-if="!applyctrl.proposeDiv">Propose new time</a>
+									<a class="text-primary" ng-click="applyctrl.openproposemodal()"  ng-if="applyctrl.proposeDiv">Pick from available times</a>
+								</div>
+								<div class="row"  ng-if="!applyctrl.proposeDiv">
 									<div class="col-sm-12">
 										<div class="row mt-3">Date</div>
 									</div>
 								</div>
-								<div class="row mt-3">
+								<div class="row mt-3"  ng-if="!applyctrl.proposeDiv">
 									<div class="col-sm-3 mb-3" ng-repeat="(key, value) in applyctrl.availableSlots">
-										
+
 										<button class="btn btnoutline success btn-outline-success" ng-class="{ 'btn-active': applyctrl.selectedDate == key }" type="button"
 										 ng-click="applyctrl.selectSlotDate(key)">
 											<i class="fa fa-calander"></i> {{applyctrl.formatDay(key)}}
@@ -141,12 +145,12 @@
 										</button>
 									</div>
 								</div>
-								<div class="row">
+								<div class="row"  ng-if="!applyctrl.proposeDiv">
 									<div class="col-sm-12">
 										<div class="row mt-3">Time</div>
 									</div>
 								</div>
-								<div class="row mt-3">
+								<div class="row mt-3" ng-if="!applyctrl.proposeDiv">
 									<div class="col-sm-3 mb-3" ng-repeat="value in applyctrl.availableSlots[applyctrl.selectedDate] track by $index">
 										<button class="btn btnoutline success btn-outline-success" ng-class="{ 'btn-active': applyctrl.selectedTime == value }" type='button'
 										 ng-click="applyctrl.selectSlotTime(value)">
@@ -154,11 +158,214 @@
 										</button>
 									</div>
 								</div>
+								<div class="" ng-if="applyctrl.proposeDiv">
+									<div class="row mt-3">
+										Choose three times that work for you. You will be notified if any one of the times is available.
+									</div>
+																
+									<div>
+										<div class="row mt-3">
+								  
+											  <div class="col-sm-4">
+												  <input type="date" class="custom-form-element" name="fromDate" min="{{newschedulectrl.todayDate}}" ng-model="newschedulectrl.fromDate1" />
+											  </div>
+											  <div class="col-sm-4">
+												  <select class="custom-form-element" name="more" ng-model="newschedulectrl.fromTime1" style="width:10vw">
+														  <option value="">From</option>   
+														<option value="12:00 am">12 am</option>
+														  <option value="01:00 am">1 am</option>
+														  <option value="02:00 am">2 am</option>
+														  <option value="03:00 am">3 am</option>
+														  <option value="04:00 am">4 am</option>
+														  <option value="05:00 am">5 am</option>
+														  <option value="06:00 am">6 am</option>
+														  <option value="07:00 am">7 am</option>
+														  <option value="08:00 am">8 am</option>
+														  <option value="09:00 am">9 am</option>
+														  <option value="10:00 am">10 am</option>
+														  <option value="11:00 am">11 am</option>
+														  <option value="12:00 am">12 pm</option>
+														  <option value="01:00 pm">1 pm</option>
+														  <option value="02:00 pm">2 pm</option>
+														  <option value="03:00 pm">3 pm</option>
+														  <option value="04:00 pm">4 pm</option>
+														  <option value="05:00 pm">5 pm</option>
+														  <option value="06:00 pm">6 pm</option>
+														  <option value="07:00 pm">7 pm</option>
+														  <option value="08:00 pm">8 pm</option>
+														  <option value="09:00 pm">9 pm</option>
+														  <option value="10:00 pm">10 pm</option>
+														  <option value="11:00 pm">11 pm</option>
+														</select>	
+											  </div>
+											  <div class="col-sm-4">
+													<select class="custom-form-element" name="more" style="width:10vw" ng-model="newschedulectrl.toTime">
+														<option value="">To</option>  
+														<option value="00:00 am">12 am</option>
+														<option value="01:00 am">1 am</option>
+														<option value="02:00 am">2 am</option>
+														<option value="03:00 am">3 am</option>
+														<option value="04:00 am">4 am</option>
+														<option value="05:00 am">5 am</option>
+														<option value="06:00 am">6 am</option>
+														<option value="07:00 am">7 am</option>
+														<option value="08:00 am">8 am</option>
+														<option value="09:00 am">9 am</option>
+														<option value="10:00 am">10 am</option>
+														<option value="11:00 am">11 am</option>
+														<option value="12:00 am">12 pm</option>
+														<option value="01:00 pm">1 pm</option>
+														<option value="02:00 pm">2 pm</option>
+														<option value="03:00 pm">3 pm</option>
+														<option value="04:00 pm">4 pm</option>
+														<option value="05:00 pm">5 pm</option>
+														<option value="06:00 pm">6 pm</option>
+														<option value="07:00 pm">7 pm</option>
+														<option value="08:00 pm">8 pm</option>
+														<option value="09:00 pm">9 pm</option>
+														<option value="10:00 pm">10 pm</option>
+														<option value="11:00 pm">11 pm</option>
+													  </select>
+												</div>
+								 
+										</div>
+										<div class="row mt-3">
+											  <div class="col-sm-4">
+													  <input type="date" class="custom-form-element" name="fromDate" min="{{newschedulectrl.todayDate}}" ng-model="newschedulectrl.fromDate2" />
+												  </div>
+												  <div class="col-sm-4">
+													  <select class="custom-form-element" name="more" ng-model="newschedulectrl.fromTime2" style="width:10vw">
+															  <option value="">From</option>   
+															<option value="12:00 am">12 am</option>
+															  <option value="01:00 am">1 am</option>
+															  <option value="02:00 am">2 am</option>
+															  <option value="03:00 am">3 am</option>
+															  <option value="04:00 am">4 am</option>
+															  <option value="05:00 am">5 am</option>
+															  <option value="06:00 am">6 am</option>
+															  <option value="07:00 am">7 am</option>
+															  <option value="08:00 am">8 am</option>
+															  <option value="09:00 am">9 am</option>
+															  <option value="10:00 am">10 am</option>
+															  <option value="11:00 am">11 am</option>
+															  <option value="12:00 am">12 pm</option>
+															  <option value="01:00 pm">1 pm</option>
+															  <option value="02:00 pm">2 pm</option>
+															  <option value="03:00 pm">3 pm</option>
+															  <option value="04:00 pm">4 pm</option>
+															  <option value="05:00 pm">5 pm</option>
+															  <option value="06:00 pm">6 pm</option>
+															  <option value="07:00 pm">7 pm</option>
+															  <option value="08:00 pm">8 pm</option>
+															  <option value="09:00 pm">9 pm</option>
+															  <option value="10:00 pm">10 pm</option>
+															  <option value="11:00 pm">11 pm</option>
+															</select>	
+												  </div>
+												  <div class="col-sm-4">
+														<select class="custom-form-element" name="more" style="width:10vw" ng-model="newschedulectrl.toTime">
+															<option value="">To</option>  
+															<option value="00:00 am">12 am</option>
+															<option value="01:00 am">1 am</option>
+															<option value="02:00 am">2 am</option>
+															<option value="03:00 am">3 am</option>
+															<option value="04:00 am">4 am</option>
+															<option value="05:00 am">5 am</option>
+															<option value="06:00 am">6 am</option>
+															<option value="07:00 am">7 am</option>
+															<option value="08:00 am">8 am</option>
+															<option value="09:00 am">9 am</option>
+															<option value="10:00 am">10 am</option>
+															<option value="11:00 am">11 am</option>
+															<option value="12:00 am">12 pm</option>
+															<option value="01:00 pm">1 pm</option>
+															<option value="02:00 pm">2 pm</option>
+															<option value="03:00 pm">3 pm</option>
+															<option value="04:00 pm">4 pm</option>
+															<option value="05:00 pm">5 pm</option>
+															<option value="06:00 pm">6 pm</option>
+															<option value="07:00 pm">7 pm</option>
+															<option value="08:00 pm">8 pm</option>
+															<option value="09:00 pm">9 pm</option>
+															<option value="10:00 pm">10 pm</option>
+															<option value="11:00 pm">11 pm</option>
+														  </select>
+													</div>
+									 
+								  
+										</div>
+										<div class="row mt-3">
+											  <div class="col-sm-4">
+													  <input type="date" class="custom-form-element" name="fromDate" min="{{newschedulectrl.todayDate}}" ng-model="newschedulectrl.fromDate3" />
+												  </div>
+												  <div class="col-sm-4">
+													  <select class="custom-form-element" name="more" ng-model="newschedulectrl.fromTime3" style="width:10vw">
+															  <option value="">From</option>   
+															<option value="12:00 am">12 am</option>
+															  <option value="01:00 am">1 am</option>
+															  <option value="02:00 am">2 am</option>
+															  <option value="03:00 am">3 am</option>
+															  <option value="04:00 am">4 am</option>
+															  <option value="05:00 am">5 am</option>
+															  <option value="06:00 am">6 am</option>
+															  <option value="07:00 am">7 am</option>
+															  <option value="08:00 am">8 am</option>
+															  <option value="09:00 am">9 am</option>
+															  <option value="10:00 am">10 am</option>
+															  <option value="11:00 am">11 am</option>
+															  <option value="12:00 am">12 pm</option>
+															  <option value="01:00 pm">1 pm</option>
+															  <option value="02:00 pm">2 pm</option>
+															  <option value="03:00 pm">3 pm</option>
+															  <option value="04:00 pm">4 pm</option>
+															  <option value="05:00 pm">5 pm</option>
+															  <option value="06:00 pm">6 pm</option>
+															  <option value="07:00 pm">7 pm</option>
+															  <option value="08:00 pm">8 pm</option>
+															  <option value="09:00 pm">9 pm</option>
+															  <option value="10:00 pm">10 pm</option>
+															  <option value="11:00 pm">11 pm</option>
+															</select>	
+												  </div>
+												  <div class="col-sm-4">
+														<select class="custom-form-element" name="more" style="width:10vw" ng-model="newschedulectrl.toTime">
+															<option value="">To</option>  
+															<option value="00:00 am">12 am</option>
+															<option value="01:00 am">1 am</option>
+															<option value="02:00 am">2 am</option>
+															<option value="03:00 am">3 am</option>
+															<option value="04:00 am">4 am</option>
+															<option value="05:00 am">5 am</option>
+															<option value="06:00 am">6 am</option>
+															<option value="07:00 am">7 am</option>
+															<option value="08:00 am">8 am</option>
+															<option value="09:00 am">9 am</option>
+															<option value="10:00 am">10 am</option>
+															<option value="11:00 am">11 am</option>
+															<option value="12:00 am">12 pm</option>
+															<option value="01:00 pm">1 pm</option>
+															<option value="02:00 pm">2 pm</option>
+															<option value="03:00 pm">3 pm</option>
+															<option value="04:00 pm">4 pm</option>
+															<option value="05:00 pm">5 pm</option>
+															<option value="06:00 pm">6 pm</option>
+															<option value="07:00 pm">7 pm</option>
+															<option value="08:00 pm">8 pm</option>
+															<option value="09:00 pm">9 pm</option>
+															<option value="10:00 pm">10 pm</option>
+															<option value="11:00 pm">11 pm</option>
+														  </select>
+													</div>
+									 
+								  
+										</div>			  
+									  </div>
+							</div>
 
 								<div>
-									<div class="row text-center mt-5" ng-if="!applyctrl.userData">
+									<div class="row text-center mt-5">
 										Already have an account? &nbsp;&nbsp;
-										<a class="text-primary"  ng-click="applyctrl.openSignInmodel()">Sign in</a>
+										<a class="text-primary" ng-click="applyctrl.openSignInmodel()">Sign in</a>
 									</div>
 
 									<div class="row mt-4">
@@ -199,7 +406,7 @@
 											</span>
 										</div>
 										<div class="col-sm-12 mt-3 text-center">
-											<button class="btn btn-success" ng-disabled="scheduleForm.$invalid || scheduleForm.$prestine"> Schedule Now </button>
+											<button class="btn bgm-teal btn-sm btn-round" ng-disabled="scheduleForm.$invalid || scheduleForm.$prestine"> Schedule Now </button>
 										</div>
 									</div>
 								</ng-form>
@@ -248,6 +455,8 @@
 	Waves.init();
 	Waves.attach('.btn');
 </script>
+
+
 <style>
 	input.ng-touched.ng-invalid {
 		border-color: red !important;
