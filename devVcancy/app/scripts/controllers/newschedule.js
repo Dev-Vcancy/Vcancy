@@ -5,8 +5,8 @@
 //================================================= 
 
 vcancyApp
-	.controller('newscheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'emailSendingService', '$q', '$uibModal', '_','$compile','uiCalendarConfig'
-		, function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, emailSendingService, $q, $uibModal, _,$compile,uiCalendarConfig) {
+	.controller('newscheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'emailSendingService', '$q', '$uibModal', '_', '$compile', 'uiCalendarConfig'
+		, function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, emailSendingService, $q, $uibModal, _, $compile, uiCalendarConfig) {
 
 			var vm = this;
 			var userID = localStorage.getItem('userID');
@@ -41,7 +41,7 @@ vcancyApp
 				className: 'gcal-event',           // an option!
 				currentTimezone: 'America/Chicago' // an option!
 			};
-			
+
 			$scope.events = [];
 
 			$scope.eventsF = function (start, end, timezone, callback) {
@@ -333,6 +333,18 @@ vcancyApp
 					windowClass: '',
 					scope: $scope
 				});
+			};
+
+			vm.toggleListOnCraglist = function (keys) {
+				keys.forEach(function (key) {
+					if (vm.listings[key].listOnCraglist) {
+						vm.listings[key].listOnCraglist = !vm.listings[key].listOnCraglist;
+					}
+					else {
+						vm.listings[key].listOnCraglist = true;
+					}
+				});
+				vm.generateMergeListing();
 			};
 
 			vm.checkIsIncomplete = function (propId, unitId) {

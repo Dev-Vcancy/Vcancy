@@ -36,7 +36,7 @@
                       </div>
 
                     </div>
-                    
+
                     <div class="col-sm-12 pl-0" ng-if="newschedulectrl.propertySelected && newschedulectrl.properties[newschedulectrl.propertySelected].unitlists.length > 0">
                       <label for="example-time-input" class="col-sm-4 col-form-label" style="margin-top:12px">
                         Unit
@@ -221,11 +221,15 @@
                     <td>
                       <a ng-href='{{value.link}}' target="_blank">{{value.link}}</a>
                     </td>
-                    <td>
+                    <td class="text-center">
                       <span ng-if="value.unitID && newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
                         class="text-primary">Incomplete listing details</span>
-                      <span ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
-                        class="text-primary">Link to Craigslist listing</span>
+                      <!-- <span  ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
+                        class="text-primary">Link to Craigslist listing</span> -->
+                      <div class="toggle-switch mt-4" ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.toggleListOnCraglist(value.keys)">
+                        <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraglist">
+                        <label class="ts-helper" style="border-radius: 8px !important"></label>
+                      </div>
                     </td>
                     <td>{{value.status}}</td>
                   </tr>
