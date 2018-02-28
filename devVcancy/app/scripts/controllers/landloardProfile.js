@@ -10,7 +10,7 @@ vcancyApp
       var vm = this;
       var landLordID = localStorage.getItem('userID');
       vm.refId = localStorage.getItem('refId');
-      
+
       var password = localStorage.getItem('password');
       var swal = window.swal;
       vm.userData = {};
@@ -80,7 +80,7 @@ vcancyApp
       });
 
 
-      vm.profileSubmit = function (ldProfilectrl) {
+      vm.profileSubmit = function () {
         var landLordID = localStorage.getItem('userID');
 
         // var updatedata = {};
@@ -112,6 +112,7 @@ vcancyApp
         //alert(JSON.stringify(updatedata)); return false;
 
         firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+          localStorage.setItem('userData', JSON.stringify(vm.userData));
           vm.opensuccesssweet("Profile Updated successfully!");
         }, function (error) {
 

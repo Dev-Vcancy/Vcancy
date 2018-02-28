@@ -450,8 +450,7 @@
 
                                                 <div id="tab_3-3" class="tab-pane">
                                                     <h3 class="m-b-20 m-t-10 fw">Craigslist</h3>
-                                                    <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)"
-                                                        role="form" unsaved-warning-form>
+                                                    <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" role="form" unsaved-warning-form>
 
 
                                                         <div class="fg-line">
@@ -489,17 +488,19 @@
 
                                                             <div class="col-xs-12 col-sm-6 form-group ">
                                                                 <div class="fg-line fg-label">
-                                                                    <input type="checkbox" ng-model="craigslist.renewAds"> Renew my ads after 48 hours of posting
+                                                                    {{craigslist.craigslistRenewAds}}
+                                                                    <input type="checkbox" ng-model="ldProfilectrl.userData.craigslistRenewAds"> Renew my ads after 48 hours of posting
                                                                     <i class="fa fa-info-circle" title="This helps you push your listing on the first page of a craigslist search"></i>
                                                                 </div>
                                                                 <div class="fg-line fg-label">
-                                                                    <input type="checkbox" ng-model="craigslist.removeAds"> Take ads off after units are rented
+                                                                    {{craigslist.craigslistRemoveAds}}
+                                                                    <input type="checkbox" ng-model="ldProfilectrl.userData.craigslistRemoveAds"> Take ads off after units are rented
                                                                 </div>
                                                             </div>
 
                                                         </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary pull-right btn-md m-t-10 waves-effect">Save</button>
+                                                <button type="button" class="btn btn-primary pull-right btn-md m-t-10 waves-effect" ng-click="ldProfilectrl.profileSubmit()">Save</button>
                                                 </form>
                                             </div>
 
