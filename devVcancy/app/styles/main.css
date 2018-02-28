@@ -64,7 +64,9 @@ body {
  .fc-day-grid-event.fc-h-event.fc-event{
    color:white;
  }
-
+.outline{
+  outline-color: teal;
+}
 .middle {
   transition: .5s ease;
   opacity: 0;
@@ -933,18 +935,20 @@ ul.header-inner li a:hover.button:before{
 .tooltip {
     width: 200px;
 }
-.btnoutline {
-  border: 2px solid black;
+.btnoutline  {
+  border: 2px solid #009688;
+  color: #009688;
   background-color: white;
-  color: black;
   padding: 14px 28px;
   font-size: 16px;
   cursor: pointer;
+  
 }
 
-.success {
-  border-color: #4CAF50;
-  color: green;
+.info:hover {
+  background:#009688 ;
+  border-color: #009688;
+  color:#fff;
 }
 .full button span {
   background-color: limegreen;
