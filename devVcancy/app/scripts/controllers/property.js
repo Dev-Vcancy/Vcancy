@@ -2152,7 +2152,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                     var units = [];
                     var headers = rows[0].split(",");
                     var totalrowunits = 0;
-                    for (var i = 1; i < parseInt(rows.length - 1); i++) {
+                    for (var i = 1; i < rows.length -1; i++) {
 
                         var obj = {};
                         var currentline = rows[i].split(",");
@@ -2160,7 +2160,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                         for (var j = 0; j < headers.length; j++) {
 
                             var headerkey = headers[j];
-                            headerkey = headerkey.replace(/[^a-zA-Z ]/g, "")
+                            headerkey = headerkey.replace(/[^a-zA-Z]/g, "")
 
                             headerkey = headerkey.toLowerCase();
                             if (headerkey == 'unit') {
@@ -2187,10 +2187,10 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
 
                             var actualHeaderKey = '';
                             var aminitiesHeaderKeys = [
-                                'amenities  furnished',
-                                'amenities  laundry',
-                                'amenities  parking',
-                                'amenities  wheelchair access'
+                                'amenitiesfurnished',
+                                'amenitieslaundry',
+                                'amenitiesparking',
+                                'amenitieswheelchairaccess'
                             ]
                             var ignorKeys = [
                                 'propertyAddress',
@@ -2209,33 +2209,35 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                                 actualHeaderKey = headerkey.trim();
                             }
 
-                            if (headerkey === 'amenities  furnished') {
+                            if (headerkey === 'amenitiesfurnished') {
                                 if (currentline[j].toLowerCase().trim() === 'yes') {
                                     if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
                                     obj[actualHeaderKey].push('furnished')
                                 }
-                            } else if (headerkey === 'amenities  laundry') {
+                            } else if (headerkey === 'amenitieslaundry') {
                                 if (currentline[j].toLowerCase().trim() === 'yes') {
                                     if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
                                     obj[actualHeaderKey].push('laundry')
                                 }
-                            } else if (headerkey === 'amenities  parking') {
+                            } else if (headerkey === 'amenitiesparking') {
                                 if (currentline[j].toLowerCase().trim() === 'yes') {
                                     if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
                                     obj[actualHeaderKey].push('parking')
                                 }
-                            } else if (headerkey === "amenities  wheelchair access") {
+                            } else if (headerkey === "amenitieswheelchairaccess") {
                                 if (currentline[j].toLowerCase().trim() === 'yes') {
                                     if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
                                     obj[actualHeaderKey].push('wheelchair')
                                 }
                             } else if (headerkey === 'status') {
-                                if (currentline[j].toLowerCase() === "available soon") {
-                                    obj[actualHeaderKey] = 'availablesoon';
+                                if (currentline[j] && currentline[j].toLowerCase() === "available soon") {
+                                    obj['status'] = 'availablesoon';
                                 }
                                 else {
-                                    obj[actualHeaderKey] = currentline[j].toLowerCase();
+                                    obj['status'] = currentline[j] ? currentline[j].toLowerCase() : 'status';
                                 }
+                            } else if (headerkey === 'descriptionoptional') {
+                                obj['description'] = currentline[j];
                             } else {
                                 obj[actualHeaderKey] = currentline[j];
                             }
