@@ -2268,7 +2268,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                         $uibModalInstance.close();
                         swal({
                             title: 'Alert',
-                            text: 'File Imported successfully. You need to save units or changes will be lost',
+                            text: 'File imported successfully. You need to save units otherwise changes will be lost',
                             type: 'success'
                         })
                         $scope.loader = 0;
