@@ -2222,7 +2222,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                                     if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
                                     obj[actualHeaderKey].push('wheelchair')
                                 }
-                            } else if (headerkey === 'catsok' || headerkey === 'dogsok') {
+                            } else if (headerkey === 'catsok' || headerkey === 'dogsok' || headerkey === 'smoking') {
                                 obj[actualHeaderKey] = currentline[j].toLowerCase() == 'yes' ? true : false
                             } else if (headerkey === 'status') {
                                 if (currentline[j] && currentline[j].toLowerCase() === "available soon") {
