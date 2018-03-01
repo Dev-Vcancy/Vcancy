@@ -107,7 +107,11 @@
 								<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
 									<br/> {{value.fromTimeslot}} : {{value.toTimeSlot}}</td>
 								<td ng-repeat="ques in lappctrl.filters.options">{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}</td>
-								<td><button class="btn btn-sm btn-danger btn-round" ng-click="lappctrl.deleteApplyProp(key)"><i class="fa fa-trash"></i></button></td>
+								<td>
+									<button class="btn btn-sm btn-danger btn-round" ng-click="lappctrl.deleteApplyProp(key)">
+										<i class="fa fa-trash"></i>
+									</button>
+								</td>
 							</tr>
 						</table>
 					</div>
@@ -128,14 +132,20 @@
 							</div>
 							<div class="modal-body">
 					<div class="checkbox-div" ng-repeat="value in lappctrl.screeningQuestions track by $index" id="{{$index}}">
-						<label>
-								<div class="checkbox">		
-								<input type="checkbox" ng-model="value.isChecked"/>&nbsp;&nbsp;
-								&nbsp;&nbsp;&nbsp;&nbsp;{{value.label}}
-								<i class="input-helper"></i>					
-								</div>
-						
-						</label>
+						<div class="row">
+							<div class="col-sm-8 text-left">
+									<label>
+											<div class="checkbox">		
+											<input type="checkbox" ng-model="value.isChecked"/>&nbsp;&nbsp;
+											&nbsp;&nbsp;&nbsp;&nbsp;{{value.label}}
+											<i class="input-helper"></i>					
+											</div>
+										</label>
+							</div>
+							<div class="col text-right" style="margin:auto">
+									<button class="btn btn-danger btn-sm btn-round" type="button" ng-click="lappctrl.deleteQuestionById(value.id)"><i class="fa fa-trash"></i></button>
+							</div>
+						</div>
 					</div>	  
 					Add custom question (text input)<br/>
 					<div class="row">

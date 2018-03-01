@@ -49,7 +49,7 @@ vcancyApp
 			];
 
 			vm.filters = {
-				options: vm.questionDropDown,
+				options: [],
 			};
 
 			vm.defaultRentalApplicationCheck = {
@@ -84,7 +84,7 @@ vcancyApp
 
 			function refreshScreeningQuestions() {
 				userData = JSON.parse(localStorage.getItem('userData'));
-				if (userData && userData.screeningQuestions) {
+				if (userData && userData.screeningQuestions && userData.screeningQuestions.length !== 0) {
 					vm.screeningQuestions = userData.screeningQuestions;
 				} else {
 					vm.screeningQuestions = angular.copy(vm.questionDropDown);
@@ -92,27 +92,27 @@ vcancyApp
 			}
 			refreshScreeningQuestions();
 			vm.getProperty = function () {
-				vm.loader = 1;				
+				vm.loader = 1;
 				var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					if (snapshot.val()) {
 						vm.properties = snapshot.val();
 					}
-					vm.loader = 0;					
+					vm.loader = 0;
 				});
 			};
 
 			vm.getApplyProp = function () {
-				vm.loader = 1;								
+				vm.loader = 1;
 				vm.apppropaddress = {};
 				var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					if (snapshot.val()) {
-						$scope.$apply(function() {
+						$scope.$apply(function () {
 							vm.apppropaddress = snapshot.val();
 							vm.originalPropAddress = angular.copy(snapshot.val());
 							console.log(vm.apppropaddress);
 						});
 					}
-					$scope.$apply(function() {
+					$scope.$apply(function () {
 						vm.loader = 0;
 					});
 				});
@@ -233,6 +233,14 @@ vcancyApp
 					scope: $scope
 				});
 			};
+
+			vm.deleteQuestionById = function (id) {
+				var index = vm.screeningQuestions.findIndex(function (ques) {
+					if (ques.id == id) return true;
+				});
+				vm.screeningQuestions.splice(index, 1);
+			};
+
 
 			vm.openruncreditcriminalcheck = function () {
 				vm.runcreditcriminalcheck = $uibModal.open({
@@ -374,13 +382,13 @@ vcancyApp
 			}
 			// vm.tablefilterdata();
 
-			vm.deleteApplyProp = function(key) {
-				firebase.database().ref('applyprop/'+key).remove().then(function(){
+			vm.deleteApplyProp = function (key) {
+				firebase.database().ref('applyprop/' + key).remove().then(function () {
 					vm.getApplyProp();
 					// vm.tablefilterdata();
 				})
-				.catch(function(err) {
-					console.error('ERROR', err);
-				});
+					.catch(function (err) {
+						console.error('ERROR', err);
+					});
 			}
 		}])
