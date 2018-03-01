@@ -2149,6 +2149,9 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
 
                         var obj = {};
                         var currentline = rows[i].split(",");
+                        if(currentline.length < 2){
+                            continue;
+                        }
 
                         for (var j = 0; j < headers.length; j++) {
 
@@ -2186,8 +2189,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                                 'amenitieswheelchairaccess'
                             ]
                             var ignorKeys = [
-                                'propertyAddress',
-                                'lease expiry date',
+                                'propertyaddressoptional',
                             ]
                             if (ignorKeys.includes(headerkey)) {
                                 continue;
@@ -2233,6 +2235,8 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                                 }
                             } else if (headerkey === 'descriptionoptional') {
                                 obj['description'] = currentline[j];
+                            } else if (headerkey === 'leaseexpiryoptional') {
+                                obj['leaseExpiry'] = new Date(currentline[j]);
                             } else {
                                 obj[actualHeaderKey] = currentline[j];
                             }
