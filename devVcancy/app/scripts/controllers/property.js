@@ -80,7 +80,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             $.each(arrAddress, function (i, address_component) {
                 if (address_component.types[0] == "street_number") {
                     itemSnumber = address_component.long_name;
-                    street_number += address_component.long_name + ",";
+                    street_number += address_component.long_name + " ";
                 }
 
                 if (address_component.types[0] == "route") {
@@ -1951,7 +1951,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         vm.opensuccesssweet = function (value) {
             swal({
                 title: "Success!",
-                text: "Your Property Created successfully!",
+                text: "Your Property is created successfully!",
                 type: "success",
             });
             // alert('Property Created successfully!');
