@@ -2145,7 +2145,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                     var units = [];
                     var headers = rows[0].split(",");
                     var totalrowunits = 0;
-                    for (var i = 1; i < rows.length - 1; i++) {
+                    for (var i = 1; i < rows.length; i++) {
 
                         var obj = {};
                         var currentline = rows[i].split(",");
