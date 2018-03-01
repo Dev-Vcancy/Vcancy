@@ -140,11 +140,23 @@ vcancyApp
 					if (!vm.mergeListing[list.link]) {
 						vm.mergeListing[list.link] = angular.copy(vm.listings[key]);
 						vm.mergeListing[list.link].fromToDate = [];
-						var date = moment(vm.listings[key].fromDate).format('DD MMM') + '-' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						var date = '';
+						if (moment(vm.listings[key].fromDate).format('DD MMM') == moment(vm.listings[key].toDate).format('DD MMM')) {
+							date = moment(vm.listings[key].fromDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						}
+						else {
+							date = moment(vm.listings[key].fromDate).format('DD') + ' to ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						}
 						vm.mergeListing[list.link].fromToDate.push(date);
 						vm.mergeListing[list.link].keys = [key];
 					} else {
-						var date = moment(vm.listings[key].fromDate).format('DD MMM') + ' - ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						var date = '';
+						if (moment(vm.listings[key].fromDate).format('DD MMM') == moment(vm.listings[key].toDate).format('DD MMM')) {
+							date = moment(vm.listings[key].fromDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						}
+						else {
+							date = moment(vm.listings[key].fromDate).format('DD') + ' to ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						}
 						vm.mergeListing[list.link].fromToDate.push(date);
 						vm.mergeListing[list.link].keys.push(key);
 					}
@@ -192,11 +204,9 @@ vcancyApp
 					status: 'Not Listed',
 					listOnCraigslist: false
 				}
-				if (vm.properties[vm.propertySelected].units == 'multiple') {
-					vm.units = _.map(vm.selectedUnitId, 'unit');
-					if (vm.units.length == 0) {
-						return;
-					}
+				vm.units = _.map(vm.selectedUnitId, 'unit');
+				if (vm.units.length == 0) {
+					return;
 				}
 				if (vm.units.length > 0) {
 					vm.units.forEach(function (unit) {
@@ -296,7 +306,6 @@ vcancyApp
 					getListings();
 				});
 			}
-			vm.availableColors = ['Red', 'Green', 'Blue', 'Yellow', 'Magenta', 'Maroon', 'Umbra', 'Turquoise'];
 
 			vm.toggleCraigsList = function (listingId, value, $event) {
 				vm.loader = 1;
@@ -334,17 +343,17 @@ vcancyApp
 					scope: $scope
 				});
 			};
-
+			
 			vm.toggleListOnCraglist = function (keys) {
 				keys.forEach(function (key) {
-					if (vm.listings[key].listOnCraglist) {
-						vm.listings[key].listOnCraglist = !vm.listings[key].listOnCraglist;
+					if (vm.listings[key].listOnCraigslist) {
+						vm.listings[key].listOnCraigslist = !vm.listings[key].listOnCraigslist;
 					}
 					else {
-						vm.listings[key].listOnCraglist = true;
+						vm.listings[key].listOnCraigslist = true;
 					}
+					vm.toggleCraigsList(key, vm.listings[key].listOnCraigslist)
 				});
-				vm.generateMergeListing();
 			};
 
 			vm.checkIsIncomplete = function (propId, unitId) {

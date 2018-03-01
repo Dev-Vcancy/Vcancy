@@ -49,7 +49,7 @@
                         <ui-select multiple tagging tagging-label="(custom 'new' label)" style="min-width: 150px;border: 1px solid #ccc;" ng-model="newschedulectrl.selectedUnitId"
                           theme="bootstrap" sortable="true" ng-disabled="ctrl.disabled">
                           <ui-select-match placeholder="&nbsp;&nbsp;&nbsp;&nbsp;Select Units...">{{$item.unit}}</ui-select-match>
-                          <ui-select-choices repeat="unit in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists">
+                          <ui-select-choices repeat="unit in newschedulectrl.properties[newschedulectrl.propertySelected].unitlists | availableunit">
                             {{unit.unit}}
                           </ui-select-choices>
                         </ui-select>
@@ -217,7 +217,12 @@
                       <input type="checkbox" ng-model="newschedulectrl.mergeListing[key].inputCheck" />
                     </td>
                     <td>{{value.unitID}} - {{newschedulectrl.properties[value.propertyId].address}}</td>
-                    <td>{{value.fromToDate.join(',')}}</td>
+                    <td>
+                      <span ng-repeat="dt in value.fromToDate">
+                        {{dt}}
+                        <br/>
+                      </span>
+                    </td>
                     <td>
                       <a ng-href='{{value.link}}' target="_blank">{{value.link}}</a>
                     </td>
@@ -227,7 +232,7 @@
                       <!-- <span  ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
                         class="text-primary">Link to Craigslist listing</span> -->
                       <div class="toggle-switch mt-4" ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.toggleListOnCraglist(value.keys)">
-                        <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraglist">
+                        <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
                         <label class="ts-helper" style="border-radius: 8px !important"></label>
                       </div>
                     </td>

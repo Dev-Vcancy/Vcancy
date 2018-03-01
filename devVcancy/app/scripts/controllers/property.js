@@ -505,9 +505,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
                                 propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
                                     //localStorage.setItem("propID", snapshot.key);
-                                    if (units == 'multiple') {
-                                        vm.opensuccesssweet(snapshot.key);
-                                    }
+                                    vm.opensuccesssweet(snapshot.key);
                                     $state.go('editprop', { propId: snapshot.key }) //unitlist
                                     // $rootScope.$apply(function () {
                                     //     console.log(units);
@@ -619,9 +617,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         console.log(data)
                         console.log("Insert Data successfully!");
                         propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
-                            if (units == 'multiple') {
-                                vm.opensuccesssweet(snapshot.key);
-                            }
+                            vm.opensuccesssweet(snapshot.key);
                             $state.go('editprop', { propId: snapshot.key })
                             // $rootScope.$apply(function () {
                             //     console.log(units);
@@ -2062,13 +2058,10 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             var keyToCheck = [
                 "address",
                 "city",
-                "location",
-                "name",
                 "postalcode",
                 "country",
                 "rent",
                 "sqft",
-                "state",
                 "status",
                 "unit",
                 "type",
@@ -2152,7 +2145,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                     var units = [];
                     var headers = rows[0].split(",");
                     var totalrowunits = 0;
-                    for (var i = 1; i < rows.length -1; i++) {
+                    for (var i = 1; i < rows.length - 1; i++) {
 
                         var obj = {};
                         var currentline = rows[i].split(",");
