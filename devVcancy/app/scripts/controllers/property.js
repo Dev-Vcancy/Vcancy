@@ -2194,10 +2194,10 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                             }
                             if (aminitiesHeaderKeys.includes(headerkey)) {
                                 actualHeaderKey = 'Aminities';
-                            } else if (headerkey === 'cats ok') {
+                            } else if (headerkey === 'catsok') {
                                 actualHeaderKey = 'cats';
-                            } else if (headerkey === 'Dogs ok') {
-                                actualHeaderKey = 'Dogs';
+                            } else if (headerkey === 'dogsok') {
+                                actualHeaderKey = 'dogs';
                             } else {
                                 actualHeaderKey = headerkey.trim();
                             }
@@ -2222,6 +2222,8 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                                     if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
                                     obj[actualHeaderKey].push('wheelchair')
                                 }
+                            } else if (headerkey === 'catsok' || headerkey === 'dogsok') {
+                                obj[actualHeaderKey] = currentline[j].toLowerCase() == 'yes' ? true : false
                             } else if (headerkey === 'status') {
                                 if (currentline[j] && currentline[j].toLowerCase() === "available soon") {
                                     obj['status'] = 'availablesoon';
