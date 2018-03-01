@@ -382,7 +382,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         // Go Back To View Property
         vm.backtoviewprop = function (value = '') {
             if (value != '') {
-                if (confirm('If you go back without update value your changes will be lost!')) {
+                if (confirm('If you go back without updating values, your changes will be lost!')) {
                     $state.go('viewprop');
                 } else {
                     return false;
@@ -615,7 +615,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         name: name
                     }).then(function (data) {
                         console.log(data)
-                        console.log("Insert Data successfully!");
+                        console.log("Data added successfully!");
                         propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
                             vm.opensuccesssweet(snapshot.key);
                             $state.go('editprop', { propId: snapshot.key })
@@ -740,24 +740,24 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 }
 
                                 if (headerkey == 'unit' && currentline[j] == '') {
-                                    alert("Unit number must be value Please make as CSV data as per instructions");
+                                    alert("Unit number must be a value. Please follow instructions in the spreadsheet");
                                     return false;
                                 }
                                 if (headerkey == 'rent' && currentline[j] == '') {
-                                    alert("Rent must be value Please make as CSV data as per instructions");
+                                    alert("Rent must be a value. Please follow instructions in the spreadsheet");
                                     return false;
                                 }
                                 if (headerkey == 'sqft' && currentline[j] == '') {
-                                    alert("Sqft must be value Please make as CSV data as per instructions");
+                                    alert("Sqft must be a value. Please follow instructions in the spreadsheet");
                                     return false;
                                 }
 
                                 if (headerkey == 'status' && currentline[j] == '') {
-                                    alert("status must be value Please make as CSV data as per instructions");
+                                    alert("Status must be a value. Please follow instructions in the spreadsheet");
                                     return false;
                                 }
                                 if (headerkey == 'amenities' && currentline[j] == '') {
-                                    alert("Amenities must be value Please make as CSV data as per instructions");
+                                    alert("Amenities must be a value. Please follow instructions in the spreadsheet");
                                     return false;
                                 }
 
@@ -795,7 +795,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
                         if (vm.duplication(units) == true) {
-                            alert("Please check your unit number are duplicate.. ")
+                            alert("Duplicate unit numbers found in the file. Please check duplicate values.")
                             return false;
                         }
 
@@ -811,7 +811,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             $rootScope.success = "Units added successfully!";
                             //setTimeout(function(){ $state.go('viewprop'); }, 2000);
                         }, function (error) {
-                            $rootScope.error = "Please Check your CSV file Having issue with the data!";
+                            $rootScope.error = "Please check your file. Multiple errors found with the data.";
                         });
                     }
 
@@ -858,7 +858,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         }
 
                         if (vm.duplication(units) == true) {
-                            alert("Please check your unit number are duplicate.. ")
+                            alert("Duplicate unit numbers found in the file. Please check duplicate values.")
                             return false;
                         }
 
@@ -870,7 +870,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                             $rootScope.success = "Units added successfully!";
                             setTimeout(function () { $state.go('viewprop'); }, 2000);
                         }, function (error) {
-                            $rootScope.error = "Please Check your CSV file Having issue with the data!";
+                            $rootScope.error = "Please check your file. Multiple errors found with the data.";
                         });
                     }
 
@@ -1233,15 +1233,15 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                     var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + snap.val().firstname + ' ' + snap.val().lastname + ',</h2><br> Your viewing request on property <em>' + vm.property_address + '</em> has been removed as landlord has deleted his property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                                     // Send Email
-                                    emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request removed from Vcancy', 'delproperty', emailData);
+                                    emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your viewing request has been removed from Vcancy', 'delproperty', emailData);
                                 });
                             });
                         })
 
                         swal({
-                            title: 'success!',
-                            text: 'Property delete successfully',
-                            type: 'success'
+                            title: 'Success!',
+                            text: 'Property deleted successfully',
+                            type: 'Success'
                         }, function () {
                             if (page === 'innerpage') {
                                 $state.go('viewprop');
@@ -1303,7 +1303,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                     var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + snap.val().firstname + ' ' + snap.val().lastname + ',</h2><br> Your viewing request on property <em>' + vm.property_address + '</em> has been removed as landlord has deleted his property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                                     // Send Email
-                                    emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request removed from Vcancy', 'delproperty', emailData);
+                                    emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your viewing request is removed from Vcancy', 'delproperty', emailData);
                                 });
                             });
                         })
@@ -1771,7 +1771,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     });
                 }
             }, function (error) {
-                if (confirm("Units Not added Please Try again!") == true) {
+                if (confirm("Units not added, please try again!") == true) {
                     return false;
                 }
             });
@@ -1826,7 +1826,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             }
 
             if (vm.duplication(number) == true) {
-                alert("Please check your unit number are duplicate.. ")
+                alert("Duplicate unit numbers found in the file. Please check duplicate values.")
                 /*$rootScope.$apply(function() {
                          $rootScope.error = "Please check your unit number are duplicate.. !";
                      });*/
@@ -2161,20 +2161,20 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                             }
 
                             if (headerkey == 'unit' && currentline[j] == '') {
-                                alert("Unit number must be value Please make as CSV data as per instructions");
+                                alert("Unit must be a value. Please follow instructions in the spreadsheet");
                                 return false;
                             }
                             if (headerkey == 'rent' && currentline[j] == '') {
-                                alert("Rent must be value Please make as CSV data as per instructions");
+                                alert("Rent must be a value. Please follow instructions in the spreadsheet");
                                 return false;
                             }
                             if (headerkey == 'sqft' && currentline[j] == '') {
-                                alert("Sqft must be value Please make as CSV data as per instructions");
+                                alert("Sqft must be a value. Please follow instructions in the spreadsheet");
                                 return false;
                             }
 
                             if (headerkey == 'status' && currentline[j] == '') {
-                                alert("status must be value Please make as CSV data as per instructions");
+                                alert("status must be a value. Please follow instructions in the spreadsheet");
                                 return false;
                             }
 
