@@ -243,7 +243,6 @@ vcancyApp
 				} else {
 					availabilities.push(availability);
 				}
-				return;
 				var promises = [];
 				var fbObj = firebase.database();
 				availabilities.forEach(function (availability) {
