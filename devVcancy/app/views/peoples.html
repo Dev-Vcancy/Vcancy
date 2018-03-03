@@ -22,6 +22,11 @@
 					<div class="col-sm-6">
 						<div class="row">
 							<div class="col-sm-12">
+								<label>
+										<strong>Select below to populate table</strong>
+								</label>
+							</div>
+							<div class="col-sm-12">
 								<!-- <div class="col-sm-4" ng-repeat="(key,w) in lappctrl.apppropaddress">
 											 <label class="checkbox checkbox-inline m-r-20">
 												<input type="checkbox" value="{{w.propID}}" checked="{{lappctrl.propcheck[w.propID]}}" ng-click="lappctrl.tablefilterdata(w.propID)">
@@ -670,6 +675,12 @@
 					</select>
 			</div>
 			<div class="col-xs-12 col-sm-6">
+				<div class="checkbox-div">
+					<label>	
+						<a href="https://s3.ca-central-1.amazonaws.com/vcancy-final/public/Sample_criminal%2C_credit_and_background_check_report.pdf" download="Sample_criminal%2C_credit_and_background_check_report.pdf">See Sample Report</a>
+					</label>
+				</div>
+				<br/>
 				<div class="checkbox-div">
 					<label>	
 						<input type="checkbox"  ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
