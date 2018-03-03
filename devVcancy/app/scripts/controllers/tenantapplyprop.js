@@ -22,6 +22,9 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		vm.proposeDiv = false;
 		vm.preScreeningAns = {};
 		vm.landlordData = {};
+
+		vm.proposeNewTime = {};
+
 		if (vm.userData) {
 			vm.registerUser.firstName = vm.userData.firstname;
 			vm.registerUser.lastName = vm.userData.lastname;
@@ -61,7 +64,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 			var slotsData = {};
 			_.forEach(listings, (value, key) => {
 				var fromDate = moment(value.fromDate);
-				var toDate = moment();
+				var toDate = moment(value.toDate);
 				var days = toDate.diff(fromDate, 'days');
 				for (var i = 0; i <= days; i++) {
 					let _fromDate = angular.copy(fromDate)
@@ -77,6 +80,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					}
 					slotsData[formattedDate] = _.uniq(slotsData[formattedDate]);
 				}
+				console.log('slotsData', slotsData)
 			});
 			$scope.$apply(function () {
 				vm.availableSlots = angular.copy(slotsData);
@@ -88,7 +92,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		vm.openproposemodal = function () {
 			vm.proposeDiv = !vm.proposeDiv;
 		};
-	
+
 		vm.formatDay = function (key) {
 			return moment(key, 'MM/DD/YYYY').format('ddd')
 		}
@@ -108,6 +112,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		function getScheduledProp() {
 			firebase.database().ref('propertiesSchedule/').orderByChild("propertyId").equalTo($stateParams.propId).once("value", function (snap) {
 				if (snap.val()) {
+					console.log('scheduleProp', snap.val());
 					var listings = snap.val();
 					vm.listings = angular.copy(listings);
 					vm.schudeledListing = 1;
@@ -165,9 +170,14 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				var fromTimeSlot = fromTime.format('hh:mm a');
 				var toTimeSlot = toTime.format('hh:mm a');
 				var preScreeningAns = angular.copy(vm.preScreeningAns)
+				var proposeNewTime = {};
+				if (Object.keys(vm.proposeNewTime).length > 0) {
+					proposeNewTime = angular.copy(vm.proposeNewTime);
+				}
+				vm.proposeNewTime = {};
 
 				// console.log(dateslot,fslot,tslot);
-
+				return;
 				var applypropObj = $firebaseAuth();
 				var applypropdbObj = firebase.database();
 				applypropdbObj.ref('applyprop/').push().set({
@@ -184,7 +194,8 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					timeRange: timeRange,
 					unitID: unitID,
 					units: unitID,
-					preScreeningAns: preScreeningAns
+					preScreeningAns: preScreeningAns,
+					proposeNewTime: proposeNewTime
 				}).then(function () {
 					$state.go('applicationThanks');
 					// $rootScope.success = 'Application for property successfully sent!';	
