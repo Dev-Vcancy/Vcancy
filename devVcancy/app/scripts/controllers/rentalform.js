@@ -144,13 +144,13 @@ vcancyApp
 
 
 			vm.dobopen = function ($event) {
-			
+
 				$event.preventDefault();
 				$event.stopPropagation();
 				vm.dobopened = true;
 			};
 			vm.dobopen1 = function ($event) {
-				
+
 				$event.preventDefault();
 				$event.stopPropagation();
 				vm.dobopened = false;
@@ -237,7 +237,7 @@ vcancyApp
 				vm.minor.push(minorlen);
 			}
 
-			
+
 
 			// to remove adult
 			vm.removeadult = function (slotindex) {
@@ -268,85 +268,85 @@ vcancyApp
 				console.log(vm.minor, vm.rentaldata);
 			}
 
-			$scope.something = function(form) {
-				
-		       
-		       if($("#test_"+form).val() == ''){
-		       	$("#index_"+form).addClass('has-error');
-		       }else{
-		       		$("#index_"+form).removeClass('has-error');
-		       }
-		    }
-			$scope.minorsomething = function(form) {
-				
-		       
-		       if($("#minortext_"+form).val() == ''){
-		       	$("#minor_"+form).addClass('has-error');
-		       }else{
-		       		$("#minor_"+form).removeClass('has-error');
-		       }
-		    }
-
-		    $scope.aacetext = function(form) {
-				
-		       
-		       if($("#aacetext_"+form).val() == ''){
-		       	$("#aace_"+form).addClass('has-error');
-		       }else{
-		       		$("#aace_"+form).removeClass('has-error');
-		       }
-		    }
+			$scope.something = function (form) {
 
 
-		    $scope.aapotext = function(form) {
-				
-		       
-		       if($("#aapotext_"+form).val() == ''){
-		       	$("#aapo_"+form).addClass('has-error');
-		       }else{
-		       		$("#aapo_"+form).removeClass('has-error');
-		       }
-		    }
+				if ($("#test_" + form).val() == '') {
+					$("#index_" + form).addClass('has-error');
+				} else {
+					$("#index_" + form).removeClass('has-error');
+				}
+			}
+			$scope.minorsomething = function (form) {
 
-		     $scope.aaeptext = function(form) {
-				
-		       
-		       if($("#aaeptext_"+form).val() == ''){
-		       	$("#aaep_"+form).addClass('has-error');
-		       }else{
-		       		$("#aaep_"+form).removeClass('has-error');
-		       }
-		    }
 
-		    $scope.aahowtext = function(form) {
-				
-		       
-		       if($("#aahowtext_"+form).val() == ''){
-		       	$("#aahow_"+form).addClass('has-error');
-		       }else{
-		       		$("#aahow_"+form).removeClass('has-error');
-		       }
-		    }
+				if ($("#minortext_" + form).val() == '') {
+					$("#minor_" + form).addClass('has-error');
+				} else {
+					$("#minor_" + form).removeClass('has-error');
+				}
+			}
 
-		    $scope.aagrstext = function(form) {
-				
-		       
-		       if($("#aagrstext_"+form).val() == ''){
-		       	$("#aagrs_"+form).addClass('has-error');
-		       }else{
-		       		$("#aagrs_"+form).removeClass('has-error');
-		       }
-		    } 
+			$scope.aacetext = function (form) {
 
-		    $scope.aaothrtext = function(form) {
-				
-		       
-		       if($("#aaothrtext_"+form).val() == ''){
-		       	$("#aaothr_"+form).addClass('has-error');
-		       }else{
-		       		$("#aaothr_"+form).removeClass('has-error');
-		       }
-		    }
+
+				if ($("#aacetext_" + form).val() == '') {
+					$("#aace_" + form).addClass('has-error');
+				} else {
+					$("#aace_" + form).removeClass('has-error');
+				}
+			}
+
+
+			$scope.aapotext = function (form) {
+
+
+				if ($("#aapotext_" + form).val() == '') {
+					$("#aapo_" + form).addClass('has-error');
+				} else {
+					$("#aapo_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aaeptext = function (form) {
+
+
+				if ($("#aaeptext_" + form).val() == '') {
+					$("#aaep_" + form).addClass('has-error');
+				} else {
+					$("#aaep_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aahowtext = function (form) {
+
+
+				if ($("#aahowtext_" + form).val() == '') {
+					$("#aahow_" + form).addClass('has-error');
+				} else {
+					$("#aahow_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aagrstext = function (form) {
+
+
+				if ($("#aagrstext_" + form).val() == '') {
+					$("#aagrs_" + form).addClass('has-error');
+				} else {
+					$("#aagrs_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aaothrtext = function (form) {
+
+
+				if ($("#aaothrtext_" + form).val() == '') {
+					$("#aaothr_" + form).addClass('has-error');
+				} else {
+					$("#aaothr_" + form).removeClass('has-error');
+				}
+			}
 
 
 			if (applicationID == 0) {
@@ -646,25 +646,25 @@ vcancyApp
 				}
 
 
-					function checkFile() {
-							if($('#uploadfile')[0].files[0]) {
-								var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();				
-								if($('#uploadfile')[0].files[0].size > 3145728) {
-									return 'File size should be 3 MB or less.'
-								} else if(!(_fileName.endsWith('.png')) 
-									&& !(_fileName.endsWith('.jpg'))
-									&& !(_fileName.endsWith('.pdf'))
-									&& !(_fileName.endsWith('.jpeg')))  {
-										return 'Invalid file type.'
-								}
-							}
+				function checkFile() {
+					if ($('#uploadfile')[0].files[0]) {
+						var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();
+						if ($('#uploadfile')[0].files[0].size > 3145728) {
+							return 'File size should be 3 MB or less.'
+						} else if (!(_fileName.endsWith('.png'))
+							&& !(_fileName.endsWith('.jpg'))
+							&& !(_fileName.endsWith('.pdf'))
+							&& !(_fileName.endsWith('.jpeg'))) {
+							return 'Invalid file type.'
 						}
-			var fileCheckMsg = checkFile();
-			if(fileCheckMsg) {
-				return window.alert(fileCheckMsg);
-			}
-			var externalemail = vm.submitemail  == undefined ? '': vm.submitemail;
-			console.log(externalappStatus);
+					}
+				}
+				var fileCheckMsg = checkFile();
+				if (fileCheckMsg) {
+					return window.alert(fileCheckMsg);
+				}
+				var externalemail = vm.submitemail == undefined ? '' : vm.submitemail;
+				console.log(externalappStatus);
 
 				var address = vm.propdata.address == undefined ? '' : vm.propdata.address;
 				var rent = vm.propdata.rent == undefined ? '' : vm.propdata.rent;
@@ -699,16 +699,16 @@ vcancyApp
 				var pets = vm.rentaldata.pets == undefined ? '' : vm.rentaldata.pets;
 				var petsdesc = vm.rentaldata.petsdesc == undefined ? '' : vm.rentaldata.petsdesc;
 				var smoking = vm.rentaldata.smoking == undefined ? '' : vm.rentaldata.smoking;
- 
+
 				// var file = $('#appfiles').val().split('\\').pop().split('/').pop();
 				// var filename = $('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime();
 				// var fileext = $('#appfiles').val().split('\\').pop().split('/').pop().split('.').pop().toLowerCase();
 				// var appfiles = "images/applicationuploads/"+filename+"."+fileext;
 
 				var appfiles = $('#appfiles').val();
-				var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-				var filepath = filename != '' ? "https://vcancy.ca/login/uploads/" + filename : appfiles;
-
+				var filename = $('#filename').val() === '' ? '' : Date.now() + '_' + $('#filename').val();
+				// var filepath = filename != '' ? "https://vcancy.ca/login/uploads/" + filename : appfiles;
+				var filepath = filename != '' ? "https://vcancy-final.s3.ca-central-1.amazonaws.com/rental-form-files/" + filename : appfiles;
 				console.log(filename, filepath, appfiles);
 
 				var appcurrentemployer = vm.rentaldata.appcurrentemployer == undefined ? '' : vm.rentaldata.appcurrentemployer;
@@ -1027,29 +1027,92 @@ vcancyApp
 				file = file.replace(/^data:image\/\w+;base64,/, "");
 				file = file.replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,", "");
 				// console.log(file,filename);
-
-				var req = {
-					method: 'POST',
-					url: config.sailsBaseUrl + 'fileupload/upload',
-					headers: {
-						'Content-Type': 'application/json',
-						'Access-Control-Allow-Origin': '*',
-						"Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
-					},
-					data: {
-						file: file,
-						filename: filename
-					}
-				}
-
-				$http(req).then(function successCallback(response) {
-					console.log(response);
-					console.log("Done");
-				}, function errorCallback(response) {
-					console.log("Fail");
+				var _file = $('#uploadfile')[0].files[0];
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
 				});
+				AWS.config.region = 'ca-central-1';
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+				filename = filename.replace(/\s/g, '');
+
+				var params = {
+					Key: 'rental-form-files/' + filename,
+					ContentType: _file.type,
+					Body: _file,
+					StorageClass: "STANDARD_IA",
+					ACL: 'authenticated-read'
+				};
+
+				bucket.upload(params).on('httpUploadProgress', function (evt) { })
+					.send(function (err, data) {
+						if (data && data.Location) {
+							console.log('file uploaded success');
+						} else {
+							console.error('ERROR in file upload');
+						}
+					});
+				// var req = {
+				// 	method: 'POST',
+				// 	url: config.sailsBaseUrl + 'fileupload/upload',
+				// 	headers: {
+				// 		'Content-Type': 'application/json',
+				// 		'Access-Control-Allow-Origin': '*',
+				// 		"Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+				// 	},
+				// 	data: {
+				// 		file: file,
+				// 		filename: filename
+				// 	}
+				// }
+
+				// $http(req).then(function successCallback(response) {
+				// 	console.log(response);
+				// 	console.log("Done");
+				// }, function errorCallback(response) {
+				// 	console.log("Fail");
+				// });
 			};
 
+			vm.viewFile = function (location) {
+				if (!location) {
+					return;
+				}
+				var _params = {
+					Bucket: 'vcancy-final',
+					Key: location.split(`https://vcancy-final.s3.ca-central-1.amazonaws.com/`)[1],
+					Expires: 60 * 5
+				}
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
+				});
+				AWS.config.region = 'ca-central-1';
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+
+				bucket.getSignedUrl('getObject', _params, function (err, data) {
+					if (err) return console.log(err, err.stack); // an error occurred
+
+					// var type = 'application/pdf';
+					var extension = location.substring(location.lastIndexOf('.'));
+					// var file = new Blob([data], { type: 'application/pdf' });
+					// saveAs(file, 'filename.pdf');
+					// var url = URL.createObjectURL(new Blob([data]));
+					var a = document.createElement('a');
+					a.href = data;
+					a.download = location.substr(location.lastIndexOf('/') + 1);
+					a.target = '_blank';
+					a.click();
+				});
+			}
 
 			vm.savechanges = function () {
 				vm.draft = "true";
@@ -1060,19 +1123,19 @@ vcancyApp
 
 			vm.printApp = function () {
 				var css = '@page { size: landscape; }',
-				    head = document.head || document.getElementsByTagName('head')[0],
-				    style = document.createElement('style');
+					head = document.head || document.getElementsByTagName('head')[0],
+					style = document.createElement('style');
 
-					style.type = 'text/css';
-					style.media = 'print';
+				style.type = 'text/css';
+				style.media = 'print';
 
-					if (style.styleSheet){
-					  style.styleSheet.cssText = css;
-					} else {
-					  style.appendChild(document.createTextNode(css));
-					}
+				if (style.styleSheet) {
+					style.styleSheet.cssText = css;
+				} else {
+					style.appendChild(document.createTextNode(css));
+				}
 
-					head.appendChild(style);
+				head.appendChild(style);
 				$window.print();
 			}
 
