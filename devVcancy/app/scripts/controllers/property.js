@@ -1946,8 +1946,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
         vm.opensuccesssweet = function (value) {
             swal({
-                title: "Success!",
-                text: "Your Property is created successfully!",
+                title: "Your Property is created successfully!",
+                text: "Press Ok to add units",
                 type: "success",
             });
             // alert('Property Created successfully!');
@@ -2068,10 +2068,18 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 "title",
                 "description"
             ]
+
             for (var i = 0; i < keyToCheck.length; i++) {
                 if (!value[keyToCheck[i]]) {
                     return true;
                 }
+            }
+
+            if (!value.images) {
+                return true;
+            }
+            if (value.images.length <= 0) {
+                return true;
             }
             return false;
         }
@@ -2149,7 +2157,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
 
                         var obj = {};
                         var currentline = rows[i].split(",");
-                        if(currentline.length < 2){
+                        if (currentline.length < 2) {
                             continue;
                         }
 
