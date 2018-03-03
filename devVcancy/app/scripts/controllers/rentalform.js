@@ -101,6 +101,10 @@ vcancyApp
 			vm.rentaldata.vehiclemodel = '';
 			vm.rentaldata.vehicleyear = '';
 
+			vm.rentaldata.vehiclemake2 = '';
+			vm.rentaldata.vehiclemodel2 = '';
+			vm.rentaldata.vehicleyear2 = '';
+
 			vm.rentaldata.emergencyname = '';
 			vm.rentaldata.emergencyphone = '';
 
@@ -383,6 +387,9 @@ vcancyApp
 								vm.rentaldata.vehiclemake = value.vehiclemake;
 								vm.rentaldata.vehiclemodel = value.vehiclemodel;
 								vm.rentaldata.vehicleyear = value.vehicleyear;
+								vm.rentaldata.vehiclemake2 = value.vehiclemake2;
+								vm.rentaldata.vehiclemodel2 = value.vehiclemodel2;
+								vm.rentaldata.vehicleyear2 = value.vehicleyear2;
 								vm.rentaldata.emergencyname = value.emergencyname;
 								vm.rentaldata.emergencyphone = value.emergencyphone;
 								vm.rentaldata.refone_name = value.refone_name;
@@ -539,6 +546,9 @@ vcancyApp
 							vm.rentaldata.vehiclemake = value.vehiclemake;
 							vm.rentaldata.vehiclemodel = value.vehiclemodel;
 							vm.rentaldata.vehicleyear = value.vehicleyear;
+							vm.rentaldata.vehiclemake2 = value.vehiclemake2;
+							vm.rentaldata.vehiclemodel2 = value.vehiclemodel2;
+							vm.rentaldata.vehicleyear2 = value.vehicleyear2;
 							vm.rentaldata.emergencyname = value.emergencyname;
 							vm.rentaldata.emergencyphone = value.emergencyphone;
 							vm.rentaldata.refone_name = value.refone_name;
@@ -713,6 +723,10 @@ vcancyApp
 				var vehiclemodel = vm.rentaldata.vehiclemodel == undefined ? '' : vm.rentaldata.vehiclemodel;
 				var vehicleyear = vm.rentaldata.vehicleyear == undefined ? '' : vm.rentaldata.vehicleyear;
 
+				var vehiclemake2 = vm.rentaldata.vehiclemake2 == undefined ? '' : vm.rentaldata.vehiclemake2;
+				var vehiclemodel2 = vm.rentaldata.vehiclemodel2 == undefined ? '' : vm.rentaldata.vehiclemodel2;
+				var vehicleyear2 = vm.rentaldata.vehicleyear2 == undefined ? '' : vm.rentaldata.vehicleyear2;
+
 				var emergencyname = vm.rentaldata.emergencyname == undefined ? '' : vm.rentaldata.emergencyname;
 				var emergencyphone = vm.rentaldata.emergencyphone == undefined ? '' : vm.rentaldata.emergencyphone;
 
@@ -797,6 +811,10 @@ vcancyApp
 						vehiclemake: vehiclemake,
 						vehiclemodel: vehiclemodel,
 						vehicleyear: vehicleyear,
+
+						vehiclemake2: vehiclemake2,
+						vehiclemodel2: vehiclemodel2,
+						vehicleyear2: vehicleyear2,
 
 						emergencyname: emergencyname,
 						emergencyphone: emergencyphone,
@@ -913,6 +931,10 @@ vcancyApp
 						vehiclemake: vehiclemake,
 						vehiclemodel: vehiclemodel,
 						vehicleyear: vehicleyear,
+
+						vehiclemake2: vehiclemake2,
+						vehiclemodel2: vehiclemodel2,
+						vehicleyear2: vehicleyear2,
 
 						emergencyname: emergencyname,
 						emergencyphone: emergencyphone,
