@@ -163,8 +163,8 @@
                 </div>
 
               </div>
-              <div class="col-sm-6 text-center" style="margin:auto;">
-                <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+              <div class="col-sm-6 text-center">
+                <div ui-calendar="uiConfig.calendar" ng-model="eventSources" style="min-width:135%"></div>
               </div>
             </div>
           </div>
@@ -381,7 +381,7 @@
                 <div class="form-group">
               
                     <label class='m-0'>Specific area:</label>
-                    <input required="" name="address" ng-model="selectedUnitDetail.data.specificArea" type="text" class="form-control original-form-control" id="" placeholder="">
+                    <input name="address" ng-model="selectedUnitDetail.data.specificArea" type="text" class="form-control original-form-control" id="" placeholder="">
                   
                 </div>
             </div>

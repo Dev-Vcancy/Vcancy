@@ -179,7 +179,18 @@ vcancyApp
 				$.map(vm.listings, function (value, key) {
 					value.inputCheck = vm.selectedAllListing;
 				});
-			}
+			};
+
+			vm.checkForDuplicate = function (currentUnit) {
+				for (var i in vm.listings) {
+					var value = vm.listings[i];
+					if (value.propertyId == currentUnit.propertyId && value.unitID == currentUnit.unitID
+						&& value.fromDate == currentUnit.fromDate && value.fromTime == currentUnit.fromTime
+						&& value.toDate == currentUnit.toDate && value.toTime == currentUnit.toTime) {
+						return true;
+					}
+				}
+			};
 
 			vm.addAvailability = function ($event) {
 				$event.preventDefault();
@@ -187,7 +198,6 @@ vcancyApp
 					return;
 				}
 				var availabilities = [];
-
 				let url = 'https://vcancy.ca/login/#/applyproperty/'
 				if (window.location.host.startsWith('localhost')) {
 					url = 'http://localhost:9000/#/applyproperty/'
@@ -208,18 +218,32 @@ vcancyApp
 				if (vm.units.length == 0) {
 					return;
 				}
+				var errorText = ''
 				if (vm.units.length > 0) {
 					vm.units.forEach(function (unit) {
 						var data = {
 							unitID: unit
-						}
+						};
 						var _unitAvailability = Object.assign(data, availability);
-						_unitAvailability.link = _unitAvailability.link + '?unitId=' + unit
-						availabilities.push(_unitAvailability);
+						_unitAvailability.link = _unitAvailability.link + '?unitId=' + unit;
+						var isDuplicateEntry = vm.checkForDuplicate(_unitAvailability);
+						if (!isDuplicateEntry) {
+							availabilities.push(_unitAvailability);
+						} else {
+							errorText += 'Duplicate entry found for ' + unit+', ';
+						}
 					});
+					if(errorText != ''){
+						swal({
+							title: 'Some units cannot be saved',
+                            text:errorText,
+                            type: 'error'
+						});
+					}
 				} else {
 					availabilities.push(availability);
 				}
+				return;
 				var promises = [];
 				var fbObj = firebase.database();
 				availabilities.forEach(function (availability) {
@@ -343,7 +367,7 @@ vcancyApp
 					scope: $scope
 				});
 			};
-			
+
 			vm.toggleListOnCraglist = function (keys) {
 				keys.forEach(function (key) {
 					if (vm.listings[key].listOnCraigslist) {
