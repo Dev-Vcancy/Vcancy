@@ -235,6 +235,10 @@
                         <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
                         <label class="ts-helper" style="border-radius: 8px !important"></label>
                       </div>
+                      <div class="text-primary hover-color" style='cursor:pointer' ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)"
+                        ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)">
+                        <span>Edit Details</span>
+                      </div>
                     </td>
                     <td>{{value.status}}</td>
                   </tr>
@@ -313,6 +317,7 @@
        <form  role="form" enctype="multipart/form-data" method="post" >
         <div class="row">
           <div class="col text-right">
+            <span style="font-size:small" ng-hide="selectedUnitDetail.data.images.length>0">upload at least one image</span>
               <button class="btn bgm-teal btn-sm btn-round waves-effect" ng-click="openImageModal()" ng-if="selectedUnitDetail.data.images.length>0"> View images({{selectedUnitDetail.data.images?selectedUnitDetail.data.images.length:0}}) </button>
             <label class="btn bgm-blue btn-sm btn-round waves-effect">
                 Upload images <small>(max 24)</small>
@@ -425,7 +430,7 @@
                 <div class="form-group">
               
                     <label class='m-0'>Property Type:</label>
-                    <select chosen="" class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.type" data-placeholder="Prop type" class="">
+                    <select required class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.type" data-placeholder="Prop type" class="">
                             <option value="">Select (Required)</option>
                             <option value="house">House</option>
                             <option value="townhouse">Town House</option>
@@ -493,7 +498,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class='m-0'>Description:</label>
-                    <textarea ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" style="resize: vertical;"/>
+                    <textarea required ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" style="resize: vertical;"/>
                 </div>
             </div>
           </div>
@@ -530,7 +535,8 @@
                 <div class="form-group">
             
                     <label class='m-0'>Phone:</label>
-                    <input name="address"   ng-model="selectedUnitDetail.data.phone" type="text" class="form-control original-form-control" id="" placeholder="">
+                    <input name="address" ng-model="selectedUnitDetail.data.phone" type="text" ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
+                    class="form-control original-form-control" id="" placeholder="">
                   
                 </div>
             </div>

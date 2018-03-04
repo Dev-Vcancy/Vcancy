@@ -36,6 +36,7 @@
                       </select>
                     </div>
                     <div class="col text-right">
+                        <span style="font-size:small" ng-hide="selectedUnitDetail.data.images.length>0">upload at least one image</span>
                       <button class="btn bgm-teal btn-sm btn-round waves-effect" ng-click="openImageModal()" ng-if="selectedUnitDetail.data.images.length>0"> View images({{selectedUnitDetail.data.images?selectedUnitDetail.data.images.length:0}}) </button>
                       <label class="btn bgm-blue btn-sm btn-round">
                           Upload images <small>(max 24)</small>
@@ -148,7 +149,7 @@
                           <div class="form-group">
                         
                               <label class='m-0'>Property Type:</label>
-                              <select chosen="" class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.type" data-placeholder="Prop type" class="">
+                              <select required class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.type" data-placeholder="Prop type" class="">
                                       <option value="">Select (Required)</option>
                                       <option value="house">House</option>
                                       <option value="townhouse">Town House</option>
@@ -216,7 +217,7 @@
                       <div class="col-sm-12">
                           <div class="form-group">
                               <label class='m-0'>Description:</label>
-                              <textarea ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" style="resize: vertical;"/>
+                              <textarea required ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" style="resize: vertical;"/>
                           </div>
                       </div>
                     </div>
@@ -398,7 +399,7 @@
                   <li role="presentation" ng-class="{'active':tab===1}">
                     <a href ng-click="tab = 1" data-toggle="tab" aria-expanded="true">Property</a>
                   </li>
-                  <li role="presentation"  ng-class="{'active':tab===2}">
+                  <li role="presentation" ng-class="{'active':tab===2}">
                     <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true">Units</a>
                   </li>
                 </ul>
@@ -449,8 +450,8 @@
                               </div> -->
                               <div class="form-group fg-float">
                                 <div class="fg-line">
-                                  <input type="number" ng-model="propctrl.prop.noofunits" ng-required="propctrl.prop.units == 'multiple'"
-                                    name="noofunits" class="form-control w-100 phone" id="" placeholder="Address" min="1">
+                                  <input type="number" ng-model="propctrl.prop.noofunits" ng-required="propctrl.prop.units == 'multiple'" name="noofunits"
+                                    class="form-control w-100 phone" id="" placeholder="Address" min="1">
                                   <label class="fg-label" for="text">No of Units:</label>
                                 </div>
                               </div>
