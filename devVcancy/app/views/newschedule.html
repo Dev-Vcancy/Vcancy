@@ -228,7 +228,7 @@
                     </td>
                     <td class="text-center">
                       <span ng-if="value.unitID && newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
-                        class="text-primary">Incomplete listing details</span>
+                        class="text-primary hover-color" style='cursor:pointer'>Incomplete listing details</span>
                       <!-- <span  ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
                         class="text-primary">Link to Craigslist listing</span> -->
                       <div class="toggle-switch mt-4" ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.toggleListOnCraglist(value.keys)">
@@ -493,7 +493,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class='m-0'>Description:</label>
-                    <textarea ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" />
+                    <textarea ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" style="resize: vertical;"/>
                 </div>
             </div>
           </div>
@@ -577,7 +577,7 @@
               <div class="col-sm-12">
                   <div class="form-group">
                       <label class='m-0'>Amenities:</label>
-                      <textarea ng-model="selectedUnitDetail.data.aminities" rows="5"  class="form-control original-form-control" 
+                      <textarea ng-model="selectedUnitDetail.data.aminities" style="resize: vertical;"  class="form-control original-form-control" 
                       
 placeholder="Rooms and Interior
 .Hardwood floors
@@ -601,6 +601,15 @@ Kitchen and Bath
   </div>
 </form>
 </div>
+<style>
+  input.ng-invalid {
+    border-color: red !important;
+  }
+
+  input.ng-touched.ng-valid {
+    border-color: green !important;
+  }
+</style>
 </script>
 
 <script type="text/ng-template" id="prescremingquestions.html">

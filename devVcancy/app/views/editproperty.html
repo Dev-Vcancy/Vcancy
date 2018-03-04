@@ -216,7 +216,7 @@
                       <div class="col-sm-12">
                           <div class="form-group">
                               <label class='m-0'>Description:</label>
-                              <textarea ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" />
+                              <textarea ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" style="resize: vertical;"/>
                           </div>
                       </div>
                     </div>
@@ -265,7 +265,7 @@
                         <div class="form-group">
                     
                             <label class='m-0'>Extension number:</label>
-                            <input required="" name="address"  ng-model="selectedUnitDetail.data.extensionNumber" type="text" class="form-control original-form-control" id="" placeholder="">
+                            <input name="address"  ng-model="selectedUnitDetail.data.extensionNumber" type="text" class="form-control original-form-control" id="" placeholder="">
                           
                         </div>
                     </div>
@@ -304,7 +304,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class='m-0'>Amenities and Features:</label>
-                                <textarea ng-model="selectedUnitDetail.data.otherAminities" rows="5"  class="form-control original-form-control" 
+                                <textarea ng-model="selectedUnitDetail.data.otherAminities" style="resize: vertical;" rows="5"  class="form-control original-form-control" 
                                 
  placeholder="Rooms and Interior
       .Hardwood floors
@@ -328,6 +328,15 @@
             </div>
         </form>
         </div>
+        <style>
+          input.ng-invalid {
+            border-color: red !important;
+          }
+        
+          input.ng-touched.ng-valid {
+            border-color: green !important;
+          }
+        </style>
     </script>
           <script type="text/ng-template" id="myModalContent1.html">
             <div class="profile_model_popup">
