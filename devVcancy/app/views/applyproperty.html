@@ -23,10 +23,10 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<input type="text" class="custom-form-element" ng-model="applyctrl.signIn.email" placeholder="email" required/>
+						<input type="text" class="custom-form-element" ng-model="applyctrl.signIn.email" placeholder="Email" required/>
 					</div>
 					<div class="form-group mt-3">
-						<input type="password" class="custom-form-element" ng-model="applyctrl.signIn.password" placeholder="password" required/>
+						<input type="password" class="custom-form-element" ng-model="applyctrl.signIn.password" placeholder="Password" required/>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -75,8 +75,8 @@
 									,{{applyctrl.selectedUnit.sqft}} sqft</div>
 								<div class="row mt-3">
 									<div id="imgDiv" style="position:relative;width:38%;color:lightgray">
-										<img src="{{applyctrl.propData.propimg?applyctrl.propData.propimg:'../assets/pages/img/no_image_found.jpg'}}"
-										 class="img-responsive pic-bordered image" />
+										<img src="{{applyctrl.propData.propimg?applyctrl.propData.propimg:'../assets/pages/img/no_image_found.jpg'}}" class="img-responsive pic-bordered image"
+										/>
 									</div>
 
 								</div>
@@ -93,7 +93,7 @@
 								<div class="row mt-3">Pets : Cats - {{applyctrl.selectedUnit.cats ? 'YES':'NO'}} , Dogs - {{applyctrl.selectedUnit.dogs? 'YES':'NO'}}</div>
 								<div class="row mt-3">Lease Terms : {{applyctrl.selectedUnit.leaseLength}}</div>
 								<div class="row mt-3">Amenities : {{applyctrl.selectedUnit.Aminities.join(',')}} </div>
-								<div class="row mt-3">
+								<div class="row mt-3" ng-if="applyctrl.selectedUnit.images.length>0">
 									<h4>Images</h4>
 								</div>
 								<div class="row mt-3">
@@ -380,7 +380,10 @@
 											 class="form-control original-form-control" required/>
 										</div>
 										<div class="col-sm-6 mb-3">
-											<input type="number" placeholder="Phone" id="phone" name="phone" ng-model="applyctrl.registerUser.phone" class="form-control original-form-control"
+											<input type="number" placeholder="Phone" id="phone" name="phone" 
+											ng-model="applyctrl.registerUser.phone" class="form-control original-form-control"
+											ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
+											ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"
 											/>
 										</div>
 										<!-- <div class="col-sm-12 mb-3 text-center">
@@ -392,10 +395,10 @@
 								<ng-form role="form" name="scheduleForm" novalidate>
 									<div class="row mt-3 p-20" style="border:1px solid #c2cad8">
 										<div class="col-sm-12 mt-3" ng-repeat="ques in applyctrl.landlordData.screeningQuestions">
-											<input type='date' ng-if="ques.isChecked && ques.id == 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' ng-model="applyctrl.preScreeningAns[ques.id]" 
-											class="form-control original-form-control" required/>
-											<input type="text" ng-if="ques.isChecked && ques.id != 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' placeholder="{{ques.label}}" ng-model="applyctrl.preScreeningAns[ques.id]"
+											<input type='date' ng-if="ques.isChecked && ques.id == 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' ng-model="applyctrl.preScreeningAns[ques.id]"
 											 class="form-control original-form-control" required/>
+											<input type="text" ng-if="ques.isChecked && ques.id != 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' placeholder="{{ques.label}}"
+											 ng-model="applyctrl.preScreeningAns[ques.id]" class="form-control original-form-control" required/>
 										</div>
 									</div>
 									<div class="row mt-3 p-20">

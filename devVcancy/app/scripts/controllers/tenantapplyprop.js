@@ -299,7 +299,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				templateUrl: 'signin.html',
 				backdrop: 'static',
 				scope: $scope,
-				size: 'sm'
+				size: 'md'
 			});
 		};
 		vm.signInFunction = function (userdetails) {
