@@ -1745,7 +1745,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             if (hasDuplicateIds) {
                 swal({
                     title: "Error!",
-                    text: "Duplicate unit number/s added, please check unit # column",
+                    text: "Duplicate unit number/s added, please check Unit # column",
                     type: "error",
                 });
                 return;
@@ -1766,7 +1766,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     vm.prop.totalunits = unitlists.length;
                     swal({
                         title: "Success!",
-                        text: "Unit saved successfully.",
+                        text: "Unit/s saved successfully.",
                         type: "success",
                     });
                 }
@@ -1914,7 +1914,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     return false;
                 }
             }, function (error) {
-                if (confirm("Units Not added Please Try again!") == true) {
+                if (confirm("Units not added, please try again!") == true) {
                     return false;
                 }
             });
@@ -1946,8 +1946,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
         vm.opensuccesssweet = function (value) {
             swal({
-                title: "Your Property is created successfully!",
-                text: "Press Ok to add units",
+                title: "Property added successfully, please add units",
+                text: "Click on the Units tab",
                 type: "success",
             });
             // alert('Property Created successfully!');
@@ -2264,7 +2264,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                     if (hasDuplicateId) {
                         swal({
                             title: 'Error',
-                            text: 'File has Duplicate unit ids.',
+                            text: 'File has duplicate unit IDs.',
                             type: 'error'
                         })
                         return;
@@ -2277,7 +2277,7 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                         $uibModalInstance.close();
                         swal({
                             title: 'Alert',
-                            text: 'File imported successfully. You need to save units otherwise changes will be lost',
+                            text: 'File imported successfully. You need to SAVE units otherwise changes will be lost.',
                             type: 'success'
                         })
                         $scope.loader = 0;
