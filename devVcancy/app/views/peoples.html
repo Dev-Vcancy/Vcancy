@@ -183,21 +183,21 @@
 					<div class="col-sm-12">
 					<div class="edit-div-hover mb-3" id="imgDiv" style="position:relative;width:25%;color:lightgray;left:37%" >
 	
-							<img src="{{ldProfilectrl.userData.companylogo?ldProfilectrl.userData.companylogo:'../assets/pages/img/no_image_found.jpg'}}"
-								class="img-responsive pic-bordered image" alt="">
-							<div class="middle">
+							<img src="{{lappctrl.userData.companylogo?lappctrl.userData.companylogo:'../assets/pages/img/no_image_found.jpg'}}"
+								class="img-responsive pic-bordered image" alt="" disabled>
+							<!-- <div class="middle">
 								<div class="text">
 									<label style="position:absolute;top:50%;left:50%;">
 										<i class="fa fa-pencil fa-2x"></i>
 										<input type="file" accept='image/*' file-upload style="display:none" />
 									</label>
 								</div>
-							</div>
+							</div> -->
 							</img>
 					</div>
 					</div>
 					<div class="col-sm-12">
-						<input type="text" class="form-control original-form-control" placeholder=" Company name, address and phone number" style="width:100%;" readonly/>
+						<input type="text" class="form-control original-form-control" ng-value="lappctrl.companyDetail()" placeholder=" Company name, address and phone number" style="width:100%;" readonly/>
 					</div>	
 				</div>
 	
@@ -210,7 +210,7 @@
 				<div class="checkbox-div">
 					
 					<div class="checkbox checkbox-clr">		
-						<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.PAPPD"/>
+						<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.PAPPD" disabled/>
 						<i class="input-helper"></i>					
 					</div>
 					<uib-accordion close-others="oneAtATime"> 
@@ -286,7 +286,7 @@
 				</div>
 				<div class="checkbox-div mb-3">
 						<div class="checkbox checkbox-clr">		
-								<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.CADDR"/>
+								<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.CADDR" disabled/>
 								<i class="input-helper"></i>					
 							</div>
 						
@@ -449,14 +449,14 @@
 				</div>
 				<div class="checkbox-div mb-3">
 						<div class="checkbox checkbox-clr">		
-								<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.ESIV"/>
+								<input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.ESIV" disabled/>
 								<i class="input-helper"></i>					
 						</div>
 						
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="Employment Status & Income Verification" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row">
-									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.ESIV1" readonly> Employment Status & Income Verification</div>
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.ESIV1" disabled readonly> Employment Status & Income Verification</div>
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-6">
@@ -531,14 +531,14 @@
 				</div>
 				<div class="checkbox-div mb-3">
 						<div class="checkbox checkbox-clr">		
-								<input type="checkbox"  ng-model="lappctrl.customRentalApplicationCheck.REF"/>
+								<input type="checkbox"  ng-model="lappctrl.customRentalApplicationCheck.REF" disabled/>
 								<i class="input-helper"></i>					
 						</div>
 						
 						<uib-accordion close-others="oneAtATime">
 							<div uib-accordion-group class="panel-default" heading="References" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
 								<div class="row">
-									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF1" readonly> References 1</div>
+									<div class="col-sm-12"><input type="checkbox" ng-model="lappctrl.customRentalApplicationCheck.REF1" disabled readonly> References 1</div>
 								</div>
 								<div class="row mt-3">
 									<div class="col-sm-4">
@@ -572,7 +572,7 @@
 				</div>
 				<div class="checkbox-div mb-3">
 						<div class="checkbox checkbox-clr">		
-								<input type="checkbox"  ng-model="lappctrl.customRentalApplicationCheck.UD"/>
+								<input type="checkbox"  ng-model="lappctrl.customRentalApplicationCheck.UD" disabled/>
 								<i class="input-helper"></i>					
 						</div>
 						
@@ -616,7 +616,7 @@
 							</div>
 
 							<div class="checkbox checkbox-clr">		
-									<input type="checkbox"  ng-model="lappctrl.customRentalApplicationCheck.TC"/>
+									<input type="checkbox"  ng-model="lappctrl.customRentalApplicationCheck.TC" disabled/>
 									<i class="input-helper"></i>					
 							</div>
 						

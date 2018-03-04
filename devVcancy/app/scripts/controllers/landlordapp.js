@@ -18,7 +18,7 @@ vcancyApp
 			}
 			vm.landLordID = landlordID;
 			var userData = JSON.parse(localStorage.getItem('userData'));
-
+			vm.userData = userData;
 			vm.propcheck = [];
 
 			vm.apppropaddress = [];
@@ -53,27 +53,28 @@ vcancyApp
 			};
 
 			vm.defaultRentalApplicationCheck = {
-				'PAPPD': false,
-				'CADDR': false,
+				'PAPPD': true,
+				'CADDR': true,
 				'PADDR': false,
 				'AAPPD': false,
 				'AAPP1': false,
 				'AAPP2': false,
-				'ESIV': false,
-				'ESIV1': false,
+				'ESIV': true,
+				'ESIV1': true,
 				'V1': false,
 				'EC': false,
 				'EC1': false,
-				'REF': false,
-				'REF1': false,
+				'REF': true,
+				'REF1': true,
 				'REF2': false,
-				'UD': false,
+				'UD': true,
 				'UDAAPP': false,
-				'TC': false
+				'TC': true
 			}
 
 			function refreshCustomRentalApplicationCheck() {
 				userData = JSON.parse(localStorage.getItem('userData'));
+				vm.userData = userData;
 				if (userData && userData.customRentalApplicationCheck) {
 					vm.customRentalApplicationCheck = userData.customRentalApplicationCheck;
 				} else {
@@ -84,6 +85,7 @@ vcancyApp
 
 			function refreshScreeningQuestions() {
 				userData = JSON.parse(localStorage.getItem('userData'));
+				vm.userData = userData;
 				if (userData && userData.screeningQuestions && userData.screeningQuestions.length !== 0) {
 					vm.screeningQuestions = userData.screeningQuestions;
 				} else {
@@ -117,6 +119,10 @@ vcancyApp
 					});
 				});
 			};
+
+			vm.companyDetail = function () {
+				return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
+			}
 
 
 			$scope.formatDay = function (key) {
