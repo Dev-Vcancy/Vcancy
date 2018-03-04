@@ -179,6 +179,7 @@ vcancyApp
 				$.map(vm.listings, function (value, key) {
 					value.inputCheck = vm.selectedAllListing;
 				});
+				vm.generateMergeListing();
 			};
 
 			vm.checkForDuplicate = function (currentUnit) {
@@ -230,14 +231,14 @@ vcancyApp
 						if (!isDuplicateEntry) {
 							availabilities.push(_unitAvailability);
 						} else {
-							errorText += 'Duplicate entry found for ' + unit+', ';
+							errorText += 'Duplicate entry found for ' + unit + ', ';
 						}
 					});
-					if(errorText != ''){
+					if (errorText != '') {
 						swal({
 							title: 'Some units cannot be saved',
-                            text:errorText,
-                            type: 'error'
+							text: errorText,
+							type: 'error'
 						});
 					}
 				} else {
@@ -326,6 +327,7 @@ vcancyApp
 					vm.selectedListings = [];
 					vm.listings = [];
 					vm.selectedAllListing = false;
+					vm.mergeListing = {};
 					getListings();
 				});
 			}
