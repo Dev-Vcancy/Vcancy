@@ -135,7 +135,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 							if (unit.unit == vm.unitId) return true;
 						})
 					}
-					console.log(vm.selectedUnit)
+					vm.selectedUnit.images.splice(0, 0, { Location: vm.propData.propimg });
 					getScheduledProp();
 					vm.getLandlord();
 				} else {
@@ -175,7 +175,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					proposeNewTime = angular.copy(vm.proposeNewTime);
 				}
 				vm.proposeNewTime = {};
-				
+
 				var applypropObj = $firebaseAuth();
 				var applypropdbObj = firebase.database();
 				applypropdbObj.ref('applyprop/').push().set({
