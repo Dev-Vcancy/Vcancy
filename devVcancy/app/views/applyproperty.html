@@ -66,21 +66,33 @@
 							<p><i class="zmdi zmdi-home zmdi-hc-fw"></i> {{applyctrl.applyprop.units}}  <span ng-hide="applyctrl.applyprop.units == ' '">-</span>  {{applyctrl.applyprop.address}}</p>
 						</div> -->
 						<div class="card-body card-padding">
-							<div class="col-sm-6">
+							<div class="col-sm-6" ng-init="applyctrl.selectedUnit.images.push({Location:applyctrl.propData.propimg})">
 								<div class="row mt-3">
-									<h4>{{applyctrl.propData.name}}
+									<h4 style="font-weight: 600;">{{applyctrl.propData.name}}
 										<span ng-if='applyctrl.selectedUnit.title'>-</span> {{applyctrl.selectedUnit.title}}</h4>
 								</div>
-								<div class="row mt-3"> {{applyctrl.unitId}} - {{applyctrl.selectedUnit.address}} {{applyctrl.selectedUnit.city}}, {{applyctrl.selectedUnit.postalcode}}</div>
-								<div class="row mt-3">${{applyctrl.selectedUnit.rent}} - {{applyctrl.selectedUnit.bedroom}} Bed ,{{applyctrl.selectedUnit.bathroom}} Bath
+								<div class="row mt-3" style="font-weight: 600;"> {{applyctrl.unitId}} - {{applyctrl.selectedUnit.address}} {{applyctrl.selectedUnit.city}}, {{applyctrl.selectedUnit.postalcode}}</div>
+								<div class="row mt-3" style="font-weight: 600;">${{applyctrl.selectedUnit.rent}} - {{applyctrl.selectedUnit.bedroom}} Bed ,{{applyctrl.selectedUnit.bathroom}} Bath
 									,{{applyctrl.selectedUnit.sqft}} sqft</div>
-								<div class="row mt-3" style="max-height:305px">
+								<!-- <div class="row mt-3" style="max-height:305px">
 									<div id="imgDiv" style="position:relative;width:38%;color:lightgray">
 										<img src="{{applyctrl.propData.propimg?applyctrl.propData.propimg:'../assets/pages/img/no_image_found.jpg'}}" class="img-responsive pic-bordered image"
 										/>
 									</div>
 					
-
+								
+								</div> -->
+								<div class="row mt-3" ng-if="applyctrl.selectedUnit.images.length>0">
+									<h4>Image galary</h4>
+								</div>
+								<div class="row">
+									<div style="height:300px;width:90%">
+										<div uib-carousel active="active" interval="5000" no-wrap="noWrapSlides">
+											<div uib-slide ng-repeat="slide in applyctrl.selectedUnit.images track by $index" index="$index">
+												<img ng-src="{{slide.Location}}" style="margin:auto;height:300px;width:90%;object-fit:contain">
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="row mt-3">Description</div>
 								<div class="row mt-3">
@@ -98,18 +110,6 @@
 								</div>
 								<div class='row ml-5'>
 									<p>{{applyctrl.selectedUnit.otherAminities}}</p>
-								</div>
-								<div class="row mt-3" ng-if="applyctrl.selectedUnit.images.length>0">
-									<h4>Image galary</h4>
-								</div>
-								<div class="row mt-3">
-									<div  style="height:400px;width:400px">
-										<div uib-carousel active="active" interval="5000" no-wrap="noWrapSlides">
-											<div uib-slide ng-repeat="slide in applyctrl.selectedUnit.images track by $index" index="$index">
-												<img ng-src="{{slide.Location}}" style="margin:auto;height:400px;width:400px;object-fit:contain">
-											</div>
-										</div>
-									</div>
 								</div>
 								<!-- <div class="form-group col-sm-1<div class="row">Property Name</div>2">
 									<input type="text" placeholder="Full name" readonly="true" ng-model=<div class="row">Property Name</div>"applyctrl.applyprop.name" required  class="form-control"/>
