@@ -5,8 +5,8 @@
 //=================================================
 
 vcancyApp
-	.controller('landlordappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', '$uibModal', '_', '$q',
-		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, $uibModal, _, $q) {
+	.controller('landlordappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', '$uibModal', '_', '$q', 'emailSendingService',
+		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, $uibModal, _, $q, emailSendingService) {
 			$scope.oneAtATime = true;
 			var vm = this;
 			vm.moment = moment;
@@ -18,13 +18,17 @@ vcancyApp
 			}
 			vm.landLordID = landlordID;
 			var userData = JSON.parse(localStorage.getItem('userData'));
+			var userEmail = localStorage.getItem('userEmail');
 			vm.userData = userData;
 			vm.propcheck = [];
 			vm.applyPropUsers = {};
 			vm.apppropaddress = [];
 			vm.originalPropAddress = [];
 			vm.loader = 1;
-
+			vm.creditCheck = {
+				reportType: "Both of the above $45/Report",
+				forTenant: ''
+			}
 			// Function to generate Random Id
 			function generateToken() {
 				var result = '',
@@ -94,17 +98,17 @@ vcancyApp
 			}
 			refreshScreeningQuestions();
 
-			vm.getUsers = function() {
-				if(vm.apppropaddressList) {
+			vm.getUsers = function () {
+				if (vm.apppropaddressList) {
 					vm.loader = 1;
 					var promises = [];
 					_.map(vm.apppropaddressList, function (value, key) {
-						var promiseObj = firebase.database().ref('users/'+value.tenantID).once("value");
+						var promiseObj = firebase.database().ref('users/' + value.tenantID).once("value");
 						promises.push(promiseObj);
 					});
 					$q.all(promises).then(function (data) {
 						var usersData = {};
-						data.forEach(function(dataObj) {
+						data.forEach(function (dataObj) {
 							usersData[dataObj.key] = dataObj.val();
 						});
 						vm.applyPropUsers = usersData;
@@ -112,7 +116,7 @@ vcancyApp
 						vm.loader = 0;
 					});
 				}
-			} 
+			}
 
 			vm.getProperty = function () {
 				vm.loader = 1;
@@ -146,11 +150,11 @@ vcancyApp
 				return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
 			}
 
-			vm.getUserName = function(id) {
-				if(!vm.applyPropUsers[id]) {
+			vm.getUserName = function (id) {
+				if (!vm.applyPropUsers[id]) {
 					return '-'
 				}
-				return vm.applyPropUsers[id].firstname + ' '+ vm.applyPropUsers[id].lastname;
+				return vm.applyPropUsers[id].firstname + ' ' + vm.applyPropUsers[id].lastname;
 			}
 
 			$scope.formatDay = function (key) {
@@ -295,20 +299,47 @@ vcancyApp
 
 			$scope.closeruncreditcriminalcheckModal = function () {
 				vm.runcreditcriminalcheck.close();
+				vm.creditCheck = {
+					reportType: "Both of the above $45/Report",
+					forTenant: ''
+				}
 			}
 
-			$scope.deleteAlert = function () {
+			$scope.submitCreditCheck = function () {
+				var tenantData = vm.applyPropUsers[vm.creditCheck.forTenant];
+				if(!tenantData) {
+					return;
+				}
 				swal({
 					title: "Are you sure?",
-					text: "Your will not be able to recover this imaginary file!",
-					type: "warning",
+					text: "Your account will be charged with the amount specified.",
+					type: "info",
 					showCancelButton: true,
-					confirmButtonClass: "btn-danger",
-					confirmButtonText: "Yes, delete it!",
+					confirmButtonClass: "bgm-teal",
+					confirmButtonText: "Yes",
 					closeOnConfirm: false
 				},
 					function () {
-						swal("Deleted!", "Your imaginary file has been deleted.", "success");
+						var userName = '';
+						if (userData) {
+							userName = userData.firstname + ' ' + (userData.lastname || '');
+						}
+						var tenantUserName = tenantData.firstname + ' ' + (tenantData.lastname || ''); 
+						var emailData = '<p>Hello, </p><p>Landlord - ' + userName + ' (' + userEmail + ') has requested credit report of tenant - ' + tenantUserName + ' (' + tenantData.email + ') for type - ' + vm.creditCheck.reportType + '</p>';
+						var toEmail = 'creditrequest@vcancy.com';
+						emailSendingService.sendEmailViaNodeMailer(toEmail, 'Landlord request for Credit/Criminal Report', 'Request Credit?criminal Check Report', emailData);
+						swal("", "Your request has been submitted successfully!", "success");
+						var requestData = {
+							tenantID: vm.creditCheck.forTenant,
+							tenantEmail: tenantData.email,
+							landlordID: landlordID,
+							landlordEmail: userEmail,
+							requestType: vm.creditCheck.reportType,
+							requestedOn: moment().format('x'),
+							status: 'PENDING'
+						}
+						firebase.database().ref('credit_report_request/').push().set(requestData);
+						$scope.closeruncreditcriminalcheckModal();
 					});
 
 			}

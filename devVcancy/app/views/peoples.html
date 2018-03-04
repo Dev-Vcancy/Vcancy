@@ -677,10 +677,9 @@
 			</div>
 			<div class="col-xs-12 modal-body">
 			<div class="col-xs-12 col-sm-6">
-					<select class="m-input m-input--square" name="more" ng-model="lappctrl.filters.property">
+					<select class="m-input m-input--square" name="more" ng-model="lappctrl.creditCheck.forTenant" 
+					ng-options="key as (value.firstname + ' ' + value.lastname) for (key, value) in lappctrl.applyPropUsers">
 							<option value="">Select Tenant</option>
-	
-	
 					</select>
 			</div>
 			<div class="col-xs-12 col-sm-6">
@@ -689,26 +688,25 @@
 						<a href="https://s3.ca-central-1.amazonaws.com/vcancy-final/public/Sample_criminal%2C_credit_and_background_check_report.pdf" download="Sample_criminal%2C_credit_and_background_check_report.pdf">See Sample Report</a>
 					</label>
 				</div>
-				<br/>
-				<div class="checkbox-div">
+				<div class="radio-div">
 					<label>	
-						<input type="checkbox"  ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						<input type="radio" name="report-type" ng-model="lappctrl.creditCheck.reportType" value="Credit Report (Transunion) $15/Report" 
 						/> Credit Report (Transunion) $15/Report
 							<i class="input-helper"></i>					
 						
 					</label>
 				</div>
-				<div class="checkbox-div">
+				<div class="radio-div">
 					<label>	
-					<input type="checkbox" ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+					<input type="radio" name="report-type" ng-model="lappctrl.creditCheck.reportType" value="Criminal Record Check $35/Report"
 						/> Criminal Record Check $35/Report
 								<i class="input-helper"></i>	
 						
 					</label>
 				</div>
-				<div class="checkbox-div">
+				<div class="radio-div">
 					<label>	
-						<input type="checkbox"  ng-checked="unit.Aminities.includes('furnished')" ng-click="propctrl.selectCheckbox('furnished',$index)"
+						<input type="radio" name="report-type" ng-model="lappctrl.creditCheck.reportType" value="Both of the above $45/Report" 
 						/> Both of the above $45/Report
 						<i class="input-helper"></i>	
 						
@@ -717,7 +715,7 @@
 			</div>
 			</div>
 			<div class="modal-footer mofo">	
-				<button class="btn bgm-teal btn-sm btn-round" ng-click="deleteAlert()"><i class="fa fa-floppy-o" ></i> Submit</button>			
+				<button class="btn bgm-teal btn-sm btn-round" ng-disabled="!lappctrl.creditCheck.reportType || !lappctrl.creditCheck.forTenant" ng-click="submitCreditCheck()"><i class="fa fa-floppy-o" ></i> Submit</button>			
 			</div>
 		</div>
 		</script>
