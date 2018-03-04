@@ -5,8 +5,8 @@
 //=================================================
 
 vcancyApp
-	.controller('landlordappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', '$uibModal', '_',
-		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, $uibModal, _) {
+	.controller('landlordappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', '$uibModal', '_', '$q',
+		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, $uibModal, _, $q) {
 			$scope.oneAtATime = true;
 			var vm = this;
 			vm.moment = moment;
@@ -20,7 +20,7 @@ vcancyApp
 			var userData = JSON.parse(localStorage.getItem('userData'));
 			vm.userData = userData;
 			vm.propcheck = [];
-
+			vm.applyPropUsers = {};
 			vm.apppropaddress = [];
 			vm.originalPropAddress = [];
 			vm.loader = 1;
@@ -93,6 +93,27 @@ vcancyApp
 				}
 			}
 			refreshScreeningQuestions();
+
+			vm.getUsers = function() {
+				if(vm.apppropaddressList) {
+					vm.loader = 1;
+					var promises = [];
+					_.map(vm.apppropaddressList, function (value, key) {
+						var promiseObj = firebase.database().ref('users/'+value.tenantID).once("value");
+						promises.push(promiseObj);
+					});
+					$q.all(promises).then(function (data) {
+						var usersData = {};
+						data.forEach(function(dataObj) {
+							usersData[dataObj.key] = dataObj.val();
+						});
+						vm.applyPropUsers = usersData;
+						vm.apppropaddress = vm.apppropaddressList;
+						vm.loader = 0;
+					});
+				}
+			} 
+
 			vm.getProperty = function () {
 				vm.loader = 1;
 				var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
@@ -109,9 +130,10 @@ vcancyApp
 				var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					if (snapshot.val()) {
 						$scope.$apply(function () {
-							vm.apppropaddress = snapshot.val();
+							vm.apppropaddressList = snapshot.val();
+							vm.getUsers();
 							vm.originalPropAddress = angular.copy(snapshot.val());
-							console.log(vm.apppropaddress);
+							console.log(vm.apppropaddressList);
 						});
 					}
 					$scope.$apply(function () {
@@ -124,6 +146,12 @@ vcancyApp
 				return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
 			}
 
+			vm.getUserName = function(id) {
+				if(!vm.applyPropUsers[id]) {
+					return '-'
+				}
+				return vm.applyPropUsers[id].firstname + ' '+ vm.applyPropUsers[id].lastname;
+			}
 
 			$scope.formatDay = function (key) {
 				return moment(key, 'MM/DD/YYYY').format('ddd')
