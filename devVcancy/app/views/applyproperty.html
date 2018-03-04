@@ -56,7 +56,7 @@
 						<h4>This property isnt available now.</h4>										
 					</div> -->
 					<!-- ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1" -->
-					<form name="applypropForm" ng-submit="applyctrl.tenantapply(applyprop)" role="form" novalidate ng-if="true">
+					<form name="applypropForm" ng-submit="applyctrl.createUser(applyprop)" role="form" novalidate ng-if="true">
 						<input type="hidden" name="landlordID" ng-model="applyctrl.applyprop.landlordID" class="form-control">
 						<input type="hidden" name="propID" ng-model="applyctrl.applyprop.propID" class="form-control">
 						<input type="hidden" name="address" ng-model="applyctrl.applyprop.address" class="form-control">
@@ -366,7 +366,7 @@
 								</div>
 
 								<div>
-									<div class="row text-center mt-5">
+									<div class="row text-center mt-5" ng-hide="applyctrl.userData && applyctrl.userData.firstname">
 										Already have an account?&nbsp;&nbsp;
 										<a class="text-primary" ng-click="applyctrl.openSignInmodel()">Sign in</a>
 									</div>
@@ -389,17 +389,13 @@
 											 ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"
 											/>
 										</div>
-										<!-- <div class="col-sm-12 mb-3 text-center">
-												<button type="button" class="btn btn-info" ng-disabled="createuserform.$invalid || createuserform.$pristine" ng-click="applyctrl.createUser(applyctrl.registerUser)">
-													<i class="fa fa-plus"></i> Create</button>
-											</div> -->
 									</div>
 								</div>
 								<ng-form role="form" name="scheduleForm" novalidate>
 									<div class="row mt-3 p-20" style="border:1px solid #c2cad8">
 										<div class="col-sm-12 mt-3" ng-repeat="ques in applyctrl.landlordData.screeningQuestions">
-											<input type='date' ng-if="ques.isChecked && ques.id == 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' ng-model="applyctrl.preScreeningAns[ques.id]"
-											 class="form-control original-form-control" required/>
+											<input type='text' ng-if="ques.isChecked && ques.id == 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' ng-model="applyctrl.preScreeningAns[ques.id]"
+											 class="form-control original-form-control"  placeholder="{{ques.label}}" onfocus="(this.type='date')"  onblur="(this.type='text')" id="date" required/>
 											<input type="text" ng-if="ques.isChecked && ques.id != 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' placeholder="{{ques.label}}"
 											 ng-model="applyctrl.preScreeningAns[ques.id]" class="form-control original-form-control" required/>
 										</div>
@@ -412,7 +408,7 @@
 											</span>
 										</div>
 										<div class="col-sm-12 mt-3 text-center">
-											<button class="btn bgm-teal btn-sm btn-round" ng-disabled="scheduleForm.$invalid || scheduleForm.$prestine" ng-click="applyctrl.createUser()">
+											<button class="btn bgm-teal btn-sm btn-round" ng-disabled="scheduleForm.$invalid || scheduleForm.$prestine">
 												Schedule Now
 											</button>
 										</div>
