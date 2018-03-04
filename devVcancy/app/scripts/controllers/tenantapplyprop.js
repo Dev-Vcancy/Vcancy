@@ -129,7 +129,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				if (snap.val()) {
 					var propData = snap.val();
 					vm.propData = angular.copy(propData);
-					console.log(propData)
+					console.log('propData', propData)
 					if (propData && propData.unitlists && propData.unitlists.length > 0) {
 						vm.selectedUnit = propData.unitlists.find(function (unit) {
 							if (unit.unit == vm.unitId) return true;

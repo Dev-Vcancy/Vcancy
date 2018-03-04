@@ -74,19 +74,9 @@
 								<div class="row mt-3">${{applyctrl.selectedUnit.rent}} - {{applyctrl.selectedUnit.bedroom}} Bed ,{{applyctrl.selectedUnit.bathroom}} Bath
 									,{{applyctrl.selectedUnit.sqft}} sqft</div>
 								<div class="row mt-3">
-									<div id="imgDiv" style="position:relative;width:38%;color:lightgray" class="edit-div-hover">
-
-										<img src="{{ldProfilectrl.userData.companylogo?ldProfilectrl.userData.companylogo:'../assets/pages/img/no_image_found.jpg'}}"
-										 class="img-responsive pic-bordered image" alt="">
-										<div class="middle">
-											<div class="text">
-												<label style="position:absolute;top:50%;left:50%;">
-													<i class="fa fa-pencil fa-2x"></i>
-													<input type="file" accept='image/*' file-upload style="display:none" />
-												</label>
-											</div>
-										</div>
-										</img>
+									<div id="imgDiv" style="position:relative;width:38%;color:lightgray">
+										<img src="{{applyctrl.propData.propimg?applyctrl.propData.propimg:'../assets/pages/img/no_image_found.jpg'}}"
+										 class="img-responsive pic-bordered image" />
 									</div>
 
 								</div>
