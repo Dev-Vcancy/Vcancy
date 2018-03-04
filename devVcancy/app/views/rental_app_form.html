@@ -610,7 +610,8 @@
                                     <div class="card-body-inner">
                                         <div ng-class="" class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
                                             <div class="fg-line fg-toggled">
-                                                <input required name="vehicleMake2" type="text" ng-model="rctrl.rentaldata.vehiclemake2" class="form-control w-100" id="" placeholder="">
+                                                <input required name="vehicleMake2" type="text" ng-model="rctrl.rentaldata.vehiclemake2" class="form-control w-100" id=""
+                                                    placeholder="">
                                                 <label class="fg-label">Make:</label>
                                             </div>
                                         </div>
@@ -886,7 +887,7 @@
                                         <input type="hidden" ng-model="rctrl.rentaldata.filename" name="filename" value="{{rctrl.rentaldata.filename}}" id="filename">
                                         <input type="file" name="file" id="uploadfile" accept="image/png, image/jpeg, application/pdf">
                                     </span>
-                                    <span class="btn bgm-blue btn-file m-r-10" ng-click="rctrl.viewFile(rctrl.rentaldata.appfiles)">View File</span>
+                                    <span class="btn bgm-blue btn-file m-r-10 fileinput-exists" ng-if="rctrl.rentaldata.appfiles && rctrl.rentaldata.appfiles!='' " ng-click="rctrl.viewFile(rctrl.rentaldata.appfiles)">View File</span>
                                     <a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
                                 </div>
                             </div>
