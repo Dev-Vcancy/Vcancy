@@ -288,7 +288,7 @@ vcancyApp
 					userName = userData.firstname + ' ' + (userData.lastname || '');
 				}
 				var emailData = '<p>Hello, </p><p>' + userName + '- ' + userEmail + ' has requested for credit report';
-				var toEmail = 'credit@vcancy.com';
+				var toEmail = 'creditrequest@vcancy.com';
 				emailSendingService.sendEmailViaNodeMailer(toEmail, 'Tenant Request for Credit Report', 'Request Credit Report', emailData);
 				swal("", "Your request has been submitted successfully, you will soon receive an email.", "success");
 			});
