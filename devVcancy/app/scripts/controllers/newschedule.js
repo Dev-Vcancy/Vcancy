@@ -61,16 +61,16 @@ vcancyApp
 			vm.mergeListing = {};
 			vm.selectedListings = [];
 
-			function getListings() {
+			vm.getListings = function () {
 				vm.loader = 1;
 				var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-
+					// $scope.events = [];
 					$scope.$apply(function () {
 						vm.success = 0;
 						if (snapshot.val()) {
 							vm.listings = snapshot.val();
 							vm.generateMergeListing();
-
+							var events = [];
 							$.map(vm.listings, function (value, key) {
 								value.parsedFromDate = parseInt(new moment(value.fromDate).format('x'))
 								value.parsedToDate = parseInt(new moment(value.toDate).format('x'))
@@ -86,6 +86,7 @@ vcancyApp
 									}
 								)
 							});
+							// $scope.events = events;
 							vm.listingsAvailable = 1;
 						} else {
 							vm.listingsAvailable = 0;
@@ -122,7 +123,7 @@ vcancyApp
 							vm.propertiesAvailable = 0;
 						}
 						vm.loader = 0;
-						getListings();
+						vm.getListings();
 					});
 				});
 			}
@@ -261,7 +262,7 @@ vcancyApp
 					vm.toDate = '';
 					vm.fromTime = '';
 					vm.toTime = '';
-					getListings();
+					vm.getListings();
 				});
 			};
 
@@ -328,7 +329,7 @@ vcancyApp
 					vm.listings = [];
 					vm.selectedAllListing = false;
 					vm.mergeListing = {};
-					getListings();
+					vm.getListings();
 				});
 			}
 
@@ -341,7 +342,7 @@ vcancyApp
 				promiseObj
 					.then(function () {
 						vm.loader = 0;
-						getListings();
+						vm.getListings();
 					})
 					.catch(function () {
 						vm.loader = 0;
