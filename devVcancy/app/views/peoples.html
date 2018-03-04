@@ -116,7 +116,7 @@
 									<a ng-if="value.reportLink" href="value.reportLink" target="_blank">Credit Check</a>
 									<span ng-if="!value.reportLink">-</span>
 								</td>
-								<td>{{lappctrl.getUserName(value.tenantID)}}</td>
+								<td>{{lappctrl.getUserName(value.tenantID, value)}}</td>
 								<td>{{value.unitID}}-{{value.address}}</td>
 								<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
 									<br/> {{value.fromTimeslot}} : {{value.toTimeSlot}}</td>

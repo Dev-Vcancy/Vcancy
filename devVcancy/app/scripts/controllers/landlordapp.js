@@ -150,9 +150,9 @@ vcancyApp
 				return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
 			}
 
-			vm.getUserName = function (id) {
+			vm.getUserName = function (id, value) {
 				if (!vm.applyPropUsers[id]) {
-					return '-'
+					return value.name || '-';
 				}
 				return vm.applyPropUsers[id].firstname + ' ' + vm.applyPropUsers[id].lastname;
 			}
