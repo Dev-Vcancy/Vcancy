@@ -1408,3 +1408,7 @@ ul.header-inner li a:hover.button:before{
 .ng-table-pager {
   display: none!important;
 }
+
+.icon-size-26 {
+  font-size: 26px; 
+}

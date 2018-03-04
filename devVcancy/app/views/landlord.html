@@ -95,7 +95,41 @@
 
                         </div>
                         <div class="portlet-body">
-                            <div id="dashboard_amchart_3" class="CSSAnimationChart"></div>
+                            <!-- <div id="dashboard_amchart_3" class="CSSAnimationChart"></div> -->
+                            <!-- <a class="lv-item ng-scope" ng-href="" ng-repeat="w in hctrl.messageResult.list"> -->
+                            <div class="media" ng-if="ldboardctrl.userData && !ldboardctrl.userData.editCompanyDetailsCheck">
+                                <div class="media-body">
+                                    <div class="lv-title">Edit company details</div>
+                                </div>
+                                <a class="pull-right icon" ng-click="ldboardctrl.updateCheck('editCompanyDetailsCheck')">
+                                    <i class="zmdi zmdi-check icon-size-26" ></i> 
+                                </a>
+                            </div>
+                            <div class="media" ng-if="ldboardctrl.userData && !ldboardctrl.userData.editCustomRentalCheck">
+                                <div class="media-body">
+                                    <div class="lv-title">Edit custom rental app</div>
+                                </div>
+                                <a class="pull-right icon"  ng-click="ldboardctrl.updateCheck('editCustomRentalCheck')">
+                                    <i class="zmdi zmdi-check icon-size-26" ></i> 
+                                </a>
+                            </div>
+                            <div class="media" ng-if="ldboardctrl.userData && !ldboardctrl.userData.editScreeningQuestionsCheck">
+                                <div class="media-body">
+                                    <div class="lv-title">Edit prescreening questions</div>
+                                </div>
+                                <a class="pull-right icon"  ng-click="ldboardctrl.updateCheck('editScreeningQuestionsCheck')">
+                                    <i class="zmdi zmdi-check icon-size-26" ></i> 
+                                </a>
+                            </div>
+                            <!-- <div class="media" ng-if="ldboardctrl.apppropaddress" ng-repeat="(key, value) in ldboardctrl.apppropaddress">
+                                <div class="media-body">
+                                    <div class="lv-title"></div>
+                                </div>
+                                <a class="pull-right icon"  ng-click="ldboardctrl.updateCheck('editScreeningQuestionsCheck')">
+                                    <i class="zmdi zmdi-check icon-size-26" ></i> 
+                                </a>
+                            </div> -->
+                            <!-- </a> -->
                         </div>
                     </div>
                 </div>
@@ -115,7 +149,7 @@
                    
                 </div> -->
                 <div class="col-sm-6 text-center">
-                        <div  ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+                    <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
                 </div>
 
             </div>

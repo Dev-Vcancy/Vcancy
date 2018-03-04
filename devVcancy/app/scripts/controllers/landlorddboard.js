@@ -9,6 +9,7 @@ vcancyApp
 
 		var vm = this;
 		var landlordID = localStorage.getItem('userID');
+		vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
 		vm.proplive = 0;
 		vm.unitsCount = 0;
 		vm.vacantUnits = 0;
@@ -16,8 +17,7 @@ vcancyApp
 		vm.viewingschedule = 0;
 		vm.viewed = 0;
 		vm.submitapps = 0;
-		
-		
+
 		vm.moment = moment;
 		$scope.eventSources = [];
 		var date = new Date();
@@ -33,19 +33,19 @@ vcancyApp
 					left: 'title',
 					center: '',
 					right: 'today prev,next'
-					
+
 				},
-				buttonText:{
+				buttonText: {
 					today: 'Today',
 				},
-				
-			//	eventClick: $scope.alertEventOnClick,
-			//	eventDrop: $scope.alertOnDrop,
-			//	eventResize: $scope.alertOnResize
+
+				//	eventClick: $scope.alertEventOnClick,
+				//	eventDrop: $scope.alertOnDrop,
+				//	eventResize: $scope.alertOnResize
 			}
 		};
 
-		
+
 		$scope.events = [];
 
 		$scope.eventSources = [$scope.events]
@@ -65,13 +65,13 @@ vcancyApp
 		function getListings() {
 			vm.loader = 1;
 			var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-			
+
 				$scope.$apply(function () {
 					vm.success = 0;
 					if (snapshot.val()) {
 						vm.listings = snapshot.val();
 						vm.generateMergeListing();
-					$.map(vm.listings, function (value, key) {
+						$.map(vm.listings, function (value, key) {
 							value.parsedFromDate = parseInt(new moment(value.fromDate).format('x'))
 							value.parsedToDate = parseInt(new moment(value.toDate).format('x'))
 							var startDate = new Date(value.fromDate).setHours(parseFloat(value.fromTime));
@@ -111,12 +111,52 @@ vcancyApp
 			});
 		}
 
+		function getPendingProposedTime() {
+			vm.loader = 1;
+			vm.apppropaddress = {};
+			var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+				if (snapshot.val()) {
+					$scope.$apply(function () {
+						var proposedTimeList = {};
+						_.map(snapshot.val(), function(value, key) {
+							if(value.schedulestatus == 'pending' && value.proposeNewTime) {
+								proposedTimeList[key] = value;
+							}
+						});
+						vm.apppropaddress = proposedTimeList;
+					});
+				}
+				$scope.$apply(function () {
+					vm.loader = 0;
+				});
+			});
+		}
+
 		function init() {
 			vm.loader = 1;
 			getProperties();
+			getPendingProposedTime();
 		}
 
 		init();
+
+		vm.updateCheck = function (key) {
+			var updateData = {};
+			updateData[key] = true
+			firebase.database().ref('users/' + landlordID).update(updateData)
+				.then(function () {
+					firebase.database().ref('users/' + landlordID).once('value')
+						.then(function (snap) {
+							var updatedUser = snap.val();
+							$scope.$apply(function () {
+								localStorage.setItem('userData', JSON.stringify(updatedUser));
+								vm.userData = JSON.parse(localStorage.getItem('userData'));
+							});
+						});
+				}, function (error) {
+					console.error('Error > ', error);
+				})
+		};
 
 		vm.generateMergeListing = function () {
 			vm.mergeListing = {};
@@ -130,7 +170,7 @@ vcancyApp
 				} else {
 					var date = moment(vm.listings[key].fromDate).format('DD MMM') + ' - ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
 					vm.mergeListing[list.link].fromToDate.push(date);
-					vm.mergeListing[list.link].keys.push(key);						
+					vm.mergeListing[list.link].keys.push(key);
 				}
 			});
 		};
@@ -240,7 +280,7 @@ vcancyApp
 				getListings();
 			});
 		}
-	
+
 		vm.toggleCraigsList = function (listingId, value, $event) {
 			vm.loader = 1;
 			var fbObj = firebase.database();
@@ -267,10 +307,10 @@ vcancyApp
 				var unitsCount = 0;
 				var vacantUnits = 0;
 				_.forEach(properties, function (value, key) {
-					if(value.unitlists) {
+					if (value.unitlists) {
 						unitsCount = unitsCount + value.unitlists.length;
-						var _vacantUnits = _.sumBy(value.unitlists, function(unitObj) {
-							if(unitObj.status == "" || unitObj.status == "available" || !unitObj.status) {
+						var _vacantUnits = _.sumBy(value.unitlists, function (unitObj) {
+							if (unitObj.status == "" || unitObj.status == "available" || !unitObj.status) {
 								return 1;
 							}
 							return 0;
@@ -291,9 +331,9 @@ vcancyApp
 			console.log(snapshot.val())
 			var appliedProperties = 0;
 			$scope.$apply(function () {
-				if(snapshot.val()) {
+				if (snapshot.val()) {
 					$.map(snapshot.val(), function (value, index) {
-	
+
 						if (value.schedulestatus == "confirmed" && moment(value.dateslot).isBefore(new Date())) {
 							vm.viewed += 1;
 						}
@@ -309,7 +349,7 @@ vcancyApp
 						if (value.schedulestatus == "submitted") {
 							vm.submitapps += 1;
 						}
-	
+
 						appliedProperties = appliedProperties + 1;
 					});
 				}
