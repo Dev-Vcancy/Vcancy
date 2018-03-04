@@ -383,12 +383,23 @@ vcancyApp
 			// vm.tablefilterdata();
 
 			vm.deleteApplyProp = function (key) {
-				firebase.database().ref('applyprop/' + key).remove().then(function () {
-					vm.getApplyProp();
-					// vm.tablefilterdata();
-				})
-					.catch(function (err) {
-						console.error('ERROR', err);
-					});
+				swal({
+					title: "Are you sure?",
+					text: "This will delete the schedule from the system.",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonClass: "btn-danger",
+					confirmButtonText: "Delete",
+					closeOnConfirm: true
+				}, function () {
+					firebase.database().ref('applyprop/' + key).remove().then(function () {
+						vm.getApplyProp();
+					})
+						.catch(function (err) {
+							console.error('ERROR', err);
+							swal("", "There was error deleteing the schedule.", "error");
+						});
+
+				});
 			}
 		}])
