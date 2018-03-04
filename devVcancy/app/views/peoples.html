@@ -37,7 +37,7 @@
 								<select class="custom-form-element" name="more" ng-model="lappctrl.filters.property" ng-change="lappctrl.filterData(true)">
 									<option value="">Select property</option>
 									<option ng-value="key" ng-repeat="(key, property) in lappctrl.properties">
-										{{property.name}}
+										{{property.address}}
 									</option>
 
 								</select>
@@ -100,7 +100,7 @@
 						</table> -->
 						<table class="table table-border table-hover" style="border:1px solid #e7ecf1;overflow-x:auto;max-width:100vw">
 							<tr>
-								<th>Property/Unit</th>
+								<th>Unit/Property</th>
 								<th style="min-width: 150px;">Date-Time</th>
 								<th ng-repeat="ques in lappctrl.filters.options">
 									{{ques.label}}
@@ -108,7 +108,7 @@
 								<th></th>
 							</tr>
 							<tr ng-repeat="(key, value) in lappctrl.apppropaddress">
-								<td>{{value.address}}-{{value.unitID}}</td>
+								<td>{{value.unitID}}-{{value.address}}</td>
 								<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
 									<br/> {{value.fromTimeslot}} : {{value.toTimeSlot}}</td>
 								<td ng-repeat="ques in lappctrl.filters.options">{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}</td>
