@@ -1296,6 +1296,10 @@ ul.header-inner li a:hover.button:before{
   color:#007bff;
 }
 
+.hover-color:hover{
+  color:#48709b !important;
+}
+
 .property_view .property_thumb img.img-responsive {
   display: block;
   max-width: 100%;
