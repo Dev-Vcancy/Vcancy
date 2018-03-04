@@ -2157,6 +2157,9 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
 
                         var obj = {};
                         var currentline = rows[i].split(",");
+                        if (currentline[0].indexOf('DELETE THE EXAMPLE') > -1) {
+                            continue;
+                        }
                         if (currentline.length < 2) {
                             continue;
                         }
