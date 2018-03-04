@@ -68,7 +68,8 @@
 						<div class="card-body card-padding">
 							<div class="col-sm-6">
 								<div class="row mt-3">
-									<h4>{{applyctrl.propData.name}} - {{applyctrl.selectedUnit.title}}</h4>
+									<h4>{{applyctrl.propData.name}}
+										<span ng-if='applyctrl.selectedUnit.title'>-</span> {{applyctrl.selectedUnit.title}}</h4>
 								</div>
 								<div class="row mt-3"> {{applyctrl.unitId}} - {{applyctrl.selectedUnit.address}} {{applyctrl.selectedUnit.city}}, {{applyctrl.selectedUnit.postalcode}}</div>
 								<div class="row mt-3">${{applyctrl.selectedUnit.rent}} - {{applyctrl.selectedUnit.bedroom}} Bed ,{{applyctrl.selectedUnit.bathroom}} Bath
@@ -92,7 +93,11 @@
 								<div class="row mt-3">Laundry : {{applyctrl.selectedUnit.laundry}}</div>
 								<div class="row mt-3">Pets : Cats - {{applyctrl.selectedUnit.cats ? 'YES':'NO'}} , Dogs - {{applyctrl.selectedUnit.dogs? 'YES':'NO'}}</div>
 								<div class="row mt-3">Lease Terms : {{applyctrl.selectedUnit.leaseLength}}</div>
-								<div class="row mt-3">Amenities : {{applyctrl.selectedUnit.Aminities.join(',')}} </div>
+								<div class="row mt-3">Amenities : {{applyctrl.selectedUnit.Aminities.join(',')}},
+								</div>
+								<div class='row ml-5'>
+									<p>{{applyctrl.selectedUnit.otherAminities}}</p>
+								</div>
 								<div class="row mt-3" ng-if="applyctrl.selectedUnit.images.length>0">
 									<h4>Images</h4>
 								</div>
@@ -380,10 +385,8 @@
 											 class="form-control original-form-control" required/>
 										</div>
 										<div class="col-sm-6 mb-3">
-											<input type="number" placeholder="Phone" id="phone" name="phone" 
-											ng-model="applyctrl.registerUser.phone" class="form-control original-form-control"
-											ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
-											ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"
+											<input type="number" placeholder="Phone" id="phone" name="phone" ng-model="applyctrl.registerUser.phone" class="form-control original-form-control"
+											 ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"
 											/>
 										</div>
 										<!-- <div class="col-sm-12 mb-3 text-center">
@@ -409,7 +412,9 @@
 											</span>
 										</div>
 										<div class="col-sm-12 mt-3 text-center">
-											<button class="btn bgm-teal btn-sm btn-round" ng-disabled="scheduleForm.$invalid || scheduleForm.$prestine"> Schedule Now </button>
+											<button class="btn bgm-teal btn-sm btn-round" ng-disabled="scheduleForm.$invalid || scheduleForm.$prestine" ng-click="applyctrl.createUser()">
+												Schedule Now
+											</button>
 										</div>
 									</div>
 								</ng-form>

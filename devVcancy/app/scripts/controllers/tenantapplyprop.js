@@ -175,9 +175,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					proposeNewTime = angular.copy(vm.proposeNewTime);
 				}
 				vm.proposeNewTime = {};
-
-				// console.log(dateslot,fslot,tslot);
-				return;
+				
 				var applypropObj = $firebaseAuth();
 				var applypropdbObj = firebase.database();
 				applypropdbObj.ref('applyprop/').push().set({
@@ -277,7 +275,6 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 										// Send Email
 										emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
 
-										console.log("Email Sent");
 										$rootScope.success = 'Confirmation email resent';
 										$rootScope.error = '';
 										setTimeout(function () { $rootScope.success = '' }, 1000);
@@ -312,7 +309,6 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					firebase.database().ref('/users/' + firebase.auth().currentUser.uid).once('value').then(function (userdata) {
 						$rootScope.usertype = 0;
 						localStorage.setItem('usertype', 0);
-						console.log("Signed in as tenant:", firebase.auth().currentUser.uid);
 						localStorage.setItem('userData', JSON.stringify(userdata.val()));
 						vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
 						if (vm.userData) {
