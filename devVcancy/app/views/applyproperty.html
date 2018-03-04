@@ -74,11 +74,12 @@
 								<div class="row mt-3"> {{applyctrl.unitId}} - {{applyctrl.selectedUnit.address}} {{applyctrl.selectedUnit.city}}, {{applyctrl.selectedUnit.postalcode}}</div>
 								<div class="row mt-3">${{applyctrl.selectedUnit.rent}} - {{applyctrl.selectedUnit.bedroom}} Bed ,{{applyctrl.selectedUnit.bathroom}} Bath
 									,{{applyctrl.selectedUnit.sqft}} sqft</div>
-								<div class="row mt-3">
+								<div class="row mt-3" style="max-height:305px">
 									<div id="imgDiv" style="position:relative;width:38%;color:lightgray">
 										<img src="{{applyctrl.propData.propimg?applyctrl.propData.propimg:'../assets/pages/img/no_image_found.jpg'}}" class="img-responsive pic-bordered image"
 										/>
 									</div>
+					
 
 								</div>
 								<div class="row mt-3">Description</div>
@@ -99,11 +100,15 @@
 									<p>{{applyctrl.selectedUnit.otherAminities}}</p>
 								</div>
 								<div class="row mt-3" ng-if="applyctrl.selectedUnit.images.length>0">
-									<h4>Images</h4>
+									<h4>Image galary</h4>
 								</div>
 								<div class="row mt-3">
-									<div class="col-sm-3" ng-repeat="images in applyctrl.selectedUnit.images">
-										<img src="{{images.Location}}" style="max-height:100px;max-width:100px" />
+									<div  style="height:400px;width:400px">
+										<div uib-carousel active="active" interval="5000" no-wrap="noWrapSlides">
+											<div uib-slide ng-repeat="slide in applyctrl.selectedUnit.images track by $index" index="$index">
+												<img ng-src="{{slide.Location}}" style="margin:auto;height:400px;width:400px;object-fit:contain">
+											</div>
+										</div>
 									</div>
 								</div>
 								<!-- <div class="form-group col-sm-1<div class="row">Property Name</div>2">
@@ -385,7 +390,7 @@
 											 class="form-control original-form-control" required/>
 										</div>
 										<div class="col-sm-6 mb-3">
-											<input type="number" placeholder="Phone" id="phone" name="phone" ng-model="applyctrl.registerUser.phone" class="form-control original-form-control"
+											<input type="text" placeholder="Phone" id="phone" name="phone" ng-model="applyctrl.registerUser.phone" class="form-control original-form-control"
 											 ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"
 											/>
 										</div>
@@ -395,7 +400,8 @@
 									<div class="row mt-3 p-20" style="border:1px solid #c2cad8">
 										<div class="col-sm-12 mt-3" ng-repeat="ques in applyctrl.landlordData.screeningQuestions">
 											<input type='text' ng-if="ques.isChecked && ques.id == 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' ng-model="applyctrl.preScreeningAns[ques.id]"
-											 class="form-control original-form-control"  placeholder="{{ques.label}}" onfocus="(this.type='date')"  onblur="(this.type='text')" id="date" required/>
+											 class="form-control original-form-control" placeholder="{{ques.label}}" onfocus="(this.type='date')" onblur="(this.type='text')"
+											 id="date" required/>
 											<input type="text" ng-if="ques.isChecked && ques.id != 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' placeholder="{{ques.label}}"
 											 ng-model="applyctrl.preScreeningAns[ques.id]" class="form-control original-form-control" required/>
 										</div>
