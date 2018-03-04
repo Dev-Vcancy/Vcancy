@@ -5,10 +5,12 @@
 //=================================================
 
 vcancyApp
-	.controller('tenantappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
+	.controller('tenantappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'emailSendingService', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, emailSendingService) {
 
 		var vm = this;
 		var tenantID = localStorage.getItem('userID');
+		var userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {};
+		var userEmail = localStorage.getItem('userEmail');
 		vm.loader = 1;
 		vm.submittedappsavail = 0;
 		vm.submitappsdata = [];
@@ -268,6 +270,29 @@ vcancyApp
 		vm.openRentalForm = function () {
 			$rootScope.isFormOpenToSaveInDraft = true;
 			window.location.href = "#/rentalform/0/0";
+		}
+
+		vm.requestCreditReport = function () {
+			swal({
+				title: "",
+				text: "We will send you an email with instructions on how to get your credit report.\n Are you sure you want to submit this request?",
+				type: "info",
+				showCancelButton: true,
+				confirmButtonClass: "bgm-teal",
+				confirmButtonText: "Yes",
+				closeOnConfirm: false
+			}, function () {
+				// swal("Deleted!", "Your imaginary file has been deleted.", "success");
+				var userName = '';
+				if (userData) {
+					userName = userData.firstname + ' ' + (userData.lastname || '');
+				}
+				var emailData = '<p>Hello, </p><p>' + userName + '- ' + userEmail + ' has requested for credit report';
+				var toEmail = 'credit@vcancy.com';
+				emailSendingService.sendEmailViaNodeMailer(toEmail, 'Tenant Request for Credit Report', 'Request Credit Report', emailData);
+				swal("", "Your request has been submitted successfully, you will soon receive an email.", "success");
+			});
+
 		}
 
 		vm.gotoRental = function (event) {
