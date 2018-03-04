@@ -178,11 +178,11 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 
 				var applypropObj = $firebaseAuth();
 				var applypropdbObj = firebase.database();
-				applypropdbObj.ref('applyprop/').push().set({
+				var _data = {
 					tenantID: tenantID,
 					propID: propID,
 					address: address,
-					schedulestatus: "pending",
+					schedulestatus: "scheduled",
 					name: name,
 					phone: phone,
 					dateSlot: dateSlot,
@@ -194,7 +194,11 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					units: unitID,
 					preScreeningAns: preScreeningAns,
 					proposeNewTime: proposeNewTime
-				}).then(function () {
+				}
+				if(!_.isEmpty(_data.proposeNewTime)) {
+					_data.schedulestatus = 'pending';
+				}
+				applypropdbObj.ref('applyprop/').push().set(_data).then(function () {
 					$state.go('applicationThanks');
 					// $rootScope.success = 'Application for property successfully sent!';	
 					console.log('Application for property successfully sent!');
