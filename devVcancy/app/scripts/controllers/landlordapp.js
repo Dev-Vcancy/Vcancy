@@ -307,7 +307,7 @@ vcancyApp
 
 			$scope.submitCreditCheck = function () {
 				var tenantData = vm.applyPropUsers[vm.creditCheck.forTenant];
-				if(!tenantData) {
+				if (!tenantData) {
 					return;
 				}
 				swal({
@@ -324,7 +324,7 @@ vcancyApp
 						if (userData) {
 							userName = userData.firstname + ' ' + (userData.lastname || '');
 						}
-						var tenantUserName = tenantData.firstname + ' ' + (tenantData.lastname || ''); 
+						var tenantUserName = tenantData.firstname + ' ' + (tenantData.lastname || '');
 						var emailData = '<p>Hello, </p><p>Landlord - ' + userName + ' (' + userEmail + ') has requested credit report of tenant - ' + tenantUserName + ' (' + tenantData.email + ') for type - ' + vm.creditCheck.reportType + '</p>';
 						var toEmail = 'creditrequest@vcancy.com';
 						emailSendingService.sendEmailViaNodeMailer(toEmail, 'Landlord request for Credit/Criminal Report', 'Request Credit?criminal Check Report', emailData);
@@ -457,7 +457,9 @@ vcancyApp
 					confirmButtonText: "Delete",
 					closeOnConfirm: true
 				}, function () {
-					firebase.database().ref('applyprop/' + key).remove().then(function () {
+					firebase.database().ref('applyprop/' + key).update({
+						schedulestatus: "cancelled"
+					}).then(function () {
 						vm.getApplyProp();
 					})
 						.catch(function (err) {
