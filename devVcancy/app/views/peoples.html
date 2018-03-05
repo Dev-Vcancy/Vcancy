@@ -105,7 +105,7 @@
 								<th>Name</th>
 								<th>Unit/Property</th>
 								<th style="min-width: 150px;">Date-Time</th>
-								<th>Showing Status</th>								
+								<th>Showing Status</th>
 								<th ng-repeat="ques in lappctrl.filters.options">
 									{{ques.label}}
 								</th>
@@ -121,8 +121,15 @@
 								<td>{{value.unitID}}-{{value.address}}</td>
 								<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
 									<br/> {{value.fromTimeslot}} : {{value.toTimeSlot}}</td>
-								<td>{{value.schedulestatus}}</td>									
-								<td ng-repeat="ques in lappctrl.filters.options">{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}</td>
+								<td>{{value.schedulestatus}}</td>
+								<td ng-repeat="ques in lappctrl.filters.options">
+									<a ng-if="ques.id==='U0G6V8'" tooltip-animation="false" uib-tooltip="{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}">
+										{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id].substring(0,20):'-'}}
+									</a>
+									<span ng-if="ques.id!=='U0G6V8'">
+										{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}
+									</span>
+								</td>
 								<td>
 									<button class="btn btn-sm btn-danger btn-round" ng-click="lappctrl.deleteApplyProp(key)">
 										<i class="fa fa-trash"></i>
