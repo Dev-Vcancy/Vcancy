@@ -177,7 +177,7 @@
             </div>
             <div class="col-sm-7 list">
               Listings
-              <span class="fa fa-info-circle" title="This link refers to craigslist">
+              <span class="fa fa-info-circle" title="This table shows your availablity for showings and units listed">
               </span>
             </div>
 
@@ -201,13 +201,15 @@
                     </th>
                     <th>
                       Scheduling Link
-                      <span class="fa fa-info-circle" title="This link refers to craigslist">
+                      <span class="fa fa-info-circle" title="Prospective tenants can schedule a showing via this link">
                     </th>
                     <th>
-                      List on Craiglist
+                      List on Craiglist 
+                      <span class="fa fa-info-circle" title="Complete mandatory fields and toggle the button to list on Craigslist"></span>
                     </th>
                     <th>
                       Listing Status
+                      <span class="fa fa-info-circle" title="Link to craigslist listing appears after unit is listed"></span>
                     </th>
                   </tr>
                 </thead>
@@ -237,7 +239,7 @@
                       </div>
                       <div class="text-primary hover-color" style='cursor:pointer' ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)"
                         ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)">
-                        <span>Edit Details</span>
+                        <span>Edit Listing Details</span>
                       </div>
                     </td>
                     <td>{{value.status}}</td>
@@ -317,7 +319,7 @@
        <form  role="form" enctype="multipart/form-data" method="post" >
         <div class="row">
           <div class="col text-right">
-            <span style="font-size:small" ng-hide="selectedUnitDetail.data.images.length>0">upload at least one image</span>
+            <span style="font-size:small" ng-hide="selectedUnitDetail.data.images.length>0">Upload at least one image</span>
               <button class="btn bgm-teal btn-sm btn-round waves-effect" ng-click="openImageModal()" ng-if="selectedUnitDetail.data.images.length>0"> View images({{selectedUnitDetail.data.images?selectedUnitDetail.data.images.length:0}}) </button>
             <label class="btn bgm-blue btn-sm btn-round waves-effect">
                 Upload images <small>(max 24)</small>
@@ -466,7 +468,7 @@
                         <option value="W/dInUnit">W/d in unit</option>
                         <option value="LaundryOnSite">Laundry on site</option>
                         <option value="LaundryInBldg">Laundry in bldg</option>
-                        <option value="noLaundryOnSite">no laundry on site</option>
+                        <option value="noLaundryOnSite">No laundry on site</option>
                       </select>
                   
                 </div>

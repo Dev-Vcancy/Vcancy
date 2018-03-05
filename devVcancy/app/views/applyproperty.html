@@ -31,7 +31,7 @@
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-info btn-sm btn-round" ng-click="applyctrl.closeModal()">Close</button>
-					<button class="btn btn-primary btn-sm btn-round" ng-click="applyctrl.signInFunction(applyctrl.signIn)">SignIn</button>
+					<button class="btn btn-primary btn-sm btn-round" ng-click="applyctrl.signInFunction(applyctrl.signIn)">Sign In</button>
 				</div>
 			</div>
 		  </script>
@@ -47,7 +47,7 @@
 			<div class="row">
 				<div class="col-sm-12 card">
 					<div ng-if="applyctrl.applyprop.availableslots.length == 0" ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1">
-						<h4>No Time Slot Available to Schedule your application for Property.</h4>
+						<h4>No time slot is available to schedule your application for property.</h4>
 					</div>
 					<div ng-if="applyctrl.alreadyBookedSlot == 1" ng-hide="applyctrl.propinactive == 1">
 						<h4>You have already booked a time slot for this property, please cancel your time slot if you want to reschedule.</h4>
