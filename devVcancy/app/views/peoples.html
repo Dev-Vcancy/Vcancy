@@ -120,7 +120,7 @@
 								<td>{{lappctrl.getUserName(value.tenantID, value)}}</td>
 								<td>{{value.unitID}}-{{value.address}}</td>
 								<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
-									<br/> {{value.fromTimeslot}} : {{value.toTimeSlot}}</td>
+									<br/> {{value.fromTimeSlot}} : {{value.toTimeSlot}}</td>
 								<td>{{value.schedulestatus}}</td>
 								<td ng-repeat="ques in lappctrl.filters.options">
 									<a ng-if="ques.id==='U0G6V8'" tooltip-animation="false" uib-tooltip="{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}">

@@ -118,8 +118,8 @@ vcancyApp
 				if (snapshot.val()) {
 					$scope.$apply(function () {
 						var proposedTimeList = {};
-						_.map(snapshot.val(), function(value, key) {
-							if(value.schedulestatus == 'pending' && value.proposeNewTime) {
+						_.map(snapshot.val(), function (value, key) {
+							if (value.schedulestatus == 'pending' && value.proposeNewTime) {
 								proposedTimeList[key] = value;
 							}
 						});
@@ -157,6 +157,21 @@ vcancyApp
 					console.error('Error > ', error);
 				})
 		};
+
+		vm.acceptProposeTime = function (key, index) {
+			vm.loader = 1;
+			var updatedData = {
+				dateSlot: vm.apppropaddress[key].proposeNewTime['date' + index],
+				fromTimeSlot: vm.apppropaddress[key].proposeNewTime['fromTime' + index],
+				toTimeSlot: vm.apppropaddress[key].proposeNewTime['toTime' + index],
+				timeRange: vm.apppropaddress[key].proposeNewTime['fromTime' + index] + '-' + vm.apppropaddress[key].proposeNewTime['toTime' + index],
+				schedulestatus: "scheduled"
+			}
+			firebase.database().ref('applyprop/' + key).update(updatedData)
+			.then(function() {
+				getPendingProposedTime();
+			});
+		}
 
 		vm.generateMergeListing = function () {
 			vm.mergeListing = {};
@@ -340,10 +355,10 @@ vcancyApp
 						if (value.schedulestatus == "confirmed" && moment(value.dateslot).isAfter(new Date())) {
 							vm.viewingschedule += 1;
 						}
-						if (value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date()) && moment(value.fromtimeslot).format('HH:mm') < moment(new Date()).format('HH:mm') && moment(value.toslot).format('HH:mm') < moment(new Date()).format('HH:mm')) {
+						if (value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date()) && moment(value.fromTimeSlot).format('hh:mm a') < moment(new Date()).format('HH:mm') && moment(value.toTimeSlot).format('HH:mm') < moment(new Date()).format('HH:mm')) {
 							vm.viewed += 1;
 						}
-						if (value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date()) && moment(value.fromtimeslot).format('HH:mm') >= moment(new Date()).format('HH:mm') && moment(value.toslot).format('HH:mm') >= moment(new Date()).format('HH:mm')) {
+						if (value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date()) && moment(value.fromTimeSlot).format('hh:mm a') >= moment(new Date()).format('HH:mm') && moment(value.toTimeSlot).format('HH:mm') >= moment(new Date()).format('HH:mm')) {
 							vm.viewingschedule += 1;
 						}
 						if (value.schedulestatus == "submitted") {

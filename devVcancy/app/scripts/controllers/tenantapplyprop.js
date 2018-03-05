@@ -227,7 +227,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					name: name,
 					phone: phone,
 					dateSlot: dateSlot,
-					fromTimeslot: fromTimeSlot,
+					fromTimeSlot: fromTimeSlot,
 					toTimeSlot: toTimeSlot,
 					landlordID: landlordID,
 					timeRange: timeRange,
@@ -238,6 +238,15 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				}
 				if (!_.isEmpty(_data.proposeNewTime)) {
 					_data.schedulestatus = 'pending';
+					if (_data.proposeNewTime.date1) {
+						_data.proposeNewTime.date1 = moment(_data.proposeNewTime.date1).format('MM/DD/YYYY')
+					}
+					if (_data.proposeNewTime.date2) {
+						_data.proposeNewTime.date2 = moment(_data.proposeNewTime.date2).format('MM/DD/YYYY')
+					}
+					if (_data.proposeNewTime.date3) {
+						_data.proposeNewTime.date3 = moment(_data.proposeNewTime.date3).format('MM/DD/YYYY')
+					}
 				}
 				applypropdbObj.ref('applyprop/').push().set(_data).then(function () {
 					$state.go('applicationThanks');

@@ -102,33 +102,59 @@
                                     <div class="lv-title">Edit company details</div>
                                 </div>
                                 <a class="pull-right icon" ng-click="ldboardctrl.updateCheck('editCompanyDetailsCheck')">
-                                    <i class="zmdi zmdi-check icon-size-26" ></i> 
+                                    <i class="zmdi zmdi-check icon-size-26"></i>
                                 </a>
                             </div>
                             <div class="media" ng-if="ldboardctrl.userData && !ldboardctrl.userData.editCustomRentalCheck">
                                 <div class="media-body">
                                     <div class="lv-title">Edit custom rental app</div>
                                 </div>
-                                <a class="pull-right icon"  ng-click="ldboardctrl.updateCheck('editCustomRentalCheck')">
-                                    <i class="zmdi zmdi-check icon-size-26" ></i> 
+                                <a class="pull-right icon" ng-click="ldboardctrl.updateCheck('editCustomRentalCheck')">
+                                    <i class="zmdi zmdi-check icon-size-26"></i>
                                 </a>
                             </div>
                             <div class="media" ng-if="ldboardctrl.userData && !ldboardctrl.userData.editScreeningQuestionsCheck">
                                 <div class="media-body">
                                     <div class="lv-title">Edit prescreening questions</div>
                                 </div>
-                                <a class="pull-right icon"  ng-click="ldboardctrl.updateCheck('editScreeningQuestionsCheck')">
-                                    <i class="zmdi zmdi-check icon-size-26" ></i> 
+                                <a class="pull-right icon" ng-click="ldboardctrl.updateCheck('editScreeningQuestionsCheck')">
+                                    <i class="zmdi zmdi-check icon-size-26"></i>
                                 </a>
                             </div>
-                            <!-- <div class="media" ng-if="ldboardctrl.apppropaddress" ng-repeat="(key, value) in ldboardctrl.apppropaddress">
+                            <div class="media" ng-if="ldboardctrl.apppropaddress" ng-repeat="(key, value) in ldboardctrl.apppropaddress">
                                 <div class="media-body">
-                                    <div class="lv-title"></div>
+                                    <div class="lv-title">{{value.name}} has requested a showing for {{value.unitID || ''}} {{value.unitID ? '-':
+                                        ''}} {{value.address}}.</div>
+                                    <br/>
+                                    <div class="col-sm-3 text-center" ng-if="value.proposeNewTime.date1">
+                                        {{value.proposeNewTime.date1}}
+                                        <br/> {{value.proposeNewTime.fromTime1}} - {{value.proposeNewTime.toTime1}}
+                                        <br/>
+                                        <a class="icon" ng-click="ldboardctrl.acceptProposeTime(key, 1)">
+                                            <i class="zmdi zmdi-check icon-size-26"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-3 text-center" ng-if="value.proposeNewTime.date2">
+                                        {{value.proposeNewTime.date2}}
+                                        <br/> {{value.proposeNewTime.fromTime2}} - {{value.proposeNewTime.toTime2}}
+                                        <br/>
+                                        <a class="icon" ng-click="ldboardctrl.acceptProposeTime(key, 2)">
+                                            <i class="zmdi zmdi-check icon-size-26"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-3 text-center" ng-if="value.proposeNewTime.date3">
+                                        {{value.proposeNewTime.date3}}
+                                        <br/> {{value.proposeNewTime.fromTime3}} - {{value.proposeNewTime.toTime3}}
+                                        <br/>
+                                        <a class="icon" ng-click="ldboardctrl.acceptProposeTime(key, 3)">
+                                            <i class="zmdi zmdi-check icon-size-26"></i>
+                                        </a>
+                                    </div>
                                 </div>
-                                <a class="pull-right icon"  ng-click="ldboardctrl.updateCheck('editScreeningQuestionsCheck')">
+                                <!-- <a class="pull-right icon"  ng-click="ldboardctrl.updateCheck('editScreeningQuestionsCheck')">
                                     <i class="zmdi zmdi-check icon-size-26" ></i> 
-                                </a>
-                            </div> -->
+                                </a> -->
+                            </div>
                             <!-- </a> -->
                         </div>
                     </div>
