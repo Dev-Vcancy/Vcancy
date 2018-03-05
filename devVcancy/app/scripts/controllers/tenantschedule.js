@@ -44,7 +44,13 @@ vcancyApp
 							} else {
 								units = value.unitID+" - ";								
 							}
-							return [{scheduleID:index, address:units+value.address, dateslot: moment(value.dateSlot, 'MM/DD/YYYY').format('DD MMMM YYYY'), timerange: value.timeRange,  schedulestatus: value.schedulestatus}];
+							var dateSlot = value.dateSlot;
+							var timeRange = value.timeRange;
+							if(value.schedulestatus == "pending" && value.proposeNewTime) {
+								dateSlot = value.proposeNewTime.date1 || value.proposeNewTime.date2 || value.proposeNewTime.date3;
+								timeRange = (value.proposeNewTime.fromTime1 + '-' + value.proposeNewTime.toTime1) || (value.proposeNewTime.fromTime2 + '-' + value.proposeNewTime.toTime2) || (value.proposeNewTime.fromTime3 + '-' + value.proposeNewTime.toTime3)
+							}
+							return [{scheduleID:index, address:units+value.address, dateslot: moment(dateSlot, 'MM/DD/YYYY').format('DD MMMM YYYY'), timerange: timeRange,  schedulestatus: value.schedulestatus}];
 						} 
 					});	
 					
