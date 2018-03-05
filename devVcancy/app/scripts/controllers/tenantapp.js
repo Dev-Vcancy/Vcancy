@@ -27,12 +27,13 @@ vcancyApp
 					}
 					//to map the object to array
 					vm.tabledata = $.map(snapshot.val(), function (value, index) {
-						if (value.schedulestatus == "confirmed") { // && moment(value.dateslot).isBefore(new Date())
+						if (value.schedulestatus == "scheduled") { // && moment(value.dateslot).isBefore(new Date())
 							vm.pendingappsavail = 1;
-							if (value.unitId === ' ' || !value.unitId) {
-								var units = '';
+							var units = '';
+							if (value.unitID === ' ' || !value.unitID) {
+								units = '';
 							} else {
-								var units = value.unitId + " - ";
+								units = value.unitID + " - ";
 							}
 							return [{ applicationID: 0, scheduleID: index, address: units + value.address, dateslot: value.dateSlot, timerange: value.timeRange, schedulestatus: value.schedulestatus }];
 						}
@@ -138,63 +139,63 @@ vcancyApp
 			});
 		});
 
-		firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function (snapshot) {
-			$scope.$apply(function () {
-				if (snapshot.val() != null) {
-					$.map(snapshot.val(), function (value, key) {
-						if (value.scheduleID == 0 && value.externalappStatus == "draft") {
-							vm.pendingappsavail = 1;
+		// firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function (snapshot) {
+		// 	$scope.$apply(function () {
+		// 		if (snapshot.val() != null) {
+		// 			$.map(snapshot.val(), function (value, key) {
+		// 				if (value.scheduleID == 0 && value.externalappStatus == "draft") {
+		// 					vm.pendingappsavail = 1;
 
-							console.log($rootScope.$previousState.name);
-							if ($rootScope.$previousState.name == "rentalform") {
-								$state.reload();
-							}
+		// 					console.log($rootScope.$previousState.name);
+		// 					if ($rootScope.$previousState.name == "rentalform") {
+		// 						$state.reload();
+		// 					}
 
-							if (value.address == '') {
-								value.address = 'No Address Entered';
-							} else {
-								value.address = value.address;
-							}
-
-
-							vm.tabledata.push({ applicationID: key, scheduleID: 0, address: value.address, dateslot: value.dateslot, timerange: value.timerange, schedulestatus: value.schedulestatus });
-						}
-					});
-
-					vm.cols = [
-						{ field: "address", title: "Address", sortable: "address", show: true },
-						{ field: "dated", title: "Submitted On", sortable: "dated", show: true },
-						// { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
-					];
-
-					// console.log(vm.tabledata);
-					vm.extracols = [
-						{ field: "scheduleID", title: "", show: true }
-					];
+		// 					if (value.address == '') {
+		// 						value.address = 'No Address Entered';
+		// 					} else {
+		// 						value.address = value.address;
+		// 					}
 
 
-					//Sorting
-					vm.tableSorting = new NgTableParams({
-						sorting: { address: 'asc' }
-					},
+		// 					vm.tabledata.push({ applicationID: key, scheduleID: 0, address: value.address, dateslot: value.dateslot, timerange: value.timerange, schedulestatus: value.schedulestatus });
+		// 				}
+		// 			});
 
-						{
-							dataset: vm.tabledata
-							/*, {
-							total: vm.tabledata.length, // length of data
-							getData: function($defer, params) {
-								// console.log(params);
-								// use build-in angular filter
-								var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
+		// 			vm.cols = [
+		// 				{ field: "address", title: "Address", sortable: "address", show: true },
+		// 				{ field: "dated", title: "Submitted On", sortable: "dated", show: true },
+		// 				// { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
+		// 			];
+
+		// 			// console.log(vm.tabledata);
+		// 			vm.extracols = [
+		// 				{ field: "scheduleID", title: "", show: true }
+		// 			];
+
+
+		// 			//Sorting
+		// 			vm.tableSorting = new NgTableParams({
+		// 				sorting: { address: 'asc' }
+		// 			},
+
+		// 				{
+		// 					dataset: vm.tabledata
+		// 					/*, {
+		// 					total: vm.tabledata.length, // length of data
+		// 					getData: function($defer, params) {
+		// 						// console.log(params);
+		// 						// use build-in angular filter
+		// 						var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
 					
-								$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-							}*/
-							// dataset: vm.tabledata
-						})
-				}
+		// 						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+		// 					}*/
+		// 					// dataset: vm.tabledata
+		// 				})
+		// 		}
 
-			});
-		});
+		// 	});
+		// });
 
 
 		firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function (snapshot) {
