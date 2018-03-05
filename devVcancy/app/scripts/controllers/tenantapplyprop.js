@@ -129,13 +129,15 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				if (snap.val()) {
 					var propData = snap.val();
 					vm.propData = angular.copy(propData);
-					console.log('propData', propData)
 					if (propData && propData.unitlists && propData.unitlists.length > 0) {
 						vm.selectedUnit = propData.unitlists.find(function (unit) {
 							if (unit.unit == vm.unitId) return true;
 						})
 					}
-					vm.selectedUnit.images.splice(0, 0, { Location: vm.propData.propimg });
+					if (!vm.selectedUnit.images) {
+						vm.selectedUnit.images = [];
+					}
+					vm.selectedUnit.images.push({ Location: vm.propData ? vm.propData.propimg : null });
 					getScheduledProp();
 					vm.getLandlord();
 				} else {
@@ -149,6 +151,45 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		}
 
 		init();
+
+		vm.forgotpwdmail = function () {
+			var email = vm.signIn.email;
+			if (!email) {
+				swal({
+					type: 'error',
+					title: 'Error',
+					text: 'Please enter email'
+				});
+				return
+			}
+			$rootScope.invalid = '';
+			$rootScope.success = '';
+			$rootScope.error = '';
+
+			var forgotuserObj = $firebaseAuth();
+			forgotuserObj.$sendPasswordResetEmail(email).then(function () {
+				$rootScope.success = 'Password reset email sent to your inbox. Please check your email.';
+				$rootScope.error = '';
+				vm.signIn.email = '';
+				vm.modalInstance.dismiss('cancel');
+				swal({
+					type: 'success',
+					title: 'success',
+					text: 'Email sent'
+				});
+			}).catch(function (error) {
+				swal({
+					type: 'error',
+					title: 'Error',
+					text: error.message
+				});
+			});
+
+		};
+		vm.forgetPwd = false;
+		vm.toggleForgetPwd = function () {
+			vm.forgetPwd = true;
+		}
 
 		// Property Application form - Data of tenant save		
 		vm.tenantapply = function () {
@@ -195,7 +236,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					preScreeningAns: preScreeningAns,
 					proposeNewTime: proposeNewTime
 				}
-				if(!_.isEmpty(_data.proposeNewTime)) {
+				if (!_.isEmpty(_data.proposeNewTime)) {
 					_data.schedulestatus = 'pending';
 				}
 				applypropdbObj.ref('applyprop/').push().set(_data).then(function () {

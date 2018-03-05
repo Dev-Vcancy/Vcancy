@@ -22,16 +22,30 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="form-group">
+					<div class="form-group" ng-if="!applyctrl.forgetPwd">
 						<input type="text" class="custom-form-element" ng-model="applyctrl.signIn.email" placeholder="Email" required/>
 					</div>
-					<div class="form-group mt-3">
+					<div class="form-group mt-3" ng-if="!applyctrl.forgetPwd">
 						<input type="password" class="custom-form-element" ng-model="applyctrl.signIn.password" placeholder="Password" required/>
+					</div>
+					<div class="row" style="margin:auto" ng-if="!applyctrl.forgetPwd">
+						<div class="col-sm-12 text-right">
+							<span class='text-primary hover-color' style="cursor:pointer" ng-click="applyctrl.toggleForgetPwd()">Forget Password?</span>
+						</div>
+					</div>
+					<div class="form-group"  ng-if="applyctrl.forgetPwd">
+						<span>
+								Please provide the email address that you used when you signed up for your account. We will send you an email that will allow you to reset your password.
+						</span>
+					</div>
+					<div class="form-group mt-3" ng-if="applyctrl.forgetPwd">
+							<input type="email" class="custom-form-element" ng-model="applyctrl.signIn.email" placeholder="registered email" required/>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-info btn-sm btn-round" ng-click="applyctrl.closeModal()">Close</button>
-					<button class="btn btn-primary btn-sm btn-round" ng-click="applyctrl.signInFunction(applyctrl.signIn)">Sign In</button>
+						<button ng-if="applyctrl.forgetPwd" class="btn btn-info btn-sm btn-round" ng-click="applyctrl.forgotpwdmail()">Request</button>
+					<button ng-if="!applyctrl.forgetPwd" class="btn btn-info btn-sm btn-round" ng-click="applyctrl.closeModal()">Close</button>
+					<button ng-if="!applyctrl.forgetPwd" class="btn btn-primary btn-sm btn-round" ng-click="applyctrl.signInFunction(applyctrl.signIn)">Sign In</button>
 				</div>
 			</div>
 		  </script>
@@ -109,7 +123,7 @@
 								<div class="row mt-3">Amenities : {{applyctrl.selectedUnit.Aminities.join(',')}},
 								</div>
 								<div class='row ml-5'>
-									<p>{{applyctrl.selectedUnit.otherAminities}}</p>
+									<p style="margin:0;margin-left:31px">{{applyctrl.selectedUnit.otherAminities}}</p>
 								</div>
 								<!-- <div class="form-group col-sm-1<div class="row">Property Name</div>2">
 									<input type="text" placeholder="Full name" readonly="true" ng-model=<div class="row">Property Name</div>"applyctrl.applyprop.name" required  class="form-control"/>
@@ -175,7 +189,8 @@
 										<div class="row mt-3">
 
 											<div class="col-sm-4">
-												<input type="date" class="custom-form-element" name="fromDate" min="{{applyctrl.todayDate}}" ng-model="applyctrl.proposeNewTime.date1" />
+												<input type="date" class="custom-form-element" name="fromDate" min="{{applyctrl.todayDate}}" ng-model="applyctrl.proposeNewTime.date1"
+												/>
 											</div>
 											<div class="col-sm-4">
 												<select class="custom-form-element" name="more" ng-model="applyctrl.proposeNewTime.fromTime1" style="width:10vw">
@@ -239,7 +254,8 @@
 										</div>
 										<div class="row mt-3">
 											<div class="col-sm-4">
-												<input type="date" class="custom-form-element" name="fromDate" min="{{applyctrl.todayDate}}" ng-model="applyctrl.proposeNewTime.date2" />
+												<input type="date" class="custom-form-element" name="fromDate" min="{{applyctrl.todayDate}}" ng-model="applyctrl.proposeNewTime.date2"
+												/>
 											</div>
 											<div class="col-sm-4">
 												<select class="custom-form-element" name="more" ng-model="applyctrl.proposeNewTime.fromTime2" style="width:10vw">
@@ -304,7 +320,8 @@
 										</div>
 										<div class="row mt-3">
 											<div class="col-sm-4">
-												<input type="date" class="custom-form-element" name="fromDate" min="{{applyctrl.todayDate}}" ng-model="applyctrl.proposeNewTime.date3" />
+												<input type="date" class="custom-form-element" name="fromDate" min="{{applyctrl.todayDate}}" ng-model="applyctrl.proposeNewTime.date3"
+												/>
 											</div>
 											<div class="col-sm-4">
 												<select class="custom-form-element" name="more" ng-model="applyctrl.proposeNewTime.fromTime3" style="width:10vw">
@@ -371,7 +388,8 @@
 								</div>
 
 								<div>
-									<div class="row text-center mt-5" ng-hide="applyctrl.userData && applyctrl.userData.firstname">
+									<!-- ng-hide="applyctrl.userData && applyctrl.userData.firstname" -->
+									<div class="row text-center mt-5">
 										Already have an account?&nbsp;&nbsp;
 										<a class="text-primary" ng-click="applyctrl.openSignInmodel()">Sign in</a>
 									</div>
