@@ -373,11 +373,7 @@ vcancyApp
 			};
 
 			vm.toggleListOnCraglist = function (keys) {
-				swal({
-					title: 'Success',
-					text: 'Your unit/s will now be listed on Craigslist within 24 hours.You will get a notification email when your listing/s is active.Note: You can also share your unique property link on other listing websites, social media, email etc.',
-					type: "success",
-				});
+				let toggle = false;
 				keys.forEach(function (key) {
 					if (vm.listings[key].listOnCraigslist) {
 						vm.listings[key].listOnCraigslist = !vm.listings[key].listOnCraigslist;
@@ -385,8 +381,18 @@ vcancyApp
 					else {
 						vm.listings[key].listOnCraigslist = true;
 					}
+					if (vm.listings[key].listOnCraigslist) {
+						toggle = true;
+					}
 					vm.toggleCraigsList(key, vm.listings[key].listOnCraigslist)
 				});
+				if (toggle) {
+					swal({
+						title: 'Success',
+						text: 'Your unit/s will now be listed on Craigslist within 24 hours.You will get a notification email when your listing/s is active.Note: You can also share your unique property link on other listing websites, social media, email etc.',
+						type: "success",
+					});
+				}
 			};
 
 			vm.checkIsIncomplete = function (propId, unitId) {

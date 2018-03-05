@@ -204,7 +204,7 @@
                       <span class="fa fa-info-circle" title="Prospective tenants can schedule a showing via this link">
                     </th>
                     <th>
-                      List on Craiglist 
+                      List on Craiglist
                       <span class="fa fa-info-circle" title="Complete mandatory fields and toggle the button to list on Craigslist"></span>
                     </th>
                     <th>
@@ -230,16 +230,19 @@
                     </td>
                     <td class="text-center">
                       <span ng-if="value.unitID && newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
-                        class="text-primary hover-color" style='cursor:pointer'>Incomplete listing details</span>
+                        class="text-primary hover-color" style='cursor:pointer;margin:auto'>Incomplete listing details</span>
                       <!-- <span  ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
                         class="text-primary">Link to Craigslist listing</span> -->
-                      <div class="toggle-switch mt-4" ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.toggleListOnCraglist(value.keys)">
-                        <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
-                        <label class="ts-helper" style="border-radius: 8px !important"></label>
-                      </div>
-                      <div class="text-primary hover-color" style='cursor:pointer' ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)"
-                        ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)">
-                        <span>Edit Listing Details</span>
+                      <div ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)">
+                        <div>Listing On/Off</div>
+                        <div class="toggle-switch mt-2" ng-click="newschedulectrl.toggleListOnCraglist(value.keys)">
+                          <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
+                          <label class="ts-helper" style="border-radius: 8px !important"></label>
+                        </div>
+                        <div class="text-primary hover-color" style='cursor:pointer'
+                          ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)">
+                          <span>Edit Listing Details</span>
+                        </div>
                       </div>
                     </td>
                     <td>{{value.status}}</td>
@@ -357,7 +360,7 @@
                 <div class="form-group">
                     <div class="">
                       <label class='m-0'>Unit:</label>
-                      <input name="rent" ng-model="selectedUnitDetail.data.unit" type="text" class="form-control original-form-control" id="" placeholder="Required">
+                      <input name="rent" required ng-model="selectedUnitDetail.data.unit" type="text" class="form-control original-form-control" id="" placeholder="Required">
                     </div>
                   </div>
             </div>
@@ -432,7 +435,7 @@
                 <div class="form-group">
               
                     <label class='m-0'>Property Type:</label>
-                    <select required class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.type" data-placeholder="Prop type" class="">
+                    <select required class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.type" data-placeholder="Prop type">
                             <option value="">Select (Required)</option>
                             <option value="house">House</option>
                             <option value="townhouse">Town House</option>
@@ -448,7 +451,7 @@
                 <div class="form-group">
                 
                     <label class='m-0'>Parking:</label>
-                    <select chosen="" class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.parking" required data-placeholder="Prop type">
+                    <select class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.parking" data-placeholder="Prop type">
                           <option value="">Select</option>
                           <option value="carport">Carport</option>
                           <option value="detachedGarage">Detached garage</option>
@@ -463,7 +466,7 @@
                 <div class="form-group">
                   
                     <label class='m-0'>Laundry:</label>
-                    <select chosen="" class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.laundry" required data-placeholder="Prop type">
+                    <select chosen="" class="form-control original-form-control select-height" name="proptype" ng-model="selectedUnitDetail.data.laundry" data-placeholder="Prop type">
                         <option value="">Select</option>
                         <option value="W/dInUnit">W/d in unit</option>
                         <option value="LaundryOnSite">Laundry on site</option>
@@ -500,7 +503,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class='m-0'>Description:</label>
-                    <textarea required ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" style="resize: vertical;"/>
+                    <textarea required name="description" id="description" ng-model="selectedUnitDetail.data.description" rows="5"  class="form-control original-form-control" placeholder="Enter property description. Prospective tenants will read this information on your listing (Required)" style="resize: vertical;"/>
                 </div>
             </div>
           </div>
@@ -520,7 +523,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label class='m-0'>Sq ft:</label>
-                    <input name="address" ng-model="selectedUnitDetail.data.sqft" type="text" class="form-control original-form-control" id="" placeholder="Required">
+                    <input name="address" ng-model="selectedUnitDetail.data.sqft" type="text" class="form-control original-form-control" id="" required placeholder="Required">
                 </div>
             </div>
           </div>
@@ -537,7 +540,7 @@
                 <div class="form-group">
             
                     <label class='m-0'>Phone:</label>
-                    <input name="address" ng-model="selectedUnitDetail.data.phone" type="text" ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
+                    <input name="address" ng-model="selectedUnitDetail.data.phone" type="text" ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"
                     class="form-control original-form-control" id="" placeholder="">
                   
                 </div>
@@ -610,11 +613,11 @@ Kitchen and Bath
 </form>
 </div>
 <style>
-  input.ng-invalid {
+  .ng-invalid {
     border-color: red !important;
   }
 
-  input.ng-touched.ng-valid {
+  .ng-touched.ng-valid {
     border-color: green !important;
   }
 </style>
