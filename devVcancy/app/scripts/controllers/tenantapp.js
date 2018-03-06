@@ -26,6 +26,7 @@ vcancyApp
 						$state.reload();
 					}
 					//to map the object to array
+					console.log(snapshot.val());
 					vm.tabledata = $.map(snapshot.val(), function (value, index) {
 						if (value.schedulestatus == "scheduled") { // && moment(value.dateslot).isBefore(new Date())
 							vm.pendingappsavail = 1;
