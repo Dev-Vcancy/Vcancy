@@ -316,7 +316,11 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 									localStorage.setItem('userEmail', firebase.auth().currentUser.email);
 									localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
 									localStorage.setItem('password', pass);
-									alert('verification email has been sent to your email.');
+									swal({
+										title: "Success",
+										text: 'verification email has been sent to your email.',
+										type: "success",
+									});
 									var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to on https://vcancy.ca/ .</p><p>Your email is ' + email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 									// Send Email

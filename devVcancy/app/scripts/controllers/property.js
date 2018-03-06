@@ -451,13 +451,21 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 filename = filename.replace(/\s/g, '');
 
                 if (file.size > 3145728) {
-                    alert('File size should be 3 MB or less.');
+                    swal({
+                        title: "Error!",
+                        text: 'File size should be 3 MB or less.',
+                        type: "error",
+                    });
                     return false;
                 } else if (
                     file.type != 'image/png' &&
                     file.type != 'image/jpeg' &&
                     file.type != 'image/jpg') {
-                    alert('Invalid file type.');
+                    swal({
+                        title: "Error!",
+                        text: 'Invalid file type.',
+                        type: "error",
+                    });
                     return false;
                 }
 
@@ -740,33 +748,51 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                                 }
 
                                 if (headerkey == 'unit' && currentline[j] == '') {
-                                    alert("Unit number must be a value. Please follow instructions in the spreadsheet");
+                                    swal({
+                                        title: "Error!",
+                                        text: "Unit number must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
                                     return false;
                                 }
                                 if (headerkey == 'rent' && currentline[j] == '') {
-                                    alert("Rent must be a value. Please follow instructions in the spreadsheet");
+                                    swal({
+                                        title: "Error!",
+                                        text: "Rent must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
                                     return false;
                                 }
                                 if (headerkey == 'sqft' && currentline[j] == '') {
-                                    alert("Sqft must be a value. Please follow instructions in the spreadsheet");
+                                    swal({
+                                        title: "Error!",
+                                        text: "Sqft must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
                                     return false;
                                 }
 
                                 if (headerkey == 'status' && currentline[j] == '') {
-                                    alert("Status must be a value. Please follow instructions in the spreadsheet");
+                                    swal({
+                                        title: "Error!",
+                                        text: "Status must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
                                     return false;
                                 }
                                 if (headerkey == 'amenities' && currentline[j] == '') {
-                                    alert("Amenities must be a value. Please follow instructions in the spreadsheet");
+                                    swal({
+                                        title: "Error!",
+                                        text: "Amenities must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
                                     return false;
                                 }
 
 
                                 if (headerkey == 'amenities' && currentline[j] != '') {
-                                    console.log(currentline[j]);
                                     var amenities = currentline[j];
                                     var str_array = amenities.split('|');
-                                    console.log(str_array);
                                     obj['Aminities'] = str_array;
                                 } else {
                                     obj[headerkey] = currentline[j];
@@ -795,7 +821,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
                         if (vm.duplication(units) == true) {
-                            alert("Duplicate unit numbers found in the file. Please check duplicate values.")
+                            swal({
+                                title: "Error!",
+                                text: "Duplicate unit numbers found in the file. Please check duplicate values.",
+                                type: "error",
+                            });
                             return false;
                         }
 
@@ -820,10 +850,18 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
                 } else {
-                    alert("This browser does not support HTML5.");
+                    swal({
+                        title: "Error!",
+                        text: "This browser does not support HTML5.",
+                        type: "error",
+                    });
                 }
             } else {
-                alert("Please upload a valid CSV file.");
+                swal({
+                    title: "Error!",
+                    text: "Please upload a valid CSV file.",
+                    type: "error",
+                });
             }
 
         }
@@ -858,7 +896,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         }
 
                         if (vm.duplication(units) == true) {
-                            alert("Duplicate unit numbers found in the file. Please check duplicate values.")
+                            swal({
+                                title: "Error!",
+                                text: "Duplicate unit numbers found in the file. Please check duplicate values.",
+                                type: "error",
+                            });
                             return false;
                         }
 
@@ -879,10 +921,18 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
 
 
                 } else {
-                    alert("This browser does not support HTML5.");
+                    swal({
+                        title: "Error!",
+                        text: "This browser does not support HTML5.",
+                        type: "error",
+                    });
                 }
             } else {
-                alert("Please upload a valid CSV file.");
+                swal({
+                    title: "Error!",
+                    text: "Please upload a valid CSV file.",
+                    type: "error",
+                });
             }
 
         }
@@ -1488,7 +1538,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 //     }
                 // }
             } else {
-                alert("Please select row for apply your selected action");
+                swal({
+                    title: "Error!",
+                    text: "Please select row for apply your selected action",
+                    type: "error",
+                });
                 vm.more = '';
             }
         }
@@ -1618,10 +1672,18 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                 filename = filename.replace(/\s/g, '');
 
                 if (file.size > 3145728) {
-                    alert('File size should be 3 MB or less.');
+                    swal({
+                        title: "Error!",
+                        text: 'File size should be 3 MB or less.',
+                        type: "error",
+                    });
                     return false;
                 } else if (file.type.indexOf('image') === -1) {
-                    alert('Only files are accepted.');
+                    swal({
+                        title: "Error!",
+                        text: 'Only files are accepted.',
+                        type: "error",
+                    });
                     return false;
                 }
 
@@ -1831,7 +1893,11 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             }
 
             if (vm.duplication(number) == true) {
-                alert("Duplicate unit numbers found in the file. Please check duplicate values.")
+                swal({
+                    title: "Error!",
+                    text: "Duplicate unit numbers found in the file. Please check duplicate values.",
+                    type: "error",
+                });
                 /*$rootScope.$apply(function() {
                          $rootScope.error = "Please check your unit number are duplicate.. !";
                      });*/
@@ -2180,20 +2246,36 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                             }
 
                             if (headerkey == 'unit' && currentline[j] == '') {
-                                alert("Unit must be a value. Please follow instructions in the spreadsheet");
+                                swal({
+                                    title: "Error!",
+                                    text: "Unit must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
                                 return false;
                             }
                             if (headerkey == 'rent' && currentline[j] == '') {
-                                alert("Rent must be a value. Please follow instructions in the spreadsheet");
+                                swal({
+                                    title: "Error!",
+                                    text: "Rent must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
                                 return false;
                             }
                             if (headerkey == 'sqft' && currentline[j] == '') {
-                                alert("Sqft must be a value. Please follow instructions in the spreadsheet");
+                                swal({
+                                    title: "Error!",
+                                    text: "Sqft must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
                                 return false;
                             }
 
                             if (headerkey == 'status' && currentline[j] == '') {
-                                alert("status must be a value. Please follow instructions in the spreadsheet");
+                                swal({
+                                    title: "Error!",
+                                    text: "status must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
                                 return false;
                             }
 
@@ -2297,10 +2379,18 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
 
 
             } else {
-                alert("This browser does not support HTML5.");
+                swal({
+                    title: "Error!",
+                    text: "This browser does not support HTML5.",
+                    type: "error",
+                });
             }
         } else {
-            alert("Please upload a valid CSV file.");
+            swal({
+                title: "Error!",
+                text: "Please upload a valid CSV file.",
+                type: "error",
+            });
         }
 
     }

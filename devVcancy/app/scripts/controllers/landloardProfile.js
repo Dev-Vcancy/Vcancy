@@ -139,10 +139,18 @@ vcancyApp
         filename = filename.replace(/\s/g, '');
 
         if (file.size > 3145728) {
-          alert('File size should be 3 MB or less.');
+          swal({
+            title: "Error!",
+            text: 'File size should be 3 MB or less.',
+            type: "error",
+          });
           return false;
         } else if (file.type.indexOf('image') === -1) {
-          alert('Only files are accepted.');
+          swal({
+            title: "Error!",
+            text: 'Only files are accepted.',
+            type: "error",
+          });
           return false;
         }
 
@@ -241,12 +249,20 @@ vcancyApp
         filename = filename.replace(/\s/g, '');
 
         if (file.size > 3145728) {
-          alert('File size should be 3 MB or less.');
+          swal({
+            title: "Error!",
+            text: 'File size should be 3 MB or less.',
+            type: "error",
+          });
           return false;
         } else if (!(filename.endsWith('.png'))
           && !(filename.endsWith('.jpg'))
           && !(filename.endsWith('.jpeg'))) {
-          alert('Invalid file type.');
+          swal({
+            title: "Error!",
+            text: 'Invalid file type.',
+            type: "error",
+          });
           return false;
         }
 
@@ -274,7 +290,11 @@ vcancyApp
 
           });
         } else {
-          alert("File Type is Invalid.");
+          swal({
+            title: "Error!",
+            text: "File Type is Invalid.",
+            type: "error",
+          });
           return false;
         }
       }

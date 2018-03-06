@@ -661,7 +661,12 @@ vcancyApp
 				}
 				var fileCheckMsg = checkFile();
 				if (fileCheckMsg) {
-					return window.alert(fileCheckMsg);
+					swal({
+						title: "Error!",
+						text: fileCheckMsg,
+						type: "error",
+					});
+					return;
 				}
 				var externalemail = vm.submitemail == undefined ? '' : vm.submitemail;
 				console.log(externalappStatus);
