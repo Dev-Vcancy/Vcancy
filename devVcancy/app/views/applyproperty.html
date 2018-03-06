@@ -416,11 +416,11 @@
 								</div>
 								<ng-form role="form" name="scheduleForm" novalidate>
 									<div class="row mt-3 p-20" style="border:1px solid #c2cad8">
-										<div class="col-sm-12 mt-3" ng-repeat="ques in applyctrl.landlordData.screeningQuestions">
-											<input type='text' ng-if="ques.isChecked && ques.id == 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' ng-model="applyctrl.preScreeningAns[ques.id]"
+										<div class="col-sm-12 mt-3" ng-if="ques.isChecked" ng-repeat="ques in applyctrl.landlordData.screeningQuestions">
+											<input type='text' ng-if="ques.id == 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' ng-model="applyctrl.preScreeningAns[ques.id]"
 											 class="form-control original-form-control" placeholder="{{ques.label}}" onfocus="(this.type='date')" onblur="(this.type='text')"
 											 id="date" required/>
-											<input type="text" ng-if="ques.isChecked && ques.id != 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' placeholder="{{ques.label}}"
+											<input type="text" ng-if="ques.id != 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' placeholder="{{ques.label}}"
 											 ng-model="applyctrl.preScreeningAns[ques.id]" class="form-control original-form-control" required/>
 										</div>
 									</div>
