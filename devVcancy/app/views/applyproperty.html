@@ -120,7 +120,7 @@
 								<div class="row mt-3">Laundry : {{applyctrl.selectedUnit.laundry}}</div>
 								<div class="row mt-3">Pets : Cats - {{applyctrl.selectedUnit.cats ? 'YES':'NO'}} , Dogs - {{applyctrl.selectedUnit.dogs? 'YES':'NO'}}</div>
 								<div class="row mt-3">Lease Terms : {{applyctrl.selectedUnit.leaseLength}}</div>
-								<div class="row mt-3">Amenities : {{applyctrl.selectedUnit.Aminities.join(',')}},
+								<div class="row mt-3">Amenities : {{applyctrl.selectedUnit.Aminities.join(', ')}},
 								</div>
 								<div class='row ml-5'>
 									<p style="margin:0;margin-left:31px">{{applyctrl.selectedUnit.otherAminities}}</p>
@@ -388,8 +388,7 @@
 								</div>
 
 								<div>
-									<!-- ng-hide="applyctrl.userData && applyctrl.userData.firstname" -->
-									<div class="row text-center mt-5">
+									<div class="row text-center mt-5" ng-hide="applyctrl.userData && applyctrl.userData.firstname">
 										Already have an account?&nbsp;&nbsp;
 										<a class="text-primary" ng-click="applyctrl.openSignInmodel()">Sign in</a>
 									</div>
@@ -427,8 +426,8 @@
 									<div class="row mt-3 p-20">
 										<div class="col-sm-12 mt-3 text-center">
 											<span>By scheduling you agree to
-												<a href='https://vcancy.ca/tos_privacypolicy/'>Terms of Use</a> and
-												<a href='https://vcancy.ca/tos_privacypolicy/'>Privacy Policy</a>
+												<a href='https://vcancy.ca/tos_privacypolicy/' target='_blank'>Terms of Use</a> and
+												<a href='https://vcancy.ca/tos_privacypolicy/' target='_blank'>Privacy Policy</a>
 											</span>
 										</div>
 										<div class="col-sm-12 mt-3 text-center">
@@ -465,10 +464,6 @@
 								</div>							 -->
 						</div>
 						<div class="clearfix"></div>
-						<!-- <div class="col-sm-12 text-center">
-								<button type="submit" ng-disabled="applypropForm.$invalid"  class="btn btn-success">Send</button>
-							</div>
-							 -->
 						<div class="clearfix"></div>
 				</div>
 				</form>

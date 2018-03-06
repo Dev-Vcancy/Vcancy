@@ -36,7 +36,7 @@
                       </select>
                     </div>
                     <div class="col text-right">
-                        <span style="font-size:small" ng-hide="selectedUnitDetail.data.images.length>0">upload at least one image</span>
+                        <span style="font-size:small;color:red" ng-hide="selectedUnitDetail.data.images.length>0">upload at least one image</span>
                       <button class="btn bgm-teal btn-sm btn-round waves-effect" ng-click="openImageModal()" ng-if="selectedUnitDetail.data.images.length>0"> View images({{selectedUnitDetail.data.images?selectedUnitDetail.data.images.length:0}}) </button>
                       <label class="btn bgm-blue btn-sm btn-round">
                           Upload images <small>(max 24)</small>
@@ -81,7 +81,7 @@
                       <div class="col-sm-4">
                         <div class="form-group">
                           <label class='m-0'>Lease Length:</label>
-                          <select data-placeholder="Status" name="status" ng-model="selectedUnitDetail.data.leaseLength" required class="form-control original-form-control select-height"
+                          <select data-placeholder="Status" name="status" ng-model="selectedUnitDetail.data.leaseLength" class="form-control original-form-control select-height"
                                       data-placeholder="Prop status">
                             <option value="">Select</option>
                             <option value="month-to-month">Month-to-month</option>

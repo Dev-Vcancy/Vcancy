@@ -1735,7 +1735,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             vm.prop.noofunits = parseInt(val + 1);
         }
 
-        vm.submiteditunits = function (unitlists, prop, isDeleted) {
+        vm.submiteditunits = function (unitlists, prop, isDeleted, isFromSchedule) {
             let unitIds = [];
             unitlists.forEach((unit) => {
                 unitIds.push(unit.unit);
@@ -1768,7 +1768,12 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         title: "Success!",
                         text: "Unit/s saved successfully.",
                         type: "success",
-                    });
+                    }, function (value) {
+                        if (isFromSchedule) {
+                            window.location.reload();
+                        }
+                    })
+
                 }
             }, function (error) {
                 if (confirm("Units not added, please try again!") == true) {
@@ -2083,7 +2088,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             }
             return false;
         }
-        $scope.submitDetails = function () {
+        $scope.submitDetails = function (isFromSchedule) {
             var index = $scope.selectedUnitDetail.index;
             if (!vm.prop.unitlists) {
                 vm.prop.unitlists = [];
@@ -2093,7 +2098,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             }
             vm.prop.unitlists[index] = angular.copy($scope.selectedUnitDetail.data);
             vm.prop.unitlists[index].isIncomplete = vm.checkIfDetailIsIncomplete(angular.copy($scope.selectedUnitDetail.data));
-            vm.submiteditunits(vm.prop.unitlists, vm.prop)
+            vm.submiteditunits(vm.prop.unitlists, vm.prop, '', isFromSchedule)
                 .then(function () {
                     $scope.cancel();
                 });
