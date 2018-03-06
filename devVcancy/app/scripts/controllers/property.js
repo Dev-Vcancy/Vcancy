@@ -1254,7 +1254,15 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             firebase.database().ref('properties/' + propID).once("value", function (snap) {
 
                 vm.property_address = snap.val().address;
-                if ($window.confirm("Are you sure you want to delete this property? All details and units will be deleted!")) {
+                swal({
+                    title: 'Warning!',
+                    text: "Are you sure you want to delete this property? All details and units will be deleted!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes",
+                    closeOnConfirm: false
+                }, function () {
                     propdbObj.ref('properties/' + propID).remove();
                     firebase.database().ref('applyprop/').orderByChild("propID").equalTo(propID).once("value", function (snapshot) {
                         $scope.$apply(function () {
@@ -1291,7 +1299,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                         swal({
                             title: 'Success!',
                             text: 'Property deleted successfully',
-                            type: 'Success'
+                            type: 'success'
                         }, function () {
                             if (page === 'innerpage') {
                                 $state.go('viewprop');
@@ -1307,7 +1315,7 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
                     } else {
                         $state.reload();
                     }
-                }
+                });
             });
         }
 
