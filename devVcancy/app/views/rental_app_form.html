@@ -25,7 +25,7 @@
                                     <div class="card-body-inner">
                                         <div class="col-xs-12 col-sm-4">
                                             <div class="form-group fg-float m-t-30">
-                                                <div class="fg-line fg-toggled">
+                                                <div class=" fg-toggled">
                                                     <input required readonly="true" type="text" ng-model="rctrl.tenantdata.tenantName" class="input-sm form-control w-100 fg-input"
                                                         id="" placeholder="">
                                                     <label class="fg-label">Full Name
@@ -35,7 +35,7 @@
                                         </div>
                                         <!--div class="col-xs-12 col-sm-4">
                                                         <div class="form-group fg-float m-t-30">
-                                                            <div class="fg-line fg-toggled">
+                                                            <div class=" fg-toggled">
                                                                 <!--<input required readonly="true" type="text" ng-model="rctrl.tenantdata.tenantName" class="input-sm form-control fg-input" id="" placeholder="Full Name">>
                                                                 <div class="date-picker input-group disp-tbl" ng-class="{ 'is-opened': rctrl.dobopened == true }">
                                                                     <span class="input-group-addon"><i class="zmdi zmdi-calendar ma-icon"></i></span>
@@ -51,7 +51,7 @@
                                                     </div-->
                                         <div class="col-xs-12 col-sm-4">
                                             <div class="form-group fg-float m-t-30">
-                                                <div class="fg-line fg-toggled">
+                                                <div class=" fg-toggled">
 
                                                     <div class="date-picker input-group disp-tbl" disable-link>
                                                         <span class="input-group-addon">
@@ -70,7 +70,7 @@
                                         </div>
                                         <div class="col-xs-12 col-sm-4">
                                             <div class="form-group fg-float m-t-30">
-                                                <div class="fg-line">
+                                                <div class="">
                                                     <input type="text" ng-model="rctrl.rentaldata.sinno" class="input-sm form-control fg-input" id="">
                                                     <label class="fg-label">SIN Number:</label>
                                                 </div>
@@ -78,7 +78,7 @@
                                         </div>
                                         <div class="col-xs-12 col-sm-4">
                                             <div ng-class="{ 'has-error' : rentalForm.telWork.$invalid && !rentalForm.telWork.$pristine }" class="form-group fg-float m-t-30">
-                                                <div class="fg-line fg-toggled">
+                                                <div class=" fg-toggled">
                                                     <input required name="telWork" type="text" ng-model="rctrl.rentaldata.telwork" class="form-control w-100 phone" id="" placeholder=""
                                                         ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
                                                         ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
@@ -91,7 +91,7 @@
 
                                         <div class="col-xs-12 col-sm-4">
                                             <div ng-class="{ 'has-error' : rentalForm.telHome.$invalid && !rentalForm.telHome.$pristine }" class="form-group fg-float m-t-30">
-                                                <div class="fg-line fg-toggled">
+                                                <div class=" fg-toggled">
                                                     <input required name="telHome" type="text" ng-model="rctrl.rentaldata.telhome" class="form-control w-100 phone" id="" placeholder=""
                                                         ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
                                                         ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
@@ -103,7 +103,7 @@
                                         </div>
                                         <div class="col-xs-12 col-sm-4">
                                             <div ng-class="{ 'has-error' : rentalForm.email.$invalid && !rentalForm.email.$pristine }" class="form-group fg-float m-t-30">
-                                                <div class="fg-line fg-toggled">
+                                                <div class=" fg-toggled">
                                                     <input required readonly type="email" name="email" ng-model="rctrl.tenantdata.tenantEmail" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/"
                                                         class="form-control w-100" id="" placeholder="">
                                                     <label class="fg-label">Email
@@ -115,7 +115,7 @@
 
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group fg-float m-t-30">
-                                                <div ng-class="{ 'has-error' : rentalForm.curAddress.$invalid && !rentalForm.curAddress.$pristine }" class="fg-line fg-toggled">
+                                                <div ng-class="{ 'has-error' : rentalForm.curAddress.$invalid && !rentalForm.curAddress.$pristine }" class=" fg-toggled">
                                                     <input required name="curAddress" type="text" class="form-control w-100" ng-model="rctrl.rentaldata.appaddress" id="" placeholder="">
                                                     <label class="fg-label">Current Address
                                                         <span class="mandatory" print-remove>*</span>:</label>
@@ -126,7 +126,7 @@
 
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group fg-float m-t-30">
-                                                <div ng-class="{ 'has-error' : rentalForm.city.$invalid && !rentalForm.city.$pristine }" class="fg-line fg-toggled">
+                                                <div ng-class="{ 'has-error' : rentalForm.city.$invalid && !rentalForm.city.$pristine }" class=" fg-toggled">
                                                     <input required name="city" ng-model="rctrl.rentaldata.appcity" type="text" class="form-control w-100" id="" placeholder="">
                                                     <label class="fg-label">City
                                                         <span class="mandatory" print-remove>*</span>:</label>
@@ -170,7 +170,7 @@
                                                         <span ng-show="rctrl.rentaldata.pets == 'yes'">
                                                             How many and what kind
                                                             <span class="mandatory" print-remove>*</span>:
-                                                            <span class="fg-line">
+                                                            <span class="">
                                                                 <input required type="text" ng-model="rctrl.rentaldata.petsdesc" class="form-control w-100" id="" placeholder="1 dog">
                                                             </span>
                                                         </span>
@@ -223,7 +223,7 @@
                                         <div class="col-xs-12 ">
                                             <div ng-class="{ 'has-error' : rentalForm.liveAddress.$invalid && !rentalForm.liveAddress.$pristine }" class="form-group fg-float m-t-30"
                                                 ng-show="rctrl.rentaldata.rent_own == 'rent'">
-                                                <div class="fg-line fg-toggled">
+                                                <div class=" fg-toggled">
                                                     <input required type="text" name="liveAddress" ng-model="rctrl.rentaldata.live_time" class="form-control w-100 " id="" placeholder="">
                                                     <label class="fg-label">How long have you lived at this address (Months-Years)
                                                         <span class="mandatory" print-remove>*</span>:</label>
@@ -233,7 +233,7 @@
 
                                         <div class="col-xs-12">
                                             <div ng-class="{ 'has-error' : rentalForm.rentAmount.$invalid && !rentalForm.rentAmount.$pristine }" class="form-group fg-float m-t-30">
-                                                <div class="fg-line fg-toggled">
+                                                <div class=" fg-toggled">
                                                     <input required type="text" name="rentAmount" ng-model="rctrl.rentaldata.rentamt" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" class="form-control w-100"
                                                         id="" placeholder="">
                                                     <label class="fg-label">Rent/Mortgage amount ($)
@@ -244,7 +244,7 @@
 
                                         <div class="col-xs-12 ">
                                             <div ng-class="{ 'has-error' : rentalForm.lastHome.$invalid && !rentalForm.lastHome.$pristine }" class="form-group fg-float m-t-30">
-                                                <div class="fg-line fg-toggled">
+                                                <div class=" fg-toggled">
                                                     <input required name="lastHome" ng-model="rctrl.rentaldata.vacantreason" type="text" class="form-control w-100" id="" placeholder="">
                                                     <label class="fg-label">Reason for vacating existing home
                                                         <span class="mandatory" print-remove>*</span>:</label>
@@ -254,7 +254,7 @@
 
                                         <div class="col-xs-12 col-sm-6">
                                             <div ng-class="{ 'has-error' : rentalForm.landLoardName.$invalid && !rentalForm.landLoardName.$pristine }" class="form-group fg-float m-t-30">
-                                                <div class="fg-line fg-toggled">
+                                                <div class=" fg-toggled">
                                                     <input required name="landLoardName" ng-model="rctrl.rentaldata.landlordname" type="text" class="form-control w-100" id=""
                                                         placeholder="">
                                                     <label class="fg-label">Full Name of Landlord
@@ -265,7 +265,7 @@
                                         </div>
                                         <div class="col-xs-12 col-sm-6">
                                             <div ng-class="{ 'has-error' : rentalForm.landloardPhone.$invalid && !rentalForm.landloardPhone.$pristine }" class="form-group fg-float m-t-30">
-                                                <div class="fg-line fg-toggled">
+                                                <div class=" fg-toggled">
                                                     <input required name="landloardPhone" ng-model="rctrl.rentaldata.landlordphone" type="text" class="form-control w-100 phone"
                                                         ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
                                                         id="" placeholder="" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
@@ -295,7 +295,7 @@
 
                                                 <div class="col-sm-4 form-group fg-float m-t-30">
                                                     <div class="col-xs-12" id="index_{{x}}">
-                                                        <div class="fg-line  fg-toggled">
+                                                        <div class="  fg-toggled">
                                                             <input required ng-model="rctrl.rentaldata.otherappname[$index]" type="text" class="form-control w-100" id="test_{{x}}" placeholder=""
                                                                 ng-blur="something(x)" ng-change="something(x)">
                                                             <label class="fg-label">Full Name
@@ -305,7 +305,7 @@
                                                 </div>
                                                 <div class="col-sm-4 form-group fg-float m-t-30">
                                                     <div class="col-xs-12">
-                                                        <div class="fg-line  fg-toggled">
+                                                        <div class="  fg-toggled">
                                                             <div class="input-group disp-tbl" ng-class="{ 'is-opened': rctrl.adultdobopened[$index] == true }" disable-link1>
                                                                 <!--style="display:inline-flex;"-->
                                                                 <span class="input-group-addon">
@@ -323,7 +323,7 @@
                                                 </div>
                                                 <div class="col-sm-4 form-group fg-float m-t-30">
                                                     <div class="col-xs-10">
-                                                        <div class="fg-line  fg-toggled">
+                                                        <div class="  fg-toggled">
                                                             <input ng-model="rctrl.rentaldata.otherappsinno[$index]" type="text" class="form-control w-100" id="" placeholder="">
                                                             <label class="fg-label">SIN Number:</label>
                                                         </div>
@@ -352,7 +352,7 @@
                                             <div class="row col-sm-12" ng-repeat="x in rctrl.minor">
                                                 <div class="col-sm-6 form-group fg-float m-t-30">
                                                     <div class="col-xs-12" id="minor_{{x}}">
-                                                        <div class="fg-line  fg-toggled">
+                                                        <div class="  fg-toggled">
                                                             <input required type="text" ng-model="rctrl.rentaldata.minorappname[$index]" class="form-control w-100" placeholder="" id="minortext_{{x}}"
                                                                 placeholder="" ng-blur="minorsomething(x)" ng-change="minorsomething(x)">
                                                             <label class="fg-label">Full Name
@@ -365,7 +365,7 @@
 
                                                 <div class="col-sm-6 form-group fg-float m-t-30">
                                                     <div class="col-xs-11">
-                                                        <div class="fg-line fg-toggled">
+                                                        <div class=" fg-toggled">
                                                             <div class="date-picker input-group disp-tbl" ng-class="{ 'is-opened': rctrl.minordobopened[$index] == true }" disable-link12>
                                                                 <span class="input-group-addon">
                                                                     <i class="zmdi zmdi-calendar ma-icon"></i>
@@ -393,7 +393,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12 text-right pr-0 mt-5">
-                                    <button class="btn bgm-blue btn-round" href="#/tenantapplications">Main Page</button>
+                                    <a class="btn bgm-blue btn-round"  href="#/tenantapplications">Main Page</a>
                                     <button class="btn bgm-teal btn-round" type="button" ng-click="activateTab(1)">Next</button>
                                 </div>
                             </div>
@@ -406,7 +406,7 @@
                                         <h4 class="m-b-20 m-t-10">Primary Applicant:</h4>
 
                                         <div ng-class="{ 'has-error' : rentalForm.currentEmployer.$invalid && !rentalForm.currentEmployer.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required type="text" name="currentEmployer" ng-model="rctrl.rentaldata.appcurrentemployer" class="form-control w-100"
                                                     id="" placeholder="">
                                                 <label class="fg-label">Current Employer
@@ -415,7 +415,7 @@
                                         </div>
 
                                         <div ng-class="{ 'has-error' : rentalForm.postion.$invalid && !rentalForm.postion.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required type="text" name="postion" ng-model="rctrl.rentaldata.appposition" class="form-control w-100" id="" placeholder="">
                                                 <label class="fg-label">Position
                                                     <span class="mandatory" print-remove>*</span>:</label>
@@ -424,7 +424,7 @@
 
 
                                         <div ng-class="{ 'has-error' : rentalForm.employerPhone.$invalid && !rentalForm.employerPhone.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="employerPhone" ng-model="rctrl.rentaldata.appemployerphone" type="text" class="form-control w-100 phone"
                                                     ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
                                                     id="" placeholder="" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
@@ -434,7 +434,7 @@
                                         </div>
 
                                         <div ng-class="{ 'has-error' : rentalForm.workDuration.$invalid && !rentalForm.workDuration.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="workDuration" ng-model="rctrl.rentaldata.appworkingduration" type="text" class="form-control w-100"
                                                     id="" placeholder="">
                                                 <label class="fg-label">How long have you worked in this company (Month/Year)
@@ -443,7 +443,7 @@
                                         </div>
 
                                         <div ng-class="{ 'has-error' : rentalForm.monthlyIncome.$invalid && !rentalForm.monthlyIncome.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="monthlyIncome" ng-model="rctrl.rentaldata.appgrossmonthlyincome" ng-pattern="/^[0-9,]+(\.[0-9,]{1,})?$/"
                                                     type="text" class="form-control w-100" id="" placeholder="">
                                                 <label class="fg-label">Gross monthly income($)
@@ -451,7 +451,7 @@
                                             </div>
                                         </div>
                                         <div ng-class="" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input name="otherIncome" ng-model="rctrl.rentaldata.appotherincome" type="text" class="form-control w-100" id="" placeholder="">
                                                 <label class="fg-label">Other income description(eg.Disability,Income Assistance,Savings):</label>
 
@@ -482,7 +482,7 @@
 
                                                 <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30 addpopupform nopdg">
                                                     <div class="col-xs-12" id="aace_{{x}}">
-                                                        <div class="fg-line  fg-toggled">
+                                                        <div class="  fg-toggled">
                                                             <input required type="text" ng-model="rctrl.rentaldata.otherappcurrentemployer[$index]" class="form-control w-100" id="aacetext_{{x}}"
                                                                 placeholder="" ng-blur="aacetext(x)" ng-change="aacetext(x)"
                                                                 placeholder="">
@@ -494,7 +494,7 @@
 
                                                 <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30 addpopupform nopdg">
                                                     <div class="col-xs-12" id="aapo_{{x}}">
-                                                        <div class="fg-line  fg-toggled">
+                                                        <div class="  fg-toggled">
                                                             <input required type="text" ng-model="rctrl.rentaldata.otherappposition[$index]" class="form-control w-100" id="aapotext_{{x}}"
                                                                 placeholder="" ng-blur="aapotext(x)" ng-change="aapotext(x)"
                                                                 placeholder="">
@@ -506,7 +506,7 @@
 
                                                 <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30 addpopupform nopdg">
                                                     <div class="col-xs-12" id="aaep_{{x}}">
-                                                        <div class="fg-line  fg-toggled">
+                                                        <div class="  fg-toggled">
                                                             <input required ng-model="rctrl.rentaldata.otherappemployerphone[$index]" type="text" class="form-control w-100 phone" ui-jq="inputmask"
                                                                 ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
                                                                 id="aaeptext_{{x}}" placeholder="" ng-blur="aaeptext(x)" ng-change="aaeptext(x)"
@@ -520,7 +520,7 @@
 
                                                 <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30 addpopupform nopdg">
                                                     <div class="col-xs-12" id="aahow_{{x}}">
-                                                        <div class="fg-line  fg-toggled">
+                                                        <div class="  fg-toggled">
                                                             <input required ng-model="rctrl.rentaldata.otherappworkingduration[$index]" type="text" class="form-control w-100" id="aahowtext_{{x}}"
                                                                 placeholder="" ng-blur="aahowtext(x)" ng-change="aahowtext(x)">
                                                             <label class="fg-label"> How long have you worked in this company (Month/Year)
@@ -531,7 +531,7 @@
 
                                                 <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30 addpopupform nopdg">
                                                     <div class="col-xs-12" id="aagrs_{{x}}">
-                                                        <div class="fg-line  fg-toggled">
+                                                        <div class="  fg-toggled">
                                                             <input required ng-model="rctrl.rentaldata.otherappgrossmonthlyincome[$index]" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" type="text"
                                                                 class="form-control w-100" placeholder="0000.00" id="aagrstext_{{x}}"
                                                                 placeholder="" ng-blur="aagrstext(x)" ng-change="aagrstext(x)">
@@ -545,7 +545,7 @@
                                                 <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30 addpopupform nopdg">
 
                                                     <div class="col-xs-12">
-                                                        <div class="fg-line  fg-toggled">
+                                                        <div class="  fg-toggled">
                                                             <input ng-model="rctrl.rentaldata.otherappotherincome[$index]" type="text" class="form-control w-100">
                                                             <label class="fg-label">Other income description(eg.Disability,Income Assistance,Savings):</label>
                                                         </div>
@@ -584,49 +584,50 @@
                                     <h3 class="m-b-20 m-t-10 fw">Vehicle Information</h3>
                                     <div class="card-body-inner">
                                         <div ng-class="" class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="vehicleMake" type="text" ng-model="rctrl.rentaldata.vehiclemake" class="form-control w-100" id="" placeholder="">
-                                                <label class="fg-label">Make:</label>
+                                                <label class="fg-label">
+                                                    <span class="mandatory printRemove" print-remove="">*</span>Make:</label>
                                             </div>
                                         </div>
 
                                         <div ng-class="" class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="vehicleModel" ng-model="rctrl.rentaldata.vehiclemodel" type="text" class="form-control w-100" id=""
                                                     placeholder="">
-                                                <label class="fg-label">Model:</label>
+                                                <label class="fg-label">
+                                                    <span class="mandatory printRemove" print-remove="">*</span>Model:</label>
                                             </div>
                                         </div>
                                         <div ng-class="" class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
 
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="vehicleYear" ng-pattern="/^([1-9][0-9]*)$/" type="text" ng-model="rctrl.rentaldata.vehicleyear" class="form-control w-100"
                                                     id="" placeholder="">
-                                                <label class="fg-label">Year:</label>
+                                                <label class="fg-label">
+                                                    <span class="mandatory printRemove" print-remove="">*</span>Year:</label>
                                             </div>
                                         </div>
 
                                     </div>
                                     <div class="card-body-inner">
                                         <div ng-class="" class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
-                                                <input required name="vehicleMake2" type="text" ng-model="rctrl.rentaldata.vehiclemake2" class="form-control w-100" id=""
-                                                    placeholder="">
+                                            <div class=" fg-toggled">
+                                                <input name="vehicleMake2" type="text" ng-model="rctrl.rentaldata.vehiclemake2" class="form-control w-100" id="" placeholder="">
                                                 <label class="fg-label">Make:</label>
                                             </div>
                                         </div>
 
                                         <div ng-class="" class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
-                                                <input required name="vehicleModel2" ng-model="rctrl.rentaldata.vehiclemodel2" type="text" class="form-control w-100" id=""
-                                                    placeholder="">
+                                            <div class=" fg-toggled">
+                                                <input name="vehicleModel2" ng-model="rctrl.rentaldata.vehiclemodel2" type="text" class="form-control w-100" id="" placeholder="">
                                                 <label class="fg-label">Model:</label>
                                             </div>
                                         </div>
                                         <div ng-class="" class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
 
-                                            <div class="fg-line fg-toggled">
-                                                <input required name="vehicleYear2" ng-pattern="/^([1-9][0-9]*)$/" type="text" ng-model="rctrl.rentaldata.vehicleyear2" class="form-control w-100"
+                                            <div class=" fg-toggled">
+                                                <input name="vehicleYear2" ng-pattern="/^([1-9][0-9]*)$/" type="text" ng-model="rctrl.rentaldata.vehicleyear2" class="form-control w-100"
                                                     id="" placeholder="">
                                                 <label class="fg-label">Year:</label>
                                             </div>
@@ -644,7 +645,7 @@
                                         </p>
 
                                         <div ng-class="{ 'has-error' : rentalForm.emergencyName.$invalid && !rentalForm.emergencyName.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="emergencyName" ng-model="rctrl.rentaldata.emergencyname" type="text" class="form-control w-100" id=""
                                                     placeholder="">
                                                 <label class="fg-label">Full Name
@@ -653,7 +654,7 @@
                                         </div>
 
                                         <div ng-class="{ 'has-error' : rentalForm.emergencyPhone.$invalid && !rentalForm.emergencyPhone.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="emergencyPhone" ng-model="rctrl.rentaldata.emergencyphone" type="text" class="form-control w-100 phone"
                                                     ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
                                                     id="" placeholder="" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
@@ -669,7 +670,7 @@
                                     <div class="card-body-inner">
                                         <p>Reference 1:</p>
                                         <div ng-class="{ 'has-error' : rentalForm.ref1Name.$invalid && !rentalForm.ref1Name.$pristine }" class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="ref1Name" ng-model="rctrl.rentaldata.refone_name" type="text" class="form-control w-100" id="" placeholder="">
                                                 <label class="fg-label">Full Name
                                                     <span class="mandatory" print-remove>*</span>:</label>
@@ -677,7 +678,7 @@
                                         </div>
 
                                         <div class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required ng-model="rctrl.rentaldata.refone_phone" type="text" class="form-control w-100 phone" id="" ui-jq="inputmask"
                                                     ui-options="'999-999-9999', { 'placeholder': '___-___-____' }" placeholder=""
                                                     ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
@@ -687,7 +688,7 @@
                                         </div>
 
                                         <div ng-class="{ 'has-error' : rentalForm.ref1Relation.$invalid && !rentalForm.ref1Relation.$pristine }" class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="ref1Relation" ng-model="rctrl.rentaldata.refone_relation" type="text" class="form-control w-100" id=""
                                                     placeholder="">
                                                 <label class="fg-label">Relationship(previous landlord,employer)
@@ -698,7 +699,7 @@
                                         <p>Reference 2:</p>
 
                                         <div ng-class="{ 'has-error' : rentalForm.ref2Name.$invalid && !rentalForm.ref2Name.$pristine }" class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="ref2Name" type="text" ng-model="rctrl.rentaldata.reftwo_name" class="form-control w-100" id="" placeholder="Full Name">
                                                 <label class="fg-label">Full Name
                                                     <span class="mandatory" print-remove>*</span>:</label>
@@ -706,7 +707,7 @@
                                         </div>
 
                                         <div class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required ng-model="rctrl.rentaldata.reftwo_phone" type="text" class="form-control w-100 phone" ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
                                                     id="" placeholder="" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
                                                 <label class="fg-label">Phone
@@ -715,7 +716,7 @@
                                         </div>
 
                                         <div ng-class="{ 'has-error' : rentalForm.ref2Relation.$invalid && !rentalForm.ref2Relation.$pristine }" class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
-                                            <div class="fg-line fg-toggled">
+                                            <div class=" fg-toggled">
                                                 <input required name="ref2Relation" type="text" class="form-control w-100" id="" ng-model="rctrl.rentaldata.reftwo_relation"
                                                     placeholder="">
                                                 <label class="fg-label">Relationship(previous landlord,employer)
@@ -737,7 +738,7 @@
                                                 <p class="m-t-10">We offer to rent</p>
                                             </div>
                                             <div ng-class="{ 'has-error' : rentalForm.newAddress.$invalid && !rentalForm.newAddress.$pristine }" class="col-sm-10 form-group fg-float">
-                                                <div class="fg-line  fg-toggled">
+                                                <div class="  fg-toggled">
                                                     <input required name="newAddress" type="text" ng-model="rctrl.propdata.address" class="form-control w-100" id="" placeholder="">
                                                     <label class="fg-label">Address
                                                         <span class="mandatory" print-remove>*</span>:</label>
@@ -751,8 +752,8 @@
                                                     <p class="m-t-10">(the “Rental unit”) at monthly rent of</p>
                                                 </div>
                                                 <div ng-class="{ 'has-error' : rentalForm.newRent.$invalid && !rentalForm.newRent.$pristine }" class="col-sm-6 form-group fg-float">
-                                                    <div class="fg-line fg-toggled">
-                                                        <input required name="newRent" type="text" ng-model="rctrl.propdata.rent" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" class="form-control w-100"
+                                                    <div class=" fg-toggled">
+                                                        <input required name="newRent" type="number" ng-model="rctrl.propdata.rent" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" class="form-control w-100"
                                                             id="" placeholder="">
                                                         <label class="fg-label">$
                                                             <span class="mandatory" print-remove>*</span>:</label>
@@ -765,7 +766,7 @@
                                                     <p class="m-t-10">for a term of</p>
                                                 </div>
                                                 <div ng-class="{ 'has-error' : rentalForm.termMonth.$invalid && !rentalForm.termMonth.$pristine }" class="col-sm-8 form-group fg-float">
-                                                    <div class="fg-line fg-toggled">
+                                                    <div class=" fg-toggled">
                                                         <input required name="termMonth" type="text" ng-model="rctrl.rentaldata.months" class="form-control w-100" id="" placeholder="">
                                                         <label class="fg-label">Months
                                                             <span class="mandatory" print-remove>*</span>:</label>
@@ -781,7 +782,7 @@
                                                     <p class="m-t-10"> months starting</p>
                                                 </div>
                                                 <div ng-class="{ 'has-error' : rentalForm.startDate.$invalid && !rentalForm.startDate.$pristine }" class="col-sm-8 form-group fg-float">
-                                                    <div class="fg-line fg-toggled">
+                                                    <div class=" fg-toggled">
                                                         <input required name="startDate" type="text" ng-model="rctrl.rentaldata.startdate" class="form-control w-100" id="" placeholder="">
                                                         <label class="fg-label">Date
                                                             <span class="mandatory" print-remove>*</span>:</label>
@@ -794,7 +795,7 @@
                                                     <p class="m-t-10">Parking is required for</p>
                                                 </div>
                                                 <div ng-class="{ 'has-error' : rentalForm.parking.$invalid && !rentalForm.parking.$pristine }" class="col-sm-6 form-group fg-float">
-                                                    <div class="fg-line fg-toggled">
+                                                    <div class=" fg-toggled">
                                                         <input required name="parking" ng-model="rctrl.rentaldata.parking" type="text" class="form-control w-100" id="" placeholder="">
                                                         <label class="fg-label">No of Vehicle
                                                             <span class="mandatory" print-remove>*</span>:</label>
@@ -840,7 +841,7 @@
                             </div>
 
                             <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
-                                <div class="fg-line fg-toggled">
+                                <div class=" fg-toggled">
                                     <div class="date-picker input-group disp-tbl" ng-class="{ 'is-opened': rctrl.dateopened == true }" disable-link123>
                                         <span class="input-group-addon">
                                             <i class="zmdi zmdi-calendar ma-icon"></i>
@@ -857,14 +858,14 @@
 
                             <div class="col-xs-12 col-sm-6">
                                 <div ng-class="{ 'has-error' : rentalForm.signature.$invalid && !rentalForm.signature.$pristine }" class="col-xs-12  form-group fg-float m-t-30">
-                                    <div class="fg-line fg-toggled">
+                                    <div class=" fg-toggled">
                                         <input required name="signature" type="text" class="form-control w-100" ng-model="rctrl.rentaldata.appsign" id="" placeholder="">
                                         <label class="fg-label">Signature of Primary Applicant (FULL NAME IN CAPS)
                                             <span class="mandatory" print-remove>*</span>:</label>
                                     </div>
                                 </div>
                                 <div ng-repeat="x in rctrl.adult" class="col-xs-12 form-group fg-float m-t-30">
-                                    <div class="fg-line fg-toggled">
+                                    <div class=" fg-toggled">
                                         <input required type="text" ng-model="rctrl.rentaldata.otherappsign[$index]" class="form-control w-100" id="" placeholder="">
                                         <label class="fg-label">
                                             <span>Signature of Additional Applicant #{{$index+1}} (FULL NAME IN CAPS)</span>
@@ -887,7 +888,8 @@
                                         <input type="hidden" ng-model="rctrl.rentaldata.filename" name="filename" value="{{rctrl.rentaldata.filename}}" id="filename">
                                         <input type="file" name="file" id="uploadfile" accept="image/png, image/jpeg, application/pdf">
                                     </span>
-                                    <span class="btn bgm-blue btn-file m-r-10 fileinput-exists" ng-if="rctrl.rentaldata.appfiles && rctrl.rentaldata.appfiles!='' " ng-click="rctrl.viewFile(rctrl.rentaldata.appfiles)">View File</span>
+                                    <span class="btn bgm-blue btn-file m-r-10 fileinput-exists" ng-if="rctrl.rentaldata.appfiles && rctrl.rentaldata.appfiles!='' "
+                                        ng-click="rctrl.viewFile(rctrl.rentaldata.appfiles)">View File</span>
                                     <a href="#" class="close fileinput-exists" data-dismiss="fileinput">&times;</a>
                                 </div>
                             </div>
@@ -907,12 +909,14 @@
         </div>
     </section>
 </section>
+
 <style>
-    .ng-invalid{
-        border-color:red !important;
+    .ng-invalid {
+        border-color: red !important;
     }
-    .ng-valid{
-        border-color:green !important;
+
+    .ng-valid {
+        border-color: green !important;
     }
 </style>
 <!-- <footer id="footer" data-ng-include="'views/template/footer.html'"></footer> -->
