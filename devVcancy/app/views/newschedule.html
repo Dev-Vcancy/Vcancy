@@ -230,11 +230,11 @@
                     </td>
                     <td class="text-center">
                       <span ng-if="value.unitID && newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
-                        class="text-primary hover-color" style='cursor:pointer;margin:auto'>Incomplete listing details</span>
+                        class="text-primary hover-color" style='cursor:pointer;margin:auto'>Incomplete Listing Details</span>
                       <!-- <span  ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
                         class="text-primary">Link to Craigslist listing</span> -->
                       <div ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)">
-                        <div>Listing On/Off</div>
+                        <div>Active/Inactive</div>
                         <div class="toggle-switch mt-2" ng-click="newschedulectrl.toggleListOnCraglist(value.keys)">
                           <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
                           <label class="ts-helper" style="border-radius: 8px !important"></label>
@@ -444,7 +444,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
               
-                    <label class='m-0'>Lease expiry:</label>
+                    <label class='m-0'>Lease expiry date:</label>
                     <input name="address" ng-model="selectedUnitDetail.data.leaseDuration" type="date" class="form-control original-form-control" id="" placeholder="">
                   
                 </div>
@@ -485,7 +485,7 @@
                           <option value="detachedGarage">Detached garage</option>
                           <option value="attachedGarage">Attached garage</option>
                           <option value="OffStreetParking">Off-street parking </option>
-                          <option value="noParking">no parking</option>
+                          <option value="noParking">No parking</option>
                         </select>
                   
                 </div>
