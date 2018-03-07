@@ -97,7 +97,7 @@ vcancyApp
 								if (snap.val() !== null) {
 									//to map the object to array
 									$.map(snap.val(), function (value, index) {
-										if (val.schedulestatus == "submitted") {
+										if (val.externalappStatus == "submit") {
 											vm.submittedappsavail = 1;
 											vm.submitappsdata.push({ appID: index, address: value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus });
 										}
@@ -188,7 +188,7 @@ vcancyApp
 		// 						// console.log(params);
 		// 						// use build-in angular filter
 		// 						var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
-					
+
 		// 						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 		// 					}*/
 		// 					// dataset: vm.tabledata
@@ -203,7 +203,7 @@ vcancyApp
 			$scope.$apply(function () {
 				if (snapshot.val() != null) {
 					$.map(snapshot.val(), function (value, key) {
-						if (value.scheduleID == 0 && value.externalappStatus == "submit") {
+						if (value.scheduleID != 0 && value.externalappStatus == "submit") {
 							vm.submittedappsavail = 1;
 							vm.submitappsdata.push({ appID: key, address: value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus });
 						}

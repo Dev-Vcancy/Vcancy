@@ -393,7 +393,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12 text-right pr-0 mt-5">
-                                    <a class="btn bgm-blue btn-round"  href="#/tenantapplications">Main Page</a>
+                                    <a class="btn bgm-blue btn-round" href="#/tenantapplications">Main Page</a>
                                     <button class="btn bgm-teal btn-round" type="button" ng-click="activateTab(1)">Next</button>
                                 </div>
                             </div>
@@ -727,84 +727,7 @@
                                     </div>
                                 </div>
 
-                                <div class="printview">
-                                    <div class="card-body-inner">
-                                        <p class="f-500">You are authorized to obtaining credit checks & verifying details contained in this
-                                            Application.
-                                        </p>
 
-                                        <div class="col-xs-12 clearfix p-0">
-                                            <div class="col-sm-2">
-                                                <p class="m-t-10">We offer to rent</p>
-                                            </div>
-                                            <div ng-class="{ 'has-error' : rentalForm.newAddress.$invalid && !rentalForm.newAddress.$pristine }" class="col-sm-10 form-group fg-float">
-                                                <div class="  fg-toggled">
-                                                    <input required name="newAddress" type="text" ng-model="rctrl.propdata.address" class="form-control w-100" id="" placeholder="">
-                                                    <label class="fg-label">Address
-                                                        <span class="mandatory" print-remove>*</span>:</label>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 clearfix p-0 m-t-10">
-                                            <div class="col-sm-7 p-0">
-                                                <div class="col-sm-6">
-                                                    <p class="m-t-10">(the “Rental unit”) at monthly rent of</p>
-                                                </div>
-                                                <div ng-class="{ 'has-error' : rentalForm.newRent.$invalid && !rentalForm.newRent.$pristine }" class="col-sm-6 form-group fg-float">
-                                                    <div class=" fg-toggled">
-                                                        <input required name="newRent" type="number" ng-model="rctrl.propdata.rent" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" class="form-control w-100"
-                                                            id="" placeholder="">
-                                                        <label class="fg-label">$
-                                                            <span class="mandatory" print-remove>*</span>:</label>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-sm-5 p-0">
-                                                <div class="col-sm-4">
-                                                    <p class="m-t-10">for a term of</p>
-                                                </div>
-                                                <div ng-class="{ 'has-error' : rentalForm.termMonth.$invalid && !rentalForm.termMonth.$pristine }" class="col-sm-8 form-group fg-float">
-                                                    <div class=" fg-toggled">
-                                                        <input required name="termMonth" type="text" ng-model="rctrl.rentaldata.months" class="form-control w-100" id="" placeholder="">
-                                                        <label class="fg-label">Months
-                                                            <span class="mandatory" print-remove>*</span>:</label>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xs-12 clearfix p-0 m-t-10">
-                                            <div class="col-sm-6 p-0">
-                                                <div class="col-sm-4">
-                                                    <p class="m-t-10"> months starting</p>
-                                                </div>
-                                                <div ng-class="{ 'has-error' : rentalForm.startDate.$invalid && !rentalForm.startDate.$pristine }" class="col-sm-8 form-group fg-float">
-                                                    <div class=" fg-toggled">
-                                                        <input required name="startDate" type="text" ng-model="rctrl.rentaldata.startdate" class="form-control w-100" id="" placeholder="">
-                                                        <label class="fg-label">Date
-                                                            <span class="mandatory" print-remove>*</span>:</label>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="col-sm-6 p-0">
-                                                <div class="col-sm-6">
-                                                    <p class="m-t-10">Parking is required for</p>
-                                                </div>
-                                                <div ng-class="{ 'has-error' : rentalForm.parking.$invalid && !rentalForm.parking.$pristine }" class="col-sm-6 form-group fg-float">
-                                                    <div class=" fg-toggled">
-                                                        <input required name="parking" ng-model="rctrl.rentaldata.parking" type="text" class="form-control w-100" id="" placeholder="">
-                                                        <label class="fg-label">No of Vehicle
-                                                            <span class="mandatory" print-remove>*</span>:</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col-sm-12 text-right pr-0 mt-5">
                                     <button class="btn bgm-blue btn-round" type="button" ng-click="activateTab(1)">Previous</button>
                                     <button class="btn bgm-teal btn-round" type="button" ng-click="activateTab(3)">Next</button>
@@ -812,6 +735,83 @@
                             </div>
                         </uib-tab>
                         <uib-tab index="3" heading="Step 4" disable="true">
+                            <div class="printview m-t-10">
+                                <div class="card-body-inner">
+                                    <p class="f-500">You are authorized to obtaining credit checks & verifying details contained in this Application.
+                                    </p>
+
+                                    <div class="col-xs-12 clearfix p-0">
+                                        <div class="col-sm-2">
+                                            <p class="m-t-10">We offer to rent</p>
+                                        </div>
+                                        <div ng-class="{ 'has-error' : rentalForm.newAddress.$invalid && !rentalForm.newAddress.$pristine }" class="col-sm-10 form-group fg-float">
+                                            <div class="  fg-toggled">
+                                                <input required name="newAddress" type="text" ng-model="rctrl.propdata.address" class="form-control w-100" id="" placeholder="">
+                                                <label class="fg-label">Address
+                                                    <span class="mandatory" print-remove>*</span>:</label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 clearfix p-0 m-t-10">
+                                        <div class="col-sm-7 p-0">
+                                            <div class="col-sm-6">
+                                                <p class="m-t-10">(the “Rental unit”) at monthly rent of</p>
+                                            </div>
+                                            <div ng-class="{ 'has-error' : rentalForm.newRent.$invalid && !rentalForm.newRent.$pristine }" class="col-sm-6 form-group fg-float">
+                                                <div class=" fg-toggled">
+                                                    <input required name="newRent" type="number" ng-model="rctrl.propdata.rent" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" class="form-control w-100"
+                                                        id="" placeholder="">
+                                                    <label class="fg-label">$
+                                                        <span class="mandatory" print-remove>*</span>:</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-5 p-0">
+                                            <div class="col-sm-4">
+                                                <p class="m-t-10">for a term of</p>
+                                            </div>
+                                            <div ng-class="{ 'has-error' : rentalForm.termMonth.$invalid && !rentalForm.termMonth.$pristine }" class="col-sm-8 form-group fg-float">
+                                                <div class=" fg-toggled">
+                                                    <input required name="termMonth" type="text" ng-model="rctrl.rentaldata.months" class="form-control w-100" id="" placeholder="">
+                                                    <label class="fg-label">Months
+                                                        <span class="mandatory" print-remove>*</span>:</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12 clearfix p-0 m-t-10">
+                                        <div class="col-sm-6 p-0">
+                                            <div class="col-sm-4">
+                                                <p class="m-t-10"> months starting</p>
+                                            </div>
+                                            <div ng-class="{ 'has-error' : rentalForm.startDate.$invalid && !rentalForm.startDate.$pristine }" class="col-sm-8 form-group fg-float">
+                                                <div class=" fg-toggled">
+                                                    <input required name="startDate" type="text" ng-model="rctrl.rentaldata.startdate" class="form-control w-100" id="" placeholder="">
+                                                    <label class="fg-label">Date
+                                                        <span class="mandatory" print-remove>*</span>:</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-6 p-0">
+                                            <div class="col-sm-6">
+                                                <p class="m-t-10">Parking is required for</p>
+                                            </div>
+                                            <div ng-class="{ 'has-error' : rentalForm.parking.$invalid && !rentalForm.parking.$pristine }" class="col-sm-6 form-group fg-float">
+                                                <div class=" fg-toggled">
+                                                    <input required name="parking" ng-model="rctrl.rentaldata.parking" type="text" class="form-control w-100" id="" placeholder="">
+                                                    <label class="fg-label">No of Vehicle
+                                                        <span class="mandatory" print-remove>*</span>:</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-xs-12 clearfix p-0 m-t-10">
 
                                 <p class="m-t-20"> vehicles (licensed only). This unit is strictly
