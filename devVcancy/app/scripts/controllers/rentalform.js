@@ -364,6 +364,7 @@ vcancyApp
 								// vm.propdata.landlordID = value.landlordID;
 
 								// vm.propdata.address = value.address;
+								console.log(value.rent)
 								vm.propdata.rent = value.rent;
 								vm.rentaldata.months = value.months;
 								vm.rentaldata.startdate = value.startdate;
@@ -404,20 +405,34 @@ vcancyApp
 									// console.log(snapshot.val())
 									$scope.$apply(function () {
 										if (snapshot.val()) {
+											// console.log('applyprop', snapshot.val())
 											vm.scheduledata = snapshot.val();
 											vm.scheduledata.scheduleID = snapshot.key;
 
 											firebase.database().ref('properties/' + vm.scheduledata.propID).once("value", function (snap) {
 												$scope.$apply(function () {
 													if (snap.val()) {
+														console.log('properties', snap.val())
 														vm.propdata = snap.val();
 														vm.propdata.propID = snap.key;
-														if (vm.propdata.units == ' ') {
-															var units = '';
-														} else {
-															var units = vm.propdata.units + " - ";
-														}
-														vm.propdata.address = units + vm.propdata.address;
+														// if (vm.propdata.units == ' ') {
+														// 	var units = '';
+														// } else {
+														// 	var units = vm.propdata.units + " - ";
+														// }
+														var unit = vm.propdata.unitlists.find(function (unitObj) {
+															if (unitObj.unit == vm.scheduledata.units) {
+																return true;
+															}
+														});
+														vm.propdata.rent = parseFloat(unit.rent);
+
+														vm.propdata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
+
+														firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
+															vm.landlordData = snap.val();
+															console.log('vm.landlordData', vm.landlordData);
+														});
 													}
 												});
 											});
