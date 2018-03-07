@@ -112,7 +112,12 @@
 								<th></th>
 							</tr>
 							<tr ng-repeat="(key, value) in lappctrl.apppropaddress">
-								<td>Not Applied</td>
+								<td>
+									<span ng-if="value.schedulestatus != 'submitted'">Not Applied</span>
+									<span ng-if="value.schedulestatus == 'submitted' && lappctrl.getApplicationLink(key)">
+										<a href="{{lappctrl.getApplicationLink(key)}}" target="_blank">Application</a>
+									</span>
+								</td>
 								<td>
 									<a ng-if="value.reportLink" href="value.reportLink" target="_blank">Credit Check</a>
 									<span ng-if="!value.reportLink">-</span>
@@ -687,7 +692,7 @@
 			<div class="col-xs-12 modal-body">
 			<div class="col-xs-12 col-sm-6">
 					<select class="m-input m-input--square" name="more" ng-model="lappctrl.creditCheck.forTenant" 
-					ng-options="key as (value.firstname + ' ' + value.lastname) for (key, value) in lappctrl.applyPropUsers">
+					ng-options="key as (value.firstname + ' ' + value.lastname) for (key, value) in lappctrl.applyPropSubmittedUsers">
 							<option value="">Select Tenant</option>
 					</select>
 			</div>

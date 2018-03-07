@@ -202,9 +202,15 @@ vcancyApp
 					return;
 				}
 				var availabilities = [];
-				let url = 'https://vcancy.ca/login/#/applyproperty/'
-				if (window.location.host.startsWith('localhost')) {
-					url = 'http://localhost:9000/#/applyproperty/'
+				var url = 'https://vcancy.ca/login/#/applyproperty/'
+				// if (window.location.host.startsWith('localhost')) {
+				// 	url = 'http://localhost:9000/#/applyproperty/'
+				// }
+				var host = window.location.origin;
+				if (host.indexOf('localhost') > -1) {
+					url = host + '/#/applyproperty/';
+				} else {
+					url = host + '/login/#/applyproperty/';
 				}
 				var availability = {
 					propertyId: vm.propertySelected,

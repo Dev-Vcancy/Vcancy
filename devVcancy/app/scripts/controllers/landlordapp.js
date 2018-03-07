@@ -22,7 +22,12 @@ vcancyApp
 			vm.userData = userData;
 			vm.propcheck = [];
 			vm.applyPropUsers = {};
+			vm.applyPropSubmittedUsers = {};
 			vm.apppropaddress = [];
+			vm.apppropaddressAppl = {};
+			vm.submittedAppl = [];
+			vm.submittedApplUsers = [];
+
 			vm.originalPropAddress = [];
 			vm.loader = 1;
 			vm.creditCheck = {
@@ -112,6 +117,11 @@ vcancyApp
 							usersData[dataObj.key] = dataObj.val();
 						});
 						vm.applyPropUsers = usersData;
+						_.forEach(vm.submittedApplUsers, function (value, index) {
+							if (usersData[value]) {
+								vm.applyPropSubmittedUsers[value] = usersData[value];
+							}
+						});
 						vm.apppropaddress = vm.apppropaddressList;
 						vm.loader = 0;
 					});
@@ -135,8 +145,32 @@ vcancyApp
 					if (snapshot.val()) {
 						$scope.$apply(function () {
 							vm.apppropaddressList = snapshot.val();
-							vm.getUsers();
+							// vm.getUsers();
 							vm.originalPropAddress = angular.copy(snapshot.val());
+							vm.loader = 1;
+							var promises = [];
+							_.map(vm.apppropaddressList, function (value, key) {
+								if (value.schedulestatus == 'submitted') {
+									vm.submittedApplUsers.push(value.tenantID);
+									var promiseObj = firebase.database().ref('submitapps/').limitToLast(1).orderByChild("scheduleID").equalTo(key).once("value");
+									promises.push(promiseObj);
+								}
+							});
+							vm.submittedApplUsers = _.uniq(vm.submittedApplUsers);
+							
+							$q.all(promises).then(function (data) {
+								var usersData = {};
+								data.forEach(function (dataObj) {
+									if (dataObj.val()) {
+										_.forEach(dataObj.val(), function (_value, _key) {
+											vm.apppropaddressAppl[_key] = _value;
+											vm.submittedAppl.push(_value)
+										})
+									}
+								});
+								vm.getUsers();
+								vm.loader = 0;
+							});
 							console.log(vm.apppropaddressList);
 						});
 					}
@@ -210,6 +244,26 @@ vcancyApp
 				}
 
 				vm.apppropaddress = obj;
+			}
+
+			vm.getApplicationLink = function (key) {
+				var data;
+				_.forEach(vm.apppropaddressAppl, function (_value, _key) {
+					if (_value.scheduleID == key) {
+						data = _key;
+						return false;
+					}
+				});
+				if (data) {
+					var host = window.location.origin;
+					if(host.indexOf('localhost')>-1) {
+						host = host + '/#/viewapplication/' + data;
+					} else {
+						host = host + '/login/#/viewapplication/' + data;
+					}
+					return host;
+				}
+				return false;
 			}
 
 			vm.customQuestion = null;

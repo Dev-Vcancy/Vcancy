@@ -11,9 +11,9 @@ vcancyApp
 		// var tenantID = localStorage.getItem('userID');
 		var applicationID = $stateParams.appID;
 		// var tenantEmail = localStorage.getItem('userEmail');
-		
+
 		vm.publicappview = $state.current.name == "viewexternalapplication" ? "1" : "0";
-		
+		vm.isLoggedIn = ($state.current.name != "viewexternalapplication") && localStorage.getItem('userEmail');
 		
 		vm.adult = [];
 		vm.minor = [];
@@ -149,6 +149,43 @@ vcancyApp
 				}
 			});
 		});
+
+		vm.viewFile = function (location) {
+			if (!location) {
+				return;
+			}
+			var _params = {
+				Bucket: 'vcancy-final',
+				Key: location.split(`https://vcancy-final.s3.ca-central-1.amazonaws.com/`)[1],
+				Expires: 60 * 5
+			}
+			AWS.config.update({
+				accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+				secretAccessKey: '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'
+			});
+			AWS.config.region = 'ca-central-1';
+			var bucket = new AWS.S3({
+				params: {
+					Bucket: 'vcancy-final'
+				}
+			});
+
+			bucket.getSignedUrl('getObject', _params, function (err, data) {
+				if (err) return console.log(err, err.stack); // an error occurred
+
+				// var type = 'application/pdf';
+				var extension = location.substring(location.lastIndexOf('.'));
+				// var file = new Blob([data], { type: 'application/pdf' });
+				// saveAs(file, 'filename.pdf');
+				// var url = URL.createObjectURL(new Blob([data]));
+				var a = document.createElement('a');
+				a.href = data;
+				a.download = location.substr(location.lastIndexOf('/') + 1);
+				a.target = '_blank';
+				a.click();
+			});
+		}
+
 		vm.printApp = function(){
 
 		   $window.print();
