@@ -10,8 +10,12 @@ vcancyApp
 
 			var vm = this;
 			var userID = localStorage.getItem('userID');
+			var landlordID = ''
 			var userData = JSON.parse(localStorage.getItem('userData'));
+			var userEmail = localStorage.getItem('userEmail');
+			vm.userData = userData;
 			var landlordID = userData.refId || userID;
+			vm.landLordID = landlordID;
 			vm.moment = moment;
 			vm.todayDate = moment().format('YYYY-MM-DD');
 			$scope.eventSources = [];
@@ -410,5 +414,92 @@ vcancyApp
 				var prop = vm.properties[propId];
 				return unit.isIncomplete == false ? false : true;
 			}
+
 			$scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF]
+
+			function generateToken() {
+				var result = '',
+					length = 6,
+					chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+				for (var i = 0; i < length; i++)
+					result += chars[Math.floor(Math.random() * chars.length)];
+
+				return result;
+			}
+
+			vm.questionDropDown = [
+				{ id: 'WKRX6Q', label: 'Job title', isChecked: false },
+				{ id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
+				{ id: 'N1F5MO', label: 'Are you able to provide references', isChecked: false },
+				{ id: 'OU489L', label: 'Why are you moving', isChecked: false },
+				{ id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: true },
+				{ id: 'A9OG32', label: 'No. of Applicants', isChecked: true },
+				{ id: 'UH7JZS', label: 'Do you smoke?', isChecked: true },
+				{ id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
+			];
+
+			vm.openPrescreeningQuestions = function () {
+				vm.prescreeningQuestion = $uibModal.open({
+					templateUrl: 'prescreeningquestions.html',
+					backdrop: 'static',
+					size: 'md',
+					scope: $scope
+				});
+			};
+
+			$scope.closePrescreeningModal = function () {
+				vm.prescreeningQuestion.close();
+			}
+			vm.customQuestion = null;
+			vm.addCustomQuestion = function () {
+				if (!vm.customQuestion) {
+					return;
+				}
+				var data = {
+					label: vm.customQuestion,
+					id: generateToken(),
+					isChecked: false
+				}
+
+				vm.screeningQuestions.push(data);
+				vm.customQuestion = null;
+			}
+
+			vm.saveScreeningQuestions = function () {
+				vm.loader = 1;
+				var ques = angular.copy(vm.screeningQuestions);
+				_.omit(ques, '$$hashKey');
+				firebase.database().ref('users/' + this.landLordID).update({
+					screeningQuestions: ques
+				}).then(function () {
+					userData.screeningQuestions = ques;
+					localStorage.setItem('userData', JSON.stringify(userData));
+					refreshScreeningQuestions();
+					vm.loader = 0;
+					vm.prescreeningQuestion.close();
+				}, function (error) {
+					vm.loader = 0;
+					return false;
+				});
+			}
+
+			vm.deleteQuestionById = function (id) {
+				var index = vm.screeningQuestions.findIndex(function (ques) {
+					if (ques.id == id) return true;
+				});
+				vm.screeningQuestions.splice(index, 1);
+			};
+
+			function refreshScreeningQuestions() {
+				userData = JSON.parse(localStorage.getItem('userData'));
+				vm.userData = userData;
+				if (userData && userData.screeningQuestions && userData.screeningQuestions.length !== 0) {
+					vm.screeningQuestions = userData.screeningQuestions;
+				} else {
+					vm.screeningQuestions = angular.copy(vm.questionDropDown);
+				}
+			}
+			refreshScreeningQuestions();
+
 		}])
