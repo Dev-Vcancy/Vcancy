@@ -34,17 +34,43 @@ vcancyApp
 				reportType: "Both of the above $45/Report",
 				forTenant: ''
 			}
-			// Function to generate Random Id
-			function generateToken() {
-				var result = '',
-					length = 6,
-					chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
+			vm.customRentalApplicationCheck = {};
+			vm.customRentalApplicationCheck.TCData = 'You are authorized to obtaining credit checks & verifying details contained in this Application.' +
 
-				for (var i = 0; i < length; i++)
-					result += chars[Math.floor(Math.random() * chars.length)];
+				'This unit/s is strictly NON SMOKING. This offer is subject to acceptance by the landlord/property' +
+				'management company that listed the property.This application is made on the understanding that no ' +
+				'betterments will be provided to the Rental Unit except those which may be specifically requested in' +
+				'this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.' +
 
-				return result;
-			}
+				'It is understood that this application will not be processed unless fully completed.' +
+
+				'If the landlord/property management company accepts this Application, we will sign a Fixed ' +
+				'Term Tenancy Agreement at the offices of the property management company or in person with' +
+				'the landlord and pay the security deposit. The Rental Unit will not be considered rented' +
+				'until the Fixed Term Tenancy Agreement is signed by the Tenant and the Landlord.' +
+
+				'We will ensure that the collection, use, disclosure and retention of information will comply with ' +
+				'the provisions of the Freedom of information and Protection of Privacy Act. ' +
+				'Information will be collected and used only as necessary and for the intended purpose and will ' +
+				'not be disclosed as required by law.' +
+
+				'I hereby state that the information contained herein is true and I authorize my References' +
+				'as listed above to release information regarding my employment and/or past/current tenancies.' +
+
+				'Tenants are not chosen on a first come – first served basis. We choose the most suitable ' +
+				'application for the unit at our sole discretion. This application form is to be used only' +
+				'in the interested of the owner of the rental unit.';
+				// Function to generate Random Id
+				function generateToken() {
+					var result = '',
+						length = 6,
+						chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+					for (var i = 0; i < length; i++)
+						result += chars[Math.floor(Math.random() * chars.length)];
+
+					return result;
+				}
 
 			vm.questionDropDown = [
 				{ id: 'WKRX6Q', label: 'Job title', isChecked: false },
@@ -78,13 +104,17 @@ vcancyApp
 				'REF2': false,
 				'UD': true,
 				'UDAAPP': false,
-				'TC': true
+				'TC': true,
+				'TCData': vm.customRentalApplicationCheck.TCData
 			}
 
 			function refreshCustomRentalApplicationCheck() {
 				userData = JSON.parse(localStorage.getItem('userData'));
 				vm.userData = userData;
 				if (userData && userData.customRentalApplicationCheck) {
+					if (userData.customRentalApplicationCheck && !userData.customRentalApplicationCheck.TCData) {
+						userData.customRentalApplicationCheck.TCData = vm.customRentalApplicationCheck.TCData;
+					}
 					vm.customRentalApplicationCheck = userData.customRentalApplicationCheck;
 				} else {
 					vm.customRentalApplicationCheck = angular.copy(vm.defaultRentalApplicationCheck);
