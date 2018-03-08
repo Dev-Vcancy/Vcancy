@@ -10,6 +10,8 @@ vcancyApp
 			$scope.oneAtATime = true;
 			var vm = this;
 			vm.moment = moment;
+			vm.sortType = 'name';
+			vm.sortReverse = false;
 			var landlordID = ''
 			if (localStorage.getItem('refId')) {
 				landlordID = localStorage.getItem('refId')
@@ -60,17 +62,17 @@ vcancyApp
 				'Tenants are not chosen on a first come – first served basis. We choose the most suitable ' +
 				'application for the unit at our sole discretion. This application form is to be used only' +
 				'in the interested of the owner of the rental unit.';
-				// Function to generate Random Id
-				function generateToken() {
-					var result = '',
-						length = 6,
-						chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
+			// Function to generate Random Id
+			function generateToken() {
+				var result = '',
+					length = 6,
+					chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-					for (var i = 0; i < length; i++)
-						result += chars[Math.floor(Math.random() * chars.length)];
+				for (var i = 0; i < length; i++)
+					result += chars[Math.floor(Math.random() * chars.length)];
 
-					return result;
-				}
+				return result;
+			}
 
 			vm.questionDropDown = [
 				{ id: 'WKRX6Q', label: 'Job title', isChecked: false },
@@ -187,7 +189,7 @@ vcancyApp
 								}
 							});
 							vm.submittedApplUsers = _.uniq(vm.submittedApplUsers);
-							
+
 							$q.all(promises).then(function (data) {
 								var usersData = {};
 								data.forEach(function (dataObj) {
@@ -219,6 +221,14 @@ vcancyApp
 					return value.name || '-';
 				}
 				return vm.applyPropUsers[id].firstname + ' ' + vm.applyPropUsers[id].lastname;
+			}
+
+			vm.changeSort = function (key) {
+				// $scope.$apply(function() {
+				// $timeout	
+				vm.sortType = key;
+				vm.sortReverse = !vm.sortReverse;
+				// });
 			}
 
 			$scope.formatDay = function (key) {
@@ -256,7 +266,7 @@ vcancyApp
 					});
 					vm.apppropaddress = obj;
 				}
-				if(forProperty) {
+				if (forProperty) {
 					vm.filters.unit = [];
 				}
 				if (vm.filters.unit && vm.filters.unit.length > 0) {
@@ -289,7 +299,7 @@ vcancyApp
 				});
 				if (data) {
 					var host = window.location.origin;
-					if(host.indexOf('localhost')>-1) {
+					if (host.indexOf('localhost') > -1) {
 						host = host + '/#/viewapplication/' + data;
 					} else {
 						host = host + '/login/#/viewapplication/' + data;
@@ -299,6 +309,20 @@ vcancyApp
 				return false;
 			}
 
+			vm.getRentalField = function (key, field) {
+				let data;
+				_.forEach(vm.apppropaddressAppl, function (_value, _key) {
+					if (_value.scheduleID == key) {
+						data = _value;
+						return false;
+					}
+				});
+				if (data) {
+					return data[field]
+				} else {
+					return '-'
+				}
+			}
 			vm.customQuestion = null;
 			vm.addCustomQuestion = function () {
 				if (!vm.customQuestion) {
