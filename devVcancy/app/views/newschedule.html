@@ -238,13 +238,13 @@
                       <!-- <span  ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
                         class="text-primary">Link to Craigslist listing</span> -->
                       <div ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)">
-                        <div>Active/Inactive</div>
+                        <div>Activate Listing</div>
                         <div class="toggle-switch mt-2" ng-click="newschedulectrl.toggleListOnCraglist(value.keys)">
                           <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
                           <label class="ts-helper" style="border-radius: 8px !important"></label>
                         </div>
                         <div class="text-primary hover-color" style='cursor:pointer' ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)">
-                          <span>Edit Listing Details</span>
+                          <span>Edit Listing</span>
                         </div>
                       </div>
                     </td>

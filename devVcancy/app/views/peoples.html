@@ -23,7 +23,7 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<label>
-									<strong>Select below to populate table</strong>
+									<strong>Select Table Filters</strong>
 								</label>
 							</div>
 							<div class="col-sm-12">
@@ -100,11 +100,11 @@
 						</table> -->
 						<table class="table table-border table-hover" style="border:1px solid #e7ecf1;overflow-x:auto;max-width:100vw">
 							<tr>
-								<th>Application</th>
-								<th>Report</th>
+								<th>Rental Application</th>
+								<th>Credit Report</th>
 								<th>Name</th>
-								<th>Unit/Property</th>
-								<th style="min-width: 150px;">Date-Time</th>
+								<th>Unit-Property</th>
+								<th style="min-width: 150px;">Showing Date-Time</th>
 								<th>Showing Status</th>
 								<th ng-repeat="ques in lappctrl.filters.options">
 									{{ques.label}}
@@ -115,7 +115,7 @@
 								<td>
 									<span ng-if="value.schedulestatus != 'submitted'">Not Applied</span>
 									<span ng-if="value.schedulestatus == 'submitted' && lappctrl.getApplicationLink(key)">
-										<a href="{{lappctrl.getApplicationLink(key)}}" target="_blank">Application</a>
+										<a href="{{lappctrl.getApplicationLink(key)}}" target="_blank">View Application</a>
 									</span>
 								</td>
 								<td>
@@ -175,7 +175,7 @@
 							</div>
 						</div>
 					</div>	  
-					Add custom question (text input)<br/>
+					Add a custom question <br/>
 					<div class="row">
 						<div class="col">
 							<input type="text" ng-model="lappctrl.customQuestion" style="margin-top:10px" class="form-group"/>
@@ -658,7 +658,7 @@
 			<div class="profile_model_popup">
 			<div class="modal-header padding-20" >
 				<h3 class="modal-title">
-						Request Credit and Criminal Check Reports
+						Request Credit and Criminal Check Report
 				</h3>
 				<button type="button" class="close margin-top-15" data-dismiss="dialog" ng-click="closeruncreditcriminalcheckModal()" style='margin-top:8px !important'>
 					<span aria-hidden="true">&times;</span>
@@ -680,8 +680,8 @@
 				</div>
 				<div class="radio-div">
 					<label>	
-						<input type="radio" name="report-type" ng-model="lappctrl.creditCheck.reportType" value="Credit Report (Transunion) $15/Report" 
-						/> Credit Report (Transunion) $15/Report
+						<input type="radio" name="report-type" ng-model="lappctrl.creditCheck.reportType" value="Credit Report $12/report" 
+						/> Credit Report $12/report
 							<i class="input-helper"></i>					
 						
 					</label>
@@ -689,7 +689,7 @@
 				<div class="radio-div">
 					<label>	
 					<input type="radio" name="report-type" ng-model="lappctrl.creditCheck.reportType" value="Criminal Record Check $35/Report"
-						/> Criminal Record Check $35/Report
+						/> Criminal Record Check $35/report
 								<i class="input-helper"></i>	
 						
 					</label>
@@ -697,7 +697,7 @@
 				<div class="radio-div">
 					<label>	
 						<input type="radio" name="report-type" ng-model="lappctrl.creditCheck.reportType" value="Both of the above $45/Report" 
-						/> Both of the above $45/Report
+						/> Both of the above $45/report
 						<i class="input-helper"></i>	
 						
 					</label>

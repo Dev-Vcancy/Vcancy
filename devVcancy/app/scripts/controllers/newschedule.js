@@ -399,7 +399,7 @@ vcancyApp
 				if (toggle) {
 					swal({
 						title: 'Success',
-						text: 'Your unit/s will now be listed on Craigslist within 12-24 hours.You will get a notification email when your listing/s is active.',
+						text: 'Your unit will now be listed on Craigslist in 12-24 hours.You will get a notification email when your listing is active.',
 						type: "success",
 					});
 				}
