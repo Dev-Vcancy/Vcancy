@@ -256,6 +256,9 @@ vcancyApp
 					});
 					vm.apppropaddress = obj;
 				}
+				if(forProperty) {
+					vm.filters.unit = [];
+				}
 				if (vm.filters.unit && vm.filters.unit.length > 0) {
 					var unitItems = {};
 					var unitIds = _.reduce(vm.filters.unit, function (previousValue, currentValue, key) {
