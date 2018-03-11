@@ -60,6 +60,12 @@ vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootSc
 						} else {
 							$state.go("tenantdashboard");
 						}
+					} else if (userdata.val().usertype === 3) {
+						$rootScope.usertype = 3;
+						localStorage.setItem('usertype', 3);
+						localStorage.setItem('userData', JSON.stringify(userdata.val()));
+						console.log("Signed in as admin:", firebaseUser.uid);
+						$state.go("admindashboard");
 					} else {
 						if (userdata.val().isDeleted) {
 							$state.go('login');
@@ -68,7 +74,7 @@ vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootSc
 						}
 						$rootScope.usertype = 1;
 						localStorage.setItem('usertype', 1);
-						localStorage.setItem('userData', JSON.stringify(userdata.val()));			
+						localStorage.setItem('userData', JSON.stringify(userdata.val()));
 						console.log("Signed in as landlord:", firebaseUser.uid);
 						if (userdata.val().refId) {
 							localStorage.setItem('refId', userdata.val().refId);
