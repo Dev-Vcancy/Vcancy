@@ -848,9 +848,10 @@ vcancyApp
 						reftwo_relation: reftwo_relation,
 
 						applicantsno: (vm.adult.length) + 1,
+						"minorapplicantsno": vm.minor.length || 0,
 						externalappStatus: externalappStatus,
 						externalemail: externalemail,
-
+						appgrossmonthlyincome: appgrossmonthlyincome,
 						dated: dated,
 
 						rentalstatus: "pending"

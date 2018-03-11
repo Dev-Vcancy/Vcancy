@@ -99,48 +99,80 @@
 							</tr>
 						</table> -->
 						<table class="table table-border table-hover" style="border:1px solid #e7ecf1;overflow-x:auto;max-width:100vw">
-							<tr>
-								<th>Rental Application</th>
-								<th>Credit Report</th>
-								<th>Name</th>
-								<th>Unit-Property</th>
-								<th style="min-width: 150px;">Showing Date-Time</th>
-								<th>Showing Status</th>
-								<th ng-repeat="ques in lappctrl.filters.options">
-									{{ques.label}}
-								</th>
-								<th></th>
-							</tr>
-							<tr ng-repeat="(key, value) in lappctrl.apppropaddress">
-								<td>
-									<span ng-if="value.schedulestatus != 'submitted'">Not Applied</span>
-									<span ng-if="value.schedulestatus == 'submitted' && lappctrl.getApplicationLink(key)">
-										<a href="{{lappctrl.getApplicationLink(key)}}" target="_blank">View Application</a>
-									</span>
-								</td>
-								<td>
-									<a ng-if="value.reportLink" href="value.reportLink" target="_blank">Credit Check</a>
-									<span ng-if="!value.reportLink">-</span>
-								</td>
-								<td>{{lappctrl.getUserName(value.tenantID, value)}}</td>
-								<td>{{value.unitID}}-{{value.address}}</td>
-								<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
-									<br/> {{value.fromTimeSlot}} : {{value.toTimeSlot}}</td>
-								<td>{{value.schedulestatus}}</td>
-								<td ng-repeat="ques in lappctrl.filters.options">
-									<a ng-if="ques.id==='U0G6V8'" tooltip-animation="false" uib-tooltip="{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}">
-										{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id].substring(0,20):'-'}}
-									</a>
-									<span ng-if="ques.id!=='U0G6V8'">
-										{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}
-									</span>
-								</td>
-								<td>
-									<button class="btn btn-sm btn-danger btn-round" ng-if="value.schedulestatus != 'cancelled'" ng-click="lappctrl.deleteApplyProp(key)">
-										<i class="fa fa-trash"></i>
-									</button>
-								</td>
-							</tr>
+							<thead>
+								<tr>
+									<th>Rental Application</th>
+									<th>Credit Report</th>
+									<th>
+										<!-- <a href="#" ng-click="lappctrl.changeSort('name')"> -->
+											Name
+											<!-- <span ng-show="lappctrl.sortType == 'name' && !lappctrl.sortReverse" class="fa fa-caret-down"></span>
+											<span ng-show="lappctrl.sortType == 'name' && lappctrl.sortReverse" class="fa fa-caret-up"></span>
+										</a> -->
+									</th>
+									<th>
+										<!-- <a href="#" ng-click="lappctrl.changeSort('salary')"> -->
+											Salary
+											<!-- <span ng-show="lappctrl.sortType == 'salary' && !lappctrl.sortReverse" class="fa fa-caret-down"></span>
+											<span ng-show="lappctrl.sortType == 'salary' && lappctrl.sortReverse" class="fa fa-caret-up"></span> -->
+										<!-- </a> -->
+									</th>
+									<th>
+										<!-- <a href="#" ng-click="lappctrl.changeSort('rent')"> -->
+											 Current Rent
+											<!-- <span ng-show="lappctrl.sortType == 'rent' && !lappctrl.sortReverse" class="fa fa-caret-down"></span>
+											<span ng-show="lappctrl.sortType == 'rent' && lappctrl.sortReverse" class="fa fa-caret-up"></span> -->
+									</th>
+									<th>Applicants</th>
+									<th>Unit-Property</th>
+									<th style="min-width: 150px;">Showing Date-Time</th>
+									<th>
+										<!-- <a href="#" ng-click="lappctrl.changeSort('status')">  -->
+											Showing Status
+										<!-- <span ng-show="lappctrl.sortType == 'status' && !lappctrl.sortReverse" class="fa fa-caret-down"></span>
+										<span ng-show="lappctrl.sortType == 'status' && lappctrl.sortReverse" class="fa fa-caret-up"></span> -->
+									</th>
+									<th ng-repeat="ques in lappctrl.filters.options">
+										{{ques.label}}
+									</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="(key, value) in lappctrl.apppropaddress | orderBy:lappctrl.sortType:lappctrl.sortReverse">
+									<td>
+										<span ng-if="value.schedulestatus != 'submitted'">Not Applied</span>
+										<span ng-if="value.schedulestatus == 'submitted' && lappctrl.getApplicationLink(key)">
+											<a href="{{lappctrl.getApplicationLink(key)}}" target="_blank">View Application</a>
+										</span>
+									</td>
+									<td>
+										<a ng-if="value.reportLink" href="value.reportLink" target="_blank">Credit Check</a>
+										<span ng-if="!value.reportLink">-</span>
+									</td>
+									<td>{{lappctrl.getUserName(value.tenantID, value)}}</td>
+									<td>{{lappctrl.getRentalField(key, 'appgrossmonthlyincome')}}</td>
+									<td>{{lappctrl.getRentalField(key, 'rentamt')}}</td>
+									<td>{{lappctrl.getRentalField(key, 'applicantsno') + lappctrl.getRentalField(key, 'minorapplicantsno')}}</td>
+									<td>{{value.unitID}}-{{value.address}}</td>
+									<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
+										<br/> {{value.fromTimeSlot}} : {{value.toTimeSlot}}</td>
+									<td>{{value.schedulestatus}}</td>
+									<td ng-repeat="ques in lappctrl.filters.options">
+										<a ng-if="ques.id==='U0G6V8'" tooltip-animation="false" uib-tooltip="{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}">
+											{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id].substring(0,20):'-'}}
+										</a>
+										<span ng-if="ques.id!=='U0G6V8'">
+											{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}
+										</span>
+									</td>
+									<td>
+										<button class="btn btn-sm btn-danger btn-round" ng-if="value.schedulestatus != 'cancelled'" ng-click="lappctrl.deleteApplyProp(key)">
+											<i class="fa fa-trash"></i>
+										</button>
+									</td>
+								</tr>
+							</tbody>
 						</table>
 					</div>
 				</div>

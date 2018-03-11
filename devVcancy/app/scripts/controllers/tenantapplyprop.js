@@ -275,7 +275,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				vm.tenantapply();
 				return;
 			}
-			firebase.database().ref('/users').orderByChild("email").equalTo(use.email).once('value').then(function (snap) {
+			firebase.database().ref('/users').orderByChild("email").equalTo(vm.registerUser.email).once('value').then(function (snap) {
 				if (snap.val()) {
 					vm.userInfo = snap.val();
 					vm.userInfo.id = snap.key;
@@ -290,14 +290,14 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 						var num = Math.floor((Math.random() * 60) + 1);
 						pass += characterArray[num];
 					}
-					reguserObj.$createUserWithEmailAndPassword(user.email, pass)
+					reguserObj.$createUserWithEmailAndPassword(vm.registerUser.email, pass)
 						.then(function (firebaseUser) {
 							var reguserdbObj = firebase.database();
 							reguserdbObj.ref('users/' + firebaseUser.uid).set({
-								firstname: user.firstname,
-								lastname: user.lastname,
+								firstname: vm.registerUser.firstName,
+								lastname: vm.registerUser.lastName,
 								usertype: 1,
-								email: user.email,
+								email: vm.registerUser.email,
 								isadded: 1,
 								iscancelshow: 1,
 								iscreditcheck: 1,
@@ -310,7 +310,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 							});
 							vm.opensuccesssweet("User Added successfully!, verification email has been sent to your email.");
 
-							firebase.auth().signInWithEmailAndPassword(user.email, pass)
+							firebase.auth().signInWithEmailAndPassword(vm.registerUser.email, pass)
 								.then(function (firebaseUser) {
 									localStorage.setItem('userID', firebase.auth().currentUser.uid);
 									localStorage.setItem('userEmail', firebase.auth().currentUser.email);
@@ -324,7 +324,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 									var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to on https://vcancy.ca/ .</p><p>Your email is ' + email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 									// Send Email
-									emailSendingService.sendEmailViaNodeMailer(user.email, 'A new user account has been added to your portal', 'Welcome', emailData);
+									emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'A new user account has been added to your portal', 'Welcome', emailData);
 									// Success 
 									firebaseUser.sendEmailVerification().then(function () {
 

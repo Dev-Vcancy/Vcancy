@@ -10,6 +10,8 @@ vcancyApp
 			$scope.oneAtATime = true;
 			var vm = this;
 			vm.moment = moment;
+			vm.sortType = 'name';
+			vm.sortReverse = false;
 			var landlordID = ''
 			if (localStorage.getItem('refId')) {
 				landlordID = localStorage.getItem('refId')
@@ -60,23 +62,23 @@ vcancyApp
 				'Tenants are not chosen on a first come – first served basis. We choose the most suitable ' +
 				'application for the unit at our sole discretion. This application form is to be used only' +
 				'in the interested of the owner of the rental unit.';
-				// Function to generate Random Id
-				function generateToken() {
-					var result = '',
-						length = 6,
-						chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
+			// Function to generate Random Id
+			function generateToken() {
+				var result = '',
+					length = 6,
+					chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-					for (var i = 0; i < length; i++)
-						result += chars[Math.floor(Math.random() * chars.length)];
+				for (var i = 0; i < length; i++)
+					result += chars[Math.floor(Math.random() * chars.length)];
 
-					return result;
-				}
+				return result;
+			}
 
 			vm.questionDropDown = [
-				{ id: 'WKRX6Q', label: 'Job title', isChecked: false },
+				{ id: 'WKRX6Q', label: 'What is your profession?', isChecked: true },
 				{ id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
-				{ id: 'N1F5MO', label: 'Are you able to provide references', isChecked: false },
-				{ id: 'OU489L', label: 'Why are you moving', isChecked: false },
+				{ id: 'N1F5MO', label: 'Are you able to provide references?', isChecked: false },
+				{ id: 'OU489L', label: 'Why are you moving?', isChecked: false },
 				{ id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: true },
 				{ id: 'A9OG32', label: 'No. of Applicants', isChecked: true },
 				{ id: 'UH7JZS', label: 'Do you smoke?', isChecked: true },
@@ -187,7 +189,7 @@ vcancyApp
 								}
 							});
 							vm.submittedApplUsers = _.uniq(vm.submittedApplUsers);
-							
+
 							$q.all(promises).then(function (data) {
 								var usersData = {};
 								data.forEach(function (dataObj) {
@@ -218,7 +220,15 @@ vcancyApp
 				if (!vm.applyPropUsers[id]) {
 					return value.name || '-';
 				}
-				return vm.applyPropUsers[id].firstname + ' ' + vm.applyPropUsers[id].lastname;
+				return ((vm.applyPropUsers[id].firstname || '') + ' ' + (vm.applyPropUsers[id].lastname || '')) || '-';
+			}
+
+			vm.changeSort = function (key) {
+				// $scope.$apply(function() {
+				// $timeout	
+				vm.sortType = key;
+				vm.sortReverse = !vm.sortReverse;
+				// });
 			}
 
 			$scope.formatDay = function (key) {
@@ -256,6 +266,9 @@ vcancyApp
 					});
 					vm.apppropaddress = obj;
 				}
+				if (forProperty) {
+					vm.filters.unit = [];
+				}
 				if (vm.filters.unit && vm.filters.unit.length > 0) {
 					var unitItems = {};
 					var unitIds = _.reduce(vm.filters.unit, function (previousValue, currentValue, key) {
@@ -286,7 +299,7 @@ vcancyApp
 				});
 				if (data) {
 					var host = window.location.origin;
-					if(host.indexOf('localhost')>-1) {
+					if (host.indexOf('localhost') > -1) {
 						host = host + '/#/viewapplication/' + data;
 					} else {
 						host = host + '/login/#/viewapplication/' + data;
@@ -296,6 +309,20 @@ vcancyApp
 				return false;
 			}
 
+			vm.getRentalField = function (key, field) {
+				let data;
+				_.forEach(vm.apppropaddressAppl, function (_value, _key) {
+					if (_value.scheduleID == key) {
+						data = _value;
+						return false;
+					}
+				});
+				if (data) {
+					return data[field]
+				} else {
+					return '-'
+				}
+			}
 			vm.customQuestion = null;
 			vm.addCustomQuestion = function () {
 				if (!vm.customQuestion) {
