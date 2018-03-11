@@ -308,7 +308,6 @@ vcancyApp
             };
 
             vm.toggleStatus = function (keys, status) {
-                console.log(keys,status)
                 let toggle = false;
                 keys.forEach(function (key) {
                     if (vm.listings[key].listOnCraigslist) {
