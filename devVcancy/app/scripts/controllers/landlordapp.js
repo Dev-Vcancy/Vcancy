@@ -89,6 +89,10 @@ vcancyApp
 				options: [],
 			};
 
+			vm.companyDetail = function () {
+				return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
+			}
+
 			vm.defaultRentalApplicationCheck = {
 				'PAPPD': true,
 				'CADDR': true,
@@ -107,7 +111,9 @@ vcancyApp
 				'UD': true,
 				'UDAAPP': false,
 				'TC': true,
-				'TCData': vm.customRentalApplicationCheck.TCData
+				'TCData': vm.customRentalApplicationCheck.TCData,
+				'companyLogo': userData ? userData.companylogo : '../assets/pages/img/no_image_found.jpg',
+				'companyDetails': vm.companyDetail()
 			}
 
 			function refreshCustomRentalApplicationCheck() {
@@ -116,6 +122,12 @@ vcancyApp
 				if (userData && userData.customRentalApplicationCheck) {
 					if (userData.customRentalApplicationCheck && !userData.customRentalApplicationCheck.TCData) {
 						userData.customRentalApplicationCheck.TCData = vm.customRentalApplicationCheck.TCData;
+					}
+					if (!userData.customRentalApplicationCheck.companyLogo) {
+						userData.customRentalApplicationCheck.companyLogo = userData.companylogo || vm.customRentalApplicationCheck.companyLogo || "../assets/pages/img/no_image_found.jpg" ;
+					}
+					if (!userData.customRentalApplicationCheck.companyDetails) {
+						userData.customRentalApplicationCheck.companyDetails = vm.companyDetail();
 					}
 					vm.customRentalApplicationCheck = userData.customRentalApplicationCheck;
 				} else {
@@ -212,9 +224,6 @@ vcancyApp
 				});
 			};
 
-			vm.companyDetail = function () {
-				return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
-			}
 
 			vm.getUserName = function (id, value) {
 				if (!vm.applyPropUsers[id]) {
@@ -374,6 +383,64 @@ vcancyApp
 				});
 			}
 
+			$scope.uploadDetailsImages = function (event) {
+        var file = event.target.files[0];
+        AWS.config.update({
+          accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+          secretAccessKey: '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'
+        });
+        AWS.config.region = 'ca-central-1';
+
+        var bucket = new AWS.S3({
+          params: {
+            Bucket: 'vcancy-final'
+          }
+        });
+        var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+        filename = filename.replace(/\s/g, '');
+
+        if (file.size > 3145728) {
+          swal({
+            title: "Error!",
+            text: 'File size should be 3 MB or less.',
+            type: "error",
+          });
+          return false;
+        } else if (file.type.indexOf('image') === -1) {
+          swal({
+            title: "Error!",
+            text: 'Only files are accepted.',
+            type: "error",
+          });
+          return false;
+        }
+
+        var params = {
+          Key: 'company-logo/' + filename,
+          ContentType: file.type,
+          Body: file,
+          StorageClass: "STANDARD_IA",
+          ACL: 'public-read'
+        };
+
+        bucket.upload(params).on('httpUploadProgress', function (evt) { })
+          .send(function (err, data) {
+            if (data && data.Location) {
+              $scope.$apply(function () {
+								vm.customRentalApplicationCheck.companyLogo = data.Location;
+							});
+              // });
+              // firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+              //   vm.opensuccesssweet("Profile Updated successfully!");
+              // }, function (error) {
+
+              //   vm.openerrorsweet("Profile Not Updated! Try again!");
+              //   return false;
+              // });
+            }
+          });
+			}
+			
 			vm.opencustomrentalapp = function () {
 				vm.customrentalapp = $uibModal.open({
 					templateUrl: 'customrentalapp.html',
