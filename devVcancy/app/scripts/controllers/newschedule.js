@@ -319,29 +319,39 @@ vcancyApp
 			}
 
 			vm.deleteListings = function ($event) {
-				var selectedListings = [];
-				$.map(vm.mergeListing, function (value, key) {
-					if (value.inputCheck) {
-						selectedListings = _.concat(selectedListings, value.keys);
+				swal({
+					title: "Are you sure?",
+					text: 'This will Delete all the selected listings.',
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonClass: "btn-danger",
+					confirmButtonText: 'Delete All!',
+					closeOnConfirm: true
+				}, function () {
+					var selectedListings = [];
+					$.map(vm.mergeListing, function (value, key) {
+						if (value.inputCheck) {
+							selectedListings = _.concat(selectedListings, value.keys);
+						}
+					});
+					if (selectedListings.length == 0) {
+						return;
 					}
-				});
-				if (selectedListings.length == 0) {
-					return;
-				}
-				var promises = [];
-				vm.loader = 1;
-				var fbObj = firebase.database();
-				selectedListings.forEach(function (listing) {
-					var promiseObj = fbObj.ref('propertiesSchedule/' + listing).remove();
-					promises.push(promiseObj);
-				});
-				$q.all(promises).then(function () {
-					vm.loader = 0;
-					vm.selectedListings = [];
-					vm.listings = [];
-					vm.selectedAllListing = false;
-					vm.mergeListing = {};
-					vm.getListings();
+					var promises = [];
+					vm.loader = 1;
+					var fbObj = firebase.database();
+					selectedListings.forEach(function (listing) {
+						var promiseObj = fbObj.ref('propertiesSchedule/' + listing).remove();
+						promises.push(promiseObj);
+					});
+					$q.all(promises).then(function () {
+						vm.loader = 0;
+						vm.selectedListings = [];
+						vm.listings = [];
+						vm.selectedAllListing = false;
+						vm.mergeListing = {};
+						vm.getListings();
+					});
 				});
 			}
 
@@ -656,7 +666,7 @@ vcancyApp
 			$scope.closecustomrentalappModal = function () {
 				vm.customrentalapp.close();
 			}
-			
+
 			vm.opencustomrentalapp = function () {
 				vm.customrentalapp = $uibModal.open({
 					templateUrl: 'customrentalapp.html',
