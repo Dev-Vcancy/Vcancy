@@ -220,7 +220,7 @@ vcancyApp
 				if (!vm.applyPropUsers[id]) {
 					return value.name || '-';
 				}
-				return vm.applyPropUsers[id].firstname + ' ' + vm.applyPropUsers[id].lastname;
+				return ((vm.applyPropUsers[id].firstname || '') + ' ' + (vm.applyPropUsers[id].lastname || '')) || '-';
 			}
 
 			vm.changeSort = function (key) {
