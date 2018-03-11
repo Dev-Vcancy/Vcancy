@@ -1,8 +1,8 @@
 'use strict';
 
 vcancyApp
-    .controller('adminScheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_',
-        function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _) {
+    .controller('adminScheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_', '$uibModal',
+        function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _, $uibModal) {
 
             var vm = this;
             var landlordID = localStorage.getItem('userID');
@@ -10,10 +10,10 @@ vcancyApp
 
             var vm = this;
             vm.selectedUser = '';
-
+            vm.statusChange = {};
             vm.usersList = [];
             firebase.database().ref('users/').once("value", function (snapvalue) {
-                
+
                 var users = snapvalue.val();
                 users = _.filter(users, function (user, key) {
                     if (user.usertype == 1 || user.usertype == 3) {
@@ -52,19 +52,13 @@ vcancyApp
                 if (!landlordId) return;
 
                 var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordId).once("value", function (snapshot) {
-                    console.log(snapshot.val())
+                    vm.getProperties(landlordId);
+                    console.log('propertyschedule', snapshot.val())
                     $scope.$apply(function () {
                         vm.success = 0;
                         if (snapshot.val()) {
                             vm.listings = snapshot.val();
                             vm.generateMergeListing();
-
-                            $.map(vm.listings, function (value, key) {
-                                value.parsedFromDate = parseInt(new moment(value.fromDate).format('x'))
-                                value.parsedToDate = parseInt(new moment(value.toDate).format('x'))
-                                var startDate = new Date(value.fromDate).setHours(parseFloat(value.fromTime));
-                                var endDate = new Date(value.toDate).setHours(parseFloat(value.toTime));
-                            });
                             vm.listingsAvailable = 1;
                         } else {
                             vm.listingsAvailable = 0;
@@ -89,9 +83,8 @@ vcancyApp
                 $scope.imageModal.dismiss('cancel');
             }
 
-            function getProperties() {
+            vm.getProperties = function (landlordID, propertyID) {
                 var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-
                     $scope.$apply(function () {
                         vm.success = 0;
                         if (snapshot.val()) {
@@ -101,17 +94,9 @@ vcancyApp
                             vm.propertiesAvailable = 0;
                         }
                         vm.loader = 0;
-                        vm.getListings();
                     });
                 });
             }
-
-            function init() {
-                vm.loader = 1;
-                getProperties();
-            }
-
-            init();
 
             vm.generateMergeListing = function () {
                 vm.mergeListing = {};
@@ -140,6 +125,7 @@ vcancyApp
                         vm.mergeListing[list.link].keys.push(key);
                     }
                 });
+                console.log(vm.mergeListing)
             };
 
             vm.clearAll = function ($event) {
@@ -160,6 +146,10 @@ vcancyApp
                 });
                 vm.generateMergeListing();
             };
+
+            vm.statusChangeHandler = function (propertyId, unitId) {
+                console.log(vm.statusChange)
+            }
 
             vm.checkForDuplicate = function (currentUnit) {
                 for (var i in vm.listings) {
@@ -315,13 +305,37 @@ vcancyApp
                     vm.mergeListing = {};
                     vm.getListings();
                 });
-            }
+            };
+
+            vm.toggleStatus = function (keys, status) {
+                console.log(keys,status)
+                let toggle = false;
+                keys.forEach(function (key) {
+                    if (vm.listings[key].listOnCraigslist) {
+                        vm.listings[key].listOnCraigslist = !vm.listings[key].listOnCraigslist;
+                    }
+                    else {
+                        vm.listings[key].listOnCraigslist = true;
+                    }
+                    if (vm.listings[key].listOnCraigslist) {
+                        toggle = true;
+                    }
+                    vm.toggleCraigsList(key, status);
+                });
+                if (toggle) {
+                    swal({
+                        title: 'Success',
+                        text: 'Your unit will now be listed on Craigslist in 12-24 hours.You will get a notification email when your listing is active.',
+                        type: "success",
+                    });
+                }
+            };
 
             vm.toggleCraigsList = function (listingId, value, $event) {
                 vm.loader = 1;
                 var fbObj = firebase.database();
                 var promiseObj = fbObj.ref('propertiesSchedule/' + listingId).update({
-                    listOnCraigslist: value
+                    status: value
                 })
                 promiseObj
                     .then(function () {
@@ -354,29 +368,6 @@ vcancyApp
                 });
             };
 
-            vm.toggleListOnCraglist = function (keys) {
-                let toggle = false;
-                keys.forEach(function (key) {
-                    if (vm.listings[key].listOnCraigslist) {
-                        vm.listings[key].listOnCraigslist = !vm.listings[key].listOnCraigslist;
-                    }
-                    else {
-                        vm.listings[key].listOnCraigslist = true;
-                    }
-                    if (vm.listings[key].listOnCraigslist) {
-                        toggle = true;
-                    }
-                    vm.toggleCraigsList(key, vm.listings[key].listOnCraigslist)
-                });
-                if (toggle) {
-                    swal({
-                        title: 'Success',
-                        text: 'Your unit will now be listed on Craigslist in 12-24 hours.You will get a notification email when your listing is active.',
-                        type: "success",
-                    });
-                }
-            };
-
             vm.checkIsIncomplete = function (propId, unitId) {
                 if (!unitId) {
                     return false;
@@ -387,38 +378,7 @@ vcancyApp
                 return unit.isIncomplete == false ? false : true;
             }
 
-            $scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF]
 
-            function generateToken() {
-                var result = '',
-                    length = 6,
-                    chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
-
-                for (var i = 0; i < length; i++)
-                    result += chars[Math.floor(Math.random() * chars.length)];
-
-                return result;
-            }
-
-            vm.questionDropDown = [
-                { id: 'WKRX6Q', label: 'Job title', isChecked: false },
-                { id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
-                { id: 'N1F5MO', label: 'Are you able to provide references', isChecked: false },
-                { id: 'OU489L', label: 'Why are you moving', isChecked: false },
-                { id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: true },
-                { id: 'A9OG32', label: 'No. of Applicants', isChecked: true },
-                { id: 'UH7JZS', label: 'Do you smoke?', isChecked: true },
-                { id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
-            ];
-
-            vm.openPrescreeningQuestions = function () {
-                vm.prescreeningQuestion = $uibModal.open({
-                    templateUrl: 'prescreeningquestions.html',
-                    backdrop: 'static',
-                    size: 'md',
-                    scope: $scope
-                });
-            };
 
 
         }]);
