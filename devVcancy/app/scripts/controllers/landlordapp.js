@@ -298,6 +298,17 @@ vcancyApp
 				vm.apppropaddress = obj;
 			}
 
+			vm.selectAllQuestions = function() {
+				vm.filters.options = angular.copy(vm.screeningQuestions);
+			}
+
+			vm.clearAllFilters = function() {
+				vm.filters = {
+					options: []
+				}
+				vm.apppropaddress = angular.copy(vm.originalPropAddress);
+			}
+
 			vm.getApplicationLink = function (key) {
 				var data;
 				_.forEach(vm.apppropaddressAppl, function (_value, _key) {

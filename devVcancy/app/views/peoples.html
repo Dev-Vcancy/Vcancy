@@ -62,6 +62,16 @@
 									</ui-select-choices>
 								</ui-select>
 							</div>
+
+							<div class="row col-sm-12 mt-3">
+								<div class="col-sm-4" ng-if="lappctrl.screeningQuestions">
+									<button class="btn btn-sm bgm-teal  btn-round" ng-disabled="lappctrl.screeningQuestions.length === lappctrl.filters.options.length" ng-click="lappctrl.selectAllQuestions()">Select All Questions</button>
+								</div>
+								<div class="col-sm-4"></div>
+								<div class="col-sm-4 text-right">
+									<button class="btn btn-sm bgm-teal  btn-round" ng-click="lappctrl.clearAllFilters()">Clear All Filters</button>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="col-sm-6">
