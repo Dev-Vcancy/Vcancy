@@ -124,7 +124,7 @@ vcancyApp
 						userData.customRentalApplicationCheck.TCData = vm.customRentalApplicationCheck.TCData;
 					}
 					if (!userData.customRentalApplicationCheck.companyLogo) {
-						userData.customRentalApplicationCheck.companyLogo = userData.companylogo || vm.customRentalApplicationCheck.companyLogo || "../assets/pages/img/no_image_found.jpg" ;
+						userData.customRentalApplicationCheck.companyLogo = userData.companylogo || vm.customRentalApplicationCheck.companyLogo || "../assets/pages/img/no_image_found.jpg";
 					}
 					if (!userData.customRentalApplicationCheck.companyDetails) {
 						userData.customRentalApplicationCheck.companyDetails = vm.companyDetail();
@@ -298,11 +298,11 @@ vcancyApp
 				vm.apppropaddress = obj;
 			}
 
-			vm.selectAllQuestions = function() {
+			vm.selectAllQuestions = function () {
 				vm.filters.options = angular.copy(vm.screeningQuestions);
 			}
 
-			vm.clearAllFilters = function() {
+			vm.clearAllFilters = function () {
 				vm.filters = {
 					options: []
 				}
@@ -395,63 +395,63 @@ vcancyApp
 			}
 
 			$scope.uploadDetailsImages = function (event) {
-        var file = event.target.files[0];
-        AWS.config.update({
-          accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
-          secretAccessKey: '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'
-        });
-        AWS.config.region = 'ca-central-1';
+				var file = event.target.files[0];
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
+				});
+				AWS.config.region = 'ca-central-1';
 
-        var bucket = new AWS.S3({
-          params: {
-            Bucket: 'vcancy-final'
-          }
-        });
-        var filename = moment().format('YYYYMMDDHHmmss') + file.name;
-        filename = filename.replace(/\s/g, '');
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+				var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+				filename = filename.replace(/\s/g, '');
 
-        if (file.size > 3145728) {
-          swal({
-            title: "Error!",
-            text: 'File size should be 3 MB or less.',
-            type: "error",
-          });
-          return false;
-        } else if (file.type.indexOf('image') === -1) {
-          swal({
-            title: "Error!",
-            text: 'Only files are accepted.',
-            type: "error",
-          });
-          return false;
-        }
+				if (file.size > 3145728) {
+					swal({
+						title: "Error!",
+						text: 'File size should be 3 MB or less.',
+						type: "error",
+					});
+					return false;
+				} else if (file.type.indexOf('image') === -1) {
+					swal({
+						title: "Error!",
+						text: 'Only files are accepted.',
+						type: "error",
+					});
+					return false;
+				}
 
-        var params = {
-          Key: 'company-logo/' + filename,
-          ContentType: file.type,
-          Body: file,
-          StorageClass: "STANDARD_IA",
-          ACL: 'public-read'
-        };
+				var params = {
+					Key: 'company-logo/' + filename,
+					ContentType: file.type,
+					Body: file,
+					StorageClass: "STANDARD_IA",
+					ACL: 'public-read'
+				};
 
-        bucket.upload(params).on('httpUploadProgress', function (evt) { })
-          .send(function (err, data) {
-            if (data && data.Location) {
-              $scope.$apply(function () {
+				bucket.upload(params).on('httpUploadProgress', function (evt) { })
+					.send(function (err, data) {
+						if (data && data.Location) {
+							$scope.$apply(function () {
 								vm.customRentalApplicationCheck.companyLogo = data.Location;
 							});
-              // });
-              // firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
-              //   vm.opensuccesssweet("Profile Updated successfully!");
-              // }, function (error) {
+							// });
+							// firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+							//   vm.opensuccesssweet("Profile Updated successfully!");
+							// }, function (error) {
 
-              //   vm.openerrorsweet("Profile Not Updated! Try again!");
-              //   return false;
-              // });
-            }
-          });
+							//   vm.openerrorsweet("Profile Not Updated! Try again!");
+							//   return false;
+							// });
+						}
+					});
 			}
-			
+
 			vm.opencustomrentalapp = function () {
 				vm.customrentalapp = $uibModal.open({
 					templateUrl: 'customrentalapp.html',
@@ -636,18 +636,28 @@ vcancyApp
 			}
 			// vm.tablefilterdata();
 
-			vm.deleteApplyProp = function (key) {
+			vm.deleteApplyProp = function (key, status) {
+				var statusToChange = 'cancelled';
+				var message = "This will cancel the schedule."
+				var buttonText = "Cancel";
+
+				if (status === 'cancelled') {
+					statusToChange = 'removed';
+					message = "This will delete the schedule from the system.";
+					buttonText = "Delete";
+				}
+
 				swal({
 					title: "Are you sure?",
-					text: "This will delete the schedule from the system.",
+					text: message,
 					type: "warning",
 					showCancelButton: true,
 					confirmButtonClass: "btn-danger",
-					confirmButtonText: "Delete",
+					confirmButtonText: buttonText,
 					closeOnConfirm: true
 				}, function () {
 					firebase.database().ref('applyprop/' + key).update({
-						schedulestatus: "cancelled"
+						schedulestatus: statusToChange
 					}).then(function () {
 						vm.getApplyProp();
 					})

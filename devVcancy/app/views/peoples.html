@@ -177,8 +177,9 @@
 										</span>
 									</td>
 									<td>
-										<button class="btn btn-sm btn-danger btn-round" ng-if="value.schedulestatus != 'cancelled'" ng-click="lappctrl.deleteApplyProp(key)">
-											<i class="fa fa-trash"></i>
+										<button class="btn btn-sm btn-danger btn-round" ng-click="lappctrl.deleteApplyProp(key, value.schedulestatus)">
+											<i  ng-if="value.schedulestatus != 'cancelled'" class="fa fa-ban"></i>
+											<i  ng-if="value.schedulestatus == 'cancelled'" class="fa fa-trash"></i>
 										</button>
 									</td>
 								</tr>
