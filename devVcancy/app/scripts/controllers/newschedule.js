@@ -502,4 +502,168 @@ vcancyApp
 			}
 			refreshScreeningQuestions();
 
+			// Custom Rental
+			vm.companyDetail = function () {
+				return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
+			}
+
+			vm.customRentalApplicationCheck = {};
+			vm.customRentalApplicationCheck.TCData = 'You are authorized to obtaining credit checks & verifying details contained in this Application.' +
+
+				'This unit/s is strictly NON SMOKING. This offer is subject to acceptance by the landlord/property' +
+				'management company that listed the property.This application is made on the understanding that no ' +
+				'betterments will be provided to the Rental Unit except those which may be specifically requested in' +
+				'this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.' +
+
+				'It is understood that this application will not be processed unless fully completed.' +
+
+				'If the landlord/property management company accepts this Application, we will sign a Fixed ' +
+				'Term Tenancy Agreement at the offices of the property management company or in person with' +
+				'the landlord and pay the security deposit. The Rental Unit will not be considered rented' +
+				'until the Fixed Term Tenancy Agreement is signed by the Tenant and the Landlord.' +
+
+				'We will ensure that the collection, use, disclosure and retention of information will comply with ' +
+				'the provisions of the Freedom of information and Protection of Privacy Act. ' +
+				'Information will be collected and used only as necessary and for the intended purpose and will ' +
+				'not be disclosed as required by law.' +
+
+				'I hereby state that the information contained herein is true and I authorize my References' +
+				'as listed above to release information regarding my employment and/or past/current tenancies.' +
+
+				'Tenants are not chosen on a first come – first served basis. We choose the most suitable ' +
+				'application for the unit at our sole discretion. This application form is to be used only' +
+				'in the interested of the owner of the rental unit.';
+
+			vm.defaultRentalApplicationCheck = {
+				'PAPPD': true,
+				'CADDR': true,
+				'PADDR': false,
+				'AAPPD': false,
+				'AAPP1': false,
+				'AAPP2': false,
+				'ESIV': true,
+				'ESIV1': true,
+				'V1': false,
+				'EC': false,
+				'EC1': false,
+				'REF': true,
+				'REF1': true,
+				'REF2': false,
+				'UD': true,
+				'UDAAPP': false,
+				'TC': true,
+				'TCData': vm.customRentalApplicationCheck.TCData,
+				'companyLogo': userData ? userData.companylogo : '../assets/pages/img/no_image_found.jpg',
+				'companyDetails': vm.companyDetail()
+			}
+
+			function refreshCustomRentalApplicationCheck() {
+				userData = JSON.parse(localStorage.getItem('userData'));
+				vm.userData = userData;
+				if (userData && userData.customRentalApplicationCheck) {
+					if (userData.customRentalApplicationCheck && !userData.customRentalApplicationCheck.TCData) {
+						userData.customRentalApplicationCheck.TCData = vm.customRentalApplicationCheck.TCData;
+					}
+					if (!userData.customRentalApplicationCheck.companyLogo) {
+						userData.customRentalApplicationCheck.companyLogo = userData.companylogo || vm.customRentalApplicationCheck.companyLogo || "../assets/pages/img/no_image_found.jpg";
+					}
+					if (!userData.customRentalApplicationCheck.companyDetails) {
+						userData.customRentalApplicationCheck.companyDetails = vm.companyDetail();
+					}
+					vm.customRentalApplicationCheck = userData.customRentalApplicationCheck;
+				} else {
+					vm.customRentalApplicationCheck = angular.copy(vm.defaultRentalApplicationCheck);
+				}
+			}
+			refreshCustomRentalApplicationCheck();
+
+			vm.saveCustomRentalApplicationCheck = function () {
+				vm.loader = 1;
+				var customChecks = angular.copy(vm.customRentalApplicationCheck);
+				_.omit(customChecks, '$$hashKey');
+				firebase.database().ref('users/' + this.landLordID).update({
+					customRentalApplicationCheck: customChecks
+				}).then(function () {
+					userData.customRentalApplicationCheck = customChecks;
+					localStorage.setItem('userData', JSON.stringify(userData));
+					refreshCustomRentalApplicationCheck();
+					vm.loader = 0;
+					vm.customrentalapp.close();
+				}, function (error) {
+					vm.loader = 0;
+					return false;
+				});
+			}
+
+			$scope.uploadDetailsImages = function (event) {
+				var file = event.target.files[0];
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
+				});
+				AWS.config.region = 'ca-central-1';
+
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+				var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+				filename = filename.replace(/\s/g, '');
+
+				if (file.size > 3145728) {
+					swal({
+						title: "Error!",
+						text: 'File size should be 3 MB or less.',
+						type: "error",
+					});
+					return false;
+				} else if (file.type.indexOf('image') === -1) {
+					swal({
+						title: "Error!",
+						text: 'Only files are accepted.',
+						type: "error",
+					});
+					return false;
+				}
+
+				var params = {
+					Key: 'company-logo/' + filename,
+					ContentType: file.type,
+					Body: file,
+					StorageClass: "STANDARD_IA",
+					ACL: 'public-read'
+				};
+
+				bucket.upload(params).on('httpUploadProgress', function (evt) { })
+					.send(function (err, data) {
+						if (data && data.Location) {
+							$scope.$apply(function () {
+								vm.customRentalApplicationCheck.companyLogo = data.Location;
+							});
+							// });
+							// firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+							//   vm.opensuccesssweet("Profile Updated successfully!");
+							// }, function (error) {
+
+							//   vm.openerrorsweet("Profile Not Updated! Try again!");
+							//   return false;
+							// });
+						}
+					});
+			}
+
+			$scope.closecustomrentalappModal = function () {
+				vm.customrentalapp.close();
+			}
+			
+			vm.opencustomrentalapp = function () {
+				vm.customrentalapp = $uibModal.open({
+					templateUrl: 'customrentalapp.html',
+					backdrop: 'static',
+					size: 'lg',
+					scope: $scope
+				});
+			};
+
 		}])
