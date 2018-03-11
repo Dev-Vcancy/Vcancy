@@ -98,7 +98,7 @@
 								<td>No submitted applications yet </td>
 							</tr>
 						</table> -->
-						<table class="table table-border table-hover" style="border:1px solid #e7ecf1;overflow-x:scroll;max-width:100vw">
+						<table class="table table-border table-hover" style="border:1px solid #e7ecf1;overflow-x:auto;max-width:100vw">
 							<thead>
 								<tr>
 									<th>Rental Application</th>
@@ -139,7 +139,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="(key, value) in lappctrl.apppropaddress | orderBy:lappctrl.sortType:lappctrl.sortReverse">
+								<tr ng-repeat="(key, value) in lappctrl.apppropaddress | orderBy:lappctrl.sortType:lappctrl.sortReverse" ng-if="value.schedulestatus != 'pending' && value.schedulestatus != 'removed'">
 									<td>
 										<span ng-if="value.schedulestatus != 'submitted'">Not Applied</span>
 										<span ng-if="value.schedulestatus == 'submitted' && lappctrl.getApplicationLink(key)">

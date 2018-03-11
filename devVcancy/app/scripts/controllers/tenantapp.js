@@ -119,7 +119,8 @@ vcancyApp
 
 					//Sorting
 					vm.submitappsSorting = new NgTableParams({
-						sorting: { address: 'asc' }
+						sorting: { address: 'asc' },
+						count: vm.submitappsdata.length						
 					},
 
 						{
@@ -220,7 +221,8 @@ vcancyApp
 
 					//Sorting
 					vm.submitappsSorting = new NgTableParams({
-						sorting: { address: 'asc' }
+						sorting: { address: 'asc' },
+						count: vm.submitappsdata.length
 					},
 
 						{
