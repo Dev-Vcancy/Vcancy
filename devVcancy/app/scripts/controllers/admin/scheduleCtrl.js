@@ -15,6 +15,7 @@ vcancyApp
             firebase.database().ref('users/').once("value", function (snapvalue) {
 
                 var users = snapvalue.val();
+                console.log('users', users, Object.keys(users).length);
                 users = _.filter(users, function (user, key) {
                     if (user.usertype == 1 || user.usertype == 3) {
                         user.key = key;
@@ -304,6 +305,17 @@ vcancyApp
                     vm.selectedAllListing = false;
                     vm.mergeListing = {};
                     vm.getListings();
+                });
+            };
+
+            vm.insertCraglistLink = function (keys, link) {
+                keys.forEach(function (listingId) {
+                    var fbObj = firebase.database();
+                    fbObj.ref('propertiesSchedule/' + listingId).update({
+                        craglistLink: link
+                    }).then(function () {
+                        vm.getListings();
+                    });
                 });
             };
 

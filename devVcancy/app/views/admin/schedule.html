@@ -22,92 +22,98 @@
                             <option ng-repeat="user in aschedule.usersList" value="{{user.key}}">{{user.firstname}} {{user.lastname}}-{{user.email}}</option>
                         </select>
                     </div>
-                </div>
-                <div class="row mt-5">
+                    <div class="row mt-5">
 
-                    <div class="col-sm-5">
-                        <!-- <button class="btn btn-sm btn-danger btn-round" ng-click="aschedule.deleteListings($event)">Delete</button> -->
-                        <button class="btn btn-sm bgm-teal btn-round" ng-click="craigslistopen(true)">Craigslist Settings</button>
-                    </div>
-                    <div class="col-sm-4 list">
-                        Listings
-                        <span class="fa fa-info-circle" title="This table shows your availablity for showings and units listed">
-                        </span>
-                    </div>
-
-                </div>
-
-                <div class="row mt-5">
-
-                    <div class="col-sm-12">
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <input type="checkbox" ng-model="aschedule.selectedAllListing" ng-click="aschedule.checkAllListing()" />
-                                    </th>
-                                    <th>
-                                        Unit - Property
-                                    </th>
-                                    <th>
-                                        Showing Date/Time
-                                    </th>
-                                    <th>
-                                        Scheduling Link
-                                        <span class="fa fa-info-circle" title="Prospective tenants can schedule a showing via this link">
-                                    </th>
-                                    <th>
-                                        List on Craiglist
-                                        <span class="fa fa-info-circle" title="Complete mandatory fields and toggle the button to list on Craigslist"></span>
-                                    </th>
-                                    <th>
-                                        Listing Status
-                                        <span class="fa fa-info-circle" title="Link to craigslist listing appears after unit is listed"></span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="(key, value) in aschedule.mergeListing track by $index" id="{{$index}}">
-                                    <td>
-                                        <input type="checkbox" ng-model="aschedule.mergeListing[key].inputCheck" />
-                                    </td>
-                                    <td>{{value.unitID}} - {{aschedule.properties[value.propertyId].address}}</td>
-                                    <td>
-                                        <span ng-repeat="dt in value.fromToDate">
-                                            {{dt}}
-                                            <br/>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <a ng-href='{{value.link}}' target="_blank">{{value.link}}</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <span ng-if="value.unitID && aschedule.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="aschedule.openDetailModel(value.propertyId, value.unitID)"
-                                            class="text-primary hover-color" style='cursor:pointer;margin:auto'>Incomplete Listing Details</span>
-                                        <!-- <span  ng-click="aschedule.openDetailModel(value.propertyId, value.unitID)"
-                            class="text-primary">Link to Craigslist listing</span> -->
-                                        <div ng-if="!aschedule.checkIsIncomplete(value.propertyId, value.unitID)">
-                                            <div>Activate Listing</div>
-                                            <div class="toggle-switch mt-2" ng-click="aschedule.toggleListOnCraglist(value.keys)">
-                                                <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
-                                                <label class="ts-helper" style="border-radius: 8px !important"></label>
-                                            </div>
-                                            <div class="text-primary hover-color" style='cursor:pointer' ng-click="aschedule.openDetailModel(value.propertyId, value.unitID)">
-                                                <span>Edit Listing</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <select ng-model="value.status" ng-change="aschedule.toggleStatus(value.keys,value.status)">
-                                            <option value='Not Listed'>Not Listed</option>
-                                            <option value='Listed'>Listed</option>
-                                            <option value='Pending'>Pending</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                            <div class="col-sm-5">
+                                <!-- <button class="btn btn-sm btn-danger btn-round" ng-click="aschedule.deleteListings($event)">Delete</button> -->
+                                <button class="btn btn-sm bgm-teal btn-round" ng-click="craigslistopen(true)">Craigslist Settings</button>
+                            </div>
+                            <div class="col-sm-4 list">
+                                Listings
+                                <span class="fa fa-info-circle" title="This table shows your availablity for showings and units listed">
+                                </span>
+                            </div>
+        
+                        </div>
+        
+                        <div class="row mt-5">
+        
+                            <div class="col-sm-12">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" ng-model="aschedule.selectedAllListing" ng-click="aschedule.checkAllListing()" />
+                                            </th>
+                                            <th>
+                                                Unit - Property
+                                            </th>
+                                            <th>
+                                                Showing Date/Time
+                                            </th>
+                                            <th>
+                                                Scheduling Link
+                                                <span class="fa fa-info-circle" title="Prospective tenants can schedule a showing via this link">
+                                            </th>
+                                            <th>
+                                                List on Craiglist
+                                                <span class="fa fa-info-circle" title="Complete mandatory fields and toggle the button to list on Craigslist"></span>
+                                            </th>
+                                            <th>
+                                                Listing Status
+                                                <span class="fa fa-info-circle" title="Link to craigslist listing appears after unit is listed"></span>
+                                            </th>
+                                            <th>
+                                                Craglist Link
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="(key, value) in aschedule.mergeListing track by $index" id="{{$index}}">
+                                            <td>
+                                                <input type="checkbox" ng-model="aschedule.mergeListing[key].inputCheck" />
+                                            </td>
+                                            <td>{{value.unitID}} - {{aschedule.properties[value.propertyId].address}}</td>
+                                            <td>
+                                                <span ng-repeat="dt in value.fromToDate">
+                                                    {{dt}}
+                                                    <br/>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a ng-href='{{value.link}}' target="_blank">{{value.link}}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                <span ng-if="value.unitID && aschedule.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="aschedule.openDetailModel(value.propertyId, value.unitID)"
+                                                    class="text-primary hover-color" style='cursor:pointer;margin:auto'>Incomplete Listing Details</span>
+                                                <!-- <span  ng-click="aschedule.openDetailModel(value.propertyId, value.unitID)"
+                                    class="text-primary">Link to Craigslist listing</span> -->
+                                                <div ng-if="!aschedule.checkIsIncomplete(value.propertyId, value.unitID)">
+                                                    <div>Activate Listing</div>
+                                                    <div class="toggle-switch mt-2" ng-click="aschedule.toggleListOnCraglist(value.keys)">
+                                                        <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
+                                                        <label class="ts-helper" style="border-radius: 8px !important"></label>
+                                                    </div>
+                                                    <div class="text-primary hover-color" style='cursor:pointer' ng-click="aschedule.openDetailModel(value.propertyId, value.unitID)">
+                                                        <span>Edit Listing</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <select ng-model="value.status" ng-change="aschedule.toggleStatus(value.keys,value.status)">
+                                                    <option value='Not Listed'>Not Listed</option>
+                                                    <option value='Listed'>Listed</option>
+                                                    <option value='Pending'>Pending</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type='text'  ng-model="value.craglistLink"  ng-blur="aschedule.insertCraglistLink(value.keys,value.craglistLink)"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                 </div>
 
 
