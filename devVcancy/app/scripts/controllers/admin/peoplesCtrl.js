@@ -14,6 +14,7 @@ vcancyApp
 
                 var users = snapvalue.val();
                 console.log('users', users, Object.keys(users).length);
+                vm. = snapvalue.val();
                 users = _.filter(users, function (user, key) {
                     if (user.usertype == 1 || user.usertype == 3) {
                         user.key = key;
@@ -26,11 +27,11 @@ vcancyApp
             });
 
             vm.getScheduleListing = function () {
-                vm.userData = vm.usersList[vm.selectedUser];
-                console.log(vm.userData)
+                vm.userData = vm.allUsers[vm.selectedUser];
                 vm.landlordID = vm.selectedUser;
                 vm.init(vm.selectedUser);
             }
+
             vm.propcheck = [];
             vm.applyPropUsers = {};
             vm.applyPropSubmittedUsers = {};
