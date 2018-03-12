@@ -112,7 +112,7 @@ vcancyApp
 				'UDAAPP': false,
 				'TC': true,
 				'TCData': vm.customRentalApplicationCheck.TCData,
-				'companyLogo': userData ? userData.companylogo : '../assets/pages/img/no_image_found.jpg',
+				'companyLogo': userData ? userData.companylogo || 'https://s3.ca-central-1.amazonaws.com/vcancy-final/public/no_image_found.jpg': 'https://s3.ca-central-1.amazonaws.com/vcancy-final/public/no_image_found.jpg',
 				'companyDetails': vm.companyDetail()
 			}
 

@@ -56,7 +56,7 @@ vcancyApp.config(function (socialProvider) {
 
 vcancyApp.service('emailSendingService', function ($http, config) {
 	this.sendEmailViaNodeMailer = function (to, subject, mode, emailData) {
-		var url = 'https://vcancy.ca/login/#/applyproperty/'
+		// var url = 'https://vcancy.ca/login/#/applyproperty/'
 		// if (window.location.host.startsWith('localhost')) {
 		// 	url = 'http://localhost:9000/#/applyproperty/'
 		// }

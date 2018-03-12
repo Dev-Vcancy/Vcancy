@@ -296,7 +296,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 							reguserdbObj.ref('users/' + firebaseUser.uid).set({
 								firstname: vm.registerUser.firstName,
 								lastname: vm.registerUser.lastName,
-								usertype: 1,
+								usertype: 0,
 								email: vm.registerUser.email,
 								isadded: 1,
 								iscancelshow: 1,
