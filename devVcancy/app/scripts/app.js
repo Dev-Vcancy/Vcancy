@@ -717,6 +717,15 @@ vcancyApp
 					adminauthenticate: adminauthenticate,
 				}
 			})
+
+			.state('admineditprop', {
+				url: '/admin/editprop/{propId}',
+				controller: 'adminPropertyCtrl',
+				controllerAs: 'apropctrl',
+				templateUrl: 'views/admin/editproperty.html',
+				resolve: { adminauthenticate: adminauthenticate }
+			})
+
 			.state('adminpeoples', {
 				url: '/admin/peoples',
 				controller: 'adminPeoplesCtrl',
