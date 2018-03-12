@@ -141,6 +141,7 @@
                                     <th ng-repeat="ques in apeoples.filters.options">
                                         {{ques.label}}
                                     </th>
+                                    <th>Credit Check Report</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -173,7 +174,14 @@
                                         </span>
                                     </td>
                                     <td>
-                                        Credit Check
+                                        <span ng-if="value.creditCheckLink">
+                                            <a href="{{value.creditCheckLink}}" target="_blank">Link</a>
+                                        </span>
+                                        <label class="btn bgm-blue btn-sm btn-round" ng-if="!value.creditCheckLink">
+                                            <i class="fa fa-upload"></i>
+                                            <input type="file" name="file" ng-click="apeoples.uploadCreditCheckReportModal(key)" id="file" value="dataFile" accept="*"
+                                                file-upload onChangeFunction="uploadDetailsImages" class="hidden" />
+                                        </label>
                                     </td>
                                     <td>
                                         <button class="btn btn-sm btn-danger btn-round" ng-if="value.schedulestatus != 'cancelled'" ng-click="apeoples.deleteApplyProp(key)">

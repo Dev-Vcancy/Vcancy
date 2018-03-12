@@ -26,6 +26,9 @@ vcancyApp
             });
 
             vm.getScheduleListing = function () {
+                vm.userData = vm.usersList[vm.selectedUser];
+                console.log(vm.userData)
+                vm.landlordID = vm.selectedUser;
                 vm.init(vm.selectedUser);
             }
             vm.propcheck = [];
@@ -79,7 +82,54 @@ vcancyApp
 
                 return result;
             }
+            vm.selectedApplication = '';
+            vm.uploadCreditCheckReportModal = function (key) {
+                vm.selectedApplication = key;
+            };
 
+            $scope.uploadDetailsImages = function (event) {
+                var filesToUpload = event.target.files;
+                var file = filesToUpload[0];
+                if (file) {
+                    var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+                    filename = filename.replace(/\s/g, '');
+                    AWS.config.update({
+                        accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+                        secretAccessKey: 'xnuyOZTMm9HgORhcvg2YTILIZVD6kHsjLL6TIkLi'
+                    });
+                    AWS.config.region = 'ca-central-1';
+
+                    var bucket = new AWS.S3({
+                        params: {
+                            Bucket: 'vcancy-final'
+                        }
+                    });
+
+                    var params = {
+                        Key: 'property-images/' + filename,
+                        ContentType: file.type,
+                        Body: file,
+                        StorageClass: "STANDARD_IA",
+                        ACL: 'public-read'
+                    };
+
+                    bucket.upload(params).on('httpUploadProgress', function (evt) {
+
+                    })
+                        .send(function (err, data) {
+                            console.log(vm.selectedApplication);
+                            firebase.database().ref('applyprop/' + vm.selectedApplication).update({
+                                creditCheckLink: data.Location
+                            }).then(function () {
+                                vm.getApplyProp(vm.landlordID);
+                            })
+                                .catch(function (err) {
+                                    console.error('ERROR', err);
+                                    swal("", "There was error deleteing the schedule.", "error");
+                                });
+                        })
+                }
+            }
             vm.questionDropDown = [
                 { id: 'WKRX6Q', label: 'What is your profession?', isChecked: true },
                 { id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
