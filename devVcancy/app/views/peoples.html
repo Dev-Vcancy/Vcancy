@@ -133,7 +133,7 @@
 										<!-- <span ng-show="lappctrl.sortType == 'rent' && !lappctrl.sortReverse" class="fa fa-caret-down"></span>
 											<span ng-show="lappctrl.sortType == 'rent' && lappctrl.sortReverse" class="fa fa-caret-up"></span> -->
 									</th>
-									<th>Applicants</th>
+									<!-- <th>Applicants</th> -->
 									<th>Unit-Property</th>
 									<th style="min-width: 150px;">Showing Date-Time</th>
 									<th>
@@ -163,7 +163,7 @@
 									<td>{{lappctrl.getUserName(value.tenantID, value)}}</td>
 									<td>{{lappctrl.getRentalField(key, 'appgrossmonthlyincome')}}</td>
 									<td>{{lappctrl.getRentalField(key, 'rentamt')}}</td>
-									<td>{{lappctrl.getRentalField(key, 'applicantsno') + lappctrl.getRentalField(key, 'minorapplicantsno')}}</td>
+									<!-- <td>{{lappctrl.getRentalField(key, 'applicantsno') + lappctrl.getRentalField(key, 'minorapplicantsno')}}</td> -->
 									<td>{{value.unitID}}-{{value.address}}</td>
 									<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
 										<br/> {{value.fromTimeSlot}} : {{value.toTimeSlot}}</td>
