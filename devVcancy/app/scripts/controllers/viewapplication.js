@@ -45,6 +45,8 @@ vcancyApp
 				if (snapshot.val()) {
 					var value = snapshot.val();
 					console.log(value);
+					vm.TCData = value.TCData;
+					vm.customRentalApplicationCheck = value.customRentalApplicationCheck;
 					vm.rentaldata.tenantID = value.tenantID;
 					vm.rentaldata.scheduleID = value.scheduleID;
 					vm.rentaldata.propID = value.propID;
@@ -84,8 +86,7 @@ vcancyApp
 					vm.rentaldata.reftwo_phone = value.reftwo_phone;
 					vm.rentaldata.reftwo_relation = value.reftwo_relation;
 					vm.rentaldata.dated = new Date(value.dated);
-
-					vm.TCData = value.TCData;
+					
 					console.log(vm.rentaldata);
 
 					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(applicationID).once("value", function (snap) {

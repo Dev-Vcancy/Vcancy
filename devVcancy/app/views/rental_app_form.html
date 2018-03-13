@@ -276,13 +276,12 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <h3 class="m-b-20 m-t-10 fw">Additional Applicant</h3>
+                                <h3 class="m-b-20 m-t-10 fw" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.AAPP1 || rctrl.customRentalApplicationCheck.AAPP2">Additional Applicant</h3>
 
                                 <div class="printview">
 
                                     <div class="additional_applicant card-body-inner">
-                                        <div class="fw">
+                                        <div class="fw" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.AAPP1">
                                             <p>
                                                 Additional Adult Occupants (18+) to occupy the premises: (Click on the + button to add)
                                                 <button print-remove type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="rctrl.addadult(rctrl.adult.length)"
@@ -340,7 +339,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-12 fw">
+                                        <div class="col-sm-12 fw" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.AAPP2">
                                             <p>Additional Minors (0-18YRS) to occupy the premises: (Click on the + button to
                                                 add)
                                                 <button print-remove type="button" tooltip-class="tooltip-orange" uib-tooltip="Add More" data-ng-click="rctrl.addminor(rctrl.minor.length)"
@@ -581,8 +580,8 @@
                         <uib-tab index="2" heading="Step 3" disable="true">
                             <div class="card-body card-padding clearfix ">
                                 <div class="printview">
-                                    <h3 class="m-b-20 m-t-10 fw">Vehicle Information</h3>
-                                    <div class="card-body-inner">
+                                    <h3 class="m-b-20 m-t-10 fw" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.VI">Vehicle Information</h3>
+                                    <div class="card-body-inner" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.VI">
                                         <div ng-class="" class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
                                             <div class=" fg-toggled">
                                                 <input required name="vehicleMake" type="text" ng-model="rctrl.rentaldata.vehiclemake" class="form-control w-100" id="" placeholder="">
@@ -610,7 +609,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="card-body-inner">
+                                    <div class="card-body-inner" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.VI">
                                         <div ng-class="" class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
                                             <div class=" fg-toggled">
                                                 <input name="vehicleMake2" type="text" ng-model="rctrl.rentaldata.vehiclemake2" class="form-control w-100" id="" placeholder="">
@@ -636,15 +635,15 @@
                                     </div>
                                 </div>
 
-                                <div class="printview">
-                                    <h3 class="m-b-20 m-t-10 fw">Emergency Contact</h3>
+                                <div class="printview" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.EC">
+                                    <h3 class="m-b-20 m-t-10 fw" >Emergency Contact</h3>
                                     <div class="card-body-inner">
-                                        <p>Name and phone number of personal/family reference who may be contacted in the case
+                                        <p ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.EC1">Name and phone number of personal/family reference who may be contacted in the case
                                             of
                                             <u>emergency:</u>
                                         </p>
 
-                                        <div ng-class="{ 'has-error' : rentalForm.emergencyName.$invalid && !rentalForm.emergencyName.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                        <div ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.EC" ng-class="{ 'has-error' : rentalForm.emergencyName.$invalid && !rentalForm.emergencyName.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
                                             <div class=" fg-toggled">
                                                 <input required name="emergencyName" ng-model="rctrl.rentaldata.emergencyname" type="text" class="form-control w-100" id=""
                                                     placeholder="">
@@ -653,7 +652,7 @@
                                             </div>
                                         </div>
 
-                                        <div ng-class="{ 'has-error' : rentalForm.emergencyPhone.$invalid && !rentalForm.emergencyPhone.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                        <div ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.EC" ng-class="{ 'has-error' : rentalForm.emergencyPhone.$invalid && !rentalForm.emergencyPhone.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
                                             <div class=" fg-toggled">
                                                 <input required name="emergencyPhone" ng-model="rctrl.rentaldata.emergencyphone" type="text" class="form-control w-100 phone"
                                                     ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
@@ -666,7 +665,7 @@
                                 </div>
 
                                 <div class="printview">
-                                    <h3 class="m-b-20 m-t-10 fw">References</h3>
+                                    <h3 class="m-b-20 m-t-10 fw" >References</h3>
                                     <div class="card-body-inner">
                                         <p>Reference 1:</p>
                                         <div ng-class="{ 'has-error' : rentalForm.ref1Name.$invalid && !rentalForm.ref1Name.$pristine }" class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
@@ -696,9 +695,9 @@
                                             </div>
                                         </div>
 
-                                        <p>Reference 2:</p>
+                                        <p ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.REF2">Reference 2:</p>
 
-                                        <div ng-class="{ 'has-error' : rentalForm.ref2Name.$invalid && !rentalForm.ref2Name.$pristine }" class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
+                                        <div ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.REF2" ng-class="{ 'has-error' : rentalForm.ref2Name.$invalid && !rentalForm.ref2Name.$pristine }" class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
                                             <div class=" fg-toggled">
                                                 <input required name="ref2Name" type="text" ng-model="rctrl.rentaldata.reftwo_name" class="form-control w-100" id="" placeholder="Full Name">
                                                 <label class="fg-label">Full Name
@@ -706,7 +705,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
+                                        <div class="col-xs-12 col-sm-4 form-group fg-float m-t-10" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.REF2">
                                             <div class=" fg-toggled">
                                                 <input required ng-model="rctrl.rentaldata.reftwo_phone" type="text" class="form-control w-100 phone" ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }"
                                                     id="" placeholder="" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/">
@@ -715,7 +714,7 @@
                                             </div>
                                         </div>
 
-                                        <div ng-class="{ 'has-error' : rentalForm.ref2Relation.$invalid && !rentalForm.ref2Relation.$pristine }" class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
+                                        <div ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.REF2"  ng-class="{ 'has-error' : rentalForm.ref2Relation.$invalid && !rentalForm.ref2Relation.$pristine }" class="col-xs-12 col-sm-4 form-group fg-float m-t-10">
                                             <div class=" fg-toggled">
                                                 <input required name="ref2Relation" type="text" class="form-control w-100" id="" ng-model="rctrl.rentaldata.reftwo_relation"
                                                     placeholder="">

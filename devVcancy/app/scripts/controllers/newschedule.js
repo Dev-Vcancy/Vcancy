@@ -553,7 +553,7 @@ vcancyApp
 				'AAPP2': false,
 				'ESIV': true,
 				'ESIV1': true,
-				'V1': false,
+				'VI': false,
 				'EC': false,
 				'EC1': false,
 				'REF': true,

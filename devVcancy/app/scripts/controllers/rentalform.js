@@ -129,7 +129,7 @@ vcancyApp
 			vm.rentaldata.otherappsign = [];
 
 			vm.TCData = '';
-
+			vm.customRentalApplicationCheck = null;
 			// DATEPICKER
 			vm.today = function () {
 				vm.dt = new Date();
@@ -431,10 +431,15 @@ vcancyApp
 														vm.propdata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
 
 														firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
-															vm.landlordData = snap.val();
-															if(vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
-																vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
-															}
+															$scope.$apply(function() {
+																vm.landlordData = snap.val();
+																if(vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+																	vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
+																}
+																if(vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
+																	vm.customRentalApplicationCheck = vm.landlordData.customRentalApplicationCheck
+																}
+															});
 															console.log('vm.landlordData', vm.landlordData);
 														});
 													}
@@ -506,10 +511,15 @@ vcancyApp
 													vm.propdata.address = vm.propdata.units + " - " + vm.propdata.address;
 
 													firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
-														vm.landlordData = snap.val();
-														if(vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
-															vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
-														}
+														$scope.$apply(function() {
+															vm.landlordData = snap.val();
+															if(vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+																vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
+															}
+															if(vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
+																vm.customRentalApplicationCheck = vm.landlordData.customRentalApplicationCheck
+															}
+														});
 														console.log('vm.landlordData', vm.landlordData);
 													});
 												}
@@ -587,6 +597,7 @@ vcancyApp
 							vm.rentaldata.dated = value.dated;
 
 							vm.TCData = value.TCData;
+							vm.customRentalApplicationCheck = value.customRentalApplicationCheck;
 
 							vm.submitemail = value.externalemail;
 							console.log(vm.submitemail);
@@ -811,6 +822,7 @@ vcancyApp
 				console.log(vm.adultapplicants);
 
 				var TCData = vm.TCData || '';
+				var customRentalApplicationCheck = vm.customRentalApplicationCheck || '';
 
 				if (vm.draftdata == "false" && $stateParams.applicationId == 0) {
 					firebase.database().ref('submitapps/').push().set({
@@ -871,7 +883,9 @@ vcancyApp
 
 						rentalstatus: "pending",
 
-						TCData: TCData
+						TCData: TCData,
+
+						customRentalApplicationCheck: customRentalApplicationCheck
 					}).then(function () {
 						//Generate the applicant details of submitted app to new table
 						firebase.database().ref('submitapps/').limitToLast(1).once("child_added", function (snapshot) {
@@ -993,7 +1007,8 @@ vcancyApp
 
 						rentalstatus: "pending",
 
-						TCData: TCData
+						TCData: TCData,
+						customRentalApplicationCheck: customRentalApplicationCheck
 					}).then(function () {
 						//Generate the applicant details of submitted app to new table
 						var applicantsdata = {

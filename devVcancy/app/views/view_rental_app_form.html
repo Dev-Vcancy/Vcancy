@@ -188,9 +188,9 @@
 					</div>
 
 					<div class="printview">
-						<h3 class="m-b-20 m-t-10 fw">Additional Applicant</h3>
+						<h3 class="m-b-20 m-t-10 fw" ng-if="(!vappctrl.customRentalApplicationCheck) || vm.customRentalApplicationCheck.AAPP1 || vm.customRentalApplicationCheck.AAPP2">Additional Applicant</h3>
 						<div class="additional_applicant">
-							<div class="fw">
+							<div class="fw" ng-if="(!vappctrl.customRentalApplicationCheck) || vm.customRentalApplicationCheck.AAPP1">
 								<p>Additional Adult Occupants (18+) to occupy the premises: </p>
 
 								<div class="col-sm-12" ng-repeat="x in vappctrl.adult">
@@ -220,7 +220,7 @@
 								</div>
 							</div>
 
-							<div class="fw">
+							<div class="fw" ng-if="(!vappctrl.customRentalApplicationCheck) || vm.customRentalApplicationCheck.AAPP2">
 								<p>Additional Minors (0-18YRS) to occupy the premises: </p>
 
 								<div class="col-sm-12" ng-repeat="x in vappctrl.minor">
@@ -347,8 +347,8 @@
 						</div>
 					</div>
 
-					<div class="printview">
-						<h3 class="m-b-20 m-t-10 fw">Vehicle Information</h3>
+					<div class="printview" ng-if="(!vappctrl.customRentalApplicationCheck) || vm.customRentalApplicationCheck.VI">
+						<h3 class="m-b-20 m-t-10 fw" >Vehicle Information</h3>
 						<div class="">
 							<p class="m-b-10">Make:
 								<span class="fg-line">
@@ -384,10 +384,10 @@
 						</div>
 					</div>
 
-					<div class="printview">
+					<div class="printview" ng-if="(!vappctrl.customRentalApplicationCheck) || vm.customRentalApplicationCheck.EC">
 						<h3 class="m-b-20 m-t-10 fw">Emergency Contact</h3>
 						<div class="">
-							<p>Name and phone number of personal/family reference who may be contacted in the case of
+							<p ng-if="(!vappctrl.customRentalApplicationCheck) || vm.customRentalApplicationCheck.EC1">Name and phone number of personal/family reference who may be contacted in the case of
 								<u>emergency:</u>
 							</p>
 							<p class="m-b-10">Name:
@@ -421,7 +421,7 @@
 								</span>
 							</p>
 
-							<p class="m-b-10">2. Name:
+							<p class="m-b-10" ng-if="(!vappctrl.customRentalApplicationCheck) || vm.customRentalApplicationCheck.REF2">2. Name:
 								<span class="fg-line">
 									<input readonly="true" required type="text" ng-model="vappctrl.rentaldata.reftwo_name" class="form-control m-b-5 w-4" id=""
 									 placeholder="">
@@ -529,7 +529,7 @@
 								</p>
 								<div print-remove>
 									<span print-remove>Document/Image Uploaded: </span>
-									<span ng-if="vappctrl.isLoggedIn" ng-click="vappctrl.viewFile(vappctrl.rentaldata.appfiles)" class="btn btn-primary btn-file m-r-10"
+									<span ng-if="vappctrl.isLoggedIn && vappctrl.rentaldata.appfiles" ng-click="vappctrl.viewFile(vappctrl.rentaldata.appfiles)" class="btn btn-primary btn-file m-r-10"
 									 print-remove>View Attached Document</span>
 								</div>
 								<div print-remove>
