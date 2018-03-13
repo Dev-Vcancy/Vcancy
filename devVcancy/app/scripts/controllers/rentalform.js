@@ -350,8 +350,16 @@ vcancyApp
 
 
 			if (applicationID == 0) {
+				console.log(tenantID)
 				firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).limitToLast(1).once("value", function (snapshot) {
-					console.log(snapshot.val());
+					if (!snapshot.val()) {
+						swal({
+							title: 'Error',
+							text: 'please submit your default rental application form on main page.',
+							type: 'error'
+						});
+						return;
+					}
 					$scope.$apply(function () {
 						if (snapshot.val() !== null) {
 							$.map(snapshot.val(), function (value, index) {
@@ -400,9 +408,9 @@ vcancyApp
 								vm.rentaldata.reftwo_phone = value.reftwo_phone;
 								vm.rentaldata.reftwo_relation = value.reftwo_relation;
 								vm.rentaldata.dated = value.dated != '' ? $filter('date')(new Date(value.dated), 'dd-MMMM-yyyy') : '';
-
+								console.log(scheduleID)
 								firebase.database().ref('applyprop/' + scheduleID).once("value", function (snapshot) {
-									// console.log(snapshot.val())
+									console.log(snapshot.val())
 									$scope.$apply(function () {
 										if (snapshot.val()) {
 											// console.log('applyprop', snapshot.val())
@@ -426,11 +434,29 @@ vcancyApp
 															}
 														});
 														vm.propdata.rent = parseFloat(unit.rent);
-
+														var leaseLength = ''
+														switch (unit.leaseLength) {
+															case 'month-to-month':
+																leaseLength = 'Month to Month';
+																break;
+															case '6months':
+																leaseLength = '6 Months';
+																break;
+															case '9months':
+																leaseLength = '9 Months';
+																break;
+															case '12months':
+																leaseLength = '12 Months';
+																break;
+														}
+														vm.rentaldata.months = leaseLength;
 														vm.propdata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
-
+														vm.rentaldata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
+														vm.rentaldata.rent = parseFloat(unit.rent);
 														firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
-															vm.landlordData = snap.val();
+															$scope.$apply(function () {
+																vm.landlordData = snap.val();
+															});
 															console.log('vm.landlordData', vm.landlordData);
 														});
 													}
@@ -576,7 +602,6 @@ vcancyApp
 
 
 							vm.submitemail = value.externalemail;
-							console.log(vm.submitemail);
 							firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function (snap) {
 								$scope.$apply(function () {
 									if (snap.val() != null) {
@@ -684,7 +709,6 @@ vcancyApp
 					return;
 				}
 				var externalemail = vm.submitemail == undefined ? '' : vm.submitemail;
-				console.log(externalappStatus);
 
 				var address = vm.propdata.address == undefined ? '' : vm.propdata.address;
 				var rent = vm.propdata.rent == undefined ? '' : vm.propdata.rent;
@@ -1077,26 +1101,6 @@ vcancyApp
 							console.error('ERROR in file upload');
 						}
 					});
-				// var req = {
-				// 	method: 'POST',
-				// 	url: config.sailsBaseUrl + 'fileupload/upload',
-				// 	headers: {
-				// 		'Content-Type': 'application/json',
-				// 		'Access-Control-Allow-Origin': '*',
-				// 		"Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
-				// 	},
-				// 	data: {
-				// 		file: file,
-				// 		filename: filename
-				// 	}
-				// }
-
-				// $http(req).then(function successCallback(response) {
-				// 	console.log(response);
-				// 	console.log("Done");
-				// }, function errorCallback(response) {
-				// 	console.log("Fail");
-				// });
 			};
 
 			vm.viewFile = function (location) {

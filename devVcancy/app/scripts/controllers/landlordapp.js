@@ -359,6 +359,7 @@ vcancyApp
 			vm.saveCustomRentalApplicationCheck = function () {
 				vm.loader = 1;
 				var customChecks = angular.copy(vm.customRentalApplicationCheck);
+				console.log('customChecks', customChecks);
 				_.omit(customChecks, '$$hashKey');
 				firebase.database().ref('users/' + this.landLordID).update({
 					customRentalApplicationCheck: customChecks

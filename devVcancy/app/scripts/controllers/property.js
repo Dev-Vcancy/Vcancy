@@ -2208,17 +2208,18 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
     $scope.submit = function () {
 
         $scope.loader = 1;
-        var propID = $scope.items1.propID;
-        var unitlists = $scope.items1.unitlists;
-        var totalunits = $scope.items1.totalunits;
-        var noofunits = $scope.items1.noofunits;
-        var name = $scope.items1.name;
-        var address = $scope.items1.address;
-        var city = $scope.items1.city;
-        var country = $scope.items1.country;
-        var proptype = $scope.items1.proptype;
-        var postcode = $scope.items1.postcode;
-        var province = $scope.items1.province;
+        console.log('vm.prop', vm.prop)
+        var propID = vm.prop.propID;
+        var unitlists = vm.prop.unitlists;
+        var totalunits = vm.prop.totalunits;
+        var noofunits = vm.prop.noofunits;
+        var name = vm.prop.name;
+        var address = vm.prop.address;
+        var city = vm.prop.city;
+        var country = vm.prop.country;
+        var proptype = vm.prop.proptype;
+        var postcode = vm.prop.postcode;
+        var province = vm.prop.province;
 
 
         var fileUpload = document.getElementById("file123");
@@ -2354,7 +2355,10 @@ vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state',
                         obj['location'] = address;
                         obj['city'] = city;
                         obj['state'] = province;
+                        obj['country'] = province;
                         obj['postcode'] = postcode;
+                        obj['postalcode'] = postcode;
+                        
                         unitsImported.push(obj);
                         totalrowunits++;
                     }

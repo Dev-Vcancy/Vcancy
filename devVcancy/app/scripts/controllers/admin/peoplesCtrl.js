@@ -14,7 +14,7 @@ vcancyApp
 
                 var users = snapvalue.val();
                 console.log('users', users, Object.keys(users).length);
-                vm. = snapvalue.val();
+                vm.allUsers = snapvalue.val();
                 users = _.filter(users, function (user, key) {
                     if (user.usertype == 1 || user.usertype == 3) {
                         user.key = key;
