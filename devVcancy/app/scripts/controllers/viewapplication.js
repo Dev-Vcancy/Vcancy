@@ -85,6 +85,7 @@ vcancyApp
 					vm.rentaldata.reftwo_relation = value.reftwo_relation;
 					vm.rentaldata.dated = new Date(value.dated);
 
+					vm.TCData = value.TCData;
 					console.log(vm.rentaldata);
 
 					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(applicationID).once("value", function (snap) {

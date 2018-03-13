@@ -9,7 +9,7 @@
 				<!-- <h1>Apply For Property</h1> -->
 				<center style="margin-bottom: 50px;">
 					<div class="col-sm-12 printview">
-						<img width="150px" height="150px" src="{{vappctrl.landlordData.customRentalApplicationCheck ? vappctrl.landlordData.customRentalApplicationCheck.companyLogo || vappctrl.landlordData.companyLogo : vappctrl.landlordData.companyLogo}}"
+						<img width="150px" height="150px" src="{{ vappctrl.landlordData.customRentalApplicationCheck.companyLogo || vappctrl.landlordData.companylogo}}"
 						 class="img-responsive pic-bordered image" alt="" disabled>
 					</div>
 					<div class="col-sm-12 text-center">
@@ -459,7 +459,7 @@
 								<span class="fg-line">
 									<input readonly="true" required ng-model="vappctrl.rentaldata.parking" type="text" class="form-control" id="" placeholder="">
 								</span>
-								<div class="col-xs-12 clearfix p-0 m-t-10" ng-if="!vappctrl.landlordData || !vappctrl.landlordData.customRentalApplicationCheck || !vappctrl.landlordData.customRentalApplicationCheck.TCData">
+								<div class="col-xs-12 clearfix p-0 m-t-10" ng-if="!vappctrl.TCData">
 									<p class="m-t-20"> vehicles (licensed only). This unit is strictly
 										<strong>NON SMOKING.</strong> This offer is subject to acceptance by the landlord/property management company that listed
 										the property. This application is made on the understanding that no betterments will be provided to the Rental
@@ -481,9 +481,9 @@
 									<p class="m-b-10">Tenants are not chosen on a first come – first served basis. We choose the most suitable application for the unit
 										at our sole discretion. This application form is to be used only in the interested of the owner of the rental unit.</p>
 								</div>
-								<div class="col-xs-12 clearfix p-0 m-t-10" ng-if="vappctrl.landlordData && vappctrl.landlordData.customRentalApplicationCheck && vappctrl.landlordData.customRentalApplicationCheck.TCData">
+								<div class="col-xs-12 clearfix p-0 m-t-10" ng-if="vappctrl.TCData">
 									<p>
-											{{vappctrl.landlordData.customRentalApplicationCheck.TCData}}
+											{{vappctrl.TCData}}
 									</p>
 								</div>
 								<!--p class="m-t-20">vehicles (licensed only). This unit is strictly <strong>NON SMOKING.</strong> This offer is subject to acceptance by the landlord/property management company that listed the property. This application is made on the understanding that no betterments will be provided to the Rental Unit except those which may be specifically requested in this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.</p>

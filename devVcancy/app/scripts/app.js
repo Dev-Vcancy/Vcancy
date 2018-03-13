@@ -67,6 +67,7 @@ vcancyApp.service('emailSendingService', function ($http, config) {
 		} else {
 			url = host + '/nodeapi/api/v1/email/sendemail';
 		}
+		console.log('URL', url);
 		var req = {
 			method: 'POST',
 			// url: 'http://localhost:1337/email/sendemail',

@@ -90,7 +90,7 @@ vcancyApp
 			};
 
 			vm.companyDetail = function () {
-				return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
+				return vm.userData.companyname + ' ' + (vm.userData.contact || '')
 			}
 
 			vm.defaultRentalApplicationCheck = {
@@ -112,7 +112,7 @@ vcancyApp
 				'UDAAPP': false,
 				'TC': true,
 				'TCData': vm.customRentalApplicationCheck.TCData,
-				'companyLogo': userData ? userData.companylogo || 'https://s3.ca-central-1.amazonaws.com/vcancy-final/public/no_image_found.jpg': 'https://s3.ca-central-1.amazonaws.com/vcancy-final/public/no_image_found.jpg',
+				'companyLogo': userData ? userData.companylogo: '',
 				'companyDetails': vm.companyDetail()
 			}
 
@@ -124,7 +124,7 @@ vcancyApp
 						userData.customRentalApplicationCheck.TCData = vm.customRentalApplicationCheck.TCData;
 					}
 					if (!userData.customRentalApplicationCheck.companyLogo) {
-						userData.customRentalApplicationCheck.companyLogo = userData.companylogo || vm.customRentalApplicationCheck.companyLogo || "../assets/pages/img/no_image_found.jpg";
+						userData.customRentalApplicationCheck.companyLogo = userData.companylogo || vm.customRentalApplicationCheck.companyLogo;
 					}
 					if (!userData.customRentalApplicationCheck.companyDetails) {
 						userData.customRentalApplicationCheck.companyDetails = vm.companyDetail();

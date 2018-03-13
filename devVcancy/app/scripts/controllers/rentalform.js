@@ -128,6 +128,7 @@ vcancyApp
 			vm.rentaldata.appsign = '';
 			vm.rentaldata.otherappsign = [];
 
+			vm.TCData = '';
 
 			// DATEPICKER
 			vm.today = function () {
@@ -431,6 +432,9 @@ vcancyApp
 
 														firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
 															vm.landlordData = snap.val();
+															if(vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+																vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
+															}
 															console.log('vm.landlordData', vm.landlordData);
 														});
 													}
@@ -500,6 +504,14 @@ vcancyApp
 													vm.propdata = snap.val();
 													vm.propdata.propID = snap.key;
 													vm.propdata.address = vm.propdata.units + " - " + vm.propdata.address;
+
+													firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
+														vm.landlordData = snap.val();
+														if(vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+															vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
+														}
+														console.log('vm.landlordData', vm.landlordData);
+													});
 												}
 											});
 										});
@@ -574,6 +586,7 @@ vcancyApp
 							vm.rentaldata.reftwo_relation = value.reftwo_relation;
 							vm.rentaldata.dated = value.dated;
 
+							vm.TCData = value.TCData;
 
 							vm.submitemail = value.externalemail;
 							console.log(vm.submitemail);
@@ -797,6 +810,8 @@ vcancyApp
 				});
 				console.log(vm.adultapplicants);
 
+				var TCData = vm.TCData || '';
+
 				if (vm.draftdata == "false" && $stateParams.applicationId == 0) {
 					firebase.database().ref('submitapps/').push().set({
 						tenantID: tenantID,
@@ -854,7 +869,9 @@ vcancyApp
 						appgrossmonthlyincome: appgrossmonthlyincome,
 						dated: dated,
 
-						rentalstatus: "pending"
+						rentalstatus: "pending",
+
+						TCData: TCData
 					}).then(function () {
 						//Generate the applicant details of submitted app to new table
 						firebase.database().ref('submitapps/').limitToLast(1).once("child_added", function (snapshot) {
@@ -974,7 +991,9 @@ vcancyApp
 
 						dated: dated,
 
-						rentalstatus: "pending"
+						rentalstatus: "pending",
+
+						TCData: TCData
 					}).then(function () {
 						//Generate the applicant details of submitted app to new table
 						var applicantsdata = {
