@@ -5,8 +5,8 @@
     <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
     <section class="new_dashbord" id="content">
         <div class="container">
-            <!-- title start -->
-          <div class="page-content-wrapper">
+            
+         
                 <div class="page-content">
                     <h1 class="page-title"> Property </h1>
                     <div class="profile">
@@ -17,13 +17,13 @@
                                 </svg>
                             </div>
                         </div>
-                        <select ng-model="aproperty.selectedUser" ng-change="aproperty.getScheduleListing()">
+                        <select ng-model="aproperty.selectedUser" ng-change="aproperty.getScheduleListing()" style="position:relative;left:16px;">
                             <option value=''>Select User</option>
                             <option ng-repeat="user in aproperty.usersList" value="{{user.key}}">{{user.firstname}} {{user.lastname}}-{{user.email}}</option>
                         </select>
                         
-                        <input type="text" placeholder=" search"/>
-                        <buttton data-ui-sref="addprop" class="btn bgm-teal pull-right"> Add Property </button>
+                        <!-- <input type="text" placeholder=" search"/> -->
+                        <buttton data-ui-sref="adminaddprop" class="btn bgm-teal pull-right" style="position:relative;top:-8px;right:16px"> Add Property </button>
                     </div>
 
                     <div class="clearfix"></div>

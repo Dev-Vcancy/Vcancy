@@ -13,8 +13,10 @@ vcancyApp
             firebase.database().ref('users/').once("value", function (snapvalue) {
 
                 var users = snapvalue.val();
-                console.log('users', users, Object.keys(users).length);
+              //  console.log(users);
+              //  console.log('users', users, Object.keys(users).length);
                 vm.allUsers = snapvalue.val();
+                console.log( vm.allUsers);
                 users = _.filter(users, function (user, key) {
                     if (user.usertype == 1 || user.usertype == 3) {
                         user.key = key;
@@ -23,6 +25,7 @@ vcancyApp
                 });
                 $scope.$apply(function () {
                     vm.usersList = users;
+                    console.log(users);
                 });
             });
 

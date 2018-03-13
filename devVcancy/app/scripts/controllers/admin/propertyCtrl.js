@@ -323,7 +323,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             if (vm.timeSlot.length == 1) {
 
             } else {
-                if ($state.current.name == 'editprop') {
+                if ($state.current.name == 'admineditprop') {
                     if ($window.confirm("Are you sure you want to delete this viewing slot? ")) {
                         if (slotindex < oldtimeSlotLen) {
                             vm.timeslotmodified = "true";
@@ -674,7 +674,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
                                 propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
                                     //localStorage.setItem("propID", snapshot.key);
                                     vm.opensuccesssweet(snapshot.key);
-                                    $state.go('editprop', { propId: snapshot.key }) //unitlist
+                                    $state.go('admineditprop', { propId: snapshot.key }) //unitlist
                                     // $rootScope.$apply(function () {
                                     //     console.log(units);
                                     //     $rootScope.units = units;
@@ -786,7 +786,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
                         console.log("Data added successfully!");
                         propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
                             vm.opensuccesssweet(snapshot.key);
-                            $state.go('editprop', { propId: snapshot.key })
+                            $state.go('admineditprop', { propId: snapshot.key })
                             // $rootScope.$apply(function () {
                             //     console.log(units);
                             //     $rootScope.units = units;
@@ -1215,7 +1215,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
                     }
                     $scope.loader = 0;
                     // console.log($rootScope.$previousState.name);
-                    if (($rootScope.$previousState.name == "editprop" || $rootScope.$previousState.name == "addprop") && vm.propsuccess != '') {
+                    if (($rootScope.$previousState.name == "admineditprop" || $rootScope.$previousState.name == "addprop") && vm.propsuccess != '') {
                         vm.success = 1;
                     }
                     localStorage.setItem('propertysuccessmsg', '')
@@ -1225,7 +1225,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         }
 
         // Edit Property
-        if ($state.current.name == 'editprop' || $state.current.name == 'editprop1') {
+        if ($state.current.name == 'admineditprop' || $state.current.name == 'admineditprop1') {
             vm.mode = 'Edit';
             vm.submitaction = "Update";
             vm.otheraction = "Delete";

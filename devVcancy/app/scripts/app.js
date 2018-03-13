@@ -726,6 +726,14 @@ vcancyApp
 				resolve: { adminauthenticate: adminauthenticate }
 			})
 
+			.state('adminaddprop', {
+				url: '/admin/addprop',
+				controller: 'adminPropertyCtrl',
+				controllerAs: 'apropctrl',
+				templateUrl: 'views/admin/addproperties.html',
+				resolve: { adminauthenticate: adminauthenticate }
+			})
+		
 			.state('adminpeoples', {
 				url: '/admin/peoples',
 				controller: 'adminPeoplesCtrl',
