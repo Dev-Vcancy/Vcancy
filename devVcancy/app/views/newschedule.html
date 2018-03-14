@@ -355,6 +355,13 @@
   <div class="modal-body prptyadd" style="max-height:600px;overflow-y:auto;">
        <form  role="form" enctype="multipart/form-data" method="post" >
         <div class="row">
+          <div class="col">
+            <label> Copy listing details </label>
+            <select ng-model="copyof" ng-change="copyUnitDetails(copyof,selectedUnitDetail.data.unit)">
+              <option value=''>Select unit</option>
+              <option ng-value="unit.unit" ng-if="unit.unit != selectedUnitDetail.data.unit" ng-repeat="unit in selectedUnitDetail.otherUnits" Required">{{unit.unit}}</option>
+            </select>
+          </div>
           <div class="col text-right">
             <span style="font-size:small;color:red" ng-hide="selectedUnitDetail.data.images.length>0">Upload at least one image</span>
               <button class="btn bgm-teal btn-sm btn-round waves-effect" ng-click="openImageModal()" ng-if="selectedUnitDetail.data.images.length>0"> View images({{selectedUnitDetail.data.images?selectedUnitDetail.data.images.length:0}}) </button>

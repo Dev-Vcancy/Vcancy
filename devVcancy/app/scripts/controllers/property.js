@@ -1652,7 +1652,8 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
         }
 
         $scope.copyUnitDetails = function (from, to) {
-            var datatoCopy = vm.prop.unitlists.find(function (unit) {
+            var prop = $scope.prop || vm.prop;
+            var datatoCopy = prop.unitlists.find(function (unit) {
                 return unit.unit == from;
             })
             for (var i in datatoCopy) {
@@ -2076,6 +2077,9 @@ vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$roo
             $scope.selectedUnitDetail.data.email = localStorage.getItem('userEmail');
             $scope.selectedUnitDetail.index = index;
             $scope.items1 = prop;
+            $scope.propUnitLists = {
+                "list": angular.copy(vm.prop.unitlists)
+            } 
             $scope.items1.indexofDetails = index;
             $scope.modalInstance = $uibModal.open({
                 templateUrl: 'myModalDetailsContent.html',

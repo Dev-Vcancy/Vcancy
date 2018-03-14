@@ -378,6 +378,7 @@ vcancyApp
 				$scope.selectedUnitDetail.data = vm.properties[propId].unitlists[index];
 				$scope.selectedUnitDetail.data.email = localStorage.getItem('userEmail');
 				$scope.selectedUnitDetail.index = index;
+				$scope.selectedUnitDetail.otherUnits = vm.properties[propId].unitlists
 				$scope.items1 = prop;
 				$scope.items1.indexofDetails = index;
 				$scope.prop = angular.copy(prop);
