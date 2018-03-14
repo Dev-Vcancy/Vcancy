@@ -68,6 +68,23 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             }
             return data;
         }
+
+        vm.addresschange = function () {
+            /*  console.log(vm.prop.address);*/
+            if (vm.prop.address != undefined && (typeof vm.prop.address == "string" || vm.googleAddress == 1)) {
+                vm.isDisabled = false;
+            } else {
+                vm.isDisabled = true;
+            }
+        }
+        this.unitsOptional = function (proptype) {
+            console.log(vm.prop.units);
+            if (vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)) {
+                vm.prop.units = ' ';
+            } else if (vm.prop.proptype != proptype && (vm.prop.units == '' || vm.prop.units == undefined)) {
+                vm.prop.units = '';
+            }
+        }
         vm.testsweet = function () {
             // swal({
             //     title: "Success!",
@@ -83,109 +100,14 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             //swal("Your Property Created successfully!", "You clicked the button And add units!", "success")
         }
         // Edit Property
-    //    console.log($state.current.name)
-        if ($state.current.name == 'admineditprop') {
-            vm.mode = 'Edit';
-            vm.submitaction = "Update";
-            vm.otheraction = "Delete";
-            $scope.loader = 1;
-            var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function (snapshot) {
+        //    console.log($state.current.name)
+      //  console.log($state.current.name)
 
-                var propData = snapshot.val();
-                console.log(propData);
-
-                vm.timeSlot = [];
-                $scope.$apply(function () {
-                    vm.prop = vm.units = {
-                        propID: snapshot.key,
-                        landlordID: propData.landlordID,
-                        propimg: propData.propimg,
-                        propstatus: propData.propstatus,
-                        proptype: propData.proptype,
-                        units: propData.units,
-                        rent: propData.rent,
-                        shared: propData.shared,
-                        address: propData.address,
-                        noofunits: propData.totalunits,
-                        city: propData.city,
-                        province: propData.province,
-                        postcode: propData.postcode,
-                        country: propData.country,
-                        propimage: propData.propimg,
-                        unitlists: propData.unitlists,
-                        noofunits: propData.noofunits,
-                        name: propData.name,
-                        multiple: [],
-                        mode: 'Edit',
-                        date: [],
-                        fromtime: [],
-                        to: [],
-                        limit: [],
-                        propertylink: propData.propertylink,
-                        invalid: [0],
-                        timeinvalid: [0],
-                        timeoverlapinvalid: [0]
-                    }
-                    $scope.loader = 0;
-                    /*   angular.forEach(propData.date, function(value, key) {
-                           vm.timeSlot.push({
-                               date: new Date(value)
-                           });
-                           vm.prop.date.push(new Date(value));
-                           vm.prop.fromtime.push(new Date(propData.fromtime[key]));
-                           vm.prop.to.push(new Date(propData.to[key]));
-                           vm.prop.limit.push(propData.limit[key]);
-                           vm.prop.multiple.push(propData.multiple[key]);
-                       });*/
-                    vm.addresschange();
-                    oldtimeSlotLen = vm.timeSlot.length;
-                    vm.unitsOptional();
-                });
-            });
-        } else {
-            vm.mode = 'Add';
-            vm.submitaction = "Save";
-            vm.otheraction = "Cancel";
-            vm.timeSlot = [{
-                date: dateconfig
-            }];
-            vm.prop = vm.units = {
-                propID: '',
-                landlordID: '',
-                propimg: '',
-                propstatus: true,
-                proptype: '',
-                units: '',
-                multiple: [true],
-                rent: '',
-                shared: '',
-                address: 'dgdfgdf',
-                noofunits: 0,
-                city: '',
-                province: '',
-                postcode: '',
-                country: '',
-                propimage: '',
-                unitlists: [],
-                noofunits: 0,
-                name: name,
-                noofunitsarray: vm.getarray(0),
-                mode: 'Add',
-                date: [],
-                fromtime: [],
-                to: [],
-                limit: [],
-                propertylink: '',
-                invalid: [0],
-                timeinvalid: [0],
-                timeoverlapinvalid: [0]
-            }
-        }
- 
 
         vm.getScheduleListing = function () {
             // console.log(vm.selectedUser);landlordID
             landlordID = vm.selectedUser;
+            localStorage.setItem('adminLandlordId', landlordID);
             vm.getProperties(vm.selectedUser);
         }
 
@@ -214,11 +136,8 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         }
 
         var landlordID = ''
-        if (localStorage.getItem('refId')) {
-            landlordID = localStorage.getItem('refId')
-        } else {
-            landlordID = localStorage.getItem('userID');
-        }
+        landlordID = localStorage.getItem('adminLandlordId')
+        if (!landlordID) return;
 
         firebase.database().ref('users/' + landlordID).once("value", function (snap) {
             vm.landlordname = snap.val().firstname + " " + snap.val().lastname;
@@ -448,14 +367,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         };
 
 
-        vm.addresschange = function () {
-            /*  console.log(vm.prop.address);*/
-            if (vm.prop.address != undefined && (typeof vm.prop.address == "string" || vm.googleAddress == 1)) {
-                vm.isDisabled = false;
-            } else {
-                vm.isDisabled = true;
-            }
-        }
+
 
         vm.datetimeslotchanged = function (key) {
             if (key < oldtimeSlotLen) {
@@ -600,10 +512,9 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             var postcode = property.postcode;
             var name = property.name;
             var landlordID = ''
-            if (localStorage.getItem('refId')) {
-                landlordID = localStorage.getItem('refId')
-            } else {
-                landlordID = localStorage.getItem('userID');
+            landlordID = localStorage.getItem('adminLandlordId')
+            if (!landlordID) {
+                return;
             }
 
             if (file != undefined) {
@@ -707,12 +618,13 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
                                 name: name
 
                             }).then(function () {
+                                vm.opensuccesssweet(snapshot.key);
                                 $rootScope.$apply(function () {
-                                    console.log(units);
-                                    $rootScope.units = units;
-                                    $rootScope.message = units;
+                                   
+                                   // $rootScope.units = units;
+                                    //$rootScope.message = units;
                                     $rootScope.success = "Property Updated!";
-                                    $rootScope.propID = propID;
+                                   // $rootScope.propID = propID;
 
 
                                 });
@@ -821,12 +733,13 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
                         multiple: multiple,
                         name: name
                     }).then(function () {
+                        vm.opensuccesssweet();
                         $rootScope.$apply(function () {
                             console.log(units);
-                            $rootScope.units = units;
-                            $rootScope.message = units;
-                            $rootScope.success = "Property Updated!";
-                            $rootScope.propID = propID;
+                            // $rootScope.units = units;
+                            // $rootScope.message = units;
+                            // $rootScope.success = "Property Updated!";
+                            // $rootScope.propID = propID;
 
 
                         });
@@ -1097,47 +1010,47 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
 
         }
 
-        if ($state.current.name == 'addunits') {
+        // if ($state.current.name == 'addunits') {
+        //     console.log('admin add prop called')
+        //     var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function (snapshot) {
 
-            var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function (snapshot) {
+        //         var propData = snapshot.val();
 
-                var propData = snapshot.val();
-
-                vm.timeSlot = [];
-                $scope.$apply(function () {
-                    vm.prop = vm.units = {
-                        propID: snapshot.key,
-                        landlordID: propData.landlordID,
-                        propimg: propData.propimg,
-                        propstatus: propData.propstatus,
-                        proptype: propData.proptype,
-                        units: 'multiple',
-                        rent: propData.rent,
-                        shared: propData.shared,
-                        address: propData.address,
-                        noofunits: propData.noofunits,
-                        totalunits: propData.totalunits,
-                        city: propData.city,
-                        province: propData.province,
-                        postcode: propData.postcode,
-                        country: propData.country,
-                        propimage: propData.propimg,
-                        unitlists: propData.unitlists,
-                        name: propData.name,
-                        noofunitsarray: vm.getarray(propData.noofunits),
-                        multiple: [],
-                        date: [],
-                        fromtime: [],
-                        to: [],
-                        limit: [],
-                        propertylink: propData.propertylink,
-                        invalid: [0],
-                        timeinvalid: [0],
-                        timeoverlapinvalid: [0]
-                    }
-                });
-            });
-        }
+        //         vm.timeSlot = [];
+        //         $scope.$apply(function () {
+        //             vm.prop = vm.units = {
+        //                 propID: snapshot.key,
+        //                 landlordID: propData.landlordID,
+        //                 propimg: propData.propimg,
+        //                 propstatus: propData.propstatus,
+        //                 proptype: propData.proptype,
+        //                 units: 'multiple',
+        //                 rent: propData.rent,
+        //                 shared: propData.shared,
+        //                 address: propData.address,
+        //                 noofunits: propData.noofunits,
+        //                 totalunits: propData.totalunits,
+        //                 city: propData.city,
+        //                 province: propData.province,
+        //                 postcode: propData.postcode,
+        //                 country: propData.country,
+        //                 propimage: propData.propimg,
+        //                 unitlists: propData.unitlists,
+        //                 name: propData.name,
+        //                 noofunitsarray: vm.getarray(propData.noofunits),
+        //                 multiple: [],
+        //                 date: [],
+        //                 fromtime: [],
+        //                 to: [],
+        //                 limit: [],
+        //                 propertylink: propData.propertylink,
+        //                 invalid: [0],
+        //                 timeinvalid: [0],
+        //                 timeoverlapinvalid: [0]
+        //             }
+        //         });
+        //     });
+        // }
 
 
         vm.duplication = function (data) {
@@ -1188,7 +1101,9 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             });
 
         }
-
+        $scope.$watch('prop', function (oldValue, newValue) {
+            console.log(oldValue, newValue)
+        })
         // View Property
         vm.getProperties = function (landlordID) {
             var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
@@ -1225,7 +1140,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         }
 
         // Edit Property
-        if ($state.current.name == 'admineditprop' || $state.current.name == 'admineditprop1') {
+        if ($state.current.name == 'admineditprop') {
             vm.mode = 'Edit';
             vm.submitaction = "Update";
             vm.otheraction = "Delete";
@@ -1283,7 +1198,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
                     vm.unitsOptional();
                 });
             });
-        } else {
+        } else if($state.current.name == 'adminaddprop'){
             vm.mode = 'Add';
             vm.submitaction = "Save";
             vm.otheraction = "Cancel";
@@ -1463,14 +1378,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         }
 
         // Units to be optional when house is selected
-        this.unitsOptional = function (proptype) {
-            console.log(vm.prop.units);
-            if (vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)) {
-                vm.prop.units = ' ';
-            } else if (vm.prop.proptype != proptype && (vm.prop.units == '' || vm.prop.units == undefined)) {
-                vm.prop.units = '';
-            }
-        }
+
 
         this.unitsClear = function (proptype) {
             console.log(vm.prop.units);
@@ -2128,7 +2036,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             $scope.items1 = [];
             var modalInstance = $uibModal.open({
                 templateUrl: 'myModalContent.html',
-                controller: 'ModalInstanceCtrl1',
+                controller: 'ModalInstanceCtrl9',
                 backdrop: 'static',
                 size: size,
                 resolve: {
@@ -2149,7 +2057,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         $scope.openImageModal = function () {
             $scope.imageModal = $uibModal.open({
                 templateUrl: 'viewimages.html',
-                controller: 'propertyCtrl',
+                controller: 'adminPropertyCtrl',
                 backdrop: 'static',
                 size: 'lg',
                 windowClass: 'zIndex',
@@ -2170,7 +2078,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             $scope.items1.indexofDetails = index;
             $scope.modalInstance = $uibModal.open({
                 templateUrl: 'myModalDetailsContent.html',
-                controller: 'propertyCtrl',
+                controller: 'adminPropertyCtrl',
                 backdrop: 'static',
                 size: 'lg',
                 windowClass: 'detailmodalcss',
@@ -2203,7 +2111,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             $scope.items1 = prop;
             var modalInstance = $uibModal.open({
                 templateUrl: 'myModalContent1.html',
-                controller: 'ModalInstanceCtrl1',
+                controller: 'ModalInstanceCtrl9',
                 backdrop: 'static',
                 resolve: {
                     items1: function () {
@@ -2258,9 +2166,9 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             if (!vm.prop.unitlists) {
                 vm.prop.unitlists = [];
             }
-            if (!vm.prop.unitlists[index]) {
-                vm.prop = angular.copy($scope.prop);
-            }
+            // if (!vm.prop.unitlists[index]) {
+            //     vm.prop = angular.copy($scope.prop);
+            // }
             vm.prop.unitlists[index] = angular.copy($scope.selectedUnitDetail.data);
             vm.prop.unitlists[index].isIncomplete = vm.checkIfDetailIsIncomplete(angular.copy($scope.selectedUnitDetail.data));
             vm.submiteditunits(vm.prop.unitlists, vm.prop, '', isFromSchedule)
@@ -2288,7 +2196,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
 
 
 
-vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$uibModal', '$uibModalInstance', '$location', 'items1', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $uibModal, $uibModalInstance, $location, items1) {
+vcancyApp.controller('ModalInstanceCtrl9', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$uibModal', '$uibModalInstance', '$location', 'items1', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $uibModal, $uibModalInstance, $location, items1) {
     var vm = this;
     vm.prop = items1;
     $scope.items1 = items1;
