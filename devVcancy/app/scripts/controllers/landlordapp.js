@@ -639,7 +639,7 @@ vcancyApp
 			vm.deleteApplyProp = function (key, status) {
 				var statusToChange = 'cancelled';
 				var message = "This will cancel the schedule."
-				var buttonText = "Cancel";
+				var buttonText = "Yes";
 
 				if (status === 'cancelled') {
 					statusToChange = 'removed';

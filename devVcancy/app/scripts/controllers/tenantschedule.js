@@ -110,7 +110,7 @@ vcancyApp
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonClass: "btn-danger",
-				confirmButtonText: 'Cancel',
+				confirmButtonText: 'Yes',
 				closeOnConfirm: true
 			}, function () {
 				firebase.database().ref('applyprop/' + index).update({
