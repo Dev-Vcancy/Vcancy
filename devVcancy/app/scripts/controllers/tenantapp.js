@@ -119,7 +119,8 @@ vcancyApp
 
 					//Sorting
 					vm.submitappsSorting = new NgTableParams({
-						sorting: { address: 'asc' }
+						sorting: { address: 'asc' },
+						count: vm.submitappsdata.length						
 					},
 
 						{
@@ -220,7 +221,8 @@ vcancyApp
 
 					//Sorting
 					vm.submitappsSorting = new NgTableParams({
-						sorting: { address: 'asc' }
+						sorting: { address: 'asc' },
+						count: vm.submitappsdata.length
 					},
 
 						{
@@ -289,7 +291,7 @@ vcancyApp
 				if (userData) {
 					userName = userData.firstname + ' ' + (userData.lastname || '');
 				}
-				var emailData = '<p>Hello, </p><p>' + userName + '- ' + userEmail + ' has requested for credit report';
+				var emailData = '<p>Hello, </p><p>' + userName + '- ' + userEmail + ' has requested for credit report from the tenant portal';
 				var toEmail = 'creditrequest@vcancy.com';
 				emailSendingService.sendEmailViaNodeMailer(toEmail, 'Tenant Request for Credit Report', 'Request Credit Report', emailData);
 				swal("", "Your request has been submitted successfully, you will soon receive an email.", "success");

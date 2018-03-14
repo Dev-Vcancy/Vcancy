@@ -89,6 +89,10 @@ vcancyApp
 				options: [],
 			};
 
+			vm.companyDetail = function () {
+				return vm.userData.companyname + ' ' + (vm.userData.contact || '')
+			}
+
 			vm.defaultRentalApplicationCheck = {
 				'PAPPD': true,
 				'CADDR': true,
@@ -98,7 +102,7 @@ vcancyApp
 				'AAPP2': false,
 				'ESIV': true,
 				'ESIV1': true,
-				'V1': false,
+				'VI': false,
 				'EC': false,
 				'EC1': false,
 				'REF': true,
@@ -107,7 +111,9 @@ vcancyApp
 				'UD': true,
 				'UDAAPP': false,
 				'TC': true,
-				'TCData': vm.customRentalApplicationCheck.TCData
+				'TCData': vm.customRentalApplicationCheck.TCData,
+				'companyLogo': userData ? userData.companylogo: '',
+				'companyDetails': vm.companyDetail()
 			}
 
 			function refreshCustomRentalApplicationCheck() {
@@ -116,6 +122,12 @@ vcancyApp
 				if (userData && userData.customRentalApplicationCheck) {
 					if (userData.customRentalApplicationCheck && !userData.customRentalApplicationCheck.TCData) {
 						userData.customRentalApplicationCheck.TCData = vm.customRentalApplicationCheck.TCData;
+					}
+					if (!userData.customRentalApplicationCheck.companyLogo) {
+						userData.customRentalApplicationCheck.companyLogo = userData.companylogo || vm.customRentalApplicationCheck.companyLogo;
+					}
+					if (!userData.customRentalApplicationCheck.companyDetails) {
+						userData.customRentalApplicationCheck.companyDetails = vm.companyDetail();
 					}
 					vm.customRentalApplicationCheck = userData.customRentalApplicationCheck;
 				} else {
@@ -212,9 +224,6 @@ vcancyApp
 				});
 			};
 
-			vm.companyDetail = function () {
-				return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
-			}
 
 			vm.getUserName = function (id, value) {
 				if (!vm.applyPropUsers[id]) {
@@ -287,6 +296,17 @@ vcancyApp
 				}
 
 				vm.apppropaddress = obj;
+			}
+
+			vm.selectAllQuestions = function () {
+				vm.filters.options = angular.copy(vm.screeningQuestions);
+			}
+
+			vm.clearAllFilters = function () {
+				vm.filters = {
+					options: []
+				}
+				vm.apppropaddress = angular.copy(vm.originalPropAddress);
 			}
 
 			vm.getApplicationLink = function (key) {
@@ -373,6 +393,64 @@ vcancyApp
 					vm.loader = 0;
 					return false;
 				});
+			}
+
+			$scope.uploadDetailsImages = function (event) {
+				var file = event.target.files[0];
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
+				});
+				AWS.config.region = 'ca-central-1';
+
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+				var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+				filename = filename.replace(/\s/g, '');
+
+				if (file.size > 3145728) {
+					swal({
+						title: "Error!",
+						text: 'File size should be 3 MB or less.',
+						type: "error",
+					});
+					return false;
+				} else if (file.type.indexOf('image') === -1) {
+					swal({
+						title: "Error!",
+						text: 'Only files are accepted.',
+						type: "error",
+					});
+					return false;
+				}
+
+				var params = {
+					Key: 'company-logo/' + filename,
+					ContentType: file.type,
+					Body: file,
+					StorageClass: "STANDARD_IA",
+					ACL: 'public-read'
+				};
+
+				bucket.upload(params).on('httpUploadProgress', function (evt) { })
+					.send(function (err, data) {
+						if (data && data.Location) {
+							$scope.$apply(function () {
+								vm.customRentalApplicationCheck.companyLogo = data.Location;
+							});
+							// });
+							// firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+							//   vm.opensuccesssweet("Profile Updated successfully!");
+							// }, function (error) {
+
+							//   vm.openerrorsweet("Profile Not Updated! Try again!");
+							//   return false;
+							// });
+						}
+					});
 			}
 
 			vm.opencustomrentalapp = function () {
@@ -559,18 +637,28 @@ vcancyApp
 			}
 			// vm.tablefilterdata();
 
-			vm.deleteApplyProp = function (key) {
+			vm.deleteApplyProp = function (key, status) {
+				var statusToChange = 'cancelled';
+				var message = "This will cancel the schedule."
+				var buttonText = "Yes";
+
+				if (status === 'cancelled') {
+					statusToChange = 'removed';
+					message = "This will delete the schedule from the system.";
+					buttonText = "Delete";
+				}
+
 				swal({
 					title: "Are you sure?",
-					text: "This will delete the schedule from the system.",
+					text: message,
 					type: "warning",
 					showCancelButton: true,
 					confirmButtonClass: "btn-danger",
-					confirmButtonText: "Delete",
+					confirmButtonText: buttonText,
 					closeOnConfirm: true
 				}, function () {
 					firebase.database().ref('applyprop/' + key).update({
-						schedulestatus: "cancelled"
+						schedulestatus: statusToChange
 					}).then(function () {
 						vm.getApplyProp();
 					})

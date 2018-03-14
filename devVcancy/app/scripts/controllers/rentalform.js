@@ -128,7 +128,8 @@ vcancyApp
 			vm.rentaldata.appsign = '';
 			vm.rentaldata.otherappsign = [];
 
-
+			vm.TCData = '';
+			vm.customRentalApplicationCheck = null;
 			// DATEPICKER
 			vm.today = function () {
 				vm.dt = new Date();
@@ -454,8 +455,14 @@ vcancyApp
 														vm.rentaldata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
 														vm.rentaldata.rent = parseFloat(unit.rent);
 														firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
-															$scope.$apply(function () {
+															$scope.$apply(function() {
 																vm.landlordData = snap.val();
+																if(vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+																	vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
+																}
+																if(vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
+																	vm.customRentalApplicationCheck = vm.landlordData.customRentalApplicationCheck
+																}
 															});
 															console.log('vm.landlordData', vm.landlordData);
 														});
@@ -526,6 +533,19 @@ vcancyApp
 													vm.propdata = snap.val();
 													vm.propdata.propID = snap.key;
 													vm.propdata.address = vm.propdata.units + " - " + vm.propdata.address;
+
+													firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
+														$scope.$apply(function() {
+															vm.landlordData = snap.val();
+															if(vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+																vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
+															}
+															if(vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
+																vm.customRentalApplicationCheck = vm.landlordData.customRentalApplicationCheck
+															}
+														});
+														console.log('vm.landlordData', vm.landlordData);
+													});
 												}
 											});
 										});
@@ -600,6 +620,8 @@ vcancyApp
 							vm.rentaldata.reftwo_relation = value.reftwo_relation;
 							vm.rentaldata.dated = value.dated;
 
+							vm.TCData = value.TCData;
+							vm.customRentalApplicationCheck = value.customRentalApplicationCheck;
 
 							vm.submitemail = value.externalemail;
 							firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function (snap) {
@@ -751,7 +773,7 @@ vcancyApp
 
 				var appfiles = $('#appfiles').val();
 				var filename = $('#filename').val() === '' ? '' : Date.now() + '_' + $('#filename').val();
-				// var filepath = filename != '' ? "https://vcancy.ca/login/uploads/" + filename : appfiles;
+				// var filepath = filename != '' ? "https://vcancy.com/login/uploads/" + filename : appfiles;
 				var filepath = filename != '' ? "https://vcancy-final.s3.ca-central-1.amazonaws.com/rental-form-files/" + filename : appfiles;
 				console.log(filename, filepath, appfiles);
 
@@ -821,6 +843,9 @@ vcancyApp
 				});
 				console.log(vm.adultapplicants);
 
+				var TCData = vm.TCData || '';
+				var customRentalApplicationCheck = vm.customRentalApplicationCheck || '';
+
 				if (vm.draftdata == "false" && $stateParams.applicationId == 0) {
 					firebase.database().ref('submitapps/').push().set({
 						tenantID: tenantID,
@@ -878,7 +903,11 @@ vcancyApp
 						appgrossmonthlyincome: appgrossmonthlyincome,
 						dated: dated,
 
-						rentalstatus: "pending"
+						rentalstatus: "pending",
+
+						TCData: TCData,
+
+						customRentalApplicationCheck: customRentalApplicationCheck
 					}).then(function () {
 						//Generate the applicant details of submitted app to new table
 						firebase.database().ref('submitapps/').limitToLast(1).once("child_added", function (snapshot) {
@@ -924,17 +953,17 @@ vcancyApp
 									if (landlordID != 0) {
 										firebase.database().ref('users/' + landlordID).once("value", function (snap) {
 											console.log(snap.val());
-											//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="https://www.vcancy.ca/login/" target = "_blank"> Vcancy.ca </a> and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+											//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a> and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 											//emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 										});
 									} else {
-										//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.ca. Please go to this link https://www.vcancy.ca/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="https://www.vcancy.ca/login/" target = "_blank"> Vcancy.ca </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+										//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.com. Please go to this link https://www.vcancy.com/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 										//emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 									}
 
-									var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in at <a href="https://www.vcancy.ca/login/" target = "_blank"> Vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+									var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in at <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 									emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
 								}
@@ -998,7 +1027,10 @@ vcancyApp
 
 						dated: dated,
 
-						rentalstatus: "pending"
+						rentalstatus: "pending",
+
+						TCData: TCData,
+						customRentalApplicationCheck: customRentalApplicationCheck
 					}).then(function () {
 						//Generate the applicant details of submitted app to new table
 						var applicantsdata = {
@@ -1048,17 +1080,17 @@ vcancyApp
 						if (landlordID != 0) {
 							firebase.database().ref('users/' + landlordID).once("value", function (snap) {
 								console.log(snap.val());
-								//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+								//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 								//emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 							});
 						} else {
-							//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.ca. Please go to this link http://www.vcancy.ca/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+							//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.com. Please go to this link http://www.vcancy.com/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 							//emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 						}
 
-						var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+						var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 						emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
 					}

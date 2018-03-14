@@ -258,7 +258,7 @@ vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootSc
 					});
 
 					var reguserdbObj = firebase.database();
-					reguserdbObj.ref('users/' + firebaseUser.uid).set({
+					var userData = {
 						firstname: first,
 						lastname: last,
 						usertype: usertype,
@@ -273,7 +273,39 @@ vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootSc
 						isshowingtime: 1,
 						profilepic: 1,
 						companyname: ""
-					});
+					}
+					if (userData.userType = 1) {
+						userData.customRentalApplicationCheck = {
+							'PAPPD': true,
+							'CADDR': true,
+							'PADDR': false,
+							'AAPPD': false,
+							'AAPP1': false,
+							'AAPP2': false,
+							'ESIV': true,
+							'ESIV1': true,
+							'VI': false,
+							'EC': false,
+							'EC1': false,
+							'REF': true,
+							'REF1': true,
+							'REF2': false,
+							'UD': true,
+							'UDAAPP': false,
+							'TC': true
+						};
+						userData.screeningQuestions = [
+							{ id: 'WKRX6Q', label: 'What is your profession?', isChecked: true },
+							{ id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
+							{ id: 'N1F5MO', label: 'Are you able to provide references?', isChecked: false },
+							{ id: 'OU489L', label: 'Why are you moving?', isChecked: false },
+							{ id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: true },
+							{ id: 'A9OG32', label: 'No. of Applicants', isChecked: true },
+							{ id: 'UH7JZS', label: 'Do you smoke?', isChecked: true },
+							{ id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
+						]
+					}
+					reguserdbObj.ref('users/' + firebaseUser.uid).set(userData);
 
 					if (usertype == 0) {
 						var emailData = '<p>Hello ' + firstname + ', </p><p>Thanks for signing up for Vcancy!</p><p>We’ve built Vcancy from the heart to help renters find a place faster and standout from the crowd. You can schedule multiple same-day viewings and submit your rental applications online. </p><p>Our team is working hard to make the rental process seamless and automated. We would love to have your feedback on our the web-app. You can reach us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';

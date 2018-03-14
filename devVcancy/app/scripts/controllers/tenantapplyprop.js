@@ -255,13 +255,13 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 
 					firebase.database().ref('users/' + landlordID).once("value", function (snapshot) {
 						// Mail to Landlord
-						var emailData = '<p>Hello, </p><p>' + name + ' has requested a viewing at ' + dateSlot + ', ' + timeRange + 'for ' + address + '.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.ca/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+						var emailData = '<p>Hello, </p><p>' + name + ' has requested a viewing at ' + dateSlot + ', ' + timeRange + 'for ' + address + '.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.com/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 						// Send Email
 						emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name + ' has requested a viewing for ' + address, 'newviewingreq', emailData);
 					});
 
 					// Mail to Tenant
-					var emailData = '<p>Hello ' + name + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.ca/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello ' + name + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 					// Send Email
 					emailSendingService.sendEmailViaNodeMailer(userDetails.email, 'Viewing request for ' + address, 'viewingreq', emailData);
 				})
@@ -296,7 +296,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 							reguserdbObj.ref('users/' + firebaseUser.uid).set({
 								firstname: vm.registerUser.firstName,
 								lastname: vm.registerUser.lastName,
-								usertype: 1,
+								usertype: 0,
 								email: vm.registerUser.email,
 								isadded: 1,
 								iscancelshow: 1,
@@ -308,7 +308,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 								isshowingtime: 1,
 								companyname: ""
 							});
-							vm.opensuccesssweet("User Added successfully!, verification email has been sent to your email.");
+							vm.opensuccesssweet("User Added successfully!, A verification email has been sent to your email.");
 
 							firebase.auth().signInWithEmailAndPassword(vm.registerUser.email, pass)
 								.then(function (firebaseUser) {
@@ -318,17 +318,17 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 									localStorage.setItem('password', pass);
 									swal({
 										title: "Success",
-										text: 'verification email has been sent to your email.',
+										text: 'A verification email has been sent to your email.',
 										type: "success",
 									});
-									var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to on https://vcancy.ca/ .</p><p>Your email is ' + email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+									var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to on https://vcancy.com/ .</p><p>Your email is ' + email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 									// Send Email
 									emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'A new user account has been added to your portal', 'Welcome', emailData);
 									// Success 
 									firebaseUser.sendEmailVerification().then(function () {
 
-										var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at ' + email + '.</p><p>To view/edit user details, please log in https://vcancy.ca/ and go to “Profile” and click on “Users”</p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+										var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at ' + email + '.</p><p>To view/edit user details, please log in https://vcancy.com/ and go to “Profile” and click on “Users”</p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 										// Send Email
 										emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
