@@ -206,7 +206,7 @@ vcancyApp
 					return;
 				}
 				var availabilities = [];
-				var url = 'https://vcancy.ca/login/#/applyproperty/'
+				var url = 'https://vcancy.com/login/#/applyproperty/'
 				// if (window.location.host.startsWith('localhost')) {
 				// 	url = 'http://localhost:9000/#/applyproperty/'
 				// }

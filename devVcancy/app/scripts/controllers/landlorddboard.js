@@ -215,7 +215,7 @@ vcancyApp
 			}
 			var availabilities = [];
 
-			let url = 'https://vcancy.ca/login/#/applyproperty/'
+			let url = 'https://vcancy.com/login/#/applyproperty/'
 			if (window.location.host.startsWith('localhost')) {
 				url = 'http://localhost:9000/#/applyproperty/'
 			}

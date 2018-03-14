@@ -38,7 +38,7 @@ var vcancyApp = angular
 vcancyApp.constant('_', window._);
 
 vcancyApp.constant('config', {
-	"sailsBaseUrl": 'https://www.vcancy.ca/nodeapi/api/v1/',
+	"sailsBaseUrl": 'https://www.vcancy.com/nodeapi/api/v1/',
 });
 
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
@@ -56,7 +56,7 @@ vcancyApp.config(function (socialProvider) {
 
 vcancyApp.service('emailSendingService', function ($http, config) {
 	this.sendEmailViaNodeMailer = function (to, subject, mode, emailData) {
-		// var url = 'https://vcancy.ca/login/#/applyproperty/'
+		// var url = 'https://vcancy.com/login/#/applyproperty/'
 		// if (window.location.host.startsWith('localhost')) {
 		// 	url = 'http://localhost:9000/#/applyproperty/'
 		// }
@@ -321,7 +321,7 @@ vcancyApp
 		};
 		var app = firebase.initializeApp(config);
 
-		// var sailsBaseUrl = 'http://www.vcancy.ca/api/v1/';
+		// var sailsBaseUrl = 'http://www.vcancy.com/api/v1/';
 
 		$urlRouterProvider.otherwise("/");
 		$stateProvider
