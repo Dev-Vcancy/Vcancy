@@ -176,6 +176,7 @@
                                     <td>
                                         <span ng-if="value.creditCheckLink">
                                             <a href="{{value.creditCheckLink}}" target="_blank">Link</a>
+                                            <i class="fa fa-close text-danger" ng-click="value.creditCheckLink=''" style="cursor:pointer;"></i>
                                         </span>
                                         <label class="btn bgm-blue btn-sm btn-round" ng-if="!value.creditCheckLink">
                                             <i class="fa fa-upload"></i>

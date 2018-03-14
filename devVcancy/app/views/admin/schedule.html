@@ -60,12 +60,16 @@
                                                 <span class="fa fa-info-circle" title="Complete mandatory fields and toggle the button to list on Craigslist"></span>
                                             </th>
                                             <th>
+                                                Craglist Link
+                                            </th>
+                                            <th>
                                                 Listing Status
                                                 <span class="fa fa-info-circle" title="Link to craigslist listing appears after unit is listed"></span>
                                             </th>
                                             <th>
-                                                Craglist Link
-                                            </th>
+                                               Action
+                                           </th>
+                                          
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -100,14 +104,17 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <select ng-model="value.status" ng-change="aschedule.toggleStatus(value.keys,value.status)">
+                                                <input type='text'  ng-model="value.craglistLink" />
+                                            </td>
+                                            <td>
+                                                <select ng-model="value.status">
                                                     <option value='Not Listed'>Not Listed</option>
                                                     <option value='Listed'>Listed</option>
                                                     <option value='Pending'>Pending</option>
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type='text'  ng-model="value.craglistLink"  ng-blur="aschedule.insertCraglistLink(value.keys,value.craglistLink)"/>
+                                                    <button class="btn bgm-teal btn-sm btn-round " ng-click="aschedule.saveaction(value.keys,value.craglistLink,value.status)" ng-disabled="!value.craglistLink" >Save</button>      
                                             </td>
                                         </tr>
                                     </tbody>

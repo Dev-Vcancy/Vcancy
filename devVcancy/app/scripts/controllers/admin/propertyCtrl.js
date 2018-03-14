@@ -543,12 +543,12 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         vm.backtoviewprop = function (value = '') {
             if (value != '') {
                 if (confirm('If you go back without updating values, your changes will be lost!')) {
-                    $state.go('viewprop');
+                    $state.go('adminproperty');
                 } else {
                     return false;
                 }
             } else {
-                $state.go('viewprop');
+                $state.go('adminproperty');
             }
 
         }

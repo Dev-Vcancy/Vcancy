@@ -1,8 +1,8 @@
 'use strict';
 
 vcancyApp
-    .controller('adminScheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_', '$uibModal',
-        function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _, $uibModal) {
+    .controller('adminScheduleCtrl', ['$scope', '$firebaseAuth','emailSendingService', '$state', '$rootScope', '$stateParams', '$window', '_', '$uibModal',
+        function ($scope, $firebaseAuth, emailSendingService,$state, $rootScope, $stateParams, $window, _, $uibModal) {
 
             var vm = this;
             var landlordID = localStorage.getItem('userID');
@@ -15,7 +15,7 @@ vcancyApp
             firebase.database().ref('users/').once("value", function (snapvalue) {
 
                 var users = snapvalue.val();
-                console.log('users', users, Object.keys(users).length);
+               // console.log('users', users, Object.keys(users).length);
                 users = _.filter(users, function (user, key) {
                     if (user.usertype == 1 || user.usertype == 3) {
                         user.key = key;
@@ -54,7 +54,7 @@ vcancyApp
 
                 var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordId).once("value", function (snapshot) {
                     vm.getProperties(landlordId);
-                    console.log('propertyschedule', snapshot.val())
+                    //console.log('propertyschedule', snapshot.val())
                     $scope.$apply(function () {
                         vm.success = 0;
                         if (snapshot.val()) {
@@ -126,7 +126,7 @@ vcancyApp
                         vm.mergeListing[list.link].keys.push(key);
                     }
                 });
-                console.log(vm.mergeListing)
+               // console.log(vm.mergeListing)
             };
 
             vm.clearAll = function ($event) {
@@ -306,6 +306,29 @@ vcancyApp
                     vm.mergeListing = {};
                     vm.getListings();
                 });
+            };
+            var userEmail = localStorage.getItem('userEmail');
+            //console.log(userEmail);
+            vm.saveaction =function (keys, link, status){
+  
+                 keys.forEach(function (listingId) {
+                    var fbObj = firebase.database();
+                    fbObj.ref('propertiesSchedule/' + listingId).update({
+                        craglistLink: link,
+                        status: status
+                    }).then(function () {
+                        vm.getListings();
+                    });
+                });
+                var emailData = '<p>Hello, </p><p> please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                // Send Email
+                emailSendingService.sendEmailViaNodeMailer(userEmail, 'Password changed', 'changepassword', emailData);
+                swal({
+                    title: 'Success',
+                    text: 'Action Save Successfully',
+                    type: 'success'
+                });
+
             };
 
             vm.insertCraglistLink = function (keys, link) {

@@ -1,8 +1,8 @@
 'use strict';
 
 vcancyApp
-    .controller('adminPeoplesCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_', '$q', '$uibModal',
-        function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _, $q, $uibModal) {
+    .controller('adminPeoplesCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope','emailSendingService', '$stateParams', '$window', '_', '$q', '$uibModal',
+        function ($scope, $firebaseAuth, $state, $rootScope,emailSendingService, $stateParams, $window, _, $q, $uibModal) {
 
             var vm = this;
             // var landlordID = localStorage.getItem('userID');
@@ -16,7 +16,7 @@ vcancyApp
               //  console.log(users);
               //  console.log('users', users, Object.keys(users).length);
                 vm.allUsers = snapvalue.val();
-                console.log( vm.allUsers);
+              //  console.log( vm.allUsers);
                 users = _.filter(users, function (user, key) {
                     if (user.usertype == 1 || user.usertype == 3) {
                         user.key = key;
@@ -25,12 +25,13 @@ vcancyApp
                 });
                 $scope.$apply(function () {
                     vm.usersList = users;
-                    console.log(users);
+              //      console.log(users);
                 });
             });
 
             vm.getScheduleListing = function () {
                 vm.userData = vm.allUsers[vm.selectedUser];
+            //    console.log(vm.userData)
                 vm.landlordID = vm.selectedUser;
                 vm.init(vm.selectedUser);
             }
@@ -90,8 +91,10 @@ vcancyApp
             vm.uploadCreditCheckReportModal = function (key) {
                 vm.selectedApplication = key;
             };
-
+        
+          
             $scope.uploadDetailsImages = function (event) {
+
                 var filesToUpload = event.target.files;
                 var file = filesToUpload[0];
                 if (file) {
@@ -121,11 +124,15 @@ vcancyApp
 
                     })
                         .send(function (err, data) {
-                            console.log(vm.selectedApplication);
+                           // console.log(vm.selectedApplication);
                             firebase.database().ref('applyprop/' + vm.selectedApplication).update({
                                 creditCheckLink: data.Location
                             }).then(function () {
                                 vm.getApplyProp(vm.landlordID);
+                                
+                                var emailData = '<p>Hello, </p><p> please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                // Send Email
+                                emailSendingService.sendEmailViaNodeMailer(vm.userData.email, 'Password changed', 'changepassword', emailData);
                             })
                                 .catch(function (err) {
                                     console.error('ERROR', err);
@@ -260,7 +267,7 @@ vcancyApp
                                 //vm.getUsers();
                                 vm.loader = 0;
                             });
-                            console.log(vm.apppropaddressList);
+                           // console.log(vm.apppropaddressList);
                         });
                     }
                     $scope.$apply(function () {
@@ -300,7 +307,7 @@ vcancyApp
                 vm.landlordID = selectedUser;
                 vm.getProperty(selectedUser);
                 vm.getApplyProp(selectedUser);
-                console.log(selectedUser)
+               // console.log(selectedUser)
                 refreshScreeningQuestions();
             };
 
@@ -581,7 +588,7 @@ vcancyApp
                             vm.submittedappsavail = 0;
                         }
 
-                        console.log(vm.submittedappsavail);
+                      //  console.log(vm.submittedappsavail);
                         vm.submitappscols = [
                             { field: "name", title: "Name", sortable: "name", show: true },
                             { field: "age", title: "Age", sortable: "age", show: true },
