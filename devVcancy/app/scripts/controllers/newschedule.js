@@ -422,6 +422,7 @@ vcancyApp
 				}
 				if (!vm.properties[propId]) return;
 				var unit = _.find(vm.properties[propId].unitlists, ['unit', unitId]);
+				if(!unit) return;
 				var prop = vm.properties[propId];
 				return unit.isIncomplete == false ? false : true;
 			}
