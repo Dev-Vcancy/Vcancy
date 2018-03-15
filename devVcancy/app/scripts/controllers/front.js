@@ -274,7 +274,7 @@ vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootSc
 						profilepic: 1,
 						companyname: ""
 					}
-					if (userData.userType = 1) {
+					if (userData.usertype == 1) {
 						userData.customRentalApplicationCheck = {
 							'PAPPD': true,
 							'CADDR': true,
