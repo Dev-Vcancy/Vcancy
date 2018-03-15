@@ -241,13 +241,13 @@
                       <!-- <span  ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)"
                         class="text-primary">Link to Craigslist listing</span> -->
                       <div ng-if="!newschedulectrl.checkIsIncomplete(value.propertyId, value.unitID)">
-                        <div>Activate Listing</div>
+                        <div>Toggle to List</div>
                         <div class="toggle-switch mt-2" ng-click="newschedulectrl.toggleListOnCraglist(value.keys)">
                           <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
                           <label class="ts-helper" style="border-radius: 8px !important"></label>
                         </div>
                         <div class="text-primary hover-color" style='cursor:pointer' ng-click="newschedulectrl.openDetailModel(value.propertyId, value.unitID)">
-                          <span>Edit Listing</span>
+                          <span>Edit</span>
                         </div>
                       </div>
                     </td>
@@ -362,7 +362,7 @@
        <form  role="form" enctype="multipart/form-data" method="post" >
         <div class="row">
           <div class="col">
-            <label> Copy listing details </label>
+            <label> Copy details from other units within property </label>
             <select ng-model="copyof" ng-change="copyUnitDetails(copyof,selectedUnitDetail.data.unit)">
               <option value=''>Select unit</option>
               <option ng-value="unit.unit" ng-if="unit.unit != selectedUnitDetail.data.unit" ng-repeat="unit in selectedUnitDetail.otherUnits" Required">{{unit.unit}}</option>
@@ -634,7 +634,7 @@
           <div class="row mt-2">
               <div class="col-sm-12">
                   <div class="form-group">
-                      <label class='m-0'>Amenities:</label>
+                      <label class='m-0'>Features and Amenities:</label>
                       <textarea ng-model="selectedUnitDetail.data.otherAminities" style="resize: vertical;"  class="form-control original-form-control" 
                       
 placeholder="Rooms and Interior
