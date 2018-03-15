@@ -414,11 +414,11 @@ vcancyApp
                 vm.loader = 1;
                 var ques = angular.copy(vm.screeningQuestions);
                 _.omit(ques, '$$hashKey');
-                firebase.database().ref('users/' + this.landLordID).update({
+                firebase.database().ref('users/' + vm.selectedUser).update({
                     screeningQuestions: ques
                 }).then(function () {
-                    userData.screeningQuestions = ques;
-                    localStorage.setItem('userData', JSON.stringify(userData));
+                   // userData.screeningQuestions = ques;
+                    ///localStorage.setItem('userData', JSON.stringify(userData));
                     refreshScreeningQuestions();
                     vm.loader = 0;
                     vm.prescremingQuestion.close();
@@ -432,11 +432,11 @@ vcancyApp
                 vm.loader = 1;
                 var customChecks = angular.copy(vm.customRentalApplicationCheck);
                 _.omit(customChecks, '$$hashKey');
-                firebase.database().ref('users/' + this.landLordID).update({
+                firebase.database().ref('users/' + vm.selectedUser).update({
                     customRentalApplicationCheck: customChecks
                 }).then(function () {
-                    userData.customRentalApplicationCheck = customChecks;
-                    localStorage.setItem('userData', JSON.stringify(userData));
+                    //vauserData.customRentalApplicationCheck = customChecks;
+                    //localStorage.setItem('userData', JSON.stringify(userData));
                     refreshCustomRentalApplicationCheck();
                     vm.loader = 0;
                     vm.customrentalapp.close();

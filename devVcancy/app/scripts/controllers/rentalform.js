@@ -353,14 +353,14 @@ vcancyApp
 			if (applicationID == 0) {
 				console.log(tenantID)
 				firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).limitToLast(1).once("value", function (snapshot) {
-					if (!snapshot.val()) {
-						swal({
-							title: 'Error',
-							text: 'please submit your default rental application form on main page.',
-							type: 'error'
-						});
-						return;
-					}
+					// if (!snapshot.val()) {
+					// 	swal({
+					// 		title: 'Error',
+					// 		text: 'please submit your default rental application form on main page.',
+					// 		type: 'error'
+					// 	});
+					// 	return;
+					// }
 					$scope.$apply(function () {
 						if (snapshot.val() !== null) {
 							$.map(snapshot.val(), function (value, index) {

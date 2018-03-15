@@ -20,7 +20,7 @@
                     <uib-tabset active="active" justified="true">
                         <uib-tab index="0" heading="Step 1" disable="true">
                             <div class="card-body card-padding clearfix ">
-                                <div class="printview" ng-if="rctrl.landlordData.customRentalApplicationCheck.PAPPD">
+                                <div class="printview" ng-if="!rctrl.landlordData.customRentalApplicationCheck || rctrl.landlordData.customRentalApplicationCheck.PAPPD">
                                     <h3 class="m-b-20 m-t-10 fw">Applicant Details</h3>
 
                                     <div class="card-body-inner">
@@ -279,7 +279,7 @@
                                 </div>
                                 <h3 class="m-b-20 m-t-10 fw" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.AAPP1 || rctrl.customRentalApplicationCheck.AAPP2">Additional Applicant</h3>
 
-                                <div class="printview" ng-if="rctrl.landlordData.customRentalApplicationCheck.AAPPD">
+                                <div class="printview" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.AAPP1 || rctrl.customRentalApplicationCheck.AAPP2">
 
                                     <div class="additional_applicant card-body-inner">
                                         <div class="fw" ng-if="(!rctrl.customRentalApplicationCheck) || rctrl.customRentalApplicationCheck.AAPP1">
@@ -401,8 +401,8 @@
                         <uib-tab index="1" heading="Step 2" disable="true">
                             <div class="card-body card-padding clearfix ">
                                 <div class="printview">
-                                    <h3 class="m-b-20 m-t-10 fw" ng-if="rctrl.landlordData.customRentalApplicationCheck.ESIV">Employment Status & Income Verification</h3>
-                                    <div class="additional_applicant card-body-inner" ng-if="rctrl.landlordData.customRentalApplicationCheck.ESIV">
+                                    <h3 class="m-b-20 m-t-10 fw" ng-if="!rctrl.landlordData.customRentalApplicationCheck || rctrl.landlordData.customRentalApplicationCheck.ESIV">Employment Status & Income Verification</h3>
+                                    <div class="additional_applicant card-body-inner" ng-if="!rctrl.landlordData.customRentalApplicationCheck || rctrl.landlordData.customRentalApplicationCheck.ESIV">
                                         <h4 class="m-b-20 m-t-10">Primary Applicant:</h4>
 
                                         <div ng-class="{ 'has-error' : rentalForm.currentEmployer.$invalid && !rentalForm.currentEmployer.$pristine }" class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
@@ -737,7 +737,7 @@
                         <uib-tab index="3" heading="Step 4" disable="true">
                             <div class="m-3">
                                 <div class="printview m-t-10">
-                                    <div class="card-body-inner" ng-if="rctrl.landlordData.customRentalApplicationCheck.UD">
+                                    <div class="card-body-inner" ng-if="!rctrl.customRentalApplicationCheck || rctrl.landlordData.customRentalApplicationCheck.UD">
                                         <p class="f-500">You are authorized to obtaining credit checks & verifying details contained in this
                                             Application.
                                         </p>
@@ -762,7 +762,8 @@
                                                 </div>
                                                 <div ng-class="{ 'has-error' : rentalForm.newRent.$invalid && !rentalForm.newRent.$pristine }" class="col-sm-6 form-group fg-float">
                                                     <div class=" fg-toggled">
-                                                        <input required name="newRent" type="number" ng-model="rctrl.rentaldata.rent" ng-pattern="/^[0-9]+(\.[0-9]{1,})?$/" class="form-control w-100"
+                                                        <input required name="newRent" type="text" 
+                                                        ng-model="rctrl.rentaldata.rent"  class="form-control w-100"
                                                             id="" placeholder="">
                                                         <label class="fg-label">$
                                                             <span class="mandatory" print-remove>*</span>:</label>
