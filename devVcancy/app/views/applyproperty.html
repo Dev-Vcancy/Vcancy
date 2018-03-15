@@ -111,20 +111,41 @@
 								<div class="row mt-3">Description</div>
 								<div class="row mt-3">
 									<div class="col-sm-12">
-										<p>
-											{{applyctrl.selectedUnit.description}}
-										</p>
+										<div ng-bind-html="applyctrl.selectedUnit.description"></div>
+
 									</div>
 								</div>
 								<div class="row mt-3">Parking : {{applyctrl.selectedUnit.parking}}</div>
 								<div class="row mt-3">Laundry : {{applyctrl.selectedUnit.laundry}}</div>
 								<div class="row mt-3">Pets : Cats - {{applyctrl.selectedUnit.cats ? 'YES':'NO'}} , Dogs - {{applyctrl.selectedUnit.dogs? 'YES':'NO'}}</div>
 								<div class="row mt-3">Lease Terms : {{applyctrl.selectedUnit.leaseLength}}</div>
-								<div class="row mt-3">Amenities : {{applyctrl.selectedUnit.Aminities.join(', ')}},
+								<div style="margin-left:-15px">
+									<div class="mt-3" ng-if="applyctrl.selectedUnit.Aminities.includes('laundry')">Laundry&nbsp;
+										<i class="fa fa-check text-primary"></i>
+										<br>
+									</div>
+
+									<div class="mt-3" ng-if="applyctrl.selectedUnit.Aminities.includes('parking')">Parking&nbsp;
+										<i class="fa fa-check text-primary"></i>
+										<br>
+									</div>
+									<div class="mt-3" ng-if="applyctrl.selectedUnit.Aminities.includes('wheelchair')">Wheelchair&nbsp;
+										<i class="fa fa-check text-primary"></i>
+										<br>
+									</div>
+									<div class="mt-3" ng-if="applyctrl.selectedUnit.Aminities.includes('furnished')">Furnished&nbsp;
+										<i class="fa fa-check text-primary"></i>
+										<br> </div>
 								</div>
-								<div class='row ml-5'>
-									<p style="margin:0;margin-left:31px">{{applyctrl.selectedUnit.otherAminities}}</p>
+								<div class='row mt-3' ng-if="applyctrl.selectedUnit.otherAminities">
+									Other amenities
 								</div>
+								<div class='row mt-3' ng-if="applyctrl.selectedUnit.otherAminities">
+									<div class="col-sm-12">
+										<div ng-bind-html="applyctrl.selectedUnit.otherAminities"></div>
+									</div>
+								</div>
+
 								<!-- <div class="form-group col-sm-1<div class="row">Property Name</div>2">
 									<input type="text" placeholder="Full name" readonly="true" ng-model=<div class="row">Property Name</div>"applyctrl.applyprop.name" required  class="form-control"/>
 								</div>
@@ -419,8 +440,8 @@
 											<input type='text' ng-if="ques.id == 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' ng-model="applyctrl.preScreeningAns[ques.id]"
 											 class="form-control original-form-control" placeholder="{{ques.label}}" onfocus="(this.type='date')" onblur="(this.type='text')"
 											 id="date" required/>
-											<input type="text" ng-if="ques.id != 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' placeholder="{{ques.label}}"
-											 ng-model="applyctrl.preScreeningAns[ques.id]" class="form-control original-form-control" required/>
+											<input type="text" ng-if="ques.id != 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' placeholder="{{ques.label}}" ng-model="applyctrl.preScreeningAns[ques.id]"
+											 class="form-control original-form-control" required/>
 										</div>
 									</div>
 									<div class="row mt-3 p-20">
