@@ -1,22 +1,23 @@
 'use strict';
 
 vcancyApp
-    .controller('adminPeoplesCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope','emailSendingService', '$stateParams', '$window', '_', '$q', '$uibModal',
-        function ($scope, $firebaseAuth, $state, $rootScope,emailSendingService, $stateParams, $window, _, $q, $uibModal) {
+    .controller('adminPeoplesCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', 'emailSendingService', '$stateParams', '$window', '_', '$q', '$uibModal',
+        function ($scope, $firebaseAuth, $state, $rootScope, emailSendingService, $stateParams, $window, _, $q, $uibModal) {
 
             var vm = this;
             // var landlordID = localStorage.getItem('userID');
             vm.selectedUser = '';
             vm.usersList = {};
             vm.userData = {};
+            $scope.loader = 0;
 
             firebase.database().ref('users/').once("value", function (snapvalue) {
 
                 var users = snapvalue.val();
-              //  console.log(users);
-              //  console.log('users', users, Object.keys(users).length);
+                //  console.log(users);
+                //  console.log('users', users, Object.keys(users).length);
                 vm.allUsers = snapvalue.val();
-              //  console.log( vm.allUsers);
+                //  console.log( vm.allUsers);
                 users = _.filter(users, function (user, key) {
                     if (user.usertype == 1 || user.usertype == 3) {
                         user.key = key;
@@ -25,13 +26,13 @@ vcancyApp
                 });
                 $scope.$apply(function () {
                     vm.usersList = users;
-              //      console.log(users);
+                    //      console.log(users);
                 });
             });
 
             vm.getScheduleListing = function () {
                 vm.userData = vm.allUsers[vm.selectedUser];
-            //    console.log(vm.userData)
+                //    console.log(vm.userData)
                 vm.landlordID = vm.selectedUser;
                 vm.init(vm.selectedUser);
             }
@@ -91,12 +92,16 @@ vcancyApp
             vm.uploadCreditCheckReportModal = function (key) {
                 vm.selectedApplication = key;
             };
-        
-          
+
+
             $scope.uploadDetailsImages = function (event) {
 
                 var filesToUpload = event.target.files;
                 var file = filesToUpload[0];
+                $scope.$apply(function () {
+                    $scope.loader = 1;
+                })
+
                 if (file) {
                     var filename = moment().format('YYYYMMDDHHmmss') + file.name;
                     filename = filename.replace(/\s/g, '');
@@ -119,17 +124,17 @@ vcancyApp
                         StorageClass: "STANDARD_IA",
                         ACL: 'public-read'
                     };
-
                     bucket.upload(params).on('httpUploadProgress', function (evt) {
 
                     })
                         .send(function (err, data) {
-                           // console.log(vm.selectedApplication);
+                            // console.log(vm.selectedApplication);
                             firebase.database().ref('applyprop/' + vm.selectedApplication).update({
                                 creditCheckLink: data.Location
                             }).then(function () {
-                                vm.getApplyProp(vm.landlordID);
-                                
+                                // vm.getApplyProp(vm.landlordID);
+                                $scope.loader = 0;
+                                vm.apppropaddress[vm.selectedApplication].creditCheckLink = data.Location;
                                 var emailData = '<p>Hello, </p><p> please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
                                 // Send Email
                                 emailSendingService.sendEmailViaNodeMailer(vm.userData.email, 'Password changed', 'changepassword', emailData);
@@ -267,7 +272,7 @@ vcancyApp
                                 //vm.getUsers();
                                 vm.loader = 0;
                             });
-                           // console.log(vm.apppropaddressList);
+                            // console.log(vm.apppropaddressList);
                         });
                     }
                     $scope.$apply(function () {
@@ -307,7 +312,7 @@ vcancyApp
                 vm.landlordID = selectedUser;
                 vm.getProperty(selectedUser);
                 vm.getApplyProp(selectedUser);
-               // console.log(selectedUser)
+                // console.log(selectedUser)
                 refreshScreeningQuestions();
             };
 
@@ -588,7 +593,7 @@ vcancyApp
                             vm.submittedappsavail = 0;
                         }
 
-                      //  console.log(vm.submittedappsavail);
+                        //  console.log(vm.submittedappsavail);
                         vm.submitappscols = [
                             { field: "name", title: "Name", sortable: "name", show: true },
                             { field: "age", title: "Age", sortable: "age", show: true },
