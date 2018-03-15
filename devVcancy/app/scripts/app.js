@@ -23,7 +23,6 @@ var vcancyApp = angular
 		'ng-clipboard',
 		'angularMoment',
 		'gm',
-		'unsavedChanges',
 		'AngularPrint',
 		'ngFileUpload',
 		'ui.jq',

@@ -13,6 +13,7 @@ vcancyApp
 		var userEmail = localStorage.getItem('userEmail');
 		vm.loader = 1;
 		vm.submittedappsavail = 0;
+		$scope.reverseSort = false;
 		vm.submitappsdata = [];
 
 		firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function (snapshot) {
