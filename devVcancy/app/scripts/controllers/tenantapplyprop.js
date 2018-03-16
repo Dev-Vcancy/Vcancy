@@ -69,7 +69,9 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				for (var i = 0; i <= days; i++) {
 					let _fromDate = angular.copy(fromDate)
 					let formattedDate = _fromDate.add(i, 'days').format('MM/DD/YYYY');
-					slotsData[formattedDate] = [];
+					if(!slotsData[formattedDate]) {
+						slotsData[formattedDate] = [];
+					}
 					var fromTime = moment(value.fromTime, 'hh:mm a');
 					var toTime = moment(value.toTime, 'hh:mm a');
 					var slotsCount = toTime.diff(fromTime, 'minutes') / 30;
