@@ -6,7 +6,9 @@ vcancyApp
 
             var vm = this;
             var landlordID = localStorage.getItem('userID');
-            vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
+
+            //vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
+            vm.userData = {};
 
             var vm = this;
             vm.selectedUser = '';
@@ -15,6 +17,8 @@ vcancyApp
             firebase.database().ref('users/').once("value", function (snapvalue) {
 
                 var users = snapvalue.val();
+                vm.allUsers = snapvalue.val();
+               //   console.log( vm.allUsers);
                // console.log('users', users, Object.keys(users).length);
                 users = _.filter(users, function (user, key) {
                     if (user.usertype == 1 || user.usertype == 3) {
@@ -28,7 +32,8 @@ vcancyApp
             });
 
             vm.getScheduleListing = function () {
-                // console.log(vm.selectedUser);
+                vm.userData = vm.allUsers[vm.selectedUser];
+               //  console.log(vm.userData);
                 vm.getListings(vm.selectedUser);
             }
 
@@ -126,7 +131,7 @@ vcancyApp
                         vm.mergeListing[list.link].keys.push(key);
                     }
                 });
-               // console.log(vm.mergeListing)
+         //       console.log(vm.mergeListing)
             };
 
             vm.clearAll = function ($event) {
@@ -149,7 +154,7 @@ vcancyApp
             };
 
             vm.statusChangeHandler = function (propertyId, unitId) {
-                console.log(vm.statusChange)
+               // console.log(vm.statusChange)
             }
 
             vm.checkForDuplicate = function (currentUnit) {
@@ -305,11 +310,10 @@ vcancyApp
                     vm.selectedAllListing = false;
                     vm.mergeListing = {};
                     vm.getListings();
-                });
+                }); 
             };
-            var userEmail = localStorage.getItem('userEmail');
-            //console.log(userEmail);
-            vm.saveaction =function (keys, link, status){
+            
+            vm.saveaction =function (keys, link, status,key){
   
                  keys.forEach(function (listingId) {
                     var fbObj = firebase.database();
@@ -318,11 +322,14 @@ vcancyApp
                         status: status
                     }).then(function () {
                         vm.getListings();
+                       // console.log()
                     });
                 });
-                var emailData = '<p>Hello, </p><p> please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                           
+                var emailData = '<p>Hello, </p><p>Your request for posting Unit '+vm.mergeListing[key].unitID +' for property address "'+vm.properties[vm.mergeListing[key].propertyId].address+'" has been posted to craglist</p><p>Thanks,</p><p>Team Vcancy</p>';
+         
                 // Send Email
-                emailSendingService.sendEmailViaNodeMailer(userEmail, 'Password changed', 'changepassword', emailData);
+                emailSendingService.sendEmailViaNodeMailer(vm.userData.email, 'Property Listed on Creaglist', 'Listed', emailData);
                 swal({
                     title: 'Success',
                     text: 'Action Save Successfully',

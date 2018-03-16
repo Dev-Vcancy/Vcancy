@@ -135,12 +135,13 @@ vcancyApp
                                 // vm.getApplyProp(vm.landlordID);
                                 $scope.loader = 0;
                                 vm.apppropaddress[vm.selectedApplication].creditCheckLink = data.Location;
-                                var emailData = '<p>Hello, </p><p> please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                var emailData = '<p>Hello, </p><p>Creditcheck request for user <b>'+vm.userData.email+'</b> has been posted, you can check on peoples page.</p><p>Thanks,</p><p>Team Vcancy</p>';
+                               // console.log(emailData);
                                 // Send Email
-                                emailSendingService.sendEmailViaNodeMailer(vm.userData.email, 'Password changed', 'changepassword', emailData);
+                                emailSendingService.sendEmailViaNodeMailer(vm.userData.email, 'Creditcheck request', 'Creditcheck request', emailData);
                             })
                                 .catch(function (err) {
-                                    console.error('ERROR', err);
+                                   // console.error('ERROR', err);
                                     swal("", "There was error deleteing the schedule.", "error");
                                 });
                         })
@@ -646,7 +647,7 @@ vcancyApp
                         vm.getApplyProp(vm.landlordID);
                     })
                         .catch(function (err) {
-                            console.error('ERROR', err);
+                         //   console.error('ERROR', err);
                             swal("", "There was error deleteing the schedule.", "error");
                         });
 
