@@ -65,13 +65,23 @@ vcancyApp
 			vm.mergeListing = {};
 			vm.selectedListings = [];
 
+			vm.isEventExist = function (id) {
+				for (var i = 0; i < $scope.events.length; i++) {
+					var event = $scope.events[i];
+					if (event.id === id) {
+						console.log(id)
+						return true;
+					}
+				}
+			};
+
 			vm.getListings = function () {
 				vm.loader = 1;
 				var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-					// $scope.events = [];
-					for (var i = 0; i < $scope.events.length; i++) {
-						$scope.events.pop();
-					}
+					//$scope.events = [];
+					// for (var i = 0; i < $scope.events.length; i++) {
+					// 	$scope.events.pop();
+					// }
 					$scope.$apply(function () {
 						vm.success = 0;
 						if (snapshot.val()) {
@@ -83,15 +93,18 @@ vcancyApp
 								value.parsedToDate = parseInt(new moment(value.toDate).format('x'))
 								var startDate = new Date(value.fromDate).setHours(parseFloat(value.fromTime));
 								var endDate = new Date(value.toDate).setHours(parseFloat(value.toTime));
-								$scope.events.push(
-									{
-										title: value.unitID + '-' + vm.properties[value.propertyId].address,
-										start: new Date(startDate),
-										end: new Date(endDate),
-										className: 'bgm-teal'
+								if (!vm.isEventExist(key)) {
+									$scope.events.push(
+										{
+											title: value.unitID + '-' + vm.properties[value.propertyId].address,
+											start: new Date(startDate),
+											end: new Date(endDate),
+											id: key,
+											className: 'bgm-teal'
 
-									}
-								)
+										}
+									)
+								}
 							});
 							vm.listingsAvailable = 1;
 						} else {
@@ -435,7 +448,7 @@ vcancyApp
 				}
 				if (!vm.properties[propId]) return;
 				var unit = _.find(vm.properties[propId].unitlists, ['unit', unitId]);
-				if(!unit) return;
+				if (!unit) return;
 				var prop = vm.properties[propId];
 				return unit.isIncomplete == false ? false : true;
 			}
