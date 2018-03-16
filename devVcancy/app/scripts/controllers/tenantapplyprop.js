@@ -193,14 +193,14 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 
 		// Property Application form - Data of tenant save		
 		vm.tenantapply = function () {
-			if (localStorage.getItem('userEmailVerified') !== 'false') {
+			//if (localStorage.getItem('userEmailVerified') !== 'false') {
 				var userInfo = vm.userInfo ? angular.copy(vm.userInfo) : null;
 				var userDetails = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : userInfo;
 				vm.emailVerifiedError = '';
 				var tenantID = localStorage.getItem('userID') || vm.userInfo.id;
 				var propID = $stateParams.propId;
 				var address = vm.propData.address;
-				var name = userDetails.firstname + ' ' + userDetails.lastname;
+				var name = vm.registerUser.firstName + ' ' + vm.registerUser.lastName;
 				var phone = vm.registerUser.phone;
 				var landlordID = vm.landlordData.id;
 				var unitID = vm.unitId;
@@ -261,13 +261,13 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					});
 
 					// Mail to Tenant
-					var emailData = '<p>Hello ' + name + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello ' + vm.registerUser.firstName + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 					// Send Email
-					emailSendingService.sendEmailViaNodeMailer(userDetails.email, 'Viewing request for ' + address, 'viewingreq', emailData);
-				})
-			} else {
-				vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'
-			}
+					emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'Viewing request for ' + address, 'viewingreq', emailData);
+				});
+			// } else {
+			// 	vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'
+			// }
 		}
 
 		vm.createUser = function (user) {
