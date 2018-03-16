@@ -69,25 +69,31 @@ vcancyApp
 				for (var i = 0; i < $scope.events.length; i++) {
 					var event = $scope.events[i];
 					if (event.id === id) {
-						console.log(id)
 						return true;
 					}
 				}
 			};
 
+			vm.removeDeletedKey = function (listing) {
+				$scope.events.filter(function (event) {
+					var eventExist = $.map(listing, function (list, key) {
+						if (key == event.id) return true;
+					});
+					return eventExist;
+				});
+			};
+
 			vm.getListings = function () {
 				vm.loader = 1;
 				var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-					//$scope.events = [];
-					// for (var i = 0; i < $scope.events.length; i++) {
-					// 	$scope.events.pop();
-					// }
 					$scope.$apply(function () {
 						vm.success = 0;
 						if (snapshot.val()) {
 							vm.listings = snapshot.val();
 							vm.generateMergeListing();
-
+							for (var i = 0; i < $scope.events.length; i++) {
+								$scope.events.pop();
+							}
 							$.map(vm.listings, function (value, key) {
 								value.parsedFromDate = parseInt(new moment(value.fromDate).format('x'))
 								value.parsedToDate = parseInt(new moment(value.toDate).format('x'))
@@ -106,6 +112,9 @@ vcancyApp
 									)
 								}
 							});
+
+							vm.removeDeletedKey(vm.listings);
+
 							vm.listingsAvailable = 1;
 						} else {
 							vm.listingsAvailable = 0;
