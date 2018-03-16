@@ -135,7 +135,7 @@ vcancyApp
                                 // vm.getApplyProp(vm.landlordID);
                                 $scope.loader = 0;
                                 vm.apppropaddress[vm.selectedApplication].creditCheckLink = data.Location;
-                                var emailData = '<p>Hello, </p><p>Creditcheck request for user <b>'+vm.userData.email+'</b> has been posted, you can check on peoples page.</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                var emailData = '<p>Hello, </p><p>A credit/criminal check report for user <b>'+vm.userData.name+' ('+vm.userData.email+')</b> is available now, please <a href="https://vcancy.com/login" target="_blank">log in</a> to your dashboard and go to the "People" menu.</p><p>Thanks,</p><p>Team Vcancy</p>';
                                // console.log(emailData);
                                 // Send Email
                                 emailSendingService.sendEmailViaNodeMailer(vm.userData.email, 'Creditcheck request', 'Creditcheck request', emailData);
