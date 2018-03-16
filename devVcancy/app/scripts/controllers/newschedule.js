@@ -364,6 +364,19 @@ vcancyApp
 				promiseObj
 					.then(function () {
 						vm.loader = 0;
+
+						if(vm.userData) {
+							debugger;
+							var listingValue = vm.listings[listingId];
+							var propertyAddr = vm.properties[listingValue.propertyId].address;
+							var emailData = '<p>Hello, </p><p>'+ vm.userData.email +' has a request for craigslist display for property - ' + propertyAddr +' </p><br/><p>Link - ' + listingValue.link +'</p>';
+							// Send Email
+							if(!value) {
+								emailData = '<p>Hello, </p><p>'+ vm.userData.email +' has a request to remove from craigslist display for property - ' + propertyAddr +' </p><br/><p>Link - ' + listingValue.link +'</p>';
+							}
+							emailSendingService.sendEmailViaNodeMailer('creditrequest@vcancy.com', 'Cragslist Toggle', 'craigslist display', emailData);
+						}
+
 						vm.getListings();
 					})
 					.catch(function () {
