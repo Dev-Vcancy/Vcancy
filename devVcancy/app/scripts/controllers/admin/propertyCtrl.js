@@ -104,12 +104,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
       //  console.log($state.current.name)
 
 
-        vm.getScheduleListing = function () {
-            // console.log(vm.selectedUser);landlordID
-            landlordID = vm.selectedUser;
-            localStorage.setItem('adminLandlordId', landlordID);
-            vm.getProperties(vm.selectedUser);
-        }
+  
 
         vm.getListings = function (landlordId) {
             vm.loader = 1;
@@ -2021,7 +2016,12 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         };
 
         $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
-
+        vm.getScheduleListing = function () {
+            // console.log(vm.selectedUser);landlordID
+            landlordID = vm.selectedUser;
+            localStorage.setItem('adminLandlordId', landlordID);
+            vm.getProperties(vm.selectedUser);
+        }
         vm.opensuccesssweet = function (value) {
             swal({
                 title: "Property added successfully, please add units",

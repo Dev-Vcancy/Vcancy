@@ -134,7 +134,9 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 					if (propData && propData.unitlists && propData.unitlists.length > 0) {
 						vm.selectedUnit = propData.unitlists.find(function (unit) {
 							if (unit.unit == vm.unitId) return true;
-						})
+						});
+						vm.selectedUnit.description = vm.selectedUnit.description.replace(/(?:\r\n|\r|\n)/g, '<br />')
+						vm.selectedUnit.otherAminities = vm.selectedUnit.otherAminities.replace(/(?:\r\n|\r|\n)/g, '<br />')
 					}
 					if (!vm.selectedUnit.images) {
 						vm.selectedUnit.images = [];
