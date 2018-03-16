@@ -4,7 +4,7 @@
 	<aside ng-hide="vappctrl.publicappview == 1" id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
 	<section id="content">
 
-		<div class="container" print-section>
+		<div class="container" style="margin-top:100px" print-section>
 			<div class="block-header text-center" ng-if="vappctrl.landlordData">
 				<!-- <h1>Apply For Property</h1> -->
 				<center style="margin-bottom: 50px;">
@@ -13,7 +13,8 @@
 						 class="img-responsive pic-bordered image" alt="" disabled>
 					</div>
 					<div class="col-sm-12 text-center">
-						<span>{{vappctrl.landlordData.customRentalApplicationCheck ? vappctrl.landlordData.customRentalApplicationCheck.companyDetails : vappctrl.landlordData.companyname}}</span>
+						<span ng-if="vappctrl.landlordData.customRentalApplicationCheck && vappctrl.landlordData.customRentalApplicationCheck.title">{{vappctrl.landlordData.customRentalApplicationCheck.title}}</span>
+						<span ng-if="!vappctrl.landlordData.customRentalApplicationCheck || !vappctrl.landlordData.customRentalApplicationCheck.title">Rental application</span>
 					</div>
 				</center>
 			</div>
@@ -30,110 +31,114 @@
 							<p class="m-b-10" style="display:inline;">
 								<label>Full Name:</label>
 								<span class="fg-line">
-									<input readonly="true" required readonly="true" type="text" ng-model="vappctrl.rentaldata.tenantName" class="form-control w-3"
+									<input readonly="true" required readonly="true" type="text" ng-model="vappctrl.rentaldata.tenantName" class="form-control w-2"
 									 id="" placeholder="">
 								</span>
 
 								<label>Date of Birth:</label>
 								<span class="fg-line">
-									<div class="date-picker input-group" ng-class="{ 'is-opened': vappctrl.dobopened == true }">
-										<span class="input-group-addon">
-											<i class="zmdi zmdi-calendar ma-icon"></i>
-										</span>
-										<div ng-class="{ 'fg-toggled': vappctrl.dobopened == true }">
-											<input readonly="true" readonly="true" ng-click="vappctrl.dobopen($event)" type="text" class="form-control" uib-datepicker-popup="{{vappctrl.format}}"
-											 show-weeks="false" ng-model="vappctrl.rentaldata.dob" is-open="vappctrl.dobopened" max-date="vappctrl.maxDate"
-											 datepicker-options="vappctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
-										</div>
-									</div>
+										<input readonly="true" required readonly="true" type="text" ng-value="vappctrl.rentaldata.dob | date:'dd/mm/yyyy'" class="form-control w-2"
+										id="" placeholder="">
 								</span>
+								<!-- <div class="date-picker input-group">
+									<span class="input-group-addon">
+										<i class="zmdi zmdi-calendar ma-icon"></i>
+									</span>
+									<div>
+											
+										<input readonly="true" readonly="true" ng-click="vappctrl.dobopen($event)" type="text" class="form-control" uib-datepicker-popup="{{vappctrl.format}}"
+										 show-weeks="false" ng-model="vappctrl.rentaldata.dob" is-open="vappctrl.dobopened" max-date="vappctrl.maxDate"
+										 datepicker-options="vappctrl.dateOptions" required close-text="Close" placeholder="Select Date" />
+									</div>
+								</div> -->
+
 
 								<label>SIN Number:</label>
 								<span>
 									<input readonly="true" required type="text" ng-model="vappctrl.rentaldata.sinno" class="form-control" id="" placeholder="SIN Number">
 								</span>
+							</p>
+							<p class="m-b-0">
+								<label>Tel (work):</label>
+								<span class="fg-line">
+									<input readonly="true" required type="text" ng-model="vappctrl.rentaldata.telwork" class="form-control m-b-5 w-4" id="" placeholder="">
+								</span>
 
-								<p class="m-b-0">
-									<label>Tel (work):</label>
-									<span class="fg-line">
-										<input readonly="true" required type="text" ng-model="vappctrl.rentaldata.telwork" class="form-control m-b-5 w-4" id="" placeholder="">
-									</span>
+								<label>Tel (home):</label>
+								<span class="fg-line">
+									<input readonly="true" required type="text" ng-model="vappctrl.rentaldata.telhome" class="form-control m-b-5 w-4" id="" placeholder="">
+								</span>
 
-									<label>Tel (home):</label>
-									<span class="fg-line">
-										<input readonly="true" required type="text" ng-model="vappctrl.rentaldata.telhome" class="form-control m-b-5 w-4" id="" placeholder="">
-									</span>
+								<label>Email:</label>
+								<span class="fg-line">
+									<input readonly="true" required type="text" ng-model="vappctrl.rentaldata.tenantEmail" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/"
+									 class="form-control m-b-5 w-9" id="" placeholder="">
+								</span>
 
-									<label>Email:</label>
-									<span class="fg-line">
-										<input readonly="true" required type="text" ng-model="vappctrl.rentaldata.tenantEmail" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/"
-										 class="form-control m-b-5 w-9" id="" placeholder="">
-									</span>
+								<label>Current Address:</label>
+								<span class="fg-line">
+									<input readonly="true" required type="text" class="form-control m-b-5 w-5" ng-model="vappctrl.rentaldata.appaddress" id=""
+									 placeholder="">
+								</span>
 
-									<label>Current Address:</label>
-									<span class="fg-line">
-										<input readonly="true" required type="text" class="form-control m-b-5 w-5" ng-model="vappctrl.rentaldata.appaddress" id=""
-										 placeholder="">
-									</span>
+								<label>City:</label>
+								<span class="fg-line">
+									<input readonly="true" required ng-model="vappctrl.rentaldata.appcity" type="text" class="form-control m-b-5 w-3" id="" placeholder="">
+								</span>
 
-									<label>City:</label>
-									<span class="fg-line">
-										<input readonly="true" required ng-model="vappctrl.rentaldata.appcity" type="text" class="form-control m-b-5 w-3" id="" placeholder="">
-									</span>
-
-									<div class="m-b-5 fw">
-										<div class="radio m-b-5">
-											<span class="p-r-5">Marital Status</span>
-											<label>
-												<input disabled="true" required type="radio" class="" ng-model="vappctrl.rentaldata.maritalstatus" value="single">
-												<i class="input-helper"></i>
-												Single
-											</label>
-											<label>
-												<input disabled="true" required type="radio" ng-model="vappctrl.rentaldata.maritalstatus" value="married">
-												<i class="input-helper"></i>
-												Married
-											</label>
-										</div>
+								<div class="m-b-5 fw">
+									<div class="radio m-b-5">
+										<span class="p-r-5">Marital Status</span>
+										<label>
+											<input disabled="true" required type="radio" class="" ng-model="vappctrl.rentaldata.maritalstatus" value="single">
+											<i class="input-helper"></i>
+											Single
+										</label>
+										<label>
+											<input disabled="true" required type="radio" ng-model="vappctrl.rentaldata.maritalstatus" value="married">
+											<i class="input-helper"></i>
+											Married
+										</label>
 									</div>
+								</div>
 
-									<p class="m-b-5 fw">
-										<span class="radio m-b-0 m-t-0">
-											<span class="p-r-5">Pets:</span>
-											<label>
-												<input disabled="true" required type="radio" class="" ng-model="vappctrl.rentaldata.pets" value="yes" ng-change="vappctrl.petschange()">
-												<i class="input-helper"></i>
-												YES
-											</label>
-											<label>
-												<input disabled="true" required type="radio" ng-model="vappctrl.rentaldata.pets" value="no" ng-change="vappctrl.petschange()">
-												<i class="input-helper"></i>
-												NO
-											</label>
-											<span ng-show="vappctrl.rentaldata.pets == 'yes'">How many and what kind:
-												<span class="fg-line">
-													<input readonly="true" required type="text" ng-model="vappctrl.rentaldata.petsdesc" class="form-control m-b-5" id="" placeholder="">
-												</span>
+								<p class="m-b-5 fw">
+									<span class="radio m-b-0 m-t-0">
+										<span class="p-r-5">Pets:</span>
+										<label>
+											<input disabled="true" required type="radio" class="" ng-model="vappctrl.rentaldata.pets" value="yes" ng-change="vappctrl.petschange()">
+											<i class="input-helper"></i>
+											YES
+										</label>
+										<label>
+											<input disabled="true" required type="radio" ng-model="vappctrl.rentaldata.pets" value="no" ng-change="vappctrl.petschange()">
+											<i class="input-helper"></i>
+											NO
+										</label>
+										<span ng-show="vappctrl.rentaldata.pets == 'yes'">How many and what kind:
+											<span class="fg-line">
+												<input readonly="true" required type="text" ng-model="vappctrl.rentaldata.petsdesc" class="form-control m-b-5" id="" placeholder="">
 											</span>
 										</span>
-									</p>
-
-									<div class="m-b-5 fw">
-										<div class="radio m-b-0 m-t-0 fw">
-											<span class="p-r-5">Smoking</span>
-											<label>
-												<input disabled="true" required type="radio" class="" ng-model="vappctrl.rentaldata.smoking" value="yes">
-												<i class="input-helper"></i>
-												YES
-											</label>
-											<label>
-												<input disabled="true" required type="radio" ng-model="vappctrl.rentaldata.smoking" value="no">
-												<i class="input-helper"></i>
-												NO
-											</label>
-										</div>
-									</div>
+									</span>
 								</p>
+
+								<div class="m-b-5 fw">
+									<div class="radio m-b-0 m-t-0 fw">
+										<span class="p-r-5">Smoking</span>
+										<label>
+											<input disabled="true" required type="radio" class="" ng-model="vappctrl.rentaldata.smoking" value="yes">
+											<i class="input-helper"></i>
+											YES
+										</label>
+										<label>
+											<input disabled="true" required type="radio" ng-model="vappctrl.rentaldata.smoking" value="no">
+											<i class="input-helper"></i>
+											NO
+										</label>
+									</div>
+								</div>
+							</p>
 						</div>
 					</div>
 
@@ -348,7 +353,7 @@
 					</div>
 
 					<div class="printview" ng-if="(!vappctrl.customRentalApplicationCheck) || vm.customRentalApplicationCheck.VI">
-						<h3 class="m-b-20 m-t-10 fw" >Vehicle Information</h3>
+						<h3 class="m-b-20 m-t-10 fw">Vehicle Information</h3>
 						<div class="">
 							<p class="m-b-10">Make:
 								<span class="fg-line">
@@ -483,7 +488,7 @@
 								</div>
 								<div class="col-xs-12 clearfix p-0 m-t-10" ng-if="vappctrl.TCData">
 									<p>
-											{{vappctrl.TCData}}
+										{{vappctrl.TCData}}
 									</p>
 								</div>
 								<!--p class="m-t-20">This unit is strictly <strong>NON SMOKING.</strong> This offer is subject to acceptance by the landlord/property management company that listed the property. This application is made on the understanding that no betterments will be provided to the Rental Unit except those which may be specifically requested in this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.</p>
@@ -529,8 +534,8 @@
 								</p>
 								<div print-remove>
 									<span print-remove>Document/Image Uploaded: </span>
-									<span ng-if="vappctrl.isLoggedIn && vappctrl.rentaldata.appfiles" ng-click="vappctrl.viewFile(vappctrl.rentaldata.appfiles)" class="btn btn-primary btn-file m-r-10"
-									 print-remove>View Attached Document</span>
+									<span ng-if="vappctrl.isLoggedIn && vappctrl.rentaldata.appfiles" ng-click="vappctrl.viewFile(vappctrl.rentaldata.appfiles)"
+									 class="btn btn-primary btn-file m-r-10" print-remove>View Attached Document</span>
 								</div>
 								<div print-remove>
 									<button type="button" ng-click="vappctrl.printApp()" class="btn bgm-orange btn-lg m-t-10">Print</button>

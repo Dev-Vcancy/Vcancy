@@ -353,14 +353,6 @@ vcancyApp
 			if (applicationID == 0) {
 				console.log(tenantID)
 				firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).limitToLast(1).once("value", function (snapshot) {
-					// if (!snapshot.val()) {
-					// 	swal({
-					// 		title: 'Error',
-					// 		text: 'please submit your default rental application form on main page.',
-					// 		type: 'error'
-					// 	});
-					// 	return;
-					// }
 					$scope.$apply(function () {
 						if (snapshot.val() !== null) {
 							$.map(snapshot.val(), function (value, index) {
@@ -452,15 +444,15 @@ vcancyApp
 														}
 														vm.rentaldata.months = leaseLength;
 														vm.propdata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
-														vm.rentaldata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
+														vm.rentaldata.address = vm.propdata.address;
 														vm.rentaldata.rent = parseFloat(unit.rent);
 														firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
-															$scope.$apply(function() {
+															$scope.$apply(function () {
 																vm.landlordData = snap.val();
-																if(vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+																if (vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
 																	vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
 																}
-																if(vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
+																if (vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
 																	vm.customRentalApplicationCheck = vm.landlordData.customRentalApplicationCheck
 																}
 															});
@@ -521,26 +513,56 @@ vcancyApp
 						} else {
 							vm.draftdata = "false";
 							firebase.database().ref('applyprop/' + scheduleID).once("value", function (snapshot) {
-								// console.log(snapshot.val())
+								console.log(snapshot.val())
 								$scope.$apply(function () {
 									if (snapshot.val()) {
+										// console.log('applyprop', snapshot.val())
 										vm.scheduledata = snapshot.val();
 										vm.scheduledata.scheduleID = snapshot.key;
 
 										firebase.database().ref('properties/' + vm.scheduledata.propID).once("value", function (snap) {
 											$scope.$apply(function () {
 												if (snap.val()) {
+													console.log('properties', snap.val())
 													vm.propdata = snap.val();
 													vm.propdata.propID = snap.key;
-													vm.propdata.address = vm.propdata.units + " - " + vm.propdata.address;
-
+													// if (vm.propdata.units == ' ') {
+													// 	var units = '';
+													// } else {
+													// 	var units = vm.propdata.units + " - ";
+													// }
+													var unit = vm.propdata.unitlists.find(function (unitObj) {
+														if (unitObj.unit == vm.scheduledata.units) {
+															return true;
+														}
+													});
+													vm.propdata.rent = parseFloat(unit.rent);
+													var leaseLength = ''
+													switch (unit.leaseLength) {
+														case 'month-to-month':
+															leaseLength = 'Month to Month';
+															break;
+														case '6months':
+															leaseLength = '6 Months';
+															break;
+														case '9months':
+															leaseLength = '9 Months';
+															break;
+														case '12months':
+															leaseLength = '12 Months';
+															break;
+													}
+													vm.rentaldata.months = leaseLength;
+													vm.propdata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
+													vm.rentaldata.address = vm.propdata.address;
+													vm.rentaldata.rent = parseFloat(unit.rent);
 													firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
-														$scope.$apply(function() {
+														$scope.$apply(function () {
 															vm.landlordData = snap.val();
-															if(vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+															if (vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
 																vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
 															}
-															if(vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
+															if (vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
 																vm.customRentalApplicationCheck = vm.landlordData.customRentalApplicationCheck
 															}
 														});
