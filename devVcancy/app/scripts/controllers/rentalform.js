@@ -975,6 +975,11 @@ vcancyApp
 									if (landlordID != 0) {
 										firebase.database().ref('users/' + landlordID).once("value", function (snap) {
 											console.log(snap.val());
+											if (snap.val()) {
+												var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + snap.val().email + '.</p><p>To make changes, please log in at <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+												emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
+											}
 											//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a> and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 											//emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
@@ -984,10 +989,6 @@ vcancyApp
 
 										//emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 									}
-
-									var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in at <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
-
-									emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
 								}
 								$state.go('tenantapplications');
 							}
@@ -1102,6 +1103,11 @@ vcancyApp
 						if (landlordID != 0) {
 							firebase.database().ref('users/' + landlordID).once("value", function (snap) {
 								console.log(snap.val());
+								if (snap.val()) {
+									var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + snap.val().email + '.</p><p>To make changes, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+									emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
+								}
 								//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 								//emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
@@ -1112,9 +1118,7 @@ vcancyApp
 							//emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 						}
 
-						var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
-						emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
 					}
 					$state.go('tenantapplications');
 				}
