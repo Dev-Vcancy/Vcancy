@@ -69,7 +69,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				for (var i = 0; i <= days; i++) {
 					let _fromDate = angular.copy(fromDate)
 					let formattedDate = _fromDate.add(i, 'days').format('MM/DD/YYYY');
-					if(!slotsData[formattedDate]) {
+					if (!slotsData[formattedDate]) {
 						slotsData[formattedDate] = [];
 					}
 					var fromTime = moment(value.fromTime, 'hh:mm a');
@@ -135,8 +135,13 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 						vm.selectedUnit = propData.unitlists.find(function (unit) {
 							if (unit.unit == vm.unitId) return true;
 						});
-						vm.selectedUnit.description = vm.selectedUnit.description.replace(/(?:\r\n|\r|\n)/g, '<br />')
-						vm.selectedUnit.otherAminities = vm.selectedUnit.otherAminities.replace(/(?:\r\n|\r|\n)/g, '<br />')
+						if (vm.selectedUnit.description) {
+
+							vm.selectedUnit.description = vm.selectedUnit.description.replace(/(?:\r\n|\r|\n)/g, '<br />')
+						}
+						if (vm.selectedUnit.otherAminities) {
+							vm.selectedUnit.otherAminities = vm.selectedUnit.otherAminities.replace(/(?:\r\n|\r|\n)/g, '<br />')
+						}
 					}
 					if (!vm.selectedUnit.images) {
 						vm.selectedUnit.images = [];
@@ -198,77 +203,77 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		// Property Application form - Data of tenant save		
 		vm.tenantapply = function () {
 			//if (localStorage.getItem('userEmailVerified') !== 'false') {
-				var userInfo = vm.userInfo ? angular.copy(vm.userInfo) : null;
-				var userDetails = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : userInfo;
-				vm.emailVerifiedError = '';
-				var tenantID = localStorage.getItem('userID') || vm.userInfo.id;
-				var propID = $stateParams.propId;
-				var address = vm.propData.address;
-				var name = vm.registerUser.firstName + ' ' + vm.registerUser.lastName;
-				var phone = vm.registerUser.phone;
-				var landlordID = vm.landlordData.id;
-				var unitID = vm.unitId;
-				var dateSlot = vm.selectedDate;
-				var fromTime = moment(vm.selectedTime, 'hh:mm a');
-				var toTime = moment(fromTime).add(30, 'minutes');
-				var timeRange = fromTime.format('hh:mm a') + '-' + toTime.format('hh:mm a');
-				var fromTimeSlot = fromTime.format('hh:mm a');
-				var toTimeSlot = toTime.format('hh:mm a');
-				var preScreeningAns = angular.copy(vm.preScreeningAns)
-				var proposeNewTime = {};
-				if (Object.keys(vm.proposeNewTime).length > 0) {
-					proposeNewTime = angular.copy(vm.proposeNewTime);
-				}
-				vm.proposeNewTime = {};
+			var userInfo = vm.userInfo ? angular.copy(vm.userInfo) : null;
+			var userDetails = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : userInfo;
+			vm.emailVerifiedError = '';
+			var tenantID = localStorage.getItem('userID') || vm.userInfo.id;
+			var propID = $stateParams.propId;
+			var address = vm.propData.address;
+			var name = vm.registerUser.firstName + ' ' + vm.registerUser.lastName;
+			var phone = vm.registerUser.phone;
+			var landlordID = vm.landlordData.id;
+			var unitID = vm.unitId;
+			var dateSlot = vm.selectedDate;
+			var fromTime = moment(vm.selectedTime, 'hh:mm a');
+			var toTime = moment(fromTime).add(30, 'minutes');
+			var timeRange = fromTime.format('hh:mm a') + '-' + toTime.format('hh:mm a');
+			var fromTimeSlot = fromTime.format('hh:mm a');
+			var toTimeSlot = toTime.format('hh:mm a');
+			var preScreeningAns = angular.copy(vm.preScreeningAns)
+			var proposeNewTime = {};
+			if (Object.keys(vm.proposeNewTime).length > 0) {
+				proposeNewTime = angular.copy(vm.proposeNewTime);
+			}
+			vm.proposeNewTime = {};
 
-				var applypropObj = $firebaseAuth();
-				var applypropdbObj = firebase.database();
-				var _data = {
-					tenantID: tenantID,
-					propID: propID,
-					address: address,
-					schedulestatus: "scheduled",
-					name: name,
-					phone: phone,
-					dateSlot: dateSlot,
-					fromTimeSlot: fromTimeSlot,
-					toTimeSlot: toTimeSlot,
-					landlordID: landlordID,
-					timeRange: timeRange,
-					unitID: unitID,
-					units: unitID,
-					preScreeningAns: preScreeningAns,
-					proposeNewTime: proposeNewTime
+			var applypropObj = $firebaseAuth();
+			var applypropdbObj = firebase.database();
+			var _data = {
+				tenantID: tenantID,
+				propID: propID,
+				address: address,
+				schedulestatus: "scheduled",
+				name: name,
+				phone: phone,
+				dateSlot: dateSlot,
+				fromTimeSlot: fromTimeSlot,
+				toTimeSlot: toTimeSlot,
+				landlordID: landlordID,
+				timeRange: timeRange,
+				unitID: unitID,
+				units: unitID,
+				preScreeningAns: preScreeningAns,
+				proposeNewTime: proposeNewTime
+			}
+			if (!_.isEmpty(_data.proposeNewTime)) {
+				_data.schedulestatus = 'pending';
+				if (_data.proposeNewTime.date1) {
+					_data.proposeNewTime.date1 = moment(_data.proposeNewTime.date1).format('MM/DD/YYYY')
 				}
-				if (!_.isEmpty(_data.proposeNewTime)) {
-					_data.schedulestatus = 'pending';
-					if (_data.proposeNewTime.date1) {
-						_data.proposeNewTime.date1 = moment(_data.proposeNewTime.date1).format('MM/DD/YYYY')
-					}
-					if (_data.proposeNewTime.date2) {
-						_data.proposeNewTime.date2 = moment(_data.proposeNewTime.date2).format('MM/DD/YYYY')
-					}
-					if (_data.proposeNewTime.date3) {
-						_data.proposeNewTime.date3 = moment(_data.proposeNewTime.date3).format('MM/DD/YYYY')
-					}
+				if (_data.proposeNewTime.date2) {
+					_data.proposeNewTime.date2 = moment(_data.proposeNewTime.date2).format('MM/DD/YYYY')
 				}
-				applypropdbObj.ref('applyprop/').push().set(_data).then(function () {
-					$state.go('applicationThanks');
-					// $rootScope.success = 'Application for property successfully sent!';	
-					console.log('Application for property successfully sent!');
+				if (_data.proposeNewTime.date3) {
+					_data.proposeNewTime.date3 = moment(_data.proposeNewTime.date3).format('MM/DD/YYYY')
+				}
+			}
+			applypropdbObj.ref('applyprop/').push().set(_data).then(function () {
+				$state.go('applicationThanks');
+				// $rootScope.success = 'Application for property successfully sent!';	
+				console.log('Application for property successfully sent!');
 
-					firebase.database().ref('users/' + landlordID).once("value", function (snapshot) {
-						// Mail to Landlord
-						var emailData = '<p>Hello, </p><p>' + name + ' has requested a viewing at ' + dateSlot + ', ' + timeRange + 'for ' + address + '.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.com/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
-						// Send Email
-						emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name + ' has requested a viewing for ' + address, 'newviewingreq', emailData);
-					});
-
-					// Mail to Tenant
-					var emailData = '<p>Hello ' + vm.registerUser.firstName + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+				firebase.database().ref('users/' + landlordID).once("value", function (snapshot) {
+					// Mail to Landlord
+					var emailData = '<p>Hello, </p><p>' + name + ' has requested a viewing at ' + dateSlot + ', ' + timeRange + 'for ' + address + '.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.com/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 					// Send Email
-					emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'Viewing request for ' + address, 'viewingreq', emailData);
+					emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name + ' has requested a viewing for ' + address, 'newviewingreq', emailData);
 				});
+
+				// Mail to Tenant
+				var emailData = '<p>Hello ' + vm.registerUser.firstName + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+				// Send Email
+				emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'Viewing request for ' + address, 'viewingreq', emailData);
+			});
 			// } else {
 			// 	vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'
 			// }
