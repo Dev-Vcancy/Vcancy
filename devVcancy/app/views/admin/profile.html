@@ -8,11 +8,57 @@
             <!-- title start -->
             <h1 class="page-title"> Profile </h1>
             <!-- title end -->
-
-            <!-- breadcrumb start -->
-
-            <!-- breadcrumb end -->
-
-            <!-- four box start -->
+            <div class="loader" ng-if="loader">
+                <div class="preloader pl-xl">
+                    <svg class="pl-circular" viewBox="25 25 50 50">
+                        <circle class="plc-path" cx="50" cy="50" r="20" />
+                    </svg>
+                </div>
+            </div>
+            <div class="card white-block p-20">
+                <div class="row mb-3">
+                    <div class="col-sm-5">
+                        <input type="email" placeholder="Login Email Address" ng-model="aprofile.userData.email" class="custom-form-element" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-5">
+                        <button class="btn btn-sm bgm-teal btn-round">Save</button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-5">
+                        <h4>Change admin password</h4>
+                    </div>
+                </div>
+                <form name="cpwdform" ng-submit="aprofile.changePassword()">
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <input type="password" placeholder="Old password" ng-model="aprofile.updatePassword.oldPwd" class="custom-form-element" required/>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="password" placeholder="New password" ng-model="aprofile.updatePassword.newPwd" class="custom-form-element" required/>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="password" placeholder="Confirm password" ng-model="aprofile.updatePassword.conPwd" class="custom-form-element"
+                                required/>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-12 text-right">
+                            <button class="btn bgm-teal" ng-disabled="cpwdform.$invalid || cpwdform.$prestine" type="submit">Change password</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
     </section>
+    <style>
+        .ng-invalid.ng-dirty {
+            border-color: red !important;
+        }
+
+        .ng-touched.ng-valid {
+            border-color: green !important;
+        }
+    </style>
 </section>

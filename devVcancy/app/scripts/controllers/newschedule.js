@@ -388,7 +388,6 @@ vcancyApp
 						vm.loader = 0;
 
 						if(vm.userData) {
-							debugger;
 							var listingValue = vm.listings[listingId];
 							var propertyAddr = vm.properties[listingValue.propertyId].address;
 							var emailData = '<p>Hello, </p><p>'+ vm.userData.email +' has a request for craigslist display for property - ' + propertyAddr +' </p><br/><p>Link - ' + listingValue.link +'</p>';
