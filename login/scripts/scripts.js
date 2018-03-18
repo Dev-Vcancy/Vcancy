@@ -2277,7 +2277,7 @@ var vcancyApp = angular
  
 	
 vcancyApp.constant('config', {
-   "sailsBaseUrl": 'https://www.vcancy.ca/nodeapi/api/v1/',
+   "sailsBaseUrl": 'https://www.vcancy.com/nodeapi/api/v1/',
 });
 
 vcancyApp.service('emailSendingService',function($http,config){
@@ -2590,7 +2590,7 @@ vcancyApp
 	  };
 	  var app = firebase.initializeApp(config);	 
 	  
-	  // var sailsBaseUrl = 'http://www.vcancy.ca/api/v1/';
+	  // var sailsBaseUrl = 'http://www.vcancy.com/api/v1/';
 	
 	$urlRouterProvider.otherwise("/");
 	$stateProvider	
@@ -4054,7 +4054,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 			  propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
 				
 				if(snapshot.key != "undefined"){
-					var propertylink = "http://www.vcancy.ca/login/#/applyproperty/"+snapshot.key;
+					var propertylink = "http://www.vcancy.com/login/#/applyproperty/"+snapshot.key;
 					vm.prop.propertylink = propertylink;	
 					
 					// link generated and property added message
@@ -4069,7 +4069,7 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 						propertylink: propertylink
 					})
 					
-					var emailData = '<p>Hello, </p><p>Thanks for adding your rental property '+address+',</p><p> Here’s your dedicated property link:</p><p>'+propertylink+'</p><p>Share this link on your online listing, social media, email and with any perspective tenant.</p><p>Please don’t delete this email for future use.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello, </p><p>Thanks for adding your rental property '+address+',</p><p> Here’s your dedicated property link:</p><p>'+propertylink+'</p><p>Share this link on your online listing, social media, email and with any perspective tenant.</p><p>Please don’t delete this email for future use.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 					
 					// Send Email
 					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your rental property link', 'addproperty', emailData);
@@ -4178,28 +4178,28 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 							});		
 
 							if(propstatus === false){
-								var emailData = '<p>Hello, </p><p>'+address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.ca/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+								var emailData = '<p>Hello, </p><p>'+address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.com/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 									
 								// Send Email
 								emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), address+' has been deactivated', 'deactivateproperty', emailData);
 						 
 								angular.forEach(vm.tenants, function(tenantID, key) {
 									firebase.database().ref('users/'+tenantID).once("value", function(snap) {
-										var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+										var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 									
 										// Send Email
 										emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
 									});
 								});
 							} else {
-								var emailData = '<p>Hello, </p><p>Your property <em>'+address+'</em>   has been successfully updated and all your property viewings affected by the updated time slots are cancelled. </p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+								var emailData = '<p>Hello, </p><p>Your property <em>'+address+'</em>   has been successfully updated and all your property viewings affected by the updated time slots are cancelled. </p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 										
 								// Send Email
 								emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Property Time Slots updated on Vcancy', 'updateproperty', emailData);
 						 
 								angular.forEach(vm.tenants, function(tenantID, key) {
 									firebase.database().ref('users/'+tenantID).once("value", function(snap) {
-										var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has made some changes in time slots for this property.</p><p>To reschedule the viewing and book some another available time, please log in at http://vcancy.ca/login/ and use the link initially provided to schedule the viewing or follow the link http://www.vcancy.ca/login/#/applyproperty/'+$stateParams.propId+'.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+										var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has made some changes in time slots for this property.</p><p>To reschedule the viewing and book some another available time, please log in at http://vcancy.com/login/ and use the link initially provided to schedule the viewing or follow the link http://www.vcancy.com/login/#/applyproperty/'+$stateParams.propId+'.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 									
 										// Send Email
 										emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'updateproperty', emailData);
@@ -4289,14 +4289,14 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 							// console.log(value);
 						});	
 
-						var emailData = '<p>Hello, </p><p>'+vm.property_address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.ca/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+						var emailData = '<p>Hello, </p><p>'+vm.property_address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.com/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 									
 						// Send Email
 						emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address+' has been deactivated', 'deactivateproperty', emailData);
 				 
 						angular.forEach(vm.tenants, function(tenantID, key) {
 							firebase.database().ref('users/'+tenantID).once("value", function(snap) {
-								var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+								var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 							
 								// Send Email
 								emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
@@ -4411,14 +4411,14 @@ vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootSc
 							})
 						});	
 						
-						var emailData = '<p style="margin: 10px auto;"><h2>Hi '+vm.landlordname+',</h2><br> Your property <em>'+vm.property_address+'</em> has been successfully deleted and all viewings related to this property are also removed.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+						var emailData = '<p style="margin: 10px auto;"><h2>Hi '+vm.landlordname+',</h2><br> Your property <em>'+vm.property_address+'</em> has been successfully deleted and all viewings related to this property are also removed.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 									
 						// Send Email
 						emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address+' has been deleted', 'delproperty', emailData);
 				 
 						angular.forEach(vm.tenants, function(tenantID, key) {
 							firebase.database().ref('users/'+tenantID).once("value", function(snap) {
-								var emailData = '<p style="margin: 10px auto;"><h2>Hi '+snap.val().firstname+' '+snap.val().lastname+',</h2><br> Your viewing request on property <em>'+vm.property_address+'</em> has been removed as landlord has deleted his property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+								var emailData = '<p style="margin: 10px auto;"><h2>Hi '+snap.val().firstname+' '+snap.val().lastname+',</h2><br> Your viewing request on property <em>'+vm.property_address+'</em> has been removed as landlord has deleted his property.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 							
 								// Send Email
 								emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request removed from Vcancy', 'delproperty', emailData);
@@ -4783,13 +4783,13 @@ vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootS
 				
 				firebase.database().ref('users/'+landlordID).once("value", function(snapshot) {
 					// Mail to Landlord
-					var emailData = '<p>Hello, </p><p>'+name+' has requested a viewing at '+dateslot+', '+timerange+'for '+address+'.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.ca/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello, </p><p>'+name+' has requested a viewing at '+dateslot+', '+timerange+'for '+address+'.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.com/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 					// Send Email
 					emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name+' has requested a viewing for '+address, 'newviewingreq', emailData);
 				});
 				
 				// Mail to Tenant
-				var emailData = '<p>Hello '+name+', </p><p>Your viewing request for '+address+' at '+dateslot+', '+timerange+' has been sent.</p><p>To view your requests, please log in at http://vcancy.ca/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+				var emailData = '<p>Hello '+name+', </p><p>Your viewing request for '+address+' at '+dateslot+', '+timerange+' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 				// Send Email
 				emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Viewing request for '+address, 'viewingreq', emailData);
 			})	
@@ -4906,7 +4906,7 @@ vcancyApp
 			
 			firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
 				firebase.database().ref('users/'+snapshot.val().tenantID).once("value", function(snap) {
-					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing request for '+snapshot.val().address+' at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been accepted.</p><p>If you wish you complete your rental application beforehand, please log in at http://vcancy.ca/login/ and go to “Applications”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing request for '+snapshot.val().address+' at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been accepted.</p><p>If you wish you complete your rental application beforehand, please log in at http://vcancy.com/login/ and go to “Applications”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 					
 					emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Viewing request for '+snapshot.val().address, 'confirmstatus', emailData);
 				});
@@ -4922,7 +4922,7 @@ vcancyApp
 				})
 				firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
 					firebase.database().ref('users/'+snapshot.val().tenantID).once("value", function(snap) {
-						var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing time '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been been <strong>cancelled</strong> by the landlord of '+snapshot.val().address+'.</p><p>Please book another time using the link initially provided or contact the landlord directly.</p><p>To view details, please <a href="http://www.vcancy.ca/login/#/"> log in </a>  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+						var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing time '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been been <strong>cancelled</strong> by the landlord of '+snapshot.val().address+'.</p><p>Please book another time using the link initially provided or contact the landlord directly.</p><p>To view details, please <a href="http://www.vcancy.com/login/#/"> log in </a>  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 						
 						emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your viewing has been cancelled for '+snapshot.val().address, 'cancelstatus', emailData);
 					});
@@ -5031,12 +5031,12 @@ vcancyApp
 				
 				firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
 					firebase.database().ref('users/'+snapshot.val().landlordID).once("value", function(snap) {
-						var emailData = '<p>Hello, </p><p>'+snapshot.val().name+' has <strong>cancelled</strong> their viewing at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' for '+snapshot.val().address+'.</p><p>The time slot is now open to other renters.</p><p>To view details, please <a href="http://www.vcancy.ca/login/#/"> log in </a> and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+						var emailData = '<p>Hello, </p><p>'+snapshot.val().name+' has <strong>cancelled</strong> their viewing at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' for '+snapshot.val().address+'.</p><p>The time slot is now open to other renters.</p><p>To view details, please <a href="http://www.vcancy.com/login/#/"> log in </a> and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 						
 						emailSendingService.sendEmailViaNodeMailer(snap.val().email, snapshot.val().name+'has cancelled viewing for '+snapshot.val().address, 'cancelstatus', emailData);
 					});
 						
-					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing time '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been been <strong>cancelled</strong> by the landlord of '+snapshot.val().address+'.</p><p>Please book another time using the link initially provided or contact the landlord directly.</p><p>To view details, please <a href="http://www.vcancy.ca/login/#/"> log in </a> and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing time '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been been <strong>cancelled</strong> by the landlord of '+snapshot.val().address+'.</p><p>Please book another time using the link initially provided or contact the landlord directly.</p><p>To view details, please <a href="http://www.vcancy.com/login/#/"> log in </a> and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 						
 					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your viewing has been cancelled for '+snapshot.val().address, 'cancelstatus', emailData);
 				});
@@ -6241,7 +6241,7 @@ vcancyApp
 
 				var appfiles = $('#appfiles').val();
 				var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-				var filepath = filename != '' ? "https://vcancy.ca/login/uploads/" + filename : appfiles;
+				var filepath = filename != '' ? "https://vcancy.com/login/uploads/" + filename : appfiles;
 
 				console.log(filename, filepath, appfiles);
 
@@ -6405,17 +6405,17 @@ vcancyApp
 									if (landlordID != 0) {
 										firebase.database().ref('users/' + landlordID).once("value", function (snap) {
 											console.log(snap.val());
-											var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="https://www.vcancy.ca/login/" target = "_blank"> Vcancy.ca </a> and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+											var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a> and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 											emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 										});
 									} else {
-										var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.ca. Please go to this link https://www.vcancy.ca/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="https://www.vcancy.ca/login/" target = "_blank"> Vcancy.ca </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+										var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.com. Please go to this link https://www.vcancy.com/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 										emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 									}
 
-									var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in at <a href="https://www.vcancy.ca/login/" target = "_blank"> Vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+									var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in at <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 									emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
 								}
@@ -6525,17 +6525,17 @@ vcancyApp
 						if (landlordID != 0) {
 							firebase.database().ref('users/' + landlordID).once("value", function (snap) {
 								console.log(snap.val());
-								var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+								var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 								emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 							});
 						} else {
-							var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.ca. Please go to this link http://www.vcancy.ca/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+							var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.com. Please go to this link http://www.vcancy.com/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 							emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 						}
 
-						var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+						var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 						emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
 					}
