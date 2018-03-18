@@ -18,6 +18,13 @@ vcancyApp
                         type: 'error'
                     });
                 }
+                else if (password != vm.updatePassword.oldPwd) {
+                    swal({
+                        title: 'Error',
+                        text: 'Old password dont match',
+                        type: 'error'
+                    });
+                }
                 else if (vm.updatePassword.newPwd == vm.updatePassword.conPwd && vm.userData.email && password == vm.updatePassword.oldPwd) {
                     var user = firebase.auth().currentUser;
                     var newPassword = vm.updatePassword.newPwd;
@@ -63,6 +70,11 @@ vcancyApp
                         firebaseUser.sendEmailVerification().then(function () {
 
                             // Send Email
+                            swal({
+                                title: 'Success',
+                                text: 'User created',
+                                type: 'success'
+                            });
                             emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
 
                             var emailData = '<p>Hello, </p><p>' + vm.createUser.email + ' ,has been added to on https://vcancy.com/ as admin.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
