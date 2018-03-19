@@ -61,7 +61,13 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         vm.csv = 0;
         vm.localpropID = '';
 
-       
+          
+        vm.getPropertiesListing = function () {
+            console.log(vm.selectedUser);
+           landlordID = vm.selectedUser;
+           localStorage.setItem('adminLandlordId', landlordID);
+           vm.getProperties(vm.selectedUser);
+       }
         vm.getarray = function (num) {
             var data = [];
             for (var i = 0; i <= num - 1; i++) {
@@ -115,7 +121,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             if (!landlordId) return;
 
             var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordId).once("value", function (snapshot) {
-                //  vm.getProperties(landlordId);
+                  vm.getProperties(landlordId);
                 // console.log('propertyschedule', snapshot.val())
                 $scope.$apply(function () {
                     vm.success = 0;
@@ -1097,6 +1103,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             });
 
         }
+     
         // View Property
         vm.getProperties = function (landlordID) {
             var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
@@ -1133,12 +1140,6 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             });
         }
 
-        vm.getPropertiesListing = function () {
-            console.log(vm.selectedUser);
-           landlordID = vm.selectedUser;
-           localStorage.setItem('adminLandlordId', landlordID);
-           vm.getProperties(vm.selectedUser);
-       }
 
         // Edit Property
         if ($state.current.name == 'admineditprop') {

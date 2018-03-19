@@ -18,7 +18,7 @@
                                 </svg>
                             </div>
                         </div>
-                        {{aproperty.getPropertiesListing}}
+                       
                         <select ng-model="aproperty.selectedUser" ng-change="aproperty.getPropertiesListing()" style="position:relative;left:16px;">
                             <option value=''>Select User</option>
                             <option ng-repeat="user in aproperty.usersList" value="{{user.key}}">{{user.firstname}} {{user.lastname}}-{{user.email}}</option>
