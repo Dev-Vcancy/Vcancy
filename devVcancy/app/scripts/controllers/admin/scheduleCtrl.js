@@ -75,7 +75,9 @@ vcancyApp
             }
 
             $scope.openImageModal = function () {
+                vm.loader = 1;
                 $scope.imageModal = $uibModal.open({
+                    
                     templateUrl: 'viewimages.html',
                     controller: 'propertyCtrl',
                     backdrop: 'static',

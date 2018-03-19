@@ -1,6 +1,6 @@
 'use strict';
 
-vcancyApp
+vcancyApp 
     .controller('adminApplicationCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_', 'NgTableParams',
         function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _, NgTableParams) {
 
@@ -205,7 +205,8 @@ vcancyApp
 
             vm.openRentalForm = function () {
                 $rootScope.isFormOpenToSaveInDraft = true;
-                window.location.href = "#/rentalform/0/0";
+
+                window.location.href = "#/adminrentalform/"+vm.selectedUser+"/0/0";
             }
 
             vm.requestCreditReport = function () {
@@ -234,7 +235,7 @@ vcancyApp
             vm.gotoRental = function (event) {
                 if (vm.disablebutton == 0) {
                     $rootScope.renterExternalEmail = vm.email;
-                    window.location.href = "#/rentalform/0/0";
+                    window.location.href = "#/adminrentalform/0/0";
                 }
             }
 

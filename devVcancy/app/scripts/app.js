@@ -680,6 +680,8 @@ vcancyApp
 				resolve: { tenantauthenticate: tenantauthenticate }
 			})
 
+			
+
 			.state('viewapplication1', {
 				url: '/viewapp/{appID}',
 				controller: 'viewappCtrl',
@@ -711,6 +713,22 @@ vcancyApp
 					}]
 				}
 			})
+			.state('adminrentalform', {
+				url: '/adminrentalform/{tenantID}/{scheduleId}/{applicationId}',
+				controller: 'adminrentalformCtrl',
+				controllerAs: 'arctrl',
+				templateUrl: 'views/admin/adminrental_app_form.html',
+				resolve: { adminauthenticate: adminauthenticate }
+			}) 
+
+			.state('adminviewapplication', {
+				url: '/adminviewapp/{appID}',
+				controller: 'adminviewappCtrl',
+				controllerAs: 'avappctrl',
+				templateUrl: 'views/admin/adminview_rental_app_form.html',
+				resolve: { adminauthenticate: adminauthenticate }
+			})
+
 			.state('adminapplication', {
 				url: '/admin/application',
 				controller: 'adminApplicationCtrl',

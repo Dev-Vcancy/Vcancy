@@ -10,7 +10,7 @@
                     <h1>Applications</h1>
     
                 </div>
-                <div class="loader" ng-if="aapplication.loader">
+                 <div class="loader" ng-if="aapplication.loader">
                     <div class="preloader pl-xl">
                         <svg class="pl-circular" viewBox="25 25 50 50">
                             <circle class="plc-path" cx="50" cy="50" r="20" />
@@ -70,7 +70,7 @@
                                 <tr ng-repeat="row in $data">
                                     <td ng-repeat="col in $columns">{{row[col.field]}}</td>
                                     <td ng-repeat="col in aapplication.extracols">
-                                        <a href="#/rentalform/{{row[col.field]}}/{{row.applicationID}}" class="btn bgm-teal btn-sm btn-round">Submit</a>
+                                        <a href="#/adminrentalform/{{aapplication.selectedUser}}/{{row[col.field]}}/{{row.applicationID}}" class="btn bgm-teal btn-sm btn-round">Submit</a>
                                     </td>
                                 </tr>
                                 <tr ng-if="aapplication.pendingappsavail == 0">
@@ -96,7 +96,7 @@
                                 <tr ng-repeat="row in $data">
                                     <td ng-repeat="col in $columns">{{row[col.field]}}</td>
                                     <td ng-repeat="col in aapplication.submitappsextracols">
-                                        <a href="#/viewapp/{{row[col.field]}}" target="_blank" class="btn bgm-teal btn-sm btn-round m-b-5">Application</a>
+                                        <a href="#/adminviewapp/{{row[col.field]}}" target="_blank" class="btn bgm-teal btn-sm btn-round m-b-5">Application</a>
                                     </td>
                                 </tr>
                                 <tr ng-if="aapplication.submitappsavail == 0">

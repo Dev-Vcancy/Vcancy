@@ -11,6 +11,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         vm.selectedUser = '';
         vm.statusChange = {};
         vm.usersList = [];
+        vm.mode = 'Add';
         firebase.database().ref('users/').once("value", function (snapvalue) {
 
             var users = snapvalue.val();
@@ -60,7 +61,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         vm.csv = 0;
         vm.localpropID = '';
 
-
+       
         vm.getarray = function (num) {
             var data = [];
             for (var i = 0; i <= num - 1; i++) {
@@ -743,7 +744,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
                 } // End OF property Add-edit
             }
         }
-
+   
         vm.createNewPropertyWithUnits = function (property) {
             var unitlists = [];
             for (var i = 0; i < property.noofunits; i++) {
@@ -1096,12 +1097,10 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             });
 
         }
-        $scope.$watch('prop', function (oldValue, newValue) {
-            console.log(oldValue, newValue)
-        })
         // View Property
         vm.getProperties = function (landlordID) {
             var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+              console.log(snapshot.val())
                 $scope.$apply(function () {
                     vm.success = 0;
                     if (snapshot.val()) {
@@ -1133,6 +1132,13 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
 
             });
         }
+
+        vm.getPropertiesListing = function () {
+            console.log(vm.selectedUser);
+           landlordID = vm.selectedUser;
+           localStorage.setItem('adminLandlordId', landlordID);
+           vm.getProperties(vm.selectedUser);
+       }
 
         // Edit Property
         if ($state.current.name == 'admineditprop') {
@@ -2016,12 +2022,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         };
 
         $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
-        vm.getScheduleListing = function () {
-            // console.log(vm.selectedUser);landlordID
-            landlordID = vm.selectedUser;
-            localStorage.setItem('adminLandlordId', landlordID);
-            vm.getProperties(vm.selectedUser);
-        }
+
         vm.opensuccesssweet = function (value) {
             swal({
                 title: "Property added successfully, please add units",
