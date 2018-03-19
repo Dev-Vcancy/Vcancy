@@ -51,7 +51,7 @@ vcancyApp
                     var num = Math.floor((Math.random() * 60) + 1);
                     pass += characterArray[num];
                 }
-
+                $scope.loader = 1;
                 var reguserObj = $firebaseAuth();
                 reguserObj.$createUserWithEmailAndPassword(vm.createUser.email, pass)
                     .then(function (firebaseUser) {
@@ -62,26 +62,28 @@ vcancyApp
                             usertype: usertype,
                             email: vm.createUser.email,
                         });
-                    });
-
-                firebase.auth().signInWithEmailAndPassword(vm.createUser.email, pass)
-                    .then(function (firebaseUser) {
-                        // Success 
-                        firebaseUser.sendEmailVerification().then(function () {
-
-                            // Send Email
-                            swal({
-                                title: 'Success',
-                                text: 'User created',
-                                type: 'success'
+                        firebase.auth().signInWithEmailAndPassword(vm.createUser.email, pass)
+                            .then(function (firebaseUser) {
+                                // Success 
+                                firebaseUser.sendEmailVerification().then(function () {
+                                    $scope.loader = 0;
+                                    // Send Email
+                                    vm.createUser.email = '';
+                                    
+                                    swal({
+                                        title: 'Success',
+                                        text: 'User created',
+                                        type: 'success'
+                                    });
+                                    emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
+        
+                                    var emailData = '<p>Hello, </p><p>' + vm.createUser.email + ' ,has been added to on https://vcancy.com/ as admin.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+        
+                                    // Send Email
+                                    emailSendingService.sendEmailViaNodeMailer(vm.createUser.email, 'A new user account has been added to your portal', 'Welcome', emailData);
+                                });
                             });
-                            emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
-
-                            var emailData = '<p>Hello, </p><p>' + vm.createUser.email + ' ,has been added to on https://vcancy.com/ as admin.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
-
-                            // Send Email
-                            emailSendingService.sendEmailViaNodeMailer(vm.createUser.email, 'A new user account has been added to your portal', 'Welcome', emailData);
-                        });
                     });
+
             };
         }]);

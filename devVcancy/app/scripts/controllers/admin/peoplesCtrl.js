@@ -135,18 +135,29 @@ vcancyApp
                                 // vm.getApplyProp(vm.landlordID);
                                 $scope.loader = 0;
                                 vm.apppropaddress[vm.selectedApplication].creditCheckLink = data.Location;
-                                var emailData = '<p>Hello, </p><p>A credit/criminal check report for user <b>'+vm.userData.name+' ('+vm.userData.email+')</b> is available now, please <a href="https://vcancy.com/login" target="_blank">log in</a> to your dashboard and go to the "People" menu.</p><p>Thanks,</p><p>Team Vcancy</p>';
-                               // console.log(emailData);
+                                var emailData = '<p>Hello, </p><p>A credit/criminal check report for user <b>' + vm.userData.name + ' (' + vm.userData.email + ')</b> is available now, please <a href="https://vcancy.com/login" target="_blank">log in</a> to your dashboard and go to the "People" menu.</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                // console.log(emailData);
                                 // Send Email
                                 emailSendingService.sendEmailViaNodeMailer(vm.userData.email, 'Creditcheck request', 'Creditcheck request', emailData);
                             })
                                 .catch(function (err) {
-                                   // console.error('ERROR', err);
+                                    // console.error('ERROR', err);
                                     swal("", "There was error deleteing the schedule.", "error");
                                 });
                         })
                 }
-            }
+            };
+
+            vm.removeCreditCheckReport = function (key) {
+                firebase.database().ref('applyprop/' + key).update({
+                    creditCheckLink: ''
+                }, function () {
+                    $scope.$apply(function () {
+                        vm.apppropaddress[key].creditCheckLink = '';
+                    })
+                });
+            };
+
             vm.questionDropDown = [
                 { id: 'WKRX6Q', label: 'What is your profession?', isChecked: true },
                 { id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
@@ -418,7 +429,7 @@ vcancyApp
                 firebase.database().ref('users/' + vm.selectedUser).update({
                     screeningQuestions: ques
                 }).then(function () {
-                   // userData.screeningQuestions = ques;
+                    // userData.screeningQuestions = ques;
                     ///localStorage.setItem('userData', JSON.stringify(userData));
                     refreshScreeningQuestions();
                     vm.loader = 0;
@@ -647,7 +658,7 @@ vcancyApp
                         vm.getApplyProp(vm.landlordID);
                     })
                         .catch(function (err) {
-                         //   console.error('ERROR', err);
+                            //   console.error('ERROR', err);
                             swal("", "There was error deleteing the schedule.", "error");
                         });
 
