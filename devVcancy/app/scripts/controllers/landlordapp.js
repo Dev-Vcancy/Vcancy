@@ -331,6 +331,7 @@ vcancyApp
 
 			vm.getRentalField = function (key, field) {
 				let data;
+				//console.log(vm.apppropaddressAppl)
 				_.forEach(vm.apppropaddressAppl, function (_value, _key) {
 					if (_value.scheduleID == key) {
 						data = _value;
