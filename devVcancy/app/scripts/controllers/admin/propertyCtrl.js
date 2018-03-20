@@ -96,18 +96,10 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             });
         }
         vm.getPropertiesListing = function () {
-<<<<<<< HEAD
-            //console.log(vm.selectedUser);
-           landlordID = vm.selectedUser;
-           localStorage.setItem('adminLandlordId', landlordID);
-           vm.getProperties(vm.selectedUser);
-       }
-=======
             landlordID = vm.selectedUser;
             localStorage.setItem('adminLandlordId', landlordID);
             vm.getProperties(vm.selectedUser);
         }
->>>>>>> e8f23e33dc6b59d305940206888e8fbc5c6a187e
         vm.getarray = function (num) {
             var data = [];
             for (var i = 0; i <= num - 1; i++) {
@@ -1082,28 +1074,6 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
             });
 
         }
-<<<<<<< HEAD
-     
-        // View Property
-        vm.getProperties = function (landlordID) {
-            var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-         //     console.log(snapshot.val())
-                $scope.$apply(function () {
-                    vm.success = 0;
-                    if (snapshot.val()) {
-                        var props = angular.copy(snapshot.val());
-                        var vacantSums = {};
-                        _.forEach(props, function (prop, key) {
-                            vacantSums[key] = _.sumBy(prop.unitlists, function (o) {
-                                if (!o.status || o.status == 'available') {
-                                    return 1;
-                                }
-                            });
-                        })
-                        vm.vacantSums = vacantSums;
-                        vm.viewprops = snapshot.val();
-=======
->>>>>>> e8f23e33dc6b59d305940206888e8fbc5c6a187e
 
 
 
