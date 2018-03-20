@@ -1,0 +1,134 @@
+
+<div class="user-login-5 custome-register-5">
+            <div class="row bs-reset">
+                <div class="col-md-6 bs-reset mt-login-5-bsfix">
+                    <div class="login-bg" style="background-image:url('https://s3.ca-central-1.amazonaws.com/vcancy-final/public/bg1.jpg')">
+                    <img src="https://s3.ca-central-1.amazonaws.com/vcancy-final/public/vcancy_logo.png" class="login-logo register-logo" alt="" />
+                     <h1 class="register-h1">More than 675,000 property managers, landlords and tenants in 16,500 ZIP Codes use Vcancy to:</h1>
+                         </div>
+                </div>
+                <div class="col-md-6 login-container bs-reset mt-login-5-bsfix">
+                    <div class="login-content">
+                   
+                        
+                        <div class="" id="l-register" data-ng-class="{ 'toggled': lctrl.register === 0 }" data-ng-if="lctrl.register === 0">            
+                                <form name="regForm" ng-submit="lctrl.registerUser(lctrl.reguser)" role="form" > 
+                                                    
+                                   <div class="form-group text-center" >
+                                   <div class='regmsgvalidate' ng-if="$root.error != ''" style="margin-top: 18%;"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>
+                                    
+                                    <div class='regmsgvalidate' ng-if="$root.success != ''" style="margin-top: 18%;"><div class="alert alert-success alert-dismissable fade in">{{$root.success}} <a  ng-click='lctrl.resendmail()'  href='javascript:void(0)' class='' 
+                                    style="text-decoration: underline;">Resend Confirmation</a></div>
+                                    </div>
+                                   <div class="md-radio-sg">
+                                        <label class="radio radio-inline"> 
+                                             <input type="radio" required ng-model="lctrl.reguser.usertype" ng-value="1"  name="usertype" value="1">
+                                            <i class="input-helper"></i>
+                                            Landlord
+                                        </label>
+                                        <label class="radio radio-inline">
+                                            <input type="radio" required ng-model="lctrl.reguser.usertype" ng-value="0"  name="usertype" value="0">
+                                            <i class="input-helper"></i>
+                                            Tenant
+                                        </label>
+                                        </div>
+                                    </div>
+                                   <div class="form-group m-b-10" style='display: inherit;float: left;width: 100%;'>                
+                                        <div class="col-sm-6 col-xs-12 m-b-10">
+                                        <div class="md-input">
+                                            <input type="text" id="fname" required ng-model="lctrl.reguser.first" name="first" class="md-form-control"> 
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="lbl">First Name</label>
+                                        </div>
+                                        </div>
+                                        <div class="col-sm-6 col-xs-12 m-b-10">
+                                        <div class="md-input">
+                                            <input type="text" id="lname" required ng-model="lctrl.reguser.last" name="last" class="md-form-control"> 
+                                             <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="lbl">Last Name</label>
+                                        </div>                 
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group"  style='display:inherit;float: left;width: 100%;'>
+                                        <div class="col-sm-12">
+                                        <div class="md-input">
+                                            <input type="email" id="regemail" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'regemail')) }" required ng-model="lctrl.reguser.email" name="email" class="md-form-control" >
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="lbl">Email Address</label>
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group m-b-20"  style='display: inherit;float: left;width: 100%;'>
+                                        <div class="col-sm-6 col-xs-12 m-b-10">
+                                           <div class="md-input">
+                                                <input type="password" id="regpwd" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'regpwd')) }"  required ng-model="lctrl.reguser.pass" name="pass" class="md-form-control" >
+                                                <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="lbl">Password</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 col-xs-12 m-b-10">
+                                          <div class="md-input">
+                                            <input type="password" id="regcpwd" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'regcpwd')) }"  required ng-model="lctrl.reguser.cpass" name="cpass" class="md-form-control" >
+                                              <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="lbl">Confirm Password</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-12 m-b-20"  style='display: inherit;float: left;'>
+                                        <span>By creating an account, you agree to <a href='https://vcancy.com/tos_privacypolicy/' target="_blank">                Terms of use and Privacy Policy        </a></span> 
+                                    </div>
+                                    <div class="clearfix"></div>
+                                
+                                    <button type="submit" ng-disabled="regForm.$invalid"  class="btn redorng btn-block uppercase">Create an account</button>
+                                </form>
+                                <div class="clearfix"></div>
+                                <div class="login-options">
+                                        <!-- <h4 class="pull-left">Or login with</h4>  -->
+                                        <ul class="social-icons pull-right" style="margin:15px;">
+                                            <li>
+                                                <a class="social-icon-color facebook" data-original-title="facebook" href="javascript:;" data-ng-click="lctrl.facebook()"></a>
+                                            </li>
+                                            <li>
+                                                <a class="social-icon-color googleplus" data-original-title="Goole Plus" href="javascript:;" data-ng-click="lctrl.google()"></a>
+                                            </li>
+                                            <li>
+                                                <a class="social-icon-color linkedin" data-original-title="Linkedin"  linked-in  href="javascript:;"></a>
+                                            </li>
+                                                         
+                    </ul>
+                </div>
+                                <div class="clearfix"></div>
+                                                <hr>
+                                                <p class='text-center'>Already have an account? <a href='#/login'   onclick="storelocal();">Sign in </a></p>
+                                                    
+                            </div>
+                </div>
+                        <!-- BEGIN FORGOT PASSWORD FORM -->
+                        
+                        <!-- END FORGOT PASSWORD FORM -->
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+      <script type="text/javascript">
+    $( document ).ready(function() {
+        $('body').addClass('register');
+        $('body').removeClass('login');
+    });
+    function storelocal(){
+        $('body').hide();
+        localStorage.setItem("justOnce", "true");
+    }
+      if(localStorage.getItem("justOnce")){
+            window.location.reload();
+            localStorage.clear();
+    }
+</script>    

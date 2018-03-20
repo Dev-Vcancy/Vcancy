@@ -1,0 +1,123 @@
+<header data-ng-include="'views/template/publicheader.html'" ></header>   <!--div class="logo login-logo">
+           
+                <img src="../images/vcancy_logo.png" class="img-responsive" alt="" /> 
+        </div-->
+        <!-- END LOGO -->
+        <!-- BEGIN LOGIN -->
+        <div class="content" style="top: 300px;height:380px;">
+            <!-- BEGIN LOGIN FORM -->
+             <div id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1">
+            <form class="login-form login-logo" ng-submit="lctrl.loginUser(user)" role="form">
+
+                <div class="form-title">
+                    <span class="form-title">Sign In to Vcancy</span>
+                    <span class="form-subtitle " style="text-transform: lowercase;">Or, </span>
+                     <a href='#/register' style="text-transform: unset;" class="creatct" onclick="storelocal();">Create an Account</a>
+                </div>
+                <div class="container">
+    
+    
+    <!-- display profile info -->
+    <div id="profileData" style="display: none;">
+        <p><a href="javascript:void(0);" onClick="logout()">Logout</a></p>
+        <div id="picture"></div>
+        <div class="info">
+            <p id="name"></p>
+            <p id="intro"></p>
+            <p id="email"></p>
+            <p id="location"></p>
+            <p id="link"></p> 
+        </div>
+    </div>
+</div>
+                <div class='loginmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}} <div ng-if="$root.invalid == 'mail'"><a  ng-click='lctrl.resendmail()'  href='javascript:void(0)' class='' 
+                                    style="text-decoration: underline;color: blue;">Resend confirmation</a></div></div>
+                
+                </div>
+                <div class='loginmsgvalidate' ng-if="$root.emailhandler"><div class="alert alert-success alert-dismissable fade in">{{$root.emailhandler}}</div></div>
+                
+                    <div class="clearfix"></div>    
+                    <div class="md-input">
+                        <input type="email" id="loginemail" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'loginemail' || $root.invalid === 'all')) }" required ng-model="user.email" name="email" class="md-form-control" >
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label class="lbl">Email</label>
+                    </div>
+                                <div class="md-input">
+                                    <input type="password" id="loginpwd" data-ng-class="{ 'invalidField': ($root.invalid != '' && ($root.invalid === 'loginpwd' || $root.invalid === 'all')) }" required ng-model="user.password" name="password" class="md-form-control" >
+                                    <span class="highlight"></span>
+                                    <span class="bar"></span>
+                                    <label class="lbl">Password</label>
+                                </div>
+             
+                <div class="form-actions">
+                    <button type="submit" ng-disabled="loginForm.$invalid" class="btn red btn-block uppercase btn-round">Sign In</button>
+
+                </div>
+                <div class="form-actions">
+                    <div class="pull-right forget-password-block">
+                        <a data-block="#forget-password" data-ng-click="lctrl.login = 0; lctrl.forgot = 1" href='javascript:void(0);' id="forget-password" class="forget-password">Forgot Password?</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <!-- <div style="text-align: center;">   <h4 class="orsep">Or login with</h4></div>
+                   <div class="clearfix"></div> -->
+                <!--button linked-in type="button">LinkedIn Login</button-->
+                    <!-- <div >
+                        <div class="left-icons">
+                        <div class="fb btn-round" data-ng-click="lctrl.facebook()"><a href="#"><span><i class="fa fa-facebook" aria-hidden="true"></i> </span> <lable>Sign in with Facebook</lable>
+                        <div class="clear"></div></a>
+                        </div>
+                        <div class="google btn-round"  data-ng-click="lctrl.google()"><a href="#"><span><i class="fa fa-google-plus" aria-hidden="true"></i> </span> <lable>Sign in with Google+</lable>
+                        <div class="clear"></div></a>
+                        </div>
+
+                        <div class="linkedin btn-round"  linked-in ><a href="#"><span><i class="fa fa-linkedin" aria-hidden="true"></i> </span> <lable>Sign in with Linkedin</lable>
+                        <div class="clear"></div></a>
+                        </div>
+                        
+                        </div>
+                    </div>
+                 -->
+                
+            </form>
+
+
+            </div>
+            <div class="custom-login" id="forget-password" data-ng-class="{ 'toggled': lctrl.forgot === 1 }" data-ng-if="lctrl.forgot === 1">
+             <!-- BEGIN FORGOT PASSWORD FORM -->
+             <form name="forgotpwdForm" ng-submit="lctrl.forgotpwdmail(lctrl.forgotuser)" role="form" novalidate>
+                <div class='msgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div></div>    
+                <div class='msgvalidate' ng-if="$root.success != ''"><div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div></div>
+                <p class="text-justify">Please provide the email address that you used when you signed up for your account. We will send you an email that will allow you to reset your password.</p>
+                 <div class="md-input">
+                        <input type="email"  required ng-model="lctrl.forgotuser.email" name="email"  class="md-form-control">
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                        <label class="lbl">Email</label>    
+                    </div>
+                    <a  data-block="#l-login"  class="btn btn-success pull-left" data-ng-click="lctrl.forgot = 0; lctrl.register = 0; lctrl.login = 1" href="javascript:void(0);">Back </a>       
+                <button type="submit" ng-disabled="forgotpwdForm.$invalid"  class="btn btn-success pull-right">Submit </button>
+            </form>
+            <!-- END FORGOT PASSWORD FORM -->
+           </div>
+        </div>
+
+
+
+<script type="text/javascript">
+    if(localStorage.getItem("justOnce")){
+            window.location.reload();
+            localStorage.clear();
+    }
+    $( document ).ready(function() {
+         $(document.body).addClass('login');
+         $(document.body).removeClass('register');
+          
+    });
+
+    function storelocal(){
+        $('body').hide();
+        localStorage.setItem("justOnce", "true");
+    }
+</script> 

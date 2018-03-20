@@ -1,0 +1,512 @@
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
+<style>
+	.radio .input-helper:before {
+		top: -11px !important;
+	}
+
+	.radio .input-helper:after {
+		top: -6px !important;
+	}
+</style>
+<section id="main">
+	<aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+
+	<section id="content">
+		<script type="text/ng-template" id="signin.html">
+				<div class="profile_model_popup">
+				<div class="modal-header padding-20" >
+					<h3 class="modal-title">Sign In</h3>
+					<button type="button" class="close margin-top-15" data-dismiss="dialog" ng-click="applyctrl.closeModal()" style='margin-top:8px !important'>
+					  <span aria-hidden="true">&times;</span>
+					  <span class="sr-only">Close</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group" ng-if="!applyctrl.forgetPwd">
+						<input type="text" class="custom-form-element" ng-model="applyctrl.signIn.email" placeholder="Email" required/>
+					</div>
+					<div class="form-group mt-3" ng-if="!applyctrl.forgetPwd">
+						<input type="password" class="custom-form-element" ng-model="applyctrl.signIn.password" placeholder="Password" required/>
+					</div>
+					<div class="row" style="margin:auto" ng-if="!applyctrl.forgetPwd">
+						<div class="col-sm-12 text-right p-0">
+							<span class='text-primary hover-color' style="cursor:pointer" ng-click="applyctrl.toggleForgetPwd()">Forget Password?</span>
+						</div>
+					</div>
+					<div class="form-group"  ng-if="applyctrl.forgetPwd">
+						<span>
+								Please provide the email address that you used when you signed up for your account. We will send you an email that will allow you to reset your password.
+						</span>
+					</div>
+					<div class="form-group mt-3" ng-if="applyctrl.forgetPwd">
+							<input type="email" class="custom-form-element" ng-model="applyctrl.signIn.email" placeholder="registered email" required/>
+					</div>
+				</div>
+				<div class="modal-footer">
+						<button ng-if="applyctrl.forgetPwd" class="btn btn-info btn-sm btn-round" ng-click="applyctrl.forgotpwdmail()">Request</button>
+					<button ng-if="!applyctrl.forgetPwd" class="btn btn-info btn-sm btn-round" ng-click="applyctrl.closeModal()">Close</button>
+					<button ng-if="!applyctrl.forgetPwd" class="btn btn-primary btn-sm btn-round" ng-click="applyctrl.signInFunction(applyctrl.signIn)">Sign In</button>
+				</div>
+			</div>
+		  </script>
+		<div class="container">
+			<div class="block-header text-center">
+				<!-- <h1>Schedule Viewing</h1> -->
+			</div>
+			<div class="row text-center">
+				<div class="alert alert-danger alert-dismissable" ng-if="applyctrl.emailVerifiedError">
+					<h4>{{applyctrl.emailVerifiedError}}</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 card">
+					<div ng-if="applyctrl.applyprop.availableslots.length == 0" ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1">
+						<h4>No time slot is available to schedule your application for property.</h4>
+					</div>
+					<div ng-if="applyctrl.alreadyBookedSlot == 1" ng-hide="applyctrl.propinactive == 1">
+						<h4>You have already booked a time slot for this property, please cancel your time slot if you want to reschedule.</h4>
+					</div>
+					<!-- <div ng-if="applyctrl.propinactive == 1" >
+						<h4>This property isnt available now.</h4>										
+					</div> -->
+					<!-- ng-hide="applyctrl.alreadyBookedSlot == 1 || applyctrl.propinactive == 1" -->
+					<form name="applypropForm" ng-submit="applyctrl.createUser(applyprop)" role="form" novalidate ng-if="true">
+						<input type="hidden" name="landlordID" ng-model="applyctrl.applyprop.landlordID" class="form-control">
+						<input type="hidden" name="propID" ng-model="applyctrl.applyprop.propID" class="form-control">
+						<input type="hidden" name="address" ng-model="applyctrl.applyprop.address" class="form-control">
+
+						<!-- <div class="card-header text-center">
+							<h1>Enter basic info and select viewing time</h1>
+							<p><i class="zmdi zmdi-home zmdi-hc-fw"></i> {{applyctrl.applyprop.units}}  <span ng-hide="applyctrl.applyprop.units == ' '">-</span>  {{applyctrl.applyprop.address}}</p>
+						</div> -->
+						<div class="card-body card-padding">
+							<div class="col-sm-6" ng-init="applyctrl.selectedUnit.images.push({Location:applyctrl.propData.propimg})">
+								<div class="row mt-3">
+									<h4 style="font-weight: 600;">{{applyctrl.propData.name}}
+										<span ng-if='applyctrl.selectedUnit.title'>-</span> {{applyctrl.selectedUnit.title}}</h4>
+								</div>
+								<div class="row mt-3" style="font-weight: 600;"> {{applyctrl.unitId}} - {{applyctrl.selectedUnit.address}} {{applyctrl.selectedUnit.city}}, {{applyctrl.selectedUnit.postalcode}}</div>
+								<div class="row mt-3" style="font-weight: 600;">${{applyctrl.selectedUnit.rent}} - {{applyctrl.selectedUnit.bedroom}} Bed ,{{applyctrl.selectedUnit.bathroom}} Bath
+									,{{applyctrl.selectedUnit.sqft}} sqft</div>
+								<!-- <div class="row mt-3" style="max-height:305px">
+									<div id="imgDiv" style="position:relative;width:38%;color:lightgray">
+										<img src="{{applyctrl.propData.propimg?applyctrl.propData.propimg:'../assets/pages/img/no_image_found.jpg'}}" class="img-responsive pic-bordered image"
+										/>
+									</div>
+					
+								
+								</div> -->
+								<div class="row mt-3" ng-if="applyctrl.selectedUnit.images.length>0">
+									<h4>Image gallery</h4>
+								</div>
+								<div class="row">
+									<div style="height:300px;width:90%">
+										<div uib-carousel active="active" interval="5000" no-wrap="noWrapSlides">
+											<div uib-slide ng-repeat="slide in applyctrl.selectedUnit.images track by $index" index="$index">
+												<img ng-src="{{slide.Location}}" style="margin:auto;height:300px;width:90%;object-fit:contain">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row mt-3">Description</div>
+								<div class="row mt-3">
+									<div class="col-sm-12">
+										<div ng-bind-html="applyctrl.selectedUnit.description"></div>
+
+									</div>
+								</div>
+								<div class="row mt-3">Parking : {{applyctrl.selectedUnit.parking}}</div>
+								<div class="row mt-3">Laundry : {{applyctrl.selectedUnit.laundry}}</div>
+								<div class="row mt-3">Pets : Cats - {{applyctrl.selectedUnit.cats ? 'YES':'NO'}} , Dogs - {{applyctrl.selectedUnit.dogs? 'YES':'NO'}}</div>
+								<div class="row mt-3">Lease Terms : {{applyctrl.selectedUnit.leaseLength}}</div>
+								<div style="margin-left:-15px">
+									<div class="mt-3" ng-if="applyctrl.selectedUnit.Aminities.includes('laundry')">Laundry&nbsp;
+										<i class="fa fa-check text-primary"></i>
+										<br>
+									</div>
+
+									<div class="mt-3" ng-if="applyctrl.selectedUnit.Aminities.includes('parking')">Parking&nbsp;
+										<i class="fa fa-check text-primary"></i>
+										<br>
+									</div>
+									<div class="mt-3" ng-if="applyctrl.selectedUnit.Aminities.includes('wheelchair')">Wheelchair&nbsp;
+										<i class="fa fa-check text-primary"></i>
+										<br>
+									</div>
+									<div class="mt-3" ng-if="applyctrl.selectedUnit.Aminities.includes('furnished')">Furnished&nbsp;
+										<i class="fa fa-check text-primary"></i>
+										<br> </div>
+								</div>
+								<div class='row mt-3' ng-if="applyctrl.selectedUnit.otherAminities">
+									Other amenities
+								</div>
+								<div class='row mt-3' ng-if="applyctrl.selectedUnit.otherAminities">
+									<div class="col-sm-12">
+										<div ng-bind-html="applyctrl.selectedUnit.otherAminities"></div>
+									</div>
+								</div>
+
+								<!-- <div class="form-group col-sm-1<div class="row">Property Name</div>2">
+									<input type="text" placeholder="Full name" readonly="true" ng-model=<div class="row">Property Name</div>"applyctrl.applyprop.name" required  class="form-control"/>
+								</div>
+								<div class="form-group col-sm-6">
+									<input type="text" placeholder="City" ng-model="applyctrl.applyprop.tenantlocation" required  class="form-control"/>
+								</div>
+								<div class="form-group col-sm-6">
+									<input type="text" placeholder="Phone Number" ng-model="applyctrl.applyprop.phone" required  class="form-control"/>
+								</div>
+								<div class="form-group col-sm-6">
+									<input type="text" placeholder="Job Title" ng-model="applyctrl.applyprop.jobtitle" required  class="form-control"/>
+								</div>
+								<div class="form-group col-sm-6">
+									<input type="text" placeholder="Age" ng-model="applyctrl.applyprop.age" required  ng-pattern="/^([1-9][0-9]*)$/" class="form-control"/>
+								</div>
+								<div class="form-group col-sm-12 m-t-10">
+									<textarea auto-size placeholder="Tell me a little about yourself" ng-model="applyctrl.applyprop.description"  required  class="form-control"></textarea>
+								</div> -->
+							</div>
+
+							<div class="col-sm-6">
+								<div class="row mt-3">Select a Showing Date and Time OR &nbsp;
+									<a class="text-primary" ng-click="applyctrl.openproposemodal()" ng-if="!applyctrl.proposeDiv">Propose new time</a>
+									<a class="text-primary" ng-click="applyctrl.openproposemodal()" ng-if="applyctrl.proposeDiv">Pick from available times</a>
+								</div>
+								<div class="row" ng-if="!applyctrl.proposeDiv">
+									<div class="col-sm-12">
+										<div class="row mt-3">Date</div>
+									</div>
+								</div>
+								<div class="row mt-3" ng-if="!applyctrl.proposeDiv">
+									<div class="col-sm-3 mb-3" ng-repeat="(key, value) in applyctrl.availableSlots">
+
+										<button class="btn btnoutline info btn-outline-info" ng-class="{ 'bgm-teal': applyctrl.selectedDate == key }" type="button"
+										 ng-click="applyctrl.selectSlotDate(key)">
+											<i class="fa fa-calander"></i> {{applyctrl.formatDay(key)}}
+											<br/> {{applyctrl.formatDate(key)}}
+											<!-- {{moment(key, 'MM/DD/YYYY').format('ddd')}}  -->
+											<!-- {{moment(key, 'MM/DD/YYYY').format('MMM dd')}} -->
+										</button>
+									</div>
+								</div>
+								<div class="row" ng-if="!applyctrl.proposeDiv">
+									<div class="col-sm-12">
+										<div class="row mt-3">Time</div>
+									</div>
+								</div>
+								<div class="row mt-3" ng-if="!applyctrl.proposeDiv">
+									<div class="col-sm-3 mb-3" ng-repeat="value in applyctrl.availableSlots[applyctrl.selectedDate] track by $index">
+										<button class="btn btnoutline info btn-outline-info" ng-class="{ 'bgm-teal': applyctrl.selectedTime == value }" type='button'
+										 ng-click="applyctrl.selectSlotTime(value)">
+											{{value}}
+										</button>
+									</div>
+								</div>
+								<div class="" ng-if="applyctrl.proposeDiv">
+									<div class="row mt-3">
+										Choose three times that work for you. You will be notified if any one of the times is available.
+									</div>
+
+									<div>
+										<div class="row mt-3">
+
+											<div class="col-sm-4">
+												<input type="date" class="custom-form-element" name="fromDate" min="{{applyctrl.todayDate}}" ng-model="applyctrl.proposeNewTime.date1"
+												/>
+											</div>
+											<div class="col-sm-4">
+												<select class="custom-form-element" name="more" ng-model="applyctrl.proposeNewTime.fromTime1" style="width:10vw">
+													<option value="">From</option>
+													<option value="12:00 am">12 am</option>
+													<option value="01:00 am">1 am</option>
+													<option value="02:00 am">2 am</option>
+													<option value="03:00 am">3 am</option>
+													<option value="04:00 am">4 am</option>
+													<option value="05:00 am">5 am</option>
+													<option value="06:00 am">6 am</option>
+													<option value="07:00 am">7 am</option>
+													<option value="08:00 am">8 am</option>
+													<option value="09:00 am">9 am</option>
+													<option value="10:00 am">10 am</option>
+													<option value="11:00 am">11 am</option>
+													<option value="12:00 am">12 pm</option>
+													<option value="01:00 pm">1 pm</option>
+													<option value="02:00 pm">2 pm</option>
+													<option value="03:00 pm">3 pm</option>
+													<option value="04:00 pm">4 pm</option>
+													<option value="05:00 pm">5 pm</option>
+													<option value="06:00 pm">6 pm</option>
+													<option value="07:00 pm">7 pm</option>
+													<option value="08:00 pm">8 pm</option>
+													<option value="09:00 pm">9 pm</option>
+													<option value="10:00 pm">10 pm</option>
+													<option value="11:00 pm">11 pm</option>
+												</select>
+											</div>
+											<div class="col-sm-4">
+												<select class="custom-form-element" name="more" style="width:10vw" ng-model="applyctrl.proposeNewTime.toTime1">
+													<option value="">To</option>
+													<option value="00:00 am">12 am</option>
+													<option value="01:00 am">1 am</option>
+													<option value="02:00 am">2 am</option>
+													<option value="03:00 am">3 am</option>
+													<option value="04:00 am">4 am</option>
+													<option value="05:00 am">5 am</option>
+													<option value="06:00 am">6 am</option>
+													<option value="07:00 am">7 am</option>
+													<option value="08:00 am">8 am</option>
+													<option value="09:00 am">9 am</option>
+													<option value="10:00 am">10 am</option>
+													<option value="11:00 am">11 am</option>
+													<option value="12:00 am">12 pm</option>
+													<option value="01:00 pm">1 pm</option>
+													<option value="02:00 pm">2 pm</option>
+													<option value="03:00 pm">3 pm</option>
+													<option value="04:00 pm">4 pm</option>
+													<option value="05:00 pm">5 pm</option>
+													<option value="06:00 pm">6 pm</option>
+													<option value="07:00 pm">7 pm</option>
+													<option value="08:00 pm">8 pm</option>
+													<option value="09:00 pm">9 pm</option>
+													<option value="10:00 pm">10 pm</option>
+													<option value="11:00 pm">11 pm</option>
+												</select>
+											</div>
+
+										</div>
+										<div class="row mt-3">
+											<div class="col-sm-4">
+												<input type="date" class="custom-form-element" name="fromDate" min="{{applyctrl.todayDate}}" ng-model="applyctrl.proposeNewTime.date2"
+												/>
+											</div>
+											<div class="col-sm-4">
+												<select class="custom-form-element" name="more" ng-model="applyctrl.proposeNewTime.fromTime2" style="width:10vw">
+													<option value="">From</option>
+													<option value="12:00 am">12 am</option>
+													<option value="01:00 am">1 am</option>
+													<option value="02:00 am">2 am</option>
+													<option value="03:00 am">3 am</option>
+													<option value="04:00 am">4 am</option>
+													<option value="05:00 am">5 am</option>
+													<option value="06:00 am">6 am</option>
+													<option value="07:00 am">7 am</option>
+													<option value="08:00 am">8 am</option>
+													<option value="09:00 am">9 am</option>
+													<option value="10:00 am">10 am</option>
+													<option value="11:00 am">11 am</option>
+													<option value="12:00 am">12 pm</option>
+													<option value="01:00 pm">1 pm</option>
+													<option value="02:00 pm">2 pm</option>
+													<option value="03:00 pm">3 pm</option>
+													<option value="04:00 pm">4 pm</option>
+													<option value="05:00 pm">5 pm</option>
+													<option value="06:00 pm">6 pm</option>
+													<option value="07:00 pm">7 pm</option>
+													<option value="08:00 pm">8 pm</option>
+													<option value="09:00 pm">9 pm</option>
+													<option value="10:00 pm">10 pm</option>
+													<option value="11:00 pm">11 pm</option>
+												</select>
+											</div>
+											<div class="col-sm-4">
+												<select class="custom-form-element" name="more" style="width:10vw" ng-model="applyctrl.proposeNewTime.toTime2">
+													<option value="">To</option>
+													<option value="00:00 am">12 am</option>
+													<option value="01:00 am">1 am</option>
+													<option value="02:00 am">2 am</option>
+													<option value="03:00 am">3 am</option>
+													<option value="04:00 am">4 am</option>
+													<option value="05:00 am">5 am</option>
+													<option value="06:00 am">6 am</option>
+													<option value="07:00 am">7 am</option>
+													<option value="08:00 am">8 am</option>
+													<option value="09:00 am">9 am</option>
+													<option value="10:00 am">10 am</option>
+													<option value="11:00 am">11 am</option>
+													<option value="12:00 am">12 pm</option>
+													<option value="01:00 pm">1 pm</option>
+													<option value="02:00 pm">2 pm</option>
+													<option value="03:00 pm">3 pm</option>
+													<option value="04:00 pm">4 pm</option>
+													<option value="05:00 pm">5 pm</option>
+													<option value="06:00 pm">6 pm</option>
+													<option value="07:00 pm">7 pm</option>
+													<option value="08:00 pm">8 pm</option>
+													<option value="09:00 pm">9 pm</option>
+													<option value="10:00 pm">10 pm</option>
+													<option value="11:00 pm">11 pm</option>
+												</select>
+											</div>
+
+
+										</div>
+										<div class="row mt-3">
+											<div class="col-sm-4">
+												<input type="date" class="custom-form-element" name="fromDate" min="{{applyctrl.todayDate}}" ng-model="applyctrl.proposeNewTime.date3"
+												/>
+											</div>
+											<div class="col-sm-4">
+												<select class="custom-form-element" name="more" ng-model="applyctrl.proposeNewTime.fromTime3" style="width:10vw">
+													<option value="">From</option>
+													<option value="12:00 am">12 am</option>
+													<option value="01:00 am">1 am</option>
+													<option value="02:00 am">2 am</option>
+													<option value="03:00 am">3 am</option>
+													<option value="04:00 am">4 am</option>
+													<option value="05:00 am">5 am</option>
+													<option value="06:00 am">6 am</option>
+													<option value="07:00 am">7 am</option>
+													<option value="08:00 am">8 am</option>
+													<option value="09:00 am">9 am</option>
+													<option value="10:00 am">10 am</option>
+													<option value="11:00 am">11 am</option>
+													<option value="12:00 am">12 pm</option>
+													<option value="01:00 pm">1 pm</option>
+													<option value="02:00 pm">2 pm</option>
+													<option value="03:00 pm">3 pm</option>
+													<option value="04:00 pm">4 pm</option>
+													<option value="05:00 pm">5 pm</option>
+													<option value="06:00 pm">6 pm</option>
+													<option value="07:00 pm">7 pm</option>
+													<option value="08:00 pm">8 pm</option>
+													<option value="09:00 pm">9 pm</option>
+													<option value="10:00 pm">10 pm</option>
+													<option value="11:00 pm">11 pm</option>
+												</select>
+											</div>
+											<div class="col-sm-4">
+												<select class="custom-form-element" name="more" style="width:10vw" ng-model="applyctrl.proposeNewTime.toTime3">
+													<option value="">To</option>
+													<option value="00:00 am">12 am</option>
+													<option value="01:00 am">1 am</option>
+													<option value="02:00 am">2 am</option>
+													<option value="03:00 am">3 am</option>
+													<option value="04:00 am">4 am</option>
+													<option value="05:00 am">5 am</option>
+													<option value="06:00 am">6 am</option>
+													<option value="07:00 am">7 am</option>
+													<option value="08:00 am">8 am</option>
+													<option value="09:00 am">9 am</option>
+													<option value="10:00 am">10 am</option>
+													<option value="11:00 am">11 am</option>
+													<option value="12:00 am">12 pm</option>
+													<option value="01:00 pm">1 pm</option>
+													<option value="02:00 pm">2 pm</option>
+													<option value="03:00 pm">3 pm</option>
+													<option value="04:00 pm">4 pm</option>
+													<option value="05:00 pm">5 pm</option>
+													<option value="06:00 pm">6 pm</option>
+													<option value="07:00 pm">7 pm</option>
+													<option value="08:00 pm">8 pm</option>
+													<option value="09:00 pm">9 pm</option>
+													<option value="10:00 pm">10 pm</option>
+													<option value="11:00 pm">11 pm</option>
+												</select>
+											</div>
+
+
+										</div>
+									</div>
+								</div>
+
+								<div>
+									<div class="row text-center mt-5" ng-hide="applyctrl.userData && applyctrl.userData.firstname">
+										Already have an account?&nbsp;&nbsp;
+										<a class="text-primary" ng-click="applyctrl.openSignInmodel()">Sign in</a>
+									</div>
+
+									<div class="row mt-4">
+										<div class="col-sm-6 mb-3">
+											<input type="text" placeholder="First Name" id="firstname" name="firstname" ng-model="applyctrl.registerUser.firstName" class="form-control original-form-control"
+											 required/>
+										</div>
+										<div class="col-sm-6 mb-3">
+											<input type="text" placeholder="Last Name" id="lastname" name="lastname" ng-model="applyctrl.registerUser.lastName" class="form-control original-form-control"
+											 required/>
+										</div>
+										<div class="col-sm-6 mb-3">
+											<input type="email" ng-disabled="userData" placeholder="Email" id="email" name="email" ng-model="applyctrl.registerUser.email"
+											 class="form-control original-form-control" required/>
+										</div>
+										<div class="col-sm-6 mb-3">
+											<input type="text" placeholder="Phone" id="phone" name="phone" ng-model="applyctrl.registerUser.phone" class="form-control original-form-control"
+											 ui-jq="inputmask" ui-options="'999-999-9999', { 'placeholder': '___-___-____' }" ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/"
+											/>
+										</div>
+									</div>
+								</div>
+								<ng-form role="form" name="scheduleForm" novalidate>
+									<div class="row mt-3 p-20" style="border:1px solid #c2cad8">
+										<div class="col-sm-12 mt-3" ng-if="ques.isChecked" ng-repeat="ques in applyctrl.landlordData.screeningQuestions">
+											<input type='text' ng-if="ques.id == 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' ng-model="applyctrl.preScreeningAns[ques.id]"
+											 class="form-control original-form-control" placeholder="{{ques.label}}" onfocus="(this.type='date')" onblur="(this.type='text')"
+											 id="date" required/>
+											<input type="text" ng-if="ques.id != 'ZGJQ60'" id="{{ques.id}}" name='{{ques.id}}' placeholder="{{ques.label}}" ng-model="applyctrl.preScreeningAns[ques.id]"
+											 class="form-control original-form-control" required/>
+										</div>
+									</div>
+									<div class="row mt-3 p-20">
+										<div class="col-sm-12 mt-3 text-center">
+											<span>By scheduling you agree to
+												<a href='https://vcancy.com/tos_privacypolicy/' target='_blank'>Terms of Use</a> and
+												<a href='https://vcancy.com/tos_privacypolicy/' target='_blank'>Privacy Policy</a>
+											</span>
+										</div>
+										<div class="col-sm-12 mt-3 text-center">
+											<button class="btn bgm-teal btn-sm btn-round" ng-disabled="scheduleForm.$invalid || scheduleForm.$prestine">
+												Schedule Now
+											</button>
+										</div>
+									</div>
+								</ng-form>
+							</div>
+							<!-- <div class="table-responsive">
+									<table class="table">
+										<thead >
+											<tr>
+												<th>Date</th>
+												<th>Time</th>
+												<th>Select</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="(key, x) in applyctrl.applyprop.availableslots" >	
+												<td>{{x.date | amDateFormat:'dddd, MMMM Do YYYY'}}</td>
+												<td>{{x.fromtime | amDateFormat:'h:mm A'}} - {{x.to| amDateFormat:'h:mm A'}}</td>
+												<td>
+													<label class="radio">
+														<input type="radio" required  ng-model="applyctrl.applyprop.datetimeslot" ng-value="{{key}}"  name="datetimeslot" value="{{key}}">
+														<i class="input-helper"></i>											
+													</label>
+												</td>
+											</tr>
+										</tbody>
+										
+									</table>							
+								</div>							 -->
+						</div>
+						<div class="clearfix"></div>
+						<div class="clearfix"></div>
+				</div>
+				</form>
+			</div>
+		</div>
+		</div>
+	</section>
+</section>
+
+<!-- <footer id="footer" data-ng-include="'views/template/footer.html'"></footer> -->
+<script type="text/javascript">
+	Waves.init();
+	Waves.attach('.btn');
+</script>
+
+
+<style>
+	input.ng-touched.ng-invalid {
+		border-color: red !important;
+	}
+
+	input.ng-touched.ng-valid {
+		border-color: green !important;
+	}
+</style>
