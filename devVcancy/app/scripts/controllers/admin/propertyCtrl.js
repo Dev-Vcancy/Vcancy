@@ -63,7 +63,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
 
           
         vm.getPropertiesListing = function () {
-            console.log(vm.selectedUser);
+            //console.log(vm.selectedUser);
            landlordID = vm.selectedUser;
            localStorage.setItem('adminLandlordId', landlordID);
            vm.getProperties(vm.selectedUser);
@@ -1107,7 +1107,7 @@ vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', 
         // View Property
         vm.getProperties = function (landlordID) {
             var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
-              console.log(snapshot.val())
+         //     console.log(snapshot.val())
                 $scope.$apply(function () {
                     vm.success = 0;
                     if (snapshot.val()) {

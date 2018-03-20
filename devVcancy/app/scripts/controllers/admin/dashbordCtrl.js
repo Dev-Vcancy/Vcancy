@@ -51,7 +51,7 @@ vcancyApp
 
             firebase.database().ref('applyprop/').once("value", function (snapvalue) {
                 var scheduled = snapvalue.val();
-                console.log(scheduled)
+               // console.log(scheduled)
                 $scope.$apply(function () {
                     vm.totalShowingScheduled = _.reduce(scheduled, function (pv, cv, ci) {
                         if (cv.schedulestatus == "scheduled" || cv.schedulestatus == "submitted") {
