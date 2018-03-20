@@ -1,21 +1,132 @@
 <header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
+<section id="main" class="profile-page-both">
 
-<section id="main">
-    <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
-    <section id="content">
-
+    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+    <section class="new_dashbord" id="content">
         <div class="container">
-            <div class="block-header text-center">
-                <h2>Landlord's Profile</h2>
-            </div>
+                <div class="page-content-wrapper">
+                     <div class="page-content" style="min-height: 1434px;">
+                         <h1 class="page-title">  Profile and Settings </h1>
+                         <div class="profile">
+                             <div class="tabbable-line tabbable-full-width">
 
-            <div class="card app_form card-custom">
+                                    <div role="tabpanel">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs" role="tablist"  ng-init="tab = 1">
+                                            <li role="presentation" class="active">
+                                                <a href ng-click="tab = 1" data-toggle="tab" aria-expanded="true" >Overview</a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true" >Account</a>
+                                            </li>
+                                        </ul>
 
-                <div class="card-body card-padding clearfix ">
-                    <div class="printview">
-                        <div class="card-body-inner">
-                            <form class="" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)" role="form" novalidate >
-                                <h3 class="m-b-20 m-t-10 fw">Personal</h3>
+                                        <!-- Tab panes -->
+                                        <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane active" id="home" ng-show="tab === 1">    <div class="row">
+                                                <div class="col-md-3">
+                                                    <ul class="list-unstyled profile-nav">
+                                                        <li>
+                                                            <img src="../assets/pages/media/profile/people19.png" class="img-responsive pic-bordered" alt="">
+                                                            
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;"> Applications <span> 0 </span>  </a> 
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;"> Property
+                                                                <span> 0 </span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;"> Units 
+                                                             <span> 0</span> </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;"> Units Vacants
+                                                              <span> 0</span> </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;"> Total Users
+                                                              <span id="totaluser"> {{ldProfilectrl.totaluser}}</span> </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <div class="row">
+                                                    <div class="col-md-12 profile-info">
+                                                    <h1 class="font-green sbold uppercase">{{ldProfilectrl.companyname}} </h1>
+                                                    <div class="portlet sale-summary">
+                                                        <div class="portlet-title">
+                                                            <div class="caption font-red sbold"> Profile Details</div>
+                                                            
+                                                        </div>
+                                                        <div class="portlet-body">
+                                                            <ul class="list-unstyled">
+                                                                <li>
+                                                                    <span class="sale-info"> Firsname
+                                                                        <i class="fa fa-img-up"></i>
+                                                                    </span>
+                                                                    <span class="sale-num"> {{ldProfilectrl.firstname}} </span>
+                                                                </li>
+                                                                <li>
+                                                                    <span class="sale-info"> Last Name
+                                                                        <i class="fa fa-img-down"></i>
+                                                                    </span>
+                                                                    <span class="sale-num"> {{ldProfilectrl.lastname}} </span>
+                                                                </li>
+                                                                <li>
+                                                                    <span class="sale-info"> Email </span>
+                                                                    <span class="sale-num"> {{ldProfilectrl.email}}  </span>
+                                                                </li> 
+                                                                <li>
+                                                                    <span class="sale-info"> Contact </span>
+                                                                    <span class="sale-num"> {{ldProfilectrl.contact}}  </span>
+                                                                </li> 
+                                                                <li>
+                                                                    <span class="sale-info"> Address </span>
+                                                                    <span class="sale-num"> {{ldProfilectrl.address}}  </span>
+                                                                </li> 
+                                                               <li>
+                                                                    <span class="sale-info"> Company Name </span>
+                                                                    <span class="sale-num"> {{ldProfilectrl.companyname}}  </span>
+                                                                </li> 
+                                                               
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                     <div class="pull-right">
+                                                        <a href="https://vcancy.ca/faq/" target="_blank" style="text-decoration: underline;
+    font-size: 18px;">Delete Account</a>
+                                                     </div>
+                                                </div>
+                                                </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="tab" ng-show="tab === 2">
+
+                                            <div class="tabordion">
+                                              <section id="section1">
+                                                <input type="radio" name="sections" id="option1" checked>
+                                                <label for="option1" class="tablbl"> User Profile </label>
+                                                <div class="tbgt">
+                                               
+                                                  <div id="tab_1-1" class="tab-pane active">
+                                                    <h3 class="m-b-20 m-t-10 fw">Personal</h3>
+                                                        <div class="clearfix"></div>
+                                                    <div ng-if= "ldProfilectrl.success != ''" class="alert alert-success">
+                                                      <strong>Success!</strong> User Updated Successfully
+                                                    </div>
+
+                                                    <div ng-if= "ldProfilectrl.error != ''" class="alert alert-danger">
+                                                          <strong>Info!</strong> User can't update. please try again.
+                                                        </div>
+                                                     <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)" role="form"  unsaved-warning-form>
+                                                      
+                                
                                 <div class="col-xs-12 col-sm-6">
                                     <div ng-class="{ 'has-error' : profileForm.firstName.$invalid && !profileForm.firstName.$pristine }" class="form-group fg-float m-t-30">
                                         <div class="fg-line fg-toggled ">
@@ -35,7 +146,7 @@
                                 <div class="col-xs-12 col-sm-6">
                                     <div ng-class="{ 'has-error' : profileForm.email.$invalid && !profileForm.email.$pristine }" class="form-group fg-float m-t-30">
                                         <div class="fg-line fg-toggled ">
-                                            <input required name="email" ng-model="ldProfilectrl.email" type="email" class="form-control w-100" id="" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" placeholder="">
+                                            <input required name="email" ng-model="ldProfilectrl.email" type="email" class="form-control w-100" id="" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" placeholder="" required>
                                             <label class="fg-label">Email<span class="mandatory">*</span>:</label>
                                         </div>
                                     </div>
@@ -51,69 +162,249 @@
                                 <div class="col-xs-12 col-sm-12">
                                     <div  class="form-group fg-float m-t-30">
                                         <div class="fg-line fg-toggled ">
+                                            <input required name="companyname"  ng-model="ldProfilectrl.companyname"  type="text" class="form-control w-100 phone" id="" placeholder="">
+                                            <label class="fg-label">Company Name:</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12">
+                                    <div  class="form-group fg-float m-t-30">
+                                        <div class="fg-line fg-toggled ">
                                             <input required name="address"  ng-model="ldProfilectrl.address"  type="text" class="form-control w-100 phone" id="" placeholder="">
                                             <label class="fg-label">Address:</label>
                                         </div>
                                     </div>
                                 </div>
+                                 
                                 <div class="col-xs-12 col-sm-12 text-right">
 
                                     <button type="submit" class="btn btn-primary btn-md m-t-10 m-l-10 waves-effect">Save</button>
                                 </div>
 
                             </form>
-                            <h3 class="m-b-20 m-t-10 fw">Security</h3>
-                            <form class="" ng-submit="ldProfilectrl.changepasswordSubmit(ldProfilectrl.passworduser)" name="pwdForm" enctype="multipart/form-data" role="form" novalidate >
-                                
-                            <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
-                                        <div class="fg-line">
-                                                <div class='regmsgvalidate' ng-if="$root.error != ''">
-                                                        <div class="alert alert-danger alert-dismissable fade in">       {{$root.error}}
-                                                        </div>
-                                                </div> 
-                                                <div class='regmsgvalidate' ng-if="$root.success != ''">
-                                                        <div class="alert alert-success alert-dismissable fade in">{{$root.success}}
-                                                        </div>
                                                 </div>
-                                        </div>
-                                    </div>
-                                <div class="col-xs-12 pwd-wrap p-b-30">
-                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
-                                        <div class="fg-line">
-                                            <input required type="password" class="form-control w-100 phone" id="" placeholder="" ng-model="ldProfilectrl.passworduser.password" required>
-                                            <label class="fg-label">Old Password<span class="mandatory" >*</span>:</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
-                                        <div class="fg-line">
-                                            <input required type="password" ng-model="ldProfilectrl.passworduser.npassword" class="form-control w-100 phone" id="" placeholder="" required>
-                                            <label class="fg-label">New Password<span class="mandatory" >*</span>:</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
-                                        <div class="fg-line">
-                                            <input required type="password" class="form-control w-100 phone" id="" placeholder="" ng-model="ldProfilectrl.passworduser.ncpassword" required>
-                                            <label class="fg-label">Confirm Password<span class="mandatory" >*</span>:</label>
-                                        </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary pull-right btn-md m-t-10 waves-effect">Change Password</button>
-                                </div>
+                                                </div>
+                                              </section>
+                                              <section id="section2">
+                                                <input type="radio" name="sections" id="option2">
+                                                <label for="option2" class="tablbl">  Company Logo </label>
+                                                 <div class="tbgt">
+                                                  <div id="tab_2-2" class="tab-pane">
+                                                   
+                                                    <form  role="form" enctype="multipart/form-data" ng-submit="ldProfilectrl.profilestore()" role="form">
+                                                    <div ng-if= "$root.success != '' " class="alert alert-success">
+                                                      <strong>Success!</strong> User Update Suceesfully
+                                                    </div>
 
-                            </form>
-                        </div>
-                    </div>
+                                                    <div ng-if= "$root.error != ''" class="alert alert-danger">
+                                                          {{ldProfilectrl.errormessage}}
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                                                    <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> </div>
+                                                                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                                                <div>
+                                                                    <span class="btn default btn-file">
+                                                                        <span class="fileinput-new"> Select image </span>
+                                                                        <span class="fileinput-exists"> Change </span>
+                                                                        <input type="hidden" ng-model="ldProfilectrl.appfiles" name="appfiles" value="{{ldProfilectrl.appfiles}}" id="appfiles" >
+                                            <input type="hidden" ng-model="ldProfilectrl.filename" name="filename" value="{{ldProfilectrl.filename}}" id="filename" >
+                                                                        <input type="file" name="file" accept="image/png, image/jpeg, application/pdf" id="uploadfile"> </span>
+                                                                    <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="margin-top-10">
+                                                            <button type="submit" name="profileadd" class="btn green"> Submit </button>
+                                                            
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                </div>
+                                              </section>
+                                              <section id="section3">
+                                                <input type="radio" name="sections" id="option3">
+                                                <label for="option3" class="tablbl"> Change Password </label>
+                                                 <div class="tbgt">
+                                                    <div id="tab_3-3" class="tab-pane">
+                                                    <h3 class="m-b-20 m-t-10 fw">Change Password</h3>
+                                                    <form class="changpass_form_block" ng-submit="ldProfilectrl.changepasswordSubmit(ldProfilectrl.passworduser)" name="pwdForm" enctype="multipart/form-data" role="form" novalidate unsaved-warning-form>
+
+                                                    <div class="col-xs-12 col-sm-6 form-group fg-float errorbox fade in">
+                                                    <div class="fg-line">
+                                                    <div class='regmsgvalidate' ng-if="$root.error != ''">
+                                                    <div class="alert alert-danger alert-dismissable fade in">       {{$root.error}}
+                                                    </div>
+                                                    </div> 
+                                                    <div class='regmsgvalidate' ng-if="$root.success != ''">
+                                                    <div class="alert alert-success alert-dismissable fade in">{{$root.success}}
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 pwd-wrap p-b-30">
+                                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
+                                                    <div class="fg-line">
+                                                    <input required type="password" class="form-control w-100 phone" id="" placeholder="" ng-model="ldProfilectrl.passworduser.password" required>
+                                                    <label class="fg-label">Old Password<span class="mandatory" >*</span>:</label>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
+                                                    <div class="fg-line">
+                                                    <input required type="password" ng-model="ldProfilectrl.passworduser.npassword" class="form-control w-100 phone" id="" placeholder="" required>
+                                                    <label class="fg-label">New Password<span class="mandatory" >*</span>:</label>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
+                                                    <div class="fg-line">
+                                                    <input required type="password" class="form-control w-100 phone" id="" placeholder="" ng-model="ldProfilectrl.passworduser.ncpassword" required>
+                                                    <label class="fg-label">Confirm Password<span class="mandatory" >*</span>:</label>
+                                                    </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary pull-right btn-md m-t-10 waves-effect">Change Password</button>
+                                                    </div>
+
+                                                    </form>
+                                                </div>
+                                              </section>
+                                            <section id="section4">
+                                                <input type="radio" name="sections" id="option4">
+                                                <label for="option4" class="tablbl"> Notification Settings</label>
+                                                 <div class="tbgt">
+                                                    <div id="tab_3-3" class="tab-pane">
+                                                    <h3 class="m-b-20 m-t-10 fw">Notification</h3>
+                                                    <form class="notification_form_block" ng-submit="ldProfilectrl.notificationSubmit(ldProfilectrl.notificationuser)" name="notification"  role="form" method="post">
+
+                                                    <div class="col-xs-12 col-sm-6 form-group fg-float errorbox">
+                                                    <div class="fg-line">
+                                                    <div class='regmsgvalidate' ng-if="$root.error != ''">
+                                                    <div class="alert alert-danger alert-dismissable fade in">       {{$root.error}}
+                                                    </div>
+                                                    </div> 
+                                                    <div class='regmsgvalidate' ng-if="$root.success != ''">
+                                                    <div class="alert alert-success alert-dismissable fade in">{{$root.success}}
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-xs-12 pwd-wrap p-b-30">
+                                                    <div class="col-xs-12 col-sm-4 col-md-12 col-lg-12">
+                                                        <h4>Send me an email when</h4>
+                                                    <div class="mt-checkbox-list">
+
+                                                        <label class="mt-checkbox mt-checkbox-outline">
+                                                            <input type="checkbox" ng-model="ldProfilectrl.notificationuser.isadded" name="isadded" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.isadded ==   1"> A new user is added
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-checkbox mt-checkbox-outline">
+                                                            <input type="checkbox" ng-model="ldProfilectrl.notificationuser.isshowingtime" name="isshowingtime" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.isshowingtime ==   1"> A renter requests a different showing time
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-checkbox mt-checkbox-outline">
+                                                            <input type="checkbox" ng-model="ldProfilectrl.notificationuser.isrentalsubmit" name="isrentalsubmit" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.isrentalsubmit ==   1">A rental application is submitted
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-checkbox mt-checkbox-outline">
+                                                            <input type="checkbox" ng-model="ldProfilectrl.notificationuser.iscreditcheck" name="iscreditcheck" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.iscreditcheck ==   1"> A credit check report is generated
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-checkbox mt-checkbox-outline">
+                                                            <input type="checkbox" ng-model="ldProfilectrl.notificationuser.iscriminalreport" name="iscriminalreport" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.iscriminalreport ==   1"> A criminal record check report is generated
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-checkbox mt-checkbox-outline">
+                                                            <input type="checkbox" ng-model="ldProfilectrl.notificationuser.iscancelshow" name="iscancelshow" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.iscancelshow ==   1">A renter cancels a showing
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-checkbox mt-checkbox-outline">
+                                                            <input type="checkbox" ng-model="ldProfilectrl.notificationuser.ispropertydelete" name="ispropertydelete" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.ispropertydelete ==   1">A property is deleted
+                                                            <span></span>
+                                                        </label>
+                                                        <label class="mt-checkbox mt-checkbox-outline">
+                                                            <input type="checkbox" ng-model="ldProfilectrl.notificationuser.isexpiresoon" name="isexpiresoon" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.isexpiresoon ==   1">A unit leae is expiring soon
+                                                            <span></span>
+                                                        </label>
+                                                        
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary pull-right btn-md m-t-10 waves-effect">Save Settings</button>
+                                                    </div>
+                                                   
+                                                    
+                                                    </div>
+
+                                                    </form>
+                                                </div>
+                                              </section>
+                                               <section id="section4">
+                                                <input type="radio" name="sections" id="option5">
+                                                <label for="option5" class="tablbl"> Add User </label>
+                                                 <div class="tbgt">
+                                                    <div id="tab_3-3" class="tab-pane">
+                                                    <h3 class="m-b-20 m-t-10 fw">Add New User</h3>
+                                                    <form class="changpass_form_block" ng-submit="ldProfilectrl.newuserSubmit(ldProfilectrl.newuser)" name="pwdForm" enctype="multipart/form-data" role="form"  unsaved-warning-form>
+
+                                                    <div class="col-xs-12 col-sm-6 form-group fg-float errorbox fade in">
+                                                    <div class="fg-line">
+                                                    <div class='regmsgvalidate' ng-if="$root.error != ''">
+                                                    <div class="alert alert-danger alert-dismissable fade in">       {{$root.error}}
+                                                    </div>
+                                                    </div> 
+                                                    <div class='regmsgvalidate' ng-if="$root.success != ''">
+                                                    <div class="alert alert-success alert-dismissable fade in">             {{$root.success}}
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div class="col-xs-12 pwd-wrap p-b-30">
+                                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
+                                                    <div class="fg-line">
+                                                    <input required type="text" class="form-control w-100 phone" id="" placeholder="" ng-model="ldProfilectrl.newuser.firstname" required>
+                                                    <label class="fg-label">First Name<span class="mandatory" >*</span>:</label>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
+                                                    <div class="fg-line">
+                                                    <input required type="text" ng-model="ldProfilectrl.newuser.lastname" class="form-control w-100 phone" id="" placeholder="" required>
+                                                    <label class="fg-label">Last Name<span class="mandatory" >*</span>:</label>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 form-group fg-float m-t-30">
+                                                    <div class="fg-line">
+                                                    <input required type="email" class="form-control w-100 phone" id="" placeholder="" ng-model="ldProfilectrl.newuser.email" required>
+                                                    <label class="fg-label">Email<span class="mandatory" >*</span>:</label>
+                                                    </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary pull-right btn-md m-t-10 waves-effect">Add User</button>
+                                                    </div>
+
+                                                    </form>
+                                                </div>
+                                              </section>
+                                            </div>
+
+
+                                            
+
+                                        </div>
+                                        </div>
+                                    </div>
+
+                             </div>
+                         </div>
+                     </div>
                 </div>
-            </div>
-
         </div>
     </section>
 </section>
+
 
 <footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
 <script type="text/javascript">
     Waves.init();
     Waves.attach('.btn');
-</script>
-<script>
-    // $(".phone").mask("999-999-9999");
 </script>

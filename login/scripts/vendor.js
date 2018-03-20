@@ -9159,16 +9159,6 @@ angular.module("template/typeahead/typeahead-popup.html", []).run(["$templateCac
 !function(a){"use strict";angular.module("firebase.utils",[]),angular.module("firebase.config",[]),angular.module("firebase.auth",["firebase.utils"]),angular.module("firebase.database",["firebase.utils"]),angular.module("firebase.storage",["firebase.utils"]),angular.module("firebase",["firebase.utils","firebase.config","firebase.auth","firebase.database","firebase.storage"]).value("Firebase",a.firebase).value("firebase",a.firebase)}(window),function(){"use strict";var a;angular.module("firebase.auth").factory("$firebaseAuth",["$q","$firebaseUtils",function(b,c){return function(d){d=d||firebase.auth();var e=new a(b,c,d);return e.construct()}}]),a=function(a,b,c){if(this._q=a,this._utils=b,"string"==typeof c)throw new Error("The $firebaseAuth service accepts a Firebase auth instance (or nothing) instead of a URL.");if("undefined"!=typeof c.ref)throw new Error("The $firebaseAuth service accepts a Firebase auth instance (or nothing) instead of a Database reference.");this._auth=c,this._initialAuthResolver=this._initAuthResolver()},a.prototype={construct:function(){return this._object={$signInWithCustomToken:this.signInWithCustomToken.bind(this),$signInAnonymously:this.signInAnonymously.bind(this),$signInWithEmailAndPassword:this.signInWithEmailAndPassword.bind(this),$signInWithPopup:this.signInWithPopup.bind(this),$signInWithRedirect:this.signInWithRedirect.bind(this),$signInWithCredential:this.signInWithCredential.bind(this),$signOut:this.signOut.bind(this),$onAuthStateChanged:this.onAuthStateChanged.bind(this),$getAuth:this.getAuth.bind(this),$requireSignIn:this.requireSignIn.bind(this),$waitForSignIn:this.waitForSignIn.bind(this),$createUserWithEmailAndPassword:this.createUserWithEmailAndPassword.bind(this),$updatePassword:this.updatePassword.bind(this),$updateEmail:this.updateEmail.bind(this),$deleteUser:this.deleteUser.bind(this),$sendPasswordResetEmail:this.sendPasswordResetEmail.bind(this),_:this},this._object},signInWithCustomToken:function(a){return this._q.when(this._auth.signInWithCustomToken(a))},signInAnonymously:function(){return this._q.when(this._auth.signInAnonymously())},signInWithEmailAndPassword:function(a,b){return this._q.when(this._auth.signInWithEmailAndPassword(a,b))},signInWithPopup:function(a){return this._q.when(this._auth.signInWithPopup(this._getProvider(a)))},signInWithRedirect:function(a){return this._q.when(this._auth.signInWithRedirect(this._getProvider(a)))},signInWithCredential:function(a){return this._q.when(this._auth.signInWithCredential(a))},signOut:function(){return null!==this.getAuth()?this._q.when(this._auth.signOut()):this._q.when()},onAuthStateChanged:function(a,b){var c=this._utils.debounce(a,b,0),d=this._auth.onAuthStateChanged(c);return d},getAuth:function(){return this._auth.currentUser},_routerMethodOnAuthPromise:function(a,b){var c=this;return this._initialAuthResolver.then(function(){var d=c.getAuth(),e=null;return e=a&&null===d?c._q.reject("AUTH_REQUIRED"):b&&!d.emailVerified?c._q.reject("EMAIL_VERIFICATION_REQUIRED"):c._q.when(d)})},_getProvider:function(a){var b;if("string"==typeof a){var c=a.slice(0,1).toUpperCase()+a.slice(1);b=new firebase.auth[c+"AuthProvider"]}else b=a;return b},_initAuthResolver:function(){var a=this._auth;return this._q(function(b){function c(){d(),b()}var d;d=a.onAuthStateChanged(c)})},requireSignIn:function(a){return this._routerMethodOnAuthPromise(!0,a)},waitForSignIn:function(){return this._routerMethodOnAuthPromise(!1,!1)},createUserWithEmailAndPassword:function(a,b){return this._q.when(this._auth.createUserWithEmailAndPassword(a,b))},updatePassword:function(a){var b=this.getAuth();return b?this._q.when(b.updatePassword(a)):this._q.reject("Cannot update password since there is no logged in user.")},updateEmail:function(a){var b=this.getAuth();return b?this._q.when(b.updateEmail(a)):this._q.reject("Cannot update email since there is no logged in user.")},deleteUser:function(){var a=this.getAuth();return a?this._q.when(a.delete()):this._q.reject("Cannot delete user since there is no logged in user.")},sendPasswordResetEmail:function(a){return this._q.when(this._auth.sendPasswordResetEmail(a))}}}(),function(){"use strict";function a(a){return a()}a.$inject=["$firebaseAuth"],angular.module("firebase.auth").factory("$firebaseAuthService",a)}(),function(){"use strict";angular.module("firebase.database").factory("$firebaseArray",["$log","$firebaseUtils","$q",function(a,b,c){function d(a){if(!(this instanceof d))return new d(a);var c=this;return this._observers=[],this.$list=[],this._ref=a,this._sync=new e(this),b.assertValidRef(a,"Must pass a valid Firebase reference to $firebaseArray (not a string or URL)"),this._indexCache={},b.getPublicMethods(c,function(a,b){c.$list[b]=a.bind(c)}),this._sync.init(this.$list),this.$list.$resolved=!1,this.$loaded().finally(function(){c.$list.$resolved=!0}),this.$list}function e(d){function e(a){if(!r.isDestroyed){r.isDestroyed=!0;var b=d.$ref();b.off("child_added",j),b.off("child_moved",l),b.off("child_changed",k),b.off("child_removed",m),d=null,q(a||"destroyed")}}function f(b){var c=d.$ref();c.on("child_added",j,p),c.on("child_moved",l,p),c.on("child_changed",k,p),c.on("child_removed",m,p),c.once("value",function(c){angular.isArray(c.val())&&a.warn("Storing data using array indices in Firebase can result in unexpected behavior. See https://firebase.google.com/docs/database/web/structure-data for more information."),q(null,b)},q)}function g(a,b){o||(o=!0,a?i.reject(a):i.resolve(b))}function h(a,b){var d=c.when(a);d.then(function(a){a&&b(a)}),o||n.push(d)}var i=c.defer(),j=function(a,b){d&&h(d.$$added(a,b),function(a){d.$$process("child_added",a,b)})},k=function(a){if(d){var b=d.$getRecord(a.key);b&&h(d.$$updated(a),function(){d.$$process("child_changed",b)})}},l=function(a,b){if(d){var c=d.$getRecord(a.key);c&&h(d.$$moved(a,b),function(){d.$$process("child_moved",c,b)})}},m=function(a){if(d){var b=d.$getRecord(a.key);b&&h(d.$$removed(a),function(){d.$$process("child_removed",b)})}},n=[],o=!1,p=b.batch(function(a){g(a),d&&d.$$error(a)}),q=b.batch(g),r={destroy:e,isDestroyed:!1,init:f,ready:function(){return i.promise.then(function(a){return c.all(n).then(function(){return a})})}};return r}return d.prototype={$add:function(a){this._assertNotDestroyed("$add");var d,e=this,f=c.defer(),g=this.$ref().ref.push();try{d=b.toJSON(a)}catch(a){f.reject(a)}return"undefined"!=typeof d&&b.doSet(g,d).then(function(){e.$$notify("child_added",g.key),f.resolve(g)}).catch(f.reject),f.promise},$save:function(a){this._assertNotDestroyed("$save");var d=this,e=d._resolveItem(a),f=d.$keyAt(e),g=c.defer();if(null!==f){var h,i=d.$ref().ref.child(f);try{h=b.toJSON(e)}catch(a){g.reject(a)}"undefined"!=typeof h&&b.doSet(i,h).then(function(){d.$$notify("child_changed",f),g.resolve(i)}).catch(g.reject)}else g.reject("Invalid record; could not determine key for "+a);return g.promise},$remove:function(a){this._assertNotDestroyed("$remove");var d=this.$keyAt(a);if(null!==d){var e=this.$ref().ref.child(d);return b.doRemove(e).then(function(){return e})}return c.reject("Invalid record; could not determine key for "+a)},$keyAt:function(a){var b=this._resolveItem(a);return this.$$getKey(b)},$indexFor:function(a){var b=this,c=b._indexCache;if(!c.hasOwnProperty(a)||b.$keyAt(c[a])!==a){var d=b.$list.findIndex(function(c){return b.$$getKey(c)===a});d!==-1&&(c[a]=d)}return c.hasOwnProperty(a)?c[a]:-1},$loaded:function(a,b){var c=this._sync.ready();return arguments.length&&(c=c.then.call(c,a,b)),c},$ref:function(){return this._ref},$watch:function(a,b){var c=this._observers;return c.push([a,b]),function(){var d=c.findIndex(function(c){return c[0]===a&&c[1]===b});d>-1&&c.splice(d,1)}},$destroy:function(a){this._isDestroyed||(this._isDestroyed=!0,this._sync.destroy(a),this.$list.length=0)},$getRecord:function(a){var b=this.$indexFor(a);return b>-1?this.$list[b]:null},$$added:function(a){var c=this.$indexFor(a.key);if(c===-1){var d=a.val();return angular.isObject(d)||(d={$value:d}),d.$id=a.key,d.$priority=a.getPriority(),b.applyDefaults(d,this.$$defaults),d}return!1},$$removed:function(a){return this.$indexFor(a.key)>-1},$$updated:function(a){var c=!1,d=this.$getRecord(a.key);return angular.isObject(d)&&(c=b.updateRec(d,a),b.applyDefaults(d,this.$$defaults)),c},$$moved:function(a){var b=this.$getRecord(a.key);return!!angular.isObject(b)&&(b.$priority=a.getPriority(),!0)},$$error:function(b){a.error(b),this.$destroy(b)},$$getKey:function(a){return angular.isObject(a)?a.$id:null},$$process:function(a,b,c){var d,e=this.$$getKey(b),f=!1;switch(a){case"child_added":d=this.$indexFor(e);break;case"child_moved":d=this.$indexFor(e),this._spliceOut(e);break;case"child_removed":f=null!==this._spliceOut(e);break;case"child_changed":f=!0;break;default:throw new Error("Invalid event type: "+a)}return angular.isDefined(d)&&(f=this._addAfter(b,c)!==d),f&&this.$$notify(a,e,c),f},$$notify:function(a,b,c){var d={event:a,key:b};angular.isDefined(c)&&(d.prevChild=c),angular.forEach(this._observers,function(a){a[0].call(a[1],d)})},_addAfter:function(a,b){var c;return null===b?c=0:(c=this.$indexFor(b)+1,0===c&&(c=this.$list.length)),this.$list.splice(c,0,a),this._indexCache[this.$$getKey(a)]=c,c},_spliceOut:function(a){var b=this.$indexFor(a);return b>-1?(delete this._indexCache[a],this.$list.splice(b,1)[0]):null},_resolveItem:function(a){var b=this.$list;if(angular.isNumber(a)&&a>=0&&b.length>=a)return b[a];if(angular.isObject(a)){var c=this.$$getKey(a),d=this.$getRecord(c);return d===a?d:null}return null},_assertNotDestroyed:function(a){if(this._isDestroyed)throw new Error("Cannot call "+a+" method on a destroyed $firebaseArray object")}},d.$extend=function(a,c){return 1===arguments.length&&angular.isObject(a)&&(c=a,a=function(b){return this instanceof a?(d.apply(this,arguments),this.$list):new a(b)}),b.inherit(a,d,c)},d}]),angular.module("firebase").factory("$FirebaseArray",["$log","$firebaseArray",function(a,b){return function(){return a.warn("$FirebaseArray has been renamed. Use $firebaseArray instead."),b.apply(null,arguments)}}])}(),function(){"use strict";angular.module("firebase.database").factory("$firebaseObject",["$parse","$firebaseUtils","$log","$q",function(a,b,c,d){function e(a){if(!(this instanceof e))return new e(a);var c=this;this.$$conf={sync:new g(this,a),ref:a,binding:new f(this),listeners:[]},Object.defineProperty(this,"$$conf",{value:this.$$conf}),this.$id=a.ref.key,this.$priority=null,b.applyDefaults(this,this.$$defaults),this.$$conf.sync.init(),this.$resolved=!1,this.$loaded().finally(function(){c.$resolved=!0})}function f(a){this.subs=[],this.scope=null,this.key=null,this.rec=a}function g(a,e){function f(b){n.isDestroyed||(n.isDestroyed=!0,e.off("value",k),a=null,m(b||"destroyed"))}function g(){e.on("value",k,l),e.once("value",function(a){angular.isArray(a.val())&&c.warn("Storing data using array indices in Firebase can result in unexpected behavior. See https://firebase.google.com/docs/database/web/structure-data for more information. Also note that you probably wanted $firebaseArray and not $firebaseObject."),m(null)},m)}function h(b){i||(i=!0,b?j.reject(b):j.resolve(a))}var i=!1,j=d.defer(),k=b.batch(function(b){if(a){var c=a.$$updated(b);c&&a.$$notify()}}),l=b.batch(function(b){h(b),a&&a.$$error(b)}),m=b.batch(h),n={isDestroyed:!1,destroy:f,init:g,ready:function(){return j.promise}};return n}return e.prototype={$save:function(){var a,c=this,e=c.$ref(),f=d.defer();try{a=b.toJSON(c)}catch(a){f.reject(a)}return"undefined"!=typeof a&&b.doSet(e,a).then(function(){c.$$notify(),f.resolve(c.$ref())}).catch(f.reject),f.promise},$remove:function(){var a=this;return b.trimKeys(a,{}),a.$value=null,b.doRemove(a.$ref()).then(function(){return a.$$notify(),a.$ref()})},$loaded:function(a,b){var c=this.$$conf.sync.ready();return arguments.length&&(c=c.then.call(c,a,b)),c},$ref:function(){return this.$$conf.ref},$bindTo:function(a,b){var c=this;return c.$loaded().then(function(){return c.$$conf.binding.bindTo(a,b)})},$watch:function(a,b){var c=this.$$conf.listeners;return c.push([a,b]),function(){var d=c.findIndex(function(c){return c[0]===a&&c[1]===b});d>-1&&c.splice(d,1)}},$destroy:function(a){var c=this;c.$isDestroyed||(c.$isDestroyed=!0,c.$$conf.sync.destroy(a),c.$$conf.binding.destroy(),b.each(c,function(a,b){delete c[b]}))},$$updated:function(a){var c=b.updateRec(this,a);return b.applyDefaults(this,this.$$defaults),c},$$error:function(a){c.error(a),this.$destroy(a)},$$scopeUpdated:function(a){var c=d.defer();return this.$ref().set(b.toJSON(a),b.makeNodeResolver(c)),c.promise},$$notify:function(){var a=this,b=this.$$conf.listeners.slice();angular.forEach(b,function(b){b[0].call(b[1],{event:"value",key:a.$id})})},forEach:function(a,c){return b.each(this,a,c)}},e.$extend=function(a,c){return 1===arguments.length&&angular.isObject(a)&&(c=a,a=function(b){return this instanceof a?void e.apply(this,arguments):new a(b)}),b.inherit(a,e,c)},f.prototype={assertNotBound:function(a){if(this.scope){var b="Cannot bind to "+a+" because this instance is already bound to "+this.key+"; one binding per instance (call unbind method or create another FirebaseObject instance)";return c.error(b),d.reject(b)}},bindTo:function(c,d){function e(e){function f(a){return angular.equals(a,k)&&a.$priority===k.$priority&&a.$value===k.$value}function g(a){j.assign(c,b.scopeData(a))}function h(){var a=j(c);return[a,a.$priority,a.$value]}var i=!1,j=a(d),k=e.rec;e.scope=c,e.varName=d;var l=b.debounce(function(a){var d=b.scopeData(a);k.$$scopeUpdated(d).finally(function(){i=!1,d.hasOwnProperty("$value")||(delete k.$value,delete j(c).$value),g(k)})},50,500),m=function(a){a=a[0],f(a)||(i=!0,l(a))},n=function(){i||f(j(c))||g(k)};return g(k),e.subs.push(c.$on("$destroy",e.unbind.bind(e))),e.subs.push(c.$watch(h,m,!0)),e.subs.push(k.$watch(n)),e.unbind.bind(e)}return this.assertNotBound(d)||e(this)},unbind:function(){this.scope&&(angular.forEach(this.subs,function(a){a()}),this.subs=[],this.scope=null,this.key=null)},destroy:function(){this.unbind(),this.rec=null}},e}]),angular.module("firebase").factory("$FirebaseObject",["$log","$firebaseObject",function(a,b){return function(){return a.warn("$FirebaseObject has been renamed. Use $firebaseObject instead."),b.apply(null,arguments)}}])}(),function(){"use strict";function a(){this.urls=null,this.registerUrl=function(a){"string"==typeof a&&(this.urls={},this.urls.default=a),angular.isObject(a)&&(this.urls=a)},this.$$checkUrls=function(a){return a?a.default?void 0:new Error('No default Firebase URL registered. Use firebaseRefProvider.registerUrl({ default: "https://<my-firebase-app>.firebaseio.com/"}).'):new Error("No Firebase URL registered. Use firebaseRefProvider.registerUrl() in the config phase. This is required if you are using $firebaseAuthService.")},this.$$createRefsFromUrlConfig=function(a){var b={},c=this.$$checkUrls(a);if(c)throw c;return angular.forEach(a,function(a,c){b[c]=firebase.database().refFromURL(a)}),b},this.$get=function(){return this.$$createRefsFromUrlConfig(this.urls)}}angular.module("firebase.database").provider("$firebaseRef",a)}(),function(){"use strict";angular.module("firebase").factory("$firebase",function(){return function(){throw new Error("$firebase has been removed. You may instantiate $firebaseArray and $firebaseObject directly now. For simple write operations, just use the Firebase ref directly. See the AngularFire 1.0.0 changelog for details: https://github.com/firebase/angularfire/releases/tag/v1.0.0")}})}(),Array.prototype.indexOf||(Array.prototype.indexOf=function(a,b){if(void 0===this||null===this)throw new TypeError("'this' is null or not defined");var c=this.length>>>0;for(b=+b||0,Math.abs(b)===1/0&&(b=0),b<0&&(b+=c,b<0&&(b=0));b<c;b++)if(this[b]===a)return b;return-1}),Function.prototype.bind||(Function.prototype.bind=function(a){if("function"!=typeof this)throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");var b=Array.prototype.slice.call(arguments,1),c=this,d=function(){},e=function(){return c.apply(this instanceof d&&a?this:a,b.concat(Array.prototype.slice.call(arguments)))};return d.prototype=this.prototype,e.prototype=new d,e}),Array.prototype.findIndex||Object.defineProperty(Array.prototype,"findIndex",{enumerable:!1,configurable:!0,writable:!0,value:function(a){if(null==this)throw new TypeError("Array.prototype.find called on null or undefined");if("function"!=typeof a)throw new TypeError("predicate must be a function");for(var b,c=Object(this),d=c.length>>>0,e=arguments[1],f=0;f<d;f++)if(f in c&&(b=c[f],a.call(e,b,f,c)))return f;return-1}}),"function"!=typeof Object.create&&!function(){var a=function(){};Object.create=function(b){if(arguments.length>1)throw new Error("Second argument not supported");if(null===b)throw new Error("Cannot set a null [[Prototype]]");if("object"!=typeof b)throw new TypeError("Argument must be an object");return a.prototype=b,new a}}(),Object.keys||(Object.keys=function(){"use strict";var a=Object.prototype.hasOwnProperty,b=!{toString:null}.propertyIsEnumerable("toString"),c=["toString","toLocaleString","valueOf","hasOwnProperty","isPrototypeOf","propertyIsEnumerable","constructor"],d=c.length;return function(e){if("object"!=typeof e&&("function"!=typeof e||null===e))throw new TypeError("Object.keys called on non-object");var f,g,h=[];for(f in e)a.call(e,f)&&h.push(f);if(b)for(g=0;g<d;g++)a.call(e,c[g])&&h.push(c[g]);return h}}()),"function"!=typeof Object.getPrototypeOf&&("object"==typeof"test".__proto__?Object.getPrototypeOf=function(a){return a.__proto__}:Object.getPrototypeOf=function(a){return a.constructor.prototype}),function(){"use strict";function a(a,c){return{$progress:function(d){a.on("state_changed",function(){c.compile(function(){d(b(a.snapshot))})})},$error:function(b){a.on("state_changed",null,function(a){c.compile(function(){b(a)})})},$complete:function(d){a.on("state_changed",null,null,function(){c.compile(function(){d(b(a.snapshot))})})},$cancel:a.cancel,$resume:a.resume,$pause:a.pause,then:a.then,catch:a.catch,$snapshot:a.snapshot}}function b(a){return{bytesTransferred:a.bytesTransferred,downloadURL:a.downloadURL,metadata:a.metadata,ref:a.ref,state:a.state,task:a.task,totalBytes:a.totalBytes}}function c(a){return a=a||{},"function"==typeof a.put}function d(a){if(!c(a))throw new Error("$firebaseStorage expects a Storage reference")}function e(e,f){var g=function(b){return d(b),{$put:function(c,d){var f=b.put(c,d);return a(f,e)},$putString:function(c,d,f){var g=b.putString(c,d,f);return a(g,e)},$getDownloadURL:function(){return f.when(b.getDownloadURL())},$delete:function(){return f.when(b.delete())},$getMetadata:function(){return f.when(b.getMetadata())},$updateMetadata:function(a){return f.when(b.updateMetadata(a))},$toString:function(){return b.toString()}}};return g.utils={_unwrapStorageSnapshot:b,_isStorageRef:c,_assertStorageRef:d},g}angular.module("firebase.storage").factory("$firebaseStorage",["$firebaseUtils","$q",e])}(),function(){"use strict";function a(a,b){return{restrict:"A",priority:99,scope:{},link:function(c,d,e){e.$observe("firebaseSrc",function(c){if(""!==c){var e=b.storage().ref(c),f=a(e);f.$getDownloadURL().then(function(a){d[0].src=a})}})}}}a.$inject=["$firebaseStorage","firebase"],angular.module("firebase.storage").directive("firebaseSrc",a)}(),function(){"use strict";function a(b){if(!angular.isObject(b))return b;var c=angular.isArray(b)?[]:{};return angular.forEach(b,function(b,d){"string"==typeof d&&"$"===d.charAt(0)||(c[d]=a(b))}),c}angular.module("firebase.utils").factory("$firebaseConfig",["$firebaseArray","$firebaseObject","$injector",function(a,b,c){return function(d){var e=angular.extend({},d);return"string"==typeof e.objectFactory&&(e.objectFactory=c.get(e.objectFactory)),"string"==typeof e.arrayFactory&&(e.arrayFactory=c.get(e.arrayFactory)),angular.extend({arrayFactory:a,objectFactory:b},e)}}]).factory("$firebaseUtils",["$q","$timeout","$rootScope",function(b,c,d){var e={batch:function(a,b){return function(){var c=Array.prototype.slice.call(arguments,0);e.compile(function(){a.apply(b,c)})}},debounce:function(a,b,c,d){function f(){j&&(j(),j=null),i&&Date.now()-i>d?l||(l=!0,e.compile(g)):(i||(i=Date.now()),j=e.wait(g,c))}function g(){j=null,i=null,l=!1,a.apply(b,k)}function h(){k=Array.prototype.slice.call(arguments,0),f()}var i,j,k,l;if("number"==typeof b&&(d=c,c=b,b=null),"number"!=typeof c)throw new Error("Must provide a valid integer for wait. Try 0 for a default");if("function"!=typeof a)throw new Error("Must provide a valid function to debounce");return d||(d=10*c||100),h.running=function(){return i>0},h},assertValidRef:function(a,b){if(!angular.isObject(a)||"object"!=typeof a.ref||"function"!=typeof a.ref.transaction)throw new Error(b||"Invalid Firebase reference")},inherit:function(a,b,c){var d=a.prototype;return a.prototype=Object.create(b.prototype),a.prototype.constructor=a,angular.forEach(Object.keys(d),function(b){a.prototype[b]=d[b]}),angular.isObject(c)&&angular.extend(a.prototype,c),a},getPrototypeMethods:function(a,b,c){for(var d={},e=Object.getPrototypeOf({}),f=angular.isFunction(a)&&angular.isObject(a.prototype)?a.prototype:Object.getPrototypeOf(a);f&&f!==e;){for(var g in f)f.hasOwnProperty(g)&&!d.hasOwnProperty(g)&&(d[g]=!0,b.call(c,f[g],g,f));f=Object.getPrototypeOf(f)}},getPublicMethods:function(a,b,c){e.getPrototypeMethods(a,function(a,d){"function"==typeof a&&"_"!==d.charAt(0)&&b.call(c,a,d)})},makeNodeResolver:function(a){return function(b,c){null===b?(arguments.length>2&&(c=Array.prototype.slice.call(arguments,1)),a.resolve(c)):a.reject(b)}},wait:function(a,b){var d=c(a,b||0);return function(){d&&(c.cancel(d),d=null)}},compile:function(a){return d.$evalAsync(a||function(){})},deepCopy:function(a){if(!angular.isObject(a))return a;var b=angular.isArray(a)?a.slice():angular.extend({},a);for(var c in b)b.hasOwnProperty(c)&&angular.isObject(b[c])&&(b[c]=e.deepCopy(b[c]));return b},trimKeys:function(a,b){e.each(a,function(c,d){b.hasOwnProperty(d)||delete a[d]})},scopeData:function(a){var b={$id:a.$id,$priority:a.$priority},c=!1;return e.each(a,function(a,d){c=!0,b[d]=e.deepCopy(a)}),!c&&a.hasOwnProperty("$value")&&(b.$value=a.$value),b},updateRec:function(a,b){var c=b.val(),d=angular.extend({},a);return angular.isObject(c)?delete a.$value:(a.$value=c,c={}),e.trimKeys(a,c),angular.extend(a,c),a.$priority=b.getPriority(),!angular.equals(d,a)||d.$value!==a.$value||d.$priority!==a.$priority},applyDefaults:function(a,b){return angular.isObject(b)&&angular.forEach(b,function(b,c){a.hasOwnProperty(c)||(a[c]=b)}),a},dataKeys:function(a){var b=[];return e.each(a,function(a,c){b.push(c)}),b},each:function(a,b,c){if(angular.isObject(a)){for(var d in a)if(a.hasOwnProperty(d)){var e=d.charAt(0);"_"!==e&&"$"!==e&&"."!==e&&b.call(c,a[d],d,a)}}else if(angular.isArray(a))for(var f=0,g=a.length;f<g;f++)b.call(c,a[f],f,a);return a},toJSON:function(b){var c;return angular.isObject(b)||(b={$value:b}),angular.isFunction(b.toJSON)?c=b.toJSON():(c={},e.each(b,function(b,d){c[d]=a(b)})),angular.isDefined(b.$value)&&0===Object.keys(c).length&&null!==b.$value&&(c[".value"]=b.$value),angular.isDefined(b.$priority)&&Object.keys(c).length>0&&null!==b.$priority&&(c[".priority"]=b.$priority),angular.forEach(c,function(a,b){if(b.match(/[.$\[\]#\/]/)&&".value"!==b&&".priority"!==b)throw new Error("Invalid key "+b+" (cannot contain .$[]#/)");if(angular.isUndefined(a))throw new Error("Key "+b+" was undefined. Cannot pass undefined in JSON. Use null instead.")}),c},doSet:function(a,c){var d=b.defer();if(angular.isFunction(a.set)||!angular.isObject(c))try{a.set(c,e.makeNodeResolver(d))}catch(a){d.reject(a)}else{var f=angular.extend({},c);a.once("value",function(b){b.forEach(function(a){f.hasOwnProperty(a.key)||(f[a.key]=null)}),a.ref.update(f,e.makeNodeResolver(d))},function(a){d.reject(a)})}return d.promise},doRemove:function(a){var c=b.defer();return angular.isFunction(a.remove)?a.remove(e.makeNodeResolver(c)):a.once("value",function(b){var d=[];b.forEach(function(a){d.push(a.ref.remove())}),e.allPromises(d).then(function(){c.resolve(a)},function(a){c.reject(a)})},function(a){c.reject(a)}),c.promise},VERSION:"2.3.0",allPromises:b.all.bind(b)};return e}])}();
 "use strict";angular.module("nouislider",[]).directive("slider",function(){return{restrict:"A",scope:{start:"@",step:"@",end:"@",callback:"@",margin:"@",ngModel:"=",ngFrom:"=",ngTo:"="},link:function(a,b){var c,d,e,f,g;return f=$(b),c=a.callback?a.callback:"slide",null!=a.ngFrom&&null!=a.ngTo?(d=null,g=null,f.noUiSlider({start:[a.ngFrom||a.start,a.ngTo||a.end],step:parseFloat(a.step||1),connect:!0,margin:parseFloat(a.margin||0),range:{min:[parseFloat(a.start)],max:[parseFloat(a.end)]}}),f.on(c,function(){var b,c,e;return e=f.val(),b=e[0],c=e[1],d=parseFloat(b),g=parseFloat(c),a.$apply(function(){return a.ngFrom=d,a.ngTo=g})}),a.$watch("ngFrom",function(a){return a!==d?f.val([a,null]):void 0}),a.$watch("ngTo",function(a){return a!==g?f.val([null,a]):void 0})):(e=null,f.noUiSlider({start:[a.ngModel||a.start],step:parseFloat(a.step||1),range:{min:[parseFloat(a.start)],max:[parseFloat(a.end)]}}),f.on(c,function(){return e=parseFloat(f.val()),a.$apply(function(){return a.ngModel=e})}),a.$watch("ngModel",function(a){return a!==e?f.val(a):void 0}))}}});
 /*!
- * Waves v0.7.5
- * http://fian.my.id/Waves
- *
- * Copyright 2014-2016 Alfiana E. Sibuea and other contributors
- * Released under the MIT license
- * https://github.com/fians/Waves/blob/master/LICENSE
- */
-!function(a,b){"use strict";"function"==typeof define&&define.amd?define([],function(){return b.apply(a)}):"object"==typeof exports?module.exports=b.call(a):a.Waves=b.call(a)}("object"==typeof global?global:this,function(){"use strict";function a(a){return null!==a&&a===a.window}function b(b){return a(b)?b:9===b.nodeType&&b.defaultView}function c(a){var b=typeof a;return"function"===b||"object"===b&&!!a}function d(a){return c(a)&&a.nodeType>0}function e(a){var b=m.call(a);return"[object String]"===b?l(a):c(a)&&/^\[object (Array|HTMLCollection|NodeList|Object)\]$/.test(b)&&a.hasOwnProperty("length")?a:d(a)?[a]:[]}function f(a){var c,d,e={top:0,left:0},f=a&&a.ownerDocument;return c=f.documentElement,"undefined"!=typeof a.getBoundingClientRect&&(e=a.getBoundingClientRect()),d=b(f),{top:e.top+d.pageYOffset-c.clientTop,left:e.left+d.pageXOffset-c.clientLeft}}function g(a){var b="";for(var c in a)a.hasOwnProperty(c)&&(b+=c+":"+a[c]+";");return b}function h(a,b,c){if(c){c.classList.remove("waves-rippling");var d=c.getAttribute("data-x"),e=c.getAttribute("data-y"),f=c.getAttribute("data-scale"),h=c.getAttribute("data-translate"),i=Date.now()-Number(c.getAttribute("data-hold")),j=350-i;0>j&&(j=0),"mousemove"===a.type&&(j=150);var k="mousemove"===a.type?2500:o.duration;setTimeout(function(){var a={top:e+"px",left:d+"px",opacity:"0","-webkit-transition-duration":k+"ms","-moz-transition-duration":k+"ms","-o-transition-duration":k+"ms","transition-duration":k+"ms","-webkit-transform":f+" "+h,"-moz-transform":f+" "+h,"-ms-transform":f+" "+h,"-o-transform":f+" "+h,transform:f+" "+h};c.setAttribute("style",g(a)),setTimeout(function(){try{b.removeChild(c)}catch(a){return!1}},k)},j)}}function i(a){if(q.allowEvent(a)===!1)return null;for(var b=null,c=a.target||a.srcElement;null!==c.parentElement;){if(c.classList.contains("waves-effect")&&!(c instanceof SVGElement)){b=c;break}c=c.parentElement}return b}function j(a){var b=i(a);if(null!==b){if(b.disabled||b.getAttribute("disabled")||b.classList.contains("disabled"))return;if(q.registerEvent(a),"touchstart"===a.type&&o.delay){var c=!1,d=setTimeout(function(){d=null,o.show(a,b)},o.delay),e=function(e){d&&(clearTimeout(d),d=null,o.show(a,b)),c||(c=!0,o.hide(e,b))},f=function(a){d&&(clearTimeout(d),d=null),e(a)};b.addEventListener("touchmove",f,!1),b.addEventListener("touchend",e,!1),b.addEventListener("touchcancel",e,!1)}else o.show(a,b),n&&(b.addEventListener("touchend",o.hide,!1),b.addEventListener("touchcancel",o.hide,!1)),b.addEventListener("mouseup",o.hide,!1),b.addEventListener("mouseleave",o.hide,!1)}}var k=k||{},l=document.querySelectorAll.bind(document),m=Object.prototype.toString,n="ontouchstart"in window,o={duration:750,delay:200,show:function(a,b,c){if(2===a.button)return!1;b=b||this;var d=document.createElement("div");d.className="waves-ripple waves-rippling",b.appendChild(d);var e=f(b),h=0,i=0;"touches"in a&&a.touches.length?(h=a.touches[0].pageY-e.top,i=a.touches[0].pageX-e.left):(h=a.pageY-e.top,i=a.pageX-e.left),i=i>=0?i:0,h=h>=0?h:0;var j="scale("+b.clientWidth/100*3+")",k="translate(0,0)";c&&(k="translate("+c.x+"px, "+c.y+"px)"),d.setAttribute("data-hold",Date.now()),d.setAttribute("data-x",i),d.setAttribute("data-y",h),d.setAttribute("data-scale",j),d.setAttribute("data-translate",k);var l={top:h+"px",left:i+"px"};d.classList.add("waves-notransition"),d.setAttribute("style",g(l)),d.classList.remove("waves-notransition"),l["-webkit-transform"]=j+" "+k,l["-moz-transform"]=j+" "+k,l["-ms-transform"]=j+" "+k,l["-o-transform"]=j+" "+k,l.transform=j+" "+k,l.opacity="1";var m="mousemove"===a.type?2500:o.duration;l["-webkit-transition-duration"]=m+"ms",l["-moz-transition-duration"]=m+"ms",l["-o-transition-duration"]=m+"ms",l["transition-duration"]=m+"ms",d.setAttribute("style",g(l))},hide:function(a,b){b=b||this;for(var c=b.getElementsByClassName("waves-rippling"),d=0,e=c.length;e>d;d++)h(a,b,c[d])}},p={input:function(a){var b=a.parentNode;if("i"!==b.tagName.toLowerCase()||!b.classList.contains("waves-effect")){var c=document.createElement("i");c.className=a.className+" waves-input-wrapper",a.className="waves-button-input",b.replaceChild(c,a),c.appendChild(a);var d=window.getComputedStyle(a,null),e=d.color,f=d.backgroundColor;c.setAttribute("style","color:"+e+";background:"+f),a.setAttribute("style","background-color:rgba(0,0,0,0);")}},img:function(a){var b=a.parentNode;if("i"!==b.tagName.toLowerCase()||!b.classList.contains("waves-effect")){var c=document.createElement("i");b.replaceChild(c,a),c.appendChild(a)}}},q={touches:0,allowEvent:function(a){var b=!0;return/^(mousedown|mousemove)$/.test(a.type)&&q.touches&&(b=!1),b},registerEvent:function(a){var b=a.type;"touchstart"===b?q.touches+=1:/^(touchend|touchcancel)$/.test(b)&&setTimeout(function(){q.touches&&(q.touches-=1)},500)}};return k.init=function(a){var b=document.body;a=a||{},"duration"in a&&(o.duration=a.duration),"delay"in a&&(o.delay=a.delay),n&&(b.addEventListener("touchstart",j,!1),b.addEventListener("touchcancel",q.registerEvent,!1),b.addEventListener("touchend",q.registerEvent,!1)),b.addEventListener("mousedown",j,!1)},k.attach=function(a,b){a=e(a),"[object Array]"===m.call(b)&&(b=b.join(" ")),b=b?" "+b:"";for(var c,d,f=0,g=a.length;g>f;f++)c=a[f],d=c.tagName.toLowerCase(),-1!==["input","img"].indexOf(d)&&(p[d](c),c=c.parentElement),-1===c.className.indexOf("waves-effect")&&(c.className+=" waves-effect"+b)},k.ripple=function(a,b){a=e(a);var c=a.length;if(b=b||{},b.wait=b.wait||0,b.position=b.position||null,c)for(var d,g,h,i={},j=0,k={type:"mousedown",button:1},l=function(a,b){return function(){o.hide(a,b)}};c>j;j++)if(d=a[j],g=b.position||{x:d.clientWidth/2,y:d.clientHeight/2},h=f(d),i.x=h.left+g.x,i.y=h.top+g.y,k.pageX=i.x,k.pageY=i.y,o.show(k,d),b.wait>=0&&null!==b.wait){var m={type:"mouseup",button:1};setTimeout(l(m,d),b.wait)}},k.calm=function(a){a=e(a);for(var b={type:"mouseup",button:1},c=0,d=a.length;d>c;c++)o.hide(b,a[c])},k.displayEffect=function(a){k.init(a)},k});
-//# sourceMappingURL=waves.min.js.map
-/*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
  * Licensed under the MIT license
@@ -15770,270 +15760,270 @@ return hooks;
 // @todo NOTE We should investigate changing default to 
 // $routeChangeStart see https://github.com/angular-ui/ui-router/blob/3898270241d4e32c53e63554034d106363205e0e/src/compat.js#L126
 
-// angular.module('unsavedChanges', ['lazyModel'])
+angular.module('unsavedChanges', ['lazyModel'])
 
-// .provider('unsavedWarningsConfig', function() {
+.provider('unsavedWarningsConfig', function() {
 
-//     var _this = this;
+    var _this = this;
 
-//     // defaults
-//     var logEnabled = false;
-//     var useTranslateService = true;
-//     var routeEvent = ['$locationChangeStart', '$stateChangeStart'];
-//     var navigateMessage = 'You will lose unsaved changes if you leave this page';
-//     var reloadMessage = 'You will lose unsaved changes if you reload this page';
+    // defaults
+    var logEnabled = false;
+    var useTranslateService = true;
+    var routeEvent = ['$locationChangeStart', '$stateChangeStart'];
+    var navigateMessage = 'You will lose unsaved changes if you leave this page';
+    var reloadMessage = 'You will lose unsaved changes if you reload this page';
 
-//     Object.defineProperty(_this, 'navigateMessage', {
-//         get: function() {
-//             return navigateMessage;
-//         },
-//         set: function(value) {
-//             navigateMessage = value;
-//         }
-//     });
+    Object.defineProperty(_this, 'navigateMessage', {
+        get: function() {
+            return navigateMessage;
+        },
+        set: function(value) {
+            navigateMessage = value;
+        }
+    });
 
-//     Object.defineProperty(_this, 'reloadMessage', {
-//         get: function() {
-//             return reloadMessage;
-//         },
-//         set: function(value) {
-//             reloadMessage = value;
-//         }
-//     });
+    Object.defineProperty(_this, 'reloadMessage', {
+        get: function() {
+            return reloadMessage;
+        },
+        set: function(value) {
+            reloadMessage = value;
+        }
+    });
 
-//     Object.defineProperty(_this, 'useTranslateService', {
-//         get: function() {
-//             return useTranslateService;
-//         },
-//         set: function(value) {
-//             useTranslateService = !! (value);
-//         }
-//     });
+    Object.defineProperty(_this, 'useTranslateService', {
+        get: function() {
+            return useTranslateService;
+        },
+        set: function(value) {
+            useTranslateService = !! (value);
+        }
+    });
 
-//     Object.defineProperty(_this, 'routeEvent', {
-//         get: function() {
-//             return routeEvent;
-//         },
-//         set: function(value) {
-//             if (typeof value === 'string') value = [value];
-//             routeEvent = value;
-//         }
-//     });
-//     Object.defineProperty(_this, 'logEnabled', {
-//         get: function() {
-//             return logEnabled;
-//         },
-//         set: function(value) {
-//             logEnabled = !! (value);
-//         }
-//     });
+    Object.defineProperty(_this, 'routeEvent', {
+        get: function() {
+            return routeEvent;
+        },
+        set: function(value) {
+            if (typeof value === 'string') value = [value];
+            routeEvent = value;
+        }
+    });
+    Object.defineProperty(_this, 'logEnabled', {
+        get: function() {
+            return logEnabled;
+        },
+        set: function(value) {
+            logEnabled = !! (value);
+        }
+    });
 
-//     this.$get = ['$injector',
-//         function($injector) {
+    this.$get = ['$injector',
+        function($injector) {
 
-//             function translateIfAble(message) {
-//                 if ($injector.has('$translate') && useTranslateService) {
-//                     return $injector.get('$translate')(message);
-//                 } else {
-//                     return false;
-//                 }
-//             }
+            function translateIfAble(message) {
+                if ($injector.has('$translate') && useTranslateService) {
+                    return $injector.get('$translate')(message);
+                } else {
+                    return false;
+                }
+            }
 
-//             var publicInterface = {
-//                 // log function that accepts any number of arguments
-//                 // @see http://stackoverflow.com/a/7942355/1738217
-//                 log: function() {
-//                     if (console.log && logEnabled && arguments.length) {
-//                         var newarr = [].slice.call(arguments);
-//                         if (typeof console.log === 'object') {
-//                             log.apply.call(console.log, console, newarr);
-//                         } else {
-//                             console.log.apply(console, newarr);
-//                         }
-//                     }
-//                 }
-//             };
+            var publicInterface = {
+                // log function that accepts any number of arguments
+                // @see http://stackoverflow.com/a/7942355/1738217
+                log: function() {
+                    if (console.log && logEnabled && arguments.length) {
+                        var newarr = [].slice.call(arguments);
+                        if (typeof console.log === 'object') {
+                            log.apply.call(console.log, console, newarr);
+                        } else {
+                            console.log.apply(console, newarr);
+                        }
+                    }
+                }
+            };
 
-//             Object.defineProperty(publicInterface, 'useTranslateService', {
-//                 get: function() {
-//                     return useTranslateService;
-//                 }
-//             });
+            Object.defineProperty(publicInterface, 'useTranslateService', {
+                get: function() {
+                    return useTranslateService;
+                }
+            });
 
-//             Object.defineProperty(publicInterface, 'reloadMessage', {
-//                 get: function() {
-//                     return translateIfAble(reloadMessage) || reloadMessage;
-//                 }
-//             });
+            Object.defineProperty(publicInterface, 'reloadMessage', {
+                get: function() {
+                    return translateIfAble(reloadMessage) || reloadMessage;
+                }
+            });
 
-//             Object.defineProperty(publicInterface, 'navigateMessage', {
-//                 get: function() {
-//                     return translateIfAble(navigateMessage) || navigateMessage;
-//                 }
-//             });
+            Object.defineProperty(publicInterface, 'navigateMessage', {
+                get: function() {
+                    return translateIfAble(navigateMessage) || navigateMessage;
+                }
+            });
 
-//             Object.defineProperty(publicInterface, 'routeEvent', {
-//                 get: function() {
-//                     return routeEvent;
-//                 }
-//             });
+            Object.defineProperty(publicInterface, 'routeEvent', {
+                get: function() {
+                    return routeEvent;
+                }
+            });
 
-//             Object.defineProperty(publicInterface, 'logEnabled', {
-//                 get: function() {
-//                     return logEnabled;
-//                 }
-//             });
+            Object.defineProperty(publicInterface, 'logEnabled', {
+                get: function() {
+                    return logEnabled;
+                }
+            });
 
-//             return publicInterface;
-//         }
-//     ];
-// })
+            return publicInterface;
+        }
+    ];
+})
 
-// .service('unsavedWarningSharedService', ['$rootScope', 'unsavedWarningsConfig', '$injector',
-//     function($rootScope, unsavedWarningsConfig, $injector) {
+.service('unsavedWarningSharedService', ['$rootScope', 'unsavedWarningsConfig', '$injector',
+    function($rootScope, unsavedWarningsConfig, $injector) {
 
-//         // Controller scopped variables
-//         var _this = this;
-//         var allForms = [];
-//         var areAllFormsClean = true;
-//         var removeFunctions = [angular.noop];
+        // Controller scopped variables
+        var _this = this;
+        var allForms = [];
+        var areAllFormsClean = true;
+        var removeFunctions = [angular.noop];
 
-//         // @note only exposed for testing purposes.
-//         this.allForms = function() {
-//             return allForms;
-//         };
+        // @note only exposed for testing purposes.
+        this.allForms = function() {
+            return allForms;
+        };
 
-//         // save shorthand reference to messages
-//         var messages = {
-//             navigate: unsavedWarningsConfig.navigateMessage,
-//             reload: unsavedWarningsConfig.reloadMessage
-//         };
+        // save shorthand reference to messages
+        var messages = {
+            navigate: unsavedWarningsConfig.navigateMessage,
+            reload: unsavedWarningsConfig.reloadMessage
+        };
 
-//         // Check all registered forms 
-//         // if any one is dirty function will return true
+        // Check all registered forms 
+        // if any one is dirty function will return true
 
-//         function allFormsClean() {
-//             areAllFormsClean = true;
-//             angular.forEach(allForms, function(item, idx) {
-//                 unsavedWarningsConfig.log('Form : ' + item.$name + ' dirty : ' + item.$dirty);
-//                 if (item.$dirty) {
-//                     areAllFormsClean = false;
-//                 }
-//             });
-//             return areAllFormsClean; // no dirty forms were found
-//         }
+        function allFormsClean() {
+            areAllFormsClean = true;
+            angular.forEach(allForms, function(item, idx) {
+                unsavedWarningsConfig.log('Form : ' + item.$name + ' dirty : ' + item.$dirty);
+                if (item.$dirty) {
+                    areAllFormsClean = false;
+                }
+            });
+            return areAllFormsClean; // no dirty forms were found
+        }
 
-//         // adds form controller to registered forms array
-//         // this array will be checked when user navigates away from page
-//         this.init = function(form) {
-//             if (allForms.length === 0) setup();
-//             unsavedWarningsConfig.log("Registering form", form);
-//             allForms.push(form);
-//         };
+        // adds form controller to registered forms array
+        // this array will be checked when user navigates away from page
+        this.init = function(form) {
+            if (allForms.length === 0) setup();
+            unsavedWarningsConfig.log("Registering form", form);
+            allForms.push(form);
+        };
 
-//         this.removeForm = function(form) {
-//             var idx = allForms.indexOf(form);
+        this.removeForm = function(form) {
+            var idx = allForms.indexOf(form);
 
-//             // this form is not present array
-//             // @todo needs test coverage 
-//             if (idx === -1) return;
+            // this form is not present array
+            // @todo needs test coverage 
+            if (idx === -1) return;
 
-//             allForms.splice(idx, 1);
-//             unsavedWarningsConfig.log("Removing form from watch list", form);
+            allForms.splice(idx, 1);
+            unsavedWarningsConfig.log("Removing form from watch list", form);
 
-//             if (allForms.length === 0) tearDown();
-//         };
+            if (allForms.length === 0) tearDown();
+        };
 
-//         function tearDown() {
-//             unsavedWarningsConfig.log('No more forms, tearing down');
-//             angular.forEach(removeFunctions, function(fn) {
-//                 fn();
-//             });
-//             window.onbeforeunload = null;
-//         }
+        function tearDown() {
+            unsavedWarningsConfig.log('No more forms, tearing down');
+            angular.forEach(removeFunctions, function(fn) {
+                fn();
+            });
+            window.onbeforeunload = null;
+        }
 
-//         // Function called when user tries to close the window
-//         this.confirmExit = function() {
-//             // @todo this could be written a lot cleaner! 
-//             if (!allFormsClean()) return messages.reload;
-//             tearDown();
-//         };
+        // Function called when user tries to close the window
+        this.confirmExit = function() {
+            // @todo this could be written a lot cleaner! 
+            if (!allFormsClean()) return messages.reload;
+            tearDown();
+        };
 
-//         // bind to window close
-//         // @todo investigate new method for listening as discovered in previous tests
+        // bind to window close
+        // @todo investigate new method for listening as discovered in previous tests
 
-//         function setup() {
-//             unsavedWarningsConfig.log('Setting up');
+        function setup() {
+            unsavedWarningsConfig.log('Setting up');
 
-//             window.onbeforeunload = _this.confirmExit;
+            window.onbeforeunload = _this.confirmExit;
 
-//             var eventsToWatchFor = unsavedWarningsConfig.routeEvent;
+            var eventsToWatchFor = unsavedWarningsConfig.routeEvent;
 
-//             angular.forEach(eventsToWatchFor, function(aEvent) {
-//                 // calling this function later will unbind this, acting as $off()
-//                 var removeFn = $rootScope.$on(aEvent, function(event, next, current) {
-//                     unsavedWarningsConfig.log("user is moving with " + aEvent);
-//                     // @todo this could be written a lot cleaner! 
-//                     if (!allFormsClean()) {
-//                         unsavedWarningsConfig.log("a form is dirty");
-//                         if (!confirm(messages.navigate)) {
-//                             unsavedWarningsConfig.log("user wants to cancel leaving");
-//                             event.preventDefault(); // user clicks cancel, wants to stay on page 
-//                         } else {
-//                             unsavedWarningsConfig.log("user doesn't care about loosing stuff");
-//                         }
-//                     } else {
-//                         unsavedWarningsConfig.log("all forms are clean");
-//                     }
+            angular.forEach(eventsToWatchFor, function(aEvent) {
+                // calling this function later will unbind this, acting as $off()
+                var removeFn = $rootScope.$on(aEvent, function(event, next, current) {
+                    unsavedWarningsConfig.log("user is moving with " + aEvent);
+                    // @todo this could be written a lot cleaner! 
+                    if (!allFormsClean()) {
+                        unsavedWarningsConfig.log("a form is dirty");
+                        if (!confirm(messages.navigate)) {
+                            unsavedWarningsConfig.log("user wants to cancel leaving");
+                            event.preventDefault(); // user clicks cancel, wants to stay on page 
+                        } else {
+                            unsavedWarningsConfig.log("user doesn't care about loosing stuff");
+                        }
+                    } else {
+                        unsavedWarningsConfig.log("all forms are clean");
+                    }
 
-//                 });
-//                 removeFunctions.push(removeFn);
-//             });
-//         }
-//     }
-// ])
+                });
+                removeFunctions.push(removeFn);
+            });
+        }
+    }
+])
 
-// .directive('unsavedWarningClear', ['unsavedWarningSharedService',
-//     function(unsavedWarningSharedService) {
-//         return {
-//             scope: true,
-//             require: '^form',
-//             priority: 3000,
-//             link: function(scope, element, attrs, formCtrl) {
-//                 element.bind('click', function(event) {
-//                     formCtrl.$setPristine();
-//                 });
+.directive('unsavedWarningClear', ['unsavedWarningSharedService',
+    function(unsavedWarningSharedService) {
+        return {
+            scope: true,
+            require: '^form',
+            priority: 3000,
+            link: function(scope, element, attrs, formCtrl) {
+                element.bind('click', function(event) {
+                    formCtrl.$setPristine();
+                });
 
-//             }
-//         };
-//     }
-// ])
+            }
+        };
+    }
+])
 
-// .directive('unsavedWarningForm', ['unsavedWarningSharedService',
-//     function(unsavedWarningSharedService) {
-//         return {
-//             require: 'form',
-//             link: function(scope, formElement, attrs, formCtrl) {
+.directive('unsavedWarningForm', ['unsavedWarningSharedService',
+    function(unsavedWarningSharedService) {
+        return {
+            require: 'form',
+            link: function(scope, formElement, attrs, formCtrl) {
 
-//                 // register this form
-//                 unsavedWarningSharedService.init(formCtrl);
+                // register this form
+                unsavedWarningSharedService.init(formCtrl);
 
-//                 // bind to form submit, this makes the typical submit button work
-//                 // in addition to the ability to bind to a seperate button which clears warning
-//                 formElement.bind('submit', function(event) {
-//                     if (formCtrl.$valid) {
-//                         formCtrl.$setPristine();
-//                     }
-//                 });
+                // bind to form submit, this makes the typical submit button work
+                // in addition to the ability to bind to a seperate button which clears warning
+                formElement.bind('submit', function(event) {
+                    if (formCtrl.$valid) {
+                        formCtrl.$setPristine();
+                    }
+                });
 
-//                 // @todo check destroy on clear button too? 
-//                 scope.$on('$destroy', function() {
-//                     unsavedWarningSharedService.removeForm(formCtrl);
-//                 });
-//             }
-//         };
-//     }
-// ]);
+                // @todo check destroy on clear button too? 
+                scope.$on('$destroy', function() {
+                    unsavedWarningSharedService.removeForm(formCtrl);
+                });
+            }
+        };
+    }
+]);
 
 
 /**
@@ -16504,6 +16494,234 @@ angular.module('lazyModel', [])
 
 	module.exports = autosize;
 });
+/*!
+ * Waves v0.7.5
+ * http://fian.my.id/Waves
+ *
+ * Copyright 2014-2016 Alfiana E. Sibuea and other contributors
+ * Released under the MIT license
+ * https://github.com/fians/Waves/blob/master/LICENSE
+ */
+!function(a,b){"use strict";"function"==typeof define&&define.amd?define([],function(){return b.apply(a)}):"object"==typeof exports?module.exports=b.call(a):a.Waves=b.call(a)}("object"==typeof global?global:this,function(){"use strict";function a(a){return null!==a&&a===a.window}function b(b){return a(b)?b:9===b.nodeType&&b.defaultView}function c(a){var b=typeof a;return"function"===b||"object"===b&&!!a}function d(a){return c(a)&&a.nodeType>0}function e(a){var b=m.call(a);return"[object String]"===b?l(a):c(a)&&/^\[object (Array|HTMLCollection|NodeList|Object)\]$/.test(b)&&a.hasOwnProperty("length")?a:d(a)?[a]:[]}function f(a){var c,d,e={top:0,left:0},f=a&&a.ownerDocument;return c=f.documentElement,"undefined"!=typeof a.getBoundingClientRect&&(e=a.getBoundingClientRect()),d=b(f),{top:e.top+d.pageYOffset-c.clientTop,left:e.left+d.pageXOffset-c.clientLeft}}function g(a){var b="";for(var c in a)a.hasOwnProperty(c)&&(b+=c+":"+a[c]+";");return b}function h(a,b,c){if(c){c.classList.remove("waves-rippling");var d=c.getAttribute("data-x"),e=c.getAttribute("data-y"),f=c.getAttribute("data-scale"),h=c.getAttribute("data-translate"),i=Date.now()-Number(c.getAttribute("data-hold")),j=350-i;0>j&&(j=0),"mousemove"===a.type&&(j=150);var k="mousemove"===a.type?2500:o.duration;setTimeout(function(){var a={top:e+"px",left:d+"px",opacity:"0","-webkit-transition-duration":k+"ms","-moz-transition-duration":k+"ms","-o-transition-duration":k+"ms","transition-duration":k+"ms","-webkit-transform":f+" "+h,"-moz-transform":f+" "+h,"-ms-transform":f+" "+h,"-o-transform":f+" "+h,transform:f+" "+h};c.setAttribute("style",g(a)),setTimeout(function(){try{b.removeChild(c)}catch(a){return!1}},k)},j)}}function i(a){if(q.allowEvent(a)===!1)return null;for(var b=null,c=a.target||a.srcElement;null!==c.parentElement;){if(c.classList.contains("waves-effect")&&!(c instanceof SVGElement)){b=c;break}c=c.parentElement}return b}function j(a){var b=i(a);if(null!==b){if(b.disabled||b.getAttribute("disabled")||b.classList.contains("disabled"))return;if(q.registerEvent(a),"touchstart"===a.type&&o.delay){var c=!1,d=setTimeout(function(){d=null,o.show(a,b)},o.delay),e=function(e){d&&(clearTimeout(d),d=null,o.show(a,b)),c||(c=!0,o.hide(e,b))},f=function(a){d&&(clearTimeout(d),d=null),e(a)};b.addEventListener("touchmove",f,!1),b.addEventListener("touchend",e,!1),b.addEventListener("touchcancel",e,!1)}else o.show(a,b),n&&(b.addEventListener("touchend",o.hide,!1),b.addEventListener("touchcancel",o.hide,!1)),b.addEventListener("mouseup",o.hide,!1),b.addEventListener("mouseleave",o.hide,!1)}}var k=k||{},l=document.querySelectorAll.bind(document),m=Object.prototype.toString,n="ontouchstart"in window,o={duration:750,delay:200,show:function(a,b,c){if(2===a.button)return!1;b=b||this;var d=document.createElement("div");d.className="waves-ripple waves-rippling",b.appendChild(d);var e=f(b),h=0,i=0;"touches"in a&&a.touches.length?(h=a.touches[0].pageY-e.top,i=a.touches[0].pageX-e.left):(h=a.pageY-e.top,i=a.pageX-e.left),i=i>=0?i:0,h=h>=0?h:0;var j="scale("+b.clientWidth/100*3+")",k="translate(0,0)";c&&(k="translate("+c.x+"px, "+c.y+"px)"),d.setAttribute("data-hold",Date.now()),d.setAttribute("data-x",i),d.setAttribute("data-y",h),d.setAttribute("data-scale",j),d.setAttribute("data-translate",k);var l={top:h+"px",left:i+"px"};d.classList.add("waves-notransition"),d.setAttribute("style",g(l)),d.classList.remove("waves-notransition"),l["-webkit-transform"]=j+" "+k,l["-moz-transform"]=j+" "+k,l["-ms-transform"]=j+" "+k,l["-o-transform"]=j+" "+k,l.transform=j+" "+k,l.opacity="1";var m="mousemove"===a.type?2500:o.duration;l["-webkit-transition-duration"]=m+"ms",l["-moz-transition-duration"]=m+"ms",l["-o-transition-duration"]=m+"ms",l["transition-duration"]=m+"ms",d.setAttribute("style",g(l))},hide:function(a,b){b=b||this;for(var c=b.getElementsByClassName("waves-rippling"),d=0,e=c.length;e>d;d++)h(a,b,c[d])}},p={input:function(a){var b=a.parentNode;if("i"!==b.tagName.toLowerCase()||!b.classList.contains("waves-effect")){var c=document.createElement("i");c.className=a.className+" waves-input-wrapper",a.className="waves-button-input",b.replaceChild(c,a),c.appendChild(a);var d=window.getComputedStyle(a,null),e=d.color,f=d.backgroundColor;c.setAttribute("style","color:"+e+";background:"+f),a.setAttribute("style","background-color:rgba(0,0,0,0);")}},img:function(a){var b=a.parentNode;if("i"!==b.tagName.toLowerCase()||!b.classList.contains("waves-effect")){var c=document.createElement("i");b.replaceChild(c,a),c.appendChild(a)}}},q={touches:0,allowEvent:function(a){var b=!0;return/^(mousedown|mousemove)$/.test(a.type)&&q.touches&&(b=!1),b},registerEvent:function(a){var b=a.type;"touchstart"===b?q.touches+=1:/^(touchend|touchcancel)$/.test(b)&&setTimeout(function(){q.touches&&(q.touches-=1)},500)}};return k.init=function(a){var b=document.body;a=a||{},"duration"in a&&(o.duration=a.duration),"delay"in a&&(o.delay=a.delay),n&&(b.addEventListener("touchstart",j,!1),b.addEventListener("touchcancel",q.registerEvent,!1),b.addEventListener("touchend",q.registerEvent,!1)),b.addEventListener("mousedown",j,!1)},k.attach=function(a,b){a=e(a),"[object Array]"===m.call(b)&&(b=b.join(" ")),b=b?" "+b:"";for(var c,d,f=0,g=a.length;g>f;f++)c=a[f],d=c.tagName.toLowerCase(),-1!==["input","img"].indexOf(d)&&(p[d](c),c=c.parentElement),-1===c.className.indexOf("waves-effect")&&(c.className+=" waves-effect"+b)},k.ripple=function(a,b){a=e(a);var c=a.length;if(b=b||{},b.wait=b.wait||0,b.position=b.position||null,c)for(var d,g,h,i={},j=0,k={type:"mousedown",button:1},l=function(a,b){return function(){o.hide(a,b)}};c>j;j++)if(d=a[j],g=b.position||{x:d.clientWidth/2,y:d.clientHeight/2},h=f(d),i.x=h.left+g.x,i.y=h.top+g.y,k.pageX=i.x,k.pageY=i.y,o.show(k,d),b.wait>=0&&null!==b.wait){var m={type:"mouseup",button:1};setTimeout(l(m,d),b.wait)}},k.calm=function(a){a=e(a);for(var b={type:"mouseup",button:1},c=0,d=a.length;d>c;c++)o.hide(b,a[c])},k.displayEffect=function(a){k.init(a)},k});
+//# sourceMappingURL=waves.min.js.map
+"use strict";
+
+var socialLogin = angular.module('socialLogin', []);
+
+socialLogin.provider("social", function(){
+	var fbKey, fbApiV, googleKey, linkedInKey;
+	return {
+		setFbKey: function(obj){
+			fbKey = obj.appId;
+			fbApiV = obj.apiVersion;
+			var d = document, fbJs, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			fbJs = d.createElement('script'); 
+			fbJs.id = id; 
+			fbJs.async = true;
+			fbJs.src = "//connect.facebook.net/en_US/sdk.js";
+
+			fbJs.onload = function() {
+				FB.init({ 
+					appId: fbKey,
+					status: true, 
+					cookie: true, 
+					xfbml: true,
+					version: fbApiV
+				});
+	        };
+
+			ref.parentNode.insertBefore(fbJs, ref);
+		},
+		setGoogleKey: function(value){
+			googleKey = value;
+			var d = document, gJs, ref = d.getElementsByTagName('script')[0];
+			gJs = d.createElement('script');
+			gJs.async = true;
+			gJs.src = "//apis.google.com/js/platform.js"
+
+			gJs.onload = function() {
+				var params ={
+					client_id: value,
+					scope: 'email'
+				}
+				gapi.load('auth2', function() {
+        			gapi.auth2.init(params);
+      			});
+		    };
+
+		    ref.parentNode.insertBefore(gJs, ref);
+		},
+		setLinkedInKey: function(value){
+			linkedInKey = value;
+			var lIN, d = document, ref = d.getElementsByTagName('script')[0];
+			lIN = d.createElement('script');
+			lIN.async = false;
+			lIN.src = "//platform.linkedin.com/in.js";
+			lIN.text = ("api_key: " + linkedInKey).replace("\"", "");
+	        ref.parentNode.insertBefore(lIN, ref);
+	    },
+		$get: function(){
+			return{
+				fbKey: fbKey,
+				googleKey: googleKey,
+				linkedInKey: linkedInKey,
+				fbApiV: fbApiV
+			}
+		}
+	}
+});
+
+socialLogin.factory("socialLoginService", ['$window', '$rootScope',
+	function($window, $rootScope){
+	return {
+		logout: function(){
+			var provider = $window.localStorage.getItem('_login_provider');
+			switch(provider) {
+				case "google":
+					//its a hack need to find better solution.
+					var gElement = document.getElementById("gSignout");
+					if (typeof(gElement) != 'undefined' && gElement != null)
+					{
+					  gElement.remove();
+					}
+					var d = document, gSignout, ref = d.getElementsByTagName('script')[0];
+					gSignout = d.createElement('script');
+					gSignout.src = "https://accounts.google.com/Logout";
+					gSignout.type = "text/html";
+					gSignout.id = "gSignout";
+					$window.localStorage.removeItem('_login_provider');
+					$rootScope.$broadcast('event:social-sign-out-success', "success");
+					ref.parentNode.insertBefore(gSignout, ref);
+			        break;
+				case "linkedIn":
+					IN.User.logout(function(){
+						$window.localStorage.removeItem('_login_provider');
+					 	$rootScope.$broadcast('event:social-sign-out-success', "success");
+					}, {});
+					break;
+				case "facebook":
+					FB.logout(function(res){
+						$window.localStorage.removeItem('_login_provider');
+					 	$rootScope.$broadcast('event:social-sign-out-success', "success");
+					});
+					break;
+			}
+		},
+		setProvider: function(provider){
+			$window.localStorage.setItem('_login_provider', provider);
+		}
+	}
+}]);
+
+socialLogin.directive("linkedIn", ['$rootScope', 'social', 'socialLoginService', '$window',
+	function($rootScope, social, socialLoginService, $window){
+	return {
+		restrict: 'EA',
+		scope: {},
+		link: function(scope, ele, attr){
+		    ele.on("click", function(){
+		  		IN.User.authorize(function(){
+					IN.API.Raw("/people/~:(id,first-name,last-name,email-address,picture-url)").result(function(res){
+						socialLoginService.setProvider("linkedIn");
+						var userDetails = {name: res.firstName + " " + res.lastName, email: res.emailAddress, uid: res.id, provider: "linkedIN", imageUrl: res.pictureUrl};
+						$rootScope.$broadcast('event:social-sign-in-success', userDetails);
+				    });
+				});
+			})
+		}
+	}
+}]);
+
+socialLogin.directive("gLogin", ['$rootScope', 'social', 'socialLoginService',
+	function($rootScope, social, socialLoginService){
+	return {
+		restrict: 'EA',
+		scope: {},
+		replace: true,
+		link: function(scope, ele, attr){
+			ele.on('click', function(){
+				var fetchUserDetails = function(){
+					var currentUser = scope.gauth.currentUser.get();
+					var profile = currentUser.getBasicProfile();
+					var idToken = currentUser.getAuthResponse().id_token;
+					var accessToken = currentUser.getAuthResponse().access_token;
+					return {
+						token: accessToken,
+						idToken: idToken, 
+						name: profile.getName(), 
+						email: profile.getEmail(), 
+						uid: profile.getId(), 
+						provider: "google", 
+						imageUrl: profile.getImageUrl()
+					}
+				}
+		    	if(typeof(scope.gauth) == "undefined")
+		    		scope.gauth = gapi.auth2.getAuthInstance();
+				if(!scope.gauth.isSignedIn.get()){
+					scope.gauth.signIn().then(function(googleUser){
+						socialLoginService.setProvider("google");
+						$rootScope.$broadcast('event:social-sign-in-success', fetchUserDetails());
+					}, function(err){
+						console.log(err);
+					});
+				}else{
+					socialLoginService.setProvider("google");
+					$rootScope.$broadcast('event:social-sign-in-success', fetchUserDetails());
+				}
+	        	
+	        });
+		}
+	}
+}]);
+
+socialLogin.directive("fbLogin", ['$rootScope', 'social', 'socialLoginService', '$q',
+ function($rootScope, social, socialLoginService, $q){
+	return {
+		restrict: 'EA',
+		scope: {},
+		replace: true,
+		link: function(scope, ele, attr){
+			ele.on('click', function(){
+				var fetchUserDetails = function(){
+					var deferred = $q.defer();
+					FB.api('/me?fields=name,email,picture', function(res){
+						if(!res || res.error){
+							deferred.reject('Error occured while fetching user details.');
+						}else{
+							deferred.resolve({
+								name: res.name, 
+								email: res.email, 
+								uid: res.id, 
+								provider: "facebook", 
+								imageUrl: res.picture.data.url
+							});
+						}
+					});
+					return deferred.promise;
+				}
+				FB.getLoginStatus(function(response) {
+					if(response.status === "connected"){
+						fetchUserDetails().then(function(userDetails){
+							userDetails["token"] = response.authResponse.accessToken;
+							socialLoginService.setProvider("facebook");
+							$rootScope.$broadcast('event:social-sign-in-success', userDetails);
+						});
+					}else{
+						FB.login(function(response) {
+							if(response.status === "connected"){
+								fetchUserDetails().then(function(userDetails){
+									userDetails["token"] = response.authResponse.accessToken;
+									socialLoginService.setProvider("facebook");
+									$rootScope.$broadcast('event:social-sign-in-success', userDetails);
+								});
+							}
+						}, {scope: 'email', auth_type: 'rerequest'});
+					}
+				});
+			});
+		}
+	}
+}]);
 /*! 12.2.13 */
 !window.XMLHttpRequest||window.FileAPI&&FileAPI.shouldLoad||(window.XMLHttpRequest.prototype.setRequestHeader=function(a){return function(b,c){if("__setXHR_"===b){var d=c(this);d instanceof Function&&d(this)}else a.apply(this,arguments)}}(window.XMLHttpRequest.prototype.setRequestHeader));var ngFileUpload=angular.module("ngFileUpload",[]);ngFileUpload.version="12.2.13",ngFileUpload.service("UploadBase",["$http","$q","$timeout",function(a,b,c){function d(d){function e(a){j.notify&&j.notify(a),k.progressFunc&&c(function(){k.progressFunc(a)})}function h(a){return null!=d._start&&g?{loaded:a.loaded+d._start,total:d._file&&d._file.size||a.total,type:a.type,config:d,lengthComputable:!0,target:a.target}:a}function i(){a(d).then(function(a){if(g&&d._chunkSize&&!d._finished&&d._file){var b=d._file&&d._file.size||0;e({loaded:Math.min(d._end,b),total:b,config:d,type:"progress"}),f.upload(d,!0)}else d._finished&&delete d._finished,j.resolve(a)},function(a){j.reject(a)},function(a){j.notify(a)})}d.method=d.method||"POST",d.headers=d.headers||{};var j=d._deferred=d._deferred||b.defer(),k=j.promise;return d.disableProgress||(d.headers.__setXHR_=function(){return function(a){a&&a.upload&&a.upload.addEventListener&&(d.__XHR=a,d.xhrFn&&d.xhrFn(a),a.upload.addEventListener("progress",function(a){a.config=d,e(h(a))},!1),a.upload.addEventListener("load",function(a){a.lengthComputable&&(a.config=d,e(h(a)))},!1))}}),g?d._chunkSize&&d._end&&!d._finished?(d._start=d._end,d._end+=d._chunkSize,i()):d.resumeSizeUrl?a.get(d.resumeSizeUrl).then(function(a){d._start=d.resumeSizeResponseReader?d.resumeSizeResponseReader(a.data):parseInt((null==a.data.size?a.data:a.data.size).toString()),d._chunkSize&&(d._end=d._start+d._chunkSize),i()},function(a){throw a}):d.resumeSize?d.resumeSize().then(function(a){d._start=a,d._chunkSize&&(d._end=d._start+d._chunkSize),i()},function(a){throw a}):(d._chunkSize&&(d._start=0,d._end=d._start+d._chunkSize),i()):i(),k.success=function(a){return k.then(function(b){a(b.data,b.status,b.headers,d)}),k},k.error=function(a){return k.then(null,function(b){a(b.data,b.status,b.headers,d)}),k},k.progress=function(a){return k.progressFunc=a,k.then(null,null,function(b){a(b)}),k},k.abort=k.pause=function(){return d.__XHR&&c(function(){d.__XHR.abort()}),k},k.xhr=function(a){return d.xhrFn=function(b){return function(){b&&b.apply(k,arguments),a.apply(k,arguments)}}(d.xhrFn),k},f.promisesCount++,k["finally"]&&k["finally"]instanceof Function&&k["finally"](function(){f.promisesCount--}),k}function e(a){var b={};for(var c in a)a.hasOwnProperty(c)&&(b[c]=a[c]);return b}var f=this;f.promisesCount=0,this.isResumeSupported=function(){return window.Blob&&window.Blob.prototype.slice};var g=this.isResumeSupported();this.isUploadInProgress=function(){return f.promisesCount>0},this.rename=function(a,b){return a.ngfName=b,a},this.jsonBlob=function(a){null==a||angular.isString(a)||(a=JSON.stringify(a));var b=new window.Blob([a],{type:"application/json"});return b._ngfBlob=!0,b},this.json=function(a){return angular.toJson(a)},this.isFile=function(a){return null!=a&&(a instanceof window.Blob||a.flashId&&a.name&&a.size)},this.upload=function(a,b){function c(b,c){if(b._ngfBlob)return b;if(a._file=a._file||b,null!=a._start&&g){a._end&&a._end>=b.size&&(a._finished=!0,a._end=b.size);var d=b.slice(a._start,a._end||b.size);return d.name=b.name,d.ngfName=b.ngfName,a._chunkSize&&(c.append("_chunkSize",a._chunkSize),c.append("_currentChunkSize",a._end-a._start),c.append("_chunkNumber",Math.floor(a._start/a._chunkSize)),c.append("_totalSize",a._file.size)),d}return b}function h(b,d,e){if(void 0!==d)if(angular.isDate(d)&&(d=d.toISOString()),angular.isString(d))b.append(e,d);else if(f.isFile(d)){var g=c(d,b),i=e.split(",");i[1]&&(g.ngfName=i[1].replace(/^\s+|\s+$/g,""),e=i[0]),a._fileKey=a._fileKey||e,b.append(e,g,g.ngfName||g.name)}else if(angular.isObject(d)){if(d.$$ngfCircularDetection)throw"ngFileUpload: Circular reference in config.data. Make sure specified data for Upload.upload() has no circular reference: "+e;d.$$ngfCircularDetection=!0;try{for(var j in d)if(d.hasOwnProperty(j)&&"$$ngfCircularDetection"!==j){var k=null==a.objectKey?"[i]":a.objectKey;d.length&&parseInt(j)>-1&&(k=null==a.arrayKey?k:a.arrayKey),h(b,d[j],e+k.replace(/[ik]/g,j))}}finally{delete d.$$ngfCircularDetection}}else b.append(e,d)}function i(){a._chunkSize=f.translateScalars(a.resumeChunkSize),a._chunkSize=a._chunkSize?parseInt(a._chunkSize.toString()):null,a.headers=a.headers||{},a.headers["Content-Type"]=void 0,a.transformRequest=a.transformRequest?angular.isArray(a.transformRequest)?a.transformRequest:[a.transformRequest]:[],a.transformRequest.push(function(b){var c,d=new window.FormData;b=b||a.fields||{},a.file&&(b.file=a.file);for(c in b)if(b.hasOwnProperty(c)){var e=b[c];a.formDataAppender?a.formDataAppender(d,c,e):h(d,e,c)}return d})}return b||(a=e(a)),a._isDigested||(a._isDigested=!0,i()),d(a)},this.http=function(b){return b=e(b),b.transformRequest=b.transformRequest||function(b){return window.ArrayBuffer&&b instanceof window.ArrayBuffer||b instanceof window.Blob?b:a.defaults.transformRequest[0].apply(this,arguments)},b._chunkSize=f.translateScalars(b.resumeChunkSize),b._chunkSize=b._chunkSize?parseInt(b._chunkSize.toString()):null,d(b)},this.translateScalars=function(a){if(angular.isString(a)){if(a.search(/kb/i)===a.length-2)return parseFloat(1024*a.substring(0,a.length-2));if(a.search(/mb/i)===a.length-2)return parseFloat(1048576*a.substring(0,a.length-2));if(a.search(/gb/i)===a.length-2)return parseFloat(1073741824*a.substring(0,a.length-2));if(a.search(/b/i)===a.length-1)return parseFloat(a.substring(0,a.length-1));if(a.search(/s/i)===a.length-1)return parseFloat(a.substring(0,a.length-1));if(a.search(/m/i)===a.length-1)return parseFloat(60*a.substring(0,a.length-1));if(a.search(/h/i)===a.length-1)return parseFloat(3600*a.substring(0,a.length-1))}return a},this.urlToBlob=function(c){var d=b.defer();return a({url:c,method:"get",responseType:"arraybuffer"}).then(function(a){var b=new Uint8Array(a.data),e=a.headers("content-type")||"image/WebP",f=new window.Blob([b],{type:e}),g=c.match(/.*\/(.+?)(\?.*)?$/);g.length>1&&(f.name=g[1]),d.resolve(f)},function(a){d.reject(a)}),d.promise},this.setDefaults=function(a){this.defaults=a||{}},this.defaults={},this.version=ngFileUpload.version}]),ngFileUpload.service("Upload",["$parse","$timeout","$compile","$q","UploadExif",function(a,b,c,d,e){function f(a,b,c){var e=[i.emptyPromise()];return angular.forEach(a,function(d,f){0===d.type.indexOf("image/jpeg")&&i.attrGetter("ngfFixOrientation",b,c,{$file:d})&&e.push(i.happyPromise(i.applyExifRotation(d),d).then(function(b){a.splice(f,1,b)}))}),d.all(e)}function g(a,b,c,e){var f=i.attrGetter("ngfResize",b,c);if(!f||!i.isResizeSupported()||!a.length)return i.emptyPromise();if(f instanceof Function){var g=d.defer();return f(a).then(function(d){h(d,a,b,c,e).then(function(a){g.resolve(a)},function(a){g.reject(a)})},function(a){g.reject(a)})}return h(f,a,b,c,e)}function h(a,b,c,e,f){function g(d,g){if(0===d.type.indexOf("image")){if(a.pattern&&!i.validatePattern(d,a.pattern))return;a.resizeIf=function(a,b){return i.attrGetter("ngfResizeIf",c,e,{$width:a,$height:b,$file:d})};var j=i.resize(d,a);h.push(j),j.then(function(a){b.splice(g,1,a)},function(a){d.$error="resize",(d.$errorMessages=d.$errorMessages||{}).resize=!0,d.$errorParam=(a?(a.message?a.message:a)+": ":"")+(d&&d.name),f.$ngfValidations.push({name:"resize",valid:!1}),i.applyModelValidation(f,b)})}}for(var h=[i.emptyPromise()],j=0;j<b.length;j++)g(b[j],j);return d.all(h)}var i=e;return i.getAttrWithDefaults=function(a,b){if(null!=a[b])return a[b];var c=i.defaults[b];return null==c?c:angular.isString(c)?c:JSON.stringify(c)},i.attrGetter=function(b,c,d,e){var f=this.getAttrWithDefaults(c,b);if(!d)return f;try{return e?a(f)(d,e):a(f)(d)}catch(g){if(b.search(/min|max|pattern/i))return f;throw g}},i.shouldUpdateOn=function(a,b,c){var d=i.attrGetter("ngfModelOptions",b,c);return d&&d.updateOn?d.updateOn.split(" ").indexOf(a)>-1:!0},i.emptyPromise=function(){var a=d.defer(),c=arguments;return b(function(){a.resolve.apply(a,c)}),a.promise},i.rejectPromise=function(){var a=d.defer(),c=arguments;return b(function(){a.reject.apply(a,c)}),a.promise},i.happyPromise=function(a,c){var e=d.defer();return a.then(function(a){e.resolve(a)},function(a){b(function(){throw a}),e.resolve(c)}),e.promise},i.updateModel=function(c,d,e,h,j,k,l){function m(f,g,j,l,m){d.$$ngfPrevValidFiles=f,d.$$ngfPrevInvalidFiles=g;var n=f&&f.length?f[0]:null,o=g&&g.length?g[0]:null;c&&(i.applyModelValidation(c,f),c.$setViewValue(m?n:f)),h&&a(h)(e,{$files:f,$file:n,$newFiles:j,$duplicateFiles:l,$invalidFiles:g,$invalidFile:o,$event:k});var p=i.attrGetter("ngfModelInvalid",d);p&&b(function(){a(p).assign(e,m?o:g)}),b(function(){})}function n(){function a(a,b){return a.name===b.name&&(a.$ngfOrigSize||a.size)===(b.$ngfOrigSize||b.size)&&a.type===b.type}function b(b){var c;for(c=0;c<r.length;c++)if(a(b,r[c]))return!0;for(c=0;c<s.length;c++)if(a(b,s[c]))return!0;return!1}if(j){q=[],t=[];for(var c=0;c<j.length;c++)b(j[c])?t.push(j[c]):q.push(j[c])}}function o(a){return angular.isArray(a)?a:[a]}function p(){function a(){b(function(){m(w?r.concat(v):v,w?s.concat(u):u,j,t,x)},z&&z.debounce?z.debounce.change||z.debounce:0)}var f=y?q:v;g(f,d,e,c).then(function(){y?i.validate(q,w?r.length:0,c,d,e).then(function(b){v=b.validsFiles,u=b.invalidsFiles,a()}):a()},function(){for(var b=0;b<f.length;b++){var c=f[b];if("resize"===c.$error){var d=v.indexOf(c);d>-1&&(v.splice(d,1),u.push(c)),a()}}})}var q,r,s,t=[],u=[],v=[];r=d.$$ngfPrevValidFiles||[],s=d.$$ngfPrevInvalidFiles||[],c&&c.$modelValue&&(r=o(c.$modelValue));var w=i.attrGetter("ngfKeep",d,e);q=(j||[]).slice(0),("distinct"===w||i.attrGetter("ngfKeepDistinct",d,e)===!0)&&n(d,e);var x=!w&&!i.attrGetter("ngfMultiple",d,e)&&!i.attrGetter("multiple",d);if(!w||q.length){i.attrGetter("ngfBeforeModelChange",d,e,{$files:j,$file:j&&j.length?j[0]:null,$newFiles:q,$duplicateFiles:t,$event:k});var y=i.attrGetter("ngfValidateAfterResize",d,e),z=i.attrGetter("ngfModelOptions",d,e);i.validate(q,w?r.length:0,c,d,e).then(function(a){l?m(q,[],j,t,x):(z&&z.allowInvalid||y?v=q:(v=a.validFiles,u=a.invalidFiles),i.attrGetter("ngfFixOrientation",d,e)&&i.isExifSupported()?f(v,d,e).then(function(){p()}):p())})}},i}]),ngFileUpload.directive("ngfSelect",["$parse","$timeout","$compile","Upload",function(a,b,c,d){function e(a){var b=a.match(/Android[^\d]*(\d+)\.(\d+)/);if(b&&b.length>2){var c=d.defaults.androidFixMinorVersion||4;return parseInt(b[1])<4||parseInt(b[1])===c&&parseInt(b[2])<c}return-1===a.indexOf("Chrome")&&/.*Windows.*Safari.*/.test(a)}function f(a,b,c,d,f,h,i,j){function k(){return"input"===b[0].tagName.toLowerCase()&&c.type&&"file"===c.type.toLowerCase()}function l(){return t("ngfChange")||t("ngfSelect")}function m(b){if(j.shouldUpdateOn("change",c,a)){var e=b.__files_||b.target&&b.target.files,f=[];if(!e)return;for(var g=0;g<e.length;g++)f.push(e[g]);j.updateModel(d,c,a,l(),f.length?f:null,b)}}function n(a,d){function e(b){a.attr("id","ngf-"+b),d.attr("id","ngf-label-"+b)}for(var f=0;f<b[0].attributes.length;f++){var g=b[0].attributes[f];"type"!==g.name&&"class"!==g.name&&"style"!==g.name&&("id"===g.name?(e(g.value),u.push(c.$observe("id",e))):a.attr(g.name,g.value||"required"!==g.name&&"multiple"!==g.name?g.value:g.name))}}function o(){if(k())return b;var a=angular.element('<input type="file">'),c=angular.element("<label>upload</label>");return c.css("visibility","hidden").css("position","absolute").css("overflow","hidden").css("width","0px").css("height","0px").css("border","none").css("margin","0px").css("padding","0px").attr("tabindex","-1"),n(a,c),g.push({el:b,ref:c}),document.body.appendChild(c.append(a)[0]),a}function p(c){if(b.attr("disabled"))return!1;if(!t("ngfSelectDisabled",a)){var d=q(c);if(null!=d)return d;r(c);try{k()||document.body.contains(x[0])||(g.push({el:b,ref:x.parent()}),document.body.appendChild(x.parent()[0]),x.bind("change",m))}catch(f){}return e(navigator.userAgent)?setTimeout(function(){x[0].click()},0):x[0].click(),!1}}function q(a){var b=a.changedTouches||a.originalEvent&&a.originalEvent.changedTouches;if(b){if("touchstart"===a.type)return w=b[0].clientX,v=b[0].clientY,!0;if("touchend"===a.type){var c=b[0].clientX,d=b[0].clientY;if(Math.abs(c-w)>20||Math.abs(d-v)>20)return a.stopPropagation(),a.preventDefault(),!1}return!0}}function r(b){j.shouldUpdateOn("click",c,a)&&x.val()&&(x.val(null),j.updateModel(d,c,a,l(),null,b,!0))}function s(a){if(x&&!x.attr("__ngf_ie10_Fix_")){if(!x[0].parentNode)return void(x=null);a.preventDefault(),a.stopPropagation(),x.unbind("click");var b=x.clone();return x.replaceWith(b),x=b,x.attr("__ngf_ie10_Fix_","true"),x.bind("change",m),x.bind("click",s),x[0].click(),!1}x.removeAttr("__ngf_ie10_Fix_")}var t=function(a,b){return j.attrGetter(a,c,b)};j.registerModelChangeValidator(d,c,a);var u=[];t("ngfMultiple")&&u.push(a.$watch(t("ngfMultiple"),function(){x.attr("multiple",t("ngfMultiple",a))})),t("ngfCapture")&&u.push(a.$watch(t("ngfCapture"),function(){x.attr("capture",t("ngfCapture",a))})),t("ngfAccept")&&u.push(a.$watch(t("ngfAccept"),function(){x.attr("accept",t("ngfAccept",a))})),u.push(c.$observe("accept",function(){x.attr("accept",t("accept"))}));var v=0,w=0,x=b;k()||(x=o()),x.bind("change",m),k()?b.bind("click",r):b.bind("click touchstart touchend",p),-1!==navigator.appVersion.indexOf("MSIE 10")&&x.bind("click",s),d&&d.$formatters.push(function(a){return(null==a||0===a.length)&&x.val()&&x.val(null),a}),a.$on("$destroy",function(){k()||x.parent().remove(),angular.forEach(u,function(a){a()})}),h(function(){for(var a=0;a<g.length;a++){var b=g[a];document.body.contains(b.el[0])||(g.splice(a,1),b.ref.remove())}}),window.FileAPI&&window.FileAPI.ngfFixIE&&window.FileAPI.ngfFixIE(b,x,m)}var g=[];return{restrict:"AEC",require:"?ngModel",link:function(e,g,h,i){f(e,g,h,i,a,b,c,d)}}}]),function(){function a(a){return"img"===a.tagName.toLowerCase()?"image":"audio"===a.tagName.toLowerCase()?"audio":"video"===a.tagName.toLowerCase()?"video":/./}function b(b,c,d,e,f,g,h,i){function j(a){var g=b.attrGetter("ngfNoObjectUrl",f,d);b.dataUrl(a,g)["finally"](function(){c(function(){var b=(g?a.$ngfDataUrl:a.$ngfBlobUrl)||a.$ngfDataUrl;i?e.css("background-image","url('"+(b||"")+"')"):e.attr("src",b),b?e.removeClass("ng-hide"):e.addClass("ng-hide")})})}c(function(){var c=d.$watch(f[g],function(c){var k=h;if("ngfThumbnail"===g&&(k||(k={width:e[0].naturalWidth||e[0].clientWidth,height:e[0].naturalHeight||e[0].clientHeight}),0===k.width&&window.getComputedStyle)){var l=getComputedStyle(e[0]);l.width&&l.width.indexOf("px")>-1&&l.height&&l.height.indexOf("px")>-1&&(k={width:parseInt(l.width.slice(0,-2)),height:parseInt(l.height.slice(0,-2))})}return angular.isString(c)?(e.removeClass("ng-hide"),i?e.css("background-image","url('"+c+"')"):e.attr("src",c)):void(!c||!c.type||0!==c.type.search(a(e[0]))||i&&0!==c.type.indexOf("image")?e.addClass("ng-hide"):k&&b.isResizeSupported()?(k.resizeIf=function(a,e){return b.attrGetter("ngfResizeIf",f,d,{$width:a,$height:e,$file:c})},b.resize(c,k).then(function(a){j(a)},function(a){throw a})):j(c))});d.$on("$destroy",function(){c()})})}ngFileUpload.service("UploadDataUrl",["UploadBase","$timeout","$q",function(a,b,c){var d=a;return d.base64DataUrl=function(a){if(angular.isArray(a)){var b=c.defer(),e=0;return angular.forEach(a,function(c){d.dataUrl(c,!0)["finally"](function(){if(e++,e===a.length){var c=[];angular.forEach(a,function(a){c.push(a.$ngfDataUrl)}),b.resolve(c,a)}})}),b.promise}return d.dataUrl(a,!0)},d.dataUrl=function(a,e){if(!a)return d.emptyPromise(a,a);if(e&&null!=a.$ngfDataUrl||!e&&null!=a.$ngfBlobUrl)return d.emptyPromise(e?a.$ngfDataUrl:a.$ngfBlobUrl,a);var f=e?a.$$ngfDataUrlPromise:a.$$ngfBlobUrlPromise;if(f)return f;var g=c.defer();return b(function(){if(window.FileReader&&a&&(!window.FileAPI||-1===navigator.userAgent.indexOf("MSIE 8")||a.size<2e4)&&(!window.FileAPI||-1===navigator.userAgent.indexOf("MSIE 9")||a.size<4e6)){var c=window.URL||window.webkitURL;if(c&&c.createObjectURL&&!e){var f;try{f=c.createObjectURL(a)}catch(h){return void b(function(){a.$ngfBlobUrl="",g.reject()})}b(function(){if(a.$ngfBlobUrl=f,f){g.resolve(f,a),d.blobUrls=d.blobUrls||[],d.blobUrlsTotalSize=d.blobUrlsTotalSize||0,d.blobUrls.push({url:f,size:a.size}),d.blobUrlsTotalSize+=a.size||0;for(var b=d.defaults.blobUrlsMaxMemory||268435456,e=d.defaults.blobUrlsMaxQueueSize||200;(d.blobUrlsTotalSize>b||d.blobUrls.length>e)&&d.blobUrls.length>1;){var h=d.blobUrls.splice(0,1)[0];c.revokeObjectURL(h.url),d.blobUrlsTotalSize-=h.size}}})}else{var i=new FileReader;i.onload=function(c){b(function(){a.$ngfDataUrl=c.target.result,g.resolve(c.target.result,a),b(function(){delete a.$ngfDataUrl},1e3)})},i.onerror=function(){b(function(){a.$ngfDataUrl="",g.reject()})},i.readAsDataURL(a)}}else b(function(){a[e?"$ngfDataUrl":"$ngfBlobUrl"]="",g.reject()})}),f=e?a.$$ngfDataUrlPromise=g.promise:a.$$ngfBlobUrlPromise=g.promise,f["finally"](function(){delete a[e?"$$ngfDataUrlPromise":"$$ngfBlobUrlPromise"]}),f},d}]),ngFileUpload.directive("ngfSrc",["Upload","$timeout",function(a,c){return{restrict:"AE",link:function(d,e,f){b(a,c,d,e,f,"ngfSrc",a.attrGetter("ngfResize",f,d),!1)}}}]),ngFileUpload.directive("ngfBackground",["Upload","$timeout",function(a,c){return{restrict:"AE",link:function(d,e,f){b(a,c,d,e,f,"ngfBackground",a.attrGetter("ngfResize",f,d),!0)}}}]),ngFileUpload.directive("ngfThumbnail",["Upload","$timeout",function(a,c){return{restrict:"AE",link:function(d,e,f){var g=a.attrGetter("ngfSize",f,d);b(a,c,d,e,f,"ngfThumbnail",g,a.attrGetter("ngfAsBackground",f,d))}}}]),ngFileUpload.config(["$compileProvider",function(a){a.imgSrcSanitizationWhitelist&&a.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|webcal|local|file|data|blob):/),a.aHrefSanitizationWhitelist&&a.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|webcal|local|file|data|blob):/)}]),ngFileUpload.filter("ngfDataUrl",["UploadDataUrl","$sce",function(a,b){return function(c,d,e){if(angular.isString(c))return b.trustAsResourceUrl(c);var f=c&&((d?c.$ngfDataUrl:c.$ngfBlobUrl)||c.$ngfDataUrl);return c&&!f?(!c.$ngfDataUrlFilterInProgress&&angular.isObject(c)&&(c.$ngfDataUrlFilterInProgress=!0,a.dataUrl(c,d)),""):(c&&delete c.$ngfDataUrlFilterInProgress,(c&&f?e?b.trustAsResourceUrl(f):f:c)||"")}}])}(),ngFileUpload.service("UploadValidate",["UploadDataUrl","$q","$timeout",function(a,b,c){function d(a){var b="",c=[];if(a.length>2&&"/"===a[0]&&"/"===a[a.length-1])b=a.substring(1,a.length-1);else{var e=a.split(",");if(e.length>1)for(var f=0;f<e.length;f++){var g=d(e[f]);g.regexp?(b+="("+g.regexp+")",f<e.length-1&&(b+="|")):c=c.concat(g.excludes)}else 0===a.indexOf("!")?c.push("^((?!"+d(a.substring(1)).regexp+").)*$"):(0===a.indexOf(".")&&(a="*"+a),b="^"+a.replace(new RegExp("[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\-]","g"),"\\$&")+"$",b=b.replace(/\\\*/g,".*").replace(/\\\?/g,"."))}return{regexp:b,excludes:c}}function e(a,b){null==b||a.$dirty||(a.$setDirty?a.$setDirty():a.$dirty=!0)}var f=a;return f.validatePattern=function(a,b){if(!b)return!0;var c=d(b),e=!0;if(c.regexp&&c.regexp.length){var f=new RegExp(c.regexp,"i");e=null!=a.type&&f.test(a.type)||null!=a.name&&f.test(a.name)}for(var g=c.excludes.length;g--;){var h=new RegExp(c.excludes[g],"i");e=e&&(null==a.type||h.test(a.type))&&(null==a.name||h.test(a.name))}return e},f.ratioToFloat=function(a){var b=a.toString(),c=b.search(/[x:]/i);return b=c>-1?parseFloat(b.substring(0,c))/parseFloat(b.substring(c+1)):parseFloat(b)},f.registerModelChangeValidator=function(a,b,c){a&&a.$formatters.push(function(d){if(a.$dirty){var e=d;d&&!angular.isArray(d)&&(e=[d]),f.validate(e,0,a,b,c).then(function(){f.applyModelValidation(a,e)})}return d})},f.applyModelValidation=function(a,b){e(a,b),angular.forEach(a.$ngfValidations,function(b){a.$setValidity(b.name,b.valid)})},f.getValidationAttr=function(a,b,c,d,e){var g="ngf"+c[0].toUpperCase()+c.substr(1),h=f.attrGetter(g,a,b,{$file:e});if(null==h&&(h=f.attrGetter("ngfValidate",a,b,{$file:e}))){var i=(d||c).split(".");h=h[i[0]],i.length>1&&(h=h&&h[i[1]])}return h},f.validate=function(a,c,d,e,g){function h(b,c,h){if(a){for(var i=a.length,j=null;i--;){var n=a[i];if(n){var o=f.getValidationAttr(e,g,b,c,n);null!=o&&(h(n,o,i)||(-1===k.indexOf(b)?(n.$error=b,(n.$errorMessages=n.$errorMessages||{})[b]=!0,n.$errorParam=o,-1===m.indexOf(n)&&m.push(n),l||a.splice(i,1),j=!1):a.splice(i,1)))}}null!==j&&d.$ngfValidations.push({name:b,valid:j})}}function i(c,h,i,n,o){function p(b,d,e){function f(f){if(f())if(-1===k.indexOf(c)){if(d.$error=c,(d.$errorMessages=d.$errorMessages||{})[c]=!0,d.$errorParam=e,-1===m.indexOf(d)&&m.push(d),!l){var g=a.indexOf(d);g>-1&&a.splice(g,1)}b.resolve(!1)}else{var h=a.indexOf(d);h>-1&&a.splice(h,1),b.resolve(!0)}else b.resolve(!0)}null!=e?n(d,e).then(function(a){f(function(){return!o(a,e)})},function(){f(function(){return j("ngfValidateForce",{$file:d})})}):b.resolve(!0)}var q=[f.emptyPromise(!0)];a&&(a=void 0===a.length?[a]:a,angular.forEach(a,function(a){var d=b.defer();return q.push(d.promise),!i||null!=a.type&&0===a.type.search(i)?void("dimensions"===c&&null!=f.attrGetter("ngfDimensions",e)?f.imageDimensions(a).then(function(b){p(d,a,j("ngfDimensions",{$file:a,$width:b.width,$height:b.height}))},function(){d.resolve(!1)}):"duration"===c&&null!=f.attrGetter("ngfDuration",e)?f.mediaDuration(a).then(function(b){p(d,a,j("ngfDuration",{$file:a,$duration:b}))},function(){d.resolve(!1)}):p(d,a,f.getValidationAttr(e,g,c,h,a))):void d.resolve(!0)}));var r=b.defer();return b.all(q).then(function(a){for(var b=!0,e=0;e<a.length;e++)if(!a[e]){b=!1;break}d.$ngfValidations.push({name:c,valid:b}),r.resolve(b)}),r.promise}d=d||{},d.$ngfValidations=d.$ngfValidations||[],angular.forEach(d.$ngfValidations,function(a){a.valid=!0});var j=function(a,b){return f.attrGetter(a,e,g,b)},k=(f.attrGetter("ngfIgnoreInvalid",e,g)||"").split(" "),l=f.attrGetter("ngfRunAllValidations",e,g);if(null==a||0===a.length)return f.emptyPromise({validFiles:a,invalidFiles:[]});a=void 0===a.length?[a]:a.slice(0);var m=[];h("pattern",null,f.validatePattern),h("minSize","size.min",function(a,b){return a.size+.1>=f.translateScalars(b)}),h("maxSize","size.max",function(a,b){return a.size-.1<=f.translateScalars(b)});var n=0;if(h("maxTotalSize",null,function(b,c){return n+=b.size,n>f.translateScalars(c)?(a.splice(0,a.length),!1):!0}),h("validateFn",null,function(a,b){return b===!0||null===b||""===b}),!a.length)return f.emptyPromise({validFiles:[],invalidFiles:m});var o=b.defer(),p=[];return p.push(i("maxHeight","height.max",/image/,this.imageDimensions,function(a,b){return a.height<=b})),p.push(i("minHeight","height.min",/image/,this.imageDimensions,function(a,b){return a.height>=b})),p.push(i("maxWidth","width.max",/image/,this.imageDimensions,function(a,b){return a.width<=b})),p.push(i("minWidth","width.min",/image/,this.imageDimensions,function(a,b){return a.width>=b})),p.push(i("dimensions",null,/image/,function(a,b){return f.emptyPromise(b)},function(a){return a})),p.push(i("ratio",null,/image/,this.imageDimensions,function(a,b){for(var c=b.toString().split(","),d=!1,e=0;e<c.length;e++)Math.abs(a.width/a.height-f.ratioToFloat(c[e]))<.01&&(d=!0);return d})),p.push(i("maxRatio","ratio.max",/image/,this.imageDimensions,function(a,b){return a.width/a.height-f.ratioToFloat(b)<1e-4})),p.push(i("minRatio","ratio.min",/image/,this.imageDimensions,function(a,b){return a.width/a.height-f.ratioToFloat(b)>-1e-4})),p.push(i("maxDuration","duration.max",/audio|video/,this.mediaDuration,function(a,b){return a<=f.translateScalars(b)})),p.push(i("minDuration","duration.min",/audio|video/,this.mediaDuration,function(a,b){return a>=f.translateScalars(b)})),p.push(i("duration",null,/audio|video/,function(a,b){return f.emptyPromise(b)},function(a){return a})),p.push(i("validateAsyncFn",null,null,function(a,b){return b},function(a){return a===!0||null===a||""===a})),b.all(p).then(function(){if(l)for(var b=0;b<a.length;b++){var d=a[b];d.$error&&a.splice(b--,1)}l=!1,h("maxFiles",null,function(a,b,d){return b>c+d}),o.resolve({validFiles:a,invalidFiles:m})}),o.promise},f.imageDimensions=function(a){if(a.$ngfWidth&&a.$ngfHeight){var d=b.defer();return c(function(){d.resolve({width:a.$ngfWidth,height:a.$ngfHeight})}),d.promise}if(a.$ngfDimensionPromise)return a.$ngfDimensionPromise;var e=b.defer();return c(function(){return 0!==a.type.indexOf("image")?void e.reject("not image"):void f.dataUrl(a).then(function(b){function d(){var b=h[0].naturalWidth||h[0].clientWidth,c=h[0].naturalHeight||h[0].clientHeight;h.remove(),a.$ngfWidth=b,a.$ngfHeight=c,e.resolve({width:b,height:c})}function f(){h.remove(),e.reject("load error")}function g(){c(function(){h[0].parentNode&&(h[0].clientWidth?d():i++>10?f():g())},1e3)}var h=angular.element("<img>").attr("src",b).css("visibility","hidden").css("position","fixed").css("max-width","none !important").css("max-height","none !important");h.on("load",d),h.on("error",f);var i=0;g(),angular.element(document.getElementsByTagName("body")[0]).append(h)},function(){e.reject("load error")})}),a.$ngfDimensionPromise=e.promise,a.$ngfDimensionPromise["finally"](function(){delete a.$ngfDimensionPromise}),a.$ngfDimensionPromise},f.mediaDuration=function(a){if(a.$ngfDuration){var d=b.defer();return c(function(){d.resolve(a.$ngfDuration)}),d.promise}if(a.$ngfDurationPromise)return a.$ngfDurationPromise;var e=b.defer();return c(function(){return 0!==a.type.indexOf("audio")&&0!==a.type.indexOf("video")?void e.reject("not media"):void f.dataUrl(a).then(function(b){function d(){var b=h[0].duration;a.$ngfDuration=b,h.remove(),e.resolve(b)}function f(){h.remove(),e.reject("load error")}function g(){c(function(){h[0].parentNode&&(h[0].duration?d():i>10?f():g())},1e3)}var h=angular.element(0===a.type.indexOf("audio")?"<audio>":"<video>").attr("src",b).css("visibility","none").css("position","fixed");h.on("loadedmetadata",d),h.on("error",f);var i=0;g(),angular.element(document.body).append(h)},function(){e.reject("load error")})}),a.$ngfDurationPromise=e.promise,a.$ngfDurationPromise["finally"](function(){delete a.$ngfDurationPromise}),a.$ngfDurationPromise},f}]),ngFileUpload.service("UploadResize",["UploadValidate","$q",function(a,b){var c=a,d=function(a,b,c,d,e){var f=e?Math.max(c/a,d/b):Math.min(c/a,d/b);return{width:a*f,height:b*f,marginX:a*f-c,marginY:b*f-d}},e=function(a,e,f,g,h,i,j,k){var l=b.defer(),m=document.createElement("canvas"),n=document.createElement("img");return n.setAttribute("style","visibility:hidden;position:fixed;z-index:-100000"),document.body.appendChild(n),n.onload=function(){var a=n.width,b=n.height;if(n.parentNode.removeChild(n),null!=k&&k(a,b)===!1)return void l.reject("resizeIf");try{if(i){var o=c.ratioToFloat(i),p=a/b;o>p?(e=a,f=e/o):(f=b,e=f*o)}e||(e=a),f||(f=b);var q=d(a,b,e,f,j);m.width=Math.min(q.width,e),m.height=Math.min(q.height,f);var r=m.getContext("2d");r.drawImage(n,Math.min(0,-q.marginX/2),Math.min(0,-q.marginY/2),q.width,q.height),l.resolve(m.toDataURL(h||"image/WebP",g||.934))}catch(s){l.reject(s)}},n.onerror=function(){n.parentNode.removeChild(n),l.reject()},n.src=a,l.promise};return c.dataUrltoBlob=function(a,b,c){for(var d=a.split(","),e=d[0].match(/:(.*?);/)[1],f=atob(d[1]),g=f.length,h=new Uint8Array(g);g--;)h[g]=f.charCodeAt(g);var i=new window.Blob([h],{type:e});return i.name=b,i.$ngfOrigSize=c,i},c.isResizeSupported=function(){var a=document.createElement("canvas");return window.atob&&a.getContext&&a.getContext("2d")&&window.Blob},c.isResizeSupported()&&Object.defineProperty(window.Blob.prototype,"name",{get:function(){return this.$ngfName},set:function(a){this.$ngfName=a},configurable:!0}),c.resize=function(a,d){if(0!==a.type.indexOf("image"))return c.emptyPromise(a);var f=b.defer();return c.dataUrl(a,!0).then(function(b){e(b,d.width,d.height,d.quality,d.type||a.type,d.ratio,d.centerCrop,d.resizeIf).then(function(e){if("image/jpeg"===a.type&&d.restoreExif!==!1)try{e=c.restoreExif(b,e)}catch(g){setTimeout(function(){throw g},1)}try{var h=c.dataUrltoBlob(e,a.name,a.size);f.resolve(h)}catch(g){f.reject(g)}},function(b){"resizeIf"===b&&f.resolve(a),f.reject(b)})},function(a){f.reject(a)}),f.promise},c}]),function(){function a(a,c,d,e,f,g,h,i,j,k){function l(){return c.attr("disabled")||s("ngfDropDisabled",a)}function m(b,c,d){if(b){var e;try{e=b&&b.getData&&b.getData("text/html")}catch(f){}q(b.items,b.files,s("ngfAllowDir",a)!==!1,s("multiple")||s("ngfMultiple",a)).then(function(a){a.length?n(a,c):o(d,e).then(function(a){n(a,c)})})}}function n(b,c){i.updateModel(e,d,a,s("ngfChange")||s("ngfDrop"),b,c)}function o(b,c){if(!i.shouldUpdateOn(b,d,a)||"string"!=typeof c)return i.rejectPromise([]);var e=[];c.replace(/<(img src|img [^>]* src) *=\"([^\"]*)\"/gi,function(a,b,c){e.push(c)});var f=[],g=[];if(e.length){angular.forEach(e,function(a){f.push(i.urlToBlob(a).then(function(a){g.push(a)}))});var h=k.defer();return k.all(f).then(function(){h.resolve(g)},function(a){h.reject(a)}),h.promise}return i.emptyPromise()}function p(a,b,c,d){var e=s("ngfDragOverClass",a,{$event:c}),f="dragover";if(angular.isString(e))f=e;else if(e&&(e.delay&&(w=e.delay),e.accept||e.reject)){var g=c.dataTransfer.items;if(null!=g&&g.length)for(var h=e.pattern||s("ngfPattern",a,{$event:c}),j=g.length;j--;){if(!i.validatePattern(g[j],h)){f=e.reject;break}f=e.accept}else f=e.accept}d(f)}function q(b,c,e,f){function g(a,b){var c=k.defer();if(null!=a)if(a.isDirectory){var d=[i.emptyPromise()];if(m){var e={type:"directory"};e.name=e.path=(b||"")+a.name,n.push(e)}var f=a.createReader(),h=[],p=function(){f.readEntries(function(e){try{e.length?(h=h.concat(Array.prototype.slice.call(e||[],0)),p()):(angular.forEach(h.slice(0),function(c){n.length<=j&&l>=o&&d.push(g(c,(b?b:"")+a.name+"/"))}),k.all(d).then(function(){c.resolve()},function(a){c.reject(a)}))}catch(f){c.reject(f)}},function(a){c.reject(a)})};p()}else a.file(function(a){try{a.path=(b?b:"")+a.name,m&&(a=i.rename(a,a.path)),n.push(a),o+=a.size,c.resolve()}catch(d){c.reject(d)}},function(a){c.reject(a)});return c.promise}var j=i.getValidationAttr(d,a,"maxFiles");null==j&&(j=Number.MAX_VALUE);var l=i.getValidationAttr(d,a,"maxTotalSize");null==l&&(l=Number.MAX_VALUE);var m=s("ngfIncludeDir",a),n=[],o=0,p=[i.emptyPromise()];if(b&&b.length>0&&"file:"!==h.location.protocol)for(var q=0;q<b.length;q++){if(b[q].webkitGetAsEntry&&b[q].webkitGetAsEntry()&&b[q].webkitGetAsEntry().isDirectory){var r=b[q].webkitGetAsEntry();if(r.isDirectory&&!e)continue;null!=r&&p.push(g(r))}else{var t=b[q].getAsFile();null!=t&&(n.push(t),o+=t.size)}if(n.length>j||o>l||!f&&n.length>0)break}else if(null!=c)for(var u=0;u<c.length;u++){var v=c.item(u);if((v.type||v.size>0)&&(n.push(v),o+=v.size),n.length>j||o>l||!f&&n.length>0)break}var w=k.defer();return k.all(p).then(function(){if(f||m||!n.length)w.resolve(n);else{for(var a=0;n[a]&&"directory"===n[a].type;)a++;w.resolve([n[a]])}},function(a){w.reject(a)}),w.promise}var r=b(),s=function(a,b,c){return i.attrGetter(a,d,b,c)};if(s("dropAvailable")&&g(function(){a[s("dropAvailable")]?a[s("dropAvailable")].value=r:a[s("dropAvailable")]=r}),!r)return void(s("ngfHideOnDropNotAvailable",a)===!0&&c.css("display","none"));null==s("ngfSelect")&&i.registerModelChangeValidator(e,d,a);var t,u=null,v=f(s("ngfStopPropagation")),w=1;c[0].addEventListener("dragover",function(b){if(!l()&&i.shouldUpdateOn("drop",d,a)){if(b.preventDefault(),v(a)&&b.stopPropagation(),navigator.userAgent.indexOf("Chrome")>-1){var e=b.dataTransfer.effectAllowed;b.dataTransfer.dropEffect="move"===e||"linkMove"===e?"move":"copy"}g.cancel(u),t||(t="C",p(a,d,b,function(d){t=d,c.addClass(t),s("ngfDrag",a,{$isDragging:!0,$class:t,$event:b})}))}},!1),c[0].addEventListener("dragenter",function(b){!l()&&i.shouldUpdateOn("drop",d,a)&&(b.preventDefault(),v(a)&&b.stopPropagation())},!1),c[0].addEventListener("dragleave",function(b){!l()&&i.shouldUpdateOn("drop",d,a)&&(b.preventDefault(),
 v(a)&&b.stopPropagation(),u=g(function(){t&&c.removeClass(t),t=null,s("ngfDrag",a,{$isDragging:!1,$event:b})},w||100))},!1),c[0].addEventListener("drop",function(b){!l()&&i.shouldUpdateOn("drop",d,a)&&(b.preventDefault(),v(a)&&b.stopPropagation(),t&&c.removeClass(t),t=null,m(b.dataTransfer,b,"dropUrl"))},!1),c[0].addEventListener("paste",function(b){navigator.userAgent.toLowerCase().indexOf("firefox")>-1&&s("ngfEnableFirefoxPaste",a)&&b.preventDefault(),!l()&&i.shouldUpdateOn("paste",d,a)&&m(b.clipboardData||b.originalEvent.clipboardData,b,"pasteUrl")},!1),navigator.userAgent.toLowerCase().indexOf("firefox")>-1&&s("ngfEnableFirefoxPaste",a)&&(c.attr("contenteditable",!0),c.on("keypress",function(a){a.metaKey||a.ctrlKey||a.preventDefault()}))}function b(){var a=document.createElement("div");return"draggable"in a&&"ondrop"in a&&!/Edge\/12./i.test(navigator.userAgent)}ngFileUpload.directive("ngfDrop",["$parse","$timeout","$window","Upload","$http","$q",function(b,c,d,e,f,g){return{restrict:"AEC",require:"?ngModel",link:function(h,i,j,k){a(h,i,j,k,b,c,d,e,f,g)}}}]),ngFileUpload.directive("ngfNoFileDrop",function(){return function(a,c){b()&&c.css("display","none")}}),ngFileUpload.directive("ngfDropAvailable",["$parse","$timeout","Upload",function(a,c,d){return function(e,f,g){if(b()){var h=a(d.attrGetter("ngfDropAvailable",g));c(function(){h(e),h.assign&&h.assign(e,!0)})}}}])}(),ngFileUpload.service("UploadExif",["UploadResize","$q",function(a,b){function c(a,b,c,d){switch(b){case 2:return a.transform(-1,0,0,1,c,0);case 3:return a.transform(-1,0,0,-1,c,d);case 4:return a.transform(1,0,0,-1,0,d);case 5:return a.transform(0,1,1,0,0,0);case 6:return a.transform(0,1,-1,0,d,0);case 7:return a.transform(0,-1,-1,0,d,c);case 8:return a.transform(0,-1,1,0,0,c)}}function d(a){for(var b="",c=new Uint8Array(a),d=c.byteLength,e=0;d>e;e++)b+=String.fromCharCode(c[e]);return window.btoa(b)}var e=a;return e.isExifSupported=function(){return window.FileReader&&(new FileReader).readAsArrayBuffer&&e.isResizeSupported()},e.readOrientation=function(a){var c=b.defer(),d=new FileReader,e=a.slice?a.slice(0,65536):a;return d.readAsArrayBuffer(e),d.onerror=function(a){return c.reject(a)},d.onload=function(a){var b={orientation:1},d=new DataView(this.result);if(65496!==d.getUint16(0,!1))return c.resolve(b);for(var e=d.byteLength,f=2;e>f;){var g=d.getUint16(f,!1);if(f+=2,65505===g){if(1165519206!==d.getUint32(f+=2,!1))return c.resolve(b);var h=18761===d.getUint16(f+=6,!1);f+=d.getUint32(f+4,h);var i=d.getUint16(f,h);f+=2;for(var j=0;i>j;j++)if(274===d.getUint16(f+12*j,h)){var k=d.getUint16(f+12*j+8,h);return k>=2&&8>=k&&(d.setUint16(f+12*j+8,1,h),b.fixedArrayBuffer=a.target.result),b.orientation=k,c.resolve(b)}}else{if(65280!==(65280&g))break;f+=d.getUint16(f,!1)}}return c.resolve(b)},c.promise},e.applyExifRotation=function(a){if(0!==a.type.indexOf("image/jpeg"))return e.emptyPromise(a);var f=b.defer();return e.readOrientation(a).then(function(b){return b.orientation<2||b.orientation>8?f.resolve(a):void e.dataUrl(a,!0).then(function(g){var h=document.createElement("canvas"),i=document.createElement("img");i.onload=function(){try{h.width=b.orientation>4?i.height:i.width,h.height=b.orientation>4?i.width:i.height;var g=h.getContext("2d");c(g,b.orientation,i.width,i.height),g.drawImage(i,0,0);var j=h.toDataURL(a.type||"image/WebP",.934);j=e.restoreExif(d(b.fixedArrayBuffer),j);var k=e.dataUrltoBlob(j,a.name);f.resolve(k)}catch(l){return f.reject(l)}},i.onerror=function(){f.reject()},i.src=g},function(a){f.reject(a)})},function(a){f.reject(a)}),f.promise},e.restoreExif=function(a,b){var c={};return c.KEY_STR="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",c.encode64=function(a){var b,c,d,e,f,g="",h="",i="",j=0;do b=a[j++],c=a[j++],h=a[j++],d=b>>2,e=(3&b)<<4|c>>4,f=(15&c)<<2|h>>6,i=63&h,isNaN(c)?f=i=64:isNaN(h)&&(i=64),g=g+this.KEY_STR.charAt(d)+this.KEY_STR.charAt(e)+this.KEY_STR.charAt(f)+this.KEY_STR.charAt(i),b=c=h="",d=e=f=i="";while(j<a.length);return g},c.restore=function(a,b){a.match("data:image/jpeg;base64,")&&(a=a.replace("data:image/jpeg;base64,",""));var c=this.decode64(a),d=this.slice2Segments(c),e=this.exifManipulation(b,d);return"data:image/jpeg;base64,"+this.encode64(e)},c.exifManipulation=function(a,b){var c=this.getExifArray(b),d=this.insertExif(a,c);return new Uint8Array(d)},c.getExifArray=function(a){for(var b,c=0;c<a.length;c++)if(b=a[c],255===b[0]&225===b[1])return b;return[]},c.insertExif=function(a,b){var c=a.replace("data:image/jpeg;base64,",""),d=this.decode64(c),e=d.indexOf(255,3),f=d.slice(0,e),g=d.slice(e),h=f;return h=h.concat(b),h=h.concat(g)},c.slice2Segments=function(a){for(var b=0,c=[];;){if(255===a[b]&218===a[b+1])break;if(255===a[b]&216===a[b+1])b+=2;else{var d=256*a[b+2]+a[b+3],e=b+d+2,f=a.slice(b,e);c.push(f),b=e}if(b>a.length)break}return c},c.decode64=function(a){var b,c,d,e,f,g="",h="",i=0,j=[],k=/[^A-Za-z0-9\+\/\=]/g;k.exec(a)&&console.log("There were invalid base64 characters in the input text.\nValid base64 characters are A-Z, a-z, 0-9, NaNExpect errors in decoding."),a=a.replace(/[^A-Za-z0-9\+\/\=]/g,"");do d=this.KEY_STR.indexOf(a.charAt(i++)),e=this.KEY_STR.indexOf(a.charAt(i++)),f=this.KEY_STR.indexOf(a.charAt(i++)),h=this.KEY_STR.indexOf(a.charAt(i++)),b=d<<2|e>>4,c=(15&e)<<4|f>>2,g=(3&f)<<6|h,j.push(b),64!==f&&j.push(c),64!==h&&j.push(g),b=c=g="",d=e=f=h="";while(i<a.length);return j},c.restore(a,b)},e}]);
