@@ -147,6 +147,73 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-12 listt text-center">
+                  Actions Pending                
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                          
+                            <th>
+                                Unit - Property
+                            </th>
+                            <th>
+                                Showing Date/Time
+                            </th>
+                           
+                            <th>
+                                List on Craiglist
+                                <span class="fa fa-info-circle" title="Complete mandatory fields and toggle the button to list on Craigslist"></span>
+                            </th>
+                           
+                            <th>
+                                Listing Status
+                                <span class="fa fa-info-circle" title="Link to craigslist listing appears after unit is listed"></span>
+                            </th>
+                           
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key, value) in adashbord.mergeListing track by $index" id="{{$index}}">
+                            
+                            <td>User <b>{{adashbord.allUsers[value.landlordID].firstname}}</b> has requested to list <b>{{value.unitID}}-{{adashbord.properties[value.propertyId].address}}</b> on Craiglist
+                             </td>
+                            <td>
+                                <span ng-repeat="dt in value.fromToDate">
+                                    {{dt}}
+                                    <br/>
+                                </span>
+                            </td>
+                           
+                            <td class="text-center">
+                                <span ng-if="value.unitID && adashbord.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="adashbord.openDetailModel(value.propertyId, value.unitID)"
+                                    class="text-primary hover-color" style='cursor:pointer;margin:auto'>Incomplete Listing Details</span>
+                               
+                                <div ng-if="!adashbord.checkIsIncomplete(value.propertyId, value.unitID)">
+                                    <div>Activate Listing</div>
+                                    <div class="toggle-switch mt-2" ng-click="adashbord.toggleListOnCraglist(value.keys)">
+                                        <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
+                                        <label class="ts-helper" style="border-radius: 8px !important"></label>
+                                    </div>
+                                    <div class="text-primary hover-color" style='cursor:pointer' ng-click="adashbord.openDetailModel(value.propertyId, value.unitID)">
+                                        <span>Edit Listing</span>
+                                    </div>
+                                </div>
+                            </td>
+                           
+                            <td>
+                                Pending
+                            </td>
+                           
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
 </section>
