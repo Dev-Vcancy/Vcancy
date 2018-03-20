@@ -1,69 +1,123 @@
-
-<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header>
+</header>
 
 <section id="main">
-    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
-    <section id="content">
+	<aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+	<section id="content">
 
-        <div class="container">
-			<div class='message' ng-if="propctrl.success == 1"><div class="alert alert-success alert-dismissable fade in"> {{propctrl.propsuccess}}</div></div>
+		<div class="container">
+			<div class='message' ng-if="propctrl.success == 1">
+				<div class="alert alert-success alert-dismissable fade in"> {{propctrl.propsuccess}}</div>
+			</div>
 			<div class="block-header text-center" ng-hide="!propctrl.propsavail">
-				<h1>Your Properties<buttton  data-ui-sref="addprop"   class="btn bgm-green pull-right"> Add Property </button></h1>
-            </div>
-            <div class="loader" ng-if="propctrl.loader">
-	            <div class="preloader pl-xl">
-	                <svg class="pl-circular" viewBox="25 25 50 50">
-	                    <circle class="plc-path" cx="50" cy="50" r="20"/>
-	                </svg>
-	            </div>
-	      	</div>
+				<h1>Your Properties
+					<buttton data-ui-sref="addprop" class="btn bgm-teal pull-right"> Add Property </button>
+				</h1>
+			</div>
+			<div class="loader" ng-if="propctrl.loader">
+				<div class="preloader pl-xl">
+					<svg class="pl-circular" viewBox="25 25 50 50">
+						<circle class="plc-path" cx="50" cy="50" r="20" />
+					</svg>
+				</div>
+			</div>
 
-            <div class="add_property_block">
+			<div class="add_property_block">
 				<div class="card white-block bgm-cyan p-20 m-t-30" ng-show="!propctrl.propsavail">
 					<div class="card-header text-center">
-						<div class="property-icon m-b-20"><i class="zmdi zmdi-balance zmdi-hc-fw"></i></div>
+						<div class="property-icon m-b-20">
+							<i class="zmdi zmdi-balance zmdi-hc-fw"></i>
+						</div>
 						<h1>Add Properties</h1>
 						<h3>Add a property to start setting up viewing appointments and receiving rental applications.</h3>
-	                	<button data-ui-sref="addprop" class="btn btn-lg m-t-20">Add a Property</button>
-		         	</div>
+						<button data-ui-sref="addprop" class="btn btn-lg m-t-20">Add a Property</button>
+					</div>
 				</div>
 			</div>
-
+			<div class="clearfix"></div>
 			<div class="row">
-				<div class="col-sm-12">
-					<div class="col-md-6 property_view" ng-repeat="(key, x) in propctrl.viewprops" ng-show="propctrl.propsavail">
+				<div class='message' ng-if="$root.error != ''">
+					<div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
+				</div>
+				<div class='message' ng-if="$root.success != ''">
+					<div class="alert alert-success alert-dismissable fade in">{{$root.success}}</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-sm-12 thumbhimnshu row-eq-height">
+					<div class="col-md-4 property_view" ng-repeat="(key, x) in propctrl.viewprops" ng-show="propctrl.propsavail">
 						<div class="card white_block p-10">
 							<div class="property_thumb">
-								<img class="img-responsive" src="{{x.propimg}}" >
-							</div>
+								<div class="btn-group" uib-dropdown dropdown-append-to-body>
+									<button id="btn-append-to-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle>
+										<i class="fa fa-ellipsis-h"></i>
+									</button>
 
-							<div class="property_detail">					
-								<h3><a tooltip-placement="top" uib-tooltip="{{x.units}} - {{x.address}}">{{x.units}} <span ng-hide="x.units == ' '">-</span> {{x.address}}</a></h3>
-        						<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===true">
-			                        <span><strong>ACTIVE</strong></span> <input ng-click="propctrl.toggleSwitch(key)" id="active{{key}}" type="checkbox" hidden="hidden">
-			                        <label  for="active{{key}}" class="ts-helper m-l-10 m-r-10 ac-inac"></label><span><strong>INACTIVE</strong></span>
-			                    </div>
-								<div class="toggle-switch p-t-5 p-b-5" data-ts-color="red" ng-show="x.propstatus===false">
-			                        <span><strong>ACTIVE</strong></span> <input ng-click="propctrl.toggleSwitch(key)" id="inac{{key}}" type="checkbox" checked="checked" hidden="hidden">
-			                        <label for="inac{{key}}"  class="ts-helper  m-l-10 m-r-10 ac-inac"></label><span><strong>INACTIVE</strong></span>
-			                    </div>
-								<span><a href="#/editprop/{{key}}">Edit</a>
-								<span class="m-l-10"><input type="hidden" disabled="true" ng-model="x.propertylink" id="propertylink"/>
-								<a class="copylink_view" ><i tooltip-class="tooltip-blue" uib-tooltip="{{propctrl.copy}}" ng-copy="x.propertylink" onSuccess="propctrl.copySuccess(e)" class="zmdi zmdi-copy zmdi-hc-fw" style="font-size:25px;" ></i></a></span></span>
+									<ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-to-body">
+										<li role="menuitem">
+											<a href="#/editprop/{{key}}">Edit</a>
+										</li>
+										<li role="menuitem">
+											<a href="javascript:void(0);" ng-click="propctrl.deleteproperty(key,'samepage')">Delete</a>
+										</li>
+									</ul>
+								</div>
+								<div ng-if="x.propimg == ''" class="home-img">
+									<a href="#/editprop/{{key}}">
+										<div class="home-icon">
+											<i class="fa fa-home fa-6" aria-hidden="true"></i>
+										</div>
+									</a>
+								</div>
+								<div ng-if="x.propimg != ''">
+									<a href="#/editprop/{{key}}">
+										<img width="640" height="220" class="img-responsive" src="{{x.propimg}}" />
+									</a>
+								</div>
+
 							</div>
+							<div class="clearfix"></div>
+							<div class="property_detail">
+								<h3>
+									<a tooltip-placement="top" uib-tooltip="{{x.units}} - {{x.address}}"> {{x.address}}</a>
+								</h3>
+								<p class="text-small text-default">{{x.city}}, {{x.country}} {{x.postcode}}</p>
+								<div class="info">
+									<ul>
+										<li>
+											<p>
+												<i class="fa fa-circle"></i>
+												<span>{{x.name}}</span>
+											</p>
+										</li>
+										<li>
+											<p ng-if="x.noofunits > 0">
+												<i class="fa fa-circle"></i>
+												<span>{{x.noofunits}}</span> Units</p>
+										</li>
+										<li>
+											<p ng-if="x.noofunits > 0">
+												<i class="fa fa-circle"></i>
+												<span>{{propctrl.vacantSums[key]}}</span> Units Vacant</p>
+										</li>
+
+									</ul>
+								</div>
+							</div>
+							<div class="clearfix"></div>
 						</div>
+						<div class="clearfix"></div>
 					</div>
-				
+
 				</div>
 			</div>
-		</div>				
-    </section>
+		</div>
+	</section>
 </section>
 
 <footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
 <script type="text/javascript">
 	Waves.init();
 	Waves.attach('.btn');
-</script> 
-
-        
+</script>

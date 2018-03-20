@@ -4,7 +4,7 @@
         </div-->
         <!-- END LOGO -->
         <!-- BEGIN LOGIN -->
-        <div class="content">
+        <div class="content" style="top: 300px;height:380px;">
             <!-- BEGIN LOGIN FORM -->
              <div id="l-login" data-ng-class="{ 'toggled': lctrl.login === 1 }" data-ng-if="lctrl.login === 1">
             <form class="login-form login-logo" ng-submit="lctrl.loginUser(user)" role="form">
@@ -12,11 +12,27 @@
                 <div class="form-title">
                     <span class="form-title">Sign In to Vcancy</span>
                     <span class="form-subtitle " style="text-transform: lowercase;">Or, </span>
-                     <a href='#/register' style="text-transform: unset;" class="creatct">Create an Account</a>
+                     <a href='#/register' style="text-transform: unset;" class="creatct" onclick="storelocal();">Create an Account</a>
                 </div>
+                <div class="container">
+    
+    
+    <!-- display profile info -->
+    <div id="profileData" style="display: none;">
+        <p><a href="javascript:void(0);" onClick="logout()">Logout</a></p>
+        <div id="picture"></div>
+        <div class="info">
+            <p id="name"></p>
+            <p id="intro"></p>
+            <p id="email"></p>
+            <p id="location"></p>
+            <p id="link"></p> 
+        </div>
+    </div>
+</div>
+                <div class='loginmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}} <div ng-if="$root.invalid == 'mail'"><a  ng-click='lctrl.resendmail()'  href='javascript:void(0)' class='' 
+                                    style="text-decoration: underline;color: blue;">Resend confirmation</a></div></div>
                 
-                <div class='loginmsgvalidate' ng-if="$root.error != ''"><div class="alert alert-danger alert-dismissable fade in">{{$root.error}}</div>
-                <div ng-if="$root.invalid == 'mail'"><button  ng-click="lctrl.resendmail()"  class="btn red btn-block uppercase resenmailbtn">Resend Email</button></div>
                 </div>
                 <div class='loginmsgvalidate' ng-if="$root.emailhandler"><div class="alert alert-success alert-dismissable fade in">{{$root.emailhandler}}</div></div>
                 
@@ -35,7 +51,7 @@
                                 </div>
              
                 <div class="form-actions">
-                    <button type="submit" ng-disabled="loginForm.$invalid" class="btn red btn-block uppercase">Sign In</button>
+                    <button type="submit" ng-disabled="loginForm.$invalid" class="btn red btn-block uppercase btn-round">Sign In</button>
 
                 </div>
                 <div class="form-actions">
@@ -44,24 +60,25 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <div style="text-align: center;">   <h4 class="orsep">Or login with</h4></div>
-                   <div class="clearfix"></div>
+                <!-- <div style="text-align: center;">   <h4 class="orsep">Or login with</h4></div>
+                   <div class="clearfix"></div> -->
                 <!--button linked-in type="button">LinkedIn Login</button-->
-                    <div >
+                    <!-- <div >
                         <div class="left-icons">
-                        <div class="fb" data-ng-click="lctrl.facebook()"><a href="#"><span><i class="fa fa-facebook" aria-hidden="true"></i> </span> <lable>Sign in with Facebook</lable>
+                        <div class="fb btn-round" data-ng-click="lctrl.facebook()"><a href="#"><span><i class="fa fa-facebook" aria-hidden="true"></i> </span> <lable>Sign in with Facebook</lable>
                         <div class="clear"></div></a>
                         </div>
-                        <div class="google"  data-ng-click="lctrl.google()"><a href="#"><span><i class="fa fa-google-plus" aria-hidden="true"></i> </span> <lable>Sign in with Google+</lable>
+                        <div class="google btn-round"  data-ng-click="lctrl.google()"><a href="#"><span><i class="fa fa-google-plus" aria-hidden="true"></i> </span> <lable>Sign in with Google+</lable>
                         <div class="clear"></div></a>
                         </div>
-                        <div class="linkedin"  data-ng-click="lctrl.linkedIn()"><a href="#"><span><i class="fa fa-linkedin" aria-hidden="true"></i> </span> <lable>Sign in with Linkedin</lable>
+
+                        <div class="linkedin btn-round"  linked-in ><a href="#"><span><i class="fa fa-linkedin" aria-hidden="true"></i> </span> <lable>Sign in with Linkedin</lable>
                         <div class="clear"></div></a>
                         </div>
                         
                         </div>
                     </div>
-                
+                 -->
                 
             </form>
 
@@ -89,8 +106,18 @@
 
 
 <script type="text/javascript">
+    if(localStorage.getItem("justOnce")){
+            window.location.reload();
+            localStorage.clear();
+    }
     $( document ).ready(function() {
-        $(document.body).addClass('login');
+         $(document.body).addClass('login');
          $(document.body).removeClass('register');
+          
     });
+
+    function storelocal(){
+        $('body').hide();
+        localStorage.setItem("justOnce", "true");
+    }
 </script> 

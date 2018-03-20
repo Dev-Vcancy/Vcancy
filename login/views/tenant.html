@@ -1,220 +1,218 @@
-<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
- <link href="assets/global/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
-<link href = "assets/global/plugins/fullcalendar/fullcalendar.min.css"
-         rel = "stylesheet">
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
+<link href="assets/global/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
+<link href="assets/global/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet">
 <section id="main">
-    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+    <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
     <section class="new_dashbord" id="content">
-    	<div class="container">
-	<!-- title start -->
-		<h1 class="page-title"> Dashboard </h1>
-	<!-- title end -->
+        <div class="container">
+            <!-- title start -->
+            <h1 class="page-title"> Dashboard </h1>
+            <!-- title end -->
 
-	<!-- breadcrumb start -->
-		
-	<!-- breadcrumb end -->
+            <!-- breadcrumb start -->
 
-	<!-- four box start -->
-	<div class="row">
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="dashboard-stat2 ">
-                <div class="display">
-                    <div class="number">
-                        <h3 class="font-green-sharp">
-                            <span data-counter="counterup" data-value="7800">{{ldboardctrl.proplive}}</span>
-                           
-                        </h3>
-                        <small>Properties</small>
-                    </div>
-                    <div class="icon">
-                        <i class="zmdi zmdi-home zmdi-hc-fw"></i>
-                    </div>
-                </div>
-              
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="dashboard-stat2 ">
-                <div class="display">
-                    <div class="number">
-                        <h3 class="font-red-haze">
-                            <span data-counter="counterup" data-value="1349">0</span>
-                        </h3>
-                        <small>Units</small>
-                    </div>
-                    <div class="icon">
-                        <i class="zmdi zmdi-home zmdi-hc-fw"></i>
-                    </div>
-                </div>
-               
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="dashboard-stat2 ">
-                <div class="display">
-                    <div class="number">
-                        <h3 class="font-blue-sharp">
-                            <span data-counter="counterup" data-value="567">0</span>
-                        </h3>
-                        <small>Units Vacants</small>
-                    </div>
-                    <div class="icon">
-                        <i class="zmdi zmdi-home zmdi-hc-fw"></i>
-                    </div>
-                </div>
-              
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="dashboard-stat2 ">
-                <div class="display">
-                    <div class="number">
-                        <h3 class="font-purple-soft">
-                            <span data-counter="counterup" data-value="276">{{ldboardctrl.submitapps}}</span>
-                        </h3>
-                        <small>Applications</small>
-                    </div>
-                    <div class="icon">
-                        <i class="icon-user"></i>
-                    </div>
-                </div>
-             
-            </div>
-        </div>
-    </div>
-	<!-- four box end -->
+            <!-- breadcrumb end -->
 
-	<!-- two box start -->
-	<div class="row">
-        <div class="col-lg-6 col-xs-12 col-sm-12">
-                            <!-- BEGIN PORTLET-->
-            <div class="portlet light calendar ">
-                <div class="portlet-title ">
-                    <div class="caption">
-                        <i class="icon-calendar font-dark hide"></i>
-                        <span class="caption-subject font-dark bold uppercase">Viewing</span>
+            <!-- four box start -->
+            <div class="row" ng-if="false">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-green-sharp">
+                                    <span data-counter="counterup" data-value="7800">{{ldboardctrl.proplive}}</span>
+
+                                </h3>
+                                <small>Properties</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-                <div class="portlet-body">
-                    <div id="calendar1"> </div>
-                </div>
-            </div>
-            <!-- END PORTLET-->
-        </div>
-        <div class="col-lg-6 col-xs-12 col-sm-12">
-            <div class="portlet light ">
-                <div class="portlet-title">
-                    <div class="caption ">
-                        <span class="caption-subject font-dark bold uppercase">Pending</span>
-                        <span class="caption-helper">Application...</span>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-red-haze">
+                                    <span data-counter="counterup" data-value="1349">0</span>
+                                </h3>
+                                <small>Units</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
                     </div>
-                    
                 </div>
-                <div class="portlet-body">
-                    <div id="dashboard_amchart_3" class="CSSAnimationChart"></div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-blue-sharp">
+                                    <span data-counter="counterup" data-value="567">0</span>
+                                </h3>
+                                <small>Units Vacants</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-purple-soft">
+                                    <span data-counter="counterup" data-value="276">{{ldboardctrl.submitapps}}</span>
+                                </h3>
+                                <small>Applications</small>
+                            </div>
+                            <div class="icon">
+                                <i class="icon-user"></i>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
+            <!-- four box end -->
+
+            <!-- two box start -->
+            <div class="row">
+                <div class="col-lg-6 col-xs-12 col-sm-12">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light calendar ">
+                        <div class="portlet-title ">
+                            <div class="caption">
+                                <i class="icon-calendar font-dark hide"></i>
+                                <span class="caption-subject font-dark bold uppercase">Viewing</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div id="calendar1"> </div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+                <div class="col-lg-6 col-xs-12 col-sm-12">
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption ">
+                                <span class="caption-subject font-dark bold uppercase">Pending</span>
+                                <span class="caption-helper">Actions</span>
+                            </div>
+
+                        </div>
+                        <div class="portlet-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- two box end -->
+
+            <!-- video section start -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <iframe width="420" height="315" src="https://www.youtube.com/embed/vNL8CA7j7oc">
+                    </iframe>
+                </div>
+            </div>
+            <!-- video section end -->
         </div>
-    </div>
-
-	<!-- two box end -->
-
-	<!-- video section start -->
-	<div class="row">
-		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<iframe width="420" height="315" src="https://www.youtube.com/embed/vNL8CA7j7oc">
-			</iframe>
-		</div>
-	</div>	
-	<!-- video section end -->
-	</div>
+    </section>
 </section>
-  </section>
 <footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
 <script type="text/javascript">
-	$(document).ready(function () {
-  var date = new Date();
-            var d = date.getDate();
-            var m = date.getMonth();
-            var y = date.getFullYear();
+    $(document).ready(function () {
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
 
-            var h = {};
+        var h = {};
 
-            if ($('#calendar1').width() <= 400) {
-                $('#calendar1').addClass("mobile");
+        if ($('#calendar1').width() <= 400) {
+            $('#calendar1').addClass("mobile");
+            h = {
+                left: 'title, prev, next',
+                center: '',
+                right: 'today,month,agendaWeek,agendaDay'
+            };
+        } else {
+            $('#calendar1').removeClass("mobile");
+            if (App.isRTL()) {
                 h = {
-                    left: 'title, prev, next',
+                    right: 'title',
                     center: '',
-                    right: 'today,month,agendaWeek,agendaDay'
+                    left: 'prev,next,today,month,agendaWeek,agendaDay'
                 };
             } else {
-                $('#calendar1').removeClass("mobile");
-                if (App.isRTL()) {
-                    h = {
-                        right: 'title',
-                        center: '',
-                        left: 'prev,next,today,month,agendaWeek,agendaDay'
-                    };
-                } else {
-                    h = {
-                        left: 'title',
-                        center: '',
-                        right: 'prev,next,today,month,agendaWeek,agendaDay'
-                    };
-                }
+                h = {
+                    left: 'title',
+                    center: '',
+                    right: 'prev,next,today,month,agendaWeek,agendaDay'
+                };
             }
+        }
 
 
 
-            $('#calendar1').fullCalendar('destroy'); // destroy the calendar
-            $('#calendar1').fullCalendar({ //re-initialize the calendar
-                disableDragging: false,
-                header: h,
-                editable: true,
-                events: [{
-                    title: 'All Day',
-                    start: new Date(y, m, 1),
-                    backgroundColor: App.getBrandColor('yellow')
-                }, {
-                    title: 'Long Event',
-                    start: new Date(y, m, d - 5),
-                    end: new Date(y, m, d - 2),
-                    backgroundColor: App.getBrandColor('blue')
-                }, {
-                    title: 'Repeating Event',
-                    start: new Date(y, m, d - 3, 16, 0),
-                    allDay: false,
-                    backgroundColor: App.getBrandColor('red')
-                }, {
-                    title: 'Repeating Event',
-                    start: new Date(y, m, d + 6, 16, 0),
-                    allDay: false,
-                    backgroundColor: App.getBrandColor('green')
-                }, {
-                    title: 'Meeting',
-                    start: new Date(y, m, d + 9, 10, 30),
-                    allDay: false
-                }, {
-                    title: 'Lunch',
-                    start: new Date(y, m, d, 14, 0),
-                    end: new Date(y, m, d, 14, 0),
-                    backgroundColor: App.getBrandColor('grey'),
-                    allDay: false
-                }, {
-                    title: 'Birthday',
-                    start: new Date(y, m, d + 1, 19, 0),
-                    end: new Date(y, m, d + 1, 22, 30),
-                    backgroundColor: App.getBrandColor('purple'),
-                    allDay: false
-                }, {
-                    title: 'Click for Google',
-                    start: new Date(y, m, 28),
-                    end: new Date(y, m, 29),
-                    backgroundColor: App.getBrandColor('yellow'),
-                    url: 'http://google.com/'
-                }]
-            });
+        $('#calendar1').fullCalendar('destroy'); // destroy the calendar
+        $('#calendar1').fullCalendar({ //re-initialize the calendar
+            disableDragging: false,
+            header: h,
+            editable: true,
+            events: [{
+                title: 'All Day',
+                start: new Date(y, m, 1),
+                backgroundColor: App.getBrandColor('yellow')
+            }, {
+                title: 'Long Event',
+                start: new Date(y, m, d - 5),
+                end: new Date(y, m, d - 2),
+                backgroundColor: App.getBrandColor('blue')
+            }, {
+                title: 'Repeating Event',
+                start: new Date(y, m, d - 3, 16, 0),
+                allDay: false,
+                backgroundColor: App.getBrandColor('red')
+            }, {
+                title: 'Repeating Event',
+                start: new Date(y, m, d + 6, 16, 0),
+                allDay: false,
+                backgroundColor: App.getBrandColor('green')
+            }, {
+                title: 'Meeting',
+                start: new Date(y, m, d + 9, 10, 30),
+                allDay: false
+            }, {
+                title: 'Lunch',
+                start: new Date(y, m, d, 14, 0),
+                end: new Date(y, m, d, 14, 0),
+                backgroundColor: App.getBrandColor('grey'),
+                allDay: false
+            }, {
+                title: 'Birthday',
+                start: new Date(y, m, d + 1, 19, 0),
+                end: new Date(y, m, d + 1, 22, 30),
+                backgroundColor: App.getBrandColor('purple'),
+                allDay: false
+            }, {
+                title: 'Click for Google',
+                start: new Date(y, m, 28),
+                end: new Date(y, m, 29),
+                backgroundColor: App.getBrandColor('yellow'),
+                url: 'http://google.com/'
+            }]
+        });
 
-             $(document.body).removeClass('login');
-});
-</script>    
+        $(document.body).removeClass('login');
+    });
+</script>

@@ -1,23 +1,42 @@
-<div class="login-content">
 <nav class="navbar header">
-    <div class="navbar-header">
+  <div class="container-fluid">
+    <div class="navbar-header" style="position:absolute">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
+        <span class="icon-bar"></span>
       </button>
-      <a class="logo" href="#"><img src="images/vcancy_logo.png"></a>
+      <a class="logo" href="#">
+        <img src="images/vcancy_logo.png">
+      </a>
     </div>
-    <div class="collapse navbar-collapse login-menu login-header" id="myNavbar">
-      <ul class="nav navbar-nav">
-		<li><a href="http://vcancy.ca/">Home</a></li>
-		<li><a href="http://vcancy.ca/blog/">Blog</a></li>
-		<li><a href="http://vcancy.ca/contact/">Contact</a></li>
-		<li><a class="button" href="http://vcancy.ca/login/#/">Log in</a></li>
-    
+    <div class="collapse navbar-collapse login-header" id="myNavbar" style="margin-left: 80px;">
+      <ul class="nav navbar-nav" style="display:inline-block">
+        <li>
+          <a href="http://vcancy.com/" class="hvr-underline-from-center">Home</a>
+        </li>
+        <li>
+          <a href="http://vcancy.com/blog/" class="hvr-underline-from-center">Blog</a>
+        </li>
+        <li>
+          <a href="http://vcancy.com/contact/" class="hvr-underline-from-center">Contact</a>
+        </li>
+        <li style="position: absolute;right: 120px;">
+        <a class="button" href="http://localhost:9000/#/">Log in</a>
+      </li>
+      <li style="position: absolute;right: 10px;">
+        <a class="button" href="http://localhost:9000/#/register" onclick="storelocal();">Sign Up</a>
+      </li>
       </ul>
     </div>
   </div>
+  </div>
 </nav>
 
-    <div class="container">
+<div class="container">
+  <script type="text/javascript">
+    function storelocal() {
+      $('body').hide();
+      localStorage.setItem("justOnce", "true");
+    }
+  </script>
