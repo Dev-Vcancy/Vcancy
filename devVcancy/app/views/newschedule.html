@@ -248,10 +248,10 @@
                       </div>
                     </td>
                     <td>
-                      <span ng-if="value.status=='Listed' && value.listOnCraigslist">
-                        <a href="{{value.craglistLink}}" target="_blank">View Listing</a>
+                      <span ng-if="value.status!='Not Listed' && value.listOnCraigslist">
+                        <a ng-if="value.status=='Listed'" href="{{value.craglistLink}}" target="_blank">View Listing</a>
+                        <span ng-if="value.status=='Pending'">Pending</span>
                       </span>
-                      <span ng-if="value.listOnCraigslist && value.status=='Not Listed'">Pending</span>
                       <span ng-if="!value.listOnCraigslist">Not Listed</span>
                     </td>
                   </tr>

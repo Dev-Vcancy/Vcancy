@@ -1,0 +1,219 @@
+/*
+ * Following CSS codes are used only for demo purpose thus you can remove them completly whenever you want. 
+ */
+
+.toggle-switch .ts-label {
+    min-width: 130px;
+}
+
+.media-demo .media {
+    margin-bottom: 25px;
+}
+
+.media-demo .media .media {
+    margin-top: 25px;
+}
+
+
+/* .modal{
+    z-index: 99999 !important;
+} */
+
+.checkbox-width{
+    width: 17px !important;
+}
+
+.sweet-alert.showSweetAlert.visible{
+    z-index:9999999
+}
+.margin-top-15{
+    margin-top:15px !important;
+}
+.edit-div-hover:hover{
+    background-color: rgba(255,255,255,0.4)
+}
+.edit-pencil-hover:hover{
+    display: block;
+}
+.padding-20{
+    padding:20px !important;
+}
+.dropdown-basic-demo {
+    display: inline-block;
+    margin: 0 15px 20px 0;
+}
+.deletebutton {
+    position: absolute;
+    /* right: 0; */
+    left: 42px;
+    top: -6px;
+    color: #a99999;
+    padding: 2px;
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 4px;
+}
+.deletebutton:hover{
+    color:white;
+}
+.dropdown-basic-demo .dropdown-menu {
+    display: block;
+    position: relative;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+    filter: alpha(opacity=1);
+    z-index: 0;
+}
+
+.dropdown-btn-demo .dropdown, .dropdown-btn-demo .btn-group, .btn-demo .btn {
+    display: inline-block;
+    margin: 0 5px 7px 0;
+}
+
+.modal-preview-demo .modal {
+    position: relative; 
+    display: block; 
+    z-index: 0; 
+    background: rgba(0,0,0,0.1);
+}
+
+.margin-bottom > *{
+    margin-bottom: 20px;
+}
+
+.popover-demo .popover {
+    position: relative;
+    display: inline-block;
+    opacity: 1;
+    margin: 0 10px 30px;
+    z-index: 0;
+}
+
+.color-block {
+    height: 100px;
+    color: rgba(255,255,255,0.9);
+    text-align: center;
+    padding: 15px 0;
+    border-radius: 2px;
+    margin-bottom: 25px;
+}
+.original-form-control{
+    border:1px solid #c2cad8 !important;
+}
+ textarea.original-form-control, input[type=text].original-form-control, input[type=number].original-form-control {
+    padding: 6px !important; 
+}
+.color-block span {
+    display: block;
+}
+
+.color-block .color {
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.width-40{
+    width:40px;
+}
+
+.color-block .code {
+    margin: 5px 0;
+}
+
+.color-block .less {
+    font-size: 11px;
+}
+
+.animation-demo .row {
+    margin: 25px -6px 0;
+    margin-bottom: -10px;
+}
+
+.animation-demo .card-body img {
+    width: 100%;
+    z-index: 1;
+    position: relative;
+}
+
+.animation-demo .col-xs-6 {
+    padding: 0 6px;
+    margin-bottom: 12px;
+}
+
+.animation-demo .btn {
+    width: 100%;
+    text-transform: none;
+}
+
+.bs-item {
+    background: #fff;
+    margin-bottom: 30px;
+    height: 100px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 2px;
+}
+
+.bs-item:before {
+    display: inline-block;
+    content: "";
+    height: 100px;
+    width: 1px;
+    vertical-align: middle;
+}
+
+.btn-colors > .btn {
+    min-width: 112px;
+}
+
+.btn-demo > .btn, .btn-group-demo > .btn-group {
+    margin: 0 5px 10px 0;
+}
+
+
+
+.icons-demo .card-body .zmdi, .card-body .socicon {
+    font-size: 23px;
+    vertical-align: middle;
+    color: #333;
+    margin-right: 10px;
+}
+
+.icons-demo .card-body .col-sm-4 {
+    padding: 0 7px;
+}
+
+.icons-demo .card-body .col-sm-4 p {
+    padding: 8px;
+    border-radius: 2px;
+    margin-bottom: 0;
+}
+
+.icons-demo .card-body .col-sm-4 p:hover {
+    background: #eee;
+    cursor: pointer;
+}
+
+.notifications .btn {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.datepicker-demo .dd-block {
+    display: inline-block;
+    margin-bottom: 20px;
+    margin-right: 25px;
+    vertical-align: top;
+}
+
+.header {
+    position: relative;
+    text-align: left;
+    background-color: #5bd0e4;
+    color: #fff;
+}
+.header .logo h2 {
+    color: #fff;
+    padding: 10px 50px;
+    margin: 0;
+}

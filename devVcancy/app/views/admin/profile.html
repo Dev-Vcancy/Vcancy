@@ -18,12 +18,12 @@
             <div class="card white-block p-20">
                 <div class="row mb-3">
                     <div class="col-sm-5">
-                        <input type="email" placeholder="Login Email Address" ng-model="aprofile.userData.email" class="custom-form-element" />
+                        <input type="email" placeholder="Login Email Address" ng-model="aprofile.createUser.email" class="custom-form-element" />
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-sm-5">
-                        <button class="btn btn-sm bgm-teal btn-round">Save</button>
+                        <button class="btn btn-sm bgm-teal btn-round" ng-click="aprofile.createUserByEmail()">Create admin user</button>
                     </div>
                 </div>
                 <div class="row mb-3">
