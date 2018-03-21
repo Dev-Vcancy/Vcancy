@@ -1,97 +1,218 @@
-<header class="header" data-current-skin={{mactrl.currentSkin}} login-header ></header>
-
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
+<link href="assets/global/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
+<link href="assets/global/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet">
 <section id="main">
-    <aside id="sidebar"  login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
-    <section id="content">
-
+    <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+    <section class="new_dashbord" id="content">
         <div class="container">
-            <div class="block-header text-center">
-                <h2>Tenant Dashboard</h2>
-            </div>
-            <div class="block-header text-center">
-                <h3>Welcome to Vcancy, check out the video below</h3>
-            </div>
-			<div class="loader" ng-if="tdboardctrl.loader">
-	            <div class="preloader pl-xl">
-	                <svg class="pl-circular" viewBox="25 25 50 50">
-	                    <circle class="plc-path" cx="50" cy="50" r="20"/>
-	                </svg>
-	            </div>
-	      	</div>
-			
+            <!-- title start -->
+            <h1 class="page-title"> Dashboard </h1>
+            <!-- title end -->
 
-			 <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 no-padding">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 video">
-             <iframe width="420" height="315"
-				src="https://www.youtube.com/embed/GOez2ainG58">
-			</iframe> 
-        </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 no-padding-right five-padding">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 list">
-                <div id="pie-charts" class="dash-widget-item pt-inner">
-						<div class="pti-header bgm-lightblue">
-							<div class="text-center">
-								<div class="main-pie home_block">
-									<i class="zmdi zmdi-home zmdi-hc-fw"></i>
-									<h1 class="text-bold">{{tdboardctrl.viewingschedule}}</h1>
-									<div class="ptih-title">Viewings Scheduled</div>
-									
-								</div>
-							</div>
-						</div>				
-					</div>
+            <!-- breadcrumb start -->
+
+            <!-- breadcrumb end -->
+
+            <!-- four box start -->
+            <div class="row" ng-if="false">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-green-sharp">
+                                    <span data-counter="counterup" data-value="7800">{{ldboardctrl.proplive}}</span>
+
+                                </h3>
+                                <small>Properties</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-red-haze">
+                                    <span data-counter="counterup" data-value="1349">0</span>
+                                </h3>
+                                <small>Units</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-blue-sharp">
+                                    <span data-counter="counterup" data-value="567">0</span>
+                                </h3>
+                                <small>Units Vacants</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-purple-soft">
+                                    <span data-counter="counterup" data-value="276">{{ldboardctrl.submitapps}}</span>
+                                </h3>
+                                <small>Applications</small>
+                            </div>
+                            <div class="icon">
+                                <i class="icon-user"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 list">
-                <div id="pie-charts" class="dash-widget-item  pt-inner">
-						<div class="pti-header bgm-cyan">
-							<div class="text-center">
-								<div class="main-pie home_block">
-									<i class="zmdi zmdi-alarm-check zmdi-hc-fw"></i>
-									<h1 class="text-bold">{{tdboardctrl.submitapps}}</h1>
-									<div class="ptih-title">Applications Submitted</div>
-								</div>
-							</div>
-						</div>				
-					</div>
+            <!-- four box end -->
+
+            <!-- two box start -->
+            <div class="row">
+                <div class="col-lg-6 col-xs-12 col-sm-12">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light calendar ">
+                        <div class="portlet-title ">
+                            <div class="caption">
+                                <i class="icon-calendar font-dark hide"></i>
+                                <span class="caption-subject font-dark bold uppercase">Viewing</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div id="calendar1"> </div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+                <div class="col-lg-6 col-xs-12 col-sm-12">
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption ">
+                                <span class="caption-subject font-dark bold uppercase">Pending</span>
+                                <span class="caption-helper">Actions</span>
+                            </div>
+
+                        </div>
+                        <div class="portlet-body">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 list">
-               <div id="pie-charts" class="dash-widget-item  pt-inner">
-						<div class="pti-header bgm-cyan">
-							<div class="text-center">
-								<div class="main-pie home_block">
-									<i class="zmdi zmdi-eye zmdi-hc-fw"></i>
-									<h1 class="text-bold">{{tdboardctrl.propactive}}</h1>
-									<div class="ptih-title">Active Properties</div>
-								</div>
-							</div>
-						</div>				
-					</div>
+
+            <!-- two box end -->
+
+            <!-- video section start -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <iframe width="420" height="315" src="https://www.youtube.com/embed/vNL8CA7j7oc">
+                    </iframe>
+                </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 list">
-                <div id="pie-charts" class="dash-widget-item pt-inner">
-						<div class="pti-header  bgm-lightblue">
-							<div class="text-center">
-								<div class="main-pie home_block">
-									<i class="zmdi zmdi-layers zmdi-hc-fw"></i>
-									<h1 class="text-bold">{{tdboardctrl.applicationcomplete}}</h1>
-									<div class="ptih-title">Applications Pending</div>
-								</div>
-							</div>
-						</div>				
-					</div>
-            </div>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-            
+            <!-- video section end -->
         </div>
     </section>
 </section>
-
 <footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
 <script type="text/javascript">
-	Waves.init();
-	Waves.attach('.btn');
-</script>    
+    $(document).ready(function () {
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        var h = {};
+
+        if ($('#calendar1').width() <= 400) {
+            $('#calendar1').addClass("mobile");
+            h = {
+                left: 'title, prev, next',
+                center: '',
+                right: 'today,month,agendaWeek,agendaDay'
+            };
+        } else {
+            $('#calendar1').removeClass("mobile");
+            if (App.isRTL()) {
+                h = {
+                    right: 'title',
+                    center: '',
+                    left: 'prev,next,today,month,agendaWeek,agendaDay'
+                };
+            } else {
+                h = {
+                    left: 'title',
+                    center: '',
+                    right: 'prev,next,today,month,agendaWeek,agendaDay'
+                };
+            }
+        }
+
+
+
+        $('#calendar1').fullCalendar('destroy'); // destroy the calendar
+        $('#calendar1').fullCalendar({ //re-initialize the calendar
+            disableDragging: false,
+            header: h,
+            editable: true,
+            events: [{
+                title: 'All Day',
+                start: new Date(y, m, 1),
+                backgroundColor: App.getBrandColor('yellow')
+            }, {
+                title: 'Long Event',
+                start: new Date(y, m, d - 5),
+                end: new Date(y, m, d - 2),
+                backgroundColor: App.getBrandColor('blue')
+            }, {
+                title: 'Repeating Event',
+                start: new Date(y, m, d - 3, 16, 0),
+                allDay: false,
+                backgroundColor: App.getBrandColor('red')
+            }, {
+                title: 'Repeating Event',
+                start: new Date(y, m, d + 6, 16, 0),
+                allDay: false,
+                backgroundColor: App.getBrandColor('green')
+            }, {
+                title: 'Meeting',
+                start: new Date(y, m, d + 9, 10, 30),
+                allDay: false
+            }, {
+                title: 'Lunch',
+                start: new Date(y, m, d, 14, 0),
+                end: new Date(y, m, d, 14, 0),
+                backgroundColor: App.getBrandColor('grey'),
+                allDay: false
+            }, {
+                title: 'Birthday',
+                start: new Date(y, m, d + 1, 19, 0),
+                end: new Date(y, m, d + 1, 22, 30),
+                backgroundColor: App.getBrandColor('purple'),
+                allDay: false
+            }, {
+                title: 'Click for Google',
+                start: new Date(y, m, 28),
+                end: new Date(y, m, 29),
+                backgroundColor: App.getBrandColor('yellow'),
+                url: 'http://google.com/'
+            }]
+        });
+
+        $(document.body).removeClass('login');
+    });
+</script>

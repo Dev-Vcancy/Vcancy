@@ -1,0 +1,220 @@
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
+<link href="assets/global/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
+<link href="assets/global/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet">
+<section id="main">
+    <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+    <section class="new_dashbord" id="content">
+        <div class="container">
+            <!-- title start -->
+            <h1 class="page-title"> Dashboard </h1>
+            <!-- title end -->
+
+            <!-- breadcrumb start -->
+
+            <!-- breadcrumb end -->
+
+            <!-- four box start -->
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-green-sharp">
+                                    <span data-counter="counterup" data-value="7800">{{adashbord.totalUsers}}</span>
+                                </h3>
+                                <small>Users</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-red-haze">
+                                    <span data-counter="counterup" data-value="1349">{{adashbord.totalProperty || 0}}</span>
+                                </h3>
+                                <small>Properties</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-blue-sharp">
+                                    <span data-counter="counterup" data-value="567">{{adashbord.totalUnit}}</span>
+                                </h3>
+                                <small>Units</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-purple-soft">
+                                    <span data-counter="counterup" data-value="276">{{adashbord.totalVacant}}</span>
+                                </h3>
+                                <small>Units vacant</small>
+                            </div>
+                            <div class="icon">
+                                <i class="icon-user"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-green-sharp">
+                                    <span data-counter="counterup" data-value="7800">{{adashbord.totalApplication}}</span>
+
+                                </h3>
+                                <small>Application submited</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-red-haze">
+                                    <span data-counter="counterup" data-value="1349">{{adashbord.totalShowingScheduled}}</span>
+                                </h3>
+                                <small>Showing scheduled</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-blue-sharp">
+                                    <span data-counter="counterup" data-value="567">0</span>
+                                </h3>
+                                <small>Paid users</small>
+                            </div>
+                            <div class="icon">
+                                <i class="zmdi zmdi-home zmdi-hc-fw"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat2 ">
+                        <div class="display">
+                            <div class="number">
+                                <h3 class="font-purple-soft">
+                                    <span data-counter="counterup" data-value="276">0</span>
+                                </h3>
+                                <small>Trial users</small>
+                            </div>
+                            <div class="icon">
+                                <i class="icon-user"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 listt text-center">
+                  Actions Pending                
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                          
+                            <th>
+                                Unit - Property
+                            </th>
+                            <th>
+                                Showing Date/Time
+                            </th>
+                           
+                            <th>
+                                List on Craiglist
+                                <span class="fa fa-info-circle" title="Complete mandatory fields and toggle the button to list on Craigslist"></span>
+                            </th>
+                           
+                            <th>
+                                Listing Status
+                                <span class="fa fa-info-circle" title="Link to craigslist listing appears after unit is listed"></span>
+                            </th>
+                           
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key, value) in adashbord.mergeListing track by $index" id="{{$index}}">
+                            
+                            <td>User <b>{{adashbord.allUsers[value.landlordID].firstname}}</b> has requested to list <b>{{value.unitID}}-{{adashbord.properties[value.propertyId].address}}</b> on Craiglist
+                             </td>
+                            <td>
+                                <span ng-repeat="dt in value.fromToDate">
+                                    {{dt}}
+                                    <br/>
+                                </span>
+                            </td>
+                           
+                            <td class="text-center">
+                                <span ng-if="value.unitID && adashbord.checkIsIncomplete(value.propertyId, value.unitID)" ng-click="adashbord.openDetailModel(value.propertyId, value.unitID)"
+                                    class="text-primary hover-color" style='cursor:pointer;margin:auto'>Incomplete Listing Details</span>
+                               
+                                <div ng-if="!adashbord.checkIsIncomplete(value.propertyId, value.unitID)">
+                                    <div>Activate Listing</div>
+                                    <div class="toggle-switch mt-2" ng-click="adashbord.toggleListOnCraglist(value.keys)">
+                                        <input type="checkbox" hidden="hidden" ng-checked="value.listOnCraigslist">
+                                        <label class="ts-helper" style="border-radius: 8px !important"></label>
+                                    </div>
+                                    <div class="text-primary hover-color" style='cursor:pointer' ng-click="adashbord.openDetailModel(value.propertyId, value.unitID)">
+                                        <span>Edit Listing</span>
+                                    </div>
+                                </div>
+                            </td>
+                           
+                            <td>
+                                Pending
+                            </td>
+                           
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</section>
+<footer id="footer" data-ng-include="'views/template/footer.html'"></footer>
