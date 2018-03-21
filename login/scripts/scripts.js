@@ -2326,641 +2326,897 @@ var App=function(){var t,e=!1,o=!1,a=!1,i=!1,n=[],l="../assets/",s="global/img/"
  * Main module of the application.
  */
 var vcancyApp = angular
-  .module('vcancyApp', [
-    //'ngRoute'
-    'ngResource',
-    'ui.router',
-    'ui.bootstrap',
-    'angular-loading-bar',
-    'oc.lazyLoad',
-    'nouislider',
-    'ngTable',
-	// 'ngTableDemos',
-	'firebase',
-	'ng-clipboard',
-	'angularMoment',
-	'gm',
-	'unsavedChanges',
-	'AngularPrint',
-	'ngFileUpload',
-	'ui.jq',
-	'ui.bootstrap',
-	'socialLogin'
-  ]); 
- 
-	
+	.module('vcancyApp', [
+		//'ngRoute'
+		'ngResource',
+		'ui.router',
+		'ui.bootstrap',
+		'angular-loading-bar',
+		'oc.lazyLoad',
+		'nouislider',
+		'ngTable',
+		// 'ngTableDemos',
+		'firebase',
+		'ng-clipboard',
+		'angularMoment',
+		'gm',
+		'AngularPrint',
+		'ngFileUpload',
+		'ui.jq',
+		'ui.bootstrap',
+		'socialLogin',
+		'angularjs-dropdown-multiselect',
+		'ngSanitize',
+		'ui.select',
+		'ui.calendar'
+	]);
+
+vcancyApp.constant('_', window._);
+
 vcancyApp.constant('config', {
-   "sailsBaseUrl": 'https://www.vcancy.ca/nodeapi/api/v1/',
+	"sailsBaseUrl": 'https://www.vcancy.com/nodeapi/api/v1/',
 });
 
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
-vcancyApp.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
-    $ocLazyLoadProvider.config({
-        // global configs go here
-    });
+vcancyApp.config(['$ocLazyLoadProvider', function ($ocLazyLoadProvider) {
+	$ocLazyLoadProvider.config({
+		// global configs go here
+	});
 }]);
-/*
-vcancyApp.config(function(socialProvider){
-//socialProvider.setGoogleKey("YOUR GOOGLE CLIENT ID");
-  socialProvider.setLinkedInKey("78blzjlmkk6jbl");
-  //socialProvider.setFbKey({appId: "YOUR FACEBOOK APP ID", apiVersion: "API VERSION"});
-}); */
 
-vcancyApp.service('emailSendingService',function($http,config){
-	this.sendEmailViaNodeMailer = function(to,subject,mode,emailData){
+vcancyApp.config(function (socialProvider) {
+	//socialProvider.setGoogleKey("YOUR GOOGLE CLIENT ID");
+	socialProvider.setLinkedInKey("78blzjlmkk6jbl");
+	//socialProvider.setFbKey({appId: "YOUR FACEBOOK APP ID", apiVersion: "API VERSION"});
+});
+
+vcancyApp.service('emailSendingService', function ($http, config) {
+	this.sendEmailViaNodeMailer = function (to, subject, mode, emailData) {
+		// var url = 'https://vcancy.com/login/#/applyproperty/'
+		// if (window.location.host.startsWith('localhost')) {
+		// 	url = 'http://localhost:9000/#/applyproperty/'
+		// }
+		var host = window.location.origin;
+		var url = '';
+		if (host.indexOf('localhost') > -1) {
+			url = 'http://localhost:1337/email/sendemail';
+		} else {
+			url = host + '/nodeapi/api/v1/email/sendemail';
+		}
+		console.log('URL', url);
 		var req = {
-			 method: 'POST',
+			method: 'POST',
 			// url: 'http://localhost:1337/email/sendemail',
-			 url: config.sailsBaseUrl+'email/sendemail',
-			 headers: {
-			    'Content-Type': 'application/json',
+			// url: config.sailsBaseUrl + 'email/sendemail',
+			url: url,
+			headers: {
+				'Content-Type': 'application/json',
 				'Access-Control-Allow-Origin': '*',
 				"Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
-			 },
-			 data: { 
+			},
+			data: {
 				to: to,
 				subject: subject,
 				mode: mode,
 				emailData: emailData
-				}
 			}
+		}
 
-		$http(req).then(function successCallback(response) {	
+		$http(req).then(function successCallback(response) {
 			console.log("Done");
 		}, function errorCallback(response) {
 			console.log("Fail");
 		});
 	}
-});  
-  
+});
+
 vcancyApp
-.service('slotsBuildService', function(){
-   this.maketimeslots = function(date,ftime,totime,limit,multiple) {
-	   	   
-		var slots = [];
-	   
-		angular.forEach(date, function(value, key) { 
-			var fromtime = new Date(ftime[key]);
-			var to = new Date(totime[key]);
-			
-			var minutestimediff = (to - fromtime)/ 60000;
-			var subslots = Math.floor(Math.ceil(minutestimediff)/30);
-			
-		    var temp = 0;
-			for(var i=0; i<subslots; i++){
-			   if(temp == 0){
-				   temp = fromtime;
-			   } 		   
-			   var f = temp;
-			   var t = new Date(f.getTime() + (30 * 60 * 1000)); // 30 minutes add to from time 
-			   var temp = t;
-			   slots.push({date:value, fromtime:f, to:t, person: limit[key], multiple: multiple[key], dateslotindex: key});
-			   
-			   // temp = new Date(t.getTime() + (1 * 60 * 1000)); // 1 minute add to TO time
-			}  
-		});
-	   
-	  // console.log(slots);
-      return slots;
-   }	
-});
-  
-  
-vcancyApp  
- .directive('loginHeader', function() {
-  return {
-    controller: 'headerCtrl',
-	controllerAs: 'hctrl',
-	templateUrl: 'views/template/header-top.html',
-  };
-}); 
+	.service('slotsBuildService', function () {
+		this.maketimeslots = function (date, ftime, totime, limit, multiple) {
 
-vcancyApp  
- .directive('loginSidebar', function() {
-  return {
-    controller: 'maCtrl',
-	controllerAs: 'mactrl',
-	templateUrl: 'views/template/sidebar-left.html',
-  };
-}); 
+			var slots = [];
 
-vcancyApp 
-.directive('autoSize', function(){
-        return {
-            restrict: 'A',
-            link: function(scope, element){
-                if (element[0]) {
-                   autosize(element);
-                }
-            }
-        }
-    })
+			angular.forEach(date, function (value, key) {
+				var fromtime = new Date(ftime[key]);
+				var to = new Date(totime[key]);
+
+				var minutestimediff = (to - fromtime) / 60000;
+				var subslots = Math.floor(Math.ceil(minutestimediff) / 30);
+
+				var temp = 0;
+				for (var i = 0; i < subslots; i++) {
+					if (temp == 0) {
+						temp = fromtime;
+					}
+					var f = temp;
+					var t = new Date(f.getTime() + (30 * 60 * 1000)); // 30 minutes add to from time 
+					var temp = t;
+					slots.push({ date: value, fromtime: f, to: t, person: limit[key], multiple: multiple[key], dateslotindex: key });
+
+					// temp = new Date(t.getTime() + (1 * 60 * 1000)); // 1 minute add to TO time
+				}
+			});
+
+			// console.log(slots);
+			return slots;
+		}
+	});
 
 
-vcancyApp.directive("disableLink", function() {
+vcancyApp
+	.directive('loginHeader', function () {
+		return {
+			controller: 'headerCtrl',
+			controllerAs: 'hctrl',
+			templateUrl: 'views/template/header-top.html',
+		};
+	});
+
+vcancyApp
+	.directive('loginSidebar', function () {
+		return {
+			controller: 'maCtrl',
+			controllerAs: 'mactrl',
+			templateUrl: 'views/template/sidebar-left.html',
+		};
+	});
+
+vcancyApp
+	.directive('autoSize', function () {
+		return {
+			restrict: 'A',
+			link: function (scope, element) {
+				if (element[0]) {
+					autosize(element);
+				}
+			}
+		}
+	})
+
+vcancyApp.directive('integer', function () {
 	return {
-        restrict: "A",
-        link: function(scope, elem, attrs) {
-            $(elem).click(function() {
-                $().JqueryFunction();
-            });
-        }
-    }
+		require: 'ngModel',
+		link: function (scope, ele, attr, ctrl) {
+			ctrl.$parsers.unshift(function (viewValue) {
+				return parseInt(viewValue, 10);
+			});
+		}
+	};
 });
-vcancyApp.directive("disableLink1", function() {
+vcancyApp.directive("disableLink", function () {
 	return {
-        restrict: "A",
-        link: function(scope, elem, attrs) {
-            $(elem).click(function() {
-            	var test = $(this).find("input").attr( 'id' );
-                $().JqueryFunction1(scope, elem, test);
-            });
-        }
-    }
+		restrict: "A",
+		link: function (scope, elem, attrs) {
+			$(elem).click(function () {
+				$().JqueryFunction();
+			});
+		}
+	}
 });
-vcancyApp.directive("disableLink12", function() {
+vcancyApp.directive("disableLink1", function () {
 	return {
-        restrict: "A",
-        link: function(scope, elem, attrs) {
-            $(elem).click(function() {
-            	var test = $(this).find("input").attr( 'id' );
-                $().JqueryFunction12(scope, elem, test);
-            });
-        }
-    }
+		restrict: "A",
+		link: function (scope, elem, attrs) {
+			$(elem).click(function () {
+				var test = $(this).find("input").attr('id');
+				$().JqueryFunction1(scope, elem, test);
+			});
+		}
+	}
 });
-vcancyApp.directive("disableLink123", function() {
+vcancyApp.directive("disableLink12", function () {
 	return {
-        restrict: "A",
-        link: function(scope, elem, attrs) {
-            $(elem).click(function() {
-                $().JqueryFunction123();
-            });
-        }
-    }
+		restrict: "A",
+		link: function (scope, elem, attrs) {
+			$(elem).click(function () {
+				var test = $(this).find("input").attr('id');
+				$().JqueryFunction12(scope, elem, test);
+			});
+		}
+	}
 });
-
-vcancyApp.directive("disableLink21", function() {
+vcancyApp.directive("disableLink123", function () {
 	return {
-        restrict: "A",
-        link: function(scope, elem, attrs) {
-            $(elem).click(function() {
-            	var test = $(this).find("input").attr( 'id' );
-            	$().JqueryFunctionprop(scope, elem, test);
-            });
-        }
-    }
+		restrict: "A",
+		link: function (scope, elem, attrs) {
+			$(elem).click(function () {
+				$().JqueryFunction123();
+			});
+		}
+	}
+});
+
+vcancyApp.directive("disableLink21", function () {
+	return {
+		restrict: "A",
+		link: function (scope, elem, attrs) {
+			$(elem).click(function () {
+				var test = $(this).find("input").attr('id');
+				$().JqueryFunctionprop(scope, elem, test);
+			});
+		}
+	}
 });
 
 
-$(document).ready(function() {
-  (function($){
-     $.fn.JqueryFunction = function() {
-     	  //alert("Come Here");
-          $( "#datepicker-13" ).datepicker({format: 'dd-MM-yyyy',autoclose: true});
-            $( "#datepicker-13" ).datepicker("show");
-            
-     }; 
-  })( jQuery );
+$(document).ready(function () {
+	(function ($) {
+		$.fn.JqueryFunction = function () {
+			//alert("Come Here");
+			$("#datepicker-13").datepicker({ format: 'dd-MM-yyyy', autoclose: true });
+			$("#datepicker-13").datepicker("show");
+
+		};
+	})(jQuery);
 
 });
-$(document).ready(function() {
-  (function($){
-     $.fn.JqueryFunction1 = function(scope, elem, test) {
-     	  
-     	   //event.preventDefault();
-        $( "#"+test ).datepicker({format: 'dd-MM-yyyy',autoclose: true});
-        $( "#"+test ).datepicker("show");
-            
-     }; 
-  })( jQuery );
+$(document).ready(function () {
+	(function ($) {
+		$.fn.JqueryFunction1 = function (scope, elem, test) {
+
+			//event.preventDefault();
+			$("#" + test).datepicker({ format: 'dd-MM-yyyy', autoclose: true });
+			$("#" + test).datepicker("show");
+
+		};
+	})(jQuery);
 
 });
-$(document).ready(function() {
-  (function($){
-     $.fn.JqueryFunction12 = function(scope, elem, test) {
-          $( "#"+test ).datepicker({format: 'dd-MM-yyyy',autoclose: true});
-            $( "#"+test ).datepicker("show");
-            
-     }; 
-  })( jQuery );
+$(document).ready(function () {
+	(function ($) {
+		$.fn.JqueryFunction12 = function (scope, elem, test) {
+			$("#" + test).datepicker({ format: 'dd-MM-yyyy', autoclose: true });
+			$("#" + test).datepicker("show");
+
+		};
+	})(jQuery);
 
 });
-$(document).ready(function() {
-  (function($){
-     $.fn.JqueryFunction123 = function() {
-     	 
-          $( "#datepicker123-13" ).datepicker({format: 'dd-MM-yyyy',autoclose: true});
-            $( "#datepicker123-13" ).datepicker("show");
-            
-     }; 
-  })( jQuery );
+$(document).ready(function () {
+	(function ($) {
+		$.fn.JqueryFunction123 = function () {
+
+			$("#datepicker123-13").datepicker({ format: 'dd-MM-yyyy', autoclose: true });
+			$("#datepicker123-13").datepicker("show");
+
+		};
+	})(jQuery);
 
 });
-$(document).ready(function() {
-  (function($){
-     $.fn.JqueryFunctionprop = function(scope, elem, test) {
-     	 
-          $( "#"+test ).datepicker({format: 'dd-MM-yyyy',autoclose: true});
-            $( "#"+test ).datepicker("show");
-            
-     }; 
-  })( jQuery );
+$(document).ready(function () {
+	(function ($) {
+		$.fn.JqueryFunctionprop = function (scope, elem, test) {
+
+			$("#" + test).datepicker({ format: 'dd-MM-yyyy', autoclose: true });
+			$("#" + test).datepicker("show");
+
+		};
+	})(jQuery);
 
 });
 
-	
 
- vcancyApp
- .directive('fullCalendar', function(){
-        return {
-            restrict: 'A',
+
+vcancyApp
+	.directive('fullCalendar', function () {
+		return {
+			restrict: 'A',
 			scope: {
 				calendardata: '=' //Two-way data binding
 			},
-            link: function(scope, element) {
+			link: function (scope, element) {
 				console.log(scope.calendardata);
-                element.fullCalendar({
-                    contentHeight: 'auto',
-                    theme: true,
-                    header: {
-                        right: '',
-                        center: 'prev, title, next',
-                        left: ''
-                    },
-                    defaultDate: new Date(),
-                    editable: true,
-					
-                    events: scope.calendardata
-                });
-            }
-        }
-    }) 	
+				element.fullCalendar({
+					contentHeight: 'auto',
+					theme: true,
+					header: {
+						right: '',
+						center: 'prev, title, next',
+						left: ''
+					},
+					defaultDate: new Date(),
+					editable: true,
 
-	
-vcancyApp 
- .config(function ($stateProvider, $urlRouterProvider){	
-	  // Initialize Firebase
-	  var config = {
-		apiKey: "AIzaSyDO18QznZ7mvAezkQ1M80nUz1OhaHjuwSA",
-		authDomain: "vcancy-5e3b4.firebaseapp.com",
-		databaseURL: "https://vcancy-5e3b4.firebaseio.com",
-		projectId: "vcancy-5e3b4",
-		storageBucket: "vcancy-5e3b4.appspot.com",
-		messagingSenderId: "330892868858"
-	  };
-	  var app = firebase.initializeApp(config);	 
-	  
-	  // var sailsBaseUrl = 'http://www.vcancy.ca/api/v1/';
-	
-	$urlRouterProvider.otherwise("/");
-	$stateProvider	
-		// Public Routes
-	   /*.state ('login', {
-			url: '/',
-			controller: 'loginCtrl',
-			controllerAs: 'lctrl',
-			templateUrl: 'views/login.html',	
-		}) */
-	   .state ('login', {
-			url: '/',
-			controller: 'loginCtrl',
-			controllerAs: 'lctrl',
-			templateUrl: 'views/login.html',	
-			resolve: {
-                deps: ['$ocLazyLoad', function($ocLazyLoad) {
-                    return $ocLazyLoad.load({
-                        name: 'vcancyApp',
-                        insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
-                        files: [
-                            '../assets/pages/css/login-2.min.css',                            
-                            '../assets/pages/scripts/login.min.js',
-                        ] 
-                    });
-                }]
-            }
-		}) 
-		 .state ('register', {
-			url: '/register',
-			controller: 'loginCtrl',
-			controllerAs: 'lctrl',
-			templateUrl: 'views/register.html',
-			 resolve: {
-                deps: ['$ocLazyLoad', function($ocLazyLoad) {
-                    return $ocLazyLoad.load({
-                        name: 'vcancyApp',
-                        insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
-                        files: [
-                            '../assets/pages/css/login-5.min.css',                            
-                            '../assets/global/plugins/backstretch/jquery.backstretch.min.js',
-                            '../assets/pages/scripts/login-5.min.js',
-                        ] 
-                    });
-                }]
-            }	
-		}) 
-		
-		.state ('termsofuse', {
-			url: '/termsofuse',
-			templateUrl: 'views/termspublic.html',	
-		}) 
-		
-		.state ('viewexternalapplication', {
-			url: '/viewexternalapp/{appID}',
-			controller: 'viewappCtrl',
-			controllerAs: 'vappctrl',
-			templateUrl: 'views/view_rental_app_form.html',
-		})
-		
-		// Landlord Routes
-		/*.state ('landlorddashboard', {
-			url: '/landlorddboard',
-			controller: 'landlorddboardlCtrl',
-			controllerAs: 'ldboardctrl',
-			templateUrl: 'views/landlord.html',
-			resolve: { authenticate: authenticate }
-		})  */
-		.state ('landlorddashboard', {
-			url: '/landlorddboard',
-			controller: 'landlorddboardlCtrl',
-			controllerAs: 'ldboardctrl',
-			templateUrl: 'views/landlord.html',
-			resolve: {authenticate: authenticate,
-				deps: ['$ocLazyLoad', function($ocLazyLoad) {
-	                    return $ocLazyLoad.load({
-	                        name: 'vcancyApp',
-	                        files: [
-	                            '../assets/layouts/layout2/css/layout.min.css',
-	                            '../assets/layouts/layout2/css/themes/blue.min.css',
-	                            '../assets/layouts/layout2/css/custom.min.css',
-	                            '../assets/global/plugins/moment.min.js',                            
-	                            '../assets/global/plugins/fullcalendar/fullcalendar.min.js',
-	                            '../assets/pages/scripts/dashboard.min.js',
-	                        ] 
-	                    });
-	                }]
-             }
-		}) 
-		/*.state('landordprofile', {
-		    url: '/landordprofile',
-		    controller: 'landlordProfilelCtrl',
-		    controllerAs: 'ldProfilectrl',
-		    templateUrl: 'views/landloardProfile.html',
-		    resolve: { authenticate: authenticate }
-		})*/
-		.state('landordprofile', {
-		    url: '/landordprofile',
-		    controller: 'landlordProfilelCtrl',
-		    controllerAs: 'ldProfilectrl',
-		    templateUrl: 'views/landloardProfile.html',
-		    resolve: { authenticate: authenticate,
-		   			 deps: ['$ocLazyLoad', function($ocLazyLoad) {
-	                    return $ocLazyLoad.load({
-	                        name: 'vcancyApp',
-	                        files: [
-	                            '../assets/pages/css/profile-2.min.css',
-	                            '../assets/layouts/layout2/css/layout.min.css',
-	                            '../assets/layouts/layout2/css/themes/blue.min.css',
-	                            '../assets/layouts/layout2/css/custom.min.css',
-	                            '../assets/layouts/layout2/scripts/layout.min.js',
-	                            '../assets/layouts/global/scripts/quick-nav.min.js',
-	                        ] 
-	                    });
-	                }]
+					events: scope.calendardata
+				});
+			}
+		}
+	})
 
-	        }
-		})
-		.state ('viewprop', {
-			url: '/myprop',
-			controller: 'propertyCtrl',
-			controllerAs: 'propctrl',
-			templateUrl: 'views/viewproperties.html',
-			resolve: { authenticate: authenticate }
-		}) 
-		
-		.state ('editprop', {
-			url: '/editprop/{propId}',
-			controller: 'propertyCtrl',
-			controllerAs: 'propctrl',
-			templateUrl: 'views/addproperties.html',
-			resolve: { authenticate: authenticate }
-		})
-		
-		.state ('customemailhandler', {
-			url: '/auth?{mode}&{oobCode}&{apiKey}',
-			controller: 'emailhandlerCtrl',
-			controllerAs: 'ehandlectrl',
-			templateUrl: 'views/customhandler.html',
-		})
-		
-		 .state ('addprop', {
-			url: '/addprop',
-			controller: 'propertyCtrl',
-			controllerAs: 'propctrl',
-			templateUrl: 'views/addproperties.html',
-			resolve: { authenticate: authenticate }
-		})
-		
-		.state ('schedule', {
-			url: '/schedule',
-			controller: 'scheduleCtrl',
-			controllerAs: 'schedulectrl',
-			templateUrl: 'views/schedule.html',
-			resolve: { authenticate: authenticate }
-		})
-		
-		.state ('app', {
-			url: '/app',
-			controller: 'landlordappCtrl',
-			controllerAs: 'lappctrl',
-			templateUrl: 'views/app.html',
-			resolve: { authenticate: authenticate }
-		})  
-		
-		.state ('faq', {
-			url: '/faq',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
-			templateUrl: 'views/faq.html',
-			resolve: { authenticate: authenticate }
-		}) 
-		
-		.state ('contact', {
-			url: '/contact',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
-			templateUrl: 'views/contact.html',
-			resolve: { authenticate: authenticate }
-		}) 
-		
-		.state ('security', {
-			url: '/security',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
-			templateUrl: 'views/security.html',
-			resolve: { authenticate: authenticate }
-		}) 
-		
-		.state ('terms', {
-			url: '/terms',
-			controller: 'maCtrl',
-			controllerAs: 'mactrl',
-			templateUrl: 'views/terms.html',
-			resolve: { authenticate: authenticate }
-		})
-		
-		.state ('viewtenantapplication', {
-			url: '/viewapplication/{appID}',
-			controller: 'viewappCtrl',
-			controllerAs: 'vappctrl',
-			templateUrl: 'views/view_rental_app_form.html',
-			resolve: { authenticate: authenticate }
-		})
-		 
-		// Tenant Routes
-		.state ('tenantdashboard', {
-			url: '/tenantdashboard',
-			controller: 'tenantdboardlCtrl',
-			controllerAs: 'tdboardctrl',
-			templateUrl: 'views/tenant.html',
-			resolve: { tenantauthenticate: tenantauthenticate,
-						deps: ['$ocLazyLoad', function($ocLazyLoad) {
-				                    return $ocLazyLoad.load({
-				                        name: 'vcancyApp',
-				                        files: [
-				                            '../assets/layouts/layout2/css/layout.min.css',
-				                            '../assets/layouts/layout2/css/themes/blue.min.css',
-				                            '../assets/layouts/layout2/css/custom.min.css',
-				                            '../assets/global/plugins/moment.min.js',                            
-				                            '../assets/global/plugins/fullcalendar/fullcalendar.min.js',
-				                            '../assets/pages/scripts/dashboard.min.js',
-				                        ] 
-				                    });
-				                }]
-	        }
-		})
-		.state('tenantprofile', {
-		    url: '/tenantprofile',
-		    controller: 'tenantProfilelCtrl',
-		    controllerAs: 'tdProfilectrl',
-		    templateUrl: 'views/tenantProfile.html',
-		    resolve: { tenantauthenticate: tenantauthenticate }
-		})
-		.state ('tenantapply', {
-			url: '/applyproperty/{propId}',
-			controller: 'applypropCtrl',
-			controllerAs: 'applyctrl',
-			templateUrl: 'views/applyproperty.html',
-			resolve: { tenantauthenticate: tenantauthenticate }
-		})
-		
-		.state ('applicationThanks', {
-			url: '/applicationThanks',
-			templateUrl: 'views/applypropsuccess.html',
-			resolve: { tenantauthenticate: tenantauthenticate }
-		})
-		
-		.state ('tenantschedule', {
-			url: '/tenantschedule',
-			controller: 'tenantscheduleCtrl',
-			controllerAs: 'tschedulectrl',
-			templateUrl: 'views/tenant_schedule.html',
-			resolve: { tenantauthenticate: tenantauthenticate }
-		})
-		
-		.state ('tenantapplications', {
-			url: '/tenantapplications',
-			controller: 'tenantappCtrl',
-			controllerAs: 'tappctrl',
-			templateUrl: 'views/tenant_app.html',
-			resolve: { tenantauthenticate: tenantauthenticate }
-		})
-		
-		
-		.state ('rentalform', {
-			url: '/rentalform/{scheduleId}/{applicationId}',
-			controller: 'rentalformCtrl',
-			controllerAs: 'rctrl',
-			templateUrl: 'views/rental_app_form.html',
-			resolve: { tenantauthenticate: tenantauthenticate }
-		})
-				
-		.state ('viewapplication1', {
-			url: '/viewapp/{appID}',
-			controller: 'viewappCtrl',
-			controllerAs: 'vappctrl',
-			templateUrl: 'views/view_rental_app_form.html',
-			resolve: { tenantauthenticate: tenantauthenticate }
-		})
-		
-		
-		function authenticate($q,$state, $timeout, $rootScope) {
-			// console.log($rootScope.user.emailVerified);
+
+vcancyApp
+	.config(function ($stateProvider, $urlRouterProvider) {
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyCR720Fl1Q6UIuvyy_0U980Z8y1mLschsI",
+			authDomain: "vcancy-5e3b4.firebaseapp.com",
+			databaseURL: "https://vcancy-5e3b4.firebaseio.com",
+			projectId: "vcancy-5e3b4",
+			storageBucket: "vcancy-5e3b4.appspot.com",
+			messagingSenderId: "330892868858"
+		};
+		var app = firebase.initializeApp(config);
+
+		// var sailsBaseUrl = 'http://www.vcancy.com/api/v1/';
+
+		$urlRouterProvider.otherwise("/");
+		$stateProvider
+			// Public Routes
+			/*.state ('login', {
+				 url: '/',
+				 controller: 'loginCtrl',
+				 controllerAs: 'lctrl',
+				 templateUrl: 'views/login.html',	
+			 }) */
+			.state('login', {
+				url: '/',
+				controller: 'loginCtrl',
+				controllerAs: 'lctrl',
+				templateUrl: 'views/login.html',
+				resolve: {
+					deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+						return $ocLazyLoad.load({
+							name: 'vcancyApp',
+							insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+							files: [
+								'../assets/pages/css/login-2.min.css',
+								'../styles/cmsdev.css',
+								'../assets/pages/scripts/login.min.js',
+							]
+						});
+					}]
+				}
+			})
+			.state('register', {
+				url: '/register',
+				controller: 'loginCtrl',
+				controllerAs: 'lctrl',
+				templateUrl: 'views/register.html',
+				resolve: {
+					deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+						return $ocLazyLoad.load({
+							name: 'vcancyApp',
+							insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
+							files: [
+								'../assets/pages/css/login-5.min.css',
+								'../assets/global/plugins/backstretch/jquery.backstretch.min.js',
+								'../assets/pages/scripts/login-5.min.js',
+							]
+						});
+					}]
+				}
+			})
+
+			.state('termsofuse', {
+				url: '/termsofuse',
+				templateUrl: 'views/termspublic.html',
+			})
+
+			.state('viewexternalapplication', {
+				url: '/viewexternalapp/{appID}',
+				controller: 'viewappCtrl',
+				controllerAs: 'vappctrl',
+				templateUrl: 'views/view_rental_app_form.html',
+			})
+
+			// Landlord Routes
+			/*.state ('landlorddashboard', {
+				url: '/landlorddboard',
+				controller: 'landlorddboardlCtrl',
+				controllerAs: 'ldboardctrl',
+				templateUrl: 'views/landlord.html',
+				resolve: { authenticate: authenticate }
+			})  */
+			.state('landlorddashboard', {
+				url: '/landlorddboard',
+				controller: 'landlorddboardlCtrl',
+				controllerAs: 'ldboardctrl',
+				templateUrl: 'views/landlord.html',
+				resolve: {
+					authenticate: authenticate,
+					deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+						return $ocLazyLoad.load({
+							name: 'vcancyApp',
+							files: [
+								'../assets/layouts/layout2/css/layout.min.css',
+								'../assets/layouts/layout2/css/themes/blue.min.css',
+								'../assets/layouts/layout2/css/custom.min.css',
+								'../assets/global/plugins/moment.min.js',
+								'../assets/global/plugins/fullcalendar/fullcalendar.min.js',
+								'../assets/pages/scripts/dashboard.min.js',
+							]
+						});
+					}]
+				}
+			})
+			/*.state('landordprofile', {
+				url: '/landordprofile',
+				controller: 'landlordProfilelCtrl',
+				controllerAs: 'ldProfilectrl',
+				templateUrl: 'views/landloardProfile.html',
+				resolve: { authenticate: authenticate }
+			})*/
+			.state('landordprofile', {
+				url: '/landordprofile',
+				controller: 'landlordProfilelCtrl',
+				controllerAs: 'ldProfilectrl',
+				templateUrl: 'views/landloardProfile.html',
+				resolve: {
+					authenticate: authenticate,
+					deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+						return $ocLazyLoad.load({
+							name: 'vcancyApp',
+							files: [
+								'../assets/pages/css/profile-2.min.css',
+								'../assets/layouts/layout2/css/layout.min.css',
+								'../assets/layouts/layout2/css/themes/blue.min.css',
+								'../assets/layouts/layout2/css/custom.min.css',
+								'../assets/layouts/layout2/scripts/layout.min.js',
+								'../assets/layouts/global/scripts/quick-nav.min.js',
+								'../styles/cmsdev.css',
+							]
+						});
+					}]
+
+				}
+			})
+
+			.state('viewprop', {
+				url: '/myprop',
+				controller: 'propertyCtrl',
+				controllerAs: 'propctrl',
+				templateUrl: 'views/viewproperties.html',
+				resolve: { authenticate: authenticate }
+			})
+			.state('addunits', {
+				url: '/addunits/{propId}',
+				templateUrl: 'views/units.html',
+				controller: 'propertyCtrl',
+				controllerAs: 'propctrl',
+
+			})
+			.state('viewunits', {
+				url: '/viewunits/{propId}',
+				templateUrl: 'views/viewunits.html',
+				controller: 'propertyCtrl',
+				controllerAs: 'propctrl',
+
+			})
+			/*.state ('editprop', {
+				url: '/editprop/{propId}',
+				controller: 'propertyCtrl',
+				controllerAs: 'propctrl',
+				templateUrl: 'views/editproperty.html',
+				resolve: { authenticate: authenticate }
+			})*/
+			.state('editprop', {
+				url: '/editprop/{propId}',
+				controller: 'propertyCtrl',
+				controllerAs: 'propctrl',
+				templateUrl: 'views/editproperty.html',
+				resolve: { authenticate: authenticate }
+			})
+
+			.state('customemailhandler', {
+				url: '/auth?{mode}&{oobCode}&{apiKey}',
+				controller: 'emailhandlerCtrl',
+				controllerAs: 'ehandlectrl',
+				templateUrl: 'views/customhandler.html',
+			})
+
+			/* .state ('addprop', {
+				url: '/addprop',
+				controller: 'propertyCtrl',
+				controllerAs: 'propctrl',
+				templateUrl: 'views/addproperties.html',
+				resolve: { authenticate: authenticate }
+			})*/
+			/*.state ('addprop', {
+			   url: '/addprop',
+			   controller: 'propertyCtrl',
+			   controllerAs: 'propctrl',
+			   templateUrl: 'views/addproperties.html',
+			   resolve: { authenticate: authenticate }
+		   })*/
+			.state('addprop', {
+				url: '/addprop',
+				controller: 'propertyCtrl',
+				controllerAs: 'propctrl',
+				templateUrl: 'views/addproperties.html',
+				resolve: { authenticate: authenticate }
+			})
+
+			// .state ('schedule', {
+			// 	url: '/schedule',
+			// 	controller: 'scheduleCtrl',
+			// 	controllerAs: 'schedulectrl',
+			// 	templateUrl: 'views/schedule.html',
+			// 	resolve: { authenticate: authenticate }
+			// })
+
+			.state('schedule', {
+				url: '/schedule',
+				controller: 'newscheduleCtrl',
+				controllerAs: 'newschedulectrl',
+				templateUrl: 'views/newschedule.html',
+				resolve: {
+					authenticate: authenticate,
+					deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+						return $ocLazyLoad.load({
+							name: 'vcancyApp',
+							files: [
+								'../assets/layouts/layout2/css/layout.min.css',
+								'../assets/layouts/layout2/css/themes/blue.min.css',
+								'../assets/layouts/layout2/css/custom.min.css',
+								'../assets/global/plugins/moment.min.js',
+								'../assets/global/plugins/fullcalendar/fullcalendar.min.js',
+								'../assets/pages/scripts/dashboard.min.js',
+							]
+						});
+					}]
+				}
+			})
+
+			.state('app', {
+				url: '/app',
+				controller: 'landlordappCtrl',
+				controllerAs: 'lappctrl',
+				templateUrl: 'views/peoples.html',
+				resolve: { authenticate: authenticate }
+			})
+
+			.state('faq', {
+				url: '/faq',
+				controller: 'maCtrl',
+				controllerAs: 'mactrl',
+				templateUrl: 'views/faq.html',
+				resolve: { authenticate: authenticate }
+			})
+
+			.state('contact', {
+				url: '/contact',
+				controller: 'maCtrl',
+				controllerAs: 'mactrl',
+				templateUrl: 'views/contact.html',
+				resolve: { authenticate: authenticate }
+			})
+
+			.state('security', {
+				url: '/security',
+				controller: 'maCtrl',
+				controllerAs: 'mactrl',
+				templateUrl: 'views/security.html',
+				resolve: { authenticate: authenticate }
+			})
+
+			.state('terms', {
+				url: '/terms',
+				controller: 'maCtrl',
+				controllerAs: 'mactrl',
+				templateUrl: 'views/terms.html',
+				resolve: { authenticate: authenticate }
+			})
+
+			.state('viewtenantapplication', {
+				url: '/viewapplication/{appID}',
+				controller: 'viewappCtrl',
+				controllerAs: 'vappctrl',
+				templateUrl: 'views/view_rental_app_form.html',
+				resolve: { authenticate: authenticate }
+			})
+
+			// Tenant Routes
+			.state('tenantdashboard', {
+				url: '/tenantdashboard',
+				controller: 'tenantdboardlCtrl',
+				controllerAs: 'tdboardctrl',
+				templateUrl: 'views/tenant.html',
+				resolve: {
+					tenantauthenticate: tenantauthenticate,
+					deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+						return $ocLazyLoad.load({
+							name: 'vcancyApp',
+							files: [
+								'../assets/layouts/layout2/css/layout.min.css',
+								'../assets/layouts/layout2/css/themes/blue.min.css',
+								'../assets/layouts/layout2/css/custom.min.css',
+								'../assets/global/plugins/moment.min.js',
+								'../assets/global/plugins/fullcalendar/fullcalendar.min.js',
+								'../assets/pages/scripts/dashboard.min.js',
+							]
+						});
+					}]
+				}
+			})
+			// .state('tenantprofile', {
+			//     url: '/tenantprofile',
+			//     controller: 'tenantProfilelCtrl',
+			//     controllerAs: 'tdProfilectrl',
+			//     templateUrl: 'views/tenantProfile.html',
+			//     resolve: { tenantauthenticate: tenantauthenticate }
+			// })
+			.state('tenantprofile', {
+				url: '/tenantprofile',
+				controller: 'tenantProfilelCtrl',
+				controllerAs: 'tdProfilectrl',
+				templateUrl: 'views/tenantProfile.html',
+				resolve: {
+					tenantauthenticate: tenantauthenticate,
+					deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+						return $ocLazyLoad.load({
+							name: 'vcancyApp',
+							files: [
+								'../assets/pages/css/profile-2.min.css',
+								'../assets/layouts/layout2/css/layout.min.css',
+								'../assets/layouts/layout2/css/themes/blue.min.css',
+								'../assets/layouts/layout2/css/custom.min.css',
+								'../assets/layouts/layout2/scripts/layout.min.js',
+								'../assets/layouts/global/scripts/quick-nav.min.js',
+								'../styles/cmsdev.css',
+							]
+						});
+					}]
+
+				}
+			})
+			.state('tenantapply', {
+				url: '/applyproperty/{propId}',
+				controller: 'applypropCtrl',
+				controllerAs: 'applyctrl',
+				templateUrl: 'views/applyproperty.html',
+			})
+
+			.state('applicationThanks', {
+				url: '/applicationThanks',
+				templateUrl: 'views/applypropsuccess.html',
+				resolve: { tenantauthenticate: tenantauthenticate }
+			})
+
+			.state('tenantschedule', {
+				url: '/tenantschedule',
+				controller: 'tenantscheduleCtrl',
+				controllerAs: 'tschedulectrl',
+				templateUrl: 'views/tenant_schedule.html',
+				resolve: { tenantauthenticate: tenantauthenticate }
+			})
+
+			.state('tenantapplications', {
+				url: '/tenantapplications',
+				controller: 'tenantappCtrl',
+				controllerAs: 'tappctrl',
+				templateUrl: 'views/tenant_app.html',
+				resolve: { tenantauthenticate: tenantauthenticate }
+			})
+
+
+			.state('rentalform', {
+				url: '/rentalform/{scheduleId}/{applicationId}',
+				controller: 'rentalformCtrl',
+				controllerAs: 'rctrl',
+				templateUrl: 'views/rental_app_form.html',
+				resolve: { tenantauthenticate: tenantauthenticate }
+			})
+
 			
-			if(localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified')!== "null" && localStorage.getItem('usertype') != "null" ){
-				 $rootScope.uid  = localStorage.getItem('userID');
-				 $rootScope.emailVerified  = localStorage.getItem('userEmailVerified');
-				 $rootScope.usertype = localStorage.getItem('usertype');
-			 } 
-			  
-			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype == "1" ) {				
-				// Resolve the promise successfully
-				return $q.when()			
-				
-			} else {
-				  // The next bit of code is asynchronously tricky.
 
-				  $timeout(function() {
-				  // This code runs after the authentication promise has been rejected.
-				  // Go to the log-in page
-				  $state.go('login')
+			.state('viewapplication1', {
+				url: '/viewapp/{appID}',
+				controller: 'viewappCtrl',
+				controllerAs: 'vappctrl',
+				templateUrl: 'views/view_rental_app_form.html',
+				resolve: { tenantauthenticate: tenantauthenticate }
+			})
+
+
+			.state('admindashboard', {
+				url: '/admin/dashboard',
+				controller: 'adminDashbordCtrl',
+				controllerAs: 'adashbord',
+				templateUrl: 'views/admin/dashbord.html',
+				resolve: {
+					adminauthenticate: adminauthenticate,
+					deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+						return $ocLazyLoad.load({
+							name: 'vcancyApp',
+							files: [
+								'../assets/layouts/layout2/css/layout.min.css',
+								'../assets/layouts/layout2/css/themes/blue.min.css',
+								'../assets/layouts/layout2/css/custom.min.css',
+								'../assets/global/plugins/moment.min.js',
+								'../assets/global/plugins/fullcalendar/fullcalendar.min.js',
+								'../assets/pages/scripts/dashboard.min.js',
+							]
+						});
+					}]
+				}
+			})
+			.state('adminrentalform', {
+				url: '/adminrentalform/{tenantID}/{scheduleId}/{applicationId}',
+				controller: 'adminrentalformCtrl',
+				controllerAs: 'arctrl',
+				templateUrl: 'views/admin/adminrental_app_form.html',
+				resolve: { adminauthenticate: adminauthenticate }
+			}) 
+
+			.state('adminviewapplication', {
+				url: '/adminviewapp/{appID}',
+				controller: 'adminviewappCtrl',
+				controllerAs: 'avappctrl',
+				templateUrl: 'views/admin/adminview_rental_app_form.html',
+				resolve: { adminauthenticate: adminauthenticate }
+			})
+
+			.state('adminapplication', {
+				url: '/admin/application',
+				controller: 'adminApplicationCtrl',
+				controllerAs: 'aapplication',
+				templateUrl: 'views/admin/application.html',
+				resolve: {
+					adminauthenticate: adminauthenticate,
+				}
+			})
+			.state('adminbilling', {
+				url: '/admin/billing',
+				controller: 'adminBillingCtrl',
+				controllerAs: 'abilling',
+				templateUrl: 'views/admin/billing.html',
+				resolve: {
+					adminauthenticate: adminauthenticate,
+				}
+			})
+
+			.state('admineditprop', {
+				url: '/admin/editprop/{propId}',
+				controller: 'adminPropertyCtrl',
+				controllerAs: 'apropctrl',
+				templateUrl: 'views/admin/editproperty.html',
+				resolve: { adminauthenticate: adminauthenticate }
+			})
+
+			.state('adminaddprop', {
+				url: '/admin/addprop',
+				controller: 'adminPropertyCtrl',
+				controllerAs: 'apropctrl',
+				templateUrl: 'views/admin/addproperties.html',
+				resolve: { adminauthenticate: adminauthenticate }
+			})
+		
+			.state('adminpeoples', {
+				url: '/admin/peoples',
+				controller: 'adminPeoplesCtrl',
+				controllerAs: 'apeoples',
+				templateUrl: 'views/admin/peoples.html',
+				resolve: {
+					adminauthenticate: adminauthenticate,
+				}
+			})
+			.state('adminproperty', {
+				url: '/admin/property',
+				controller: 'adminPropertyCtrl',
+				controllerAs: 'aproperty',
+				templateUrl: 'views/admin/property.html',
+				resolve: {
+					adminauthenticate: adminauthenticate,
+				}
+			})
+			.state('adminschedule', {
+				url: '/admin/schedule',
+				controller: 'adminScheduleCtrl',
+				controllerAs: 'aschedule',
+				templateUrl: 'views/admin/schedule.html',
+				resolve: {
+					adminauthenticate: adminauthenticate,
+				}
+			})
+			.state('adminprofile', {
+				url: '/admin/profile',
+				controller: 'adminProfileCtrl',
+				controllerAs: 'aprofile',
+				templateUrl: 'views/admin/profile.html',
+				resolve: {
+					adminauthenticate: adminauthenticate,
+				}
+			});
+
+
+		function authenticate($q, $state, $timeout, $rootScope) {
+			// console.log($rootScope.user.emailVerified);
+
+			if (localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified') !== "null" && localStorage.getItem('usertype') != "null") {
+				$rootScope.uid = localStorage.getItem('userID');
+				$rootScope.emailVerified = localStorage.getItem('userEmailVerified');
+				$rootScope.usertype = localStorage.getItem('usertype');
+			}
+
+			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype == "1") {
+				// Resolve the promise successfully
+				return $q.when()
+
+			} else {
+				// The next bit of code is asynchronously tricky.
+
+				$timeout(function () {
+					// This code runs after the authentication promise has been rejected.
+					// Go to the log-in page
+					$state.go('login')
 				})
 
 				// Reject the authentication promise to prevent the state from loading
 				return $q.reject()
 			}
 		}
-		
-		function tenantauthenticate($q,$state, $timeout, $rootScope) {
-			// console.log($rootScope.user.emailVerified);
-			
-			if(localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified')!== "null" && localStorage.getItem('usertype') != "null"){
-				 $rootScope.uid  = localStorage.getItem('userID');
-				 $rootScope.emailVerified  = localStorage.getItem('userEmailVerified');
-				 $rootScope.usertype = localStorage.getItem('usertype');
-			 } 
-			  
-			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype == "0" ) {			
-				// Resolve the promise successfully
-				return $q.when()			
-				
-			} else {
-				  // The next bit of code is asynchronously tricky.
 
-				 console.log(window.location);
-				 // $rootScope.applyhiturl = window.location.href;
-				 localStorage.setItem('applyhiturl',window.location.href) 
-				 
-				 
-				 $timeout(function() {
-				  // This code runs after the authentication promise has been rejected.
-				  // Go to the log-in page
-				  $state.go('login')
+		function tenantauthenticate($q, $state, $timeout, $rootScope) {
+			// console.log($rootScope.user.emailVerified);
+
+			if (localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified') !== "null" && localStorage.getItem('usertype') != "null") {
+				$rootScope.uid = localStorage.getItem('userID');
+				$rootScope.emailVerified = localStorage.getItem('userEmailVerified');
+				$rootScope.usertype = localStorage.getItem('usertype');
+			}
+
+			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype == "0") {
+				// Resolve the promise successfully
+				return $q.when()
+
+			} else {
+				// The next bit of code is asynchronously tricky.
+
+				console.log(window.location);
+				// $rootScope.applyhiturl = window.location.href;
+				localStorage.setItem('applyhiturl', window.location.href)
+
+
+				$timeout(function () {
+					// This code runs after the authentication promise has been rejected.
+					// Go to the log-in page
+					$state.go('login')
 				})
 
-				 
+
 				// Reject the authentication promise to prevent the state from loading
 				return $q.reject()
 			}
 		}
-		
-		
-  })
-  .run( [ '$rootScope', function ($rootScope) {
-        $rootScope.$on('$stateChangeSuccess', function(event, to, toParams, from, fromParams) {
-            $rootScope.$previousState = from;
-        });
-      }]);
+
+		function adminauthenticate($q, $state, $timeout, $rootScope) {
+			// console.log($rootScope.user.emailVerified);
+
+			if (localStorage.getItem('userID') !== "null" && localStorage.getItem('userEmailVerified') !== "null" && localStorage.getItem('usertype') != "null") {
+				$rootScope.uid = localStorage.getItem('userID');
+				$rootScope.emailVerified = localStorage.getItem('userEmailVerified');
+				$rootScope.usertype = localStorage.getItem('usertype');
+			}
+
+			if ($rootScope.uid && $rootScope.emailVerified && $rootScope.usertype == 3) {
+				// Resolve the promise successfully
+				return $q.when()
+
+			} else {
+				// The next bit of code is asynchronously tricky.
+
+				console.log(window.location);
+				// $rootScope.applyhiturl = window.location.href;
+				localStorage.setItem('applyhiturl', window.location.href)
+
+
+				$timeout(function () {
+					// This code runs after the authentication promise has been rejected.
+					// Go to the log-in page
+					$state.go('login')
+				})
+
+
+				// Reject the authentication promise to prevent the state from loading
+				return $q.reject()
+			}
+		}
+	})
+	.run(['$rootScope', function ($rootScope) {
+		$rootScope.$on('$stateChangeSuccess', function (event, to, toParams, from, fromParams) {
+			$rootScope.$previousState = from;
+		});
+	}]);
 
 vcancyApp.run(['$templateCache', function ($templateCache) {
   'use strict';
@@ -3046,6 +3302,5333 @@ vcancyApp.run(['$templateCache', function ($templateCache) {
 
 }]);
 
+'use strict';
+
+vcancyApp
+    .controller('adminDashbordCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_',
+        function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _) {
+
+            var vm = this;
+            vm.totalUsers = 0;
+            vm.totalProperty = 0;
+            vm.totalUnit = 0;
+            vm.totalVacant = 0;
+            vm.totalApplication = 0;
+            vm.totalShowingScheduled = 0;
+
+            firebase.database().ref('users/').once("value", function (snapvalue) {
+                var users = snapvalue.val();
+                $scope.$apply(function () {
+                    vm.totalUsers = _.size(users);
+                });
+            });
+
+            firebase.database().ref('properties/').once("value", function (snapvalue) {
+                var properties = snapvalue.val();
+                $scope.$apply(function () {
+                    vm.totalProperty = _.size(properties);
+
+                    vm.totalUnit = _.reduce(properties, function (previousValue, currentValue, currentIndex) {
+                        previousValue += _.size(currentValue.unitlists);
+                        return previousValue;
+                    }, 0);
+
+                    vm.totalVacant = _.reduce(properties, function (previousValue, currentValue, currentIndex) {
+                        previousValue += _.reduce(currentValue.unitlists, function (pv, cv, ci) {
+                            if (cv.status === 'available' || cv.status === 'availablesoon') {
+                                pv += 1;
+                            }
+                            return pv;
+                        }, 0);
+                        return previousValue;
+                    }, 0);
+                });
+
+            });
+
+            firebase.database().ref('submitapps/').once("value", function (snapvalue) {
+                var application = snapvalue.val();
+                $scope.$apply(function () {
+                    vm.totalApplication = _.size(application);
+                });
+            });
+
+            firebase.database().ref('applyprop/').once("value", function (snapvalue) {
+                var scheduled = snapvalue.val();
+                console.log(scheduled)
+                $scope.$apply(function () {
+                    vm.totalShowingScheduled = _.reduce(scheduled, function (pv, cv, ci) {
+                        if (cv.schedulestatus == "scheduled" || cv.schedulestatus == "submitted") {
+                            pv += 1;
+                        }
+                        return pv;
+                    }, 0);
+                });
+            });
+
+        }]);
+
+'use strict';
+
+vcancyApp 
+    .controller('adminApplicationCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_', 'NgTableParams',
+        function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _, NgTableParams) {
+
+            var vm = this;
+            var tenantID = '';
+            var userData = {};
+            var userEmail = '';
+
+            var vm = this;
+            vm.selectedUser = '';
+            vm.statusChange = {};
+            vm.usersList = [];
+            vm.tenantID = '';
+            vm.allUsers = {};
+
+            firebase.database().ref('users/').once("value", function (snapvalue) {
+
+                var users = snapvalue.val();
+                vm.allUsers = users;
+                //  console.log('users', users, Object.keys(users).length);
+                users = _.filter(users, function (user, key) {
+                    if (user.usertype == 0) {
+                        user.key = key;
+                        return true;
+                    }
+                });
+                $scope.$apply(function () {
+                    vm.usersList = users;
+                });
+            });
+
+            vm.submittedappsavail = 0;
+            $scope.reverseSort = false;
+            vm.submitappsdata = [];
+
+            vm.getPendingApplications = function () {
+                firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function (snapshot) {
+                    // console.log(snapshot.val())
+                    $scope.$apply(function () {
+                        if (snapshot.val() != null) {
+                            vm.pendingappsavail = 0;
+                            if ($rootScope.$previousState.name == "rentalform") {
+                                $state.reload();
+                            }
+                            vm.tabledata = $.map(snapshot.val(), function (value, index) {
+                                if (value.schedulestatus == "scheduled") { // && moment(value.dateslot).isBefore(new Date())
+                                    vm.pendingappsavail = 1;
+                                    var units = '';
+                                    if (value.unitID === ' ' || !value.unitID) {
+                                        units = '';
+                                    } else {
+                                        units = value.unitID + " - ";
+                                    }
+                                    return [{ applicationID: 0, scheduleID: index, address: units + value.address, dateslot: value.dateSlot, timerange: value.timeRange, schedulestatus: value.schedulestatus }];
+                                }
+                            });
+
+                            // console.log(vm.tabledata);
+                            angular.forEach(vm.tabledata, function (schedule, key) {
+                                firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(schedule.scheduleID).once("value", function (snap) {
+                                    // console.log(snap.val());
+                                    $scope.$apply(function () {
+                                        if (snap.val() != null) {
+                                            $.map(snap.val(), function (val, k) {
+                                                vm.tabledata[key].applicationID = k;
+                                            });
+                                        }
+                                    });
+                                });
+                            });
+
+                            // console.log(vm.tabledata);
+
+                            vm.extracols = [
+                                { field: "scheduleID", title: "", show: true }
+                            ];
+
+
+                            vm.cols = [
+                                { field: "address", title: "Address", sortable: "address", show: true },
+                                { field: "dateslot", title: "Viewed On", sortable: "dateslot", show: true }
+                            ];
+
+                            vm.loader = 0;
+
+                            //Sorting
+                            vm.tableSorting = new NgTableParams({
+                                sorting: { address: 'asc' }
+                            },
+
+                                {
+                                    dataset: vm.tabledata
+                                })
+                        }
+
+
+                        if (snapshot.val() != null) {
+                            $.map(snapshot.val(), function (val, key) {
+                                firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(key).once("value", function (snap) {
+                                    $scope.$apply(function () {
+                                        if (snap.val() !== null) {
+                                            //to map the object to array
+                                            $.map(snap.val(), function (value, index) {
+                                                if (val.externalappStatus == "submit") {
+                                                    vm.submittedappsavail = 1;
+                                                    vm.submitappsdata.push({ appID: index, address: value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus });
+                                                }
+                                            });
+                                        }
+                                    });
+                                });
+                            });
+
+                            vm.submitappsextracols = [
+                                { field: "appID", title: "", show: true }
+                            ];
+
+                            vm.submitappscols = [
+                                { field: "address", title: "Address", sortable: "address", show: true },
+                                { field: "dated", title: "Submitted On", sortable: "dated", show: true },
+                            ];
+
+                            //Sorting
+                            vm.submitappsSorting = new NgTableParams({
+                                sorting: { address: 'asc' },
+                                count: vm.submitappsdata.length
+                            },
+
+                                {
+                                    dataset: vm.submitappsdata
+                                });
+                        }
+
+                    });
+                });
+            }
+
+            vm.getSubmitedApps = function () {
+                firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function (snapshot) {
+                    $scope.$apply(function () {
+                        if (snapshot.val() != null) {
+                            $.map(snapshot.val(), function (value, key) {
+                                if (value.scheduleID != 0 && value.externalappStatus == "submit") {
+                                    vm.submittedappsavail = 1;
+                                    vm.submitappsdata.push({ appID: key, address: value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus });
+                                }
+                            });
+                            vm.submitappsextracols = [
+                                { field: "appID", title: "", show: true }
+                            ];
+
+                            vm.submitappscols = [
+                                { field: "address", title: "Address", sortable: "address", show: true },
+                                { field: "dated", title: "Submitted On", sortable: "dated", show: true },
+                            ];
+
+                            //Sorting
+                            vm.submitappsSorting = new NgTableParams({
+                                sorting: { address: 'asc' },
+                                count: vm.submitappsdata.length
+                            },
+
+                                {
+                                    dataset: vm.submitappsdata
+                                })
+                        }
+
+                    });
+                });
+
+                if (vm.submittedappsavail == 0) {
+                    // vm.submitappsdata.push({scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''});
+                } else {
+                    vm.loader = 0;
+                }
+
+                if (vm.pendingappsavail == 0) {
+                    // vm.tabledata.push({scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''});
+                } else {
+                    vm.loader = 0;
+                }
+            }
+
+            vm.selectUser = function () {
+                vm.loader = 1;
+                tenantID = vm.selectedUser;
+                userData = vm.allUsers[tenantID];
+                userEmail = userData.email;
+                vm.getPendingApplications();
+                vm.getSubmitedApps();
+            };
+
+            vm.email = '';
+            vm.disablebutton = 1;
+            vm.emailrequired = function (event) {
+                if (vm.email == '' || !vm.email.match(/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/)) {
+                    vm.disablebutton = 1;
+                } else {
+                    vm.disablebutton = 0;
+                }
+            }
+
+            vm.openRentalForm = function () {
+                $rootScope.isFormOpenToSaveInDraft = true;
+
+                window.location.href = "#/adminrentalform/"+vm.selectedUser+"/0/0";
+            }
+
+            vm.requestCreditReport = function () {
+                swal({
+                    title: "",
+                    text: "We will send you an email with instructions on how to get your credit report.\n Are you sure you want to submit this request?",
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonClass: "bgm-teal",
+                    confirmButtonText: "Yes",
+                    closeOnConfirm: false
+                }, function () {
+                    // swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                    var userName = '';
+                    if (userData) {
+                        userName = userData.firstname + ' ' + (userData.lastname || '');
+                    }
+                    var emailData = '<p>Hello, </p><p>' + userName + '- ' + userEmail + ' has requested for credit report from the tenant portal';
+                    var toEmail = 'creditrequest@vcancy.com';
+                    emailSendingService.sendEmailViaNodeMailer(toEmail, 'Tenant Request for Credit Report', 'Request Credit Report', emailData);
+                    swal("", "Your request has been submitted successfully, you will soon receive an email.", "success");
+                });
+
+            }
+
+            vm.gotoRental = function (event) {
+                if (vm.disablebutton == 0) {
+                    $rootScope.renterExternalEmail = vm.email;
+                    window.location.href = "#/adminrentalform/0/0";
+                }
+            }
+
+
+        }]);
+
+'use strict';
+
+vcancyApp
+    .controller('adminBillingCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_',
+        function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _) {
+
+            var vm = this;
+            var landlordID = localStorage.getItem('userID');
+            vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
+
+        }]);
+
+'use strict';
+
+vcancyApp
+    .controller('adminPeoplesCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', 'emailSendingService', '$stateParams', '$window', '_', '$q', '$uibModal',
+        function ($scope, $firebaseAuth, $state, $rootScope, emailSendingService, $stateParams, $window, _, $q, $uibModal) {
+
+            var vm = this;
+            // var landlordID = localStorage.getItem('userID');
+            vm.selectedUser = '';
+            vm.usersList = {};
+            vm.userData = {};
+            $scope.loader = 0;
+
+            firebase.database().ref('users/').once("value", function (snapvalue) {
+
+                var users = snapvalue.val();
+                //  console.log(users);
+                //  console.log('users', users, Object.keys(users).length);
+                vm.allUsers = snapvalue.val();
+                //  console.log( vm.allUsers);
+                users = _.filter(users, function (user, key) {
+                    if (user.usertype == 1 || user.usertype == 3) {
+                        user.key = key;
+                        return true;
+                    }
+                });
+                $scope.$apply(function () {
+                    vm.usersList = users;
+                    //      console.log(users);
+                });
+            });
+
+            vm.getScheduleListing = function () {
+                vm.userData = vm.allUsers[vm.selectedUser];
+                //    console.log(vm.userData)
+                vm.landlordID = vm.selectedUser;
+                vm.init(vm.selectedUser);
+            }
+
+            vm.propcheck = [];
+            vm.applyPropUsers = {};
+            vm.applyPropSubmittedUsers = {};
+            vm.apppropaddress = [];
+            vm.apppropaddressAppl = {};
+            vm.submittedAppl = [];
+            vm.submittedApplUsers = [];
+
+            vm.originalPropAddress = [];
+            vm.loader = 0;
+            vm.creditCheck = {
+                reportType: "Both of the above $45/Report",
+                forTenant: ''
+            }
+            vm.customRentalApplicationCheck = {};
+            vm.customRentalApplicationCheck.TCData = 'You are authorized to obtaining credit checks & verifying details contained in this Application.' +
+
+                'This unit/s is strictly NON SMOKING. This offer is subject to acceptance by the landlord/property' +
+                'management company that listed the property.This application is made on the understanding that no ' +
+                'betterments will be provided to the Rental Unit except those which may be specifically requested in' +
+                'this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.' +
+
+                'It is understood that this application will not be processed unless fully completed.' +
+
+                'If the landlord/property management company accepts this Application, we will sign a Fixed ' +
+                'Term Tenancy Agreement at the offices of the property management company or in person with' +
+                'the landlord and pay the security deposit. The Rental Unit will not be considered rented' +
+                'until the Fixed Term Tenancy Agreement is signed by the Tenant and the Landlord.' +
+
+                'We will ensure that the collection, use, disclosure and retention of information will comply with ' +
+                'the provisions of the Freedom of information and Protection of Privacy Act. ' +
+                'Information will be collected and used only as necessary and for the intended purpose and will ' +
+                'not be disclosed as required by law.' +
+
+                'I hereby state that the information contained herein is true and I authorize my References' +
+                'as listed above to release information regarding my employment and/or past/current tenancies.' +
+
+                'Tenants are not chosen on a first come – first served basis. We choose the most suitable ' +
+                'application for the unit at our sole discretion. This application form is to be used only' +
+                'in the interested of the owner of the rental unit.';
+            // Function to generate Random Id
+            function generateToken() {
+                var result = '',
+                    length = 6,
+                    chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+                for (var i = 0; i < length; i++)
+                    result += chars[Math.floor(Math.random() * chars.length)];
+
+                return result;
+            }
+            vm.selectedApplication = '';
+            vm.uploadCreditCheckReportModal = function (key) {
+                vm.selectedApplication = key;
+            };
+
+
+            $scope.uploadDetailsImages = function (event) {
+
+                var filesToUpload = event.target.files;
+                var file = filesToUpload[0];
+                $scope.$apply(function () {
+                    $scope.loader = 1;
+                })
+
+                if (file) {
+                    var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+                    filename = filename.replace(/\s/g, '');
+                    AWS.config.update({
+                        accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+                        secretAccessKey: 'xnuyOZTMm9HgORhcvg2YTILIZVD6kHsjLL6TIkLi'
+                    });
+                    AWS.config.region = 'ca-central-1';
+
+                    var bucket = new AWS.S3({
+                        params: {
+                            Bucket: 'vcancy-final'
+                        }
+                    });
+
+                    var params = {
+                        Key: 'property-images/' + filename,
+                        ContentType: file.type,
+                        Body: file,
+                        StorageClass: "STANDARD_IA",
+                        ACL: 'public-read'
+                    };
+                    bucket.upload(params).on('httpUploadProgress', function (evt) {
+
+                    })
+                        .send(function (err, data) {
+                            // console.log(vm.selectedApplication);
+                            firebase.database().ref('applyprop/' + vm.selectedApplication).update({
+                                creditCheckLink: data.Location
+                            }).then(function () {
+                                // vm.getApplyProp(vm.landlordID);
+                                $scope.loader = 0;
+                                vm.apppropaddress[vm.selectedApplication].creditCheckLink = data.Location;
+                                var emailData = '<p>Hello, </p><p>A credit/criminal check report for user <b>' + vm.userData.name + ' (' + vm.userData.email + ')</b> is available now, please <a href="https://vcancy.com/login" target="_blank">log in</a> to your dashboard and go to the "People" menu.</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                // console.log(emailData);
+                                // Send Email
+                                emailSendingService.sendEmailViaNodeMailer(vm.userData.email, 'Creditcheck request', 'Creditcheck request', emailData);
+                            })
+                                .catch(function (err) {
+                                    // console.error('ERROR', err);
+                                    swal("", "There was error deleteing the schedule.", "error");
+                                });
+                        })
+                }
+            };
+
+            vm.removeCreditCheckReport = function (key) {
+                firebase.database().ref('applyprop/' + key).update({
+                    creditCheckLink: ''
+                }, function () {
+                    $scope.$apply(function () {
+                        vm.apppropaddress[key].creditCheckLink = '';
+                    })
+                });
+            };
+
+            vm.questionDropDown = [
+                { id: 'WKRX6Q', label: 'What is your profession?', isChecked: true },
+                { id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
+                { id: 'N1F5MO', label: 'Are you able to provide references?', isChecked: false },
+                { id: 'OU489L', label: 'Why are you moving?', isChecked: false },
+                { id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: true },
+                { id: 'A9OG32', label: 'No. of Applicants', isChecked: true },
+                { id: 'UH7JZS', label: 'Do you smoke?', isChecked: true },
+                { id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
+            ];
+
+            vm.filters = {
+                options: [],
+            };
+
+            vm.defaultRentalApplicationCheck = {
+                'PAPPD': true,
+                'CADDR': true,
+                'PADDR': false,
+                'AAPPD': false,
+                'AAPP1': false,
+                'AAPP2': false,
+                'ESIV': true,
+                'ESIV1': true,
+                'V1': false,
+                'EC': false,
+                'EC1': false,
+                'REF': true,
+                'REF1': true,
+                'REF2': false,
+                'UD': true,
+                'UDAAPP': false,
+                'TC': true,
+                'TCData': vm.customRentalApplicationCheck.TCData
+            }
+
+            function refreshCustomRentalApplicationCheck() {
+                var userData = vm.userData;
+                if (userData && userData.customRentalApplicationCheck) {
+                    if (userData.customRentalApplicationCheck && !userData.customRentalApplicationCheck.TCData) {
+                        userData.customRentalApplicationCheck.TCData = vm.customRentalApplicationCheck.TCData;
+                    }
+                    vm.customRentalApplicationCheck = userData.customRentalApplicationCheck;
+                } else {
+                    vm.customRentalApplicationCheck = angular.copy(vm.defaultRentalApplicationCheck);
+                }
+            }
+            refreshCustomRentalApplicationCheck();
+
+            function refreshScreeningQuestions() {
+                var userData = vm.userData;
+                if (userData && userData.screeningQuestions && userData.screeningQuestions.length !== 0) {
+                    vm.screeningQuestions = userData.screeningQuestions;
+                } else {
+                    vm.screeningQuestions = angular.copy(vm.questionDropDown);
+                }
+            }
+
+            vm.getUsers = function () {
+                if (vm.apppropaddressList) {
+                    vm.loader = 1;
+                    var promises = [];
+                    _.map(vm.apppropaddressList, function (value, key) {
+                        var promiseObj = firebase.database().ref('users/' + value.tenantID).once("value");
+                        promises.push(promiseObj);
+                    });
+                    $q.all(promises).then(function (data) {
+                        var usersData = {};
+                        data.forEach(function (dataObj) {
+                            usersData[dataObj.key] = dataObj.val();
+                        });
+                        vm.applyPropUsers = usersData;
+                        _.forEach(vm.submittedApplUsers, function (value, index) {
+                            if (usersData[value]) {
+                                vm.applyPropSubmittedUsers[value] = usersData[value];
+                            }
+                        });
+                        vm.apppropaddress = vm.apppropaddressList;
+                        vm.loader = 0;
+                    });
+                }
+            }
+
+            vm.getProperty = function (selectedUser) {
+                vm.loader = 1;
+                var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(selectedUser).once("value", function (snapshot) {
+                    if (snapshot.val()) {
+                        vm.properties = snapshot.val();
+                    }
+                    vm.loader = 0;
+                });
+            };
+
+            vm.getApplyProp = function (selectedUser) {
+                vm.loader = 1;
+                vm.apppropaddress = {};
+                var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(selectedUser).once("value", function (snapshot) {
+                    if (snapshot.val()) {
+                        $scope.$apply(function () {
+                            vm.apppropaddressList = snapshot.val();
+                            // vm.getUsers();
+                            vm.originalPropAddress = angular.copy(snapshot.val());
+                            vm.loader = 1;
+                            var promises = [];
+                            _.map(vm.apppropaddressList, function (value, key) {
+                                if (value.schedulestatus == 'submitted') {
+                                    vm.submittedApplUsers.push(value.tenantID);
+                                    var promiseObj = firebase.database().ref('submitapps/').limitToLast(1).orderByChild("scheduleID").equalTo(key).once("value");
+                                    promises.push(promiseObj);
+                                }
+                            });
+                            vm.submittedApplUsers = _.uniq(vm.submittedApplUsers);
+
+                            $q.all(promises).then(function (data) {
+                                var usersData = {};
+                                data.forEach(function (dataObj) {
+                                    if (dataObj.val()) {
+                                        _.forEach(dataObj.val(), function (_value, _key) {
+                                            vm.apppropaddressAppl[_key] = _value;
+                                            vm.submittedAppl.push(_value)
+                                        })
+                                    }
+                                });
+                                //vm.getUsers();
+                                vm.loader = 0;
+                            });
+                            // console.log(vm.apppropaddressList);
+                        });
+                    }
+                    $scope.$apply(function () {
+                        vm.loader = 0;
+                    });
+                });
+            };
+
+            vm.companyDetail = function () {
+                return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
+            }
+
+            vm.getUserName = function (id, value) {
+                if (!vm.applyPropUsers[id]) {
+                    return value.name || '-';
+                }
+                return ((vm.applyPropUsers[id].firstname || '') + ' ' + (vm.applyPropUsers[id].lastname || '')) || '-';
+            }
+
+            vm.changeSort = function (key) {
+                // $scope.$apply(function() {
+                // $timeout	
+                vm.sortType = key;
+                vm.sortReverse = !vm.sortReverse;
+                // });
+            }
+
+            $scope.formatDay = function (key) {
+                return moment(key, 'MM/DD/YYYY').format('ddd')
+            };
+
+            $scope.formatDate = function (key) {
+                return moment(key, 'MM/DD/YYYY').format('MMM DD')
+            };
+
+            vm.init = function (selectedUser) {
+                vm.landlordID = selectedUser;
+                vm.getProperty(selectedUser);
+                vm.getApplyProp(selectedUser);
+                // console.log(selectedUser)
+                refreshScreeningQuestions();
+            };
+
+            // vm.init();
+
+            vm.openPrescremingQuestions = function () {
+                vm.prescremingQuestion = $uibModal.open({
+                    templateUrl: 'prescremingquestions.html',
+                    backdrop: 'static',
+                    size: 'lg',
+                    scope: $scope
+                });
+            };
+            vm.filterData = function (forProperty) {
+                var properties = angular.copy(vm.originalPropAddress);
+                vm.apppropaddress = properties;
+                if (vm.filters.property) {
+                    var obj = {};
+                    _.filter(properties, function (value, key) {
+                        if (value.propID == vm.filters.property) {
+                            obj[key] = value;
+                        }
+                    });
+                    vm.apppropaddress = obj;
+                }
+                if (forProperty) {
+                    vm.filters.unit = [];
+                }
+                if (vm.filters.unit && vm.filters.unit.length > 0) {
+                    var unitItems = {};
+                    var unitIds = _.reduce(vm.filters.unit, function (previousValue, currentValue, key) {
+                        if (currentValue.unit) {
+                            previousValue.push(parseInt(currentValue.unit));
+                        }
+                        return previousValue;
+                    }, []);
+                    _.filter(properties, function (value, key) {
+                        if (value.propID == vm.filters.property && unitIds.includes(parseInt(value.unitID))) {
+                            unitItems[key] = value;
+                        }
+                    });
+                    vm.apppropaddress = unitItems;
+                    return
+                }
+
+                vm.apppropaddress = obj;
+            }
+
+            vm.getApplicationLink = function (key) {
+                var data;
+                _.forEach(vm.apppropaddressAppl, function (_value, _key) {
+                    if (_value.scheduleID == key) {
+                        data = _key;
+                        return false;
+                    }
+                });
+                if (data) {
+                    var host = window.location.origin;
+                    if (host.indexOf('localhost') > -1) {
+                        host = host + '/#/viewapplication/' + data;
+                    } else {
+                        host = host + '/login/#/viewapplication/' + data;
+                    }
+                    return host;
+                }
+                return false;
+            }
+
+            vm.getRentalField = function (key, field) {
+                let data;
+                _.forEach(vm.apppropaddressAppl, function (_value, _key) {
+                    if (_value.scheduleID == key) {
+                        data = _value;
+                        return false;
+                    }
+                });
+                if (data) {
+                    return data[field]
+                } else {
+                    return '-'
+                }
+            }
+            vm.customQuestion = null;
+            vm.addCustomQuestion = function () {
+                if (!vm.customQuestion) {
+                    return;
+                }
+                var data = {
+                    label: vm.customQuestion,
+                    id: generateToken(),
+                    isChecked: false
+                }
+
+                vm.screeningQuestions.push(data);
+                vm.customQuestion = null;
+            }
+
+            vm.saveScreeningQuestions = function () {
+                vm.loader = 1;
+                var ques = angular.copy(vm.screeningQuestions);
+                _.omit(ques, '$$hashKey');
+                firebase.database().ref('users/' + vm.selectedUser).update({
+                    screeningQuestions: ques
+                }).then(function () {
+                    // userData.screeningQuestions = ques;
+                    ///localStorage.setItem('userData', JSON.stringify(userData));
+                    refreshScreeningQuestions();
+                    vm.loader = 0;
+                    vm.prescremingQuestion.close();
+                }, function (error) {
+                    vm.loader = 0;
+                    return false;
+                });
+            }
+
+            vm.saveCustomRentalApplicationCheck = function () {
+                vm.loader = 1;
+                var customChecks = angular.copy(vm.customRentalApplicationCheck);
+                _.omit(customChecks, '$$hashKey');
+                firebase.database().ref('users/' + vm.selectedUser).update({
+                    customRentalApplicationCheck: customChecks
+                }).then(function () {
+                    //vauserData.customRentalApplicationCheck = customChecks;
+                    //localStorage.setItem('userData', JSON.stringify(userData));
+                    refreshCustomRentalApplicationCheck();
+                    vm.loader = 0;
+                    vm.customrentalapp.close();
+                }, function (error) {
+                    vm.loader = 0;
+                    return false;
+                });
+            }
+
+            vm.opencustomrentalapp = function () {
+                vm.customrentalapp = $uibModal.open({
+                    templateUrl: 'customrentalapp.html',
+                    backdrop: 'static',
+                    size: 'lg',
+                    scope: $scope
+                });
+            };
+
+            vm.deleteQuestionById = function (id) {
+                var index = vm.screeningQuestions.findIndex(function (ques) {
+                    if (ques.id == id) return true;
+                });
+                vm.screeningQuestions.splice(index, 1);
+            };
+
+
+            vm.openruncreditcriminalcheck = function () {
+                vm.runcreditcriminalcheck = $uibModal.open({
+                    templateUrl: 'runcreditcriminalcheck.html',
+                    backdrop: 'static',
+                    size: 'lg',
+                    scope: $scope
+                });
+            };
+
+            $scope.closePrescreeningModal = function () {
+                vm.prescremingQuestion.close();
+            }
+
+            $scope.closecustomrentalappModal = function () {
+                vm.customrentalapp.close();
+            }
+
+            $scope.closeruncreditcriminalcheckModal = function () {
+                vm.runcreditcriminalcheck.close();
+                vm.creditCheck = {
+                    reportType: "Both of the above $45/Report",
+                    forTenant: ''
+                }
+            }
+
+            $scope.submitCreditCheck = function () {
+                var tenantData = vm.applyPropUsers[vm.creditCheck.forTenant];
+                if (!tenantData) {
+                    return;
+                }
+                swal({
+                    title: "Are you sure?",
+                    text: "Your account will be charged with the amount specified.",
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonClass: "bgm-teal",
+                    confirmButtonText: "Yes",
+                    closeOnConfirm: false
+                },
+                    function () {
+                        var userName = '';
+                        if (userData) {
+                            userName = userData.firstname + ' ' + (userData.lastname || '');
+                        }
+                        var tenantUserName = tenantData.firstname + ' ' + (tenantData.lastname || '');
+                        var emailData = '<p>Hello, </p><p>Landlord - ' + userName + ' (' + userEmail + ') has requested credit report of tenant - ' + tenantUserName + ' (' + tenantData.email + ') for type - ' + vm.creditCheck.reportType + '</p>';
+                        var toEmail = 'creditrequest@vcancy.com';
+                        emailSendingService.sendEmailViaNodeMailer(toEmail, 'Landlord request for Credit/Criminal Report', 'Request Credit?criminal Check Report', emailData);
+                        swal("", "Your request has been submitted successfully!", "success");
+                        var requestData = {
+                            tenantID: vm.creditCheck.forTenant,
+                            tenantEmail: tenantData.email,
+                            landlordID: landlordID,
+                            landlordEmail: userEmail,
+                            requestType: vm.creditCheck.reportType,
+                            requestedOn: moment().format('x'),
+                            status: 'PENDING'
+                        }
+                        firebase.database().ref('credit_report_request/').push().set(requestData);
+                        $scope.closeruncreditcriminalcheckModal();
+                    });
+
+            }
+
+            vm.tablefilterdata = function (propID = '') {
+                if (propID != '') {
+                    vm.propcheck[propID] = !vm.propcheck[propID];
+                }
+                vm.loader = 1;
+                firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+                    // console.log(snapshot.val())
+                    $scope.$apply(function () {
+                        if (snapshot.val() != null) {
+                            $.map(snapshot.val(), function (value, index) {
+                                if (vm.apppropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus == "submitted") {
+                                    vm.apppropaddress.push({ propID: value.propID, address: value.address, units: value.units });
+                                    vm.propcheck[value.propID] = true;
+                                }
+                            });
+                        }
+                        vm.submitappsdata = [];
+
+                        if (snapshot.val() != null) {
+                            vm.submittedappsavail = 0;
+                            //to map the object to array
+                            vm.submitappsdata = $.map(snapshot.val(), function (value, index) {
+                                if (vm.propcheck[value.propID] == true || propID == '') {
+                                    if (value.schedulestatus == "submitted") {
+                                        vm.submittedappsavail = 1;
+                                        return [{ scheduleID: index, name: value.name, age: value.age, profession: value.jobtitle, schedulestatus: value.schedulestatus }];
+                                    }
+                                }
+                            });
+
+                            angular.forEach(vm.submitappsdata, function (schedule, key) {
+                                firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(schedule.scheduleID).once("value", function (snapshot) {
+                                    $scope.$apply(function () {
+                                        if (snapshot.val()) {
+                                            $.map(snapshot.val(), function (value, index) {
+                                                vm.submitappsdata[key].applicationID = index;
+                                                vm.submitappsdata[key].pets = value.pets;
+                                                vm.submitappsdata[key].maritalstatus = value.maritalstatus;
+                                                vm.submitappsdata[key].appno = value.applicantsno;
+                                                firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(index).once("value", function (snap) {
+                                                    $scope.$apply(function () {
+                                                        if (snap.val()) {
+                                                            $.map(snap.val(), function (v, k) {
+                                                                // console.log(v);
+                                                                vm.submitappsdata[key].salary = v.mainapplicant.appgrossmonthlyincome;
+                                                            });
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        }
+                                    });
+                                });
+                            });
+
+                            vm.submitappsextracols = [
+                                { field: "applicationID", title: "Credit Score", show: true }
+                            ];
+
+
+                        } else {
+                            vm.submitappsdata = [{ scheduleID: '', name: '', age: '', profession: '', salary: '', pets: '', maritalstatus: '', appno: '', schedulestatus: '' }];
+
+                            vm.submittedappsavail = 0;
+                        }
+
+                        //  console.log(vm.submittedappsavail);
+                        vm.submitappscols = [
+                            { field: "name", title: "Name", sortable: "name", show: true },
+                            { field: "age", title: "Age", sortable: "age", show: true },
+                            { field: "profession", title: "Job Title", sortable: "profession", show: true },
+                            { field: "salary", title: "Salary", sortable: "salary", show: true },
+                            { field: "pets", title: "Pets", sortable: "pets", show: true },
+                            { field: "maritalstatus", title: "Marital Status", sortable: "maritalstatus", show: true },
+                            { field: "appno", title: "No of Applicants", sortable: "appno", show: true },
+                        ];
+
+                        vm.loader = 0;
+
+                        //Sorting
+                        vm.submitappsSorting = new NgTableParams({
+                            sorting: { name: 'asc' }
+                        },
+
+                            {
+                                dataset: vm.submitappsdata
+								/*}, {
+									total: vm.submitappsdata.length, // length of data
+									getData: function($defer, params) {
+										// console.log(params);
+										// use build-in angular filter
+										var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
+							
+										$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+									}*/
+                                // dataset: vm.submitappsdata
+                            })
+                    });
+                });
+
+            }
+            // vm.tablefilterdata();
+
+            vm.deleteApplyProp = function (key) {
+                swal({
+                    title: "Are you sure?",
+                    text: "This will delete the schedule from the system.",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Delete",
+                    closeOnConfirm: true
+                }, function () {
+                    firebase.database().ref('applyprop/' + key).update({
+                        schedulestatus: "cancelled"
+                    }).then(function () {
+                        vm.getApplyProp(vm.landlordID);
+                    })
+                        .catch(function (err) {
+                            //   console.error('ERROR', err);
+                            swal("", "There was error deleteing the schedule.", "error");
+                        });
+
+                });
+            }
+
+        }]);
+
+'use strict';
+
+vcancyApp.controller('adminPropertyCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'slotsBuildService', 'emailSendingService', '$http', '$location', '$log', '$uibModal', '$q'
+    , function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, slotsBuildService, emailSendingService, $http, $location, $log, $uibModal, $q) {
+
+        var vm = this;
+        var landlordID = '';
+        vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
+
+        var vm = this;
+        vm.selectedUser = '';
+        vm.statusChange = {};
+        vm.usersList = [];
+        vm.mode = 'Add';
+        firebase.database().ref('users/').once("value", function (snapvalue) {
+
+            var users = snapvalue.val();
+            //  console.log('users', users, Object.keys(users).length);
+            users = _.filter(users, function (user, key) {
+                if (user.usertype == 1 || user.usertype == 3) {
+                    user.key = key;
+                    return true;
+                }
+            });
+            $scope.$apply(function () {
+                vm.usersList = users;
+            });
+        });
+
+
+
+        $rootScope.invalid = '';
+        $rootScope.success = '';
+        $rootScope.error = '';
+        $rootScope.message = '';
+
+        var todaydate = new Date();
+        var dateconfig = new Date(new Date().setMinutes(0));
+        var url = $location.absUrl();
+        var oldtimeSlotLen = 0;
+
+        var swal = window.swal;
+
+        var vm = this;
+        vm.propsavail = 1;
+        vm.timeslotmodified = "false";
+        vm.isDisabled = false;
+        vm.googleAddress = 0;
+        vm.more = '';
+        vm.city = '';
+        vm.province = '';
+        vm.postcode = '';
+        vm.country = '';
+        vm.noofunits = 0;
+        vm.checkedRow = {};
+        $scope.imageCount = 0;
+        $scope.loader = 0;
+        // $scope.unitVacant = [];
+
+        vm.table = 1;
+        vm.csv = 0;
+        vm.localpropID = '';
+
+        // View Property
+        vm.getProperties = function (landlordID) {
+            var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+                $scope.$apply(function () {
+                    vm.success = 0;
+                    if (snapshot.val()) {
+                        var props = angular.copy(snapshot.val());
+                        var vacantSums = {};
+                        _.forEach(props, function (prop, key) {
+                            vacantSums[key] = _.sumBy(prop.unitlists, function (o) {
+                                if (!o.status || o.status == 'available') {
+                                    return 1;
+                                }
+                            });
+                        })
+                        vm.vacantSums = vacantSums;
+                        vm.viewprops = snapshot.val();
+
+                        vm.propsavail = 1;
+                        vm.propsuccess = localStorage.getItem('propertysuccessmsg');
+                    } else {
+                        vm.propsavail = 0;
+                        vm.propsuccess = localStorage.getItem('propertysuccessmsg');
+                    }
+                    $scope.loader = 0;
+                    // console.log($rootScope.$previousState.name);
+                    if (($rootScope.$previousState.name == "admineditprop" || $rootScope.$previousState.name == "addprop") && vm.propsuccess != '') {
+                        vm.success = 1;
+                    }
+                    localStorage.setItem('propertysuccessmsg', '')
+                });
+
+            });
+        }
+        vm.getPropertiesListing = function () {
+            landlordID = vm.selectedUser;
+            localStorage.setItem('adminLandlordId', landlordID);
+            vm.getProperties(vm.selectedUser);
+        }
+        vm.getarray = function (num) {
+            var data = [];
+            for (var i = 0; i <= num - 1; i++) {
+                data.push(i);
+            }
+            return data;
+        }
+
+        vm.addresschange = function () {
+            /*  console.log(vm.prop.address);*/
+            if (vm.prop.address != undefined && (typeof vm.prop.address == "string" || vm.googleAddress == 1)) {
+                vm.isDisabled = false;
+            } else {
+                vm.isDisabled = true;
+            }
+        }
+        this.unitsOptional = function (proptype) {
+            console.log(vm.prop.units);
+            if (vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)) {
+                vm.prop.units = ' ';
+            } else if (vm.prop.proptype != proptype && (vm.prop.units == '' || vm.prop.units == undefined)) {
+                vm.prop.units = '';
+            }
+        };
+
+        vm.getListings = function (landlordId) {
+            vm.loader = 1;
+            if (!landlordId) {
+                landlordId = vm.selectedUser;
+            }
+            if (!landlordId) return;
+
+            var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordId).once("value", function (snapshot) {
+                vm.getProperties(landlordId);
+                // console.log('propertyschedule', snapshot.val())
+                $scope.$apply(function () {
+                    vm.success = 0;
+                    if (snapshot.val()) {
+                        vm.listings = snapshot.val();
+                        vm.generateMergeListing();
+                        vm.listingsAvailable = 1;
+                    } else {
+                        vm.listingsAvailable = 0;
+                    }
+                    vm.loader = 0;
+                });
+            });
+        }
+
+        var landlordID = ''
+        landlordID = localStorage.getItem('adminLandlordId')
+        if (!landlordID) return;
+
+        firebase.database().ref('users/' + landlordID).once("value", function (snap) {
+            vm.landlordname = snap.val().firstname + " " + snap.val().lastname;
+        });
+
+        $scope.$on('gmPlacesAutocomplete::placeChanged', function () {
+            var address = vm.prop.address.getPlace();
+            var arrAddress = address.address_components;
+            vm.googleAddress = 1;
+            vm.prop.address = address.formatted_address;
+
+            var itemRoute = '';
+            var itemLocality = '';
+            var itemCountry = '';
+            var itemPc = '';
+            var itemSnumber = '';
+            var street_number = '';
+
+            $.each(arrAddress, function (i, address_component) {
+                if (address_component.types[0] == "street_number") {
+                    itemSnumber = address_component.long_name;
+                    street_number += address_component.long_name + " ";
+                }
+
+                if (address_component.types[0] == "route") {
+                    itemRoute = address_component.long_name;
+                    var route = address_component.long_name;
+                    vm.prop.address = street_number + address_component.long_name;
+                }
+
+                if (address_component.types[0] == "administrative_area_level_1") {
+                    itemRoute = address_component.short_name;
+                    vm.prop.province = address_component.short_name;
+                }
+
+                if (address_component.types[0] == "locality") {
+                    itemLocality = address_component.long_name;
+                    vm.prop.city = address_component.long_name;
+                }
+
+                if (address_component.types[0] == "country") {
+                    itemCountry = address_component.long_name;
+                    vm.prop.country = address_component.long_name;
+                }
+
+                if (address_component.types[0] == "postal_code_prefix") {
+                    itemPc = address_component.long_name;
+                }
+
+
+                if (address_component.types[0] == "postal_code") {
+                    itemSnumber = address_component.long_name;
+
+                    vm.prop.postcode = address_component.long_name;
+                }
+
+                if (address_component.types[0] == "sublocality_level_1") {
+                    itemRoute = address_component.long_name;
+                    vm.prop.address = address_component.long_name;
+
+                }
+
+            });
+
+
+            vm.addresschange();
+            $scope.$apply();
+        });
+
+        vm.copy = "Copy Link";
+        $scope.copySuccess = function (e) {
+            vm.copy = "Copied";
+            $scope.$apply();
+        };
+
+        vm.csvform = function () {
+            vm.table = 0;
+            vm.csv = 1;
+
+        }
+
+        vm.doSomething = function () {
+            console.log("Form Edit changes something");
+        }
+        // timeSlot for Date and Timepicker
+        vm.addTimeSlot = function (slotlen) {
+
+            for (var i = 0; i < slotlen; i++) {
+                vm.newTime = false;
+            }
+
+            vm.timeSlot.push({
+                date: dateconfig
+            });
+            vm.prop.multiple[slotlen] = true;
+            vm.newTime = true;
+
+        }
+
+        // to remove timeslots
+        vm.removeTimeSlot = function (slotindex) {
+            if (vm.timeSlot.length == 1) {
+
+            } else {
+                if ($state.current.name == 'admineditprop') {
+                    if ($window.confirm("Are you sure you want to delete this viewing slot? ")) {
+                        if (slotindex < oldtimeSlotLen) {
+                            vm.timeslotmodified = "true";
+                        }
+                        vm.timeSlot.splice(slotindex, 1);
+                        vm.prop.date.splice(slotindex, 1);
+                        vm.prop.fromtime.splice(slotindex, 1);
+                        vm.prop.to.splice(slotindex, 1);
+                        vm.prop.limit.splice(slotindex, 1);
+                        vm.prop.multiple.splice(slotindex, 1);
+                    }
+                } else {
+                    vm.timeSlot.splice(slotindex, 1);
+                    vm.prop.date.splice(slotindex, 1);
+                    vm.prop.fromtime.splice(slotindex, 1);
+                    vm.prop.to.splice(slotindex, 1);
+                    vm.prop.limit.splice(slotindex, 1);
+                    vm.prop.multiple.splice(slotindex, 1);
+                }
+            }
+
+        }
+        // DATEPICKER
+        vm.today = function () {
+            vm.dt = new Date();
+        };
+        vm.today();
+
+        vm.toggleMin = function () {
+            vm.minDate = vm.minDate ? null : new Date();
+        };
+        vm.toggleMin();
+
+        vm.open = function ($event, opened) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            angular.forEach(vm.timeSlot, function (value, key) {
+                value.opened = false;
+            });
+            opened.opened = true;
+        };
+
+        vm.units = function (value) {
+
+            if (value != '' && value != null) {
+                $window.location.href = '#/addunits/' + value;
+            }
+        };
+
+        vm.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        vm.format = vm.formats[0];
+
+        vm.timeopen = function ($event, opened) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            angular.forEach(vm.timeSlot, function (value, key) {
+                value.opened = false;
+            });
+            vm.opened = true;
+        };
+
+        //  TIMEPICKER
+        vm.mytime = new Date();
+        vm.ck = [];
+        vm.getNumber = function (num) {
+            vm.ck = new Array(num);
+            console.log(vm.ck);
+            return vm.ck;
+        }
+
+        vm.arraytest = function () {
+
+            var listToDelete = ['abc', 'efg'];
+
+            var arrayOfObjects = [{ id: 'abc', name: 'oh' }, // delete me
+            { id: 'efg', name: 'em' }, // delete me
+            { id: 'hij', name: 'ge' }] // all that should remain
+            console.log(arrayOfObjects);
+            //var animals = [{"status":"Available"},{"status":"Available"},{"status":"Available"},{"status":"Available"}];
+            var test = [];
+            for (var i = 0; i < arrayOfObjects.length; i++) {
+                var obj = arrayOfObjects[i];
+
+                if (i != 0) {
+                    test.push(obj)
+                }
+                console.log(arrayOfObjects);
+            }
+
+            console.log(test);
+
+        }
+
+        vm.hstep = 1;
+        vm.mstep = 5;
+
+        vm.options = {
+            hstep: [1, 2, 3],
+            mstep: [1, 5, 10, 15, 25, 30]
+        };
+
+        vm.minDate = new Date();
+
+        vm.newTime = false;
+
+        vm.ismeridian = true;
+
+        vm.toggleMode = function () {
+            vm.ismeridian = !vm.ismeridian;
+        };
+
+        vm.update = function () {
+            var d = new Date();
+            d.setHours(14);
+            d.setMinutes(0);
+            vm.mytime = d;
+        };
+
+
+
+
+        vm.datetimeslotchanged = function (key) {
+            if (key < oldtimeSlotLen) {
+                vm.timeslotmodified = "true";
+            }
+            if (vm.prop.fromtime[key] === undefined) {
+                var fromtime = dateconfig;
+            } else {
+                var fromtime = vm.prop.fromtime[key];
+            }
+
+            if (vm.prop.to[key] === undefined) {
+                var to = dateconfig;
+            } else {
+                var to = vm.prop.to[key];
+            }
+
+            vm.overlap = 0;
+
+            for (var i = 0; i < vm.prop.date.length; i++) {
+                if (i != key) {
+                    if (vm.prop.fromtime[i] === undefined) {
+                        var ftime = dateconfig;
+                    } else {
+                        var ftime = vm.prop.fromtime[i];
+                    }
+
+                    if (vm.prop.to[i] === undefined) {
+                        var totime = dateconfig;
+                    } else {
+                        var totime = vm.prop.to[i];
+                    }
+
+                    console.log(fromtime > ftime, to > ftime, fromtime > totime, to > totime);
+
+                    if ((moment(fromtime).format('HH:mm') <= moment(ftime).format('HH:mm') && moment(to).format('HH:mm') <= moment(ftime).format('HH:mm') && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || (moment(fromtime).format('HH:mm') >= moment(totime).format('HH:mm') && moment(to).format('HH:mm') >= moment(totime).format('HH:mm') && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isBefore(moment(vm.prop.date[i]).format('DD-MMMM-YYYY')) || moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isAfter(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) {
+
+                    } else {
+                        vm.overlap = 1;
+                    }
+                }
+            }
+
+            if (vm.overlap == 1) {
+                vm.prop.timeoverlapinvalid[key] = 1;
+                vm.isDisabled = true;
+            } else {
+                vm.prop.timeoverlapinvalid[key] = 0;
+            }
+
+            var temp = new Date(fromtime.getTime() + 30 * 60000)
+            if (moment(to).format('HH:mm') < moment(temp).format('HH:mm') && vm.prop.timeoverlapinvalid[key] == 0) {
+                vm.prop.timeinvalid[key] = 1;
+                vm.isDisabled = true;
+            } else {
+                vm.prop.timeinvalid[key] = 0;
+            }
+
+            if ((vm.prop.multiple[key] === false || vm.prop.multiple[key] === undefined) && vm.prop.timeinvalid[key] == 0) {
+                var minutestimediff = (to - fromtime) / 60000;
+                var subslots = Math.floor(Math.ceil(minutestimediff) / 30);
+
+                if (vm.prop.limit[key] > subslots) {
+                    vm.prop.invalid[key] = 1;
+                    vm.isDisabled = true;
+                } else {
+                    vm.prop.invalid[key] = 0;
+                    if (vm.prop.address != undefined && (typeof vm.prop.address == "string" || vm.googleAddress == 1)) {
+                        vm.isDisabled = false;
+                    } else {
+                        vm.isDisabled = true;
+                    }
+                }
+            } else if ((vm.prop.multiple[key] === true) && vm.prop.timeinvalid[key] == 0) {
+                vm.prop.invalid[key] = 0;
+                vm.isDisabled = false;
+            }
+        }
+
+        vm.clear = function () {
+            vm.mytime = null;
+        };
+
+        // Go Back To View Property
+        vm.backtoviewprop = function (value = '') {
+            if (value != '') {
+                if (confirm('If you go back without updating values, your changes will be lost!')) {
+                    $state.go('adminproperty');
+                } else {
+                    return false;
+                }
+            } else {
+                $state.go('adminproperty');
+            }
+
+        }
+
+        vm.selectCheckbox = function (value, index) {
+            if (!vm.prop.unitlists[index].Aminities || !(vm.prop.unitlists[index].Aminities instanceof Array)) {
+                vm.prop.unitlists[index].Aminities = [];
+            }
+            if (vm.prop.unitlists[index].Aminities.includes(value)) {
+                vm.prop.unitlists[index].Aminities.splice(vm.prop.unitlists[index].Aminities.indexOf(value), 1);
+            } else {
+                vm.prop.unitlists[index].Aminities.push(value);
+            }
+        }
+
+        // Add/Edit Property       
+        vm.submitProp = function (property) {
+
+            AWS.config.update({
+                accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+                secretAccessKey: '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'
+            });
+            AWS.config.region = 'ca-central-1';
+
+            var bucket = new AWS.S3({
+                params: {
+                    Bucket: 'vcancy-final'
+                }
+            });
+            var fileChooser = document.getElementById('file');
+            var file = fileChooser.files[0];
+            var propimg = '';
+
+
+            var propertyObj = $firebaseAuth();
+
+            var propdbObj = firebase.database();
+
+            var propID = property.propID;
+            var propstatus = property.propstatus == '' ? false : property.propstatus;
+            var proptype = property.proptype;
+            var units = property.units;
+            var multiple = property.noofunits;
+            var shared = property.shared == '' ? false : property.shared;
+            var address = property.address;
+            var city = property.city;
+            var province = property.province;
+            var country = property.country;
+            var postcode = property.postcode;
+            var name = property.name;
+            var landlordID = ''
+            landlordID = localStorage.getItem('adminLandlordId')
+            if (!landlordID) {
+                return;
+            }
+
+            if (file != undefined) {
+                var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+                filename = filename.replace(/\s/g, '');
+
+                if (file.size > 3145728) {
+                    swal({
+                        title: "Error!",
+                        text: 'File size should be 3 MB or less.',
+                        type: "error",
+                    });
+                    return false;
+                } else if (
+                    file.type != 'image/png' &&
+                    file.type != 'image/jpeg' &&
+                    file.type != 'image/jpg') {
+                    swal({
+                        title: "Error!",
+                        text: 'Invalid file type.',
+                        type: "error",
+                    });
+                    return false;
+                }
+
+
+
+                var params = {
+                    Key: 'property-images/' + filename,
+                    ContentType: file.type,
+                    Body: file,
+                    StorageClass: "STANDARD_IA",
+                    ACL: 'public-read'
+                };
+
+                bucket.upload(params).on('httpUploadProgress', function (evt) {
+                    //  console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total)+'%');
+                    $rootScope.$apply(function () {
+                        $rootScope.success = "Please Wait.. !";
+                    });
+                }).send(function (err, data) {
+                    if (data.Location != '') {
+                        propimg = data.Location;
+                        // Start Of property Add
+                        var unitlists = vm.createNewPropertyWithUnits(property)
+                        if (propID == '') {
+                            propdbObj.ref('properties/').push().set({
+                                landlordID: landlordID,
+                                propimg: propimg,
+                                propstatus: propstatus,
+                                proptype: proptype,
+                                unitlists: unitlists,
+                                units: units,
+                                shared: shared,
+                                address: address,
+                                city: city,
+                                province: province,
+                                noofunits: multiple,
+                                country: country,
+                                postcode: postcode,
+                                date: moment().format('YYYY-MM-DD:HH:mm:ss'),
+                                multiple: multiple,
+                                name: name
+                            }).then(function (data) {
+                                console.log(data)
+                                console.log("Insert Data successfully!");
+
+                                propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
+                                    //localStorage.setItem("propID", snapshot.key);
+                                    vm.opensuccesssweet(snapshot.key);
+                                    $state.go('admineditprop', { propId: snapshot.key }) //unitlist
+                                    // $rootScope.$apply(function () {
+                                    //     console.log(units);
+                                    //     $rootScope.units = units;
+                                    //     $rootScope.message = units;
+                                    //     $rootScope.success = "Property added successfully!";
+                                    //     $rootScope.propID = snapshot.key;
+                                    // });
+
+
+                                });
+
+                            });
+                        } else {
+
+                            propdbObj.ref('properties/' + propID).update({
+                                landlordID: landlordID,
+                                propimg: propimg,
+                                propstatus: propstatus,
+                                proptype: proptype,
+                                units: units,
+                                shared: shared,
+                                address: address,
+                                city: city,
+                                province: province,
+                                country: country,
+                                postcode: postcode,
+                                noofunits: multiple,
+                                date: moment().format('YYYY-MM-DD:HH:mm:ss'),
+                                multiple: multiple,
+                                name: name
+
+                            }).then(function () {
+                                vm.opensuccesssweet(snapshot.key);
+                                $rootScope.$apply(function () {
+
+                                    // $rootScope.units = units;
+                                    //$rootScope.message = units;
+                                    $rootScope.success = "Property Updated!";
+                                    // $rootScope.propID = propID;
+
+
+                                });
+                            });
+                        } // End OF property Add - Edit
+
+                        /* localStorage.setItem('propertysuccessmsg','Property updated successfully.');
+                                 angular.forEach(vm.scheduleIDs, function(value, key) {
+                                     firebase.database().ref('applyprop/'+value).update({    
+                                         schedulestatus: "cancelled"
+                                     })
+                                     // console.log(value);
+                                 });     
+    
+                                 if(propstatus === false){
+                                     var emailData = '<p>Hello, </p><p>'+address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.com/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                         
+                                     // Send Email
+                                     emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), address+' has been deactivated', 'deactivateproperty', emailData);
+                              
+                                     angular.forEach(vm.tenants, function(tenantID, key) {
+                                         firebase.database().ref('users/'+tenantID).once("value", function(snap) {
+                                             var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                         
+                                             // Send Email
+                                             emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
+                                         });
+                                     });
+                                 } else {
+                                     var emailData = '<p>Hello, </p><p>Your property <em>'+address+'</em>   has been successfully updated and all your property viewings affected by the updated time slots are cancelled. </p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                             
+                                     // Send Email
+                                     emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Property Time Slots updated on Vcancy', 'updateproperty', emailData);
+                              
+                                     angular.forEach(vm.tenants, function(tenantID, key) {
+                                         firebase.database().ref('users/'+tenantID).once("value", function(snap) {
+                                             var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has made some changes in time slots for this property.</p><p>To reschedule the viewing and book some another available time, please log in at http://vcancy.com/login/ and use the link initially provided to schedule the viewing or follow the link http://www.vcancy.com/login/#/applyproperty/'+$stateParams.propId+'.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                         
+                                             // Send Email
+                                             emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'updateproperty', emailData);
+                                         });
+                                     });
+                                 } */
+                    }
+                });
+
+            } else {
+
+                // Start Of property Add
+                if (propID == '') {
+                    var unitlists = vm.createNewPropertyWithUnits(property)
+                    propdbObj.ref('properties/').push().set({
+                        landlordID: landlordID,
+                        propimg: propimg,
+                        unitlists: unitlists,
+                        propstatus: propstatus,
+                        proptype: proptype,
+                        units: units,
+                        shared: shared,
+                        address: address,
+                        city: city,
+                        province: province,
+                        country: country,
+                        noofunits: multiple,
+                        postcode: postcode,
+                        date: moment().format('YYYY-MM-DD:HH:mm:ss'),
+                        multiple: multiple,
+                        name: name
+                    }).then(function (data) {
+                        console.log(data)
+                        console.log("Data added successfully!");
+                        propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
+                            vm.opensuccesssweet(snapshot.key);
+                            $state.go('admineditprop', { propId: snapshot.key })
+                            // $rootScope.$apply(function () {
+                            //     console.log(units);
+                            //     $rootScope.units = units;
+                            //     $rootScope.message = units;
+                            //     $rootScope.success = "Property Added successfully!";
+                            //     $rootScope.propID = snapshot.key;
+
+
+                            //                        });
+                        });
+
+                    });
+                } else {
+                    if ($('#propimg').val() != '') {
+                        propimg = $('#propimg').val();
+                    }
+
+                    propdbObj.ref('properties/' + propID).update({
+                        landlordID: landlordID,
+                        propstatus: propstatus,
+                        proptype: proptype,
+                        units: units,
+                        propimg: propimg,
+                        shared: shared,
+                        address: address,
+                        city: city,
+                        province: province,
+                        country: country,
+                        noofunits: multiple,
+                        postcode: postcode,
+                        date: moment().format('YYYY-MM-DD:HH:mm:ss'),
+                        multiple: multiple,
+                        name: name
+                    }).then(function () {
+                        vm.opensuccesssweet();
+                        $rootScope.$apply(function () {
+                            console.log(units);
+                            // $rootScope.units = units;
+                            // $rootScope.message = units;
+                            // $rootScope.success = "Property Updated!";
+                            // $rootScope.propID = propID;
+
+
+                        });
+
+                    });
+                } // End OF property Add-edit
+            }
+        }
+
+        vm.createNewPropertyWithUnits = function (property) {
+            var unitlists = [];
+            for (var i = 0; i < property.noofunits; i++) {
+                unitlists.push({
+                    "Aminities": [],
+                    "address": property.address,
+                    "bathroom": "",
+                    "bedroom": "",
+                    "cats": "",
+                    "city": property.city,
+                    "description": "",
+                    "dogs": "",
+                    "epirydate": "",
+                    "location": property.city,
+                    "name": property.name,
+                    "postalcode": property.postcode,
+                    "rent": "",
+                    "smoking": "",
+                    "sqft": "",
+                    "country": property.country,
+                    "state": property.province,
+                    "status": "",
+                    "type": property.proptype,
+                    "unit": '',
+                    isIncomplete: true,
+                });
+            }
+            return unitlists;
+        }
+
+        vm.csvsubmitdata = function (prop) {
+
+            var propID = prop.propID;
+            var unitlists = prop.unitlists;
+            var totalunits = prop.totalunits;
+            var noofunits = prop.noofunits;
+            var name = prop.name;
+            var address = prop.address;
+            var city = prop.city;
+            var country = prop.country;
+            var proptype = prop.proptype;
+            var postcode = prop.postcode;
+            var province = prop.province;
+
+
+            var fileUpload = document.getElementById("file123");
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+            if (regex.test(fileUpload.value.toLowerCase())) {
+                if (typeof (FileReader) != "undefined") {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var rows = e.target.result.split("\n");
+                        var result = [];
+                        var units = [];
+                        var headers = rows[0].split(",");
+                        var totalrowunits = 0;
+                        for (var i = 1; i < parseInt(rows.length - 1); i++) {
+
+                            var obj = {};
+                            var currentline = rows[i].split(",");
+
+                            for (var j = 0; j < headers.length; j++) {
+
+                                var headerkey = headers[j];
+                                headerkey = headerkey.replace(/[^a-zA-Z ]/g, "")
+
+                                headerkey = headerkey.toLowerCase();
+                                if (headerkey == 'unit') {
+                                    units.push(currentline[j]);
+                                }
+
+                                if (headerkey == 'unit' && currentline[j] == '') {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Unit number must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
+                                    return false;
+                                }
+                                if (headerkey == 'rent' && currentline[j] == '') {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Rent must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
+                                    return false;
+                                }
+                                if (headerkey == 'sqft' && currentline[j] == '') {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Sqft must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
+                                    return false;
+                                }
+
+                                if (headerkey == 'status' && currentline[j] == '') {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Status must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
+                                    return false;
+                                }
+                                if (headerkey == 'amenities' && currentline[j] == '') {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Amenities must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
+                                    return false;
+                                }
+
+
+                                if (headerkey == 'amenities' && currentline[j] != '') {
+                                    var amenities = currentline[j];
+                                    var str_array = amenities.split('|');
+                                    obj['Aminities'] = str_array;
+                                } else {
+                                    obj[headerkey] = currentline[j];
+                                }
+
+                                obj['name'] = name;
+                                obj['type'] = proptype;
+                                obj['address'] = address;
+                                obj['location'] = address;
+                                obj['city'] = city;
+                                obj['state'] = province;
+                                obj['postcode'] = postcode;
+                            }
+                            result.push(obj);
+                            totalrowunits++;
+                        }
+
+                        for (var i = 0; i < totalrowunits; i++) {
+                            var objres = result[i];
+                            unitlists.push(objres);
+                        }
+
+                        /*console.log(totalrowunits);
+                        console.log(unitlists);*/
+
+
+
+                        if (vm.duplication(units) == true) {
+                            swal({
+                                title: "Error!",
+                                text: "Duplicate unit numbers found in the file. Please check duplicate values.",
+                                type: "error",
+                            });
+                            return false;
+                        }
+
+                        noofunits = parseInt(totalrowunits + noofunits);
+                        firebase.database().ref('properties/' + propID).update({
+                            unitlists: unitlists,
+                            totalunits: noofunits, noofunits: noofunits
+                        }).then(function () {
+
+                            if (confirm("Units added successfully!")) {
+                                $state.go('viewprop');
+                            }
+                            $rootScope.success = "Units added successfully!";
+                            //setTimeout(function(){ $state.go('viewprop'); }, 2000);
+                        }, function (error) {
+                            $rootScope.error = "Please check your file. Multiple errors found with the data.";
+                        });
+                    }
+
+                    reader.readAsText(fileUpload.files[0]);
+
+
+
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: "This browser does not support HTML5.",
+                        type: "error",
+                    });
+                }
+            } else {
+                swal({
+                    title: "Error!",
+                    text: "Please upload a valid CSV file.",
+                    type: "error",
+                });
+            }
+
+        }
+
+        vm.csvadd = function () {
+            var fileUpload = document.getElementById("file");
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+            if (regex.test(fileUpload.value.toLowerCase())) {
+                if (typeof (FileReader) != "undefined") {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var rows = e.target.result.split("\n");
+                        var result = [];
+                        var units = [];
+                        var headers = rows[0].split(",");
+                        var totalunits = 0;
+                        for (var i = 1; i < parseInt(rows.length - 1); i++) {
+                            totalunits = i;
+                            var obj = {};
+                            var currentline = rows[i].split(",");
+
+                            for (var j = 0; j < headers.length; j++) {
+
+                                var headerkey = headers[j];
+                                headerkey = headerkey.replace(/[^a-zA-Z ]/g, "")
+                                if (headerkey == 'unit') {
+                                    units.push(currentline[j]);
+                                }
+                                obj[headerkey] = currentline[j];
+                            }
+                            result.push(obj);
+                        }
+
+                        if (vm.duplication(units) == true) {
+                            swal({
+                                title: "Error!",
+                                text: "Duplicate unit numbers found in the file. Please check duplicate values.",
+                                type: "error",
+                            });
+                            return false;
+                        }
+
+                        //   console.log(result);
+                        firebase.database().ref('properties/' + vm.localpropID).update({
+                            unitlists: result,
+                            totalunits: totalunits
+                        }).then(function () {
+                            $rootScope.success = "Units added successfully!";
+                            setTimeout(function () { $state.go('viewprop'); }, 2000);
+                        }, function (error) {
+                            $rootScope.error = "Please check your file. Multiple errors found with the data.";
+                        });
+                    }
+
+                    reader.readAsText(fileUpload.files[0]);
+
+
+
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: "This browser does not support HTML5.",
+                        type: "error",
+                    });
+                }
+            } else {
+                swal({
+                    title: "Error!",
+                    text: "Please upload a valid CSV file.",
+                    type: "error",
+                });
+            }
+
+        }
+
+
+
+        vm.duplication = function (data) {
+
+            var sorted_arr = data.slice().sort(); // You can define the comparing function here. 
+            // JS by default uses a crappy string compare.
+            // (we use slice to clone the array so the
+            // original array won't be modified)
+            var results = [];
+            for (var i = 0; i < sorted_arr.length - 1; i++) {
+                if (sorted_arr[i + 1] == sorted_arr[i]) {
+                    results.push(sorted_arr[i]);
+                }
+            }
+
+            if (results.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        if ($state.current.name == 'viewunits') {
+
+            var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function (snapshot) {
+                var propertiesData = snapshot.val();
+                $scope.$apply(function () {
+                    vm.units = {
+                        mode: 'View',
+                        propID: snapshot.key,
+                        address: propertiesData.address,
+                        city: propertiesData.city,
+                        country: propertiesData.country,
+                        date: propertiesData.date,
+                        landlordID: propertiesData.landlordID,
+                        name: propertiesData.name,
+                        postcode: propertiesData.postcode,
+                        propimg: propertiesData.propimg,
+                        propstatus: propertiesData.propstatus,
+                        proptype: propertiesData.proptype,
+                        province: propertiesData.province,
+                        shared: propertiesData.shared,
+                        totalunits: propertiesData.totalunits,
+                        units: propertiesData.units,
+                        unitlists: propertiesData.unitlists,
+                    }
+                });
+            });
+
+        }
+
+
+
+
+        // Edit Property
+        if ($state.current.name == 'admineditprop') {
+            vm.mode = 'Edit';
+            vm.submitaction = "Update";
+            vm.otheraction = "Delete";
+            $scope.loader = 1;
+            var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function (snapshot) {
+
+                var propData = snapshot.val();
+                console.log(propData);
+
+                vm.timeSlot = [];
+                $scope.$apply(function () {
+                    vm.prop = vm.units = {
+                        propID: snapshot.key,
+                        landlordID: propData.landlordID,
+                        propimg: propData.propimg,
+                        propstatus: propData.propstatus,
+                        proptype: propData.proptype,
+                        units: propData.units,
+                        rent: propData.rent,
+                        shared: propData.shared,
+                        address: propData.address,
+                        noofunits: propData.totalunits,
+                        city: propData.city,
+                        province: propData.province,
+                        postcode: propData.postcode,
+                        country: propData.country,
+                        propimage: propData.propimg,
+                        unitlists: propData.unitlists,
+                        noofunits: propData.noofunits,
+                        name: propData.name,
+                        multiple: [],
+                        mode: 'Edit',
+                        date: [],
+                        fromtime: [],
+                        to: [],
+                        limit: [],
+                        propertylink: propData.propertylink,
+                        invalid: [0],
+                        timeinvalid: [0],
+                        timeoverlapinvalid: [0]
+                    }
+                    $scope.loader = 0;
+                    /*   angular.forEach(propData.date, function(value, key) {
+                           vm.timeSlot.push({
+                               date: new Date(value)
+                           });
+                           vm.prop.date.push(new Date(value));
+                           vm.prop.fromtime.push(new Date(propData.fromtime[key]));
+                           vm.prop.to.push(new Date(propData.to[key]));
+                           vm.prop.limit.push(propData.limit[key]);
+                           vm.prop.multiple.push(propData.multiple[key]);
+                       });*/
+                    vm.addresschange();
+                    oldtimeSlotLen = vm.timeSlot.length;
+                    vm.unitsOptional();
+                });
+            });
+        } else if ($state.current.name == 'adminaddprop') {
+            vm.mode = 'Add';
+            vm.submitaction = "Save";
+            vm.otheraction = "Cancel";
+            vm.timeSlot = [{
+                date: dateconfig
+            }];
+            vm.prop = vm.units = {
+                propID: '',
+                landlordID: '',
+                propimg: '',
+                propstatus: true,
+                proptype: '',
+                units: '',
+                multiple: [true],
+                rent: '',
+                shared: '',
+                address: 'dgdfgdf',
+                noofunits: 0,
+                city: '',
+                province: '',
+                postcode: '',
+                country: '',
+                propimage: '',
+                unitlists: [],
+                noofunits: 0,
+                name: name,
+                noofunitsarray: vm.getarray(0),
+                mode: 'Add',
+                date: [],
+                fromtime: [],
+                to: [],
+                limit: [],
+                propertylink: '',
+                invalid: [0],
+                timeinvalid: [0],
+                timeoverlapinvalid: [0]
+            }
+        }
+        //noofunitsarray Return array value
+        vm.noofunitsarray = function () {
+
+            return vm.getarray(vm.prop.noofunits);
+
+        }
+
+        vm.onChangeCheckBox = function (index, value) {
+            var isValueIncluded = vm.prop.unitlists[index].Aminities.includes(value);
+            if (isValueIncluded) {
+                vm.prop.unitlists[index].Aminities.splice(vm.prop.unitlists[index].Aminities.indexOf(value), 1);
+            } else {
+                vm.prop.unitlists[index].Aminities.push(value);
+            }
+            // $(event.target).toggleClass('selected');
+        }
+        vm.deleteproperty = function (propID, page) {
+            var propID = propID;
+            var propertyObj = $firebaseAuth();
+            var propdbObj = firebase.database();
+            firebase.database().ref('properties/' + propID).once("value", function (snap) {
+
+                vm.property_address = snap.val().address;
+                swal({
+                    title: 'Warning!',
+                    text: "Are you sure you want to delete this property? All details and units will be deleted!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes",
+                    closeOnConfirm: false
+                }, function () {
+                    propdbObj.ref('properties/' + propID).remove();
+                    firebase.database().ref('applyprop/').orderByChild("propID").equalTo(propID).once("value", function (snapshot) {
+                        $scope.$apply(function () {
+                            vm.scheduleIDs = [];
+                            vm.tenants = [];
+
+                            if (snapshot.val() != null) {
+                                $.map(snapshot.val(), function (value, index) {
+                                    vm.scheduleIDs.push(index);
+                                    vm.tenants.push(value.tenantID);
+                                });
+                            }
+                            angular.forEach(vm.scheduleIDs, function (value, key) {
+                                firebase.database().ref('applyprop/' + value).update({
+                                    schedulestatus: "removed"
+                                })
+                            });
+
+                            var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + vm.landlordname + ',</h2><br> Your property <em>' + vm.property_address + '</em> has been successfully deleted and all viewings related to this property are also removed.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                            // Send Email
+                            emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address + ' has been deleted', 'delproperty', emailData);
+
+                            angular.forEach(vm.tenants, function (tenantID, key) {
+                                firebase.database().ref('users/' + tenantID).once("value", function (snap) {
+                                    var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + snap.val().firstname + ' ' + snap.val().lastname + ',</h2><br> Your viewing request on property <em>' + vm.property_address + '</em> has been removed as landlord has deleted his property.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                                    // Send Email
+                                    emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your viewing request has been removed from Vcancy', 'delproperty', emailData);
+                                });
+                            });
+                        })
+
+                        swal({
+                            title: 'Success!',
+                            text: 'Property deleted successfully',
+                            type: 'success'
+                        }, function () {
+                            if (page === 'innerpage') {
+                                $state.go('viewprop');
+                            } else {
+                                $state.reload();
+                            }
+                        });
+
+                    });
+
+                    if (page === 'innerpage') {
+                        $state.go('viewprop');
+                    } else {
+                        $state.reload();
+                    }
+                });
+            });
+        }
+
+        vm.stringModel = [];
+        vm.stringData = ['David', 'Jhon', 'Danny',];
+        vm.stringSettings = { template: '{{option}}', smartButtonTextConverter(skip, option) { return option; }, };
+
+        // Delete Property Permanently
+        this.delprop = function (propID) {
+            var propertyObj = $firebaseAuth();
+            var propdbObj = firebase.database();
+
+            firebase.database().ref('properties/' + propID).once("value", function (snap) {
+                vm.property_address = snap.val().address;
+
+                if ($window.confirm("Do you want to continue?")) {
+                    propdbObj.ref('properties/' + propID).remove();
+
+                    firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function (snapshot) {
+                        $scope.$apply(function () {
+                            vm.scheduleIDs = [];
+                            vm.tenants = [];
+
+                            if (snapshot.val() != null) {
+                                $.map(snapshot.val(), function (value, index) {
+                                    vm.scheduleIDs.push(index);
+                                    vm.tenants.push(value.tenantID);
+                                });
+                            }
+                            angular.forEach(vm.scheduleIDs, function (value, key) {
+                                firebase.database().ref('applyprop/' + value).update({
+                                    schedulestatus: "removed"
+                                })
+                            });
+
+                            var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + vm.landlordname + ',</h2><br> Your property <em>' + vm.property_address + '</em> has been successfully deleted and all viewings related to this property are also removed.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                            // Send Email
+                            emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address + ' has been deleted', 'delproperty', emailData);
+
+                            angular.forEach(vm.tenants, function (tenantID, key) {
+                                firebase.database().ref('users/' + tenantID).once("value", function (snap) {
+                                    var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + snap.val().firstname + ' ' + snap.val().lastname + ',</h2><br> Your viewing request on property <em>' + vm.property_address + '</em> has been removed as landlord has deleted his property.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                                    // Send Email
+                                    emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your viewing request is removed from Vcancy', 'delproperty', emailData);
+                                });
+                            });
+                        })
+                        $state.go('viewprop');
+                    })
+                }
+            });
+        }
+
+        // Units to be optional when house is selected
+
+
+        this.unitsClear = function (proptype) {
+            console.log(vm.prop.units);
+            if (vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)) {
+                vm.prop.units = ' ';
+            }
+        }
+
+        vm.checkAll = function () {
+            if (vm.selectedAll) {
+                for (var i = 0; i < vm.prop.unitlists.length; i++) {
+                    vm.checkedRow[i] = true;
+                }
+            } else {
+                vm.checkedRow = {};
+            }
+            // var datalen = vm.noofunitsarray();
+
+            // for (var i = 0; i <= datalen.length - 1; i++) {
+            //     vm.prop.noofunitsarray[i] = $scope.selectedAll;
+            // }
+        }
+        vm.moreaction = function (action) {
+
+            if (Object.keys(vm.checkedRow).length > 0) {
+
+                for (var index in vm.checkedRow) {
+                    if (vm.checkedRow[index] && action) {
+                        vm.prop.unitlists[index].status = action;
+                    }
+                }
+                // $("#ts_checkbox:checked").each(function (index) {
+                //     selectedvalue.push($(this).val());
+                // });
+
+
+                // var rowlength = selectedvalue.length;
+                // //var tablerowlength = vm.prop.noofunitsarray;
+                // var tablerowlength = vm.noofunitsarray();
+
+                // if (val === 'DAll') {
+                //     if (vm.units.unitlists !== undefined) {
+                //         for (var i = 0; i < rowlength; i++) {
+                //             delete vm.units.unitlists[parseInt(selectedvalue[i])];
+                //         }
+                //     }
+                //     for (var i = 0; i < rowlength; i++) {
+                //         vm.units.noofunits = parseInt(vm.units.noofunits - 1);
+                //         vm.prop.noofunits = vm.units.noofunits
+                //         //vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
+                //         // vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
+                //     }
+                //     var list = [];
+                //     for (var i = 0; i < vm.units.unitlists.length; i++) {
+                //         if (typeof vm.units.unitlists[i] !== 'undefined') {
+                //             list.push(vm.units.unitlists[i]);
+                //         }
+                //     }
+
+                //     vm.units.unitlists = list;
+                //     $scope.selectedAll = false;
+                //     var datalen = vm.noofunitsarray();
+
+                //     for (var i = 0; i <= datalen.length - 1; i++) {
+                //         vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                //     }
+                // }
+
+                // if (val === 'Mavailable') {
+
+                //     if (vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined) {
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             console.log(vm.units.unitlists[index]);
+                //             if (vm.units.unitlists[index] !== undefined) {
+                //                 vm.units.unitlists[index]['status'] = 'Available';
+                //             } else {
+                //                 vm.units.unitlists.push({ status: 'Available' });
+                //             }
+
+                //         }
+                //     } else {
+                //         vm.units.unitlists = [];
+                //         for (var i = 0; i < tablerowlength.length; i++) {
+
+                //         }
+
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             vm.units.unitlists[index]['status'] = 'Available';
+                //         }
+
+                //     }
+
+                //     $scope.selectedAll = false;
+                //     var datalen = vm.noofunitsarray();
+
+                //     for (var i = 0; i <= datalen.length - 1; i++) {
+                //         vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                //     }
+                // }
+
+                // if (val === 'Mranted') {
+                //     if (vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined) {
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             if (vm.units.unitlists[index] !== undefined) {
+                //                 vm.units.unitlists[index]['status'] = 'rented';
+                //             } else {
+                //                 vm.units.unitlists.push({ status: 'rented' });
+                //             }
+                //         }
+                //     } else {
+                //         vm.units.unitlists = [];
+                //         for (var i = 0; i < tablerowlength.length; i++) {
+                //             vm.units.unitlists.push({ status: '' });
+                //         }
+
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             vm.units.unitlists[index]['status'] = 'rented';
+                //         }
+
+                //     }
+
+                //     $scope.selectedAll = false;
+                //     var datalen = vm.noofunitsarray();
+
+                //     for (var i = 0; i <= datalen.length - 1; i++) {
+                //         vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                //     }
+                // }
+
+
+                // if (val === 'Msold') {
+                //     if (vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined) {
+
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             if (vm.units.unitlists[index] !== undefined) {
+                //                 vm.units.unitlists[index]['status'] = 'sold';
+                //             } else {
+                //                 vm.units.unitlists.push({ status: 'sold' });
+                //             }
+                //         }
+                //     } else {
+                //         vm.units.unitlists = [];
+                //         for (var i = 0; i < tablerowlength.length; i++) {
+                //             vm.units.unitlists.push({ status: '' });
+                //         }
+
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             vm.units.unitlists[index]['status'] = 'sold';
+                //         }
+
+                //     }
+
+                //     $scope.selectedAll = false;
+                //     var datalen = vm.noofunitsarray();
+
+                //     for (var i = 0; i <= datalen.length - 1; i++) {
+                //         vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                //     }
+                // }
+            } else {
+                swal({
+                    title: "Error!",
+                    text: "Please select row for apply your selected action",
+                    type: "error",
+                });
+                vm.more = '';
+            }
+        }
+
+        vm.addNewUnit = function () {
+            var newUnit = {
+                "Aminities": [],
+                "address": vm.prop.address,
+                "bathroom": "",
+                "bedroom": "",
+                "cats": "",
+                "city": vm.prop.city,
+                "description": "",
+                "dogs": "",
+                "epirydate": "",
+                "location": vm.prop.address,
+                "name": vm.prop.name,
+                "postalcode": vm.prop.postcode,
+                "country": vm.prop.country,
+                "rent": "",
+                "smoking": "",
+                "sqft": "",
+                "state": vm.prop.province || vm.prop.city,
+                "status": "available",
+                "type": "",
+                "unit": '',
+                isIncomplete: true,
+            }
+            if (!vm.prop.unitlists) vm.prop.unitlists = [];
+            vm.prop.unitlists.push(newUnit);
+        }
+
+        vm.deleteSelected = function () {
+            if (Object.keys(vm.checkedRow) && Object.keys(vm.checkedRow).length > 0) {
+
+                vm.prop.unitlists = vm.prop.unitlists.filter(function (unit, key) {
+                    if (!vm.checkedRow[key]) return true;
+                })
+                vm.submiteditunits(vm.prop.unitlists, vm.prop, true);
+                vm.checkedRow = {};
+            } else {
+                swal({
+                    title: "Alert!",
+                    text: "Please select any unit from row",
+                    type: "warning",
+                });
+            }
+        }
+
+        vm.addmorerow = function (val1) {
+            var val = val1;
+            if (isNaN(val)) {
+                val = 0;
+            }
+
+            vm.units.noofunits = parseInt(val + 1);
+            vm.prop.noofunits = parseInt(val + 1);
+            $scope.selectedAll = false;
+            //vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits)
+        }
+        vm.filesArray = [];
+        $scope.uploadDetailsImages = function (event) {
+            var filesToUpload = event.target.files;
+            var alreadyAddedImages = $scope.selectedUnitDetail.data.images ? $scope.selectedUnitDetail.data.images.length : 0
+            if (filesToUpload.length + alreadyAddedImages > 24) {
+                swal({
+                    title: "Warning!",
+                    text: "Images uploading is limited to 24 images only.",
+                    type: "warning",
+                });
+                return
+            }
+            // swal({
+            //     title: 'Alert',
+            //     text: "Please wait photos are uploading",
+            //     icon: "info",
+            // });
+            $scope.loader = 1;
+            for (var i = 0; i < filesToUpload.length; i++) {
+                var file = filesToUpload[i];
+                vm.filesArray.push(vm.singleFileUpload(file));
+            }
+
+            $q
+                .all(vm.filesArray)
+                .then((data) => {
+                    swal.close();
+                    if (!$scope.selectedUnitDetail.data.images) $scope.selectedUnitDetail.data.images = [];
+                    $scope.selectedUnitDetail.data.images = $scope.selectedUnitDetail.data.images.concat(data);
+                    setTimeout(function () {
+                        swal({
+                            title: "Success!",
+                            text: "Photos uploaded successfully!",
+                            type: "success",
+                        });
+                    }, 100)
+                    $scope.loader = 0;
+                })
+        }
+
+        $scope.copyUnitDetails = function (from, to) {
+            var datatoCopy = vm.prop.unitlists.find(function (unit) {
+                return unit.unit == from;
+            })
+            for (var i in datatoCopy) {
+                if (i != 'unit') {
+                    $scope.selectedUnitDetail.data[i] = datatoCopy[i]
+                }
+            }
+        }
+
+        vm.singleFileUpload = function (file) {
+            var fileUploadDefer = $q.defer();
+            if (file) {
+                AWS.config.update({
+                    accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+                    secretAccessKey: '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'
+                });
+                AWS.config.region = 'ca-central-1';
+
+                var bucket = new AWS.S3({
+                    params: {
+                        Bucket: 'vcancy-final'
+                    }
+                });
+                var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+                filename = filename.replace(/\s/g, '');
+
+                if (file.size > 3145728) {
+                    swal({
+                        title: "Error!",
+                        text: 'File size should be 3 MB or less.',
+                        type: "error",
+                    });
+                    return false;
+                } else if (file.type.indexOf('image') === -1) {
+                    swal({
+                        title: "Error!",
+                        text: 'Only files are accepted.',
+                        type: "error",
+                    });
+                    return false;
+                }
+
+
+
+                var params = {
+                    Key: 'property-images/' + filename,
+                    ContentType: file.type,
+                    Body: file,
+                    StorageClass: "STANDARD_IA",
+                    ACL: 'public-read'
+                };
+
+                bucket.upload(params).on('httpUploadProgress', function (evt) {
+
+                })
+                    .send(function (err, data) {
+                        if (err) {
+                            return fileUploadDefer.reject(data);
+                        }
+                        return fileUploadDefer.resolve(data);
+                    });
+
+                return fileUploadDefer.promise;
+            }
+        }
+
+        vm.copyrowofunits = function () {
+
+            var arr = [];
+            var selectedvalue = new Array();
+            var n = $("#ts_checkbox:checked").length;
+            var tempArray = vm.prop.unitlists;
+            var b = [];
+            if (n > 0) {
+
+                $("#ts_checkbox:checked").each(function (index) {
+                    selectedvalue.push($(this).val());
+                });
+
+                for (var i = 0; i < selectedvalue.length; i++) {
+                    //console.log(vm.prop.unitlists[i]);
+                    units = parseInt(vm.prop.unitlists[i]['unit']) + parseInt(vm.prop.unitlists.length);
+
+                    b.push({
+                        unit: units,
+                        name: vm.prop.unitlists[i]['name'],
+                        type: vm.prop.unitlists[i]['type'],
+                        address: vm.prop.unitlists[i]['address'],
+                        city: vm.prop.unitlists[i]['city'],
+                        state: vm.prop.unitlists[i]['state'],
+                        postalcode: vm.prop.unitlists[i]['postalcode'],
+                        location: vm.prop.unitlists[i]['location'],
+                        sqft: vm.prop.unitlists[i]['sqft'],
+                        bedroom: vm.prop.unitlists[i]['bedroom'],
+                        bathroom: vm.prop.unitlists[i]['bathroom'],
+                        rent: vm.prop.unitlists[i]['rent'],
+                        description: vm.prop.unitlists[i]['description'],
+                        status: vm.prop.unitlists[i]['status'],
+                        epirydate: vm.prop.unitlists[i]['epirydate'],
+                        Aminities: vm.prop.unitlists[i]['Aminities'],
+                        cats: vm.prop.unitlists[i]['cats'],
+                        dogs: vm.prop.unitlists[i]['dogs'],
+                        smoking: vm.prop.unitlists[i]['smoking']
+
+                    });
+                    vm.prop.noofunits = parseInt(vm.prop.noofunits + 1);
+                }
+
+
+                for (var i = 0; i < b.length; i++) {
+                    vm.prop.unitlists.push(b[i]);
+                }
+            } else {
+                vm.prop.noofunits = parseInt(vm.prop.noofunits + vm.prop.unitlists.length);
+
+                for (var i = 0; i < vm.prop.unitlists.length; i++) {
+                    var units = parseInt(vm.prop.unitlists[i]['unit']) + parseInt(vm.prop.unitlists.length);
+                    b.push({
+                        unit: units,
+                        name: vm.prop.unitlists[i]['name'],
+                        type: vm.prop.unitlists[i]['type'],
+                        address: vm.prop.unitlists[i]['address'],
+                        city: vm.prop.unitlists[i]['city'],
+                        state: vm.prop.unitlists[i]['state'],
+                        postalcode: vm.prop.unitlists[i]['postalcode'],
+                        location: vm.prop.unitlists[i]['location'],
+                        sqft: vm.prop.unitlists[i]['sqft'],
+                        bedroom: vm.prop.unitlists[i]['bedroom'],
+                        bathroom: vm.prop.unitlists[i]['bathroom'],
+                        rent: vm.prop.unitlists[i]['rent'],
+                        description: vm.prop.unitlists[i]['description'],
+                        status: vm.prop.unitlists[i]['status'],
+                        epirydate: vm.prop.unitlists[i]['epirydate'],
+                        Aminities: vm.prop.unitlists[i]['Aminities'],
+                        cats: vm.prop.unitlists[i]['cats'],
+                        dogs: vm.prop.unitlists[i]['dogs'],
+                        smoking: vm.prop.unitlists[i]['smoking']
+
+                    });
+                }
+
+                for (var i = 0; i < b.length; i++) {
+                    console.log(b[i]);
+                    vm.prop.unitlists.push(b[i]);
+                }
+            }
+        }
+
+        vm.addmorerowedit = function (val) {
+            vm.prop.noofunits = parseInt(val + 1);
+        }
+
+        vm.submiteditunits = function (unitlists, prop, isDeleted, isFromSchedule) {
+            let unitIds = [];
+            unitlists.forEach((unit) => {
+                unitIds.push(unit.unit);
+                delete unit.$$hashKey;
+            });
+            var hasDuplicateIds = vm.duplication(unitIds);
+            if (hasDuplicateIds) {
+                swal({
+                    title: "Error!",
+                    text: "Duplicate unit number/s added, please check Unit # column",
+                    type: "error",
+                });
+                return;
+            }
+            return firebase.database().ref('properties/' + prop.propID).update({
+                unitlists: unitlists,
+                totalunits: unitlists.length,
+                noofunits: unitlists.length
+            }).then(function () {
+                if (isDeleted) {
+                    swal({
+                        title: "Success!",
+                        text: "Unit deleted successfully.",
+                        type: "success",
+                    });
+                } else {
+                    vm.prop.noofunits = unitlists.length;
+                    vm.prop.totalunits = unitlists.length;
+                    swal({
+                        title: "Success!",
+                        text: "Unit/s saved successfully.",
+                        type: "success",
+                    }, function (value) {
+                        if (isFromSchedule) {
+                            window.location.reload();
+                        }
+                    })
+
+                }
+            }, function (error) {
+                if (confirm("Units not added, please try again!") == true) {
+                    return false;
+                }
+            });
+        }
+
+        vm.submitunits = function (units) {
+
+            var num = units.number;
+            var rent = units.rent;
+            var sqft = units.sqft;
+            var status = units.status;
+            var bath = units.bath;
+            var bed = units.bed;
+            var aminities1 = units.Aminities;
+            var fullformarary = [];
+
+
+            var address = units.address;
+            var name = units.name;
+            var type = units.proptype;
+            var city = units.city;
+            var state = units.province;
+            var postalcode = units.postcode;
+            var location = units.address;
+            var bedroom = [];
+            var bathroom = [];
+            var description = [];
+            var status = units.status;
+            var epirydate = [];
+            var cats = [];
+            var dogs = [];
+            var smoking = [];
+            var furnished = [];
+            var wheelchair = [];
+
+
+            var number = [];
+            var rentarray = [];
+            var sqftarray = [];
+            var statusarray = [];
+            var textarray = [];
+            var batharray = [];
+            var bedarray = [];
+            var Aminitiesarray = [];
+
+
+
+            for (var prop in num) {
+                if (num.hasOwnProperty(prop)) {
+                    number.push(num[prop]);
+                }
+            }
+
+            if (vm.duplication(number) == true) {
+                swal({
+                    title: "Error!",
+                    text: "Duplicate unit numbers found in the file. Please check duplicate values.",
+                    type: "error",
+                });
+                /*$rootScope.$apply(function() {
+                         $rootScope.error = "Please check your unit number are duplicate.. !";
+                     });*/
+                return false;
+            }
+
+            for (var prop in rent) {
+                if (rent.hasOwnProperty(prop)) {
+                    rentarray.push(rent[prop]);
+                }
+            }
+
+            for (var prop in sqft) {
+                if (sqft.hasOwnProperty(prop)) {
+                    sqftarray.push(sqft[prop]);
+                }
+            }
+
+            for (var prop in status) {
+                if (status.hasOwnProperty(prop)) {
+                    statusarray.push(status[prop]);
+                }
+            }
+
+            for (var prop in bath) {
+                if (bath.hasOwnProperty(prop)) {
+                    batharray.push(bath[prop]);
+                }
+            }
+
+            for (var prop in bed) {
+                if (bed.hasOwnProperty(prop)) {
+                    bedarray.push(bed[prop]);
+                }
+            }
+
+            for (var prop in aminities1) {
+                if (aminities1.hasOwnProperty(prop)) {
+                    Aminitiesarray.push(aminities1[prop]);
+                }
+            }
+
+            var totalunits = 0;
+            for (var i = 0; i < number.length; i++) {
+
+                fullformarary.push({
+                    unit: number[i],
+                    name: name,
+                    type: type,
+                    address: units.address,
+                    city: city,
+                    state: state,
+                    postalcode: postalcode,
+                    location: address,
+                    sqft: sqftarray[i],
+                    bedroom: bedarray[i],
+                    bathroom: batharray[i],
+                    rent: rentarray[i],
+                    description: '',
+                    status: statusarray[i],
+                    epirydate: '',
+                    Aminities: Aminitiesarray[i],
+                    cats: '',
+                    dogs: '',
+                    smoking: '',
+                    furnished: '',
+                    wheelchair: ''
+                });
+                totalunits++;
+            }
+
+
+
+            firebase.database().ref('properties/' + units.propID).update({
+                unitlists: fullformarary,
+                totalunits: totalunits,
+                noofunits: totalunits
+            }).then(function () {
+                if (confirm("Units added successfully!") == true) {
+                    localStorage.removeItem('propID');
+                    localStorage.removeItem('units');
+                    localStorage.removeItem('propName');
+                    $state.go('viewprop');
+                } else {
+                    return false;
+                }
+            }, function (error) {
+                if (confirm("Units not added, please try again!") == true) {
+                    return false;
+                }
+            });
+
+        }
+
+
+        $scope.items = [
+            'The first choice!',
+            'And another choice for you.',
+            'but wait! A third!'
+        ];
+
+        $scope.status = {
+            isopen: false
+        };
+
+        $scope.toggled = function (open) {
+            $log.log('Dropdown is now: ', open);
+        };
+
+        $scope.toggleDropdown = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.status.isopen = !$scope.status.isopen;
+        };
+
+        $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
+
+        vm.opensuccesssweet = function (value) {
+            swal({
+                title: "Property added successfully, please add units",
+                text: "Click on the Units tab",
+                type: "success",
+            });
+            // alert('Property Created successfully!');
+            //swal("Your Property Created successfully!", "You clicked the button And add units!", "success")
+        }
+
+        vm.openmodel = function (size) {
+            $scope.items1 = [];
+            var modalInstance = $uibModal.open({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl9',
+                backdrop: 'static',
+                size: size,
+                resolve: {
+                    items1: function () {
+                        return $scope.items1;
+                    }
+                }
+
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        $scope.openImageModal = function () {
+            $scope.imageModal = $uibModal.open({
+                templateUrl: 'viewimages.html',
+                controller: 'adminPropertyCtrl',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'zIndex',
+                scope: $scope
+            });
+        }
+
+        $scope.closeImageModal = function () {
+            $scope.imageModal.dismiss('cancel');
+        }
+
+        vm.openDetailModel = function (prop, index) {
+            $scope.selectedUnitDetail = {};
+            $scope.selectedUnitDetail.data = vm.prop.unitlists[index];
+            $scope.selectedUnitDetail.data.email = localStorage.getItem('userEmail');
+            $scope.selectedUnitDetail.index = index;
+            $scope.items1 = prop;
+            $scope.items1.indexofDetails = index;
+            $scope.modalInstance = $uibModal.open({
+                templateUrl: 'myModalDetailsContent.html',
+                controller: 'adminPropertyCtrl',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'detailmodalcss',
+                scope: $scope
+            });
+        };
+        vm.duplication = function (data) {
+
+            var sorted_arr = data.slice().sort(); // You can define the comparing function here. 
+            // JS by default uses a crappy string compare.
+            // (we use slice to clone the array so the
+            // original array won't be modified)
+            var results = [];
+            for (var i = 0; i < sorted_arr.length - 1; i++) {
+                if (sorted_arr[i + 1] == sorted_arr[i]) {
+                    results.push(sorted_arr[i]);
+                    break;
+                }
+            }
+
+            if (results.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        vm.opencsvmodel = function (prop) {
+
+            $scope.items1 = prop;
+            var modalInstance = $uibModal.open({
+                templateUrl: 'myModalContent1.html',
+                controller: 'ModalInstanceCtrl9',
+                backdrop: 'static',
+                resolve: {
+                    items1: function () {
+                        return $scope.items1;
+                    }
+                }
+
+            });
+
+            modalInstance.result.then(function () {
+
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        $scope.cancel = function () {
+            $scope.modalInstance.dismiss('cancel');
+        };
+        vm.checkIfDetailIsIncomplete = function (value) {
+
+            var keyToCheck = [
+                "address",
+                "city",
+                "postalcode",
+                "country",
+                "rent",
+                "sqft",
+                "status",
+                "unit",
+                "type",
+                "title",
+                "description"
+            ]
+
+            for (var i = 0; i < keyToCheck.length; i++) {
+                if (!value[keyToCheck[i]]) {
+                    return true;
+                }
+            }
+
+            if (!value.images) {
+                return true;
+            }
+            if (value.images.length <= 0) {
+                return true;
+            }
+            return false;
+        }
+        $scope.submitDetails = function (isFromSchedule) {
+            var index = $scope.selectedUnitDetail.index;
+            if (!vm.prop.unitlists) {
+                vm.prop.unitlists = [];
+            }
+            // if (!vm.prop.unitlists[index]) {
+            //     vm.prop = angular.copy($scope.prop);
+            // }
+            vm.prop.unitlists[index] = angular.copy($scope.selectedUnitDetail.data);
+            vm.prop.unitlists[index].isIncomplete = vm.checkIfDetailIsIncomplete(angular.copy($scope.selectedUnitDetail.data));
+            vm.submiteditunits(vm.prop.unitlists, vm.prop, '', isFromSchedule)
+                .then(function () {
+                    $scope.cancel();
+                });
+        };
+
+        $scope.deleteImageFromDetail = function (index) {
+            $scope.selectedUnitDetail.data.images.splice(index, 1);
+        }
+
+        $scope.onChangeCheckbox = function (type) {
+            if ($scope.selectedUnitDetail.data.Aminities && $scope.selectedUnitDetail.data.Aminities.includes(type)) {
+                $scope.selectedUnitDetail.data.Aminities.splice($scope.selectedUnitDetail.data.Aminities.indexOf(type), 1);
+            } else {
+                if (!$scope.selectedUnitDetail.data.Aminities) $scope.selectedUnitDetail.data.Aminities = [];
+                $scope.selectedUnitDetail.data.Aminities.push(type);
+            }
+        }
+
+
+
+    }]);
+
+
+
+vcancyApp.controller('ModalInstanceCtrl9', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$uibModal', '$uibModalInstance', '$location', 'items1', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $uibModal, $uibModalInstance, $location, items1) {
+    var vm = this;
+    vm.prop = items1;
+    $scope.items1 = items1;
+    $scope.ok = function (value) {
+        if (value === 'viewproperty') {
+            $uibModalInstance.close();
+            $state.go('viewprop');
+        }
+    };
+
+    $scope.submit = function () {
+
+        $scope.loader = 1;
+        var propID = $scope.items1.propID;
+        var unitlists = $scope.items1.unitlists;
+        var totalunits = $scope.items1.totalunits;
+        var noofunits = $scope.items1.noofunits;
+        var name = $scope.items1.name;
+        var address = $scope.items1.address;
+        var city = $scope.items1.city;
+        var country = $scope.items1.country;
+        var proptype = $scope.items1.proptype;
+        var postcode = $scope.items1.postcode;
+        var province = $scope.items1.province;
+
+
+        var fileUpload = document.getElementById("file123");
+        if (fileUpload.value.indexOf('.csv') > -1) {
+            if (typeof (FileReader) != "undefined") {
+                var unitsImported = [];
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var rows = e.target.result.split("\n");
+                    var units = [];
+                    var headers = rows[0].split(",");
+                    var totalrowunits = 0;
+                    for (var i = 1; i < rows.length; i++) {
+
+                        var obj = {};
+                        var currentline = rows[i].split(",");
+                        if (currentline[0].indexOf('DELETE THE EXAMPLE') > -1) {
+                            continue;
+                        }
+                        if (currentline.length < 2) {
+                            continue;
+                        }
+
+                        for (var j = 0; j < headers.length; j++) {
+
+                            var headerkey = headers[j];
+                            headerkey = headerkey.replace(/[^a-zA-Z]/g, "")
+
+                            headerkey = headerkey.toLowerCase();
+                            if (headerkey == 'unit') {
+                                units.push(currentline[j]);
+                            }
+
+                            if (headerkey == 'unit' && currentline[j] == '') {
+                                swal({
+                                    title: "Error!",
+                                    text: "Unit must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
+                                return false;
+                            }
+                            if (headerkey == 'rent' && currentline[j] == '') {
+                                swal({
+                                    title: "Error!",
+                                    text: "Rent must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
+                                return false;
+                            }
+                            if (headerkey == 'sqft' && currentline[j] == '') {
+                                swal({
+                                    title: "Error!",
+                                    text: "Sqft must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
+                                return false;
+                            }
+
+                            if (headerkey == 'status' && currentline[j] == '') {
+                                swal({
+                                    title: "Error!",
+                                    text: "status must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
+                                return false;
+                            }
+
+                            var actualHeaderKey = '';
+                            var aminitiesHeaderKeys = [
+                                'amenitiesfurnished',
+                                'amenitieslaundry',
+                                'amenitiesparking',
+                                'amenitieswheelchairaccess'
+                            ]
+                            var ignorKeys = [
+                                'propertyaddressoptional',
+                            ]
+                            if (ignorKeys.includes(headerkey)) {
+                                continue;
+                            }
+                            if (aminitiesHeaderKeys.includes(headerkey)) {
+                                actualHeaderKey = 'Aminities';
+                            } else if (headerkey === 'catsok') {
+                                actualHeaderKey = 'cats';
+                            } else if (headerkey === 'dogsok') {
+                                actualHeaderKey = 'dogs';
+                            } else {
+                                actualHeaderKey = headerkey.trim();
+                            }
+
+                            if (headerkey === 'amenitiesfurnished') {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('furnished')
+                                }
+                            } else if (headerkey === 'amenitieslaundry') {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('laundry')
+                                }
+                            } else if (headerkey === 'amenitiesparking') {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('parking')
+                                }
+                            } else if (headerkey === "amenitieswheelchairaccess") {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('wheelchair')
+                                }
+                            } else if (headerkey === 'catsok' || headerkey === 'dogsok' || headerkey === 'smoking') {
+                                obj[actualHeaderKey] = currentline[j].toLowerCase() == 'yes' ? true : false
+                            } else if (headerkey === 'status') {
+                                if (currentline[j] && currentline[j].toLowerCase() === "available soon") {
+                                    obj['status'] = 'availablesoon';
+                                }
+                                else {
+                                    obj['status'] = currentline[j] ? currentline[j].toLowerCase() : 'status';
+                                }
+                            } else if (headerkey === 'descriptionoptional') {
+                                obj['description'] = currentline[j];
+                            } else if (headerkey === 'leaseexpiryoptional') {
+                                obj['leaseExpiry'] = new Date(currentline[j]);
+                            } else {
+                                obj[actualHeaderKey] = currentline[j];
+                            }
+                        }
+
+                        obj['name'] = name;
+                        obj['type'] = proptype;
+                        obj['address'] = address;
+                        obj['location'] = address;
+                        obj['city'] = city;
+                        obj['state'] = province;
+                        obj['postcode'] = postcode;
+                        unitsImported.push(obj);
+                        totalrowunits++;
+                    }
+                    var hasDuplicateId = vm.duplication(units);
+                    if (hasDuplicateId) {
+                        swal({
+                            title: 'Error',
+                            text: 'File has duplicate unit IDs.',
+                            type: 'error'
+                        })
+                        return;
+                    }
+                    if (!vm.prop.unitlists) vm.prop.unitlists = [];
+                    vm.prop.unitlists = vm.prop.unitlists.concat(unitsImported);
+                    vm.prop.totalunits = vm.prop.unitlists.length;
+                    vm.prop.noofunits = vm.prop.unitlists.length;
+                    setTimeout(function () {
+                        $uibModalInstance.close();
+                        swal({
+                            title: 'Alert',
+                            text: 'File imported successfully. You need to SAVE units otherwise changes will be lost.',
+                            type: 'success'
+                        })
+                        $scope.loader = 0;
+                    }, 1000);
+                }
+
+                reader.readAsText(fileUpload.files[0]);
+
+
+
+            } else {
+                swal({
+                    title: "Error!",
+                    text: "This browser does not support HTML5.",
+                    type: "error",
+                });
+            }
+        } else {
+            swal({
+                title: "Error!",
+                text: "Please upload a valid CSV file.",
+                type: "error",
+            });
+        }
+
+    }
+
+    $scope.units = function (value) {
+        if (value != '' && value != null) {
+            //  $location.absUrl() = '#/addunits/'+value;
+            $uibModalInstance.close();
+            $window.location.href = '#/addunits/' + value;
+        }
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+    vm.duplication = function (data) {
+
+        var sorted_arr = data.slice().sort(); // You can define the comparing function here. 
+        // JS by default uses a crappy string compare.
+        // (we use slice to clone the array so the
+        // original array won't be modified)
+        var results = [];
+        for (var i = 0; i < sorted_arr.length - 1; i++) {
+            if (sorted_arr[i + 1] == sorted_arr[i]) {
+                results.push(sorted_arr[i]);
+            }
+        }
+
+        if (results.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}]);
+
+
+
+'use strict';
+
+vcancyApp
+    .controller('adminScheduleCtrl', ['$scope', '$firebaseAuth','emailSendingService', '$state', '$rootScope', '$stateParams', '$window', '_', '$uibModal',
+        function ($scope, $firebaseAuth, emailSendingService,$state, $rootScope, $stateParams, $window, _, $uibModal) {
+
+            var vm = this;
+            var landlordID = localStorage.getItem('userID');
+
+            //vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
+            vm.userData = {};
+
+            var vm = this;
+            vm.selectedUser = '';
+            vm.statusChange = {};
+            vm.usersList = [];
+            firebase.database().ref('users/').once("value", function (snapvalue) {
+
+                var users = snapvalue.val();
+                vm.allUsers = snapvalue.val();
+               //   console.log( vm.allUsers);
+               // console.log('users', users, Object.keys(users).length);
+                users = _.filter(users, function (user, key) {
+                    if (user.usertype == 1 || user.usertype == 3) {
+                        user.key = key;
+                        return true;
+                    }
+                });
+                $scope.$apply(function () {
+                    vm.usersList = users;
+                });
+            });
+
+            vm.getScheduleListing = function () {
+                vm.userData = vm.allUsers[vm.selectedUser];
+               //  console.log(vm.userData);
+                vm.getListings(vm.selectedUser);
+            }
+
+            vm.propertySelected = '';
+            vm.unitSelected = '';
+            vm.selectedUnitId = '';
+            vm.units = [];
+            vm.fromDate = '';
+            vm.toDate = '';
+            vm.fromTime = '';
+            vm.toTime = '';
+            vm.properties = [];
+            vm.listings = [];
+            vm.mergeListing = {};
+            vm.selectedListings = [];
+
+            vm.getListings = function (landlordId) {
+                vm.loader = 1;
+                if (!landlordId) {
+                    landlordId = vm.selectedUser;
+                }
+                if (!landlordId) return;
+
+                var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordId).once("value", function (snapshot) {
+                    vm.getProperties(landlordId);
+                    //console.log('propertyschedule', snapshot.val())
+                    $scope.$apply(function () {
+                        vm.success = 0;
+                        if (snapshot.val()) {
+                            vm.listings = snapshot.val();
+                            vm.generateMergeListing();
+                            vm.listingsAvailable = 1;
+                        } else {
+                            vm.listingsAvailable = 0;
+                        }
+                        vm.loader = 0;
+                    });
+                });
+            }
+
+            $scope.openImageModal = function () {
+                vm.loader = 1;
+                $scope.imageModal = $uibModal.open({
+                    
+                    templateUrl: 'viewimages.html',
+                    controller: 'propertyCtrl',
+                    backdrop: 'static',
+                    size: 'lg',
+                    windowClass: 'zIndex',
+                    scope: $scope
+                });
+            }
+
+            $scope.closeImageModal = function () {
+                $scope.imageModal.dismiss('cancel');
+            }
+
+            vm.getProperties = function (landlordID, propertyID) {
+                var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+                    $scope.$apply(function () {
+                        vm.success = 0;
+                        if (snapshot.val()) {
+                            vm.properties = snapshot.val();
+                            vm.propertiesAvailable = 1;
+                        } else {
+                            vm.propertiesAvailable = 0;
+                        }
+                        vm.loader = 0;
+                    });
+                });
+            }
+
+            vm.generateMergeListing = function () {
+                vm.mergeListing = {};
+                _.forEach(vm.listings, function (list, key) {
+                    if (!vm.mergeListing[list.link]) {
+                        vm.mergeListing[list.link] = angular.copy(vm.listings[key]);
+                        vm.mergeListing[list.link].fromToDate = [];
+                        var date = '';
+                        if (moment(vm.listings[key].fromDate).format('DD MMM') == moment(vm.listings[key].toDate).format('DD MMM')) {
+                            date = moment(vm.listings[key].fromDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+                        }
+                        else {
+                            date = moment(vm.listings[key].fromDate).format('DD') + ' to ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+                        }
+                        vm.mergeListing[list.link].fromToDate.push(date);
+                        vm.mergeListing[list.link].keys = [key];
+                    } else {
+                        var date = '';
+                        if (moment(vm.listings[key].fromDate).format('DD MMM') == moment(vm.listings[key].toDate).format('DD MMM')) {
+                            date = moment(vm.listings[key].fromDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+                        }
+                        else {
+                            date = moment(vm.listings[key].fromDate).format('DD') + ' to ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+                        }
+                        vm.mergeListing[list.link].fromToDate.push(date);
+                        vm.mergeListing[list.link].keys.push(key);
+                    }
+                });
+         //       console.log(vm.mergeListing)
+            };
+
+            vm.clearAll = function ($event) {
+                vm.propertySelected = '';
+                vm.unitSelected = '';
+                vm.selectedUnitId = '';
+                vm.units = [];
+                vm.fromDate = '';
+                vm.toDate = '';
+                vm.fromTime = '';
+                vm.toTime = '';
+                $event.preventDefault();
+            }
+
+            vm.checkAllListing = function () {
+                $.map(vm.listings, function (value, key) {
+                    value.inputCheck = vm.selectedAllListing;
+                });
+                vm.generateMergeListing();
+            };
+
+            vm.statusChangeHandler = function (propertyId, unitId) {
+               // console.log(vm.statusChange)
+            }
+
+            vm.checkForDuplicate = function (currentUnit) {
+                for (var i in vm.listings) {
+                    var value = vm.listings[i];
+                    if (value.propertyId == currentUnit.propertyId && value.unitID == currentUnit.unitID
+                        && value.fromDate == currentUnit.fromDate && value.fromTime == currentUnit.fromTime
+                        && value.toDate == currentUnit.toDate && value.toTime == currentUnit.toTime) {
+                        return true;
+                    }
+                }
+            };
+
+            vm.addAvailability = function ($event) {
+                $event.preventDefault();
+                if (!vm.propertySelected || !vm.fromDate || !vm.toDate || !vm.fromTime || !vm.toTime) {
+                    return;
+                }
+                var availabilities = [];
+                var url = 'https://vcancy.com/login/#/applyproperty/'
+                // if (window.location.host.startsWith('localhost')) {
+                // 	url = 'http://localhost:9000/#/applyproperty/'
+                // }
+                var host = window.location.origin;
+                if (host.indexOf('localhost') > -1) {
+                    url = host + '/#/applyproperty/';
+                } else {
+                    url = host + '/login/#/applyproperty/';
+                }
+                var availability = {
+                    propertyId: vm.propertySelected,
+                    fromDate: moment(vm.fromDate.toString()).toDate().toString(),
+                    fromTime: vm.fromTime,
+                    toDate: moment(vm.toDate.toString()).toDate().toString(),
+                    toTime: vm.toTime,
+                    landlordID: landlordID,
+                    userID: userID,
+                    link: url + vm.propertySelected,
+                    status: 'Not Listed',
+                    listOnCraigslist: false
+                }
+                vm.units = _.map(vm.selectedUnitId, 'unit');
+                if (vm.units.length == 0) {
+                    return;
+                }
+                var errorText = ''
+                if (vm.units.length > 0) {
+                    vm.units.forEach(function (unit) {
+                        var data = {
+                            unitID: unit
+                        };
+                        var _unitAvailability = Object.assign(data, availability);
+                        _unitAvailability.link = _unitAvailability.link + '?unitId=' + unit;
+                        var isDuplicateEntry = vm.checkForDuplicate(_unitAvailability);
+                        if (!isDuplicateEntry) {
+                            availabilities.push(_unitAvailability);
+                        } else {
+                            errorText += 'Duplicate entry found for ' + unit + ', ';
+                        }
+                    });
+                    if (errorText != '') {
+                        swal({
+                            title: 'Some units cannot be saved',
+                            text: errorText,
+                            type: 'error'
+                        });
+                    }
+                } else {
+                    availabilities.push(availability);
+                }
+                var promises = [];
+                var fbObj = firebase.database();
+                availabilities.forEach(function (availability) {
+                    var promiseObj = fbObj.ref('propertiesSchedule/').push().set(availability)
+                    promises.push(promiseObj);
+                });
+                vm.loader = 1;
+                $q.all(promises).then(function () {
+                    vm.loader = 0;
+                    vm.propertySelected = '';
+                    vm.units = [];
+                    vm.unitSelected = '';
+                    vm.selectedUnitId = '';
+                    vm.fromDate = '';
+                    vm.toDate = '';
+                    vm.fromTime = '';
+                    vm.toTime = '';
+                    vm.getListings();
+                });
+            };
+
+            $scope.craigslistopen = function (isOpen) {
+                if (isOpen) {
+                    var userData = vm.userData;
+                    $scope.craigslist = {
+                        username: userData.craigslistUserID || '',
+                        password: userData.craigslistpassword || '',
+                        renewAds: userData.craigslistRenewAds || false,
+                        removeAds: userData.craigslistRemoveAds || false
+                    }
+                    vm.Craigslistopenapp = $uibModal.open({
+                        templateUrl: 'craigslist.html',
+                        backdrop: 'static',
+                        size: 'lg',
+                        scope: $scope
+                    });
+                }
+                else {
+                    vm.Craigslistopenapp.close();
+                }
+            };
+
+            $scope.saveCraigslistDetails = function () {
+                var fbObj = firebase.database();
+                var promiseObj = fbObj.ref('users/' + landlordID).update({
+                    craigslistUserID: $scope.craigslist.username,
+                    craigslistpassword: $scope.craigslist.password,
+                    craigslistRenewAds: $scope.craigslist.renewAds,
+                    craigslistRemoveAds: $scope.craigslist.removeAds
+                }).then(function () {
+                    userData = JSON.parse(localStorage.getItem('userData')) || {};
+
+                    userData['craigslistUserID'] = $scope.craigslist.username,
+                        userData['craigslistpassword'] = $scope.craigslist.password,
+                        userData['craigslistRenewAds'] = $scope.craigslist.renewAds,
+                        userData['craigslistRemoveAds'] = $scope.craigslist.removeAds,
+                        localStorage.setItem('userData', JSON.stringify(userData));
+                })
+                vm.Craigslistopenapp.close();
+            }
+
+            vm.deleteListings = function ($event) {
+                var selectedListings = [];
+                $.map(vm.mergeListing, function (value, key) {
+                    if (value.inputCheck) {
+                        selectedListings = _.concat(selectedListings, value.keys);
+                    }
+                });
+                if (selectedListings.length == 0) {
+                    return;
+                }
+                var promises = [];
+                vm.loader = 1;
+                var fbObj = firebase.database();
+                selectedListings.forEach(function (listing) {
+                    var promiseObj = fbObj.ref('propertiesSchedule/' + listing).remove();
+                    promises.push(promiseObj);
+                });
+                $q.all(promises).then(function () {
+                    vm.loader = 0;
+                    vm.selectedListings = [];
+                    vm.listings = [];
+                    vm.selectedAllListing = false;
+                    vm.mergeListing = {};
+                    vm.getListings();
+                }); 
+            };
+            
+            vm.saveaction =function (keys, link, status,key){
+  
+                 keys.forEach(function (listingId) {
+                    var fbObj = firebase.database();
+                    fbObj.ref('propertiesSchedule/' + listingId).update({
+                        craglistLink: link,
+                        status: status
+                    }).then(function () {
+                        vm.getListings();
+                       // console.log()
+                    });
+                });
+                           
+                var emailData = '<p>Hello, </p><p>Your request for posting Unit '+vm.mergeListing[key].unitID +' for property address "'+vm.properties[vm.mergeListing[key].propertyId].address+'" has been posted to craglist</p><p>Thanks,</p><p>Team Vcancy</p>';
+         
+                // Send Email
+                emailSendingService.sendEmailViaNodeMailer(vm.userData.email, 'Property Listed on Creaglist', 'Listed', emailData);
+                swal({
+                    title: 'Success',
+                    text: 'Action Save Successfully',
+                    type: 'success'
+                });
+
+            };
+
+            vm.insertCraglistLink = function (keys, link) {
+                keys.forEach(function (listingId) {
+                    var fbObj = firebase.database();
+                    fbObj.ref('propertiesSchedule/' + listingId).update({
+                        craglistLink: link
+                    }).then(function () {
+                        vm.getListings();
+                    });
+                });
+            };
+
+            vm.toggleStatus = function (keys, status) {
+                let toggle = false;
+                keys.forEach(function (key) {
+                    if (vm.listings[key].listOnCraigslist) {
+                        vm.listings[key].listOnCraigslist = !vm.listings[key].listOnCraigslist;
+                    }
+                    else {
+                        vm.listings[key].listOnCraigslist = true;
+                    }
+                    if (vm.listings[key].listOnCraigslist) {
+                        toggle = true;
+                    }
+                    vm.toggleCraigsList(key, status);
+                });
+                if (toggle) {
+                    swal({
+                        title: 'Success',
+                        text: 'Your unit will now be listed on Craigslist in 12-24 hours.You will get a notification email when your listing is active.',
+                        type: "success",
+                    });
+                }
+            };
+
+            vm.toggleCraigsList = function (listingId, value, $event) {
+                vm.loader = 1;
+                var fbObj = firebase.database();
+                var promiseObj = fbObj.ref('propertiesSchedule/' + listingId).update({
+                    status: value
+                })
+                promiseObj
+                    .then(function () {
+                        vm.loader = 0;
+                        vm.getListings();
+                    })
+                    .catch(function () {
+                        vm.loader = 0;
+                    });
+            }
+
+            vm.openDetailModel = function (propId, unitId) {
+                var index = _.findIndex(vm.properties[propId].unitlists, ['unit', unitId]);
+                var prop = vm.properties[propId];
+                $scope.selectedUnitDetail = {};
+                $scope.selectedUnitDetail.data = vm.properties[propId].unitlists[index];
+                $scope.selectedUnitDetail.data.email = localStorage.getItem('userEmail');
+                $scope.selectedUnitDetail.index = index;
+                $scope.items1 = prop;
+                $scope.items1.indexofDetails = index;
+                $scope.prop = angular.copy(prop);
+                $scope.prop.propID = propId;
+                $scope.modalInstance = $uibModal.open({
+                    templateUrl: 'myModalDetailsContent.html',
+                    controller: 'propertyCtrl',
+                    backdrop: 'static',
+                    size: 'lg',
+                    windowClass: '',
+                    scope: $scope
+                });
+            };
+
+            vm.checkIsIncomplete = function (propId, unitId) {
+                if (!unitId) {
+                    return false;
+                }
+                if (!vm.properties[propId]) return;
+                var unit = _.find(vm.properties[propId].unitlists, ['unit', unitId]);
+                var prop = vm.properties[propId];
+                return unit.isIncomplete == false ? false : true;
+            }
+
+
+
+
+        }]);
+
+
+'use strict';
+
+vcancyApp
+    .controller('adminProfileCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_', 'emailSendingService',
+        function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _, emailSendingService) {
+
+            var vm = this;
+            var landlordID = localStorage.getItem('userID');
+            vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
+            var password = localStorage.getItem('password');
+            vm.updatePassword = {};
+
+            vm.changePassword = function () {
+                if (vm.updatePassword.newPwd != vm.updatePassword.conPwd) {
+                    swal({
+                        title: 'Error',
+                        text: 'New password should match with confirm password',
+                        type: 'error'
+                    });
+                }
+                else if (password != vm.updatePassword.oldPwd) {
+                    swal({
+                        title: 'Error',
+                        text: 'Old password dont match',
+                        type: 'error'
+                    });
+                }
+                else if (vm.updatePassword.newPwd == vm.updatePassword.conPwd && vm.userData.email && password == vm.updatePassword.oldPwd) {
+                    var user = firebase.auth().currentUser;
+                    var newPassword = vm.updatePassword.newPwd;
+                    user.updatePassword(newPassword).then(function () {
+                        vm.updatePassword = {};
+                        swal({
+                            title: 'Success',
+                            text: 'Password updated',
+                            type: 'success'
+                        });
+                        localStorage.setItem('password', newPassword);
+                        var emailData = '<p>Hello, </p><p>Your password has been changed. If you didn’t change the password then please contact  support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                        emailSendingService.sendEmailViaNodeMailer(vm.userData.email, 'Password changed', 'changepassword', emailData);
+                    });
+                }
+            };
+
+            vm.createUserByEmail = function () {
+
+                var usertype = 3;
+                var characterArray = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                var pass = '';
+                for (var i = 0; i < 6; i++) {
+                    var num = Math.floor((Math.random() * 60) + 1);
+                    pass += characterArray[num];
+                }
+                $scope.loader = 1;
+                var reguserObj = $firebaseAuth();
+                reguserObj.$createUserWithEmailAndPassword(vm.createUser.email, pass)
+                    .then(function (firebaseUser) {
+                        var reguserdbObj = firebase.database();
+                        reguserdbObj.ref('users/' + firebaseUser.uid).set({
+                            firstname: 'admin',
+                            lastname: 'admin',
+                            usertype: usertype,
+                            email: vm.createUser.email,
+                        });
+                        firebase.auth().signInWithEmailAndPassword(vm.createUser.email, pass)
+                            .then(function (firebaseUser) {
+                                // Success 
+                                firebaseUser.sendEmailVerification().then(function () {
+                                    $scope.loader = 0;
+                                    // Send Email
+                                    vm.createUser.email = '';
+                                    
+                                    swal({
+                                        title: 'Success',
+                                        text: 'User created',
+                                        type: 'success'
+                                    });
+                                    emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
+        
+                                    var emailData = '<p>Hello, </p><p>' + vm.createUser.email + ' ,has been added to on https://vcancy.com/ as admin.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+        
+                                    // Send Email
+                                    emailSendingService.sendEmailViaNodeMailer(vm.createUser.email, 'A new user account has been added to your portal', 'Welcome', emailData);
+                                });
+                            });
+                    });
+
+            };
+        }]);
+
+'use strict';
+
+//=================================================
+// Tenant Schedule
+//=================================================
+
+vcancyApp
+	.controller('adminrentalformCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'Upload', '$http', 'emailSendingService', 'config',
+		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, Upload, $http, emailSendingService, config) {
+
+			var vm = this;
+			$scope.active = 0;
+			$scope.activateTab = function (tab) {
+				$scope.active = tab;
+			};
+			var tenantID = $stateParams.tenantID;
+			var scheduleID = $stateParams.scheduleId;
+			var applicationID = $stateParams.applicationId;
+			var tenantEmail = localStorage.getItem('userEmail');
+			vm.submitemail = $rootScope.renterExternalEmail;
+			console.log(vm.submitemail);
+			$rootScope.renterExternalEmail = '';
+			console.log($rootScope.renterExternalEmail);
+			vm.draft = "false";
+			vm.draftdata = "false";
+			vm.rentownchange = function () {
+				if (vm.rentaldata.rent_own == "rent") {
+					vm.rentaldata.live_time = '';
+					vm.rentaldata.rentamt = '';
+					vm.rentaldata.vacantreason = '';
+				} else {
+					vm.rentaldata.live_time = ' ';
+					vm.rentaldata.rentamt = '0.00';
+					vm.rentaldata.vacantreason = ' ';
+				}
+
+			}
+
+			vm.petschange = function () {
+				if (vm.rentaldata.pets == "yes") {
+					vm.rentaldata.petsdesc = '';
+				} else {
+					vm.rentaldata.petsdesc = ' ';
+				}
+			}
+
+			vm.tenantdata = [];
+			vm.rentaldata = [];
+			vm.propdata = [];
+			vm.scheduledata = [];
+
+
+			vm.tenantdata.tenantID = '';
+			vm.scheduledata.scheduleID = '';
+			vm.propdata.propID = '';
+			vm.propdata.landlordID = '';
+
+			vm.propdata.address = '';
+			vm.propdata.rent = '';
+			vm.rentaldata.months = '';
+			vm.rentaldata.startdate = '';
+			vm.rentaldata.parking = '';
+			vm.tenantdata.tenantName = '';
+			vm.rentaldata.dob = '';
+			vm.rentaldata.sinno = '';
+			vm.rentaldata.telwork = '';
+			vm.rentaldata.telhome = '';
+			vm.tenantdata.tenantEmail = '';
+			vm.rentaldata.appaddress = '';
+			vm.rentaldata.appcity = '';
+			vm.rentaldata.maritalstatus = '';
+			vm.rentaldata.rent_own = '';
+			vm.rentaldata.live_time = '';
+			vm.rentaldata.rentamt = '';
+			vm.rentaldata.vacantreason = '';
+			vm.rentaldata.landlordname = '';
+			vm.rentaldata.landlordphone = '';
+
+			vm.rentaldata.otherappname = [];
+			vm.rentaldata.otherappdob = [];
+			vm.rentaldata.otherappsinno = [];
+
+			vm.rentaldata.minorappname = [];
+			vm.rentaldata.minorappdob = [];
+			vm.rentaldata.minorappsinno = [];
+
+			vm.rentaldata.pets = '';
+			vm.rentaldata.petsdesc = '';
+			vm.rentaldata.smoking = '';
+			vm.rentaldata.appfiles = '';
+
+			vm.rentaldata.appcurrentemployer = '';
+			vm.rentaldata.appposition = '';
+			vm.rentaldata.appemployerphone = '';
+			vm.rentaldata.appworkingduration = '';
+			vm.rentaldata.appgrossmonthlyincome = '';
+			vm.rentaldata.appincometype = '';
+			vm.rentaldata.appotherincome = '';
+
+			vm.rentaldata.vehiclemake = '';
+			vm.rentaldata.vehiclemodel = '';
+			vm.rentaldata.vehicleyear = '';
+
+			vm.rentaldata.vehiclemake2 = '';
+			vm.rentaldata.vehiclemodel2 = '';
+			vm.rentaldata.vehicleyear2 = '';
+
+			vm.rentaldata.emergencyname = '';
+			vm.rentaldata.emergencyphone = '';
+
+			vm.rentaldata.refone_name = '';
+			vm.rentaldata.refone_phone = '';
+			vm.rentaldata.refone_relation = '';
+
+			vm.rentaldata.reftwo_name = '';
+			vm.rentaldata.reftwo_phone = '';
+			vm.rentaldata.reftwo_relation = '';
+
+			vm.rentaldata.otherappcurrentemployer = [];
+			vm.rentaldata.otherappposition = [];
+			vm.rentaldata.otherappemployerphone = [];
+			vm.rentaldata.otherappworkingduration = [];
+			vm.rentaldata.otherappgrossmonthlyincome = [];
+			vm.rentaldata.otherappincometype = [];
+			vm.rentaldata.otherappotherincome = [];
+
+			vm.rentaldata.dated = '';
+			vm.rentaldata.appsign = '';
+			vm.rentaldata.otherappsign = [];
+
+			vm.TCData = '';
+			vm.customRentalApplicationCheck = null;
+			// DATEPICKER
+			vm.today = function () {
+				vm.dt = new Date();
+			};
+			vm.today();
+
+			vm.toggleMin = function () {
+				vm.minDate = vm.minDate ? null : new Date();
+			};
+			vm.toggleMin();
+
+
+
+
+			vm.dobopen = function ($event) {
+
+				$event.preventDefault();
+				$event.stopPropagation();
+				vm.dobopened = true;
+			};
+			vm.dobopen1 = function ($event) {
+
+				$event.preventDefault();
+				$event.stopPropagation();
+				vm.dobopened = false;
+			};
+
+
+
+
+			vm.dateopen = function ($event) {
+				$event.preventDefault();
+				$event.stopPropagation();
+				vm.dateopened = true;
+			};
+			vm.dateopen1 = function ($event) {
+				$event.preventDefault();
+				$event.stopPropagation();
+				vm.dateopened = false;
+			};
+
+			vm.minordobopened = [];
+			vm.minordobopen = function ($event, minorindex) {
+				console.log(minorindex);
+				$event.preventDefault();
+				$event.stopPropagation();
+				angular.forEach(vm.minor, function (value, key) {
+					vm.minordobopened[key] = false;
+					console.log(vm.minordobopened[key]);
+				});
+				vm.minordobopened[minorindex] = true;
+				console.log("here1" + vm.minordobopened[minorindex]);
+			};
+			vm.minordobopen1 = function ($event, minorindex) {
+				console.log(minorindex);
+				$event.preventDefault();
+				$event.stopPropagation();
+				angular.forEach(vm.minor, function (value, key) {
+					vm.minordobopened[key] = false;
+					console.log(vm.minordobopened[key]);
+				});
+				vm.minordobopened[minorindex] = false;
+				console.log("here2" + vm.minordobopened[minorindex]);
+			};
+
+
+			vm.adultdobopened = [];
+			vm.adultdobopen = function ($event, adultindex) {
+				console.log(adultindex);
+				$event.preventDefault();
+				$event.stopPropagation();
+				angular.forEach(vm.adult, function (value, key) {
+					vm.adultdobopened[key] = false;
+					console.log(vm.adultdobopened[key]);
+				});
+				vm.adultdobopened[adultindex] = true;
+				console.log("here3" + vm.adultdobopened[adultindex]);
+			};
+			vm.adultdobopen1 = function ($event, adultindex) {
+				console.log(adultindex);
+				$event.preventDefault();
+				$event.stopPropagation();
+				angular.forEach(vm.adult, function (value, key) {
+					vm.adultdobopened[key] = false;
+					console.log(vm.adultdobopened[key]);
+				});
+				vm.adultdobopened[adultindex] = false;
+				console.log("here4" + vm.adultdobopened[adultindex]);
+			};
+
+			vm.dateOptions = {
+				formatYear: 'yy',
+				startingDay: 1
+			};
+			vm.maxDate = new Date();
+			vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+			vm.format = vm.formats[0];
+
+
+			vm.adult = [];
+			vm.minor = [];
+			vm.addadult = function (adultlen) {
+				vm.adult.push(adultlen);
+			}
+			vm.addminor = function (minorlen) {
+				vm.minor.push(minorlen);
+			}
+
+
+
+			// to remove adult
+			vm.removeadult = function (slotindex) {
+				console.log(slotindex, vm.adult);
+				vm.adult.splice(slotindex, 1);
+				vm.rentaldata.otherappname.splice(slotindex, 1);
+				vm.rentaldata.otherappdob.splice(slotindex, 1);
+				vm.rentaldata.otherappsinno.splice(slotindex, 1);
+				vm.rentaldata.otherappcurrentemployer.splice(slotindex, 1);
+				vm.rentaldata.otherappposition.splice(slotindex, 1);
+				vm.rentaldata.otherappemployerphone.splice(slotindex, 1);
+				vm.rentaldata.otherappworkingduration.splice(slotindex, 1);
+				vm.rentaldata.otherappgrossmonthlyincome.splice(slotindex, 1);
+				vm.rentaldata.otherappincometype.splice(slotindex, 1);
+				vm.rentaldata.otherappotherincome.splice(slotindex, 1);
+				vm.rentaldata.otherappsign.splice(slotindex, 1);
+			}
+
+			// to remove minor
+			vm.removeminor = function (slotindex) {
+				console.log(slotindex, vm.adult);
+				console.log(vm.rentaldata);
+				vm.minor.splice(slotindex, 1);
+				vm.rentaldata.minorappdob.splice(slotindex, 1);
+				vm.rentaldata.minorappsinno.splice(slotindex, 1);
+				vm.rentaldata.minorappname.splice(slotindex, 1);
+
+				console.log(vm.minor, vm.rentaldata);
+			}
+
+			$scope.something = function (form) {
+
+
+				if ($("#test_" + form).val() == '') {
+					$("#index_" + form).addClass('has-error');
+				} else {
+					$("#index_" + form).removeClass('has-error');
+				}
+			}
+			$scope.minorsomething = function (form) {
+
+
+				if ($("#minortext_" + form).val() == '') {
+					$("#minor_" + form).addClass('has-error');
+				} else {
+					$("#minor_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aacetext = function (form) {
+
+
+				if ($("#aacetext_" + form).val() == '') {
+					$("#aace_" + form).addClass('has-error');
+				} else {
+					$("#aace_" + form).removeClass('has-error');
+				}
+			}
+
+
+			$scope.aapotext = function (form) {
+
+
+				if ($("#aapotext_" + form).val() == '') {
+					$("#aapo_" + form).addClass('has-error');
+				} else {
+					$("#aapo_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aaeptext = function (form) {
+
+
+				if ($("#aaeptext_" + form).val() == '') {
+					$("#aaep_" + form).addClass('has-error');
+				} else {
+					$("#aaep_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aahowtext = function (form) {
+
+
+				if ($("#aahowtext_" + form).val() == '') {
+					$("#aahow_" + form).addClass('has-error');
+				} else {
+					$("#aahow_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aagrstext = function (form) {
+
+
+				if ($("#aagrstext_" + form).val() == '') {
+					$("#aagrs_" + form).addClass('has-error');
+				} else {
+					$("#aagrs_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aaothrtext = function (form) {
+
+
+				if ($("#aaothrtext_" + form).val() == '') {
+					$("#aaothr_" + form).addClass('has-error');
+				} else {
+					$("#aaothr_" + form).removeClass('has-error');
+				}
+			}
+
+
+			if (applicationID == 0) {
+				console.log(tenantID)
+				firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).limitToLast(1).once("value", function (snapshot) {
+					$scope.$apply(function () {
+						if (snapshot.val() !== null) {
+							$.map(snapshot.val(), function (value, index) {
+								var date = new Date();
+								vm.draftdata = "false";
+								vm.applicationval = index;
+								vm.tenantdata.tenantID = value.tenantID;
+								// vm.scheduledata.scheduleID = value.scheduleID;
+								// vm.propdata.propID = value.propID;
+								// vm.propdata.landlordID = value.landlordID;
+
+								// vm.propdata.address = value.address;
+								console.log(value.rent)
+								vm.propdata.rent = value.rent;
+								vm.rentaldata.months = value.months;
+								vm.rentaldata.startdate = value.startdate;
+								vm.rentaldata.parking = value.parking;
+								vm.rentaldata.telwork = value.telwork;
+								vm.rentaldata.telhome = value.telhome;
+								vm.tenantdata.tenantEmail = value.applicantemail;
+								vm.rentaldata.appaddress = value.appaddress;
+								vm.rentaldata.appcity = value.applicantcity;
+								vm.rentaldata.maritalstatus = value.maritalstatus;
+								vm.rentaldata.rent_own = value.rent_own;
+								vm.rentaldata.live_time = value.live_time_at_address;
+								vm.rentaldata.rentamt = value.rentamt;
+								vm.rentaldata.vacantreason = value.vacantreason;
+								vm.rentaldata.landlordname = value.landlordname;
+								vm.rentaldata.landlordphone = value.landlordphone;
+								vm.rentaldata.pets = value.pets;
+								vm.rentaldata.petsdesc = value.petsdesc;
+								vm.rentaldata.smoking = value.smoking;
+								vm.rentaldata.appfiles = value.appfiles;
+								vm.rentaldata.vehiclemake = value.vehiclemake;
+								vm.rentaldata.vehiclemodel = value.vehiclemodel;
+								vm.rentaldata.vehicleyear = value.vehicleyear;
+								vm.rentaldata.vehiclemake2 = value.vehiclemake2;
+								vm.rentaldata.vehiclemodel2 = value.vehiclemodel2;
+								vm.rentaldata.vehicleyear2 = value.vehicleyear2;
+								vm.rentaldata.emergencyname = value.emergencyname;
+								vm.rentaldata.emergencyphone = value.emergencyphone;
+								vm.rentaldata.refone_name = value.refone_name;
+								vm.rentaldata.refone_phone = value.refone_phone;
+								vm.rentaldata.refone_relation = value.refone_relation;
+								vm.rentaldata.reftwo_name = value.reftwo_name;
+								vm.rentaldata.reftwo_phone = value.reftwo_phone;
+								vm.rentaldata.reftwo_relation = value.reftwo_relation;
+								vm.rentaldata.dated = value.dated != '' ? $filter('date')(new Date(value.dated), 'dd-MMMM-yyyy') : '';
+								console.log(scheduleID)
+								firebase.database().ref('applyprop/' + scheduleID).once("value", function (snapshot) {
+									console.log(snapshot.val())
+									$scope.$apply(function () {
+										if (snapshot.val()) {
+											// console.log('applyprop', snapshot.val())
+											vm.scheduledata = snapshot.val();
+											vm.scheduledata.scheduleID = snapshot.key;
+
+											firebase.database().ref('properties/' + vm.scheduledata.propID).once("value", function (snap) {
+												$scope.$apply(function () {
+													if (snap.val()) {
+														console.log('properties', snap.val())
+														vm.propdata = snap.val();
+														vm.propdata.propID = snap.key;
+														// if (vm.propdata.units == ' ') {
+														// 	var units = '';
+														// } else {
+														// 	var units = vm.propdata.units + " - ";
+														// }
+														var unit = vm.propdata.unitlists.find(function (unitObj) {
+															if (unitObj.unit == vm.scheduledata.units) {
+																return true;
+															}
+														});
+														vm.propdata.rent = parseFloat(unit.rent);
+														var leaseLength = ''
+														switch (unit.leaseLength) {
+															case 'month-to-month':
+																leaseLength = 'Month to Month';
+																break;
+															case '6months':
+																leaseLength = '6 Months';
+																break;
+															case '9months':
+																leaseLength = '9 Months';
+																break;
+															case '12months':
+																leaseLength = '12 Months';
+																break;
+														}
+														vm.rentaldata.months = leaseLength;
+														vm.propdata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
+														vm.rentaldata.address = vm.propdata.address;
+														vm.rentaldata.rent = parseFloat(unit.rent);
+														firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
+															$scope.$apply(function () {
+																vm.landlordData = snap.val();
+																if (vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+																	vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
+																}
+																if (vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
+																	vm.customRentalApplicationCheck = vm.landlordData.customRentalApplicationCheck
+																}
+															});
+															console.log('vm.landlordData', vm.landlordData);
+														});
+													}
+												});
+											});
+										}
+									});
+								});
+							});
+							firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationval).once("value", function (snap) {
+								$scope.$apply(function () {
+									if (snap.val() != null) {
+										$.map(snap.val(), function (v, k) {
+											console.log(v);
+											var date = new Date();
+											vm.tenantdata.tenantName = v.mainapplicant.applicantname;
+											vm.rentaldata.dob = v.mainapplicant.applicantdob != '' ? $filter('date')(new Date(v.mainapplicant.applicantdob), 'dd-MMMM-yyyy') : '';
+											vm.rentaldata.sinno = v.mainapplicant.applicantsinno;
+											vm.rentaldata.appcurrentemployer = v.mainapplicant.appcurrentemployer;
+											vm.rentaldata.appposition = v.mainapplicant.appposition;
+											vm.rentaldata.appemployerphone = v.mainapplicant.appemployerphone;
+											vm.rentaldata.appworkingduration = v.mainapplicant.appworkingduration;
+											vm.rentaldata.appgrossmonthlyincome = v.mainapplicant.appgrossmonthlyincome;
+											vm.rentaldata.appincometype = v.mainapplicant.appincometype;
+											vm.rentaldata.appotherincome = v.mainapplicant.appotherincome;
+											vm.rentaldata.appsign = v.mainapplicant.appsign;
+
+
+											angular.forEach(v.minors, function (value, key) {
+												vm.minor.push(key);
+												vm.rentaldata.minorappname.push(value.minorapplicantname);
+												vm.rentaldata.minorappdob.push(value.minorapplicantdob != '' ? $filter('date')(new Date(value.minorapplicantdob), 'dd-MMMM-yyyy') : '');
+												vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);
+											});
+
+											angular.forEach(v.otherapplicants, function (value, key) {
+												vm.adult.push(key);
+												vm.rentaldata.otherappname.push(value.adultapplicantname);
+												vm.rentaldata.otherappdob.push(value.adultapplicantdob != '' ? $filter('date')(new Date(value.adultapplicantdob), 'dd-MMMM-yyyy') : '');
+												vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
+												vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
+												vm.rentaldata.otherappposition.push(value.otherappposition);
+												vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
+												vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
+												vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
+												vm.rentaldata.otherappincometype.push(value.otherappincometype);
+												vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
+												vm.rentaldata.otherappsign.push(value.otherappsign);
+											});
+
+										});
+									}
+								});
+							});
+						} else {
+							vm.draftdata = "false";
+							firebase.database().ref('applyprop/' + scheduleID).once("value", function (snapshot) {
+								console.log(snapshot.val())
+								$scope.$apply(function () {
+									if (snapshot.val()) {
+										// console.log('applyprop', snapshot.val())
+										vm.scheduledata = snapshot.val();
+										vm.scheduledata.scheduleID = snapshot.key;
+
+										firebase.database().ref('properties/' + vm.scheduledata.propID).once("value", function (snap) {
+											$scope.$apply(function () {
+												if (snap.val()) {
+													console.log('properties', snap.val())
+													vm.propdata = snap.val();
+													vm.propdata.propID = snap.key;
+													// if (vm.propdata.units == ' ') {
+													// 	var units = '';
+													// } else {
+													// 	var units = vm.propdata.units + " - ";
+													// }
+													var unit = vm.propdata.unitlists.find(function (unitObj) {
+														if (unitObj.unit == vm.scheduledata.units) {
+															return true;
+														}
+													});
+													vm.propdata.rent = parseFloat(unit.rent);
+													var leaseLength = ''
+													switch (unit.leaseLength) {
+														case 'month-to-month':
+															leaseLength = 'Month to Month';
+															break;
+														case '6months':
+															leaseLength = '6 Months';
+															break;
+														case '9months':
+															leaseLength = '9 Months';
+															break;
+														case '12months':
+															leaseLength = '12 Months';
+															break;
+													}
+													vm.rentaldata.months = leaseLength;
+													vm.propdata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
+													vm.rentaldata.address = vm.propdata.address;
+													vm.rentaldata.rent = parseFloat(unit.rent);
+													firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
+														$scope.$apply(function () {
+															vm.landlordData = snap.val();
+															if (vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+																vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
+															}
+															if (vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
+																vm.customRentalApplicationCheck = vm.landlordData.customRentalApplicationCheck
+															}
+														});
+														console.log('vm.landlordData', vm.landlordData);
+													});
+												}
+											});
+										});
+									}
+								});
+							});
+
+
+							firebase.database().ref('users/' + tenantID).once("value", function (snapval) {
+								$scope.$apply(function () {
+									if (snapval.val()) {
+										vm.tenantdata = snapval.val();
+										vm.tenantdata.tenantID = snapval.key;
+										vm.tenantdata.tenantName = vm.tenantdata.firstname + " " + vm.tenantdata.lastname;
+										vm.tenantdata.tenantEmail = tenantEmail;
+									}
+								});
+							});
+						}
+						// console.log(vm.tenantdata);	
+						// console.log(vm.rentaldata);	
+						// console.log(vm.propdata);	
+					});
+				});
+			} else {
+				firebase.database().ref('submitapps/' + $stateParams.applicationId).once("value", function (snapshot) {
+					console.log(snapshot.val());
+					$scope.$apply(function () {
+						if (snapshot.val() !== null) {
+							var date = new Date();
+							var value = snapshot.val();
+							vm.applicationID = $stateParams.applicationId;
+							vm.draftdata = "true";
+							vm.tenantdata.tenantID = value.tenantID;
+							vm.scheduledata.scheduleID = value.scheduleID;
+							vm.propdata.propID = value.propID;
+							vm.propdata.landlordID = value.landlordID;
+							vm.propdata.address = value.address;
+							vm.propdata.rent = value.rent;
+							vm.rentaldata.months = value.months;
+							vm.rentaldata.startdate = value.startdate;
+							vm.rentaldata.parking = value.parking;
+							vm.rentaldata.telwork = value.telwork;
+							vm.rentaldata.telhome = value.telhome;
+							vm.tenantdata.tenantEmail = value.applicantemail;
+							vm.rentaldata.appaddress = value.appaddress;
+							vm.rentaldata.appcity = value.applicantcity;
+							vm.rentaldata.maritalstatus = value.maritalstatus;
+							vm.rentaldata.rent_own = value.rent_own;
+							vm.rentaldata.live_time = value.live_time_at_address;
+							vm.rentaldata.rentamt = value.rentamt;
+							vm.rentaldata.vacantreason = value.vacantreason;
+							vm.rentaldata.landlordname = value.landlordname;
+							vm.rentaldata.landlordphone = value.landlordphone;
+							vm.rentaldata.pets = value.pets;
+							vm.rentaldata.petsdesc = value.petsdesc;
+							vm.rentaldata.smoking = value.smoking;
+							vm.rentaldata.appfiles = value.appfiles;
+							vm.rentaldata.vehiclemake = value.vehiclemake;
+							vm.rentaldata.vehiclemodel = value.vehiclemodel;
+							vm.rentaldata.vehicleyear = value.vehicleyear;
+							vm.rentaldata.vehiclemake2 = value.vehiclemake2;
+							vm.rentaldata.vehiclemodel2 = value.vehiclemodel2;
+							vm.rentaldata.vehicleyear2 = value.vehicleyear2;
+							vm.rentaldata.emergencyname = value.emergencyname;
+							vm.rentaldata.emergencyphone = value.emergencyphone;
+							vm.rentaldata.refone_name = value.refone_name;
+							vm.rentaldata.refone_phone = value.refone_phone;
+							vm.rentaldata.refone_relation = value.refone_relation;
+							vm.rentaldata.reftwo_name = value.reftwo_name;
+							vm.rentaldata.reftwo_phone = value.reftwo_phone;
+							vm.rentaldata.reftwo_relation = value.reftwo_relation;
+							vm.rentaldata.dated = value.dated;
+
+							vm.TCData = value.TCData;
+							vm.customRentalApplicationCheck = value.customRentalApplicationCheck;
+
+							vm.submitemail = value.externalemail;
+							firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function (snap) {
+								$scope.$apply(function () {
+									if (snap.val() != null) {
+										$.map(snap.val(), function (v, k) {
+											console.log(v);
+											vm.tenantdata.tenantName = v.mainapplicant.applicantname;
+											vm.rentaldata.dob = new Date(v.mainapplicant.applicantdob);
+											vm.rentaldata.sinno = v.mainapplicant.applicantsinno;
+											vm.rentaldata.appcurrentemployer = v.mainapplicant.appcurrentemployer;
+											vm.rentaldata.appposition = v.mainapplicant.appposition;
+											vm.rentaldata.appemployerphone = v.mainapplicant.appemployerphone;
+											vm.rentaldata.appworkingduration = v.mainapplicant.appworkingduration;
+											vm.rentaldata.appgrossmonthlyincome = v.mainapplicant.appgrossmonthlyincome;
+											vm.rentaldata.appincometype = v.mainapplicant.appincometype;
+											vm.rentaldata.appotherincome = v.mainapplicant.appotherincome;
+											vm.rentaldata.appsign = v.mainapplicant.appsign;
+
+
+											angular.forEach(v.minors, function (value, key) {
+												vm.minor.push(key);
+												vm.rentaldata.minorappname.push(value.minorapplicantname);
+												vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));
+												vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);
+											});
+
+											angular.forEach(v.otherapplicants, function (value, key) {
+												vm.adult.push(key);
+												vm.rentaldata.otherappname.push(value.adultapplicantname);
+												vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
+												vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
+												vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
+												vm.rentaldata.otherappposition.push(value.otherappposition);
+												vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
+												vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
+												vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
+												vm.rentaldata.otherappincometype.push(value.otherappincometype);
+												vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
+												vm.rentaldata.otherappsign.push(value.otherappsign);
+											});
+
+										});
+									}
+								});
+							});
+						} else {
+							vm.draftdata = "false";
+							firebase.database().ref('users/' + tenantID).once("value", function (snapval) {
+								$scope.$apply(function () {
+									if (snapval.val()) {
+										vm.tenantdata = snapval.val();
+										vm.tenantdata.tenantID = snapval.key;
+										vm.tenantdata.tenantName = vm.tenantdata.firstname + " " + vm.tenantdata.lastname;
+										vm.tenantdata.tenantEmail = tenantEmail;
+									}
+								});
+							});
+						}
+					});
+				});
+			}
+
+			vm.rentalAppSubmit = function () {
+				console.log(vm.rentaldata, vm.draft);
+				// alert($('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime());
+				var tenantID = vm.tenantdata.tenantID;
+
+				if ($stateParams.scheduleId != 0) {
+					var scheduleID = $stateParams.scheduleId;
+					var propID = vm.propdata.propID;
+					var landlordID = vm.propdata.landlordID;
+					var externalappStatus = "submit";
+				} else {
+					var scheduleID = 0;
+					var propID = 0;
+					var landlordID = 0;
+					var externalappStatus = "submit";
+					if (vm.draft == "true") {
+						var externalappStatus = "draft";
+					} else {
+						var externalappStatus = "submit";
+					}
+				}
+
+
+				function checkFile() {
+					if ($('#uploadfile')[0].files[0]) {
+						var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();
+						if ($('#uploadfile')[0].files[0].size > 3145728) {
+							return 'File size should be 3 MB or less.'
+						} else if (!(_fileName.endsWith('.png'))
+							&& !(_fileName.endsWith('.jpg'))
+							&& !(_fileName.endsWith('.pdf'))
+							&& !(_fileName.endsWith('.jpeg'))) {
+							return 'Invalid file type.'
+						}
+					}
+				}
+				var fileCheckMsg = checkFile();
+				if (fileCheckMsg) {
+					swal({
+						title: "Error!",
+						text: fileCheckMsg,
+						type: "error",
+					});
+					return;
+				}
+				var externalemail = vm.submitemail == undefined ? '' : vm.submitemail;
+
+				var address = vm.propdata.address == undefined ? '' : vm.propdata.address;
+				var rent = vm.propdata.rent == undefined ? '' : vm.propdata.rent;
+				var months = vm.rentaldata.months == undefined ? '' : vm.rentaldata.months;
+				var startdate = vm.rentaldata.startdate == undefined ? '' : vm.rentaldata.startdate;
+				var parking = vm.rentaldata.parking == undefined ? '' : vm.rentaldata.parking;
+
+				var applicantname = vm.tenantdata.tenantName == undefined ? '' : vm.tenantdata.tenantName;
+				var applicantdob = vm.rentaldata.dob == undefined ? '' : vm.rentaldata.dob.toString();
+				var applicantsinno = vm.rentaldata.sinno == undefined ? '' : vm.rentaldata.sinno;
+				var telwork = vm.rentaldata.telwork == undefined ? '' : vm.rentaldata.telwork;
+				var telhome = vm.rentaldata.telhome == undefined ? '' : vm.rentaldata.telhome;
+				var applicantemail = vm.tenantdata.tenantEmail == undefined ? '' : vm.tenantdata.tenantEmail;
+				var appaddress = vm.rentaldata.appaddress == undefined ? '' : vm.rentaldata.appaddress;
+				var applicantcity = vm.rentaldata.appcity == undefined ? '' : vm.rentaldata.appcity;
+				var maritalstatus = vm.rentaldata.maritalstatus == undefined ? '' : vm.rentaldata.maritalstatus;
+				var rent_own = vm.rentaldata.rent_own == undefined ? '' : vm.rentaldata.rent_own;
+				var live_time_at_address = vm.rentaldata.live_time == undefined ? '' : vm.rentaldata.live_time;
+				var rentamt = vm.rentaldata.rentamt == undefined ? '' : vm.rentaldata.rentamt;
+				var vacantreason = vm.rentaldata.vacantreason == undefined ? '' : vm.rentaldata.vacantreason;
+				var landlordname = vm.rentaldata.landlordname == undefined ? '' : vm.rentaldata.landlordname;
+				var landlordphone = vm.rentaldata.landlordphone == undefined ? '' : vm.rentaldata.landlordphone;
+
+				var adultapplicantname = vm.rentaldata.otherappname;
+				var adultapplicantdob = vm.rentaldata.otherappdob;
+				var adultapplicantsinno = vm.rentaldata.otherappsinno;
+
+				var minorapplicantname = vm.rentaldata.minorappname;
+				var minorapplicantdob = vm.rentaldata.minorappdob;
+				var minorapplicantsinno = vm.rentaldata.minorappsinno;
+
+				var pets = vm.rentaldata.pets == undefined ? '' : vm.rentaldata.pets;
+				var petsdesc = vm.rentaldata.petsdesc == undefined ? '' : vm.rentaldata.petsdesc;
+				var smoking = vm.rentaldata.smoking == undefined ? '' : vm.rentaldata.smoking;
+
+				// var file = $('#appfiles').val().split('\\').pop().split('/').pop();
+				// var filename = $('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime();
+				// var fileext = $('#appfiles').val().split('\\').pop().split('/').pop().split('.').pop().toLowerCase();
+				// var appfiles = "images/applicationuploads/"+filename+"."+fileext;
+
+				var appfiles = $('#appfiles').val();
+				var filename = $('#filename').val() === '' ? '' : Date.now() + '_' + $('#filename').val();
+				// var filepath = filename != '' ? "https://vcancy.com/login/uploads/" + filename : appfiles;
+				var filepath = filename != '' ? "https://vcancy-final.s3.ca-central-1.amazonaws.com/rental-form-files/" + filename : appfiles;
+				console.log(filename, filepath, appfiles);
+
+				var appcurrentemployer = vm.rentaldata.appcurrentemployer == undefined ? '' : vm.rentaldata.appcurrentemployer;
+				var appposition = vm.rentaldata.appposition == undefined ? '' : vm.rentaldata.appposition;
+				var appemployerphone = vm.rentaldata.appemployerphone == undefined ? '' : vm.rentaldata.appemployerphone;
+				var appworkingduration = vm.rentaldata.appworkingduration == undefined ? '' : vm.rentaldata.appworkingduration;
+				var appgrossmonthlyincome = vm.rentaldata.appgrossmonthlyincome == undefined ? '' : vm.rentaldata.appgrossmonthlyincome;
+				var appincometype = vm.rentaldata.appincometype == undefined ? '' : vm.rentaldata.appincometype;
+				var appotherincome = vm.rentaldata.appotherincome == undefined ? '' : vm.rentaldata.appotherincome;
+
+				var vehiclemake = vm.rentaldata.vehiclemake == undefined ? '' : vm.rentaldata.vehiclemake;
+				var vehiclemodel = vm.rentaldata.vehiclemodel == undefined ? '' : vm.rentaldata.vehiclemodel;
+				var vehicleyear = vm.rentaldata.vehicleyear == undefined ? '' : vm.rentaldata.vehicleyear;
+
+				var vehiclemake2 = vm.rentaldata.vehiclemake2 == undefined ? '' : vm.rentaldata.vehiclemake2;
+				var vehiclemodel2 = vm.rentaldata.vehiclemodel2 == undefined ? '' : vm.rentaldata.vehiclemodel2;
+				var vehicleyear2 = vm.rentaldata.vehicleyear2 == undefined ? '' : vm.rentaldata.vehicleyear2;
+
+				var emergencyname = vm.rentaldata.emergencyname == undefined ? '' : vm.rentaldata.emergencyname;
+				var emergencyphone = vm.rentaldata.emergencyphone == undefined ? '' : vm.rentaldata.emergencyphone;
+
+				var refone_name = vm.rentaldata.refone_name == undefined ? '' : vm.rentaldata.refone_name;
+				var refone_phone = vm.rentaldata.refone_phone == undefined ? '' : vm.rentaldata.refone_phone;
+				var refone_relation = vm.rentaldata.refone_relation == undefined ? '' : vm.rentaldata.refone_relation;
+
+				var reftwo_name = vm.rentaldata.reftwo_name == undefined ? '' : vm.rentaldata.reftwo_name;
+				var reftwo_phone = vm.rentaldata.reftwo_phone == undefined ? '' : vm.rentaldata.reftwo_phone;
+				var reftwo_relation = vm.rentaldata.reftwo_relation == undefined ? '' : vm.rentaldata.reftwo_relation;
+
+				var otherappcurrentemployer = vm.rentaldata.otherappcurrentemployer;
+				var otherappposition = vm.rentaldata.otherappposition;
+				var otherappemployerphone = vm.rentaldata.otherappemployerphone;
+				var otherappworkingduration = vm.rentaldata.otherappworkingduration;
+				var otherappgrossmonthlyincome = vm.rentaldata.otherappgrossmonthlyincome;
+				var otherappincometype = vm.rentaldata.otherappincometype;
+				var otherappotherincome = vm.rentaldata.otherappotherincome;
+
+				var dated = vm.rentaldata.dated == undefined ? '' : vm.rentaldata.dated.toString();
+				var appsign = vm.rentaldata.appsign == undefined ? '' : vm.rentaldata.appsign;
+				var otherappsign = vm.rentaldata.otherappsign;
+				vm.adultapplicants = [];
+				vm.minorapplicants = [];
+
+				vm.adultapplicants = $.map(vm.adult, function (adult, index) {
+					return [{
+						adultapplicantname: adultapplicantname[index] == undefined ? '' : adultapplicantname[index],
+						adultapplicantdob: adultapplicantdob[index] == undefined ? '' : adultapplicantdob[index].toString(),
+						adultapplicantsinno: adultapplicantsinno[index] == undefined ? '' : adultapplicantsinno[index],
+						otherappcurrentemployer: otherappcurrentemployer[index] == undefined ? '' : otherappcurrentemployer[index],
+						otherappposition: otherappposition[index] == undefined ? '' : otherappposition[index],
+						otherappemployerphone: otherappemployerphone[index] == undefined ? '' : otherappemployerphone[index],
+						otherappworkingduration: otherappworkingduration[index] == undefined ? '' : otherappworkingduration[index],
+						otherappgrossmonthlyincome: otherappgrossmonthlyincome[index] == undefined ? '' : otherappgrossmonthlyincome[index],
+						otherappincometype: otherappincometype[index] == undefined ? '' : otherappincometype[index],
+						otherappotherincome: otherappotherincome[index] == undefined ? '' : otherappotherincome[index],
+						otherappsign: otherappsign[index] == undefined ? '' : otherappsign[index]
+					}];
+				});
+
+				vm.minorapplicants = $.map(vm.minor, function (minor, index) {
+					return [{
+						minorapplicantname: minorapplicantname[index] == undefined ? '' : minorapplicantname[index],
+						minorapplicantdob: minorapplicantdob[index] == undefined ? '' : minorapplicantdob[index].toString(),
+						minorapplicantsinno: minorapplicantsinno[index] == undefined ? '' : minorapplicantsinno[index]
+					}];
+				});
+				console.log(vm.adultapplicants);
+
+				var TCData = vm.TCData || '';
+				var customRentalApplicationCheck = vm.customRentalApplicationCheck || '';
+
+				if (vm.draftdata == "false" && $stateParams.applicationId == 0) {
+					firebase.database().ref('submitapps/').push().set({
+						tenantID: tenantID,
+						scheduleID: scheduleID,
+						propID: propID,
+						landlordID: landlordID,
+
+						address: address,
+						rent: rent,
+						months: months,
+						startdate: startdate,
+						parking: parking,
+
+						telwork: telwork,
+						telhome: telhome,
+						applicantemail: applicantemail,
+						appaddress: appaddress,
+						applicantcity: applicantcity,
+						maritalstatus: maritalstatus,
+						rent_own: rent_own,
+						live_time_at_address: live_time_at_address,
+						rentamt: rentamt,
+						vacantreason: vacantreason,
+						landlordname: landlordname,
+						landlordphone: landlordphone,
+
+						pets: pets,
+						petsdesc: petsdesc,
+						smoking: smoking,
+						appfiles: filepath,
+
+						vehiclemake: vehiclemake,
+						vehiclemodel: vehiclemodel,
+						vehicleyear: vehicleyear,
+
+						vehiclemake2: vehiclemake2,
+						vehiclemodel2: vehiclemodel2,
+						vehicleyear2: vehicleyear2,
+
+						emergencyname: emergencyname,
+						emergencyphone: emergencyphone,
+
+						refone_name: refone_name,
+						refone_phone: refone_phone,
+						refone_relation: refone_relation,
+
+						reftwo_name: reftwo_name,
+						reftwo_phone: reftwo_phone,
+						reftwo_relation: reftwo_relation,
+
+						applicantsno: (vm.adult.length) + 1,
+						"minorapplicantsno": vm.minor.length || 0,
+						externalappStatus: externalappStatus,
+						externalemail: externalemail,
+						appgrossmonthlyincome: appgrossmonthlyincome,
+						dated: dated,
+
+						rentalstatus: "pending",
+
+						TCData: TCData,
+
+						customRentalApplicationCheck: customRentalApplicationCheck
+					}).then(function () {
+						//Generate the applicant details of submitted app to new table
+						firebase.database().ref('submitapps/').limitToLast(1).once("child_added", function (snapshot) {
+
+							if (snapshot.key != "undefined") {
+								vm.applicationID = snapshot.key;
+								console.log(vm.applicationID);
+								var applicantsdata = {
+									"applicationID": snapshot.key,
+									"mainapplicant": {
+										"applicantname": applicantname,
+										"applicantdob": applicantdob,
+										"applicantsinno": applicantsinno,
+										"appcurrentemployer": appcurrentemployer,
+										"appposition": appposition,
+										"appemployerphone": appemployerphone,
+										"appworkingduration": appworkingduration,
+										"appgrossmonthlyincome": appgrossmonthlyincome,
+										"appincometype": appincometype,
+										"appotherincome": appotherincome,
+										"appsign": appsign,
+									},
+									"otherapplicants": vm.adultapplicants,
+									"minors": vm.minorapplicants
+								}
+
+								console.log(applicantsdata);
+
+								firebase.database().ref('submitappapplicants/').push().set(applicantsdata);
+
+								if (vm.draft == "false") {
+									// update the schedule to be aubmitted application
+									firebase.database().ref('applyprop/' + scheduleID).update({
+										schedulestatus: "submitted"
+									})
+								}
+
+								if (filename != '') {
+									vm.upload(appfiles, filename);
+								}
+
+								if (vm.draft == "false") {
+									if (landlordID != 0) {
+										firebase.database().ref('users/' + landlordID).once("value", function (snap) {
+											console.log(snap.val());
+											if (snap.val()) {
+												var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + snap.val().email + '.</p><p>To make changes, please log in at <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+												emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
+											}
+											//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a> and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+											//emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+										});
+									} else {
+										//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.com. Please go to this link https://www.vcancy.com/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+										//emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+									}
+								}
+								$state.go('tenantapplications');
+							}
+						})
+					})
+				} else {
+					firebase.database().ref('submitapps/' + vm.applicationID).set({
+						tenantID: tenantID,
+						scheduleID: scheduleID,
+						propID: propID,
+						landlordID: landlordID,
+
+						address: address,
+						rent: rent,
+						months: months,
+						startdate: startdate,
+						parking: parking,
+
+						telwork: telwork,
+						telhome: telhome,
+						applicantemail: applicantemail,
+						appaddress: appaddress,
+						applicantcity: applicantcity,
+						maritalstatus: maritalstatus,
+						rent_own: rent_own,
+						live_time_at_address: live_time_at_address,
+						rentamt: rentamt,
+						vacantreason: vacantreason,
+						landlordname: landlordname,
+						landlordphone: landlordphone,
+
+						pets: pets,
+						petsdesc: petsdesc,
+						smoking: smoking,
+						appfiles: filepath,
+
+						vehiclemake: vehiclemake,
+						vehiclemodel: vehiclemodel,
+						vehicleyear: vehicleyear,
+
+						vehiclemake2: vehiclemake2,
+						vehiclemodel2: vehiclemodel2,
+						vehicleyear2: vehicleyear2,
+
+						emergencyname: emergencyname,
+						emergencyphone: emergencyphone,
+
+						refone_name: refone_name,
+						refone_phone: refone_phone,
+						refone_relation: refone_relation,
+
+						reftwo_name: reftwo_name,
+						reftwo_phone: reftwo_phone,
+						reftwo_relation: reftwo_relation,
+
+						applicantsno: (vm.adult.length) + 1,
+						externalappStatus: externalappStatus,
+						externalemail: externalemail,
+
+						dated: dated,
+
+						rentalstatus: "pending",
+
+						TCData: TCData,
+						customRentalApplicationCheck: customRentalApplicationCheck
+					}).then(function () {
+						//Generate the applicant details of submitted app to new table
+						var applicantsdata = {
+							"applicationID": vm.applicationID,
+							"mainapplicant": {
+								"applicantname": applicantname,
+								"applicantdob": applicantdob,
+								"applicantsinno": applicantsinno,
+								"appcurrentemployer": appcurrentemployer,
+								"appposition": appposition,
+								"appemployerphone": appemployerphone,
+								"appworkingduration": appworkingduration,
+								"appgrossmonthlyincome": appgrossmonthlyincome,
+								"appincometype": appincometype,
+								"appotherincome": appotherincome,
+								"appsign": appsign,
+							},
+							"otherapplicants": vm.adultapplicants,
+							"minors": vm.minorapplicants
+						}
+
+						console.log(applicantsdata);
+						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function (snap) {
+							console.log(snap.val());
+							if (snap.val() != null) {
+								$.map(snap.val(), function (v, k) {
+									console.log(k, applicantsdata);
+									firebase.database().ref('submitappapplicants/' + k).set(applicantsdata);
+								});
+							}
+						});
+
+
+						if (vm.draft == "false") {
+							// update the schedule to be aubmitted application
+							firebase.database().ref('applyprop/' + scheduleID).update({
+								schedulestatus: "submitted"
+							})
+						}
+					})
+
+					if (filename != '') {
+						vm.upload(appfiles, filename);
+					}
+
+					if (vm.draft == "false") {
+						if (landlordID != 0) {
+							firebase.database().ref('users/' + landlordID).once("value", function (snap) {
+								console.log(snap.val());
+								if (snap.val()) {
+									var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + snap.val().email + '.</p><p>To make changes, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+									emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
+								}
+								//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+								//emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+							});
+						} else {
+							//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.com. Please go to this link http://www.vcancy.com/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+							//emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+						}
+
+
+					}
+					$state.go('tenantapplications');
+				}
+			}
+
+			vm.upload = function (file, filename) {
+				file = file.replace("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", "");
+				file = file.replace("data:application/pdf;base64,", "");
+				file = file.replace(/^data:image\/\w+;base64,/, "");
+				file = file.replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,", "");
+				// console.log(file,filename);
+				var _file = $('#uploadfile')[0].files[0];
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
+				});
+				AWS.config.region = 'ca-central-1';
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+				filename = filename.replace(/\s/g, '');
+
+				var params = {
+					Key: 'rental-form-files/' + filename,
+					ContentType: _file.type,
+					Body: _file,
+					StorageClass: "STANDARD_IA",
+					ACL: 'authenticated-read'
+				};
+
+				bucket.upload(params).on('httpUploadProgress', function (evt) { })
+					.send(function (err, data) {
+						if (data && data.Location) {
+							console.log('file uploaded success');
+						} else {
+							console.error('ERROR in file upload');
+						}
+					});
+			};
+
+			vm.viewFile = function (location) {
+				if (!location) {
+					return;
+				}
+				var _params = {
+					Bucket: 'vcancy-final',
+					Key: location.split(`https://vcancy-final.s3.ca-central-1.amazonaws.com/`)[1],
+					Expires: 60 * 5
+				}
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
+				});
+				AWS.config.region = 'ca-central-1';
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+
+				bucket.getSignedUrl('getObject', _params, function (err, data) {
+					if (err) return console.log(err, err.stack); // an error occurred
+
+					// var type = 'application/pdf';
+					var extension = location.substring(location.lastIndexOf('.'));
+					// var file = new Blob([data], { type: 'application/pdf' });
+					// saveAs(file, 'filename.pdf');
+					// var url = URL.createObjectURL(new Blob([data]));
+					var a = document.createElement('a');
+					a.href = data;
+					a.download = location.substr(location.lastIndexOf('/') + 1);
+					a.target = '_blank';
+					a.click();
+				});
+			}
+
+			vm.savechanges = function () {
+				vm.draft = "true";
+				$rootScope.isFormOpenToSaveInDraft = false;
+				// alert(vm.draft);
+				vm.rentalAppSubmit();
+			}
+
+			vm.printApp = function () {
+				var css = '@page { size: landscape; }',
+					head = document.head || document.getElementsByTagName('head')[0],
+					style = document.createElement('style');
+
+				style.type = 'text/css';
+				style.media = 'print';
+
+				if (style.styleSheet) {
+					style.styleSheet.cssText = css;
+				} else {
+					style.appendChild(document.createTextNode(css));
+				}
+
+				head.appendChild(style);
+				$window.print();
+			}
+
+		}])
+'use strict';
+
+//=================================================
+// View Tenant Application
+//=================================================
+
+vcancyApp
+	.controller('adminviewappCtrl', ['$scope', '$timeout', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', function ($scope, $timeout, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
+
+		var vm = this;
+		// var tenantID = localStorage.getItem('userID');
+		var applicationID = $stateParams.appID;
+		// var tenantEmail = localStorage.getItem('userEmail');
+
+		vm.publicappview = $state.current.name == "viewexternalapplication" ? "1" : "0";
+		vm.isLoggedIn = ($state.current.name != "viewexternalapplication") && localStorage.getItem('userEmail');
+
+		vm.adult = [];
+		vm.minor = [];
+		vm.rentaldata = [];
+
+		// DATEPICKER
+		vm.today = function () {
+			vm.dt = new Date();
+		};
+		vm.today();
+
+		vm.toggleMin = function () {
+			vm.minDate = vm.minDate ? null : new Date();
+		};
+		vm.toggleMin();
+
+		vm.dateOptions = {
+			formatYear: 'yy',
+			startingDay: 1
+		};
+		vm.maxDate = new Date();
+		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+		vm.format = vm.formats[0];
+
+
+		firebase.database().ref('submitapps/' + applicationID).once("value", function (snapshot) {
+			console.log(snapshot.val());
+			$scope.$apply(function () {
+				if (snapshot.val()) {
+					var value = snapshot.val();
+					console.log(value);
+					vm.TCData = value.TCData;
+					vm.customRentalApplicationCheck = value.customRentalApplicationCheck;
+					vm.rentaldata.tenantID = value.tenantID;
+					vm.rentaldata.scheduleID = value.scheduleID;
+					vm.rentaldata.propID = value.propID;
+
+					vm.rentaldata.landlordID = value.landlordID;
+
+					vm.rentaldata.address = value.address;
+					vm.rentaldata.rent = value.rent;
+					vm.rentaldata.months = value.months;
+					vm.rentaldata.startdate = value.startdate;
+					vm.rentaldata.parking = value.parking;
+					vm.rentaldata.telwork = value.telwork;
+					vm.rentaldata.telhome = value.telhome;
+					vm.rentaldata.tenantEmail = value.applicantemail;
+					vm.rentaldata.appaddress = value.appaddress;
+					vm.rentaldata.appcity = value.applicantcity;
+					vm.rentaldata.maritalstatus = value.maritalstatus;
+					vm.rentaldata.rent_own = value.rent_own;
+					vm.rentaldata.live_time = value.live_time_at_address;
+					vm.rentaldata.rentamt = value.rentamt;
+					vm.rentaldata.vacantreason = value.vacantreason;
+					vm.rentaldata.landlordname = value.landlordname;
+					vm.rentaldata.landlordphone = value.landlordphone;
+					vm.rentaldata.pets = value.pets;
+					vm.rentaldata.petsdesc = value.petsdesc;
+					vm.rentaldata.smoking = value.smoking;
+					vm.rentaldata.appfiles = value.appfiles;
+					vm.rentaldata.vehiclemake = value.vehiclemake;
+					vm.rentaldata.vehiclemodel = value.vehiclemodel;
+					vm.rentaldata.vehicleyear = value.vehicleyear;
+					vm.rentaldata.emergencyname = value.emergencyname;
+					vm.rentaldata.emergencyphone = value.emergencyphone;
+					vm.rentaldata.refone_name = value.refone_name;
+					vm.rentaldata.refone_phone = value.refone_phone;
+					vm.rentaldata.refone_relation = value.refone_relation;
+					vm.rentaldata.reftwo_name = value.reftwo_name;
+					vm.rentaldata.reftwo_phone = value.reftwo_phone;
+					vm.rentaldata.reftwo_relation = value.reftwo_relation;
+					vm.rentaldata.dated = new Date(value.dated);
+					
+					console.log(vm.rentaldata);
+
+					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(applicationID).once("value", function (snap) {
+						$scope.$apply(function () {
+							if (snap.val()) {
+								$.map(snap.val(), function (v, k) {
+									console.log(v);
+									vm.rentaldata.tenantName = v.mainapplicant.applicantname;
+									vm.rentaldata.dob = new Date(v.mainapplicant.applicantdob);
+									vm.rentaldata.sinno = v.mainapplicant.applicantsinno;
+									vm.rentaldata.appcurrentemployer = v.mainapplicant.appcurrentemployer;
+									vm.rentaldata.appposition = v.mainapplicant.appposition;
+									vm.rentaldata.appemployerphone = v.mainapplicant.appemployerphone;
+									vm.rentaldata.appworkingduration = v.mainapplicant.appworkingduration;
+									vm.rentaldata.appgrossmonthlyincome = v.mainapplicant.appgrossmonthlyincome;
+									vm.rentaldata.appincometype = v.mainapplicant.appincometype;
+									vm.rentaldata.appotherincome = v.mainapplicant.appotherincome;
+									vm.rentaldata.appsign = v.mainapplicant.appsign;
+
+									vm.rentaldata.minorappname = [];
+									vm.rentaldata.minorappdob = [];
+									vm.rentaldata.minorappsinno = [];
+
+									if (v.minors != undefined) {
+										angular.forEach(v.minors, function (value, key) {
+											vm.minor.push(key);
+											vm.rentaldata.minorappname.push(value.minorapplicantname);
+											vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));
+											vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);
+										});
+									}
+									vm.rentaldata.otherappname = [];
+									vm.rentaldata.otherappdob = [];
+									vm.rentaldata.otherappsinno = [];
+									vm.rentaldata.otherappcurrentemployer = [];
+									vm.rentaldata.otherappposition = [];
+									vm.rentaldata.otherappemployerphone = [];
+									vm.rentaldata.otherappworkingduration = [];
+									vm.rentaldata.otherappgrossmonthlyincome = [];
+									vm.rentaldata.otherappincometype = [];
+									vm.rentaldata.otherappotherincome = [];
+									vm.rentaldata.otherappsign = [];
+
+									if (v.otherapplicants != undefined) {
+										angular.forEach(v.otherapplicants, function (value, key) {
+											vm.adult.push(key);
+											vm.rentaldata.otherappname.push(value.adultapplicantname);
+											vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
+											vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
+											vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
+											vm.rentaldata.otherappposition.push(value.otherappposition);
+											vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
+											vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
+											vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
+											vm.rentaldata.otherappincometype.push(value.otherappincometype);
+											vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
+											vm.rentaldata.otherappsign.push(value.otherappsign);
+										});
+									}
+								});
+							}
+						});
+					});
+					if (vm.rentaldata.landlordID) {
+						firebase.database().ref('users/' + vm.rentaldata.landlordID).once("value", function (snap) {
+							$scope.$apply(function() {
+								vm.landlordData = snap.val();
+							});
+						});
+					}
+				}
+			});
+		});
+
+		vm.viewFile = function (location) {
+			if (!location) {
+				return;
+			}
+			var _params = {
+				Bucket: 'vcancy-final',
+				Key: location.split(`https://vcancy-final.s3.ca-central-1.amazonaws.com/`)[1],
+				Expires: 60 * 5
+			}
+			AWS.config.update({
+				accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+				secretAccessKey: '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'
+			});
+			AWS.config.region = 'ca-central-1';
+			var bucket = new AWS.S3({
+				params: {
+					Bucket: 'vcancy-final'
+				}
+			});
+
+			bucket.getSignedUrl('getObject', _params, function (err, data) {
+				if (err) return console.log(err, err.stack); // an error occurred
+
+				// var type = 'application/pdf';
+				var extension = location.substring(location.lastIndexOf('.'));
+				// var file = new Blob([data], { type: 'application/pdf' });
+				// saveAs(file, 'filename.pdf');
+				// var url = URL.createObjectURL(new Blob([data]));
+				var a = document.createElement('a');
+				a.href = data;
+				a.download = location.substr(location.lastIndexOf('/') + 1);
+				a.target = '_blank';
+				a.click();
+			});
+		}
+
+		vm.printApp = function () {
+			vm.printMode = true;
+			$timeout(function(){
+				$window.print();
+			}, 1000);
+			$timeout(function(){
+				vm.printMode = false;
+			}, 3000);
+			// vm.printMode = false;
+		}
+	}])
 'use strict';
 
 vcancyApp
@@ -3541,14 +9124,19 @@ vcancyApp
     // =========================================================================
     // Header
     // =========================================================================
-    .controller('headerCtrl', function($timeout, $firebaseAuth, $rootScope, $state){
+    .controller('headerCtrl', function($timeout, $firebaseAuth, $rootScope, $state,$window){
 		var authObj = $firebaseAuth();		
 		
 		this.userLogout = function(){
 			authObj.$signOut();
 			$rootScope.user = null;
 			localStorage.clear();
-			$state.go('login', {}, {reload: true});
+			//$state.go('login', {}, {reload: true});
+            $('body').hide();
+            localStorage.setItem("justOnce", "true");
+            window.location = '#/login';
+
+
 		}
 		
         
@@ -3651,295 +9239,440 @@ vcancyApp
 // LOGIN, REGISTER
 //=================================================
 
-vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$location',function($scope,$firebaseAuth,$state,$rootScope,$location) {
-		var vm = this;
-        //Status
-        vm.login = 1;
-        vm.register = 0;
-        vm.forgot = 0;
-		$rootScope.invalid = '';
-		$rootScope.error = '';
-		$rootScope.success = '';
-		
-		vm.loginUser = function($user){
-			var email = $user.email;
-			var password = $user.password;
-			
-			var authObj = $firebaseAuth();
-			authObj.$signInWithEmailAndPassword(email, password).then(function(firebaseUser) {			 
-				 //alert(JSON.stringify(firebase.auth().currentUser));
-				 if(firebase.auth().currentUser != null){
-					 localStorage.setItem('userID', firebase.auth().currentUser.uid);
-					 localStorage.setItem('userEmail', firebase.auth().currentUser.email);
-					 localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
-					 localStorage.setItem('password', password);
-					 
-				 } 
+vcancyApp.controller('loginCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$location', '$window', 'emailSendingService', function ($scope, $firebaseAuth, $state, $rootScope, $location, $window, emailSendingService) {
 
-				 if(firebase.auth().currentUser != null){
-					 $rootScope.uid = firebase.auth().currentUser.uid;
-					 $rootScope.userEmail = firebase.auth().currentUser.email;
-					 $rootScope.emailVerified = firebase.auth().currentUser.emailVerified;
-					 $rootScope.password = firebase.auth().currentUser.password;
+	var vm = this;
+	//Status
+	vm.login = 1;
+	vm.register = 0;
+	vm.forgot = 0;
+	$rootScope.invalid = '';
+	$rootScope.error = '';
+	$rootScope.success = '';
 
-				 } 
-				 
-				 if(!firebase.auth().currentUser.emailVerified){
-				 	localStorage.setItem('RegEmail',email);
-					localStorage.setItem('RegPass', password);
-					$rootScope.error = 'Your new email is not verified. Please try again after verifying your email. If you not get anymail please resend varification mail';
-					$rootScope.invalid = 'mail';
-					authObj.$signOut();
-					$rootScope.user = null;
-					localStorage.clear();
-					$state.go('login');
-				 } else {			 
-					 firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function(userdata) {
-					   if(userdata.val().usertype === 0){
-							$rootScope.usertype = 0;
-							localStorage.setItem('usertype', 0);
-							console.log("Signed in as tenant:", firebaseUser.uid);
-                                                
-							if(localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1){
-								window.location.href = localStorage.getItem('applyhiturl');
-								localStorage.setItem('applyhiturl','');
-							} else {
-								$state.go("tenantdashboard");  
-							} 
-					   } else {    
-							$rootScope.usertype = 1;
-							localStorage.setItem('usertype', 1);
-							console.log("Signed in as landlord:", firebaseUser.uid);
-							$state.go("landlorddashboard");
-					   }
-					 });
-				 }
-				 
-			}).catch(function(error) {
-				if(error.message){
-					$rootScope.error = error.message;
-				} 
-								
-				if(error.code === "auth/invalid-email"){
-					$rootScope.invalid = 'loginemail';
-				} else if(error.code === "auth/wrong-password"){
-					$rootScope.invalid = 'loginpwd';				
-				} else if(error.code === "auth/user-not-found"){
-					$rootScope.invalid = 'all';					
+	vm.loginUser = function ($user) {
+		var email = $user.email;
+		var password = $user.password;
+
+		var authObj = $firebaseAuth();
+		authObj.$signInWithEmailAndPassword(email, password).then(function (firebaseUser) {
+			//alert(JSON.stringify(firebase.auth().currentUser));
+			if (firebase.auth().currentUser != null) {
+				localStorage.setItem('userID', firebase.auth().currentUser.uid);
+				localStorage.setItem('userEmail', firebase.auth().currentUser.email);
+				localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
+				localStorage.setItem('password', password);
+
+			}
+
+			if (firebase.auth().currentUser != null) {
+				$rootScope.uid = firebase.auth().currentUser.uid;
+				$rootScope.userEmail = firebase.auth().currentUser.email;
+				$rootScope.emailVerified = firebase.auth().currentUser.emailVerified;
+				$rootScope.password = firebase.auth().currentUser.password;
+
+			}
+
+			if (!firebase.auth().currentUser.emailVerified) {
+				localStorage.setItem('RegEmail', email);
+				localStorage.setItem('RegPass', password);
+				$rootScope.error = "We've sent you an account confirmation email. Please check your email and Log in.";
+				$rootScope.invalid = 'mail';
+				authObj.$signOut();
+				$rootScope.user = null;
+				localStorage.clear();
+				$state.go('login');
+			} else {
+				firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function (userdata) {
+					if (userdata.val().usertype === 0) {
+						$rootScope.usertype = 0;
+						localStorage.setItem('usertype', 0);
+						console.log("Signed in as tenant:", firebaseUser.uid);
+						localStorage.setItem('userData', JSON.stringify(userdata.val()));
+						if (localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1) {
+							window.location.href = localStorage.getItem('applyhiturl');
+							localStorage.setItem('applyhiturl', '');
+						} else {
+							$state.go("tenantdashboard");
+						}
+					} else if (userdata.val().usertype === 3) {
+						$rootScope.usertype = 3;
+						localStorage.setItem('usertype', 3);
+						localStorage.setItem('userData', JSON.stringify(userdata.val()));
+						console.log("Signed in as admin:", firebaseUser.uid);
+						$state.go("admindashboard");
+					} else {
+						if (userdata.val().isDeleted) {
+							$state.go('login');
+							$rootScope.error = 'User is deleted.';
+							return;
+						}
+						$rootScope.usertype = 1;
+						localStorage.setItem('usertype', 1);
+						localStorage.setItem('userData', JSON.stringify(userdata.val()));
+						console.log("Signed in as landlord:", firebaseUser.uid);
+						if (userdata.val().refId) {
+							localStorage.setItem('refId', userdata.val().refId);
+						}
+						$state.go("landlorddashboard");
+					}
+				});
+			}
+
+		}).catch(function (error) {
+			//console.log(error);
+			if (error.message) {
+
+				if (error.message == "The email address is badly formatted.") {
+					$rootScope.error = "Invalid Email.";
 				} else {
-					console.log('hre');
-					$rootScope.invalid = '';
+					$rootScope.error = error.message;
 				}
-			});
-			 
-		}
-		
-		vm.google = function(){
-				
-				var provider = new firebase.auth.GoogleAuthProvider();
-				  provider.addScope('profile');
-				  provider.addScope('email');
-				  firebase.auth().signInWithPopup(provider).then(function(result) {
-				   // This gives you a Google Access Token.
-				   var token = result.credential.accessToken;
-				   console.log("token");
-				   console.log(token);
-				   // The signed-in user info.
-				   var user = result.user;
-				   console.log("User");
-				   console.log(user);
-				  });
-		}
 
-		vm.facebook = function(){
-				
-				var provider = new firebase.auth.FacebookAuthProvider();
-				  provider.addScope('user_birthday');
-				 
-				  firebase.auth().signInWithPopup(provider).then(function(result) {
-					  // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-					  var token = result.credential.accessToken;
-					   console.log("token");
-				   	   console.log(token);
-					  // The signed-in user info.
-					  var user = result.user;
-					  console.log("User");
-				   	  console.log(user);
-					  // ...
-					}).catch(function(error) {
-						console.log(error);
-					  // Handle Errors here.
-					  var errorCode = error.code;
-					  var errorMessage = error.message;
-					  // The email of the user's account used.
-					  var email = error.email;
-					  // The firebase.auth.AuthCredential type that was used.
-					  var credential = error.credential;
-					  // ...
-				  });
-		}
-		vm.linkedIn = function(){
-				
-				firebase.auth().signInWithCustomToken(token).catch(function(error) {
-						console.log(error);
-					  // Handle Errors here.
-					  var errorCode = error.code;
-					  var errorMessage = error.message;
-					  // ...
-					});
-		}
-		
-		vm.registerUser = function(reguser){
-			var first = reguser.first;
-			var last = reguser.last;
-			var email = reguser.email;
-			var pass = reguser.pass; 
-			var cpass = reguser.cpass; 
-			var usertype = reguser.usertype;
-			$rootScope.invalid = '';
-			$rootScope.success = '';
-			$rootScope.error = '';
-			
-			var reguserObj = $firebaseAuth();
-			
-			if(cpass === pass){
-				reguserObj.$createUserWithEmailAndPassword(email, pass)
-					.then(function(firebaseUser) {
-						localStorage.setItem('RegEmail',email);
-						localStorage.setItem('RegPass', pass);
+			}
+
+			if (error.code === "auth/invalid-email") {
+				$rootScope.invalid = 'loginemail';
+
+			} else if (error.code === "auth/wrong-password") {
+				$rootScope.invalid = 'loginpwd';
+			} else if (error.code === "auth/user-not-found") {
+				$rootScope.invalid = 'all';
+			} else {
+				console.log('hre');
+				$rootScope.invalid = '';
+			}
+		});
+
+	}
+
+	vm.google = function () {
+
+		var provider = new firebase.auth.GoogleAuthProvider();
+		provider.addScope('profile');
+		provider.addScope('email');
+		firebase.auth().signInWithPopup(provider).then(function (result) {
+			// This gives you a Google Access Token.
+			var token = result.credential.accessToken;
+			console.log("token");
+			console.log(token);
+			// The signed-in user info.
+			var user = result.user;
+			console.log("User");
+			console.log(user);
+		});
+	}
+
+	vm.facebook = function () {
+
+		var provider = new firebase.auth.FacebookAuthProvider();
+		provider.addScope('user_birthday');
+
+		firebase.auth().signInWithPopup(provider).then(function (result) {
+			var token = result.credential.accessToken;
+			console.log("token");
+			console.log(token);
+			// The signed-in user info.
+			var user = result.user;
+			console.log("User");
+			console.log(user);
+			// ...
+		}).catch(function (error) {
+			if (error.message) {
+				IN.User.logout();
+				if (error.message == "The email address is badly formatted.") {
+					$rootScope.error = "Invalid Email.";
+					$rootScope.success = '';
+				} else {
+					$rootScope.error = error.message;
+					$rootScope.success = '';
+				}
+				//$rootScope.error = error.message;
+
+			}
+
+			if (error.code === "auth/invalid-email") {
+				$rootScope.invalid = 'regemail';
+			} else if (error.code === "auth/weak-password") {
+				$rootScope.invalid = 'regpwd';
+			} else if (error.code === "auth/email-already-in-use") {
+				$rootScope.invalid = 'regpwd';
+			} else {
+				$rootScope.invalid = '';
+			}
+		});
+	}
+	$window.onload = function () {
+		IN.Event.on(IN, "auth", vm.getProfileData);
+	};
+
+	vm.getProfileData = function () {
+		IN.API.Profile("me").fields("id", "first-name", "last-name", "headline", "location", "picture-url", "public-profile-url", "email-address").result(vm.displayProfileData).error(vm.onError);
+	}
+	vm.displayProfileData = function (data) {
+		var user = data.values[0];
+
+		vm.saveUserData(user);
+	}
+
+	vm.saveUserData = function (userData) {
+
+		var id = userData.id;
+		var email = userData.emailAddress;
+		var firstName = userData.firstName;
+		var lastName = userData.lastName;
+		var password = "secret@1234";
+		var reguserObj = $firebaseAuth();
+
+		reguserObj.$createUserWithEmailAndPassword(email, password).then(function (firebaseUser) {
+			console.log(firebaseUser)
+		}).catch(function (error) {
+			console.log(error);
+			if (error.message) {
+				IN.User.logout();
+				if (error.message == "The email address is badly formatted.") {
+					$rootScope.error = "Invalid Email.";
+					$rootScope.success = '';
+				} else {
+					$rootScope.error = error.message;
+					$rootScope.success = '';
+				}
+				//$rootScope.error = error.message;
+
+			}
+
+			if (error.code === "auth/invalid-email") {
+				$rootScope.invalid = 'regemail';
+			} else if (error.code === "auth/weak-password") {
+				$rootScope.invalid = 'regpwd';
+			} else if (error.code === "auth/email-already-in-use") {
+				$rootScope.invalid = 'regpwd';
+			} else {
+				$rootScope.invalid = '';
+			}
+		});
+
+	}
+
+	vm.onError = function (error) {
+		console.log(error);
+	}
+
+	vm.logout = function () {
+		IN.User.logout(vm.removeProfileData);
+	}
+
+	vm.removeProfileData = function () {
+
+	}
+
+	vm.registerUser = function (reguser) {
+		var first = reguser.first;
+		var last = reguser.last;
+		var email = reguser.email;
+		var pass = reguser.pass;
+		var cpass = reguser.cpass;
+		var usertype = reguser.usertype;
+		$rootScope.invalid = '';
+		$rootScope.success = '';
+		$rootScope.error = '';
+
+		var reguserObj = $firebaseAuth();
+
+		if (cpass === pass) {
+			reguserObj.$createUserWithEmailAndPassword(email, pass)
+				.then(function (firebaseUser) {
+					localStorage.setItem('RegEmail', email);
+					localStorage.setItem('RegPass', pass);
 
 					// $scope.$apply(function(){
-						firebaseUser.sendEmailVerification().then(function() {
-							// console.log("Email Sent");
-						}).catch(function(error) {
-							// console.log("Error in sending email"+error);
-						});
-												
-						var reguserdbObj = firebase.database();
-						reguserdbObj.ref('users/' + firebaseUser.uid).set({
+					firebaseUser.sendEmailVerification().then(function () {
+						// console.log("Email Sent");
+					}).catch(function (error) {
+						// console.log("Error in sending email"+error);
+					});
+
+					var reguserdbObj = firebase.database();
+					var userData = {
 						firstname: first,
 						lastname: last,
-						usertype : usertype,
-						email : email,
-						isadded : 1,
-                   		iscancelshow : 1,
-                    	iscreditcheck : 1,
-                    	iscriminalreport : 1,
-                    	isexpiresoon : 1,
-                    	ispropertydelete : 1,
-                    	isrentalsubmit : 1,
-                    	isshowingtime : 1,
-                    	profilepic : 1,
-                    	companyname : ""
-					  });				  
-					$rootScope.success = "We've sent you an account confirmation email. Please check your email and Log in. Resend confirmation";
-					$rootScope.error = '';			
+						usertype: usertype,
+						email: email,
+						isadded: 1,
+						iscancelshow: 1,
+						iscreditcheck: 1,
+						iscriminalreport: 1,
+						isexpiresoon: 1,
+						ispropertydelete: 1,
+						isrentalsubmit: 1,
+						isshowingtime: 1,
+						profilepic: 1,
+						companyname: ""
+					}
+					if (userData.usertype == 1) {
+						userData.customRentalApplicationCheck = {
+							'PAPPD': true,
+							'CADDR': true,
+							'PADDR': false,
+							'AAPPD': false,
+							'AAPP1': false,
+							'AAPP2': false,
+							'ESIV': true,
+							'ESIV1': true,
+							'VI': false,
+							'EC': false,
+							'EC1': false,
+							'REF': true,
+							'REF1': true,
+							'REF2': false,
+							'UD': true,
+							'UDAAPP': false,
+							'TC': true
+						};
+						userData.screeningQuestions = [
+							{ id: 'WKRX6Q', label: 'What is your profession?', isChecked: true },
+							{ id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
+							{ id: 'N1F5MO', label: 'Are you able to provide references?', isChecked: false },
+							{ id: 'OU489L', label: 'Why are you moving?', isChecked: false },
+							{ id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: true },
+							{ id: 'A9OG32', label: 'No. of Applicants', isChecked: true },
+							{ id: 'UH7JZS', label: 'Do you smoke?', isChecked: true },
+							{ id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
+						]
+					}
+					reguserdbObj.ref('users/' + firebaseUser.uid).set(userData);
+
+					if (usertype == 0) {
+						var emailData = '<p>Hello ' + firstname + ', </p><p>Thanks for signing up for Vcancy!</p><p>We’ve built Vcancy from the heart to help renters find a place faster and standout from the crowd. You can schedule multiple same-day viewings and submit your rental applications online. </p><p>Our team is working hard to make the rental process seamless and automated. We would love to have your feedback on our the web-app. You can reach us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+						// Send Email
+						emailSendingService.sendEmailViaNodeMailer(email, 'Welcome to Vcancy', 'Welcome', emailData);
+					}
+					if (usertype == 1) {
+						var emailData = '<p>Hello, </p><p>Thanks for signing up!</p><p>We’ve built Vcancy from the heart to help busy landlords and property management companies find the best tenants faster by saving them time and labour costs. </p><p>We are always working hard make the tenant onboarding process seamless and automated. Please feel free to reach out to us if you have any suggestions about the web-app at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+						// Send Email
+						emailSendingService.sendEmailViaNodeMailer(email, 'Welcome to Vcancy', 'Welcome', emailData);
+					}
+
+					$rootScope.success = "We've sent you an account confirmation email. Please check your email and Log in. ";
+					$rootScope.error = '';
 					reguser.first = '';
 					reguser.last = '';
 					reguser.email = '';
-					reguser.pass = ''; 
-					reguser.cpass = ''; 
+					reguser.pass = '';
+					reguser.cpass = '';
 					reguser.usertype = -1;
 					vm.reguser = reguser;
-					
-					// When apply property url hit direct login and redirect to apply link url on signup successful
-					if(localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1 && usertype === 0 ){
-						var authObj = $firebaseAuth();
-						authObj.$signInWithEmailAndPassword(email, pass).then(function(firebaseUser) {
-							 if(firebase.auth().currentUser != null){
-								 localStorage.setItem('userID', firebase.auth().currentUser.uid);
-								 localStorage.setItem('userEmail', firebase.auth().currentUser.email);
-								 localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
-							 } 
 
-							 if(firebase.auth().currentUser != null){
-								 $rootScope.uid = firebase.auth().currentUser.uid;
-								 $rootScope.userEmail = firebase.auth().currentUser.email;
-								 $rootScope.emailVerified = firebase.auth().currentUser.emailVerified;
-							 } 
-							
-							firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function(userdata) {
-							   if(userdata.val().usertype === 0){
+					// When apply property url hit direct login and redirect to apply link url on signup successful
+					if (localStorage.getItem('applyhiturl') != undefined && localStorage.getItem('applyhiturl').indexOf("applyproperty") !== -1 && usertype === 0) {
+						var authObj = $firebaseAuth();
+						authObj.$signInWithEmailAndPassword(email, pass).then(function (firebaseUser) {
+							if (firebase.auth().currentUser != null) {
+								localStorage.setItem('userID', firebase.auth().currentUser.uid);
+								localStorage.setItem('userEmail', firebase.auth().currentUser.email);
+								localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
+							}
+
+							if (firebase.auth().currentUser != null) {
+								$rootScope.uid = firebase.auth().currentUser.uid;
+								$rootScope.userEmail = firebase.auth().currentUser.email;
+								$rootScope.emailVerified = firebase.auth().currentUser.emailVerified;
+							}
+
+							firebase.database().ref('/users/' + firebaseUser.uid).once('value').then(function (userdata) {
+								if (userdata.val().usertype === 0) {
 									$rootScope.usertype = 0;
 									localStorage.setItem('usertype', 0);
 									console.log("Signed in as tenant:", firebaseUser.uid);
-									
+
 									window.location.href = localStorage.getItem('applyhiturl');
-									localStorage.setItem('applyhiturl','');
-							   } 
-							 });
+									localStorage.setItem('applyhiturl', '');
+								}
+							});
 						});
-					}		
+					}
 					// Ends Here
 					// });
-				  }).catch(function(error) {
-					if(error.message){
-						$rootScope.error = error.message;
-						$rootScope.success = '';
-					} 		
-					
-					if(error.code === "auth/invalid-email"){
+				}).catch(function (error) {
+					//console.log(error);
+					if (error.message) {
+						if (error.message == "The email address is badly formatted.") {
+							$rootScope.error = "Invalid Email.";
+							$rootScope.success = '';
+						} else {
+							$rootScope.error = error.message;
+							$rootScope.success = '';
+						}
+						//$rootScope.error = error.message;
+
+					}
+
+					if (error.code === "auth/invalid-email") {
 						$rootScope.invalid = 'regemail';
-					} else if(error.code === "auth/weak-password"){
-						$rootScope.invalid = 'regpwd';					
-					}  else {
+					} else if (error.code === "auth/weak-password") {
+						$rootScope.invalid = 'regpwd';
+					} else {
 						$rootScope.invalid = '';
 					}
-				  });
-			} else {
-				$rootScope.invalid = 'regcpwd';			
-				$rootScope.error = 'Passwords don’t match.';
-				$rootScope.success = '';
-			}
-			
-			vm.reguser = reguser;
-		}
-		
-		vm.forgotpwdmail = function(forgot){
-			var email = forgot.email;
-			$rootScope.invalid = '';
+				});
+		} else {
+			$rootScope.invalid = 'regcpwd';
+			$rootScope.error = 'Passwords don’t match.';
 			$rootScope.success = '';
-			$rootScope.error = '';
-			
-			var forgotuserObj = $firebaseAuth();
-			forgotuserObj.$sendPasswordResetEmail(email).then(function() {
-				$rootScope.success = 'Password reset email sent in your inbox. Please check your email.';
-				$rootScope.error = '';
-				vm.forgotuser.email = '';		
-			}).catch(function(error) {
-				console.error("Error: ", error);
-				if(error.message){
-					$rootScope.error = error.message;
-					$rootScope.success = '';
-				} 
-			});
-				
 		}
 
-		vm.resendmail = function(){
-			var email = localStorage.getItem('RegEmail');
-			var pass = localStorage.getItem('RegPass');
-			if(email != null && pass != null){
-				firebase.auth().signInWithEmailAndPassword(email, pass)
-				   .then(function(firebaseUser) {
-				       // Success 
-				       firebaseUser.sendEmailVerification().then(function() {
-							console.log("Email Sent");
-								$rootScope.success = 'Sent mail in your mail box please check your Email';
-								$rootScope.error = '';			
-					
-						}).catch(function(error) {
-							 console.log("Error in sending email"+error);
-						});
-				   })
-				  .catch(function(error) {
-				  	console.log(error);
-				       // Error Handling
-				  });
-					
+		vm.reguser = reguser;
+	}
+
+	vm.forgotpwdmail = function (forgot) {
+		var email = forgot.email;
+		$rootScope.invalid = '';
+		$rootScope.success = '';
+		$rootScope.error = '';
+
+		var forgotuserObj = $firebaseAuth();
+		forgotuserObj.$sendPasswordResetEmail(email).then(function () {
+			$rootScope.success = 'Password reset email sent to your inbox. Please check your email.';
+			$rootScope.error = '';
+			vm.forgotuser.email = '';
+		}).catch(function (error) {
+			console.error("Error: ", error);
+			if (error.message) {
+				$rootScope.error = error.message;
+				$rootScope.success = '';
 			}
+		});
+
+	}
+
+	vm.resendmail = function () {
+		$rootScope.success = 'Confirmation email resent';
+		var email = localStorage.getItem('RegEmail');
+		var pass = localStorage.getItem('RegPass');
+		if (email != null && pass != null) {
+			firebase.auth().signInWithEmailAndPassword(email, pass)
+				.then(function (firebaseUser) {
+					// Success 
+					firebaseUser.sendEmailVerification().then(function () {
+						console.log("Email Sent");
+						$rootScope.success = 'Confirmation email resent';
+						//$rootScope.success = 'Sent mail in your mail box please check your Email';
+						$rootScope.error = '';
+
+					}).catch(function (error) {
+						console.log("Error in sending email" + error);
+					});
+				})
+				.catch(function (error) {
+					console.log(error);
+					// Error Handling
+				});
+
 		}
-		
+	}
+
 }]);
 
 'use strict';
@@ -3948,717 +9681,2446 @@ vcancyApp.controller('loginCtrl', ['$scope','$firebaseAuth','$state','$rootScope
 // PROPERTY
 //=================================================
 
-vcancyApp.controller('propertyCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','slotsBuildService','emailSendingService','$http', function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, slotsBuildService, emailSendingService, $http) {
-	$rootScope.invalid = '';
-	$rootScope.success = '';
-	$rootScope.error = '';	
-	
-	var todaydate = new Date();	
-	var dateconfig = new Date(new Date().setMinutes( 0 ));
-	console.log(dateconfig,todaydate);
-	
-	var vm = this;
-	vm.propsavail = 1;
-	vm.timeslotmodified = "false";
-	vm.isDisabled = false;
-	vm.googleAddress = 0;
-	var oldtimeSlotLen = 0;
-	// console.log(vm.isDisabled);	
-	
-	firebase.database().ref('users/'+localStorage.getItem('userID')).once("value", function(snap) {
-		vm.landlordname = snap.val().firstname+" "+snap.val().lastname;			
-	});
-	
-	$scope.$on('gmPlacesAutocomplete::placeChanged', function(){
-      var address = vm.prop.address.getPlace();
-	  vm.googleAddress = 1;
-	  vm.prop.address = address.formatted_address;
-	  vm.addresschange();
-	  $scope.$apply();
-	});
-	
-	vm.copy = "Copy Link";		
-	$scope.copySuccess = function(e) {
-		console.info('Action:', e.action);
-		console.info('Text:', e.text);
-		console.info('Trigger:', e.trigger);
-		vm.copy = "Copied";	
-		$scope.$apply();
-	};
-		
-	// timeSlot for Date and Timepicker
-	vm.addTimeSlot = function(slotlen){
-		// console.log(slotlen);
-		for(var i=0; i<slotlen; i++){
-			vm.newTime = false;		
-		}
-		
-		vm.timeSlot.push({date:dateconfig});
-		vm.prop.multiple[slotlen] = true;
-		vm.newTime = true;
-		console.log(vm.newTime);
-	}
-	
-	// to remove timeslots
-	vm.removeTimeSlot = function(slotindex){
-		if(vm.timeSlot.length == 1){
-			
-		} else {
-			if($state.current.name == 'editprop') {
-				if ($window.confirm("Are you sure you want to delete this viewing slot? "))  {	
-					if(slotindex < oldtimeSlotLen){
-						vm.timeslotmodified = "true";
-					} 
-					vm.timeSlot.splice(slotindex,1);
-					vm.prop.date.splice(slotindex,1);
-					vm.prop.fromtime.splice(slotindex,1);
-					vm.prop.to.splice(slotindex,1);
-					vm.prop.limit.splice(slotindex,1);	
-					vm.prop.multiple.splice(slotindex,1);
-				}			
-			} else {
-				vm.timeSlot.splice(slotindex,1);
-				vm.prop.date.splice(slotindex,1);
-				vm.prop.fromtime.splice(slotindex,1);
-				vm.prop.to.splice(slotindex,1);
-				vm.prop.limit.splice(slotindex,1);	
-				vm.prop.multiple.splice(slotindex,1);
-			}
-		}		
-				
-	}
-	
-	// DATEPICKER
-	vm.today = function() {
-		vm.dt = new Date();
-	};
-	vm.today();
+vcancyApp.controller('propertyCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'slotsBuildService', 'emailSendingService', '$http', '$location', '$log', '$uibModal', '$q'
+    , function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, slotsBuildService, emailSendingService, $http, $location, $log, $uibModal, $q) {
+        $rootScope.invalid = '';
+        $rootScope.success = '';
+        $rootScope.error = '';
+        $rootScope.message = '';
 
-	vm.toggleMin = function() {
-		vm.minDate = vm.minDate ? null : new Date();
-	};
-	vm.toggleMin();
+        var todaydate = new Date();
+        var dateconfig = new Date(new Date().setMinutes(0));
+        var url = $location.absUrl();
+        var oldtimeSlotLen = 0;
 
-	vm.open = function($event, opened) {
-		$event.preventDefault();
-		$event.stopPropagation();
-		angular.forEach(vm.timeSlot, function(value, key) {
-		  value.opened = false;
-		});
-		opened.opened = true;
-	};
-	
-	vm.dateOptions = {
-		formatYear: 'yy',
-		startingDay: 1
-	};
+        var swal = window.swal;
 
-	vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-	vm.format = vm.formats[0];
-		
-	vm.timeopen = function($event,opened) {
-		$event.preventDefault();
-		$event.stopPropagation();
-		angular.forEach(vm.timeSlot, function(value, key) {
-		  value.opened = false;
-		});
-		vm.opened = true;
-	  }; 
-	
-	//  TIMEPICKER
-	vm.mytime = new Date();
-	
-	vm.hstep = 1;
-	vm.mstep = 5;
-	
-	vm.options = {
-		hstep: [1, 2, 3],
-		mstep: [1, 5, 10, 15, 25, 30]
-	};
+        var vm = this;
+        vm.propsavail = 1;
+        vm.timeslotmodified = "false";
+        vm.isDisabled = false;
+        vm.googleAddress = 0;
+        vm.more = '';
+        vm.city = '';
+        vm.province = '';
+        vm.postcode = '';
+        vm.country = '';
+        vm.noofunits = 0;
+        vm.checkedRow = {};
+        $scope.imageCount = 0;
+        $scope.loader = 0;
+        // $scope.unitVacant = [];
 
-	vm.minDate = new Date();
-	
-	vm.newTime = false;
-	
-	vm.ismeridian = true;
-	
-	vm.toggleMode = function() {
-		vm.ismeridian = ! vm.ismeridian;
-	};
+        vm.table = 1;
+        vm.csv = 0;
+        vm.localpropID = '';
 
-	vm.update = function() {
-		var d = new Date();
-		d.setHours( 14 );
-		d.setMinutes( 0 );
-		vm.mytime = d;
-	};
-	
-	
-	vm.addresschange = function(){
-		console.log(vm.prop.address);
-		if(vm.prop.address != undefined && (typeof vm.prop.address == "string" || vm.googleAddress == 1)){
-			vm.isDisabled = false;
-		} else {
-			vm.isDisabled = true;
-		}
-		
-		vm.datetimeslotchanged(0);
-	}
-	
-	vm.datetimeslotchanged = function (key) {		
-		if(key < oldtimeSlotLen){
-			vm.timeslotmodified = "true";
-		} 
-		if(vm.prop.fromtime[key] === undefined){
-			var fromtime  =  dateconfig;			
-		} else {
-			var fromtime= vm.prop.fromtime[key];	
-		}
-		
-		if(vm.prop.to[key] === undefined){
-			var to = dateconfig;	
-		} else {
-			var to = vm.prop.to[key];	
-		}		
-		
-		vm.overlap = 0;			
-		
-		for (var i = 0; i < vm.prop.date.length ; i++) {
-			// console.log(i,key);
-			if(i != key){
-				if(vm.prop.fromtime[i] === undefined){
-					var ftime  =  dateconfig;			
-				} else {
-					var ftime= vm.prop.fromtime[i];	
-				}
-				
-				if(vm.prop.to[i] === undefined){
-					var totime = dateconfig;	
-				} else {
-					var totime = vm.prop.to[i];	
-				}
-				
-				console.log(fromtime > ftime , to > ftime,fromtime > totime , to > totime)	;			
-				
-				if ((moment(fromtime).format('HH:mm') <= moment(ftime).format('HH:mm') && moment(to).format('HH:mm') <= moment(ftime).format('HH:mm') && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || (moment(fromtime).format('HH:mm') >= moment(totime).format('HH:mm') && moment(to).format('HH:mm') >= moment(totime).format('HH:mm') && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isBefore(moment(vm.prop.date[i]).format('DD-MMMM-YYYY')) || moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isAfter(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) {
-					
-				} else { 
-					vm.overlap = 1;
-				}
-			}
-		}
-		console.log(vm.overlap);
-	
-		if(vm.overlap == 1) {
-			vm.prop.timeoverlapinvalid[key] = 1;
-			vm.isDisabled = true;
-		} else {
-			vm.prop.timeoverlapinvalid[key] = 0;
-		}
-		
-		var temp = new Date(fromtime.getTime() + 30 * 60000)
-		// console.log(moment(to).format('HH:mm'),moment(temp).format('HH:mm'));
-		if (moment(to).format('HH:mm') < moment(temp).format('HH:mm') && vm.prop.timeoverlapinvalid[key] == 0) {
-			vm.prop.timeinvalid[key] = 1;
-			vm.isDisabled = true;
-		} else {
-			vm.prop.timeinvalid[key] = 0;
-		}
-				
-		// console.log(vm.prop.multiple[key],fromtime,to);
-		
-		if((vm.prop.multiple[key] === false || vm.prop.multiple[key] === undefined) && vm.prop.timeinvalid[key] == 0){
-			var minutestimediff = (to - fromtime)/ 60000;
-			var subslots = Math.floor(Math.ceil(minutestimediff)/30);				
-			// console.log(minutestimediff,subslots);
-			
-			if(vm.prop.limit[key] > subslots ){
-				vm.prop.invalid[key] = 1;
-				vm.isDisabled = true;
-			} else {
-				vm.prop.invalid[key] = 0;
-				if(vm.prop.address != undefined && (typeof vm.prop.address == "string" || vm.googleAddress == 1)){
-					vm.isDisabled = false;
-				} else {
-					vm.isDisabled = true;
-				}
-			}
-		} else if((vm.prop.multiple[key] === true) && vm.prop.timeinvalid[key] == 0){
-			vm.prop.invalid[key] = 0;
-			vm.isDisabled = false;
-		}
-	}
 
-	vm.clear = function() {
-		vm.mytime = null;
-	};
-		
-	// Go Back To View Property
-	vm.backtoviewprop = function(){
-		$state.go('viewprop');
-	}	
-	
-	// Add/Edit Property		
-	vm.submitProp = function(property){		
-		var r = confirm("Your unique property link is generated, please click on edit property and copy the link at the bottom");
-		if (r == true) {
-		    
-		
-			vm.loader = 1;
-			var propID = property.propID;
-			var propimg = $('#propimg').val();	
-			var propstatus = property.propstatus  == '' ? false : property.propstatus ; 
-			var proptype = property.proptype;
-			var units = property.units;
-			var shared = property.shared  == '' ? false : property.shared ; 
-			var address = property.address; 
-			var rent = property.rent; 
-			var landlordID = localStorage.getItem('userID');
-			var date = [];
-			var fromtime = [];
-			var to = [];
-			var limit = [];	
-			var multiple = [];		
-			angular.forEach(property.limit, function(lval, key) {
-				date[key] = property.date[key].toString();
-				if(property.fromtime[key] === undefined){
-					fromtime[key]  =  dateconfig.toString();				
-				} else {
-					fromtime[key] = property.fromtime[key].toString();					
-				}
-				
-				if(property.to[key] === undefined){
-					to[key] = dateconfig.toString();	
-				} else {
-					to[key] = property.to[key].toString();	
-				}			
-				multiple[key] = property.multiple[key]   == '' ? false : property.multiple[key];
-				limit[key] = lval;
-			});
-						
-			$rootScope.invalid = '';
-			$rootScope.success = '';
-			$rootScope.error = '';
-			
-			var propertyObj = $firebaseAuth();
-			
-			var propdbObj = firebase.database();
-		if(propID == ''){	
-			propdbObj.ref('properties/').push().set({	
-				landlordID: landlordID,
-				propimg: propimg,
-				propstatus: propstatus,
-				proptype: proptype,
-				units: units,
-				rent: rent,
-				shared: shared, 
-				address: address, 
-				date: date,
-				fromtime: fromtime,
-				to: to,
-				multiple: multiple,
-				limit: limit
-			}).then(function(){
-			  //Generate the property link
-			  propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
-				
-				if(snapshot.key != "undefined"){
-					var propertylink = "http://www.vcancy.ca/login/#/applyproperty/"+snapshot.key;
-					vm.prop.propertylink = propertylink;	
-					
-					// link generated and property added message
-					localStorage.setItem('propertysuccessmsg','Property added successfully. Property Link is also generated.');
-					$window.scrollTo(0, 0);
-					
-					vm.prop.propertylink = propertylink;				
-					$('#propertylink').val(propertylink);	
-					
-					// update the property link to property table
-					propdbObj.ref('properties/'+snapshot.key).update({	
-						propertylink: propertylink
-					})
-					
-					var emailData = '<p>Hello, </p><p>Thanks for adding your rental property '+address+',</p><p> Here’s your dedicated property link:</p><p>'+propertylink+'</p><p>Share this link on your online listing, social media, email and with any perspective tenant.</p><p>Please don’t delete this email for future use.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-					
-					// Send Email
-					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your rental property link', 'addproperty', emailData);
-					
-					$state.go('viewprop');
-					
-				// reset the add property form
-				vm.timeSlot = [{date:dateconfig}];
-				$scope.$apply(function(){
-					vm.prop = {
-						propID: '',
-						landlordID: '',
-						propimg : ' ',
-						propstatus : '',
-						proptype : '',
-						units : '',
-						multiple: [],
-						rent: '',
-						shared : '',	
-						address : '',
-						date : [],
-						fromtime : [],
-						to : [],
-						limit : [],
-						propertylink: ''
-					}
-					$('#propertylink').val('');
-				});
-				}				
-			  })
-			});
-		} else {
-			if(vm.timeslotmodified == "true"){
-				 var confirmAns = $window.confirm("Are you sure you want to change timeslots? Any changes will result in time slots being canceled at the renters’ end.");
-			} else {				
-				var confirmAns = true;
-			}
-			if(confirmAns == true){
-				propdbObj.ref('properties/'+propID).update({
-						propimg: propimg,
-						propstatus: propstatus,
-						proptype: proptype,
-						units: units,
-						rent: rent,
-						shared: shared, 
-						multiple: multiple,
-						address: address, 
-						date: date,
-						fromtime: fromtime,
-						to: to,
-						limit: limit
-				}).then(function(){
-					firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snap) {
-						if(snap.val() != null) {								
-							$.map(snap.val(), function(v, k) {
-								firebase.database().ref('applyprop/'+k).update({
-									address: address,
-									units: units
-								});
-							});
-						}
-					});
-					
-					vm.slots = slotsBuildService.maketimeslots(date,fromtime,to,limit,multiple);
-					
-					firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
-						$scope.$apply(function(){
-							vm.appliedslots = [];
-							vm.scheduleIDs = [];
-							vm.tenants = [];
-							
-							if(snapshot.val() != null){
-								vm.appliedslots = $.map(snapshot.val(), function(value, index) {							
-									if(value.schedulestatus !== "cancelled" && value.schedulestatus !== "submitted"){	
-										vm.scheduleIDs.push(index);
-										vm.tenants.push(index);
-										return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot).format('HH:mm'),scheduleID:index}];				
-									}
-								});
-							}
-							
-							console.log(vm.scheduleIDs);
-							// console.log(vm.appliedslots);	
-							
-							if(propstatus != false)	{
-								for (var i = 0; i < vm.slots.length; i++) {
-									for (var j = 0; j < vm.appliedslots.length; j++) {
-										if (moment(vm.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.slots[i].to).format('HH:mm') == vm.appliedslots[j].to) {					
-											var index = vm.scheduleIDs.indexOf(vm.appliedslots[j].scheduleID);
-											if (index > -1) {
-											   vm.scheduleIDs.splice(index, 1);
-											   vm.tenants.splice(index, 1);
-											}
-										} 
-									}
-								}	
-							} 				
-							
-							// link generated and property added message
-							localStorage.setItem('propertysuccessmsg','Property updated successfully.');
-							angular.forEach(vm.scheduleIDs, function(value, key) {
-								firebase.database().ref('applyprop/'+value).update({	
-									schedulestatus: "cancelled"
-								})
-								// console.log(value);
-							});		
+        vm.testsweet = function () {
+            // swal({
+            //     title: "Success!",
+            //     text: "Your Property Created successfully!",
+            //     type: "success",
+            //     confirmButtonColor: '#009999',
+            //     confirmButtonText: "Add Units"
+            // }, function (isConfirm) {
+            //     if (isConfirm) {
+            //         window.location.href = "http://google.com";
+            //     }
+            // });
+            //swal("Your Property Created successfully!", "You clicked the button And add units!", "success")
+        }
+        var landlordID = ''
+        if (localStorage.getItem('refId')) {
+            landlordID = localStorage.getItem('refId')
+        } else {
+            landlordID = localStorage.getItem('userID');
+        }
 
-							if(propstatus === false){
-								var emailData = '<p>Hello, </p><p>'+address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.ca/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-									
-								// Send Email
-								emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), address+' has been deactivated', 'deactivateproperty', emailData);
-						 
-								angular.forEach(vm.tenants, function(tenantID, key) {
-									firebase.database().ref('users/'+tenantID).once("value", function(snap) {
-										var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-									
-										// Send Email
-										emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
-									});
-								});
-							} else {
-								var emailData = '<p>Hello, </p><p>Your property <em>'+address+'</em>   has been successfully updated and all your property viewings affected by the updated time slots are cancelled. </p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-										
-								// Send Email
-								emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Property Time Slots updated on Vcancy', 'updateproperty', emailData);
-						 
-								angular.forEach(vm.tenants, function(tenantID, key) {
-									firebase.database().ref('users/'+tenantID).once("value", function(snap) {
-										var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has made some changes in time slots for this property.</p><p>To reschedule the viewing and book some another available time, please log in at http://vcancy.ca/login/ and use the link initially provided to schedule the viewing or follow the link http://www.vcancy.ca/login/#/applyproperty/'+$stateParams.propId+'.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-									
-										// Send Email
-										emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'updateproperty', emailData);
-									});
-								});
-							}
+        firebase.database().ref('users/' + landlordID).once("value", function (snap) {
+            vm.landlordname = snap.val().firstname + " " + snap.val().lastname;
+        });
 
-								
-							$state.go('viewprop');
-						});	
-					});	
-					
-					$window.scrollTo(0, 0);
-				})
-			} else {
-				vm.loader = 0;				
-				$state.reload();
-			}
-		}
+        $scope.$on('gmPlacesAutocomplete::placeChanged', function () {
+            var address = vm.prop.address.getPlace();
+            var arrAddress = address.address_components;
+            vm.googleAddress = 1;
+            vm.prop.address = address.formatted_address;
 
-		} else {
-		    return false;
-		}
-	}
-	
-	
-	// View Property
-	if($state.current.name == 'viewprop') {
-		vm.loader = 1;
-		var landlordID = localStorage.getItem('userID');
-		var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
-			$scope.$apply(function(){
-				vm.success = 0;
-				if(snapshot.val()) {
-			 		vm.viewprops = snapshot.val();
-			 		vm.propsavail = 1;
-					vm.propsuccess = localStorage.getItem('propertysuccessmsg');
-				}
-			 	else {
-			 		vm.propsavail = 0;
-					vm.propsuccess = localStorage.getItem('propertysuccessmsg');
-			 	}
-				vm.loader = 0;
-				// console.log($rootScope.$previousState.name);
-				if(($rootScope.$previousState.name == "editprop" || $rootScope.$previousState.name == "addprop") && vm.propsuccess != ''){
-					vm.success = 1;
-				}
-				localStorage.setItem('propertysuccessmsg','')
-			});
-		   
-		});
-	
-		vm.toggleSwitch = function(key){
-			// console.log(key);
-			console.log(vm.viewprops[key].propstatus);	
-			var propstatus = !vm.viewprops[key].propstatus;
-			console.log(!vm.viewprops[key].propstatus);	
-			
-			firebase.database().ref('properties/'+key).once("value", function(snap) {
-				vm.property_address = snap.val().address;
-			});
-			
-			// update the property status to property table
-			firebase.database().ref('properties/'+key).update({	
-				propstatus: propstatus
-			})
-			
-			if(!vm.viewprops[key].propstatus == false) {
-				firebase.database().ref('applyprop/').orderByChild("propID").equalTo(key).once("value", function(snapshot) {	
-					$scope.$apply(function(){
-						vm.scheduleIDs = [];
-						vm.tenants = [];
-						
-						if(snapshot.val() != null){
-							$.map(snapshot.val(), function(value, index) {							
-								if(value.schedulestatus !== "cancelled" && value.schedulestatus !== "submitted"){	
-									vm.scheduleIDs.push(index);	
-									vm.tenants.push(value.tenantID);
-								}
-							});
-						}
-						
-						angular.forEach(vm.scheduleIDs, function(value, key) {
-							firebase.database().ref('applyprop/'+value).update({	
-								schedulestatus: "cancelled"
-							})
-							// console.log(value);
-						});	
+            var itemRoute = '';
+            var itemLocality = '';
+            var itemCountry = '';
+            var itemPc = '';
+            var itemSnumber = '';
+            var street_number = '';
 
-						var emailData = '<p>Hello, </p><p>'+vm.property_address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.ca/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-									
-						// Send Email
-						emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address+' has been deactivated', 'deactivateproperty', emailData);
-				 
-						angular.forEach(vm.tenants, function(tenantID, key) {
-							firebase.database().ref('users/'+tenantID).once("value", function(snap) {
-								var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-							
-								// Send Email
-								emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
-							});
-						});
-						$state.reload();
-					});	
-				});	
-			} else {
-				$state.reload();				
-			}
-		}
-	}
+            $.each(arrAddress, function (i, address_component) {
+                if (address_component.types[0] == "street_number") {
+                    itemSnumber = address_component.long_name;
+                    street_number += address_component.long_name + " ";
+                }
 
-	// Edit Property
-	if($state.current.name == 'editprop') {
-		vm.mode = 'Edit';
-		vm.submitaction = "Update";
-		vm.otheraction = "Delete";
-		var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snapshot) {
-		  var propData = snapshot.val();
-		  vm.timeSlot = [];
-		  $scope.$apply(function(){
-				vm.prop = {
-					propID: snapshot.key,
-					landlordID: propData.landlordID,
-					propimg : propData.propimg,
-					propstatus : propData.propstatus,
-					proptype : propData.proptype,
-					units : propData.units,
-					rent: propData.rent,
-					shared : propData.shared,
-					address : propData.address,
-					multiple: [],
-					date : [],
-					fromtime : [],
-					to : [],
-					limit : [],
-					propertylink: propData.propertylink,
-					invalid: [0],
-					timeinvalid: [0],
-					timeoverlapinvalid: [0]
-				}
-				angular.forEach(propData.date, function(value, key) {
-				  vm.timeSlot.push({date: new Date(value)});
-				  vm.prop.date.push(new Date(value));
-				  vm.prop.fromtime.push(new Date(propData.fromtime[key]));
-				  vm.prop.to.push(new Date(propData.to[key]));
-				  vm.prop.limit.push(propData.limit[key]);
-				  vm.prop.multiple.push(propData.multiple[key]);				  
-				});
-				vm.addresschange();		
-				oldtimeSlotLen = vm.timeSlot.length;
-				vm.unitsOptional();
-			});
-		});
-	} else {
-		vm.mode = 'Add';
-		vm.submitaction = "Save";		
-		vm.otheraction = "Cancel";
-		vm.timeSlot = [{date:dateconfig}];
-		vm.prop = {
-			propID: '',
-			landlordID: '',
-			propimg : '',
-			propstatus : true,
-			proptype : '',
-			units : '',
-			multiple: [true],
-			rent: '',
-			shared : '',
-			address : '',
-			date : [],
-			fromtime : [],
-			to : [],
-			limit : [],
-			propertylink: '',
-			invalid: [0],
-			timeinvalid: [0],
-			timeoverlapinvalid: [0]
-		}
+                if (address_component.types[0] == "route") {
+                    itemRoute = address_component.long_name;
+                    var route = address_component.long_name;
+                    vm.prop.address = street_number + address_component.long_name;
+                }
 
-	}
-	
-	
-	
-	// Delete Property Permanently
-	this.delprop = function(propID){
-		var propertyObj = $firebaseAuth();
-		var propdbObj = firebase.database();
-		
-		firebase.database().ref('properties/'+propID).once("value", function(snap) {
-			vm.property_address = snap.val().address;
-			
-			if ($window.confirm("Do you want to continue?"))  {
-				propdbObj.ref('properties/'+propID).remove();
-				
-				firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
-					$scope.$apply(function(){
-						vm.scheduleIDs = [];
-						vm.tenants = [];
-						
-						if(snapshot.val() != null){
-							$.map(snapshot.val(), function(value, index) {	
-								vm.scheduleIDs.push(index);	
-								vm.tenants.push(value.tenantID);
-							});
-						}
-						angular.forEach(vm.scheduleIDs, function(value, key) {
-							firebase.database().ref('applyprop/'+value).update({	
-								schedulestatus: "removed"
-							})
-						});	
-						
-						var emailData = '<p style="margin: 10px auto;"><h2>Hi '+vm.landlordname+',</h2><br> Your property <em>'+vm.property_address+'</em> has been successfully deleted and all viewings related to this property are also removed.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-									
-						// Send Email
-						emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address+' has been deleted', 'delproperty', emailData);
-				 
-						angular.forEach(vm.tenants, function(tenantID, key) {
-							firebase.database().ref('users/'+tenantID).once("value", function(snap) {
-								var emailData = '<p style="margin: 10px auto;"><h2>Hi '+snap.val().firstname+' '+snap.val().lastname+',</h2><br> Your viewing request on property <em>'+vm.property_address+'</em> has been removed as landlord has deleted his property.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-							
-								// Send Email
-								emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request removed from Vcancy', 'delproperty', emailData);
-							});
-						});
-					})
-					$state.go('viewprop');
-				})
-			}
-		});
-	}
-	
-	// Units to be optional when house is selected
-	this.unitsOptional = function(proptype){
-		console.log(vm.prop.units);
-		if(vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)){
-			vm.prop.units = ' ';
-		} else if(vm.prop.proptype != proptype && (vm.prop.units == '' || vm.prop.units == undefined)){
-			vm.prop.units = '';
-		}
-	}
-	
-	this.unitsClear = function(proptype){
-		console.log(vm.prop.units);
-		if(vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)){
-			vm.prop.units = ' ';
-		} 
-	}
-}])
-	
-	
+                if (address_component.types[0] == "administrative_area_level_1") {
+                    itemRoute = address_component.short_name;
+                    vm.prop.province = address_component.short_name;
+                }
+
+                if (address_component.types[0] == "locality") {
+                    itemLocality = address_component.long_name;
+                    vm.prop.city = address_component.long_name;
+                }
+
+                if (address_component.types[0] == "country") {
+                    itemCountry = address_component.long_name;
+                    vm.prop.country = address_component.long_name;
+                }
+
+                if (address_component.types[0] == "postal_code_prefix") {
+                    itemPc = address_component.long_name;
+                }
+
+
+                if (address_component.types[0] == "postal_code") {
+                    itemSnumber = address_component.long_name;
+
+                    vm.prop.postcode = address_component.long_name;
+                }
+
+                if (address_component.types[0] == "sublocality_level_1") {
+                    itemRoute = address_component.long_name;
+                    vm.prop.address = address_component.long_name;
+
+                }
+
+            });
+
+
+            vm.addresschange();
+            $scope.$apply();
+        });
+
+        vm.copy = "Copy Link";
+        $scope.copySuccess = function (e) {
+            vm.copy = "Copied";
+            $scope.$apply();
+        };
+
+        vm.csvform = function () {
+            vm.table = 0;
+            vm.csv = 1;
+
+        }
+
+        vm.doSomething = function () {
+            console.log("Form Edit changes something");
+        }
+        // timeSlot for Date and Timepicker
+        vm.addTimeSlot = function (slotlen) {
+
+            for (var i = 0; i < slotlen; i++) {
+                vm.newTime = false;
+            }
+
+            vm.timeSlot.push({
+                date: dateconfig
+            });
+            vm.prop.multiple[slotlen] = true;
+            vm.newTime = true;
+
+        }
+
+        // to remove timeslots
+        vm.removeTimeSlot = function (slotindex) {
+            if (vm.timeSlot.length == 1) {
+
+            } else {
+                if ($state.current.name == 'editprop') {
+                    if ($window.confirm("Are you sure you want to delete this viewing slot? ")) {
+                        if (slotindex < oldtimeSlotLen) {
+                            vm.timeslotmodified = "true";
+                        }
+                        vm.timeSlot.splice(slotindex, 1);
+                        vm.prop.date.splice(slotindex, 1);
+                        vm.prop.fromtime.splice(slotindex, 1);
+                        vm.prop.to.splice(slotindex, 1);
+                        vm.prop.limit.splice(slotindex, 1);
+                        vm.prop.multiple.splice(slotindex, 1);
+                    }
+                } else {
+                    vm.timeSlot.splice(slotindex, 1);
+                    vm.prop.date.splice(slotindex, 1);
+                    vm.prop.fromtime.splice(slotindex, 1);
+                    vm.prop.to.splice(slotindex, 1);
+                    vm.prop.limit.splice(slotindex, 1);
+                    vm.prop.multiple.splice(slotindex, 1);
+                }
+            }
+
+        }
+        // DATEPICKER
+        vm.today = function () {
+            vm.dt = new Date();
+        };
+        vm.today();
+
+        vm.toggleMin = function () {
+            vm.minDate = vm.minDate ? null : new Date();
+        };
+        vm.toggleMin();
+
+        vm.open = function ($event, opened) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            angular.forEach(vm.timeSlot, function (value, key) {
+                value.opened = false;
+            });
+            opened.opened = true;
+        };
+
+        vm.units = function (value) {
+
+            if (value != '' && value != null) {
+                $window.location.href = '#/addunits/' + value;
+            }
+        };
+
+        vm.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        vm.format = vm.formats[0];
+
+        vm.timeopen = function ($event, opened) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            angular.forEach(vm.timeSlot, function (value, key) {
+                value.opened = false;
+            });
+            vm.opened = true;
+        };
+
+        //  TIMEPICKER
+        vm.mytime = new Date();
+        vm.ck = [];
+        vm.getNumber = function (num) {
+            vm.ck = new Array(num);
+            console.log(vm.ck);
+            return vm.ck;
+        }
+
+        vm.arraytest = function () {
+
+            var listToDelete = ['abc', 'efg'];
+
+            var arrayOfObjects = [{ id: 'abc', name: 'oh' }, // delete me
+            { id: 'efg', name: 'em' }, // delete me
+            { id: 'hij', name: 'ge' }] // all that should remain
+            console.log(arrayOfObjects);
+            //var animals = [{"status":"Available"},{"status":"Available"},{"status":"Available"},{"status":"Available"}];
+            var test = [];
+            for (var i = 0; i < arrayOfObjects.length; i++) {
+                var obj = arrayOfObjects[i];
+
+                if (i != 0) {
+                    test.push(obj)
+                }
+                console.log(arrayOfObjects);
+            }
+
+            console.log(test);
+
+        }
+
+        vm.hstep = 1;
+        vm.mstep = 5;
+
+        vm.options = {
+            hstep: [1, 2, 3],
+            mstep: [1, 5, 10, 15, 25, 30]
+        };
+
+        vm.minDate = new Date();
+
+        vm.newTime = false;
+
+        vm.ismeridian = true;
+
+        vm.toggleMode = function () {
+            vm.ismeridian = !vm.ismeridian;
+        };
+
+        vm.update = function () {
+            var d = new Date();
+            d.setHours(14);
+            d.setMinutes(0);
+            vm.mytime = d;
+        };
+
+
+        vm.addresschange = function () {
+            /*  console.log(vm.prop.address);*/
+            if (vm.prop.address != undefined && (typeof vm.prop.address == "string" || vm.googleAddress == 1)) {
+                vm.isDisabled = false;
+            } else {
+                vm.isDisabled = true;
+            }
+        }
+
+        vm.datetimeslotchanged = function (key) {
+            if (key < oldtimeSlotLen) {
+                vm.timeslotmodified = "true";
+            }
+            if (vm.prop.fromtime[key] === undefined) {
+                var fromtime = dateconfig;
+            } else {
+                var fromtime = vm.prop.fromtime[key];
+            }
+
+            if (vm.prop.to[key] === undefined) {
+                var to = dateconfig;
+            } else {
+                var to = vm.prop.to[key];
+            }
+
+            vm.overlap = 0;
+
+            for (var i = 0; i < vm.prop.date.length; i++) {
+                if (i != key) {
+                    if (vm.prop.fromtime[i] === undefined) {
+                        var ftime = dateconfig;
+                    } else {
+                        var ftime = vm.prop.fromtime[i];
+                    }
+
+                    if (vm.prop.to[i] === undefined) {
+                        var totime = dateconfig;
+                    } else {
+                        var totime = vm.prop.to[i];
+                    }
+
+                    console.log(fromtime > ftime, to > ftime, fromtime > totime, to > totime);
+
+                    if ((moment(fromtime).format('HH:mm') <= moment(ftime).format('HH:mm') && moment(to).format('HH:mm') <= moment(ftime).format('HH:mm') && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || (moment(fromtime).format('HH:mm') >= moment(totime).format('HH:mm') && moment(to).format('HH:mm') >= moment(totime).format('HH:mm') && moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isSame(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) || moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isBefore(moment(vm.prop.date[i]).format('DD-MMMM-YYYY')) || moment(moment(vm.prop.date[key]).format('DD-MMMM-YYYY')).isAfter(moment(vm.prop.date[i]).format('DD-MMMM-YYYY'))) {
+
+                    } else {
+                        vm.overlap = 1;
+                    }
+                }
+            }
+
+            if (vm.overlap == 1) {
+                vm.prop.timeoverlapinvalid[key] = 1;
+                vm.isDisabled = true;
+            } else {
+                vm.prop.timeoverlapinvalid[key] = 0;
+            }
+
+            var temp = new Date(fromtime.getTime() + 30 * 60000)
+            if (moment(to).format('HH:mm') < moment(temp).format('HH:mm') && vm.prop.timeoverlapinvalid[key] == 0) {
+                vm.prop.timeinvalid[key] = 1;
+                vm.isDisabled = true;
+            } else {
+                vm.prop.timeinvalid[key] = 0;
+            }
+
+            if ((vm.prop.multiple[key] === false || vm.prop.multiple[key] === undefined) && vm.prop.timeinvalid[key] == 0) {
+                var minutestimediff = (to - fromtime) / 60000;
+                var subslots = Math.floor(Math.ceil(minutestimediff) / 30);
+
+                if (vm.prop.limit[key] > subslots) {
+                    vm.prop.invalid[key] = 1;
+                    vm.isDisabled = true;
+                } else {
+                    vm.prop.invalid[key] = 0;
+                    if (vm.prop.address != undefined && (typeof vm.prop.address == "string" || vm.googleAddress == 1)) {
+                        vm.isDisabled = false;
+                    } else {
+                        vm.isDisabled = true;
+                    }
+                }
+            } else if ((vm.prop.multiple[key] === true) && vm.prop.timeinvalid[key] == 0) {
+                vm.prop.invalid[key] = 0;
+                vm.isDisabled = false;
+            }
+        }
+
+        vm.clear = function () {
+            vm.mytime = null;
+        };
+
+        // Go Back To View Property
+        vm.backtoviewprop = function (value = '') {
+            if (value != '') {
+                if (confirm('If you go back without updating values, your changes will be lost!')) {
+                    $state.go('viewprop');
+                } else {
+                    return false;
+                }
+            } else {
+                $state.go('viewprop');
+            }
+
+        }
+
+        vm.selectCheckbox = function (value, index) {
+            if (!vm.prop.unitlists[index].Aminities || !(vm.prop.unitlists[index].Aminities instanceof Array)) {
+                vm.prop.unitlists[index].Aminities = [];
+            }
+            if (vm.prop.unitlists[index].Aminities.includes(value)) {
+                vm.prop.unitlists[index].Aminities.splice(vm.prop.unitlists[index].Aminities.indexOf(value), 1);
+            } else {
+                vm.prop.unitlists[index].Aminities.push(value);
+            }
+        }
+
+        // Add/Edit Property       
+        vm.submitProp = function (property) {
+
+            AWS.config.update({
+                accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+                secretAccessKey: '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'
+            });
+            AWS.config.region = 'ca-central-1';
+
+            var bucket = new AWS.S3({
+                params: {
+                    Bucket: 'vcancy-final'
+                }
+            });
+            var fileChooser = document.getElementById('file');
+            var file = fileChooser.files[0];
+            var propimg = '';
+
+
+            var propertyObj = $firebaseAuth();
+
+            var propdbObj = firebase.database();
+
+            var propID = property.propID;
+            var propstatus = property.propstatus == '' ? false : property.propstatus;
+            var proptype = property.proptype;
+            var units = property.units;
+            var multiple = property.noofunits;
+            var shared = property.shared == '' ? false : property.shared;
+            var address = property.address;
+            var city = property.city;
+            var province = property.province;
+            var country = property.country;
+            var postcode = property.postcode;
+            var name = property.name;
+            var landlordID = ''
+            if (localStorage.getItem('refId')) {
+                landlordID = localStorage.getItem('refId')
+            } else {
+                landlordID = localStorage.getItem('userID');
+            }
+
+            if (file != undefined) {
+                var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+                filename = filename.replace(/\s/g, '');
+
+                if (file.size > 3145728) {
+                    swal({
+                        title: "Error!",
+                        text: 'File size should be 3 MB or less.',
+                        type: "error",
+                    });
+                    return false;
+                } else if (
+                    file.type != 'image/png' &&
+                    file.type != 'image/jpeg' &&
+                    file.type != 'image/jpg') {
+                    swal({
+                        title: "Error!",
+                        text: 'Invalid file type.',
+                        type: "error",
+                    });
+                    return false;
+                }
+
+
+
+                var params = {
+                    Key: 'property-images/' + filename,
+                    ContentType: file.type,
+                    Body: file,
+                    StorageClass: "STANDARD_IA",
+                    ACL: 'public-read'
+                };
+
+                bucket.upload(params).on('httpUploadProgress', function (evt) {
+                    //  console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total)+'%');
+                    $rootScope.$apply(function () {
+                        $rootScope.success = "Please Wait.. !";
+                    });
+                }).send(function (err, data) {
+                    if (data.Location != '') {
+                        propimg = data.Location;
+                        // Start Of property Add
+                        var unitlists = vm.createNewPropertyWithUnits(property)
+                        if (propID == '') {
+                            propdbObj.ref('properties/').push().set({
+                                landlordID: landlordID,
+                                propimg: propimg,
+                                propstatus: propstatus,
+                                proptype: proptype,
+                                unitlists: unitlists,
+                                units: units,
+                                shared: shared,
+                                address: address,
+                                city: city,
+                                province: province,
+                                noofunits: multiple,
+                                country: country,
+                                postcode: postcode,
+                                date: moment().format('YYYY-MM-DD:HH:mm:ss'),
+                                multiple: multiple,
+                                name: name
+                            }).then(function (data) {
+                                console.log(data)
+                                console.log("Insert Data successfully!");
+
+                                propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
+                                    //localStorage.setItem("propID", snapshot.key);
+                                    vm.opensuccesssweet(snapshot.key);
+                                    $state.go('editprop', { propId: snapshot.key }) //unitlist
+                                    // $rootScope.$apply(function () {
+                                    //     console.log(units);
+                                    //     $rootScope.units = units;
+                                    //     $rootScope.message = units;
+                                    //     $rootScope.success = "Property added successfully!";
+                                    //     $rootScope.propID = snapshot.key;
+                                    // });
+
+
+                                });
+
+                            });
+                        } else {
+
+                            propdbObj.ref('properties/' + propID).update({
+                                landlordID: landlordID,
+                                propimg: propimg,
+                                propstatus: propstatus,
+                                proptype: proptype,
+                                units: units,
+                                shared: shared,
+                                address: address,
+                                city: city,
+                                province: province,
+                                country: country,
+                                postcode: postcode,
+                                noofunits: multiple,
+                                date: moment().format('YYYY-MM-DD:HH:mm:ss'),
+                                multiple: multiple,
+                                name: name
+
+                            }).then(function () {
+                                $rootScope.$apply(function () {
+                                    console.log(units);
+                                    $rootScope.units = units;
+                                    $rootScope.message = units;
+                                    $rootScope.success = "Property Updated!";
+                                    $rootScope.propID = propID;
+
+
+                                });
+                            });
+                        } // End OF property Add - Edit
+
+                        /* localStorage.setItem('propertysuccessmsg','Property updated successfully.');
+                                 angular.forEach(vm.scheduleIDs, function(value, key) {
+                                     firebase.database().ref('applyprop/'+value).update({    
+                                         schedulestatus: "cancelled"
+                                     })
+                                     // console.log(value);
+                                 });     
+    
+                                 if(propstatus === false){
+                                     var emailData = '<p>Hello, </p><p>'+address+' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.com/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                         
+                                     // Send Email
+                                     emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), address+' has been deactivated', 'deactivateproperty', emailData);
+                              
+                                     angular.forEach(vm.tenants, function(tenantID, key) {
+                                         firebase.database().ref('users/'+tenantID).once("value", function(snap) {
+                                             var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                         
+                                             // Send Email
+                                             emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
+                                         });
+                                     });
+                                 } else {
+                                     var emailData = '<p>Hello, </p><p>Your property <em>'+address+'</em>   has been successfully updated and all your property viewings affected by the updated time slots are cancelled. </p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                             
+                                     // Send Email
+                                     emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Property Time Slots updated on Vcancy', 'updateproperty', emailData);
+                              
+                                     angular.forEach(vm.tenants, function(tenantID, key) {
+                                         firebase.database().ref('users/'+tenantID).once("value", function(snap) {
+                                             var emailData = '<p>Hello '+snap.val().firstname+' '+snap.val().lastname+', </p><p>Your viewing request on property <em>'+address+'</em> has been cancelled as landlord has made some changes in time slots for this property.</p><p>To reschedule the viewing and book some another available time, please log in at http://vcancy.com/login/ and use the link initially provided to schedule the viewing or follow the link http://www.vcancy.com/login/#/applyproperty/'+$stateParams.propId+'.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                                         
+                                             // Send Email
+                                             emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'updateproperty', emailData);
+                                         });
+                                     });
+                                 } */
+                    }
+                });
+
+            } else {
+
+                // Start Of property Add
+                if (propID == '') {
+                    var unitlists = vm.createNewPropertyWithUnits(property)
+                    propdbObj.ref('properties/').push().set({
+                        landlordID: landlordID,
+                        propimg: propimg,
+                        unitlists: unitlists,
+                        propstatus: propstatus,
+                        proptype: proptype,
+                        units: units,
+                        shared: shared,
+                        address: address,
+                        city: city,
+                        province: province,
+                        country: country,
+                        noofunits: multiple,
+                        postcode: postcode,
+                        date: moment().format('YYYY-MM-DD:HH:mm:ss'),
+                        multiple: multiple,
+                        name: name
+                    }).then(function (data) {
+                        console.log(data)
+                        console.log("Data added successfully!");
+                        propdbObj.ref('properties/').limitToLast(1).once("child_added", function (snapshot) {
+                            vm.opensuccesssweet(snapshot.key);
+                            $state.go('editprop', { propId: snapshot.key })
+                            // $rootScope.$apply(function () {
+                            //     console.log(units);
+                            //     $rootScope.units = units;
+                            //     $rootScope.message = units;
+                            //     $rootScope.success = "Property Added successfully!";
+                            //     $rootScope.propID = snapshot.key;
+
+
+                            //                        });
+                        });
+
+                    });
+                } else {
+                    if ($('#propimg').val() != '') {
+                        propimg = $('#propimg').val();
+                    }
+
+                    propdbObj.ref('properties/' + propID).update({
+                        landlordID: landlordID,
+                        propstatus: propstatus,
+                        proptype: proptype,
+                        units: units,
+                        propimg: propimg,
+                        shared: shared,
+                        address: address,
+                        city: city,
+                        province: province,
+                        country: country,
+                        noofunits: multiple,
+                        postcode: postcode,
+                        date: moment().format('YYYY-MM-DD:HH:mm:ss'),
+                        multiple: multiple,
+                        name: name
+                    }).then(function () {
+                        $rootScope.$apply(function () {
+                            console.log(units);
+                            $rootScope.units = units;
+                            $rootScope.message = units;
+                            $rootScope.success = "Property Updated!";
+                            $rootScope.propID = propID;
+
+
+                        });
+
+                    });
+                } // End OF property Add-edit
+            }
+        }
+
+        vm.createNewPropertyWithUnits = function (property) {
+            var unitlists = [];
+            for (var i = 0; i < property.noofunits; i++) {
+                unitlists.push({
+                    "Aminities": [],
+                    "address": property.address,
+                    "bathroom": "",
+                    "bedroom": "",
+                    "cats": "",
+                    "city": property.city,
+                    "description": "",
+                    "dogs": "",
+                    "epirydate": "",
+                    "location": property.city,
+                    "name": property.name,
+                    "postalcode": property.postcode,
+                    "rent": "",
+                    "smoking": "",
+                    "sqft": "",
+                    "country": property.country,
+                    "state": property.province,
+                    "status": "",
+                    "type": property.proptype,
+                    "unit": '',
+                    isIncomplete: true,
+                });
+            }
+            return unitlists;
+        }
+
+        vm.csvsubmitdata = function (prop) {
+
+            var propID = prop.propID;
+            var unitlists = prop.unitlists;
+            var totalunits = prop.totalunits;
+            var noofunits = prop.noofunits;
+            var name = prop.name;
+            var address = prop.address;
+            var city = prop.city;
+            var country = prop.country;
+            var proptype = prop.proptype;
+            var postcode = prop.postcode;
+            var province = prop.province;
+
+
+            var fileUpload = document.getElementById("file123");
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+            if (regex.test(fileUpload.value.toLowerCase())) {
+                if (typeof (FileReader) != "undefined") {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var rows = e.target.result.split("\n");
+                        var result = [];
+                        var units = [];
+                        var headers = rows[0].split(",");
+                        var totalrowunits = 0;
+                        for (var i = 1; i < parseInt(rows.length - 1); i++) {
+
+                            var obj = {};
+                            var currentline = rows[i].split(",");
+
+                            for (var j = 0; j < headers.length; j++) {
+
+                                var headerkey = headers[j];
+                                headerkey = headerkey.replace(/[^a-zA-Z ]/g, "")
+
+                                headerkey = headerkey.toLowerCase();
+                                if (headerkey == 'unit') {
+                                    units.push(currentline[j]);
+                                }
+
+                                if (headerkey == 'unit' && currentline[j] == '') {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Unit number must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
+                                    return false;
+                                }
+                                if (headerkey == 'rent' && currentline[j] == '') {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Rent must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
+                                    return false;
+                                }
+                                if (headerkey == 'sqft' && currentline[j] == '') {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Sqft must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
+                                    return false;
+                                }
+
+                                if (headerkey == 'status' && currentline[j] == '') {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Status must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
+                                    return false;
+                                }
+                                if (headerkey == 'amenities' && currentline[j] == '') {
+                                    swal({
+                                        title: "Error!",
+                                        text: "Amenities must be a value. Please follow instructions in the spreadsheet",
+                                        type: "error",
+                                    });
+                                    return false;
+                                }
+
+
+                                if (headerkey == 'amenities' && currentline[j] != '') {
+                                    var amenities = currentline[j];
+                                    var str_array = amenities.split('|');
+                                    obj['Aminities'] = str_array;
+                                } else {
+                                    obj[headerkey] = currentline[j];
+                                }
+
+                                obj['name'] = name;
+                                obj['type'] = proptype;
+                                obj['address'] = address;
+                                obj['location'] = address;
+                                obj['city'] = city;
+                                obj['state'] = province;
+                                obj['postcode'] = postcode;
+                            }
+                            result.push(obj);
+                            totalrowunits++;
+                        }
+
+                        for (var i = 0; i < totalrowunits; i++) {
+                            var objres = result[i];
+                            unitlists.push(objres);
+                        }
+
+                        /*console.log(totalrowunits);
+                        console.log(unitlists);*/
+
+
+
+                        if (vm.duplication(units) == true) {
+                            swal({
+                                title: "Error!",
+                                text: "Duplicate unit numbers found in the file. Please check duplicate values.",
+                                type: "error",
+                            });
+                            return false;
+                        }
+
+                        noofunits = parseInt(totalrowunits + noofunits);
+                        firebase.database().ref('properties/' + propID).update({
+                            unitlists: unitlists,
+                            totalunits: noofunits, noofunits: noofunits
+                        }).then(function () {
+
+                            if (confirm("Units added successfully!")) {
+                                $state.go('viewprop');
+                            }
+                            $rootScope.success = "Units added successfully!";
+                            //setTimeout(function(){ $state.go('viewprop'); }, 2000);
+                        }, function (error) {
+                            $rootScope.error = "Please check your file. Multiple errors found with the data.";
+                        });
+                    }
+
+                    reader.readAsText(fileUpload.files[0]);
+
+
+
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: "This browser does not support HTML5.",
+                        type: "error",
+                    });
+                }
+            } else {
+                swal({
+                    title: "Error!",
+                    text: "Please upload a valid CSV file.",
+                    type: "error",
+                });
+            }
+
+        }
+
+        vm.csvadd = function () {
+            var fileUpload = document.getElementById("file");
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+            if (regex.test(fileUpload.value.toLowerCase())) {
+                if (typeof (FileReader) != "undefined") {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var rows = e.target.result.split("\n");
+                        var result = [];
+                        var units = [];
+                        var headers = rows[0].split(",");
+                        var totalunits = 0;
+                        for (var i = 1; i < parseInt(rows.length - 1); i++) {
+                            totalunits = i;
+                            var obj = {};
+                            var currentline = rows[i].split(",");
+
+                            for (var j = 0; j < headers.length; j++) {
+
+                                var headerkey = headers[j];
+                                headerkey = headerkey.replace(/[^a-zA-Z ]/g, "")
+                                if (headerkey == 'unit') {
+                                    units.push(currentline[j]);
+                                }
+                                obj[headerkey] = currentline[j];
+                            }
+                            result.push(obj);
+                        }
+
+                        if (vm.duplication(units) == true) {
+                            swal({
+                                title: "Error!",
+                                text: "Duplicate unit numbers found in the file. Please check duplicate values.",
+                                type: "error",
+                            });
+                            return false;
+                        }
+
+                        //   console.log(result);
+                        firebase.database().ref('properties/' + vm.localpropID).update({
+                            unitlists: result,
+                            totalunits: totalunits
+                        }).then(function () {
+                            $rootScope.success = "Units added successfully!";
+                            setTimeout(function () { $state.go('viewprop'); }, 2000);
+                        }, function (error) {
+                            $rootScope.error = "Please check your file. Multiple errors found with the data.";
+                        });
+                    }
+
+                    reader.readAsText(fileUpload.files[0]);
+
+
+
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: "This browser does not support HTML5.",
+                        type: "error",
+                    });
+                }
+            } else {
+                swal({
+                    title: "Error!",
+                    text: "Please upload a valid CSV file.",
+                    type: "error",
+                });
+            }
+
+        }
+
+        if ($state.current.name == 'addunits') {
+
+            var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function (snapshot) {
+
+                var propData = snapshot.val();
+
+                vm.timeSlot = [];
+                $scope.$apply(function () {
+                    vm.prop = vm.units = {
+                        propID: snapshot.key,
+                        landlordID: propData.landlordID,
+                        propimg: propData.propimg,
+                        propstatus: propData.propstatus,
+                        proptype: propData.proptype,
+                        units: 'multiple',
+                        rent: propData.rent,
+                        shared: propData.shared,
+                        address: propData.address,
+                        noofunits: propData.noofunits,
+                        totalunits: propData.totalunits,
+                        city: propData.city,
+                        province: propData.province,
+                        postcode: propData.postcode,
+                        country: propData.country,
+                        propimage: propData.propimg,
+                        unitlists: propData.unitlists,
+                        name: propData.name,
+                        noofunitsarray: vm.getarray(propData.noofunits),
+                        multiple: [],
+                        date: [],
+                        fromtime: [],
+                        to: [],
+                        limit: [],
+                        propertylink: propData.propertylink,
+                        invalid: [0],
+                        timeinvalid: [0],
+                        timeoverlapinvalid: [0]
+                    }
+                });
+            });
+        }
+
+        vm.getarray = function (num) {
+            var data = [];
+            for (var i = 0; i <= num - 1; i++) {
+                data.push(i);
+            }
+            return data;
+        }
+
+        vm.duplication = function (data) {
+
+            var sorted_arr = data.slice().sort(); // You can define the comparing function here. 
+            // JS by default uses a crappy string compare.
+            // (we use slice to clone the array so the
+            // original array won't be modified)
+            var results = [];
+            for (var i = 0; i < sorted_arr.length - 1; i++) {
+                if (sorted_arr[i + 1] == sorted_arr[i]) {
+                    results.push(sorted_arr[i]);
+                }
+            }
+
+            if (results.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        if ($state.current.name == 'viewunits') {
+
+            var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function (snapshot) {
+                var propertiesData = snapshot.val();
+                $scope.$apply(function () {
+                    vm.units = {
+                        mode: 'View',
+                        propID: snapshot.key,
+                        address: propertiesData.address,
+                        city: propertiesData.city,
+                        country: propertiesData.country,
+                        date: propertiesData.date,
+                        landlordID: propertiesData.landlordID,
+                        name: propertiesData.name,
+                        postcode: propertiesData.postcode,
+                        propimg: propertiesData.propimg,
+                        propstatus: propertiesData.propstatus,
+                        proptype: propertiesData.proptype,
+                        province: propertiesData.province,
+                        shared: propertiesData.shared,
+                        totalunits: propertiesData.totalunits,
+                        units: propertiesData.units,
+                        unitlists: propertiesData.unitlists,
+                    }
+                });
+            });
+
+        }
+
+        // View Property
+        if ($state.current.name == 'viewprop') {
+            $scope.loader = 1;
+            var landlordID = ''
+            if (localStorage.getItem('refId')) {
+                landlordID = localStorage.getItem('refId')
+            } else {
+                landlordID = localStorage.getItem('userID');
+            }
+            var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+                $scope.$apply(function () {
+                    vm.success = 0;
+                    if (snapshot.val()) {
+                        var props = angular.copy(snapshot.val());
+                        var vacantSums = {};
+                        _.forEach(props, function (prop, key) {
+                            vacantSums[key] = _.sumBy(prop.unitlists, function (o) {
+                                if (!o.status || o.status == 'available') {
+                                    return 1;
+                                }
+                            });
+                        })
+                        vm.vacantSums = vacantSums;
+                        vm.viewprops = snapshot.val();
+
+                        vm.propsavail = 1;
+                        vm.propsuccess = localStorage.getItem('propertysuccessmsg');
+                    } else {
+                        vm.propsavail = 0;
+                        vm.propsuccess = localStorage.getItem('propertysuccessmsg');
+                    }
+                    $scope.loader = 0;
+                    // console.log($rootScope.$previousState.name);
+                    if (($rootScope.$previousState.name == "editprop" || $rootScope.$previousState.name == "addprop") && vm.propsuccess != '') {
+                        vm.success = 1;
+                    }
+                    localStorage.setItem('propertysuccessmsg', '')
+                });
+
+            });
+
+            vm.toggleSwitch = function (key) {
+                var propstatus = !vm.viewprops[key].propstatus;
+
+                firebase.database().ref('properties/' + key).once("value", function (snap) {
+                    vm.property_address = snap.val().address;
+                });
+
+                // update the property status to property table
+                firebase.database().ref('properties/' + key).update({
+                    propstatus: propstatus
+                })
+
+                if (!vm.viewprops[key].propstatus == false) {
+                    firebase.database().ref('applyprop/').orderByChild("propID").equalTo(key).once("value", function (snapshot) {
+                        $scope.$apply(function () {
+                            vm.scheduleIDs = [];
+                            vm.tenants = [];
+
+                            if (snapshot.val() != null) {
+                                $.map(snapshot.val(), function (value, index) {
+                                    if (value.schedulestatus !== "cancelled" && value.schedulestatus !== "submitted") {
+                                        vm.scheduleIDs.push(index);
+                                        vm.tenants.push(value.tenantID);
+                                    }
+                                });
+                            }
+
+                            angular.forEach(vm.scheduleIDs, function (value, key) {
+                                firebase.database().ref('applyprop/' + value).update({
+                                    schedulestatus: "cancelled"
+                                })
+                                // console.log(value);
+                            });
+
+                            var emailData = '<p>Hello, </p><p>' + vm.property_address + ' been successfully <strong>deactivated</strong>.</p><p>You will no longer receive viewing requests and rental applications.</p><p>To make changes or reactivate, please log in at http://vcancy.com/login/ and go to “My Properties”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                            // Send Email
+                            emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address + ' has been deactivated', 'deactivateproperty', emailData);
+
+                            angular.forEach(vm.tenants, function (tenantID, key) {
+                                firebase.database().ref('users/' + tenantID).once("value", function (snap) {
+                                    var emailData = '<p>Hello ' + snap.val().firstname + ' ' + snap.val().lastname + ', </p><p>Your viewing request on property <em>' + address + '</em> has been cancelled as landlord has deactivated this property.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                                    // Send Email
+                                    emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your generated viewing request cancelled on Vcancy', 'delproperty', emailData);
+                                });
+                            });
+                            $state.reload();
+                        });
+                    });
+                } else {
+                    $state.reload();
+                }
+            }
+        }
+
+        // Edit Property
+        if ($state.current.name == 'editprop' || $state.current.name == 'editprop1') {
+            vm.mode = 'Edit';
+            vm.submitaction = "Update";
+            vm.otheraction = "Delete";
+            $scope.loader = 1;
+            var ref = firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function (snapshot) {
+
+                var propData = snapshot.val();
+                console.log(propData);
+
+                vm.timeSlot = [];
+                $scope.$apply(function () {
+                    vm.prop = vm.units = {
+                        propID: snapshot.key,
+                        landlordID: propData.landlordID,
+                        propimg: propData.propimg,
+                        propstatus: propData.propstatus,
+                        proptype: propData.proptype,
+                        units: propData.units,
+                        rent: propData.rent,
+                        shared: propData.shared,
+                        address: propData.address,
+                        noofunits: propData.totalunits,
+                        city: propData.city,
+                        province: propData.province,
+                        postcode: propData.postcode,
+                        country: propData.country,
+                        propimage: propData.propimg,
+                        unitlists: propData.unitlists,
+                        noofunits: propData.noofunits,
+                        name: propData.name,
+                        multiple: [],
+                        mode: 'Edit',
+                        date: [],
+                        fromtime: [],
+                        to: [],
+                        limit: [],
+                        propertylink: propData.propertylink,
+                        invalid: [0],
+                        timeinvalid: [0],
+                        timeoverlapinvalid: [0]
+                    }
+                    $scope.loader = 0;
+                    /*   angular.forEach(propData.date, function(value, key) {
+                           vm.timeSlot.push({
+                               date: new Date(value)
+                           });
+                           vm.prop.date.push(new Date(value));
+                           vm.prop.fromtime.push(new Date(propData.fromtime[key]));
+                           vm.prop.to.push(new Date(propData.to[key]));
+                           vm.prop.limit.push(propData.limit[key]);
+                           vm.prop.multiple.push(propData.multiple[key]);
+                       });*/
+                    vm.addresschange();
+                    oldtimeSlotLen = vm.timeSlot.length;
+                    vm.unitsOptional();
+                });
+            });
+        } else {
+            vm.mode = 'Add';
+            vm.submitaction = "Save";
+            vm.otheraction = "Cancel";
+            vm.timeSlot = [{
+                date: dateconfig
+            }];
+            vm.prop = vm.units = {
+                propID: '',
+                landlordID: '',
+                propimg: '',
+                propstatus: true,
+                proptype: '',
+                units: '',
+                multiple: [true],
+                rent: '',
+                shared: '',
+                address: 'dgdfgdf',
+                noofunits: 0,
+                city: '',
+                province: '',
+                postcode: '',
+                country: '',
+                propimage: '',
+                unitlists: [],
+                noofunits: 0,
+                name: name,
+                noofunitsarray: vm.getarray(0),
+                mode: 'Add',
+                date: [],
+                fromtime: [],
+                to: [],
+                limit: [],
+                propertylink: '',
+                invalid: [0],
+                timeinvalid: [0],
+                timeoverlapinvalid: [0]
+            }
+        }
+        //noofunitsarray Return array value
+        vm.noofunitsarray = function () {
+
+            return vm.getarray(vm.prop.noofunits);
+
+        }
+
+        vm.onChangeCheckBox = function (index, value) {
+            var isValueIncluded = vm.prop.unitlists[index].Aminities.includes(value);
+            if (isValueIncluded) {
+                vm.prop.unitlists[index].Aminities.splice(vm.prop.unitlists[index].Aminities.indexOf(value), 1);
+            } else {
+                vm.prop.unitlists[index].Aminities.push(value);
+            }
+            // $(event.target).toggleClass('selected');
+        }
+        vm.deleteproperty = function (propID, page) {
+            var propID = propID;
+            var propertyObj = $firebaseAuth();
+            var propdbObj = firebase.database();
+            firebase.database().ref('properties/' + propID).once("value", function (snap) {
+
+                vm.property_address = snap.val().address;
+                swal({
+                    title: 'Warning!',
+                    text: "Are you sure you want to delete this property? All details and units will be deleted!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes",
+                    closeOnConfirm: false
+                }, function () {
+                    propdbObj.ref('properties/' + propID).remove();
+                    firebase.database().ref('applyprop/').orderByChild("propID").equalTo(propID).once("value", function (snapshot) {
+                        $scope.$apply(function () {
+                            vm.scheduleIDs = [];
+                            vm.tenants = [];
+
+                            if (snapshot.val() != null) {
+                                $.map(snapshot.val(), function (value, index) {
+                                    vm.scheduleIDs.push(index);
+                                    vm.tenants.push(value.tenantID);
+                                });
+                            }
+                            angular.forEach(vm.scheduleIDs, function (value, key) {
+                                firebase.database().ref('applyprop/' + value).update({
+                                    schedulestatus: "removed"
+                                })
+                            });
+
+                            var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + vm.landlordname + ',</h2><br> Your property <em>' + vm.property_address + '</em> has been successfully deleted and all viewings related to this property are also removed.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                            // Send Email
+                            emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address + ' has been deleted', 'delproperty', emailData);
+
+                            angular.forEach(vm.tenants, function (tenantID, key) {
+                                firebase.database().ref('users/' + tenantID).once("value", function (snap) {
+                                    var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + snap.val().firstname + ' ' + snap.val().lastname + ',</h2><br> Your viewing request on property <em>' + vm.property_address + '</em> has been removed as landlord has deleted his property.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                                    // Send Email
+                                    emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your viewing request has been removed from Vcancy', 'delproperty', emailData);
+                                });
+                            });
+                        })
+
+                        swal({
+                            title: 'Success!',
+                            text: 'Property deleted successfully',
+                            type: 'success'
+                        }, function () {
+                            if (page === 'innerpage') {
+                                $state.go('viewprop');
+                            } else {
+                                $state.reload();
+                            }
+                        });
+
+                    });
+
+                    if (page === 'innerpage') {
+                        $state.go('viewprop');
+                    } else {
+                        $state.reload();
+                    }
+                });
+            });
+        }
+
+        vm.stringModel = [];
+        vm.stringData = ['David', 'Jhon', 'Danny',];
+        vm.stringSettings = { template: '{{option}}', smartButtonTextConverter(skip, option) { return option; }, };
+
+        // Delete Property Permanently
+        this.delprop = function (propID) {
+            var propertyObj = $firebaseAuth();
+            var propdbObj = firebase.database();
+
+            firebase.database().ref('properties/' + propID).once("value", function (snap) {
+                vm.property_address = snap.val().address;
+
+                if ($window.confirm("Do you want to continue?")) {
+                    propdbObj.ref('properties/' + propID).remove();
+
+                    firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function (snapshot) {
+                        $scope.$apply(function () {
+                            vm.scheduleIDs = [];
+                            vm.tenants = [];
+
+                            if (snapshot.val() != null) {
+                                $.map(snapshot.val(), function (value, index) {
+                                    vm.scheduleIDs.push(index);
+                                    vm.tenants.push(value.tenantID);
+                                });
+                            }
+                            angular.forEach(vm.scheduleIDs, function (value, key) {
+                                firebase.database().ref('applyprop/' + value).update({
+                                    schedulestatus: "removed"
+                                })
+                            });
+
+                            var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + vm.landlordname + ',</h2><br> Your property <em>' + vm.property_address + '</em> has been successfully deleted and all viewings related to this property are also removed.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                            // Send Email
+                            emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), vm.property_address + ' has been deleted', 'delproperty', emailData);
+
+                            angular.forEach(vm.tenants, function (tenantID, key) {
+                                firebase.database().ref('users/' + tenantID).once("value", function (snap) {
+                                    var emailData = '<p style="margin: 10px auto;"><h2>Hi ' + snap.val().firstname + ' ' + snap.val().lastname + ',</h2><br> Your viewing request on property <em>' + vm.property_address + '</em> has been removed as landlord has deleted his property.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                                    // Send Email
+                                    emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your viewing request is removed from Vcancy', 'delproperty', emailData);
+                                });
+                            });
+                        })
+                        $state.go('viewprop');
+                    })
+                }
+            });
+        }
+
+        // Units to be optional when house is selected
+        this.unitsOptional = function (proptype) {
+            console.log(vm.prop.units);
+            if (vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)) {
+                vm.prop.units = ' ';
+            } else if (vm.prop.proptype != proptype && (vm.prop.units == '' || vm.prop.units == undefined)) {
+                vm.prop.units = '';
+            }
+        }
+
+        this.unitsClear = function (proptype) {
+            console.log(vm.prop.units);
+            if (vm.prop.proptype == proptype && (vm.prop.units == '' || vm.prop.units == undefined)) {
+                vm.prop.units = ' ';
+            }
+        }
+
+        vm.checkAll = function () {
+            if (vm.selectedAll) {
+                for (var i = 0; i < vm.prop.unitlists.length; i++) {
+                    vm.checkedRow[i] = true;
+                }
+            } else {
+                vm.checkedRow = {};
+            }
+            // var datalen = vm.noofunitsarray();
+
+            // for (var i = 0; i <= datalen.length - 1; i++) {
+            //     vm.prop.noofunitsarray[i] = $scope.selectedAll;
+            // }
+        }
+        vm.moreaction = function (action) {
+
+            if (Object.keys(vm.checkedRow).length > 0) {
+
+                for (var index in vm.checkedRow) {
+                    if (vm.checkedRow[index] && action) {
+                        vm.prop.unitlists[index].status = action;
+                    }
+                }
+                // $("#ts_checkbox:checked").each(function (index) {
+                //     selectedvalue.push($(this).val());
+                // });
+
+
+                // var rowlength = selectedvalue.length;
+                // //var tablerowlength = vm.prop.noofunitsarray;
+                // var tablerowlength = vm.noofunitsarray();
+
+                // if (val === 'DAll') {
+                //     if (vm.units.unitlists !== undefined) {
+                //         for (var i = 0; i < rowlength; i++) {
+                //             delete vm.units.unitlists[parseInt(selectedvalue[i])];
+                //         }
+                //     }
+                //     for (var i = 0; i < rowlength; i++) {
+                //         vm.units.noofunits = parseInt(vm.units.noofunits - 1);
+                //         vm.prop.noofunits = vm.units.noofunits
+                //         //vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits);
+                //         // vm.units.noofunitsarray = vm.getarray(vm.units.noofunits);
+                //     }
+                //     var list = [];
+                //     for (var i = 0; i < vm.units.unitlists.length; i++) {
+                //         if (typeof vm.units.unitlists[i] !== 'undefined') {
+                //             list.push(vm.units.unitlists[i]);
+                //         }
+                //     }
+
+                //     vm.units.unitlists = list;
+                //     $scope.selectedAll = false;
+                //     var datalen = vm.noofunitsarray();
+
+                //     for (var i = 0; i <= datalen.length - 1; i++) {
+                //         vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                //     }
+                // }
+
+                // if (val === 'Mavailable') {
+
+                //     if (vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined) {
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             console.log(vm.units.unitlists[index]);
+                //             if (vm.units.unitlists[index] !== undefined) {
+                //                 vm.units.unitlists[index]['status'] = 'Available';
+                //             } else {
+                //                 vm.units.unitlists.push({ status: 'Available' });
+                //             }
+
+                //         }
+                //     } else {
+                //         vm.units.unitlists = [];
+                //         for (var i = 0; i < tablerowlength.length; i++) {
+
+                //         }
+
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             vm.units.unitlists[index]['status'] = 'Available';
+                //         }
+
+                //     }
+
+                //     $scope.selectedAll = false;
+                //     var datalen = vm.noofunitsarray();
+
+                //     for (var i = 0; i <= datalen.length - 1; i++) {
+                //         vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                //     }
+                // }
+
+                // if (val === 'Mranted') {
+                //     if (vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined) {
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             if (vm.units.unitlists[index] !== undefined) {
+                //                 vm.units.unitlists[index]['status'] = 'rented';
+                //             } else {
+                //                 vm.units.unitlists.push({ status: 'rented' });
+                //             }
+                //         }
+                //     } else {
+                //         vm.units.unitlists = [];
+                //         for (var i = 0; i < tablerowlength.length; i++) {
+                //             vm.units.unitlists.push({ status: '' });
+                //         }
+
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             vm.units.unitlists[index]['status'] = 'rented';
+                //         }
+
+                //     }
+
+                //     $scope.selectedAll = false;
+                //     var datalen = vm.noofunitsarray();
+
+                //     for (var i = 0; i <= datalen.length - 1; i++) {
+                //         vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                //     }
+                // }
+
+
+                // if (val === 'Msold') {
+                //     if (vm.units.unitlists !== undefined && vm.prop.unitlists !== undefined) {
+
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             if (vm.units.unitlists[index] !== undefined) {
+                //                 vm.units.unitlists[index]['status'] = 'sold';
+                //             } else {
+                //                 vm.units.unitlists.push({ status: 'sold' });
+                //             }
+                //         }
+                //     } else {
+                //         vm.units.unitlists = [];
+                //         for (var i = 0; i < tablerowlength.length; i++) {
+                //             vm.units.unitlists.push({ status: '' });
+                //         }
+
+                //         for (var i = 0; i < rowlength; i++) {
+                //             var index = parseInt(selectedvalue[i]);
+                //             vm.units.unitlists[index]['status'] = 'sold';
+                //         }
+
+                //     }
+
+                //     $scope.selectedAll = false;
+                //     var datalen = vm.noofunitsarray();
+
+                //     for (var i = 0; i <= datalen.length - 1; i++) {
+                //         vm.prop.noofunitsarray[i] = $scope.selectedAll;
+                //     }
+                // }
+            } else {
+                swal({
+                    title: "Error!",
+                    text: "Please select row for apply your selected action",
+                    type: "error",
+                });
+                vm.more = '';
+            }
+        }
+
+        vm.addNewUnit = function () {
+            var newUnit = {
+                "Aminities": [],
+                "address": vm.prop.address,
+                "bathroom": "",
+                "bedroom": "",
+                "cats": "",
+                "city": vm.prop.city,
+                "description": "",
+                "dogs": "",
+                "epirydate": "",
+                "location": vm.prop.address,
+                "name": vm.prop.name,
+                "postalcode": vm.prop.postcode,
+                "country": vm.prop.country,
+                "rent": "",
+                "smoking": "",
+                "sqft": "",
+                "state": vm.prop.province || vm.prop.city,
+                "status": "available",
+                "type": "",
+                "unit": '',
+                isIncomplete: true,
+            }
+            if (!vm.prop.unitlists) vm.prop.unitlists = [];
+            vm.prop.unitlists.push(newUnit);
+        }
+
+        vm.deleteSelected = function () {
+            if (Object.keys(vm.checkedRow) && Object.keys(vm.checkedRow).length > 0) {
+
+                vm.prop.unitlists = vm.prop.unitlists.filter(function (unit, key) {
+                    if (!vm.checkedRow[key]) return true;
+                })
+                vm.submiteditunits(vm.prop.unitlists, vm.prop, true);
+                vm.checkedRow = {};
+            } else {
+                swal({
+                    title: "Alert!",
+                    text: "Please select any unit from row",
+                    type: "warning",
+                });
+            }
+        }
+
+        vm.addmorerow = function (val1) {
+            var val = val1;
+            if (isNaN(val)) {
+                val = 0;
+            }
+
+            vm.units.noofunits = parseInt(val + 1);
+            vm.prop.noofunits = parseInt(val + 1);
+            $scope.selectedAll = false;
+            //vm.prop.noofunitsarray = vm.getarray(vm.units.noofunits)
+        }
+        vm.filesArray = [];
+        $scope.uploadDetailsImages = function (event) {
+            var filesToUpload = event.target.files;
+            var alreadyAddedImages = $scope.selectedUnitDetail.data.images ? $scope.selectedUnitDetail.data.images.length : 0
+            if (filesToUpload.length + alreadyAddedImages > 24) {
+                swal({
+                    title: "Warning!",
+                    text: "Images uploading is limited to 24 images only.",
+                    type: "warning",
+                });
+                return
+            }
+            // swal({
+            //     title: 'Alert',
+            //     text: "Please wait photos are uploading",
+            //     icon: "info",
+            // });
+            $scope.loader = 1;
+            for (var i = 0; i < filesToUpload.length; i++) {
+                var file = filesToUpload[i];
+                vm.filesArray.push(vm.singleFileUpload(file));
+            }
+
+            $q
+                .all(vm.filesArray)
+                .then((data) => {
+                    swal.close();
+                    if (!$scope.selectedUnitDetail.data.images) $scope.selectedUnitDetail.data.images = [];
+                    $scope.selectedUnitDetail.data.images = $scope.selectedUnitDetail.data.images.concat(data);
+                    setTimeout(function () {
+                        swal({
+                            title: "Success!",
+                            text: "Photos uploaded successfully!",
+                            type: "success",
+                        });
+                    }, 100)
+                    $scope.loader = 0;
+                })
+        }
+
+        $scope.copyUnitDetails = function (from, to) {
+            var prop = $scope.prop || vm.prop;
+            var datatoCopy = prop.unitlists.find(function (unit) {
+                return unit.unit == from;
+            })
+            for (var i in datatoCopy) {
+                if (i != 'unit') {
+                    $scope.selectedUnitDetail.data[i] = datatoCopy[i]
+                }
+            }
+        }
+
+        vm.singleFileUpload = function (file) {
+            var fileUploadDefer = $q.defer();
+            if (file) {
+                AWS.config.update({
+                    accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+                    secretAccessKey: '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'
+                });
+                AWS.config.region = 'ca-central-1';
+
+                var bucket = new AWS.S3({
+                    params: {
+                        Bucket: 'vcancy-final'
+                    }
+                });
+                var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+                filename = filename.replace(/\s/g, '');
+
+                if (file.size > 3145728) {
+                    swal({
+                        title: "Error!",
+                        text: 'File size should be 3 MB or less.',
+                        type: "error",
+                    });
+                    return false;
+                } else if (file.type.indexOf('image') === -1) {
+                    swal({
+                        title: "Error!",
+                        text: 'Only files are accepted.',
+                        type: "error",
+                    });
+                    return false;
+                }
+
+
+
+                var params = {
+                    Key: 'property-images/' + filename,
+                    ContentType: file.type,
+                    Body: file,
+                    StorageClass: "STANDARD_IA",
+                    ACL: 'public-read'
+                };
+
+                bucket.upload(params).on('httpUploadProgress', function (evt) {
+
+                })
+                    .send(function (err, data) {
+                        if (err) {
+                            return fileUploadDefer.reject(data);
+                        }
+                        return fileUploadDefer.resolve(data);
+                    });
+
+                return fileUploadDefer.promise;
+            }
+        }
+
+        vm.copyrowofunits = function () {
+
+            var arr = [];
+            var selectedvalue = new Array();
+            var n = $("#ts_checkbox:checked").length;
+            var tempArray = vm.prop.unitlists;
+            var b = [];
+            if (n > 0) {
+
+                $("#ts_checkbox:checked").each(function (index) {
+                    selectedvalue.push($(this).val());
+                });
+
+                for (var i = 0; i < selectedvalue.length; i++) {
+                    //console.log(vm.prop.unitlists[i]);
+                    units = parseInt(vm.prop.unitlists[i]['unit']) + parseInt(vm.prop.unitlists.length);
+
+                    b.push({
+                        unit: units,
+                        name: vm.prop.unitlists[i]['name'],
+                        type: vm.prop.unitlists[i]['type'],
+                        address: vm.prop.unitlists[i]['address'],
+                        city: vm.prop.unitlists[i]['city'],
+                        state: vm.prop.unitlists[i]['state'],
+                        postalcode: vm.prop.unitlists[i]['postalcode'],
+                        location: vm.prop.unitlists[i]['location'],
+                        sqft: vm.prop.unitlists[i]['sqft'],
+                        bedroom: vm.prop.unitlists[i]['bedroom'],
+                        bathroom: vm.prop.unitlists[i]['bathroom'],
+                        rent: vm.prop.unitlists[i]['rent'],
+                        description: vm.prop.unitlists[i]['description'],
+                        status: vm.prop.unitlists[i]['status'],
+                        epirydate: vm.prop.unitlists[i]['epirydate'],
+                        Aminities: vm.prop.unitlists[i]['Aminities'],
+                        cats: vm.prop.unitlists[i]['cats'],
+                        dogs: vm.prop.unitlists[i]['dogs'],
+                        smoking: vm.prop.unitlists[i]['smoking']
+
+                    });
+                    vm.prop.noofunits = parseInt(vm.prop.noofunits + 1);
+                }
+
+
+                for (var i = 0; i < b.length; i++) {
+                    vm.prop.unitlists.push(b[i]);
+                }
+            } else {
+                vm.prop.noofunits = parseInt(vm.prop.noofunits + vm.prop.unitlists.length);
+
+                for (var i = 0; i < vm.prop.unitlists.length; i++) {
+                    var units = parseInt(vm.prop.unitlists[i]['unit']) + parseInt(vm.prop.unitlists.length);
+                    b.push({
+                        unit: units,
+                        name: vm.prop.unitlists[i]['name'],
+                        type: vm.prop.unitlists[i]['type'],
+                        address: vm.prop.unitlists[i]['address'],
+                        city: vm.prop.unitlists[i]['city'],
+                        state: vm.prop.unitlists[i]['state'],
+                        postalcode: vm.prop.unitlists[i]['postalcode'],
+                        location: vm.prop.unitlists[i]['location'],
+                        sqft: vm.prop.unitlists[i]['sqft'],
+                        bedroom: vm.prop.unitlists[i]['bedroom'],
+                        bathroom: vm.prop.unitlists[i]['bathroom'],
+                        rent: vm.prop.unitlists[i]['rent'],
+                        description: vm.prop.unitlists[i]['description'],
+                        status: vm.prop.unitlists[i]['status'],
+                        epirydate: vm.prop.unitlists[i]['epirydate'],
+                        Aminities: vm.prop.unitlists[i]['Aminities'],
+                        cats: vm.prop.unitlists[i]['cats'],
+                        dogs: vm.prop.unitlists[i]['dogs'],
+                        smoking: vm.prop.unitlists[i]['smoking']
+
+                    });
+                }
+
+                for (var i = 0; i < b.length; i++) {
+                    console.log(b[i]);
+                    vm.prop.unitlists.push(b[i]);
+                }
+            }
+        }
+
+        vm.addmorerowedit = function (val) {
+            vm.prop.noofunits = parseInt(val + 1);
+        }
+
+        vm.submiteditunits = function (unitlists, prop, isDeleted, isFromSchedule) {
+            let unitIds = [];
+            unitlists.forEach((unit) => {
+                unitIds.push(unit.unit);
+                delete unit.$$hashKey;
+            });
+            var hasDuplicateIds = vm.duplication(unitIds);
+            if (hasDuplicateIds) {
+                swal({
+                    title: "Error!",
+                    text: "Duplicate unit number/s added, please check Unit # column",
+                    type: "error",
+                });
+                return;
+            }
+            return firebase.database().ref('properties/' + prop.propID).update({
+                unitlists: unitlists,
+                totalunits: unitlists.length,
+                noofunits: unitlists.length
+            }).then(function () {
+                if (isDeleted) {
+                    swal({
+                        title: "Success!",
+                        text: "Unit deleted successfully.",
+                        type: "success",
+                    });
+                } else {
+                    vm.prop.noofunits = unitlists.length;
+                    vm.prop.totalunits = unitlists.length;
+                    swal({
+                        title: "Success!",
+                        text: "Unit/s saved successfully.",
+                        type: "success",
+                    }, function (value) {
+                        if (isFromSchedule) {
+                            window.location.reload();
+                        }
+                    })
+
+                }
+            }, function (error) {
+                if (confirm("Units not added, please try again!") == true) {
+                    return false;
+                }
+            });
+        }
+
+        vm.submitunits = function (units) {
+
+            var num = units.number;
+            var rent = units.rent;
+            var sqft = units.sqft;
+            var status = units.status;
+            var bath = units.bath;
+            var bed = units.bed;
+            var aminities1 = units.Aminities;
+            var fullformarary = [];
+
+
+            var address = units.address;
+            var name = units.name;
+            var type = units.proptype;
+            var city = units.city;
+            var state = units.province;
+            var postalcode = units.postcode;
+            var location = units.address;
+            var bedroom = [];
+            var bathroom = [];
+            var description = [];
+            var status = units.status;
+            var epirydate = [];
+            var cats = [];
+            var dogs = [];
+            var smoking = [];
+            var furnished = [];
+            var wheelchair = [];
+
+
+            var number = [];
+            var rentarray = [];
+            var sqftarray = [];
+            var statusarray = [];
+            var textarray = [];
+            var batharray = [];
+            var bedarray = [];
+            var Aminitiesarray = [];
+
+
+
+            for (var prop in num) {
+                if (num.hasOwnProperty(prop)) {
+                    number.push(num[prop]);
+                }
+            }
+
+            if (vm.duplication(number) == true) {
+                swal({
+                    title: "Error!",
+                    text: "Duplicate unit numbers found in the file. Please check duplicate values.",
+                    type: "error",
+                });
+                /*$rootScope.$apply(function() {
+                         $rootScope.error = "Please check your unit number are duplicate.. !";
+                     });*/
+                return false;
+            }
+
+            for (var prop in rent) {
+                if (rent.hasOwnProperty(prop)) {
+                    rentarray.push(rent[prop]);
+                }
+            }
+
+            for (var prop in sqft) {
+                if (sqft.hasOwnProperty(prop)) {
+                    sqftarray.push(sqft[prop]);
+                }
+            }
+
+            for (var prop in status) {
+                if (status.hasOwnProperty(prop)) {
+                    statusarray.push(status[prop]);
+                }
+            }
+
+            for (var prop in bath) {
+                if (bath.hasOwnProperty(prop)) {
+                    batharray.push(bath[prop]);
+                }
+            }
+
+            for (var prop in bed) {
+                if (bed.hasOwnProperty(prop)) {
+                    bedarray.push(bed[prop]);
+                }
+            }
+
+            for (var prop in aminities1) {
+                if (aminities1.hasOwnProperty(prop)) {
+                    Aminitiesarray.push(aminities1[prop]);
+                }
+            }
+
+            var totalunits = 0;
+            for (var i = 0; i < number.length; i++) {
+
+                fullformarary.push({
+                    unit: number[i],
+                    name: name,
+                    type: type,
+                    address: units.address,
+                    city: city,
+                    state: state,
+                    postalcode: postalcode,
+                    location: address,
+                    sqft: sqftarray[i],
+                    bedroom: bedarray[i],
+                    bathroom: batharray[i],
+                    rent: rentarray[i],
+                    description: '',
+                    status: statusarray[i],
+                    epirydate: '',
+                    Aminities: Aminitiesarray[i],
+                    cats: '',
+                    dogs: '',
+                    smoking: '',
+                    furnished: '',
+                    wheelchair: ''
+                });
+                totalunits++;
+            }
+
+
+
+            firebase.database().ref('properties/' + units.propID).update({
+                unitlists: fullformarary,
+                totalunits: totalunits,
+                noofunits: totalunits
+            }).then(function () {
+                if (confirm("Units added successfully!") == true) {
+                    localStorage.removeItem('propID');
+                    localStorage.removeItem('units');
+                    localStorage.removeItem('propName');
+                    $state.go('viewprop');
+                } else {
+                    return false;
+                }
+            }, function (error) {
+                if (confirm("Units not added, please try again!") == true) {
+                    return false;
+                }
+            });
+
+        }
+
+
+        $scope.items = [
+            'The first choice!',
+            'And another choice for you.',
+            'but wait! A third!'
+        ];
+
+        $scope.status = {
+            isopen: false
+        };
+
+        $scope.toggled = function (open) {
+            $log.log('Dropdown is now: ', open);
+        };
+
+        $scope.toggleDropdown = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.status.isopen = !$scope.status.isopen;
+        };
+
+        $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
+
+        vm.opensuccesssweet = function (value) {
+            swal({
+                title: "Property added successfully, please add units",
+                text: "Click on the Units tab",
+                type: "success",
+            });
+            // alert('Property Created successfully!');
+            //swal("Your Property Created successfully!", "You clicked the button And add units!", "success")
+        }
+
+        vm.openmodel = function (size) {
+            $scope.items1 = [];
+            var modalInstance = $uibModal.open({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl1',
+                backdrop: 'static',
+                size: size,
+                resolve: {
+                    items1: function () {
+                        return $scope.items1;
+                    }
+                }
+
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        $scope.openImageModal = function () {
+            $scope.imageModal = $uibModal.open({
+                templateUrl: 'viewimages.html',
+                controller: 'propertyCtrl',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'zIndex',
+                scope: $scope
+            });
+        }
+
+        $scope.closeImageModal = function () {
+            $scope.imageModal.dismiss('cancel');
+        }
+
+        vm.openDetailModel = function (prop, index) {
+            $scope.selectedUnitDetail = {};
+            $scope.selectedUnitDetail.data = vm.prop.unitlists[index];
+            $scope.selectedUnitDetail.data.email = localStorage.getItem('userEmail');
+            $scope.selectedUnitDetail.index = index;
+            $scope.items1 = prop;
+            $scope.propUnitLists = {
+                "list": angular.copy(vm.prop.unitlists)
+            } 
+            $scope.items1.indexofDetails = index;
+            $scope.modalInstance = $uibModal.open({
+                templateUrl: 'myModalDetailsContent.html',
+                controller: 'propertyCtrl',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'detailmodalcss',
+                scope: $scope
+            });
+        };
+        vm.duplication = function (data) {
+
+            var sorted_arr = data.slice().sort(); // You can define the comparing function here. 
+            // JS by default uses a crappy string compare.
+            // (we use slice to clone the array so the
+            // original array won't be modified)
+            var results = [];
+            for (var i = 0; i < sorted_arr.length - 1; i++) {
+                if (sorted_arr[i + 1] == sorted_arr[i]) {
+                    results.push(sorted_arr[i]);
+                    break;
+                }
+            }
+
+            if (results.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        vm.opencsvmodel = function (prop) {
+
+            $scope.items1 = prop;
+            var modalInstance = $uibModal.open({
+                templateUrl: 'myModalContent1.html',
+                controller: 'ModalInstanceCtrl1',
+                backdrop: 'static',
+                resolve: {
+                    items1: function () {
+                        return $scope.items1;
+                    }
+                }
+
+            });
+
+            modalInstance.result.then(function () {
+
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        $scope.cancel = function () {
+            $scope.modalInstance.dismiss('cancel');
+        };
+        vm.checkIfDetailIsIncomplete = function (value) {
+
+            var keyToCheck = [
+                "address",
+                "city",
+                "postalcode",
+                "country",
+                "rent",
+                "sqft",
+                "status",
+                "unit",
+                "type",
+                "title",
+                "description"
+            ]
+
+            for (var i = 0; i < keyToCheck.length; i++) {
+                if (!value[keyToCheck[i]]) {
+                    return true;
+                }
+            }
+
+            if (!value.images) {
+                return true;
+            }
+            if (value.images.length <= 0) {
+                return true;
+            }
+            return false;
+        }
+        $scope.submitDetails = function (isFromSchedule) {
+            var index = $scope.selectedUnitDetail.index;
+            if (!vm.prop.unitlists) {
+                vm.prop.unitlists = [];
+            }
+            if (!vm.prop.unitlists[index]) {
+                vm.prop = angular.copy($scope.prop);
+            }
+            vm.prop.unitlists[index] = angular.copy($scope.selectedUnitDetail.data);
+            vm.prop.unitlists[index].isIncomplete = vm.checkIfDetailIsIncomplete(angular.copy($scope.selectedUnitDetail.data));
+            vm.submiteditunits(vm.prop.unitlists, vm.prop, '', isFromSchedule)
+                .then(function () {
+                    $scope.cancel();
+                });
+        };
+
+        $scope.deleteImageFromDetail = function (index) {
+            $scope.selectedUnitDetail.data.images.splice(index, 1);
+        }
+
+        $scope.onChangeCheckbox = function (type) {
+            if ($scope.selectedUnitDetail.data.Aminities && $scope.selectedUnitDetail.data.Aminities.includes(type)) {
+                $scope.selectedUnitDetail.data.Aminities.splice($scope.selectedUnitDetail.data.Aminities.indexOf(type), 1);
+            } else {
+                if (!$scope.selectedUnitDetail.data.Aminities) $scope.selectedUnitDetail.data.Aminities = [];
+                $scope.selectedUnitDetail.data.Aminities.push(type);
+            }
+        }
+
+    }
+]);
+
+vcancyApp.controller('ModalInstanceCtrl1', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$uibModal', '$uibModalInstance', '$location', 'items1', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $uibModal, $uibModalInstance, $location, items1) {
+    var vm = this;
+    vm.prop = items1;
+    $scope.items1 = items1;
+    $scope.ok = function (value) {
+        if (value === 'viewproperty') {
+            $uibModalInstance.close();
+            $state.go('viewprop');
+        }
+    };
+
+    $scope.submit = function () {
+
+        $scope.loader = 1;
+        console.log('vm.prop', vm.prop)
+        var propID = vm.prop.propID;
+        var unitlists = vm.prop.unitlists;
+        var totalunits = vm.prop.totalunits;
+        var noofunits = vm.prop.noofunits;
+        var name = vm.prop.name;
+        var address = vm.prop.address;
+        var city = vm.prop.city;
+        var country = vm.prop.country;
+        var proptype = vm.prop.proptype;
+        var postcode = vm.prop.postcode;
+        var province = vm.prop.province;
+
+
+        var fileUpload = document.getElementById("file123");
+        if (fileUpload.value.indexOf('.csv') > -1) {
+            if (typeof (FileReader) != "undefined") {
+                var unitsImported = [];
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var rows = e.target.result.split("\n");
+                    var units = [];
+                    var headers = rows[0].split(",");
+                    var totalrowunits = 0;
+                    for (var i = 1; i < rows.length; i++) {
+
+                        var obj = {};
+                        var currentline = rows[i].split(",");
+                        if (currentline[0].indexOf('DELETE THE EXAMPLE') > -1) {
+                            continue;
+                        }
+                        if (currentline.length < 2) {
+                            continue;
+                        }
+
+                        for (var j = 0; j < headers.length; j++) {
+
+                            var headerkey = headers[j];
+                            headerkey = headerkey.replace(/[^a-zA-Z]/g, "")
+
+                            headerkey = headerkey.toLowerCase();
+                            if (headerkey == 'unit') {
+                                units.push(currentline[j]);
+                            }
+
+                            if (headerkey == 'unit' && currentline[j] == '') {
+                                swal({
+                                    title: "Error!",
+                                    text: "Unit must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
+                                return false;
+                            }
+                            if (headerkey == 'rent' && currentline[j] == '') {
+                                swal({
+                                    title: "Error!",
+                                    text: "Rent must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
+                                return false;
+                            }
+                            if (headerkey == 'sqft' && currentline[j] == '') {
+                                swal({
+                                    title: "Error!",
+                                    text: "Sqft must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
+                                return false;
+                            }
+
+                            if (headerkey == 'status' && currentline[j] == '') {
+                                swal({
+                                    title: "Error!",
+                                    text: "status must be a value. Please follow instructions in the spreadsheet",
+                                    type: "error",
+                                });
+                                return false;
+                            }
+
+                            var actualHeaderKey = '';
+                            var aminitiesHeaderKeys = [
+                                'amenitiesfurnished',
+                                'amenitieslaundry',
+                                'amenitiesparking',
+                                'amenitieswheelchairaccess'
+                            ]
+                            var ignorKeys = [
+                                'propertyaddressoptional',
+                            ]
+                            if (ignorKeys.includes(headerkey)) {
+                                continue;
+                            }
+                            if (aminitiesHeaderKeys.includes(headerkey)) {
+                                actualHeaderKey = 'Aminities';
+                            } else if (headerkey === 'catsok') {
+                                actualHeaderKey = 'cats';
+                            } else if (headerkey === 'dogsok') {
+                                actualHeaderKey = 'dogs';
+                            } else {
+                                actualHeaderKey = headerkey.trim();
+                            }
+
+                            if (headerkey === 'amenitiesfurnished') {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('furnished')
+                                }
+                            } else if (headerkey === 'amenitieslaundry') {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('laundry')
+                                }
+                            } else if (headerkey === 'amenitiesparking') {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('parking')
+                                }
+                            } else if (headerkey === "amenitieswheelchairaccess") {
+                                if (currentline[j].toLowerCase().trim() === 'yes') {
+                                    if (!obj[actualHeaderKey] || !(obj[actualHeaderKey] instanceof Array)) obj[actualHeaderKey] = [];
+                                    obj[actualHeaderKey].push('wheelchair')
+                                }
+                            } else if (headerkey === 'catsok' || headerkey === 'dogsok' || headerkey === 'smoking') {
+                                obj[actualHeaderKey] = currentline[j].toLowerCase() == 'yes' ? true : false
+                            } else if (headerkey === 'status') {
+                                if (currentline[j] && currentline[j].toLowerCase() === "available soon") {
+                                    obj['status'] = 'availablesoon';
+                                }
+                                else {
+                                    obj['status'] = currentline[j] ? currentline[j].toLowerCase() : 'status';
+                                }
+                            } else if (headerkey === 'descriptionoptional') {
+                                obj['description'] = currentline[j];
+                            } else if (headerkey === 'leaseexpiryoptional') {
+                                obj['leaseExpiry'] = new Date(currentline[j]);
+                            } else {
+                                obj[actualHeaderKey] = currentline[j];
+                            }
+                        }
+
+                        obj['name'] = name;
+                        obj['type'] = proptype;
+                        obj['address'] = address;
+                        obj['location'] = address;
+                        obj['city'] = city;
+                        obj['state'] = province;
+                        obj['country'] = province;
+                        obj['postcode'] = postcode;
+                        obj['postalcode'] = postcode;
+                        
+                        unitsImported.push(obj);
+                        totalrowunits++;
+                    }
+                    var hasDuplicateId = vm.duplication(units);
+                    if (hasDuplicateId) {
+                        swal({
+                            title: 'Error',
+                            text: 'File has duplicate unit IDs.',
+                            type: 'error'
+                        })
+                        return;
+                    }
+                    if (!vm.prop.unitlists) vm.prop.unitlists = [];
+                    vm.prop.unitlists = vm.prop.unitlists.concat(unitsImported);
+                    vm.prop.totalunits = vm.prop.unitlists.length;
+                    vm.prop.noofunits = vm.prop.unitlists.length;
+                    setTimeout(function () {
+                        $uibModalInstance.close();
+                        swal({
+                            title: 'Alert',
+                            text: 'File imported successfully. You need to SAVE units otherwise changes will be lost.',
+                            type: 'success'
+                        })
+                        $scope.loader = 0;
+                    }, 1000);
+                }
+
+                reader.readAsText(fileUpload.files[0]);
+
+
+
+            } else {
+                swal({
+                    title: "Error!",
+                    text: "This browser does not support HTML5.",
+                    type: "error",
+                });
+            }
+        } else {
+            swal({
+                title: "Error!",
+                text: "Please upload a valid CSV file.",
+                type: "error",
+            });
+        }
+
+    }
+
+    $scope.units = function (value) {
+        if (value != '' && value != null) {
+            //  $location.absUrl() = '#/addunits/'+value;
+            $uibModalInstance.close();
+            $window.location.href = '#/addunits/' + value;
+        }
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+    vm.duplication = function (data) {
+
+        var sorted_arr = data.slice().sort(); // You can define the comparing function here. 
+        // JS by default uses a crappy string compare.
+        // (we use slice to clone the array so the
+        // original array won't be modified)
+        var results = [];
+        for (var i = 0; i < sorted_arr.length - 1; i++) {
+            if (sorted_arr[i + 1] == sorted_arr[i]) {
+                results.push(sorted_arr[i]);
+            }
+        }
+
+        if (results.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}]);
 'use strict';
 
 //=================================================
@@ -4766,248 +12228,421 @@ vcancyApp.controller('emailhandlerCtrl', ['$scope','$firebaseAuth','$state','$ro
 // Apply Property
 //=================================================
 
-vcancyApp.controller('applypropCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','slotsBuildService','emailSendingService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window,$filter,slotsBuildService,emailSendingService) {
-	
-	var vm = this;
-	vm.emailVerifiedError = '';
-	var tenantID = localStorage.getItem('userID');
-	vm.propinactive = 0;
-	
-	firebase.database().ref('users/'+localStorage.getItem('userID')).once("value", function(snapval) {	
-		var userData = snapval.val();
-	  	$scope.$apply(function(){
-	  		// console.log(userData);
-	  		vm.userName = userData.firstname + ' ' +userData.lastname;
-	  	});
-	 });
-	// console.log(localStorage.getItem('userEmailVerified'));
-	if(localStorage.getItem('userEmailVerified') == "false" || !$rootScope.emailVerified ){
-		vm.isEmailVerified = 1;
-	} else {
-		vm.isEmailVerified = 0;
-	}
-	// console.log(vm.isEmailVerified);
-	
-	// Fetching property Data
-	var ref = firebase.database().ref("/properties/"+$stateParams.propId).once('value').then(function(snap) {
-		var propData = snap.val();
-		if(propData == null){
-			$state.go('tenantdashboard');
+vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', 'slotsBuildService', 'emailSendingService', '$uibModal', '$location', '_'
+	, function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, slotsBuildService, emailSendingService, $uibModal, $location, _) {
+
+		var vm = this;
+		vm.moment = moment;
+		vm.emailVerifiedError = '';
+		var tenantID = localStorage.getItem('userID');
+		vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
+		vm.propinactive = 0;
+		vm.registerUser = {
+			firstName: '',
+			lastName: '',
+			email: '',
+			phone: ''
+		};
+		vm.proposeDiv = false;
+		vm.preScreeningAns = {};
+		vm.landlordData = {};
+
+		vm.proposeNewTime = {};
+
+		if (vm.userData) {
+			vm.registerUser.firstName = vm.userData.firstname;
+			vm.registerUser.lastName = vm.userData.lastname;
+			vm.registerUser.email = vm.userData.email;
+		}
+		vm.signIn = {
+			username: '',
+			password: ''
+		}
+		var urlData = $location.search() || {};
+		vm.unitId = urlData.unitId || null;
+
+		vm.selectedUnit = {};
+		if (vm.userData) {
+			vm.userName = vm.firstname + ' ' + vm.lastname;
+		}
+		// console.log(localStorage.getItem('userEmailVerified'));
+		if (localStorage.getItem('userEmailVerified') == "false" || !$rootScope.emailVerified) {
+			vm.isEmailVerified = 1;
 		} else {
-			vm.timeSlot = [];
-			vm.slots = [];
-			$scope.$apply(function(){
-				vm.applyprop = {
-					propID: snap.key,
-					landlordID: propData.landlordID,
-					propimg : propData.propimg,
-					propstatus : propData.propstatus,
-					proptype : propData.proptype,
-					units : propData.units,
-					shared : propData.shared,
-					address : propData.address,
-					date : [],
-					fromtime : [],
-					to : [],
-					limit : [],
-					multiple: [],
-					propertylink: propData.propertylink,
-					name : vm.userName
-				}
-				angular.forEach(propData.date, function(value, key) {
-					console.log(propData);
-				  vm.applyprop.date.push(value);
-				  vm.applyprop.fromtime.push(propData.fromtime[key]);
-				  vm.applyprop.to.push(propData.to[key]);
-				  vm.applyprop.limit.push(propData.limit[key]);
-				  
-				  if(propData.multiple) {
-					vm.applyprop.multiple.push(propData.multiple[key]);
-				  }
-				  
-				});
-			
-				vm.applyprop.slots = slotsBuildService.maketimeslots(vm.applyprop.date,vm.applyprop.fromtime,vm.applyprop.to,vm.applyprop.limit,vm.applyprop.multiple);
-				
-				// If property is inactive tenant can't apply for the application
-				if(vm.applyprop.propstatus == false){
-					// $state.go('tenantdashboard');
-					vm.propinactive = 1;
-				}
+			vm.isEmailVerified = 0;
+		}
+		// console.log(vm.isEmailVerified);
+
+		vm.getLandlord = function () {
+			firebase.database().ref('/users/' + vm.propData.landlordID).once('value').then(function (snap) {
+				$scope.$apply(function () {
+					vm.landlordData = snap.val();
+					console.log('vm.landlordData', vm.landlordData);
+					vm.landlordData.id = snap.key;
+				})
 			});
 		}
-		
-		
-		
-		firebase.database().ref('applyprop/').orderByChild("propID").equalTo($stateParams.propId).once("value", function(snapshot) {	
-			$scope.$apply(function(){
-				console.log(snapshot.val());
-					
-				vm.alreadyBookedSlot = 0;
-				vm.appliedslots = [];
-				vm.applyprop.availableslots = [];
-				vm.timeslotavail = 0;
-				
-				
-				if(snapshot.val() != null){
-					$.map(snapshot.val(), function(value, index) {
-						if(value.tenantID == localStorage.getItem('userID') && value.schedulestatus !== "cancelled"){
-							vm.alreadyBookedSlot = 1;
-						}
-					 });
-				
-					vm.appliedslots = $.map(snapshot.val(), function(value, index) {			
-						if(value.schedulestatus !== "cancelled"){
-							return [{date:value.dateslot, fromtime:moment(value.fromtimeslot).format('HH:mm'), to:moment(value.toslot).format('HH:mm'), person:1}];
-						}						
-					});
-					 
-					console.log(vm.applyprop.slots);
-					console.log(vm.appliedslots);	
-					// console.log(vm.appliedslots.length);
-						
-					for (var i = 0; i < vm.applyprop.slots.length; i++) {
-						for (var j = 0; j < vm.appliedslots.length; j++) {
-							if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == false) {
-								vm.applyprop.slots[i].person = 0;
-								
-								for (var l = 0; l < vm.applyprop.slots.length; l++) {
-									if(vm.applyprop.slots[l].dateslotindex == vm.applyprop.slots[i].dateslotindex && l != i){
-										vm.applyprop.slots[l].person -=1;
-									}
-								}
-								
-							}
-							
-							if (moment(vm.applyprop.slots[i].date).format('DD-MMMM-YYYY') == vm.appliedslots[j].date &&  moment(vm.applyprop.slots[i].fromtime).format('HH:mm') == vm.appliedslots[j].fromtime && moment(vm.applyprop.slots[i].to).format('HH:mm') == vm.appliedslots[j].to && vm.applyprop.slots[i].multiple == true ) {
-								for (var l = 0; l < vm.applyprop.slots.length; l++) {
-									if(vm.applyprop.slots[l].dateslotindex ==  vm.applyprop.slots[i].dateslotindex){
-										vm.applyprop.slots[l].person -= 1;
-									}
-								}
-								// break;
-							}
-						console.log(vm.applyprop.slots);
-						}
+
+		function generateSlots() {
+			var listings = angular.copy(vm.listings);
+			var slotsData = {};
+			_.forEach(listings, (value, key) => {
+				var fromDate = moment(value.fromDate);
+				var toDate = moment(value.toDate);
+				var days = toDate.diff(fromDate, 'days');
+				for (var i = 0; i <= days; i++) {
+					let _fromDate = angular.copy(fromDate)
+					let formattedDate = _fromDate.add(i, 'days').format('MM/DD/YYYY');
+					if (!slotsData[formattedDate]) {
+						slotsData[formattedDate] = [];
 					}
-					
-					
-					for (var i = 0; i< vm.applyprop.slots.length; i++) {					
-						if (vm.applyprop.slots[i].person > 0) {
-							vm.applyprop.availableslots.push(vm.applyprop.slots[i]);
-						}
-						vm.timeslotavail = 1;
+					var fromTime = moment(value.fromTime, 'hh:mm a');
+					var toTime = moment(value.toTime, 'hh:mm a');
+					var slotsCount = toTime.diff(fromTime, 'minutes') / 30;
+					for (var j = 0; j <= slotsCount; j++) {
+						let _fromTime = angular.copy(fromTime);
+						let formattedTime = _fromTime.add(30 * j, 'minutes').format('hh:mm a');
+						slotsData[formattedDate].push(formattedTime);
 					}
-				} else {
-					vm.applyprop.availableslots = vm.applyprop.slots;
-					vm.timeslotavail = 1;
+					slotsData[formattedDate] = _.uniq(slotsData[formattedDate]);
 				}
-				console.log(vm.applyprop.availableslots, vm.applyprop.availableslots.length);
-				
-				for (var j = 0; j < vm.applyprop.availableslots.length; j++) {
-					if (moment(moment(vm.applyprop.availableslots[j].date).format('DD-MMMM-YYYY')).isBefore(moment(new Date()).format('DD-MMMM-YYYY')) ) {
-						vm.applyprop.availableslots.splice(vm.applyprop.availableslots[j]);
-					}
-				}
-				console.log(vm.applyprop.availableslots, vm.applyprop.availableslots.length);
-				
-			});	
-		});	
-		
-		firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).limitToLast(1).once("value", function(snapshot) {	
-			$scope.$apply(function(){
-				console.log(snapshot.val());
-				if(snapshot.val() != null){
-					$.map(snapshot.val(), function(value, index) {
-						vm.applyprop.tenantlocation = value.tenantlocation;
-						vm.applyprop.phone = value.phone;
-						vm.applyprop.age = value.age; 
-						vm.applyprop.jobtitle = value.jobtitle; 
-						vm.applyprop.description = value.description; 
-					});
-				} else {
-					vm.applyprop.tenantlocation = '';
-					vm.applyprop.phone = '';
-					vm.applyprop.age = ''; 
-					vm.applyprop.jobtitle = ''; 
-					vm.applyprop.description = ''; 
-				}
+				console.log('slotsData', slotsData)
 			});
-		});
-		
-		
-		
-	});
-	
-	
-	// Property Application form - Data of tenant save		
-	vm.tenantapply = function(applyprop){
-		if(localStorage.getItem('userEmailVerified') !== 'false') {
+			$scope.$apply(function () {
+				vm.availableSlots = angular.copy(slotsData);
+				let keys = _.keys(vm.availableSlots);
+				vm.selectedDate = keys[0];
+				vm.selectedTime = vm.availableSlots[vm.selectedDate][0];
+			});
+		}
+		vm.openproposemodal = function () {
+			vm.proposeDiv = !vm.proposeDiv;
+		};
+
+		vm.formatDay = function (key) {
+			return moment(key, 'MM/DD/YYYY').format('ddd')
+		}
+
+		vm.formatDate = function (key) {
+			return moment(key, 'MM/DD/YYYY').format('MMM DD')
+		}
+
+		vm.selectSlotDate = function (key) {
+			vm.selectedDate = key;
+		};
+
+		vm.selectSlotTime = function (key) {
+			vm.selectedTime = key;
+		};
+
+		function getScheduledProp() {
+			firebase.database().ref('propertiesSchedule/').orderByChild("propertyId").equalTo($stateParams.propId).once("value", function (snap) {
+				if (snap.val()) {
+					console.log('scheduleProp', snap.val());
+					var listings = snap.val();
+					vm.listings = angular.copy(listings);
+					vm.schudeledListing = 1;
+					generateSlots();
+					// getScheduledProp();
+				} else {
+					vm.schudeledListing = 0;
+				}
+			})
+		}
+
+		function getProperty() {
+			firebase.database().ref("/properties/" + $stateParams.propId).once('value').then(function (snap) {
+				if (snap.val()) {
+					var propData = snap.val();
+					vm.propData = angular.copy(propData);
+					if (propData && propData.unitlists && propData.unitlists.length > 0) {
+						vm.selectedUnit = propData.unitlists.find(function (unit) {
+							if (unit.unit == vm.unitId) return true;
+						});
+						if (vm.selectedUnit.description) {
+
+							vm.selectedUnit.description = vm.selectedUnit.description.replace(/(?:\r\n|\r|\n)/g, '<br />')
+						}
+						if (vm.selectedUnit.otherAminities) {
+							vm.selectedUnit.otherAminities = vm.selectedUnit.otherAminities.replace(/(?:\r\n|\r|\n)/g, '<br />')
+						}
+					}
+					if (!vm.selectedUnit.images) {
+						vm.selectedUnit.images = [];
+					}
+					vm.selectedUnit.images.push({ Location: vm.propData ? vm.propData.propimg : null });
+					getScheduledProp();
+					vm.getLandlord();
+				} else {
+					$state.go('tenantdashboard');
+				}
+			})
+		}
+
+		function init() {
+			getProperty();
+		}
+
+		init();
+
+		vm.forgotpwdmail = function () {
+			var email = vm.signIn.email;
+			if (!email) {
+				swal({
+					type: 'error',
+					title: 'Error',
+					text: 'Please enter email'
+				});
+				return
+			}
+			$rootScope.invalid = '';
+			$rootScope.success = '';
+			$rootScope.error = '';
+
+			var forgotuserObj = $firebaseAuth();
+			forgotuserObj.$sendPasswordResetEmail(email).then(function () {
+				$rootScope.success = 'Password reset email sent to your inbox. Please check your email.';
+				$rootScope.error = '';
+				vm.signIn.email = '';
+				vm.modalInstance.dismiss('cancel');
+				swal({
+					type: 'success',
+					title: 'success',
+					text: 'Email sent'
+				});
+			}).catch(function (error) {
+				swal({
+					type: 'error',
+					title: 'Error',
+					text: error.message
+				});
+			});
+
+		};
+		vm.forgetPwd = false;
+		vm.toggleForgetPwd = function () {
+			vm.forgetPwd = true;
+		}
+
+		// Property Application form - Data of tenant save		
+		vm.tenantapply = function () {
+			//if (localStorage.getItem('userEmailVerified') !== 'false') {
+			var userInfo = vm.userInfo ? angular.copy(vm.userInfo) : null;
+			var userDetails = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : userInfo;
 			vm.emailVerifiedError = '';
-			var tenantID = localStorage.getItem('userID');
-			var propID = vm.applyprop.propID;
-			var address = vm.applyprop.address;
-			var name = vm.applyprop.name;
-			var tenantlocation = vm.applyprop.tenantlocation;
-			var phone = vm.applyprop.phone;
-			var age = vm.applyprop.age; 
-			var jobtitle = vm.applyprop.jobtitle; 
-			var landlordID =  vm.applyprop.landlordID;
-			var description = vm.applyprop.description; 
-			var datetimeslot = vm.applyprop.datetimeslot;
-			var units = vm.applyprop.units;
-			var dateslot = moment(vm.applyprop.availableslots[datetimeslot].date).format('DD-MMMM-YYYY');
-			var fslot = vm.applyprop.availableslots[datetimeslot].fromtime.toString();
-			var tslot = vm.applyprop.availableslots[datetimeslot].to.toString();
-			var timerange = moment(vm.applyprop.availableslots[datetimeslot].fromtime).format('hh:mm A')+" - "+moment(vm.applyprop.availableslots[datetimeslot].to).format('hh:mm A');
-			
-			// console.log(dateslot,fslot,tslot);
-			
-			
-			var applypropObj = $firebaseAuth();			
+			var tenantID = localStorage.getItem('userID') || vm.userInfo.id;
+			var propID = $stateParams.propId;
+			var address = vm.propData.address;
+			var name = vm.registerUser.firstName + ' ' + vm.registerUser.lastName;
+			var phone = vm.registerUser.phone;
+			var landlordID = vm.landlordData.id;
+			var unitID = vm.unitId;
+			var dateSlot = vm.selectedDate;
+			var fromTime = moment(vm.selectedTime, 'hh:mm a');
+			var toTime = moment(fromTime).add(30, 'minutes');
+			var timeRange = fromTime.format('hh:mm a') + '-' + toTime.format('hh:mm a');
+			var fromTimeSlot = fromTime.format('hh:mm a');
+			var toTimeSlot = toTime.format('hh:mm a');
+			var preScreeningAns = angular.copy(vm.preScreeningAns)
+			var proposeNewTime = {};
+			if (Object.keys(vm.proposeNewTime).length > 0) {
+				proposeNewTime = angular.copy(vm.proposeNewTime);
+			}
+			vm.proposeNewTime = {};
+
+			var applypropObj = $firebaseAuth();
 			var applypropdbObj = firebase.database();
-			
-			applypropdbObj.ref('applyprop/').push().set({
+			var _data = {
 				tenantID: tenantID,
-				propID : propID,
+				propID: propID,
 				address: address,
-				schedulestatus: "pending",
-				name : name,
-				tenantlocation : tenantlocation,
+				schedulestatus: "scheduled",
+				name: name,
 				phone: phone,
-				age : age, 
-				datetimeslot : datetimeslot,
-				dateslot : dateslot,
-				fromtimeslot : fslot,
-				toslot : tslot,
-				jobtitle : jobtitle, 
-				landlordID :  landlordID,
-				description : description, 
-				timerange: timerange,
-				units: units
-			}).then(function(){
+				dateSlot: dateSlot,
+				fromTimeSlot: fromTimeSlot,
+				toTimeSlot: toTimeSlot,
+				landlordID: landlordID,
+				timeRange: timeRange,
+				unitID: unitID,
+				units: unitID,
+				preScreeningAns: preScreeningAns,
+				proposeNewTime: proposeNewTime
+			}
+			if (!_.isEmpty(_data.proposeNewTime)) {
+				_data.schedulestatus = 'pending';
+				if (_data.proposeNewTime.date1) {
+					_data.proposeNewTime.date1 = moment(_data.proposeNewTime.date1).format('MM/DD/YYYY')
+				}
+				if (_data.proposeNewTime.date2) {
+					_data.proposeNewTime.date2 = moment(_data.proposeNewTime.date2).format('MM/DD/YYYY')
+				}
+				if (_data.proposeNewTime.date3) {
+					_data.proposeNewTime.date3 = moment(_data.proposeNewTime.date3).format('MM/DD/YYYY')
+				}
+			}
+			applypropdbObj.ref('applyprop/').push().set(_data).then(function () {
 				$state.go('applicationThanks');
 				// $rootScope.success = 'Application for property successfully sent!';	
 				console.log('Application for property successfully sent!');
-				
-				firebase.database().ref('users/'+landlordID).once("value", function(snapshot) {
-					// Mail to Landlord
-					var emailData = '<p>Hello, </p><p>'+name+' has requested a viewing at '+dateslot+', '+timerange+'for '+address+'.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.ca/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-					// Send Email
-					emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name+' has requested a viewing for '+address, 'newviewingreq', emailData);
-				});
-				
-				// Mail to Tenant
-				var emailData = '<p>Hello '+name+', </p><p>Your viewing request for '+address+' at '+dateslot+', '+timerange+' has been sent.</p><p>To view your requests, please log in at http://vcancy.ca/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-				// Send Email
-				emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Viewing request for '+address, 'viewingreq', emailData);
-			})	
-		} else {
-			vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'
-		}
-	}
 
-}])
+				firebase.database().ref('users/' + landlordID).once("value", function (snapshot) {
+					// Mail to Landlord
+					var emailData = '<p>Hello, </p><p>' + name + ' has requested a viewing at ' + dateSlot + ', ' + timeRange + 'for ' + address + '.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.com/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+					// Send Email
+					emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name + ' has requested a viewing for ' + address, 'newviewingreq', emailData);
+				});
+
+				// Mail to Tenant
+				var emailData = '<p>Hello ' + vm.registerUser.firstName + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+				// Send Email
+				emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'Viewing request for ' + address, 'viewingreq', emailData);
+			});
+			// } else {
+			// 	vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'
+			// }
+		}
+
+		vm.createUser = function (user) {
+			if (vm.userData) {
+				vm.tenantapply();
+				return;
+			}
+			firebase.database().ref('/users').orderByChild("email").equalTo(vm.registerUser.email).once('value').then(function (snap) {
+				if (snap.val()) {
+					vm.userInfo = snap.val();
+					vm.userInfo.id = snap.key;
+					vm.foundUser = true;
+					vm.tenantapply();
+				} else {
+					var reguserObj = $firebaseAuth();
+					var random = parseInt(Math.random() * 10000);
+					var characterArray = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+					var pass = '';
+					for (var i = 0; i < 6; i++) {
+						var num = Math.floor((Math.random() * 60) + 1);
+						pass += characterArray[num];
+					}
+					reguserObj.$createUserWithEmailAndPassword(vm.registerUser.email, pass)
+						.then(function (firebaseUser) {
+							var reguserdbObj = firebase.database();
+							reguserdbObj.ref('users/' + firebaseUser.uid).set({
+								firstname: vm.registerUser.firstName,
+								lastname: vm.registerUser.lastName,
+								usertype: 0,
+								email: vm.registerUser.email,
+								isadded: 1,
+								iscancelshow: 1,
+								iscreditcheck: 1,
+								iscriminalreport: 1,
+								isexpiresoon: 1,
+								ispropertydelete: 1,
+								isrentalsubmit: 1,
+								isshowingtime: 1,
+								companyname: ""
+							});
+							vm.opensuccesssweet("User Added successfully!, A verification email has been sent to you. Please verify your account, log in and submit your rental application");
+
+							firebase.auth().signInWithEmailAndPassword(vm.registerUser.email, pass)
+								.then(function (firebaseUser) {
+									localStorage.setItem('userID', firebase.auth().currentUser.uid);
+									localStorage.setItem('userEmail', firebase.auth().currentUser.email);
+									localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
+									localStorage.setItem('password', pass);
+									swal({
+										title: "Success",
+										text: 'User Added successfully!, A verification email has been sent to you. Please verify your account, log in and submit your rental application.',
+										type: "success",
+									});
+									var emailData = '<p>Hello, </p><p>A new user,' + vm.registerUser.firstName + ' ,has been added to on https://vcancy.com/ .</p><p>Your email is ' + vm.registerUser.email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+									// Send Email
+									emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'A new user account has been added to your portal', 'Welcome', emailData);
+									// Success 
+									firebaseUser.sendEmailVerification().then(function () {
+
+										$rootScope.success = 'Confirmation email resent';
+										$rootScope.error = '';
+										setTimeout(function () { $rootScope.success = '' }, 1000);
+										vm.tenantapply();
+									}).catch(function (error) {
+										console.log("Error sending email" + error);
+									});
+								})
+						}).catch(function (error) {
+							vm.openerrorsweet(error.code);
+						});
+				}
+			});
+
+		};
+		vm.openSignInmodel = function (prop) {
+
+			vm.modalInstance = $uibModal.open({
+				templateUrl: 'signin.html',
+				backdrop: 'static',
+				scope: $scope,
+				size: 'md'
+			});
+		};
+		vm.signInFunction = function (userdetails) {
+			firebase.auth().signInWithEmailAndPassword(userdetails.email, userdetails.password)
+				.then(function (firebaseUser) {
+					localStorage.setItem('userID', firebase.auth().currentUser.uid);
+					localStorage.setItem('userEmail', firebase.auth().currentUser.email);
+					localStorage.setItem('userEmailVerified', firebase.auth().currentUser.emailVerified);
+					localStorage.setItem('password', userdetails.password);
+					firebase.database().ref('/users/' + firebase.auth().currentUser.uid).once('value').then(function (userdata) {
+						$rootScope.usertype = 0;
+						localStorage.setItem('usertype', 0);
+						localStorage.setItem('userData', JSON.stringify(userdata.val()));
+						vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
+						if (vm.userData) {
+							vm.registerUser.firstName = vm.userData.firstname;
+							vm.registerUser.lastName = vm.userData.lastname;
+							vm.registerUser.email = vm.userData.email;
+						}
+						vm.closeModal();
+						$scope.$apply();
+					});
+				})
+				.catch(function (error) {
+					vm.openerrorsweet(error.code);
+				});
+		}
+		vm.closeModal = function () {
+			vm.modalInstance.dismiss('cancel');
+		}
+		vm.opensuccesssweet = function (value) {
+			swal({
+				title: "Success!",
+				text: value,
+				type: "success",
+				confirmButtonColor: '#009999',
+				confirmButtonText: "Ok"
+			}, function (isConfirm) {
+				if (isConfirm) {
+					// $state.reload();
+				}
+			});
+		};
+
+		vm.openerrorsweet = function (value) {
+			swal({
+				title: "Error",
+				text: value,
+				type: "warning",
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Ok",
+				closeOnConfirm: true
+			},
+				function () {
+					return false;
+				});
+
+		};
+
+	}])
 'use strict';
 
 //=================================================
@@ -5115,7 +12750,7 @@ vcancyApp
 			
 			firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
 				firebase.database().ref('users/'+snapshot.val().tenantID).once("value", function(snap) {
-					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing request for '+snapshot.val().address+' at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been accepted.</p><p>If you wish you complete your rental application beforehand, please log in at http://vcancy.ca/login/ and go to “Applications”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing request for '+snapshot.val().address+' at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been accepted.</p><p>If you wish you complete your rental application beforehand, please log in at http://vcancy.com/login/ and go to “Applications”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 					
 					emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Viewing request for '+snapshot.val().address, 'confirmstatus', emailData);
 				});
@@ -5131,7 +12766,7 @@ vcancyApp
 				})
 				firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
 					firebase.database().ref('users/'+snapshot.val().tenantID).once("value", function(snap) {
-						var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing time '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been been <strong>cancelled</strong> by the landlord of '+snapshot.val().address+'.</p><p>Please book another time using the link initially provided or contact the landlord directly.</p><p>To view details, please <a href="http://www.vcancy.ca/login/#/"> log in </a>  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+						var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing time '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been been <strong>cancelled</strong> by the landlord of '+snapshot.val().address+'.</p><p>Please book another time using the link initially provided or contact the landlord directly.</p><p>To view details, please <a href="http://www.vcancy.com/login/#/"> log in </a>  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 						
 						emailSendingService.sendEmailViaNodeMailer(snap.val().email, 'Your viewing has been cancelled for '+snapshot.val().address, 'cancelstatus', emailData);
 					});
@@ -5143,118 +12778,878 @@ vcancyApp
 'use strict';
 
 //=================================================
+// Landlord Schedule
+//================================================= 
+
+vcancyApp
+	.controller('newscheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'emailSendingService', '$q', '$uibModal', '_', '$compile', 'uiCalendarConfig'
+		, function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, emailSendingService, $q, $uibModal, _, $compile, uiCalendarConfig) {
+
+			var vm = this;
+			var userID = localStorage.getItem('userID');
+			var landlordID = ''
+			var userData = JSON.parse(localStorage.getItem('userData'));
+			var userEmail = localStorage.getItem('userEmail');
+			vm.userData = userData;
+			var landlordID = userData.refId || userID;
+			vm.landLordID = landlordID;
+			vm.moment = moment;
+			vm.todayDate = moment().format('YYYY-MM-DD');
+			$scope.eventSources = [];
+			var date = new Date();
+			var d = date.getDate();
+			var m = date.getMonth();
+			var y = date.getFullYear();
+
+			$scope.uiConfig = {
+				calendar: {
+					height: 500,
+					editable: false,
+					header: {
+						left: 'title',
+						center: '',
+						right: 'today prev,next',
+
+					},
+					buttonText: {
+						today: 'Today',
+					},
+				}
+			};
+
+			/* event source that pulls from google.com */
+			$scope.eventSource = {
+				className: 'gcal-event',           // an option!
+				currentTimezone: 'America/Chicago' // an option!
+			};
+
+			$scope.events = [];
+
+			$scope.eventsF = function (start, end, timezone, callback) {
+				callback();
+			}
+
+			vm.propertySelected = '';
+			vm.unitSelected = '';
+			vm.selectedUnitId = '';
+			vm.units = [];
+			vm.fromDate = '';
+			vm.toDate = '';
+			vm.fromTime = '';
+			vm.toTime = '';
+			vm.properties = [];
+			vm.listings = [];
+			vm.mergeListing = {};
+			vm.selectedListings = [];
+
+			vm.isEventExist = function (id) {
+				for (var i = 0; i < $scope.events.length; i++) {
+					var event = $scope.events[i];
+					if (event.id === id) {
+						return true;
+					}
+				}
+			};
+
+			vm.removeDeletedKey = function (listing) {
+				$scope.events.filter(function (event) {
+					var eventExist = $.map(listing, function (list, key) {
+						if (key == event.id) return true;
+					});
+					return eventExist;
+				});
+			};
+
+			vm.getListings = function () {
+				vm.loader = 1;
+				var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+					$scope.$apply(function () {
+						vm.success = 0;
+						if (snapshot.val()) {
+							vm.listings = snapshot.val();
+							vm.generateMergeListing();
+							for (var i = 0; i < $scope.events.length; i++) {
+								$scope.events.pop();
+							}
+							$.map(vm.listings, function (value, key) {
+								value.parsedFromDate = parseInt(new moment(value.fromDate).format('x'))
+								value.parsedToDate = parseInt(new moment(value.toDate).format('x'))
+								var startDate = new Date(value.fromDate).setHours(parseFloat(value.fromTime));
+								var endDate = new Date(value.toDate).setHours(parseFloat(value.toTime));
+								if (!vm.isEventExist(key)) {
+									$scope.events.push(
+										{
+											title: value.unitID + '-' + vm.properties[value.propertyId].address,
+											start: new Date(startDate),
+											end: new Date(endDate),
+											id: key,
+											className: 'bgm-teal'
+
+										}
+									)
+								}
+							});
+
+							vm.removeDeletedKey(vm.listings);
+
+							vm.listingsAvailable = 1;
+						} else {
+							vm.listingsAvailable = 0;
+						}
+						vm.loader = 0;
+					});
+				});
+			}
+
+			$scope.openImageModal = function () {
+				$scope.imageModal = $uibModal.open({
+					templateUrl: 'viewimages.html',
+					controller: 'propertyCtrl',
+					backdrop: 'static',
+					size: 'lg',
+					windowClass: 'zIndex',
+					scope: $scope
+				});
+			}
+
+			$scope.closeImageModal = function () {
+				$scope.imageModal.dismiss('cancel');
+			}
+
+			function getProperties() {
+				var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+
+					$scope.$apply(function () {
+						vm.success = 0;
+						if (snapshot.val()) {
+							vm.properties = snapshot.val();
+							vm.propertiesAvailable = 1;
+						} else {
+							vm.propertiesAvailable = 0;
+						}
+						vm.loader = 0;
+						vm.getListings();
+					});
+				});
+			}
+
+			function init() {
+				vm.loader = 1;
+				getProperties();
+			}
+
+			init();
+
+			vm.generateMergeListing = function () {
+				vm.mergeListing = {};
+				_.forEach(vm.listings, function (list, key) {
+					if (!vm.mergeListing[list.link]) {
+						vm.mergeListing[list.link] = angular.copy(vm.listings[key]);
+						vm.mergeListing[list.link].fromToDate = [];
+						var date = '';
+						if (moment(vm.listings[key].fromDate).format('DD MMM') == moment(vm.listings[key].toDate).format('DD MMM')) {
+							date = moment(vm.listings[key].fromDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						}
+						else {
+							date = moment(vm.listings[key].fromDate).format('DD') + ' to ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						}
+						vm.mergeListing[list.link].fromToDate.push(date);
+						vm.mergeListing[list.link].keys = [key];
+					} else {
+						var date = '';
+						if (moment(vm.listings[key].fromDate).format('DD MMM') == moment(vm.listings[key].toDate).format('DD MMM')) {
+							date = moment(vm.listings[key].fromDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						}
+						else {
+							date = moment(vm.listings[key].fromDate).format('DD') + ' to ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+						}
+						vm.mergeListing[list.link].fromToDate.push(date);
+						vm.mergeListing[list.link].keys.push(key);
+					}
+				});
+			};
+
+			vm.clearAll = function ($event) {
+				vm.propertySelected = '';
+				vm.unitSelected = '';
+				vm.selectedUnitId = '';
+				vm.units = [];
+				vm.fromDate = '';
+				vm.toDate = '';
+				vm.fromTime = '';
+				vm.toTime = '';
+				$event.preventDefault();
+			}
+
+			vm.checkAllListing = function () {
+				$.map(vm.listings, function (value, key) {
+					value.inputCheck = vm.selectedAllListing;
+				});
+				vm.generateMergeListing();
+			};
+
+			vm.checkForDuplicate = function (currentUnit) {
+				for (var i in vm.listings) {
+					var value = vm.listings[i];
+					if (value.propertyId == currentUnit.propertyId && value.unitID == currentUnit.unitID
+						&& value.fromDate == currentUnit.fromDate && value.fromTime == currentUnit.fromTime
+						&& value.toDate == currentUnit.toDate && value.toTime == currentUnit.toTime) {
+						return true;
+					}
+				}
+			};
+
+			vm.addAvailability = function ($event) {
+				$event.preventDefault();
+				if (!vm.propertySelected || !vm.fromDate || !vm.toDate || !vm.fromTime || !vm.toTime) {
+					return;
+				}
+				var availabilities = [];
+				var url = 'https://vcancy.com/login/#/applyproperty/'
+				// if (window.location.host.startsWith('localhost')) {
+				// 	url = 'http://localhost:9000/#/applyproperty/'
+				// }
+				var host = window.location.origin;
+				if (host.indexOf('localhost') > -1) {
+					url = host + '/#/applyproperty/';
+				} else {
+					url = host + '/login/#/applyproperty/';
+				}
+				var availability = {
+					propertyId: vm.propertySelected,
+					fromDate: moment(vm.fromDate.toString()).toDate().toString(),
+					fromTime: vm.fromTime,
+					toDate: moment(vm.toDate.toString()).toDate().toString(),
+					toTime: vm.toTime,
+					landlordID: landlordID,
+					userID: userID,
+					link: url + vm.propertySelected,
+					status: 'Not Listed',
+					listOnCraigslist: false
+				}
+				vm.units = _.map(vm.selectedUnitId, 'unit');
+				if (vm.units.length == 0) {
+					return;
+				}
+				var errorText = ''
+				if (vm.units.length > 0) {
+					vm.units.forEach(function (unit) {
+						var data = {
+							unitID: unit
+						};
+						var _unitAvailability = Object.assign(data, availability);
+						_unitAvailability.link = _unitAvailability.link + '?unitId=' + unit;
+						var isDuplicateEntry = vm.checkForDuplicate(_unitAvailability);
+						if (!isDuplicateEntry) {
+							availabilities.push(_unitAvailability);
+						} else {
+							errorText += 'Duplicate entry found for ' + unit + ', ';
+						}
+					});
+					if (errorText != '') {
+						swal({
+							title: 'Some units cannot be saved',
+							text: errorText,
+							type: 'error'
+						});
+					}
+				} else {
+					availabilities.push(availability);
+				}
+				var promises = [];
+				var fbObj = firebase.database();
+				availabilities.forEach(function (availability) {
+					var promiseObj = fbObj.ref('propertiesSchedule/').push().set(availability)
+					promises.push(promiseObj);
+				});
+				vm.loader = 1;
+				$q.all(promises).then(function () {
+					vm.loader = 0;
+					vm.propertySelected = '';
+					vm.units = [];
+					vm.unitSelected = '';
+					vm.selectedUnitId = '';
+					vm.fromDate = '';
+					vm.toDate = '';
+					vm.fromTime = '';
+					vm.toTime = '';
+					vm.getListings();
+				});
+			};
+
+			$scope.craigslistopen = function (isOpen) {
+				if (isOpen) {
+					userData = JSON.parse(localStorage.getItem('userData')) || {};
+					$scope.craigslist = {
+						username: userData.craigslistUserID || '',
+						password: userData.craigslistpassword || '',
+						renewAds: userData.craigslistRenewAds || false,
+						removeAds: userData.craigslistRemoveAds || false
+					}
+					vm.Craigslistopenapp = $uibModal.open({
+						templateUrl: 'craigslist.html',
+						backdrop: 'static',
+						size: 'lg',
+						scope: $scope
+					});
+				}
+				else {
+					vm.Craigslistopenapp.close();
+				}
+			};
+
+			$scope.saveCraigslistDetails = function () {
+				var fbObj = firebase.database();
+				var promiseObj = fbObj.ref('users/' + landlordID).update({
+					craigslistUserID: $scope.craigslist.username,
+					craigslistpassword: $scope.craigslist.password,
+					craigslistRenewAds: $scope.craigslist.renewAds,
+					craigslistRemoveAds: $scope.craigslist.removeAds
+				}).then(function () {
+					userData = JSON.parse(localStorage.getItem('userData')) || {};
+
+					userData['craigslistUserID'] = $scope.craigslist.username,
+						userData['craigslistpassword'] = $scope.craigslist.password,
+						userData['craigslistRenewAds'] = $scope.craigslist.renewAds,
+						userData['craigslistRemoveAds'] = $scope.craigslist.removeAds,
+						localStorage.setItem('userData', JSON.stringify(userData));
+				})
+				vm.Craigslistopenapp.close();
+			}
+
+			vm.deleteListings = function ($event) {
+				swal({
+					title: "Are you sure?",
+					text: 'This will Delete all the selected listings.',
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonClass: "btn-danger",
+					confirmButtonText: 'Delete All!',
+					closeOnConfirm: true
+				}, function () {
+					var selectedListings = [];
+					$.map(vm.mergeListing, function (value, key) {
+						if (value.inputCheck) {
+							selectedListings = _.concat(selectedListings, value.keys);
+						}
+					});
+					if (selectedListings.length == 0) {
+						return;
+					}
+					var promises = [];
+					vm.loader = 1;
+					var fbObj = firebase.database();
+					selectedListings.forEach(function (listing) {
+						var promiseObj = fbObj.ref('propertiesSchedule/' + listing).remove();
+						promises.push(promiseObj);
+					});
+					$q.all(promises).then(function () {
+						vm.loader = 0;
+						vm.selectedListings = [];
+						vm.listings = [];
+						vm.selectedAllListing = false;
+						vm.mergeListing = {};
+						vm.getListings();
+					});
+				});
+			}
+
+			vm.toggleCraigsList = function (listingId, value, $event) {
+				vm.loader = 1;
+				var fbObj = firebase.database();
+				var promiseObj = fbObj.ref('propertiesSchedule/' + listingId).update({
+					listOnCraigslist: value,
+					status: value ? 'Pending' : 'Not Listed'
+				})
+				promiseObj
+					.then(function () {
+						vm.loader = 0;
+
+						if (vm.userData) {
+							var listingValue = vm.listings[listingId];
+							var propertyAddr = vm.properties[listingValue.propertyId].address;
+							var emailData = '<p>Hello, </p><p>' + vm.userData.email + ' has a request for craigslist display for property - ' + propertyAddr + ' </p><br/><p>Link - ' + listingValue.link + '</p>';
+							// Send Email
+							if (!value) {
+								emailData = '<p>Hello, </p><p>' + vm.userData.email + ' has a request to remove from craigslist display for property - ' + propertyAddr + ' </p><br/><p>Link - ' + listingValue.link + '</p>';
+							}
+							emailSendingService.sendEmailViaNodeMailer('creditrequest@vcancy.com', 'Cragslist Toggle', 'craigslist display', emailData);
+						}
+
+						vm.getListings();
+					})
+					.catch(function () {
+						vm.loader = 0;
+					});
+			}
+
+			vm.openDetailModel = function (propId, unitId) {
+				var index = _.findIndex(vm.properties[propId].unitlists, ['unit', unitId]);
+				var prop = vm.properties[propId];
+				$scope.selectedUnitDetail = {};
+				$scope.selectedUnitDetail.data = vm.properties[propId].unitlists[index];
+				$scope.selectedUnitDetail.data.email = localStorage.getItem('userEmail');
+				$scope.selectedUnitDetail.index = index;
+				$scope.selectedUnitDetail.otherUnits = vm.properties[propId].unitlists
+				$scope.items1 = prop;
+				$scope.items1.indexofDetails = index;
+				$scope.prop = angular.copy(prop);
+				$scope.prop.propID = propId;
+				$scope.modalInstance = $uibModal.open({
+					templateUrl: 'myModalDetailsContent.html',
+					controller: 'propertyCtrl',
+					backdrop: 'static',
+					size: 'lg',
+					windowClass: '',
+					scope: $scope
+				});
+			};
+
+			vm.toggleListOnCraglist = function (keys) {
+				let toggle = false;
+				keys.forEach(function (key) {
+					if (vm.listings[key].listOnCraigslist) {
+						vm.listings[key].listOnCraigslist = !vm.listings[key].listOnCraigslist;
+					}
+					else {
+						vm.listings[key].listOnCraigslist = true;
+					}
+					if (vm.listings[key].listOnCraigslist) {
+						toggle = true;
+					}
+					vm.toggleCraigsList(key, vm.listings[key].listOnCraigslist)
+				});
+				if (toggle) {
+					swal({
+						title: 'Success',
+						text: 'Your unit will now be listed on Craigslist in 12-24 hours.You will get a notification email when your listing is active.',
+						type: "success",
+					});
+				}
+			};
+
+			vm.checkIsIncomplete = function (propId, unitId) {
+				if (!unitId) {
+					return false;
+				}
+				if (!vm.properties[propId]) return;
+				var unit = _.find(vm.properties[propId].unitlists, ['unit', unitId]);
+				if (!unit) return;
+				var prop = vm.properties[propId];
+				return unit.isIncomplete == false ? false : true;
+			}
+
+			$scope.eventSources = [$scope.events, $scope.eventSource, $scope.eventsF]
+
+			function generateToken() {
+				var result = '',
+					length = 6,
+					chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+				for (var i = 0; i < length; i++)
+					result += chars[Math.floor(Math.random() * chars.length)];
+
+				return result;
+			}
+
+			vm.questionDropDown = [
+				{ id: 'WKRX6Q', label: 'What is your profession?', isChecked: false },
+				{ id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
+				{ id: 'N1F5MO', label: 'Are you able to provide references?', isChecked: false },
+				{ id: 'OU489L', label: 'Why are you moving?', isChecked: false },
+				{ id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: true },
+				{ id: 'A9OG32', label: 'No. of Applicants', isChecked: true },
+				{ id: 'UH7JZS', label: 'Do you smoke?', isChecked: true },
+				{ id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
+			];
+
+			vm.openPrescreeningQuestions = function () {
+				vm.prescreeningQuestion = $uibModal.open({
+					templateUrl: 'prescreeningquestions.html',
+					backdrop: 'static',
+					size: 'md',
+					scope: $scope
+				});
+			};
+
+			$scope.closePrescreeningModal = function () {
+				vm.prescreeningQuestion.close();
+			}
+			vm.customQuestion = null;
+			vm.addCustomQuestion = function () {
+				if (!vm.customQuestion) {
+					return;
+				}
+				var data = {
+					label: vm.customQuestion,
+					id: generateToken(),
+					isChecked: false
+				}
+
+				vm.screeningQuestions.push(data);
+				vm.customQuestion = null;
+			}
+
+			vm.saveScreeningQuestions = function () {
+				vm.loader = 1;
+				var ques = angular.copy(vm.screeningQuestions);
+				_.omit(ques, '$$hashKey');
+				firebase.database().ref('users/' + this.landLordID).update({
+					screeningQuestions: ques
+				}).then(function () {
+					userData.screeningQuestions = ques;
+					localStorage.setItem('userData', JSON.stringify(userData));
+					refreshScreeningQuestions();
+					vm.loader = 0;
+					vm.prescreeningQuestion.close();
+				}, function (error) {
+					vm.loader = 0;
+					return false;
+				});
+			}
+
+			vm.deleteQuestionById = function (id) {
+				var index = vm.screeningQuestions.findIndex(function (ques) {
+					if (ques.id == id) return true;
+				});
+				vm.screeningQuestions.splice(index, 1);
+			};
+
+			function refreshScreeningQuestions() {
+				userData = JSON.parse(localStorage.getItem('userData'));
+				vm.userData = userData;
+				if (userData && userData.screeningQuestions && userData.screeningQuestions.length !== 0) {
+					vm.screeningQuestions = userData.screeningQuestions;
+				} else {
+					vm.screeningQuestions = angular.copy(vm.questionDropDown);
+				}
+			}
+			refreshScreeningQuestions();
+
+			// Custom Rental
+			vm.companyDetail = function () {
+				return vm.userData.companyname + ' ' + (',' + vm.userData.contact || '')
+			}
+
+			vm.customRentalApplicationCheck = {};
+			vm.customRentalApplicationCheck.TCData = 'You are authorized to obtaining credit checks & verifying details contained in this Application.' +
+
+				'This unit/s is strictly NON SMOKING. This offer is subject to acceptance by the landlord/property' +
+				'management company that listed the property.This application is made on the understanding that no ' +
+				'betterments will be provided to the Rental Unit except those which may be specifically requested in' +
+				'this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.' +
+
+				'It is understood that this application will not be processed unless fully completed.' +
+
+				'If the landlord/property management company accepts this Application, we will sign a Fixed ' +
+				'Term Tenancy Agreement at the offices of the property management company or in person with' +
+				'the landlord and pay the security deposit. The Rental Unit will not be considered rented' +
+				'until the Fixed Term Tenancy Agreement is signed by the Tenant and the Landlord.' +
+
+				'We will ensure that the collection, use, disclosure and retention of information will comply with ' +
+				'the provisions of the Freedom of information and Protection of Privacy Act. ' +
+				'Information will be collected and used only as necessary and for the intended purpose and will ' +
+				'not be disclosed as required by law.' +
+
+				'I hereby state that the information contained herein is true and I authorize my References' +
+				'as listed above to release information regarding my employment and/or past/current tenancies.' +
+
+				'Tenants are not chosen on a first come – first served basis. We choose the most suitable ' +
+				'application for the unit at our sole discretion. This application form is to be used only' +
+				'in the interested of the owner of the rental unit.';
+
+			vm.defaultRentalApplicationCheck = {
+				'PAPPD': true,
+				'CADDR': true,
+				'PADDR': false,
+				'AAPPD': false,
+				'AAPP1': false,
+				'AAPP2': false,
+				'ESIV': true,
+				'ESIV1': true,
+				'VI': false,
+				'EC': false,
+				'EC1': false,
+				'REF': true,
+				'REF1': true,
+				'REF2': false,
+				'UD': true,
+				'UDAAPP': false,
+				'TC': true,
+				'TCData': vm.customRentalApplicationCheck.TCData,
+				'companyLogo': userData ? userData.companylogo || 'https://s3.ca-central-1.amazonaws.com/vcancy-final/public/no_image_found.jpg' : 'https://s3.ca-central-1.amazonaws.com/vcancy-final/public/no_image_found.jpg',
+				'companyDetails': vm.companyDetail()
+			}
+
+			function refreshCustomRentalApplicationCheck() {
+				userData = JSON.parse(localStorage.getItem('userData'));
+				vm.userData = userData;
+				if (userData && userData.customRentalApplicationCheck) {
+					if (userData.customRentalApplicationCheck && !userData.customRentalApplicationCheck.TCData) {
+						userData.customRentalApplicationCheck.TCData = vm.customRentalApplicationCheck.TCData;
+					}
+					if (!userData.customRentalApplicationCheck.companyLogo) {
+						userData.customRentalApplicationCheck.companyLogo = userData.companylogo || vm.customRentalApplicationCheck.companyLogo || "https://s3.ca-central-1.amazonaws.com/vcancy-final/public/no_image_found.jpg";
+					}
+					if (!userData.customRentalApplicationCheck.companyDetails) {
+						userData.customRentalApplicationCheck.companyDetails = vm.companyDetail();
+					}
+					vm.customRentalApplicationCheck = userData.customRentalApplicationCheck;
+				} else {
+					vm.customRentalApplicationCheck = angular.copy(vm.defaultRentalApplicationCheck);
+				}
+			}
+			refreshCustomRentalApplicationCheck();
+
+			vm.saveCustomRentalApplicationCheck = function () {
+				vm.loader = 1;
+				var customChecks = angular.copy(vm.customRentalApplicationCheck);
+				_.omit(customChecks, '$$hashKey');
+				firebase.database().ref('users/' + this.landLordID).update({
+					customRentalApplicationCheck: customChecks
+				}).then(function () {
+					userData.customRentalApplicationCheck = customChecks;
+					localStorage.setItem('userData', JSON.stringify(userData));
+					refreshCustomRentalApplicationCheck();
+					vm.loader = 0;
+					vm.customrentalapp.close();
+				}, function (error) {
+					vm.loader = 0;
+					return false;
+				});
+			}
+
+			$scope.uploadDetailsImages = function (event) {
+				var file = event.target.files[0];
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
+				});
+				AWS.config.region = 'ca-central-1';
+
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+				var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+				filename = filename.replace(/\s/g, '');
+
+				if (file.size > 3145728) {
+					swal({
+						title: "Error!",
+						text: 'File size should be 3 MB or less.',
+						type: "error",
+					});
+					return false;
+				} else if (file.type.indexOf('image') === -1) {
+					swal({
+						title: "Error!",
+						text: 'Only files are accepted.',
+						type: "error",
+					});
+					return false;
+				}
+
+				var params = {
+					Key: 'company-logo/' + filename,
+					ContentType: file.type,
+					Body: file,
+					StorageClass: "STANDARD_IA",
+					ACL: 'public-read'
+				};
+
+				bucket.upload(params).on('httpUploadProgress', function (evt) { })
+					.send(function (err, data) {
+						if (data && data.Location) {
+							$scope.$apply(function () {
+								vm.customRentalApplicationCheck.companyLogo = data.Location;
+							});
+							// });
+							// firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+							//   vm.opensuccesssweet("Profile Updated successfully!");
+							// }, function (error) {
+
+							//   vm.openerrorsweet("Profile Not Updated! Try again!");
+							//   return false;
+							// });
+						}
+					});
+			}
+
+			$scope.closecustomrentalappModal = function () {
+				vm.customrentalapp.close();
+			}
+
+			vm.opencustomrentalapp = function () {
+				vm.customrentalapp = $uibModal.open({
+					templateUrl: 'customrentalapp.html',
+					backdrop: 'static',
+					size: 'lg',
+					scope: $scope
+				});
+			};
+
+		}])
+'use strict';
+
+//=================================================
 // Tenant Schedule
 //=================================================
 
 vcancyApp
-    .controller('tenantscheduleCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams','emailSendingService',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams,emailSendingService) {
-		
+	.controller('tenantscheduleCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'emailSendingService', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, emailSendingService) {
+
 		var vm = this;
 		vm.showCal = false;
 		var tenantID = localStorage.getItem('userID');
 		vm.loader = 1;
-		
-		var propdbObj = firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
+
+		var propdbObj = firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function (snapshot) {
 			// console.log(snapshot.val())
-			$scope.$apply(function(){
-				if(snapshot.val() !== null) {
-					vm.calendardata = $.map(snapshot.val(), function(value, index) {
-						if(value.schedulestatus == "confirmed") {
-							if(value.units === ' '){
-								var units = '';
+			$scope.$apply(function () {
+				if (snapshot.val() !== null) {
+					vm.calendardata = $.map(snapshot.val(), function (value, index) {
+						if (value.schedulestatus == "confirmed") {
+							var units = '';
+							if (value.unitID === ' ' || !value.unitID) {
+								units = '';
 							} else {
-								var units = value.units+" - ";								
+								units = value.unitID + " - ";
 							}
-							return [{scheduleID:index, className: 'bgm-cyan', title: units+value.address, start: new Date(value.dateslot)}];
+							return [{ scheduleID: index, className: 'bgm-cyan', title: units + value.address, start: new Date(value.dateslot) }];
 						}
-					});						
-					
+					});
+
 					// vm.calendardata = [{scheduleID:"-KvaDdFDac3A_apLY-ce",className:"bgm-cyan",title:"Active kl",start:"24-September-2017"}]
 					$scope.calendardata = vm.calendardata;
-					
+
 					console.log($scope.calendardata);
 					vm.schedulesavail = 0;
-					
+
 					//to map the object to array
-					vm.tabledata = $.map(snapshot.val(), function(value, index) {
-						if(value.schedulestatus !== "removed") {
+					vm.tabledata = $.map(snapshot.val(), function (value, index) {
+						if (value.schedulestatus !== "removed" && value.schedulestatus !== "pending") {
 							vm.schedulesavail = 1;
-							if(value.units === ' '){
-								var units = '';
+							var units = '';
+							if (value.unitID === ' ' || !value.unitID) {
+								units = '';
 							} else {
-								var units = value.units+" - ";								
+								units = value.unitID + " - ";
 							}
-							return [{scheduleID:index, address:units+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];
-						} 
-					});	
-					
+							var dateSlot = value.dateSlot;
+							var timeRange = value.timeRange;
+							if (value.schedulestatus == "pending" && value.proposeNewTime) {
+								dateSlot = value.proposeNewTime.date1 || value.proposeNewTime.date2 || value.proposeNewTime.date3;
+								timeRange = (value.proposeNewTime.fromTime1 + '-' + value.proposeNewTime.toTime1) || (value.proposeNewTime.fromTime2 + '-' + value.proposeNewTime.toTime2) || (value.proposeNewTime.fromTime3 + '-' + value.proposeNewTime.toTime3)
+							}
+							return [{ scheduleID: index, address: units + value.address, dateslot: moment(dateSlot, 'MM/DD/YYYY').format('DD MMMM YYYY'), timerange: timeRange, schedulestatus: value.schedulestatus }];
+						}
+					});
+
 					vm.extracols = [
-							{ field: "", title: "", show: true}
-						];	
-					
+						{ field: "", title: "", show: true }
+					];
+
 				} else {
-					vm.tabledata = [{scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''}];						
-					vm.calendardata = [{scheduleID:'', className: 'bgm-cyan', title:'', start: ''}]						
-					$scope.calendardata = vm.calendardata;					
+					vm.tabledata = [{ scheduleID: '', address: '', dateslot: '', timerange: '', schedulestatus: '' }];
+					vm.calendardata = [{ scheduleID: '', className: 'bgm-cyan', title: '', start: '' }]
+					$scope.calendardata = vm.calendardata;
 					vm.schedulesavail = 0;
 				}
-					
+
 				vm.cols = [
-					  { field: "address", title: "Address", sortable: "address", show: true },
-					  { field: "dateslot", title: "Date", sortable: "dateslot", show: true },					  
-					  { field: "timerange", title: "Time", sortable: "timerange", show: true },
-					  { field: "schedulestatus", title: "Status", sortable: "schedulestatus", show: true }
-					];
-					
-				
+					{ field: "address", title: "Address", sortable: "address", show: true },
+					{ field: "dateslot", title: "Date", show: true },
+					{ field: "timerange", title: "Time", show: true },
+					{ field: "schedulestatus", title: "Status", sortable: "schedulestatus", show: true }
+				];
+
+
 				vm.loader = 0;
-				
+
 				//Sorting
 				vm.tableSorting = new NgTableParams({
-					sorting: {address: 'asc'}}, 
+					sorting: { address: 'asc' }
+				},
+
+					{
+						dataset: vm.tabledata,
+						counts: [],
+						paginate: false
+
+						/*, {
+							total: vm.tabledata.length, // length of data
+							getData: function($defer, params) {
+								// console.log(params);
+								// use build-in angular filter
+								var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
 					
-					{dataset: vm.tabledata
-				      
-				/*, {
-					total: vm.tabledata.length, // length of data
-					getData: function($defer, params) {
-						// console.log(params);
-						// use build-in angular filter
-						var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
-			
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}*/
-					 // dataset: vm.tabledata
-				})
-				
-				vm.showCal = true;
+								$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+							}*/
+						// dataset: vm.tabledata
+					})
+
+				vm.showCal = false;
 			});
 		});
-		
-		vm.cancelschedule = function(index){
+
+		vm.cancelschedule = function (index) {
 			// console.log(index);
-			if ($window.confirm("Are you sure you want to cancel this viewing appointment?"))  {
-				firebase.database().ref('applyprop/'+index).update({	
+			// if ($window.confirm("Are you sure you want to cancel this viewing appointment?")) {
+			swal({
+				title: "Are you sure?",
+				text: 'This will Cancel this viewing appointment!',
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonClass: "btn-danger",
+				confirmButtonText: 'Yes',
+				closeOnConfirm: true
+			}, function () {
+				firebase.database().ref('applyprop/' + index).update({
 					schedulestatus: "cancelled"
 				})
-				
-				firebase.database().ref('applyprop/'+index).once("value", function(snapshot) {
-					firebase.database().ref('users/'+snapshot.val().landlordID).once("value", function(snap) {
-						var emailData = '<p>Hello, </p><p>'+snapshot.val().name+' has <strong>cancelled</strong> their viewing at '+snapshot.val().dateslot+', '+snapshot.val().timerange+' for '+snapshot.val().address+'.</p><p>The time slot is now open to other renters.</p><p>To view details, please <a href="http://www.vcancy.ca/login/#/"> log in </a> and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-						
-						emailSendingService.sendEmailViaNodeMailer(snap.val().email, snapshot.val().name+'has cancelled viewing for '+snapshot.val().address, 'cancelstatus', emailData);
+
+				firebase.database().ref('applyprop/' + index).once("value", function (snapshot) {
+					firebase.database().ref('users/' + snapshot.val().landlordID).once("value", function (snap) {
+						var emailData = '<p>Hello, </p><p>' + snapshot.val().name + ' has <strong>cancelled</strong> their viewing at ' + snapshot.val().dateslot + ', ' + snapshot.val().timerange + ' for ' + snapshot.val().address + '.</p><p>The time slot is now open to other renters.</p><p>To view details, please <a href="http://www.vcancy.com/login/#/"> log in </a> and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+						emailSendingService.sendEmailViaNodeMailer(snap.val().email, snapshot.val().name + 'has cancelled viewing for ' + snapshot.val().address, 'cancelstatus', emailData);
 					});
-						
-					var emailData = '<p>Hello '+snapshot.val().name+', </p><p>Your viewing time '+snapshot.val().dateslot+', '+snapshot.val().timerange+' has been been <strong>cancelled</strong> by the landlord of '+snapshot.val().address+'.</p><p>Please book another time using the link initially provided or contact the landlord directly.</p><p>To view details, please <a href="http://www.vcancy.ca/login/#/"> log in </a> and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-						
-					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your viewing has been cancelled for '+snapshot.val().address, 'cancelstatus', emailData);
+
+					var emailData = '<p>Hello ' + snapshot.val().name + ', </p><p>Your viewing time ' + snapshot.val().dateslot + ', ' + snapshot.val().timerange + ' has been been <strong>cancelled</strong> by the landlord of ' + snapshot.val().address + '.</p><p>Please book another time using the link initially provided or contact the landlord directly.</p><p>To view details, please <a href="http://www.vcancy.com/login/#/"> log in </a> and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+					emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Your viewing has been cancelled for ' + snapshot.val().address, 'cancelstatus', emailData);
 				});
-				
-				
 				$state.reload();
-			}
+			});
+
+			// }
 		}
-}])
+
+		vm.removeSchedule = function (key) {
+			swal({
+				title: "Are you sure?",
+				text: 'This will delete the schedule from the system.',
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonClass: "btn-danger",
+				confirmButtonText: 'Delete',
+				closeOnConfirm: true
+			}, function () {
+				firebase.database().ref('applyprop/' + key).update({
+					schedulestatus: 'removed'
+				}).then(function () {
+					$state.reload();
+				})
+					.catch(function (err) {
+						console.error('ERROR', err);
+						swal("", "There was error deleteing the schedule.", "error");
+					});
+
+			});
+		}
+	}])
 
 'use strict';
 
@@ -5263,63 +13658,376 @@ vcancyApp
 //=================================================
 
 vcancyApp
-    .controller('landlorddboardlCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window) {
-		
+	.controller('landlorddboardlCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _) {
+
 		var vm = this;
 		var landlordID = localStorage.getItem('userID');
+		vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
 		vm.proplive = 0;
+		vm.unitsCount = 0;
+		vm.vacantUnits = 0;
+		vm.appliedProperties;
 		vm.viewingschedule = 0;
 		vm.viewed = 0;
 		vm.submitapps = 0;
-		
-		vm.loader = 1;
-		
-		var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
-			// console.log(snapshot.val())
-			$scope.$apply(function(){
-				snapshot.forEach(function(childSnapshot) {
-					// console.log(childSnapshot.val().propstatus);
-					
-					if(childSnapshot.val().propstatus == true){
-						vm.proplive += 1;
+
+		vm.moment = moment;
+		$scope.eventSources = [];
+		var date = new Date();
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
+
+		$scope.uiConfig = {
+			calendar: {
+				height: 500,
+				editable: false,
+				header: {
+					left: 'title',
+					center: '',
+					right: 'today prev,next'
+
+				},
+				buttonText: {
+					today: 'Today',
+				},
+
+				//	eventClick: $scope.alertEventOnClick,
+				//	eventDrop: $scope.alertOnDrop,
+				//	eventResize: $scope.alertOnResize
+			}
+		};
+
+
+		$scope.events = [];
+
+		$scope.eventSources = [$scope.events]
+		vm.propertySelected = '';
+		vm.unitSelected = '';
+		vm.selectedUnitId = '';
+		vm.units = [];
+		vm.fromDate = '';
+		vm.toDate = '';
+		vm.fromTime = '';
+		vm.toTime = '';
+		vm.properties = [];
+		vm.listings = [];
+		vm.mergeListing = {};
+		vm.selectedListings = [];
+
+		function getListings() {
+			vm.loader = 1;
+			var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+
+				$scope.$apply(function () {
+					vm.success = 0;
+					if (snapshot.val()) {
+						vm.listings = snapshot.val();
+						vm.generateMergeListing();
+						$.map(vm.listings, function (value, key) {
+							value.parsedFromDate = parseInt(new moment(value.fromDate).format('x'))
+							value.parsedToDate = parseInt(new moment(value.toDate).format('x'))
+							var startDate = new Date(value.fromDate).setHours(parseFloat(value.fromTime));
+							var endDate = new Date(value.toDate).setHours(parseFloat(value.toTime));
+							$scope.events.push(
+								{
+									title: value.unitID + '-' + vm.properties[value.propertyId].address,
+									start: new Date(startDate),
+									end: new Date(endDate),
+									className: 'bgm-teal'
+								}
+							)
+						});
+						vm.listingsAvailable = 1;
+					} else {
+						vm.listingsAvailable = 0;
 					}
-					
+					vm.loader = 0;
 				});
+			});
+		}
+
+		function getProperties() {
+			var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+
+				$scope.$apply(function () {
+					vm.success = 0;
+					if (snapshot.val()) {
+						vm.properties = snapshot.val();
+						vm.propertiesAvailable = 1;
+					} else {
+						vm.propertiesAvailable = 0;
+					}
+					vm.loader = 0;
+					getListings();
+				});
+			});
+		}
+
+		function getPendingProposedTime() {
+			vm.loader = 1;
+			vm.apppropaddress = {};
+			var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+				if (snapshot.val()) {
+					$scope.$apply(function () {
+						var proposedTimeList = {};
+						_.map(snapshot.val(), function (value, key) {
+							if (value.schedulestatus == 'pending' && value.proposeNewTime) {
+								proposedTimeList[key] = value;
+							}
+						});
+						vm.apppropaddress = proposedTimeList;
+					});
+				}
+				$scope.$apply(function () {
+					vm.loader = 0;
+				});
+			});
+		}
+
+		function init() {
+			vm.loader = 1;
+			getProperties();
+			getPendingProposedTime();
+		}
+
+		init();
+
+		vm.updateCheck = function (key) {
+			var updateData = {};
+			updateData[key] = true
+			firebase.database().ref('users/' + landlordID).update(updateData)
+				.then(function () {
+					firebase.database().ref('users/' + landlordID).once('value')
+						.then(function (snap) {
+							var updatedUser = snap.val();
+							$scope.$apply(function () {
+								localStorage.setItem('userData', JSON.stringify(updatedUser));
+								vm.userData = JSON.parse(localStorage.getItem('userData'));
+							});
+						});
+				}, function (error) {
+					console.error('Error > ', error);
+				})
+		};
+
+		vm.acceptProposeTime = function (key, index) {
+			vm.loader = 1;
+			var updatedData = {
+				dateSlot: vm.apppropaddress[key].proposeNewTime['date' + index],
+				fromTimeSlot: vm.apppropaddress[key].proposeNewTime['fromTime' + index],
+				toTimeSlot: vm.apppropaddress[key].proposeNewTime['toTime' + index],
+				timeRange: vm.apppropaddress[key].proposeNewTime['fromTime' + index] + '-' + vm.apppropaddress[key].proposeNewTime['toTime' + index],
+				schedulestatus: "scheduled"
+			}
+			firebase.database().ref('applyprop/' + key).update(updatedData)
+			.then(function() {
+				getPendingProposedTime();
+			});
+		}
+
+		vm.generateMergeListing = function () {
+			vm.mergeListing = {};
+			_.forEach(vm.listings, function (list, key) {
+				if (!vm.mergeListing[list.link]) {
+					vm.mergeListing[list.link] = angular.copy(vm.listings[key]);
+					vm.mergeListing[list.link].fromToDate = [];
+					var date = moment(vm.listings[key].fromDate).format('DD MMM') + '-' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+					vm.mergeListing[list.link].fromToDate.push(date);
+					vm.mergeListing[list.link].keys = [key];
+				} else {
+					var date = moment(vm.listings[key].fromDate).format('DD MMM') + ' - ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
+					vm.mergeListing[list.link].fromToDate.push(date);
+					vm.mergeListing[list.link].keys.push(key);
+				}
+			});
+		};
+
+		vm.clearAll = function ($event) {
+			vm.propertySelected = '';
+			vm.unitSelected = '';
+			vm.selectedUnitId = '';
+			vm.units = [];
+			vm.fromDate = '';
+			vm.toDate = '';
+			vm.fromTime = '';
+			vm.toTime = '';
+			$event.preventDefault();
+		}
+
+		vm.checkAllListing = function () {
+			$.map(vm.listings, function (value, key) {
+				value.inputCheck = vm.selectedAllListing;
+			});
+		}
+
+		vm.addAvailability = function ($event) {
+			$event.preventDefault();
+			if (!vm.propertySelected || !vm.fromDate || !vm.toDate || !vm.fromTime || !vm.toTime) {
+				return;
+			}
+			var availabilities = [];
+
+			let url = 'https://vcancy.com/login/#/applyproperty/'
+			if (window.location.host.startsWith('localhost')) {
+				url = 'http://localhost:9000/#/applyproperty/'
+			}
+			var availability = {
+				propertyId: vm.propertySelected,
+				fromDate: moment(vm.fromDate.toString()).toDate().toString(),
+				fromTime: vm.fromTime,
+				toDate: moment(vm.toDate.toString()).toDate().toString(),
+				toTime: vm.toTime,
+				landlordID: landlordID,
+				userID: userID,
+				link: url + vm.propertySelected,
+				status: 'Not Listed',
+				listOnCraigslist: false
+			}
+			if (vm.properties[vm.propertySelected].units == 'multiple') {
+				vm.units = _.map(vm.selectedUnitId, 'unit');
+				if (vm.units.length == 0) {
+					return;
+				}
+			}
+			if (vm.units.length > 0) {
+				vm.units.forEach(function (unit) {
+					var data = {
+						unitID: unit
+					}
+					var _unitAvailability = Object.assign(data, availability);
+					_unitAvailability.link = _unitAvailability.link + '?unitId=' + unit
+					availabilities.push(_unitAvailability);
+				});
+			} else {
+				availabilities.push(availability);
+			}
+			var promises = [];
+			var fbObj = firebase.database();
+			availabilities.forEach(function (availability) {
+				var promiseObj = fbObj.ref('propertiesSchedule/').push().set(availability)
+				promises.push(promiseObj);
+			});
+			vm.loader = 1;
+			$q.all(promises).then(function () {
+				vm.loader = 0;
+				vm.propertySelected = '';
+				vm.units = [];
+				vm.unitSelected = '';
+				vm.selectedUnitId = '';
+				vm.fromDate = '';
+				vm.toDate = '';
+				vm.fromTime = '';
+				vm.toTime = '';
+				getListings();
+			});
+		};
+
+		vm.deleteListings = function ($event) {
+			var selectedListings = [];
+			$.map(vm.mergeListing, function (value, key) {
+				if (value.inputCheck) {
+					selectedListings = _.concat(selectedListings, value.keys);
+				}
+			});
+			if (selectedListings.length == 0) {
+				return;
+			}
+			var promises = [];
+			vm.loader = 1;
+			var fbObj = firebase.database();
+			selectedListings.forEach(function (listing) {
+				var promiseObj = fbObj.ref('propertiesSchedule/' + listing).remove();
+				promises.push(promiseObj);
+			});
+			$q.all(promises).then(function () {
+				vm.loader = 0;
+				vm.selectedListings = [];
+				vm.listings = [];
+				vm.selectedAllListing = false;
+				getListings();
+			});
+		}
+
+		vm.toggleCraigsList = function (listingId, value, $event) {
+			vm.loader = 1;
+			var fbObj = firebase.database();
+			var promiseObj = fbObj.ref('propertiesSchedule/' + listingId).update({
+				listOnCraigslist: value
+			})
+			promiseObj
+				.then(function () {
+					vm.loader = 0;
+					getListings();
+				})
+				.catch(function () {
+					vm.loader = 0;
+				});
+		}
+
+		vm.loader = 1;
+
+		var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+			// console.log(snapshot.val())
+			var properties = snapshot.val() || {};
+			$scope.$apply(function () {
+				var liveProperties = 0;
+				var unitsCount = 0;
+				var vacantUnits = 0;
+				_.forEach(properties, function (value, key) {
+					if (value.unitlists) {
+						unitsCount = unitsCount + value.unitlists.length;
+						var _vacantUnits = _.sumBy(value.unitlists, function (unitObj) {
+							if (unitObj.status == "" || unitObj.status == "available" || !unitObj.status) {
+								return 1;
+							}
+							return 0;
+						});
+						vacantUnits = vacantUnits + _vacantUnits || 0;
+					}
+					liveProperties = liveProperties + 1;
+				});
+				vm.proplive = liveProperties;
+				vm.unitsCount = unitsCount;
+				vm.vacantUnits = vacantUnits;
 				vm.loader = 0;
 			});
-		   
+
 		});
-		
-		var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
+
+		var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 			console.log(snapshot.val())
-			$scope.$apply(function(){
-				$.map(snapshot.val(), function(value, index) {
-					
-					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isBefore(new Date()) ) {
-						vm.viewed += 1;
-					} 
-					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isAfter(new Date())) {
-						vm.viewingschedule += 1;
-					}
-					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date())  &&   moment(value.fromtimeslot).format('HH:mm') < moment(new Date()).format('HH:mm') &&  moment(value.toslot).format('HH:mm') < moment(new Date()).format('HH:mm')) {
-						vm.viewed += 1;
-					}
-					if(value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date())  &&   moment(value.fromtimeslot).format('HH:mm') >= moment(new Date()).format('HH:mm') &&  moment(value.toslot).format('HH:mm') >= moment(new Date()).format('HH:mm')) {
-						vm.viewingschedule += 1;
-					}
-					if(value.schedulestatus == "submitted"){
-						vm.submitapps += 1;
-					}
-					
-					
-				});	
-				
+			var appliedProperties = 0;
+			$scope.$apply(function () {
+				if (snapshot.val()) {
+					$.map(snapshot.val(), function (value, index) {
+
+						if (value.schedulestatus == "confirmed" && moment(value.dateslot).isBefore(new Date())) {
+							vm.viewed += 1;
+						}
+						if (value.schedulestatus == "confirmed" && moment(value.dateslot).isAfter(new Date())) {
+							vm.viewingschedule += 1;
+						}
+						if (value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date()) && moment(value.fromTimeSlot).format('hh:mm a') < moment(new Date()).format('HH:mm') && moment(value.toTimeSlot).format('HH:mm') < moment(new Date()).format('HH:mm')) {
+							vm.viewed += 1;
+						}
+						if (value.schedulestatus == "confirmed" && moment(value.dateslot).isSame(new Date()) && moment(value.fromTimeSlot).format('hh:mm a') >= moment(new Date()).format('HH:mm') && moment(value.toTimeSlot).format('HH:mm') >= moment(new Date()).format('HH:mm')) {
+							vm.viewingschedule += 1;
+						}
+						if (value.schedulestatus == "submitted") {
+							vm.submitapps += 1;
+						}
+
+						appliedProperties = appliedProperties + 1;
+					});
+				}
+				vm.appliedProperties = appliedProperties;
 				vm.loader = 0;
 			});
-		   
+
 		});
-		
-}])
+
+	}])
 'use strict';
 
 //=================================================
@@ -5373,269 +14081,229 @@ vcancyApp
 //=================================================
 
 vcancyApp
-    .controller('tenantappCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
-		
+	.controller('tenantappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', 'emailSendingService', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, emailSendingService) {
+
 		var vm = this;
 		var tenantID = localStorage.getItem('userID');
+		var userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : {};
+		var userEmail = localStorage.getItem('userEmail');
 		vm.loader = 1;
 		vm.submittedappsavail = 0;
-		vm.submitappsdata = [];	
-		
-		firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
+		$scope.reverseSort = false;
+		vm.submitappsdata = [];
+
+		firebase.database().ref('applyprop/').orderByChild("tenantID").equalTo(tenantID).once("value", function (snapshot) {
 			// console.log(snapshot.val())
-			$scope.$apply(function(){
-				if(snapshot.val() != null) {					
+			$scope.$apply(function () {
+				if (snapshot.val() != null) {
 					vm.pendingappsavail = 0;
-					
+
 					console.log($rootScope.$previousState.name);
-					if($rootScope.$previousState.name == "rentalform"){		
+					if ($rootScope.$previousState.name == "rentalform") {
 						$state.reload();
 					}
-					
 					//to map the object to array
-					vm.tabledata = $.map(snapshot.val(), function(value, index) {						
-						if(value.schedulestatus == "confirmed" ) { // && moment(value.dateslot).isBefore(new Date())
+					console.log(snapshot.val());
+					vm.tabledata = $.map(snapshot.val(), function (value, index) {
+						if (value.schedulestatus == "scheduled") { // && moment(value.dateslot).isBefore(new Date())
 							vm.pendingappsavail = 1;
-							if(value.units === ' '){
-								var units = '';
+							var units = '';
+							if (value.unitID === ' ' || !value.unitID) {
+								units = '';
 							} else {
-								var units = value.units+" - ";								
+								units = value.unitID + " - ";
 							}
-							return [{applicationID: 0, scheduleID:index, address: units+value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus}];			
-						} 
-					});	
-					
+							return [{ applicationID: 0, scheduleID: index, address: units + value.address, dateslot: value.dateSlot, timerange: value.timeRange, schedulestatus: value.schedulestatus }];
+						}
+					});
+
 					// console.log(vm.tabledata);
-					angular.forEach(vm.tabledata, function(schedule, key) {	
-						firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(schedule.scheduleID).once("value", function(snap) {	
+					angular.forEach(vm.tabledata, function (schedule, key) {
+						firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(schedule.scheduleID).once("value", function (snap) {
 							// console.log(snap.val());
-							$scope.$apply(function(){
-								if(snap.val() != null) {		
-									$.map(snap.val(),function(val,k){
+							$scope.$apply(function () {
+								if (snap.val() != null) {
+									$.map(snap.val(), function (val, k) {
 										vm.tabledata[key].applicationID = k;
 									});
-								} 	
-							});
-						});
-					});
-					
-					// console.log(vm.tabledata);
-					
-					vm.extracols = [
-						  { field: "scheduleID", title: "", show: true }
-						];
-				
-				
-					vm.cols = [
-						  { field: "address", title: "Address", sortable: "address", show: true },
-						  { field: "dateslot", title: "Viewed On", sortable: "dateslot", show: true }
-						];
-						
-					vm.loader = 0;
-						
-					//Sorting
-					vm.tableSorting = new NgTableParams({
-						sorting: {address: 'asc'}}, 
-						
-						{dataset: vm.tabledata
-
-						/*, {
-						total: vm.tabledata.length, // length of data
-						getData: function($defer, params) {
-							// console.log(params);
-							// use build-in angular filter
-							var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
-				
-							$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-						}*/
-						 // dataset: vm.tabledata
-						})
-					}
-				
-				
-				if(snapshot.val() != null){
-					$.map(snapshot.val(), function(val, key) {		
-						firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(key).once("value", function(snap) {	
-							$scope.$apply(function() {
-								if(snap.val() !== null) {					
-									//to map the object to array
-									$.map(snap.val(), function(value, index) {	
-										if(val.schedulestatus == "submitted" ){
-											vm.submittedappsavail = 1;
-											vm.submitappsdata.push({appID:index, address:value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus});
-										}
-									});	
 								}
 							});
 						});
-					});	
-					
-					vm.submitappsextracols = [
-					  { field: "appID", title: "", show: true }
-					];
-					
-					vm.submitappscols = [
-					  { field: "address", title: "Address", sortable: "address", show: true },
-					  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
-					  // { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
-					];
-					
-					//Sorting
-					vm.submitappsSorting = new NgTableParams({
-						sorting: {address: 'asc'}}, 
-					
-					{dataset: vm.submitappsdata
-					/*}, {
-						total: vm.submitappsdata.length, // length of data
-						getData: function($defer, params) {
-							// console.log(params);
-							// use build-in angular filter
-							var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
-				
-							$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-						}*/
-						 // dataset: vm.submitappsdata
-					})	
-				}
-				
-			});		
-		});	
-		
-		firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
-			$scope.$apply(function(){
-				if(snapshot.val() != null){
-					$.map(snapshot.val(), function(value, key) {		
-						if(value.scheduleID == 0 && value.externalappStatus == "draft" ){
-							vm.pendingappsavail = 1;
-														
-							console.log($rootScope.$previousState.name);
-							if($rootScope.$previousState.name == "rentalform"){		
-								$state.reload();
-							}
-					
-							if(value.address == ''){
-								value.address = 'No Address Entered';
-							} else {
-								value.address = value.address;
-							}
-							
-							
-							vm.tabledata.push({applicationID: key,scheduleID:0, address:value.address, dateslot: value.dateslot, timerange: value.timerange,  schedulestatus: value.schedulestatus});
-						}
 					});
-					
-					vm.cols = [
-					  { field: "address", title: "Address", sortable: "address", show: true },
-					  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
-					  // { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
-					];
-					
+
 					// console.log(vm.tabledata);
+
 					vm.extracols = [
-						  { field: "scheduleID", title: "", show: true }
-						];
-						
+						{ field: "scheduleID", title: "", show: true }
+					];
+
+
+					vm.cols = [
+						{ field: "address", title: "Address", sortable: "address", show: true },
+						{ field: "dateslot", title: "Viewed On", sortable: "dateslot", show: true }
+					];
+
+					vm.loader = 0;
 
 					//Sorting
 					vm.tableSorting = new NgTableParams({
-						sorting: {address: 'asc'}}, 
+						sorting: { address: 'asc' }
+					},
+
+						{
+							dataset: vm.tabledata
+
+							/*, {
+							total: vm.tabledata.length, // length of data
+							getData: function($defer, params) {
+								// console.log(params);
+								// use build-in angular filter
+								var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
 					
-					{dataset: vm.tabledata
-					/*, {
-					total: vm.tabledata.length, // length of data
-					getData: function($defer, params) {
-						// console.log(params);
-						// use build-in angular filter
-						var orderedData = params.sorting() ? $filter('orderBy')(vm.tabledata, params.orderBy()) : vm.tabledata;
-			
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}*/
-					 // dataset: vm.tabledata
-					})	
-				}			
-					
-			});
-		});
-		
-		
-		firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function(snapshot) {	
-			$scope.$apply(function(){
-				if(snapshot.val() != null){
-					$.map(snapshot.val(), function(value, key) {		
-						if(value.scheduleID == 0 && value.externalappStatus == "submit" ){
-							vm.submittedappsavail = 1;
-							vm.submitappsdata.push({appID:key, address:value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus});
-						}
+								$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+							}*/
+							// dataset: vm.tabledata
+						})
+				}
+
+
+				if (snapshot.val() != null) {
+					$.map(snapshot.val(), function (val, key) {
+						firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(key).once("value", function (snap) {
+							$scope.$apply(function () {
+								if (snap.val() !== null) {
+									//to map the object to array
+									$.map(snap.val(), function (value, index) {
+										if (val.externalappStatus == "submit") {
+											vm.submittedappsavail = 1;
+											vm.submitappsdata.push({ appID: index, address: value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus });
+										}
+									});
+								}
+							});
+						});
 					});
+
 					vm.submitappsextracols = [
-					  { field: "appID", title: "", show: true }
+						{ field: "appID", title: "", show: true }
 					];
-					
+
 					vm.submitappscols = [
-					  { field: "address", title: "Address", sortable: "address", show: true },
-					  { field: "dated", title: "Submitted On", sortable: "dated", show: true },
-					  // { field: "rentalstatus", title: "Status", sortable: "rentalstatus", show: true }
+						{ field: "address", title: "Address", sortable: "address", show: true },
+						{ field: "dated", title: "Submitted On", sortable: "dated", show: true },
 					];
 
 					//Sorting
 					vm.submitappsSorting = new NgTableParams({
-						sorting: {address: 'asc'}}, 
-					
-					{dataset: vm.submitappsdata
-					/*}, {
-						total: vm.submitappsdata.length, // length of data
-						getData: function($defer, params) {
-							// console.log(params);
-							// use build-in angular filter
-							var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
-				
-							$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-						}*/
-						 // dataset: vm.submitappsdata
-					})	
-				}			
-					
+						sorting: { address: 'asc' },
+						count: vm.submitappsdata.length						
+					},
+
+						{
+							dataset: vm.submitappsdata
+						});
+				}
+
 			});
 		});
-		
-		if(vm.submittedappsavail == 0) {
+
+		firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).once("value", function (snapshot) {
+			$scope.$apply(function () {
+				if (snapshot.val() != null) {
+					$.map(snapshot.val(), function (value, key) {
+						if (value.scheduleID != 0 && value.externalappStatus == "submit") {
+							vm.submittedappsavail = 1;
+							vm.submitappsdata.push({ appID: key, address: value.address, dated: moment(value.dated).format("DD-MMMM-YYYY"), rentalstatus: value.rentalstatus });
+						}
+					});
+					vm.submitappsextracols = [
+						{ field: "appID", title: "", show: true }
+					];
+
+					vm.submitappscols = [
+						{ field: "address", title: "Address", sortable: "address", show: true },
+						{ field: "dated", title: "Submitted On", sortable: "dated", show: true },
+					];
+
+					//Sorting
+					vm.submitappsSorting = new NgTableParams({
+						sorting: { address: 'asc' },
+						count: vm.submitappsdata.length
+					},
+
+						{
+							dataset: vm.submitappsdata
+						})
+				}
+
+			});
+		});
+
+		if (vm.submittedappsavail == 0) {
 			// vm.submitappsdata.push({scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''});
-		} else {			
-			vm.loader = 0;				
+		} else {
+			vm.loader = 0;
 		}
-		
-		if(vm.pendingappsavail == 0) {
+
+		if (vm.pendingappsavail == 0) {
 			// vm.tabledata.push({scheduleID:'', address:'', dateslot: '', timerange: '',  schedulestatus: ''});
-		} else {			
-			vm.loader = 0;				
+		} else {
+			vm.loader = 0;
 		}
-		
-									
+
+
 		console.log($rootScope.$previousState.name);
-		if($rootScope.$previousState.name == "rentalform"){		
+		if ($rootScope.$previousState.name == "rentalform") {
 			$state.reload();
 		}
-		
+
 		vm.email = '';
 		vm.disablebutton = 1;
-		vm.emailrequired = function(event){
-			if(vm.email == '' || !vm.email.match(/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/)){
+		vm.emailrequired = function (event) {
+			if (vm.email == '' || !vm.email.match(/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/)) {
 				vm.disablebutton = 1;
 			} else {
 				vm.disablebutton = 0;
 			}
 		}
-		
-		
-		vm.gotoRental = function(event){
-			if(vm.disablebutton == 0){
+
+		vm.openRentalForm = function () {
+			$rootScope.isFormOpenToSaveInDraft = true;
+			window.location.href = "#/rentalform/0/0";
+		}
+
+		vm.requestCreditReport = function () {
+			swal({
+				title: "",
+				text: "We will send you an email with instructions on how to get your credit report.\n Are you sure you want to submit this request?",
+				type: "info",
+				showCancelButton: true,
+				confirmButtonClass: "bgm-teal",
+				confirmButtonText: "Yes",
+				closeOnConfirm: false
+			}, function () {
+				// swal("Deleted!", "Your imaginary file has been deleted.", "success");
+				var userName = '';
+				if (userData) {
+					userName = userData.firstname + ' ' + (userData.lastname || '');
+				}
+				var emailData = '<p>Hello, </p><p>' + userName + '- ' + userEmail + ' has requested for credit report from the tenant portal';
+				var toEmail = 'creditrequest@vcancy.com';
+				emailSendingService.sendEmailViaNodeMailer(toEmail, 'Tenant Request for Credit Report', 'Request Credit Report', emailData);
+				swal("", "Your request has been submitted successfully, you will soon receive an email.", "success");
+			});
+
+		}
+
+		vm.gotoRental = function (event) {
+			if (vm.disablebutton == 0) {
 				$rootScope.renterExternalEmail = vm.email;
 				window.location.href = "#/rentalform/0/0";
 			}
 		}
-		
-			
-}])
+
+
+	}])
 'use strict';
 
 //=================================================
@@ -5643,118 +14311,671 @@ vcancyApp
 //=================================================
 
 vcancyApp
-    .controller('landlordappCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
-		
-		var vm = this;
-		var landlordID = localStorage.getItem('userID');
-		vm.propcheck = [];
-		vm.apppropaddress = [];
-		vm.loader = 1;
-		
-		vm.tablefilterdata = function(propID = '') {
-			if(propID !=''){
-				vm.propcheck[propID] = !vm.propcheck[propID];
+	.controller('landlordappCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', '$uibModal', '_', '$q', 'emailSendingService',
+		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, $uibModal, _, $q, emailSendingService) {
+			$scope.oneAtATime = true;
+			var vm = this;
+			vm.moment = moment;
+			vm.sortType = 'name';
+			vm.sortReverse = false;
+			var landlordID = ''
+			if (localStorage.getItem('refId')) {
+				landlordID = localStorage.getItem('refId')
+			} else {
+				landlordID = localStorage.getItem('userID');
 			}
-			
-			firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function(snapshot) {	
-			// console.log(snapshot.val())
-			$scope.$apply(function(){
-				if(snapshot.val() != null) {										
-					$.map(snapshot.val(), function(value, index) {							
-						 if(vm.apppropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus == "submitted") {
-							  vm.apppropaddress.push({propID: value.propID, address: value.address, units: value.units}); 
-							  vm.propcheck[value.propID] = true;
-						 } 	
+			vm.landLordID = landlordID;
+			var userData = JSON.parse(localStorage.getItem('userData'));
+			var userEmail = localStorage.getItem('userEmail');
+			vm.userData = userData;
+			vm.propcheck = [];
+			vm.applyPropUsers = {};
+			vm.applyPropSubmittedUsers = {};
+			vm.apppropaddress = [];
+			vm.apppropaddressAppl = {};
+			vm.submittedAppl = [];
+			vm.submittedApplUsers = [];
+
+			vm.originalPropAddress = [];
+			vm.loader = 1;
+			vm.creditCheck = {
+				reportType: "Both of the above $45/Report",
+				forTenant: ''
+			}
+			vm.customRentalApplicationCheck = {};
+			vm.customRentalApplicationCheck.TCData = 'You are authorized to obtaining credit checks & verifying details contained in this Application.' +
+
+				'This unit/s is strictly NON SMOKING. This offer is subject to acceptance by the landlord/property' +
+				'management company that listed the property.This application is made on the understanding that no ' +
+				'betterments will be provided to the Rental Unit except those which may be specifically requested in' +
+				'this Application and agreed to in writing by the Landlord and specified in a tenancy agreement.' +
+
+				'It is understood that this application will not be processed unless fully completed.' +
+
+				'If the landlord/property management company accepts this Application, we will sign a Fixed ' +
+				'Term Tenancy Agreement at the offices of the property management company or in person with' +
+				'the landlord and pay the security deposit. The Rental Unit will not be considered rented' +
+				'until the Fixed Term Tenancy Agreement is signed by the Tenant and the Landlord.' +
+
+				'We will ensure that the collection, use, disclosure and retention of information will comply with ' +
+				'the provisions of the Freedom of information and Protection of Privacy Act. ' +
+				'Information will be collected and used only as necessary and for the intended purpose and will ' +
+				'not be disclosed as required by law.' +
+
+				'I hereby state that the information contained herein is true and I authorize my References' +
+				'as listed above to release information regarding my employment and/or past/current tenancies.' +
+
+				'Tenants are not chosen on a first come – first served basis. We choose the most suitable ' +
+				'application for the unit at our sole discretion. This application form is to be used only' +
+				'in the interested of the owner of the rental unit.';
+			// Function to generate Random Id
+			function generateToken() {
+				var result = '',
+					length = 6,
+					chars = 'ABCEDFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+				for (var i = 0; i < length; i++)
+					result += chars[Math.floor(Math.random() * chars.length)];
+
+				return result;
+			}
+
+			vm.questionDropDown = [
+				{ id: 'WKRX6Q', label: 'What is your profession?', isChecked: true },
+				{ id: 'MV5SML', label: 'Do you have Pets? Provide details', isChecked: true },
+				{ id: 'N1F5MO', label: 'Are you able to provide references?', isChecked: false },
+				{ id: 'OU489L', label: 'Why are you moving?', isChecked: false },
+				{ id: 'U0G6V8', label: 'Tell me a bit about yourself', isChecked: true },
+				{ id: 'A9OG32', label: 'No. of Applicants', isChecked: true },
+				{ id: 'UH7JZS', label: 'Do you smoke?', isChecked: true },
+				{ id: 'ZGJQ60', label: 'Move-in date', isChecked: true },
+			];
+
+			vm.filters = {
+				options: [],
+			};
+
+			vm.companyDetail = function () {
+				return vm.userData.companyname + ' ' + (vm.userData.contact || '')
+			}
+
+			vm.defaultRentalApplicationCheck = {
+				'PAPPD': true,
+				'CADDR': true,
+				'PADDR': false,
+				'AAPPD': false,
+				'AAPP1': false,
+				'AAPP2': false,
+				'ESIV': true,
+				'ESIV1': true,
+				'VI': false,
+				'EC': false,
+				'EC1': false,
+				'REF': true,
+				'REF1': true,
+				'REF2': false,
+				'UD': true,
+				'UDAAPP': false,
+				'TC': true,
+				'TCData': vm.customRentalApplicationCheck.TCData,
+				'companyLogo': userData ? userData.companylogo: '',
+				'companyDetails': vm.companyDetail()
+			}
+
+			function refreshCustomRentalApplicationCheck() {
+				userData = JSON.parse(localStorage.getItem('userData'));
+				vm.userData = userData;
+				if (userData && userData.customRentalApplicationCheck) {
+					if (userData.customRentalApplicationCheck && !userData.customRentalApplicationCheck.TCData) {
+						userData.customRentalApplicationCheck.TCData = vm.customRentalApplicationCheck.TCData;
+					}
+					if (!userData.customRentalApplicationCheck.companyLogo) {
+						userData.customRentalApplicationCheck.companyLogo = userData.companylogo || vm.customRentalApplicationCheck.companyLogo;
+					}
+					if (!userData.customRentalApplicationCheck.companyDetails) {
+						userData.customRentalApplicationCheck.companyDetails = vm.companyDetail();
+					}
+					vm.customRentalApplicationCheck = userData.customRentalApplicationCheck;
+				} else {
+					vm.customRentalApplicationCheck = angular.copy(vm.defaultRentalApplicationCheck);
+				}
+			}
+			refreshCustomRentalApplicationCheck();
+
+			function refreshScreeningQuestions() {
+				userData = JSON.parse(localStorage.getItem('userData'));
+				vm.userData = userData;
+				if (userData && userData.screeningQuestions && userData.screeningQuestions.length !== 0) {
+					vm.screeningQuestions = userData.screeningQuestions;
+				} else {
+					vm.screeningQuestions = angular.copy(vm.questionDropDown);
+				}
+			}
+			refreshScreeningQuestions();
+
+			vm.getUsers = function () {
+				if (vm.apppropaddressList) {
+					vm.loader = 1;
+					var promises = [];
+					_.map(vm.apppropaddressList, function (value, key) {
+						var promiseObj = firebase.database().ref('users/' + value.tenantID).once("value");
+						promises.push(promiseObj);
+					});
+					$q.all(promises).then(function (data) {
+						var usersData = {};
+						data.forEach(function (dataObj) {
+							usersData[dataObj.key] = dataObj.val();
+						});
+						vm.applyPropUsers = usersData;
+						_.forEach(vm.submittedApplUsers, function (value, index) {
+							if (usersData[value]) {
+								vm.applyPropSubmittedUsers[value] = usersData[value];
+							}
+						});
+						vm.apppropaddress = vm.apppropaddressList;
+						vm.loader = 0;
 					});
 				}
-					vm.submitappsdata = [];
-				
-				if(snapshot.val() != null) {	
-					vm.submittedappsavail = 0;
-					//to map the object to array
-					vm.submitappsdata = $.map(snapshot.val(), function(value, index) {
-						if(vm.propcheck[value.propID] == true || propID == ''){					
-							if(value.schedulestatus == "submitted" ){
-								vm.submittedappsavail = 1;
-								return [{scheduleID:index, name:value.name, age: value.age, profession: value.jobtitle,  schedulestatus: value.schedulestatus}];
-							} 
-						}
-					});	
-					
-					angular.forEach(vm.submitappsdata, function(schedule, key) {		
-						firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(schedule.scheduleID).once("value", function(snapshot) {	
-							$scope.$apply(function(){
-								if(snapshot.val()) {
-									$.map(snapshot.val(), function(value, index) {	
-										vm.submitappsdata[key].applicationID = index;
-										vm.submitappsdata[key].pets = value.pets;
-										vm.submitappsdata[key].maritalstatus = value.maritalstatus;
-										vm.submitappsdata[key].appno = value.applicantsno ;
-										firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(index).once("value", function(snap) {	
-											$scope.$apply(function(){
-												if(snap.val()) {
-													$.map(snap.val(), function(v, k) {
-														// console.log(v);
-														vm.submitappsdata[key].salary = v.mainapplicant.appgrossmonthlyincome;
-													});
-												}
-											});
-										});
-									});
+			}
+
+			vm.getProperty = function () {
+				vm.loader = 1;
+				var propdbObj = firebase.database().ref('properties/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+					if (snapshot.val()) {
+						vm.properties = snapshot.val();
+					}
+					vm.loader = 0;
+				});
+			};
+
+			vm.getApplyProp = function () {
+				vm.loader = 1;
+				vm.apppropaddress = {};
+				var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+					if (snapshot.val()) {
+						$scope.$apply(function () {
+							vm.apppropaddressList = snapshot.val();
+							// vm.getUsers();
+							vm.originalPropAddress = angular.copy(snapshot.val());
+							vm.loader = 1;
+							var promises = [];
+							_.map(vm.apppropaddressList, function (value, key) {
+								if (value.schedulestatus == 'submitted') {
+									vm.submittedApplUsers.push(value.tenantID);
+									var promiseObj = firebase.database().ref('submitapps/').limitToLast(1).orderByChild("scheduleID").equalTo(key).once("value");
+									promises.push(promiseObj);
 								}
 							});
+							vm.submittedApplUsers = _.uniq(vm.submittedApplUsers);
+
+							$q.all(promises).then(function (data) {
+								var usersData = {};
+								data.forEach(function (dataObj) {
+									if (dataObj.val()) {
+										_.forEach(dataObj.val(), function (_value, _key) {
+											vm.apppropaddressAppl[_key] = _value;
+											vm.submittedAppl.push(_value)
+										})
+									}
+								});
+								vm.getUsers();
+								vm.loader = 0;
+							});
+							console.log(vm.apppropaddressList);
 						});
+					}
+					$scope.$apply(function () {
+						vm.loader = 0;
 					});
-					
-					vm.submitappsextracols = [
-					  { field: "applicationID", title: "Credit Score", show: true }
-					];
-					
-					
-				} else {
-					vm.submitappsdata = [{scheduleID:'', name:'', age: '', profession: '',salary: '', pets: '', maritalstatus:'', appno:'',  schedulestatus: ''}];
-					
-					vm.submittedappsavail = 0;
+				});
+			};
+
+
+			vm.getUserName = function (id, value) {
+				if (!vm.applyPropUsers[id]) {
+					return value.name || '-';
 				}
-	
+				return ((vm.applyPropUsers[id].firstname || '') + ' ' + (vm.applyPropUsers[id].lastname || '')) || '-';
+			}
+
+			vm.changeSort = function (key) {
+				// $scope.$apply(function() {
+				// $timeout	
+				vm.sortType = key;
+				vm.sortReverse = !vm.sortReverse;
+				// });
+			}
+
+			$scope.formatDay = function (key) {
+				return moment(key, 'MM/DD/YYYY').format('ddd')
+			};
+
+			$scope.formatDate = function (key) {
+				return moment(key, 'MM/DD/YYYY').format('MMM DD')
+			};
+
+			vm.init = function () {
+				vm.getProperty();
+				vm.getApplyProp();
+			};
+
+			vm.init();
+
+			vm.openPrescremingQuestions = function () {
+				vm.prescremingQuestion = $uibModal.open({
+					templateUrl: 'prescremingquestions.html',
+					backdrop: 'static',
+					size: 'lg',
+					scope: $scope
+				});
+			};
+			vm.filterData = function (forProperty) {
+				var properties = angular.copy(vm.originalPropAddress);
+				vm.apppropaddress = properties;
+				if (vm.filters.property) {
+					var obj = {};
+					_.filter(properties, function (value, key) {
+						if (value.propID == vm.filters.property) {
+							obj[key] = value;
+						}
+					});
+					vm.apppropaddress = obj;
+				}
+				if (forProperty) {
+					vm.filters.unit = [];
+				}
+				if (vm.filters.unit && vm.filters.unit.length > 0) {
+					var unitItems = {};
+					var unitIds = _.reduce(vm.filters.unit, function (previousValue, currentValue, key) {
+						if (currentValue.unit) {
+							previousValue.push(parseInt(currentValue.unit));
+						}
+						return previousValue;
+					}, []);
+					_.filter(properties, function (value, key) {
+						if (value.propID == vm.filters.property && unitIds.includes(parseInt(value.unitID))) {
+							unitItems[key] = value;
+						}
+					});
+					vm.apppropaddress = unitItems;
+					return
+				}
+
+				vm.apppropaddress = obj;
+			}
+
+			vm.selectAllQuestions = function () {
+				vm.filters.options = angular.copy(vm.screeningQuestions);
+			}
+
+			vm.clearAllFilters = function () {
+				vm.filters = {
+					options: []
+				}
+				vm.apppropaddress = angular.copy(vm.originalPropAddress);
+			}
+
+			vm.getApplicationLink = function (key) {
+				var data;
+				_.forEach(vm.apppropaddressAppl, function (_value, _key) {
+					if (_value.scheduleID == key) {
+						data = _key;
+						return false;
+					}
+				});
+				if (data) {
+					var host = window.location.origin;
+					if (host.indexOf('localhost') > -1) {
+						host = host + '/#/viewapplication/' + data;
+					} else {
+						host = host + '/login/#/viewapplication/' + data;
+					}
+					return host;
+				}
+				return false;
+			}
+
+			vm.getRentalField = function (key, field) {
+				let data;
+				_.forEach(vm.apppropaddressAppl, function (_value, _key) {
+					if (_value.scheduleID == key) {
+						data = _value;
+						return false;
+					}
+				});
+				if (data) {
+					return data[field]
+				} else {
+					return '-'
+				}
+			}
+			vm.customQuestion = null;
+			vm.addCustomQuestion = function () {
+				if (!vm.customQuestion) {
+					return;
+				}
+				var data = {
+					label: vm.customQuestion,
+					id: generateToken(),
+					isChecked: false
+				}
+
+				vm.screeningQuestions.push(data);
+				vm.customQuestion = null;
+			}
+
+			vm.saveScreeningQuestions = function () {
+				vm.loader = 1;
+				var ques = angular.copy(vm.screeningQuestions);
+				_.omit(ques, '$$hashKey');
+				firebase.database().ref('users/' + this.landLordID).update({
+					screeningQuestions: ques
+				}).then(function () {
+					userData.screeningQuestions = ques;
+					localStorage.setItem('userData', JSON.stringify(userData));
+					refreshScreeningQuestions();
+					vm.loader = 0;
+					vm.prescremingQuestion.close();
+				}, function (error) {
+					vm.loader = 0;
+					return false;
+				});
+			}
+
+			vm.saveCustomRentalApplicationCheck = function () {
+				vm.loader = 1;
+				var customChecks = angular.copy(vm.customRentalApplicationCheck);
+				console.log('customChecks', customChecks);
+				_.omit(customChecks, '$$hashKey');
+				firebase.database().ref('users/' + this.landLordID).update({
+					customRentalApplicationCheck: customChecks
+				}).then(function () {
+					userData.customRentalApplicationCheck = customChecks;
+					localStorage.setItem('userData', JSON.stringify(userData));
+					refreshCustomRentalApplicationCheck();
+					vm.loader = 0;
+					vm.customrentalapp.close();
+				}, function (error) {
+					vm.loader = 0;
+					return false;
+				});
+			}
+
+			$scope.uploadDetailsImages = function (event) {
+				var file = event.target.files[0];
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
+				});
+				AWS.config.region = 'ca-central-1';
+
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+				var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+				filename = filename.replace(/\s/g, '');
+
+				if (file.size > 3145728) {
+					swal({
+						title: "Error!",
+						text: 'File size should be 3 MB or less.',
+						type: "error",
+					});
+					return false;
+				} else if (file.type.indexOf('image') === -1) {
+					swal({
+						title: "Error!",
+						text: 'Only files are accepted.',
+						type: "error",
+					});
+					return false;
+				}
+
+				var params = {
+					Key: 'company-logo/' + filename,
+					ContentType: file.type,
+					Body: file,
+					StorageClass: "STANDARD_IA",
+					ACL: 'public-read'
+				};
+
+				bucket.upload(params).on('httpUploadProgress', function (evt) { })
+					.send(function (err, data) {
+						if (data && data.Location) {
+							$scope.$apply(function () {
+								vm.customRentalApplicationCheck.companyLogo = data.Location;
+							});
+							// });
+							// firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+							//   vm.opensuccesssweet("Profile Updated successfully!");
+							// }, function (error) {
+
+							//   vm.openerrorsweet("Profile Not Updated! Try again!");
+							//   return false;
+							// });
+						}
+					});
+			}
+
+			vm.opencustomrentalapp = function () {
+				vm.customrentalapp = $uibModal.open({
+					templateUrl: 'customrentalapp.html',
+					backdrop: 'static',
+					size: 'lg',
+					scope: $scope
+				});
+			};
+
+			vm.deleteQuestionById = function (id) {
+				var index = vm.screeningQuestions.findIndex(function (ques) {
+					if (ques.id == id) return true;
+				});
+				vm.screeningQuestions.splice(index, 1);
+			};
+
+
+			vm.openruncreditcriminalcheck = function () {
+				vm.runcreditcriminalcheck = $uibModal.open({
+					templateUrl: 'runcreditcriminalcheck.html',
+					backdrop: 'static',
+					size: 'lg',
+					scope: $scope
+				});
+			};
+
+			$scope.closePrescreeningModal = function () {
+				vm.prescremingQuestion.close();
+			}
+
+			$scope.closecustomrentalappModal = function () {
+				vm.customrentalapp.close();
+			}
+
+			$scope.closeruncreditcriminalcheckModal = function () {
+				vm.runcreditcriminalcheck.close();
+				vm.creditCheck = {
+					reportType: "Both of the above $45/Report",
+					forTenant: ''
+				}
+			}
+
+			$scope.submitCreditCheck = function () {
+				var tenantData = vm.applyPropUsers[vm.creditCheck.forTenant];
+				if (!tenantData) {
+					return;
+				}
+				swal({
+					title: "Are you sure?",
+					text: "Your account will be charged with the amount specified.",
+					type: "info",
+					showCancelButton: true,
+					confirmButtonClass: "bgm-teal",
+					confirmButtonText: "Yes",
+					closeOnConfirm: false
+				},
+					function () {
+						var userName = '';
+						if (userData) {
+							userName = userData.firstname + ' ' + (userData.lastname || '');
+						}
+						var tenantUserName = tenantData.firstname + ' ' + (tenantData.lastname || '');
+						var emailData = '<p>Hello, </p><p>Landlord - ' + userName + ' (' + userEmail + ') has requested credit report of tenant - ' + tenantUserName + ' (' + tenantData.email + ') for type - ' + vm.creditCheck.reportType + '</p>';
+						var toEmail = 'creditrequest@vcancy.com';
+						emailSendingService.sendEmailViaNodeMailer(toEmail, 'Landlord request for Credit/Criminal Report', 'Request Credit?criminal Check Report', emailData);
+						swal("", "Your request has been submitted successfully!", "success");
+						var requestData = {
+							tenantID: vm.creditCheck.forTenant,
+							tenantEmail: tenantData.email,
+							landlordID: landlordID,
+							landlordEmail: userEmail,
+							requestType: vm.creditCheck.reportType,
+							requestedOn: moment().format('x'),
+							status: 'PENDING'
+						}
+						firebase.database().ref('credit_report_request/').push().set(requestData);
+						$scope.closeruncreditcriminalcheckModal();
+					});
+
+			}
+
+			vm.tablefilterdata = function (propID = '') {
+				if (propID != '') {
+					vm.propcheck[propID] = !vm.propcheck[propID];
+				}
+				vm.loader = 1;
+				firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
+					// console.log(snapshot.val())
+					$scope.$apply(function () {
+						if (snapshot.val() != null) {
+							$.map(snapshot.val(), function (value, index) {
+								if (vm.apppropaddress.findIndex(x => x.propID == value.propID) == -1 && value.schedulestatus == "submitted") {
+									vm.apppropaddress.push({ propID: value.propID, address: value.address, units: value.units });
+									vm.propcheck[value.propID] = true;
+								}
+							});
+						}
+						vm.submitappsdata = [];
+
+						if (snapshot.val() != null) {
+							vm.submittedappsavail = 0;
+							//to map the object to array
+							vm.submitappsdata = $.map(snapshot.val(), function (value, index) {
+								if (vm.propcheck[value.propID] == true || propID == '') {
+									if (value.schedulestatus == "submitted") {
+										vm.submittedappsavail = 1;
+										return [{ scheduleID: index, name: value.name, age: value.age, profession: value.jobtitle, schedulestatus: value.schedulestatus }];
+									}
+								}
+							});
+
+							angular.forEach(vm.submitappsdata, function (schedule, key) {
+								firebase.database().ref('submitapps/').orderByChild("scheduleID").equalTo(schedule.scheduleID).once("value", function (snapshot) {
+									$scope.$apply(function () {
+										if (snapshot.val()) {
+											$.map(snapshot.val(), function (value, index) {
+												vm.submitappsdata[key].applicationID = index;
+												vm.submitappsdata[key].pets = value.pets;
+												vm.submitappsdata[key].maritalstatus = value.maritalstatus;
+												vm.submitappsdata[key].appno = value.applicantsno;
+												firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(index).once("value", function (snap) {
+													$scope.$apply(function () {
+														if (snap.val()) {
+															$.map(snap.val(), function (v, k) {
+																// console.log(v);
+																vm.submitappsdata[key].salary = v.mainapplicant.appgrossmonthlyincome;
+															});
+														}
+													});
+												});
+											});
+										}
+									});
+								});
+							});
+
+							vm.submitappsextracols = [
+								{ field: "applicationID", title: "Credit Score", show: true }
+							];
+
+
+						} else {
+							vm.submitappsdata = [{ scheduleID: '', name: '', age: '', profession: '', salary: '', pets: '', maritalstatus: '', appno: '', schedulestatus: '' }];
+
+							vm.submittedappsavail = 0;
+						}
+
 						console.log(vm.submittedappsavail);
-				vm.submitappscols = [
-					  { field: "name", title: "Name", sortable: "name", show: true },
-					  { field: "age", title: "Age", sortable: "age", show: true },
-					  { field: "profession", title: "Job Title", sortable: "profession", show: true },
-					  { field: "salary", title: "Salary", sortable: "salary", show: true },
-					  { field: "pets", title: "Pets", sortable: "pets", show: true },
-					  { field: "maritalstatus", title: "Marital Status", sortable: "maritalstatus", show: true },
-					  { field: "appno", title: "No of Applicants", sortable: "appno", show: true },
-					];
-					
-				vm.loader = 0;
-					
-				//Sorting
-				vm.submitappsSorting = new NgTableParams({
-					sorting: {name: 'asc'}}, 
-					
-					{dataset: vm.submitappsdata
-				/*}, {
-					total: vm.submitappsdata.length, // length of data
-					getData: function($defer, params) {
-						// console.log(params);
-						// use build-in angular filter
-						var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
-			
-						$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-					}*/
-					 // dataset: vm.submitappsdata
-				})
-			});
-		});
-		
-		}
-		vm.tablefilterdata();
-		
-		
-		
-}])
+						vm.submitappscols = [
+							{ field: "name", title: "Name", sortable: "name", show: true },
+							{ field: "age", title: "Age", sortable: "age", show: true },
+							{ field: "profession", title: "Job Title", sortable: "profession", show: true },
+							{ field: "salary", title: "Salary", sortable: "salary", show: true },
+							{ field: "pets", title: "Pets", sortable: "pets", show: true },
+							{ field: "maritalstatus", title: "Marital Status", sortable: "maritalstatus", show: true },
+							{ field: "appno", title: "No of Applicants", sortable: "appno", show: true },
+						];
+
+						vm.loader = 0;
+
+						//Sorting
+						vm.submitappsSorting = new NgTableParams({
+							sorting: { name: 'asc' }
+						},
+
+							{
+								dataset: vm.submitappsdata
+								/*}, {
+									total: vm.submitappsdata.length, // length of data
+									getData: function($defer, params) {
+										// console.log(params);
+										// use build-in angular filter
+										var orderedData = params.sorting() ? $filter('orderBy')(vm.submitappsdata, params.orderBy()) : vm.submitappsdata;
+							
+										$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+									}*/
+								// dataset: vm.submitappsdata
+							})
+					});
+				});
+
+			}
+			// vm.tablefilterdata();
+
+			vm.deleteApplyProp = function (key, status) {
+				var statusToChange = 'cancelled';
+				var message = "This will cancel the schedule."
+				var buttonText = "Yes";
+
+				if (status === 'cancelled') {
+					statusToChange = 'removed';
+					message = "This will delete the schedule from the system.";
+					buttonText = "Delete";
+				}
+
+				swal({
+					title: "Are you sure?",
+					text: message,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonClass: "btn-danger",
+					confirmButtonText: buttonText,
+					closeOnConfirm: true
+				}, function () {
+					firebase.database().ref('applyprop/' + key).update({
+						schedulestatus: statusToChange
+					}).then(function () {
+						vm.getApplyProp();
+					})
+						.catch(function (err) {
+							console.error('ERROR', err);
+							swal("", "There was error deleteing the schedule.", "error");
+						});
+
+				});
+			}
+		}])
 'use strict';
 
 //=================================================
@@ -5766,6 +14987,10 @@ vcancyApp
 		function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams, Upload, $http, emailSendingService, config) {
 
 			var vm = this;
+			$scope.active = 0;
+			$scope.activateTab = function (tab) {
+				$scope.active = tab;
+			};
 			var tenantID = localStorage.getItem('userID');
 			var scheduleID = $stateParams.scheduleId;
 			var applicationID = $stateParams.applicationId;
@@ -5854,6 +15079,10 @@ vcancyApp
 			vm.rentaldata.vehiclemodel = '';
 			vm.rentaldata.vehicleyear = '';
 
+			vm.rentaldata.vehiclemake2 = '';
+			vm.rentaldata.vehiclemodel2 = '';
+			vm.rentaldata.vehicleyear2 = '';
+
 			vm.rentaldata.emergencyname = '';
 			vm.rentaldata.emergencyphone = '';
 
@@ -5877,7 +15106,8 @@ vcancyApp
 			vm.rentaldata.appsign = '';
 			vm.rentaldata.otherappsign = [];
 
-
+			vm.TCData = '';
+			vm.customRentalApplicationCheck = null;
 			// DATEPICKER
 			vm.today = function () {
 				vm.dt = new Date();
@@ -5893,13 +15123,13 @@ vcancyApp
 
 
 			vm.dobopen = function ($event) {
-			
+
 				$event.preventDefault();
 				$event.stopPropagation();
 				vm.dobopened = true;
 			};
 			vm.dobopen1 = function ($event) {
-				
+
 				$event.preventDefault();
 				$event.stopPropagation();
 				vm.dobopened = false;
@@ -5986,7 +15216,7 @@ vcancyApp
 				vm.minor.push(minorlen);
 			}
 
-			
+
 
 			// to remove adult
 			vm.removeadult = function (slotindex) {
@@ -6017,90 +15247,90 @@ vcancyApp
 				console.log(vm.minor, vm.rentaldata);
 			}
 
-			$scope.something = function(form) {
-				
-		       
-		       if($("#test_"+form).val() == ''){
-		       	$("#index_"+form).addClass('has-error');
-		       }else{
-		       		$("#index_"+form).removeClass('has-error');
-		       }
-		    }
-			$scope.minorsomething = function(form) {
-				
-		       
-		       if($("#minortext_"+form).val() == ''){
-		       	$("#minor_"+form).addClass('has-error');
-		       }else{
-		       		$("#minor_"+form).removeClass('has-error');
-		       }
-		    }
-
-		    $scope.aacetext = function(form) {
-				
-		       
-		       if($("#aacetext_"+form).val() == ''){
-		       	$("#aace_"+form).addClass('has-error');
-		       }else{
-		       		$("#aace_"+form).removeClass('has-error');
-		       }
-		    }
+			$scope.something = function (form) {
 
 
-		    $scope.aapotext = function(form) {
-				
-		       
-		       if($("#aapotext_"+form).val() == ''){
-		       	$("#aapo_"+form).addClass('has-error');
-		       }else{
-		       		$("#aapo_"+form).removeClass('has-error');
-		       }
-		    }
+				if ($("#test_" + form).val() == '') {
+					$("#index_" + form).addClass('has-error');
+				} else {
+					$("#index_" + form).removeClass('has-error');
+				}
+			}
+			$scope.minorsomething = function (form) {
 
-		     $scope.aaeptext = function(form) {
-				
-		       
-		       if($("#aaeptext_"+form).val() == ''){
-		       	$("#aaep_"+form).addClass('has-error');
-		       }else{
-		       		$("#aaep_"+form).removeClass('has-error');
-		       }
-		    }
 
-		    $scope.aahowtext = function(form) {
-				
-		       
-		       if($("#aahowtext_"+form).val() == ''){
-		       	$("#aahow_"+form).addClass('has-error');
-		       }else{
-		       		$("#aahow_"+form).removeClass('has-error');
-		       }
-		    }
+				if ($("#minortext_" + form).val() == '') {
+					$("#minor_" + form).addClass('has-error');
+				} else {
+					$("#minor_" + form).removeClass('has-error');
+				}
+			}
 
-		    $scope.aagrstext = function(form) {
-				
-		       
-		       if($("#aagrstext_"+form).val() == ''){
-		       	$("#aagrs_"+form).addClass('has-error');
-		       }else{
-		       		$("#aagrs_"+form).removeClass('has-error');
-		       }
-		    } 
+			$scope.aacetext = function (form) {
 
-		    $scope.aaothrtext = function(form) {
-				
-		       
-		       if($("#aaothrtext_"+form).val() == ''){
-		       	$("#aaothr_"+form).addClass('has-error');
-		       }else{
-		       		$("#aaothr_"+form).removeClass('has-error');
-		       }
-		    }
+
+				if ($("#aacetext_" + form).val() == '') {
+					$("#aace_" + form).addClass('has-error');
+				} else {
+					$("#aace_" + form).removeClass('has-error');
+				}
+			}
+
+
+			$scope.aapotext = function (form) {
+
+
+				if ($("#aapotext_" + form).val() == '') {
+					$("#aapo_" + form).addClass('has-error');
+				} else {
+					$("#aapo_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aaeptext = function (form) {
+
+
+				if ($("#aaeptext_" + form).val() == '') {
+					$("#aaep_" + form).addClass('has-error');
+				} else {
+					$("#aaep_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aahowtext = function (form) {
+
+
+				if ($("#aahowtext_" + form).val() == '') {
+					$("#aahow_" + form).addClass('has-error');
+				} else {
+					$("#aahow_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aagrstext = function (form) {
+
+
+				if ($("#aagrstext_" + form).val() == '') {
+					$("#aagrs_" + form).addClass('has-error');
+				} else {
+					$("#aagrs_" + form).removeClass('has-error');
+				}
+			}
+
+			$scope.aaothrtext = function (form) {
+
+
+				if ($("#aaothrtext_" + form).val() == '') {
+					$("#aaothr_" + form).addClass('has-error');
+				} else {
+					$("#aaothr_" + form).removeClass('has-error');
+				}
+			}
 
 
 			if (applicationID == 0) {
+				console.log(tenantID)
 				firebase.database().ref('submitapps/').orderByChild("tenantID").equalTo(tenantID).limitToLast(1).once("value", function (snapshot) {
-					console.log(snapshot.val());
 					$scope.$apply(function () {
 						if (snapshot.val() !== null) {
 							$.map(snapshot.val(), function (value, index) {
@@ -6113,6 +15343,7 @@ vcancyApp
 								// vm.propdata.landlordID = value.landlordID;
 
 								// vm.propdata.address = value.address;
+								console.log(value.rent)
 								vm.propdata.rent = value.rent;
 								vm.rentaldata.months = value.months;
 								vm.rentaldata.startdate = value.startdate;
@@ -6136,6 +15367,9 @@ vcancyApp
 								vm.rentaldata.vehiclemake = value.vehiclemake;
 								vm.rentaldata.vehiclemodel = value.vehiclemodel;
 								vm.rentaldata.vehicleyear = value.vehicleyear;
+								vm.rentaldata.vehiclemake2 = value.vehiclemake2;
+								vm.rentaldata.vehiclemodel2 = value.vehiclemodel2;
+								vm.rentaldata.vehicleyear2 = value.vehicleyear2;
 								vm.rentaldata.emergencyname = value.emergencyname;
 								vm.rentaldata.emergencyphone = value.emergencyphone;
 								vm.rentaldata.refone_name = value.refone_name;
@@ -6145,25 +15379,63 @@ vcancyApp
 								vm.rentaldata.reftwo_phone = value.reftwo_phone;
 								vm.rentaldata.reftwo_relation = value.reftwo_relation;
 								vm.rentaldata.dated = value.dated != '' ? $filter('date')(new Date(value.dated), 'dd-MMMM-yyyy') : '';
-
+								console.log(scheduleID)
 								firebase.database().ref('applyprop/' + scheduleID).once("value", function (snapshot) {
-									// console.log(snapshot.val())
+									console.log(snapshot.val())
 									$scope.$apply(function () {
 										if (snapshot.val()) {
+											// console.log('applyprop', snapshot.val())
 											vm.scheduledata = snapshot.val();
 											vm.scheduledata.scheduleID = snapshot.key;
 
 											firebase.database().ref('properties/' + vm.scheduledata.propID).once("value", function (snap) {
 												$scope.$apply(function () {
 													if (snap.val()) {
+														console.log('properties', snap.val())
 														vm.propdata = snap.val();
 														vm.propdata.propID = snap.key;
-														if (vm.propdata.units == ' ') {
-															var units = '';
-														} else {
-															var units = vm.propdata.units + " - ";
+														// if (vm.propdata.units == ' ') {
+														// 	var units = '';
+														// } else {
+														// 	var units = vm.propdata.units + " - ";
+														// }
+														var unit = vm.propdata.unitlists.find(function (unitObj) {
+															if (unitObj.unit == vm.scheduledata.units) {
+																return true;
+															}
+														});
+														vm.propdata.rent = parseFloat(unit.rent);
+														var leaseLength = ''
+														switch (unit.leaseLength) {
+															case 'month-to-month':
+																leaseLength = 'Month to Month';
+																break;
+															case '6months':
+																leaseLength = '6 Months';
+																break;
+															case '9months':
+																leaseLength = '9 Months';
+																break;
+															case '12months':
+																leaseLength = '12 Months';
+																break;
 														}
-														vm.propdata.address = units + vm.propdata.address;
+														vm.rentaldata.months = leaseLength;
+														vm.propdata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
+														vm.rentaldata.address = vm.propdata.address;
+														vm.rentaldata.rent = parseFloat(unit.rent);
+														firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
+															$scope.$apply(function () {
+																vm.landlordData = snap.val();
+																if (vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+																	vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
+																}
+																if (vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
+																	vm.customRentalApplicationCheck = vm.landlordData.customRentalApplicationCheck
+																}
+															});
+															console.log('vm.landlordData', vm.landlordData);
+														});
 													}
 												});
 											});
@@ -6219,18 +15491,61 @@ vcancyApp
 						} else {
 							vm.draftdata = "false";
 							firebase.database().ref('applyprop/' + scheduleID).once("value", function (snapshot) {
-								// console.log(snapshot.val())
+								console.log(snapshot.val())
 								$scope.$apply(function () {
 									if (snapshot.val()) {
+										// console.log('applyprop', snapshot.val())
 										vm.scheduledata = snapshot.val();
 										vm.scheduledata.scheduleID = snapshot.key;
 
 										firebase.database().ref('properties/' + vm.scheduledata.propID).once("value", function (snap) {
 											$scope.$apply(function () {
 												if (snap.val()) {
+													console.log('properties', snap.val())
 													vm.propdata = snap.val();
 													vm.propdata.propID = snap.key;
-													vm.propdata.address = vm.propdata.units + " - " + vm.propdata.address;
+													// if (vm.propdata.units == ' ') {
+													// 	var units = '';
+													// } else {
+													// 	var units = vm.propdata.units + " - ";
+													// }
+													var unit = vm.propdata.unitlists.find(function (unitObj) {
+														if (unitObj.unit == vm.scheduledata.units) {
+															return true;
+														}
+													});
+													vm.propdata.rent = parseFloat(unit.rent);
+													var leaseLength = ''
+													switch (unit.leaseLength) {
+														case 'month-to-month':
+															leaseLength = 'Month to Month';
+															break;
+														case '6months':
+															leaseLength = '6 Months';
+															break;
+														case '9months':
+															leaseLength = '9 Months';
+															break;
+														case '12months':
+															leaseLength = '12 Months';
+															break;
+													}
+													vm.rentaldata.months = leaseLength;
+													vm.propdata.address = vm.scheduledata.units + ' - ' + vm.propdata.address;
+													vm.rentaldata.address = vm.propdata.address;
+													vm.rentaldata.rent = parseFloat(unit.rent);
+													firebase.database().ref('users/' + vm.propdata.landlordID).once("value", function (snap) {
+														$scope.$apply(function () {
+															vm.landlordData = snap.val();
+															if (vm.landlordData && vm.landlordData.customRentalApplicationCheck && vm.landlordData.customRentalApplicationCheck.TCData) {
+																vm.TCData = vm.landlordData.customRentalApplicationCheck.TCData;
+															}
+															if (vm.landlordData && vm.landlordData.customRentalApplicationCheck) {
+																vm.customRentalApplicationCheck = vm.landlordData.customRentalApplicationCheck
+															}
+														});
+														console.log('vm.landlordData', vm.landlordData);
+													});
 												}
 											});
 										});
@@ -6292,6 +15607,9 @@ vcancyApp
 							vm.rentaldata.vehiclemake = value.vehiclemake;
 							vm.rentaldata.vehiclemodel = value.vehiclemodel;
 							vm.rentaldata.vehicleyear = value.vehicleyear;
+							vm.rentaldata.vehiclemake2 = value.vehiclemake2;
+							vm.rentaldata.vehiclemodel2 = value.vehiclemodel2;
+							vm.rentaldata.vehicleyear2 = value.vehicleyear2;
 							vm.rentaldata.emergencyname = value.emergencyname;
 							vm.rentaldata.emergencyphone = value.emergencyphone;
 							vm.rentaldata.refone_name = value.refone_name;
@@ -6302,9 +15620,10 @@ vcancyApp
 							vm.rentaldata.reftwo_relation = value.reftwo_relation;
 							vm.rentaldata.dated = value.dated;
 
+							vm.TCData = value.TCData;
+							vm.customRentalApplicationCheck = value.customRentalApplicationCheck;
 
 							vm.submitemail = value.externalemail;
-							console.log(vm.submitemail);
 							firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(vm.applicationID).once("value", function (snap) {
 								$scope.$apply(function () {
 									if (snap.val() != null) {
@@ -6389,25 +15708,29 @@ vcancyApp
 				}
 
 
-					function checkFile() {
-							if($('#uploadfile')[0].files[0]) {
-								var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();				
-								if($('#uploadfile')[0].files[0].size > 3145728) {
-									return 'File size should be 3 MB or less.'
-								} else if(!(_fileName.endsWith('.png')) 
-									&& !(_fileName.endsWith('.jpg'))
-									&& !(_fileName.endsWith('.pdf'))
-									&& !(_fileName.endsWith('.jpeg')))  {
-										return 'Invalid file type.'
-								}
-							}
+				function checkFile() {
+					if ($('#uploadfile')[0].files[0]) {
+						var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();
+						if ($('#uploadfile')[0].files[0].size > 3145728) {
+							return 'File size should be 3 MB or less.'
+						} else if (!(_fileName.endsWith('.png'))
+							&& !(_fileName.endsWith('.jpg'))
+							&& !(_fileName.endsWith('.pdf'))
+							&& !(_fileName.endsWith('.jpeg'))) {
+							return 'Invalid file type.'
 						}
-			var fileCheckMsg = checkFile();
-			if(fileCheckMsg) {
-				return window.alert(fileCheckMsg);
-			}
-			var externalemail = vm.submitemail  == undefined ? '': vm.submitemail;
-			console.log(externalappStatus);
+					}
+				}
+				var fileCheckMsg = checkFile();
+				if (fileCheckMsg) {
+					swal({
+						title: "Error!",
+						text: fileCheckMsg,
+						type: "error",
+					});
+					return;
+				}
+				var externalemail = vm.submitemail == undefined ? '' : vm.submitemail;
 
 				var address = vm.propdata.address == undefined ? '' : vm.propdata.address;
 				var rent = vm.propdata.rent == undefined ? '' : vm.propdata.rent;
@@ -6442,16 +15765,16 @@ vcancyApp
 				var pets = vm.rentaldata.pets == undefined ? '' : vm.rentaldata.pets;
 				var petsdesc = vm.rentaldata.petsdesc == undefined ? '' : vm.rentaldata.petsdesc;
 				var smoking = vm.rentaldata.smoking == undefined ? '' : vm.rentaldata.smoking;
- 
+
 				// var file = $('#appfiles').val().split('\\').pop().split('/').pop();
 				// var filename = $('#appfiles').val().split('\\').pop().split('/').pop().split('.')[0]+new Date().getTime();
 				// var fileext = $('#appfiles').val().split('\\').pop().split('/').pop().split('.').pop().toLowerCase();
 				// var appfiles = "images/applicationuploads/"+filename+"."+fileext;
 
 				var appfiles = $('#appfiles').val();
-				var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-				var filepath = filename != '' ? "https://vcancy.ca/login/uploads/" + filename : appfiles;
-
+				var filename = $('#filename').val() === '' ? '' : Date.now() + '_' + $('#filename').val();
+				// var filepath = filename != '' ? "https://vcancy.com/login/uploads/" + filename : appfiles;
+				var filepath = filename != '' ? "https://vcancy-final.s3.ca-central-1.amazonaws.com/rental-form-files/" + filename : appfiles;
 				console.log(filename, filepath, appfiles);
 
 				var appcurrentemployer = vm.rentaldata.appcurrentemployer == undefined ? '' : vm.rentaldata.appcurrentemployer;
@@ -6465,6 +15788,10 @@ vcancyApp
 				var vehiclemake = vm.rentaldata.vehiclemake == undefined ? '' : vm.rentaldata.vehiclemake;
 				var vehiclemodel = vm.rentaldata.vehiclemodel == undefined ? '' : vm.rentaldata.vehiclemodel;
 				var vehicleyear = vm.rentaldata.vehicleyear == undefined ? '' : vm.rentaldata.vehicleyear;
+
+				var vehiclemake2 = vm.rentaldata.vehiclemake2 == undefined ? '' : vm.rentaldata.vehiclemake2;
+				var vehiclemodel2 = vm.rentaldata.vehiclemodel2 == undefined ? '' : vm.rentaldata.vehiclemodel2;
+				var vehicleyear2 = vm.rentaldata.vehicleyear2 == undefined ? '' : vm.rentaldata.vehicleyear2;
 
 				var emergencyname = vm.rentaldata.emergencyname == undefined ? '' : vm.rentaldata.emergencyname;
 				var emergencyphone = vm.rentaldata.emergencyphone == undefined ? '' : vm.rentaldata.emergencyphone;
@@ -6516,6 +15843,9 @@ vcancyApp
 				});
 				console.log(vm.adultapplicants);
 
+				var TCData = vm.TCData || '';
+				var customRentalApplicationCheck = vm.customRentalApplicationCheck || '';
+
 				if (vm.draftdata == "false" && $stateParams.applicationId == 0) {
 					firebase.database().ref('submitapps/').push().set({
 						tenantID: tenantID,
@@ -6551,6 +15881,10 @@ vcancyApp
 						vehiclemodel: vehiclemodel,
 						vehicleyear: vehicleyear,
 
+						vehiclemake2: vehiclemake2,
+						vehiclemodel2: vehiclemodel2,
+						vehicleyear2: vehicleyear2,
+
 						emergencyname: emergencyname,
 						emergencyphone: emergencyphone,
 
@@ -6563,12 +15897,17 @@ vcancyApp
 						reftwo_relation: reftwo_relation,
 
 						applicantsno: (vm.adult.length) + 1,
+						"minorapplicantsno": vm.minor.length || 0,
 						externalappStatus: externalappStatus,
 						externalemail: externalemail,
-
+						appgrossmonthlyincome: appgrossmonthlyincome,
 						dated: dated,
 
-						rentalstatus: "pending"
+						rentalstatus: "pending",
+
+						TCData: TCData,
+
+						customRentalApplicationCheck: customRentalApplicationCheck
 					}).then(function () {
 						//Generate the applicant details of submitted app to new table
 						firebase.database().ref('submitapps/').limitToLast(1).once("child_added", function (snapshot) {
@@ -6614,19 +15953,20 @@ vcancyApp
 									if (landlordID != 0) {
 										firebase.database().ref('users/' + landlordID).once("value", function (snap) {
 											console.log(snap.val());
-											var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="https://www.vcancy.ca/login/" target = "_blank"> Vcancy.ca </a> and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+											if (snap.val()) {
+												var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + snap.val().email + '.</p><p>To make changes, please log in at <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
-											emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+												emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
+											}
+											//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a> and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+											//emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 										});
 									} else {
-										var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.ca. Please go to this link https://www.vcancy.ca/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="https://www.vcancy.ca/login/" target = "_blank"> Vcancy.ca </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+										//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.com. Please go to this link https://www.vcancy.com/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="https://www.vcancy.com/login/" target = "_blank"> vcancy.com </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
-										emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+										//emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 									}
-
-									var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in at <a href="https://www.vcancy.ca/login/" target = "_blank"> Vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
-
-									emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
 								}
 								$state.go('tenantapplications');
 							}
@@ -6667,6 +16007,10 @@ vcancyApp
 						vehiclemodel: vehiclemodel,
 						vehicleyear: vehicleyear,
 
+						vehiclemake2: vehiclemake2,
+						vehiclemodel2: vehiclemodel2,
+						vehicleyear2: vehicleyear2,
+
 						emergencyname: emergencyname,
 						emergencyphone: emergencyphone,
 
@@ -6684,7 +16028,10 @@ vcancyApp
 
 						dated: dated,
 
-						rentalstatus: "pending"
+						rentalstatus: "pending",
+
+						TCData: TCData,
+						customRentalApplicationCheck: customRentalApplicationCheck
 					}).then(function () {
 						//Generate the applicant details of submitted app to new table
 						var applicantsdata = {
@@ -6734,19 +16081,22 @@ vcancyApp
 						if (landlordID != 0) {
 							firebase.database().ref('users/' + landlordID).once("value", function (snap) {
 								console.log(snap.val());
-								var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+								if (snap.val()) {
+									var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + snap.val().email + '.</p><p>To make changes, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
-								emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+									emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
+								}
+								//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted a rental application for ' + address + '.</p><p>To view the application, please log in <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+								//emailSendingService.sendEmailViaNodeMailer(snap.val().email, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 							});
 						} else {
-							var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.ca. Please go to this link http://www.vcancy.ca/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+							//var emailData = '<p>Hello, </p><p>' + applicantname + ' has submitted an online rental application via vcancy.com. Please go to this link http://www.vcancy.com/login/#/viewexternalapp/' + vm.applicationID + ' to view the application.</p><p>Check out <a href="http://www.vcancy.com/login/#/" target = "_blank"> vcancy.com </a> to automate viewing appointments and compare rental applications	 online.</p><p>For any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
-							emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
+							//emailSendingService.sendEmailViaNodeMailer(vm.submitemail, applicantname + ' has submitting a rental application', 'rentalreceive', emailData);
 						}
 
-						var emailData = '<p>Hello ' + applicantname + ', </p><p>Your rental application has been submitted to ' + applicantemail + '.</p><p>To make changes, please log in <a href="http://www.vcancy.ca/login/#/" target = "_blank"> vcancy.ca </a>  and go to “Applications”.</p><p>If you have any questions or suggestions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
-						emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'Rental application', 'rentalapp', emailData);
 					}
 					$state.go('tenantapplications');
 				}
@@ -6758,51 +16108,95 @@ vcancyApp
 				file = file.replace(/^data:image\/\w+;base64,/, "");
 				file = file.replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,", "");
 				// console.log(file,filename);
-
-				var req = {
-					method: 'POST',
-					url: config.sailsBaseUrl + 'fileupload/upload',
-					headers: {
-						'Content-Type': 'application/json',
-						'Access-Control-Allow-Origin': '*',
-						"Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
-					},
-					data: {
-						file: file,
-						filename: filename
-					}
-				}
-
-				$http(req).then(function successCallback(response) {
-					console.log(response);
-					console.log("Done");
-				}, function errorCallback(response) {
-					console.log("Fail");
+				var _file = $('#uploadfile')[0].files[0];
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
 				});
+				AWS.config.region = 'ca-central-1';
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+				filename = filename.replace(/\s/g, '');
+
+				var params = {
+					Key: 'rental-form-files/' + filename,
+					ContentType: _file.type,
+					Body: _file,
+					StorageClass: "STANDARD_IA",
+					ACL: 'authenticated-read'
+				};
+
+				bucket.upload(params).on('httpUploadProgress', function (evt) { })
+					.send(function (err, data) {
+						if (data && data.Location) {
+							console.log('file uploaded success');
+						} else {
+							console.error('ERROR in file upload');
+						}
+					});
 			};
 
+			vm.viewFile = function (location) {
+				if (!location) {
+					return;
+				}
+				var _params = {
+					Bucket: 'vcancy-final',
+					Key: location.split(`https://vcancy-final.s3.ca-central-1.amazonaws.com/`)[1],
+					Expires: 60 * 5
+				}
+				AWS.config.update({
+					accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+					secretAccessKey: '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'
+				});
+				AWS.config.region = 'ca-central-1';
+				var bucket = new AWS.S3({
+					params: {
+						Bucket: 'vcancy-final'
+					}
+				});
+
+				bucket.getSignedUrl('getObject', _params, function (err, data) {
+					if (err) return console.log(err, err.stack); // an error occurred
+
+					// var type = 'application/pdf';
+					var extension = location.substring(location.lastIndexOf('.'));
+					// var file = new Blob([data], { type: 'application/pdf' });
+					// saveAs(file, 'filename.pdf');
+					// var url = URL.createObjectURL(new Blob([data]));
+					var a = document.createElement('a');
+					a.href = data;
+					a.download = location.substr(location.lastIndexOf('/') + 1);
+					a.target = '_blank';
+					a.click();
+				});
+			}
 
 			vm.savechanges = function () {
 				vm.draft = "true";
+				$rootScope.isFormOpenToSaveInDraft = false;
 				// alert(vm.draft);
 				vm.rentalAppSubmit();
 			}
 
 			vm.printApp = function () {
 				var css = '@page { size: landscape; }',
-				    head = document.head || document.getElementsByTagName('head')[0],
-				    style = document.createElement('style');
+					head = document.head || document.getElementsByTagName('head')[0],
+					style = document.createElement('style');
 
-					style.type = 'text/css';
-					style.media = 'print';
+				style.type = 'text/css';
+				style.media = 'print';
 
-					if (style.styleSheet){
-					  style.styleSheet.cssText = css;
-					} else {
-					  style.appendChild(document.createTextNode(css));
-					}
+				if (style.styleSheet) {
+					style.styleSheet.cssText = css;
+				} else {
+					style.appendChild(document.createTextNode(css));
+				}
 
-					head.appendChild(style);
+				head.appendChild(style);
 				$window.print();
 			}
 
@@ -6814,31 +16208,31 @@ vcancyApp
 //=================================================
 
 vcancyApp
-    .controller('viewappCtrl', ['$scope','$firebaseAuth','$state','$rootScope','$stateParams','$window','$filter','$sce','NgTableParams',function($scope,$firebaseAuth,$state,$rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
-		
+	.controller('viewappCtrl', ['$scope', '$timeout', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '$filter', '$sce', 'NgTableParams', function ($scope, $timeout, $firebaseAuth, $state, $rootScope, $stateParams, $window, $filter, $sce, NgTableParams) {
+
 		var vm = this;
 		// var tenantID = localStorage.getItem('userID');
 		var applicationID = $stateParams.appID;
 		// var tenantEmail = localStorage.getItem('userEmail');
-		
+
 		vm.publicappview = $state.current.name == "viewexternalapplication" ? "1" : "0";
-		
-		
+		vm.isLoggedIn = ($state.current.name != "viewexternalapplication") && localStorage.getItem('userEmail');
+
 		vm.adult = [];
 		vm.minor = [];
-		vm.rentaldata = [];		
-		
+		vm.rentaldata = [];
+
 		// DATEPICKER
-		vm.today = function() {
+		vm.today = function () {
 			vm.dt = new Date();
 		};
 		vm.today();
 
-		vm.toggleMin = function() {
+		vm.toggleMin = function () {
 			vm.minDate = vm.minDate ? null : new Date();
 		};
 		vm.toggleMin();
-		
+
 		vm.dateOptions = {
 			formatYear: 'yy',
 			startingDay: 1
@@ -6846,123 +16240,177 @@ vcancyApp
 		vm.maxDate = new Date();
 		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
 		vm.format = vm.formats[0];
-		
-		
-		firebase.database().ref('submitapps/'+applicationID).once("value", function(snapshot) {	
-			console.log(snapshot.val());
-			$scope.$apply(function(){
-				if(snapshot.val()) {
-						var value = snapshot.val();
-						console.log(value);
-						vm.rentaldata.tenantID = value.tenantID;
-						vm.rentaldata.scheduleID = value.scheduleID;
-						vm.rentaldata.propID = value.propID;
-						
-						vm.rentaldata.address = value.address;
-						vm.rentaldata.rent = value.rent;
-						vm.rentaldata.months = value.months;
-						vm.rentaldata.startdate = value.startdate;
-						vm.rentaldata.parking = value.parking;						
-						vm.rentaldata.telwork = value.telwork;
-						vm.rentaldata.telhome = value.telhome;
-						vm.rentaldata.tenantEmail = value.applicantemail;
-						vm.rentaldata.appaddress = value.appaddress;
-						vm.rentaldata.appcity = value.applicantcity;
-						vm.rentaldata.maritalstatus = value.maritalstatus;
-						vm.rentaldata.rent_own = value.rent_own;		
-						vm.rentaldata.live_time = value.live_time_at_address;
-						vm.rentaldata.rentamt = value.rentamt;
-						vm.rentaldata.vacantreason = value.vacantreason;
-						vm.rentaldata.landlordname = value.landlordname;
-						vm.rentaldata.landlordphone = value.landlordphone;
-						vm.rentaldata.pets = value.pets;
-						vm.rentaldata.petsdesc = value.petsdesc;
-						vm.rentaldata.smoking = value.smoking;
-						vm.rentaldata.appfiles = value.appfiles;
-						vm.rentaldata.vehiclemake = value.vehiclemake;
-						vm.rentaldata.vehiclemodel = value.vehiclemodel;
-						vm.rentaldata.vehicleyear = value.vehicleyear;						
-						vm.rentaldata.emergencyname = value.emergencyname;
-						vm.rentaldata.emergencyphone = value.emergencyphone;
-						vm.rentaldata.refone_name = value.refone_name;
-						vm.rentaldata.refone_phone = value.refone_phone;
-						vm.rentaldata.refone_relation = value.refone_relation;
-						vm.rentaldata.reftwo_name = value.reftwo_name;
-						vm.rentaldata.reftwo_phone = value.reftwo_phone;
-						vm.rentaldata.reftwo_relation = value.reftwo_relation;
-						vm.rentaldata.dated = new Date(value.dated);
 
-						console.log(vm.rentaldata);
-						
-						firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(applicationID).once("value", function(snap) {	
-							$scope.$apply(function(){
-								if(snap.val()) {
-									$.map(snap.val(), function(v, k) {
-										console.log(v);
-										vm.rentaldata.tenantName = v.mainapplicant.applicantname;
-										vm.rentaldata.dob =  new Date(v.mainapplicant.applicantdob);
-										vm.rentaldata.sinno = v.mainapplicant.applicantsinno;
-										vm.rentaldata.appcurrentemployer =  v.mainapplicant.appcurrentemployer;
-										vm.rentaldata.appposition =  v.mainapplicant.appposition;
-										vm.rentaldata.appemployerphone =  v.mainapplicant.appemployerphone;
-										vm.rentaldata.appworkingduration =  v.mainapplicant.appworkingduration;
-										vm.rentaldata.appgrossmonthlyincome =  v.mainapplicant.appgrossmonthlyincome;
-										vm.rentaldata.appincometype =  v.mainapplicant.appincometype;
-										vm.rentaldata.appotherincome =  v.mainapplicant.appotherincome;												
-										vm.rentaldata.appsign =  v.mainapplicant.appsign;
-										
-										vm.rentaldata.minorappname= [];
-										vm.rentaldata.minorappdob= [];
-										vm.rentaldata.minorappsinno = [];
-										
-										if(v.minors != undefined){
-											angular.forEach(v.minors, function(value, key) {
-											  vm.minor.push(key);
-											  vm.rentaldata.minorappname.push(value.minorapplicantname);
-											  vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));
-											  vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);					  
-											});
-										}
-										vm.rentaldata.otherappname= [];
-										vm.rentaldata.otherappdob= [];
-										vm.rentaldata.otherappsinno = [];
-										vm.rentaldata.otherappcurrentemployer= [];
-										vm.rentaldata.otherappposition= [];
-										vm.rentaldata.otherappemployerphone= [];
-										vm.rentaldata.otherappworkingduration= [];
-										vm.rentaldata.otherappgrossmonthlyincome= [];
-										vm.rentaldata.otherappincometype= [];
-										vm.rentaldata.otherappotherincome= [];
-										vm.rentaldata.otherappsign= [];
-										
-										if(v.otherapplicants != undefined){
-											angular.forEach(v.otherapplicants, function(value, key) {
-											  vm.adult.push(key);
-											  vm.rentaldata.otherappname.push(value.adultapplicantname);
-											  vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
-											  vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
-											  vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
-											  vm.rentaldata.otherappposition.push(value.otherappposition);
-											  vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
-											  vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
-											  vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
-											  vm.rentaldata.otherappincometype.push(value.otherappincometype);
-											  vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
-											  vm.rentaldata.otherappsign.push(value.otherappsign);									  
-											});
-										}
-									});
-								}
+
+		firebase.database().ref('submitapps/' + applicationID).once("value", function (snapshot) {
+			console.log(snapshot.val());
+			$scope.$apply(function () {
+				if (snapshot.val()) {
+					var value = snapshot.val();
+					console.log(value);
+					vm.TCData = value.TCData;
+					vm.customRentalApplicationCheck = value.customRentalApplicationCheck;
+					vm.rentaldata.tenantID = value.tenantID;
+					vm.rentaldata.scheduleID = value.scheduleID;
+					vm.rentaldata.propID = value.propID;
+
+					vm.rentaldata.landlordID = value.landlordID;
+
+					vm.rentaldata.address = value.address;
+					vm.rentaldata.rent = value.rent;
+					vm.rentaldata.months = value.months;
+					vm.rentaldata.startdate = value.startdate;
+					vm.rentaldata.parking = value.parking;
+					vm.rentaldata.telwork = value.telwork;
+					vm.rentaldata.telhome = value.telhome;
+					vm.rentaldata.tenantEmail = value.applicantemail;
+					vm.rentaldata.appaddress = value.appaddress;
+					vm.rentaldata.appcity = value.applicantcity;
+					vm.rentaldata.maritalstatus = value.maritalstatus;
+					vm.rentaldata.rent_own = value.rent_own;
+					vm.rentaldata.live_time = value.live_time_at_address;
+					vm.rentaldata.rentamt = value.rentamt;
+					vm.rentaldata.vacantreason = value.vacantreason;
+					vm.rentaldata.landlordname = value.landlordname;
+					vm.rentaldata.landlordphone = value.landlordphone;
+					vm.rentaldata.pets = value.pets;
+					vm.rentaldata.petsdesc = value.petsdesc;
+					vm.rentaldata.smoking = value.smoking;
+					vm.rentaldata.appfiles = value.appfiles;
+					vm.rentaldata.vehiclemake = value.vehiclemake;
+					vm.rentaldata.vehiclemodel = value.vehiclemodel;
+					vm.rentaldata.vehicleyear = value.vehicleyear;
+					vm.rentaldata.emergencyname = value.emergencyname;
+					vm.rentaldata.emergencyphone = value.emergencyphone;
+					vm.rentaldata.refone_name = value.refone_name;
+					vm.rentaldata.refone_phone = value.refone_phone;
+					vm.rentaldata.refone_relation = value.refone_relation;
+					vm.rentaldata.reftwo_name = value.reftwo_name;
+					vm.rentaldata.reftwo_phone = value.reftwo_phone;
+					vm.rentaldata.reftwo_relation = value.reftwo_relation;
+					vm.rentaldata.dated = new Date(value.dated);
+					
+					console.log(vm.rentaldata);
+
+					firebase.database().ref('submitappapplicants/').orderByChild("applicationID").equalTo(applicationID).once("value", function (snap) {
+						$scope.$apply(function () {
+							if (snap.val()) {
+								$.map(snap.val(), function (v, k) {
+									console.log(v);
+									vm.rentaldata.tenantName = v.mainapplicant.applicantname;
+									vm.rentaldata.dob = new Date(v.mainapplicant.applicantdob);
+									vm.rentaldata.sinno = v.mainapplicant.applicantsinno;
+									vm.rentaldata.appcurrentemployer = v.mainapplicant.appcurrentemployer;
+									vm.rentaldata.appposition = v.mainapplicant.appposition;
+									vm.rentaldata.appemployerphone = v.mainapplicant.appemployerphone;
+									vm.rentaldata.appworkingduration = v.mainapplicant.appworkingduration;
+									vm.rentaldata.appgrossmonthlyincome = v.mainapplicant.appgrossmonthlyincome;
+									vm.rentaldata.appincometype = v.mainapplicant.appincometype;
+									vm.rentaldata.appotherincome = v.mainapplicant.appotherincome;
+									vm.rentaldata.appsign = v.mainapplicant.appsign;
+
+									vm.rentaldata.minorappname = [];
+									vm.rentaldata.minorappdob = [];
+									vm.rentaldata.minorappsinno = [];
+
+									if (v.minors != undefined) {
+										angular.forEach(v.minors, function (value, key) {
+											vm.minor.push(key);
+											vm.rentaldata.minorappname.push(value.minorapplicantname);
+											vm.rentaldata.minorappdob.push(new Date(value.minorapplicantdob));
+											vm.rentaldata.minorappsinno.push(value.minorapplicantsinno);
+										});
+									}
+									vm.rentaldata.otherappname = [];
+									vm.rentaldata.otherappdob = [];
+									vm.rentaldata.otherappsinno = [];
+									vm.rentaldata.otherappcurrentemployer = [];
+									vm.rentaldata.otherappposition = [];
+									vm.rentaldata.otherappemployerphone = [];
+									vm.rentaldata.otherappworkingduration = [];
+									vm.rentaldata.otherappgrossmonthlyincome = [];
+									vm.rentaldata.otherappincometype = [];
+									vm.rentaldata.otherappotherincome = [];
+									vm.rentaldata.otherappsign = [];
+
+									if (v.otherapplicants != undefined) {
+										angular.forEach(v.otherapplicants, function (value, key) {
+											vm.adult.push(key);
+											vm.rentaldata.otherappname.push(value.adultapplicantname);
+											vm.rentaldata.otherappdob.push(new Date(value.adultapplicantdob));
+											vm.rentaldata.otherappsinno.push(value.adultapplicantsinno);
+											vm.rentaldata.otherappcurrentemployer.push(value.otherappcurrentemployer);
+											vm.rentaldata.otherappposition.push(value.otherappposition);
+											vm.rentaldata.otherappemployerphone.push(value.otherappemployerphone);
+											vm.rentaldata.otherappworkingduration.push(value.otherappworkingduration);
+											vm.rentaldata.otherappgrossmonthlyincome.push(value.otherappgrossmonthlyincome);
+											vm.rentaldata.otherappincometype.push(value.otherappincometype);
+											vm.rentaldata.otherappotherincome.push(value.otherappotherincome);
+											vm.rentaldata.otherappsign.push(value.otherappsign);
+										});
+									}
+								});
+							}
+						});
+					});
+					if (vm.rentaldata.landlordID) {
+						firebase.database().ref('users/' + vm.rentaldata.landlordID).once("value", function (snap) {
+							$scope.$apply(function() {
+								vm.landlordData = snap.val();
 							});
 						});
+					}
 				}
 			});
 		});
-		vm.printApp = function(){
 
-		   $window.print();
-		  }
-}])
+		vm.viewFile = function (location) {
+			if (!location) {
+				return;
+			}
+			var _params = {
+				Bucket: 'vcancy-final',
+				Key: location.split(`https://vcancy-final.s3.ca-central-1.amazonaws.com/`)[1],
+				Expires: 60 * 5
+			}
+			AWS.config.update({
+				accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+				secretAccessKey: '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'
+			});
+			AWS.config.region = 'ca-central-1';
+			var bucket = new AWS.S3({
+				params: {
+					Bucket: 'vcancy-final'
+				}
+			});
+
+			bucket.getSignedUrl('getObject', _params, function (err, data) {
+				if (err) return console.log(err, err.stack); // an error occurred
+
+				// var type = 'application/pdf';
+				var extension = location.substring(location.lastIndexOf('.'));
+				// var file = new Blob([data], { type: 'application/pdf' });
+				// saveAs(file, 'filename.pdf');
+				// var url = URL.createObjectURL(new Blob([data]));
+				var a = document.createElement('a');
+				a.href = data;
+				a.download = location.substr(location.lastIndexOf('/') + 1);
+				a.target = '_blank';
+				a.click();
+			});
+		}
+
+		vm.printApp = function () {
+			vm.printMode = true;
+			$timeout(function(){
+				$window.print();
+			}, 1000);
+			$timeout(function(){
+				vm.printMode = false;
+			}, 3000);
+			// vm.printMode = false;
+		}
+	}])
 'use strict';
 
 //=================================================
@@ -6970,117 +16418,231 @@ vcancyApp
 //=================================================
 
 vcancyApp
-    .controller('tenantProfilelCtrl', ['$scope' , '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window) {
-        var vm = this;
+  .controller('tenantProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'emailSendingService',
+    function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, emailSendingService) {
+      var vm = this;
+      var tenantID = localStorage.getItem('userID');
+      var password = localStorage.getItem('password');
+
+
+      vm.email = '';
+      vm.firstname = '';
+      vm.lastname = '';
+      vm.contact = '';
+      vm.address = '';
+      vm.password = password;
+      vm.loader = 1;
+      vm.userdata = {};
+
+      vm.invalid = '';
+      vm.success = '';
+      vm.error = '';
+
+      firebase.database().ref('/users/' + tenantID).once('value').then(function (userdata) {
+
+        $scope.$apply(function () {
+          vm.userData = userdata.val();
+          console.log(vm.userData)
+
+        });
+      });
+
+      vm.opensuccesssweet = function (value) {
+        swal({
+          title: "Success!",
+          text: value,
+          type: "success",
+          confirmButtonColor: '#009999',
+          confirmButtonText: "Ok"
+        }, function (isConfirm) {
+          if (isConfirm) {
+            // $state.reload();
+          }
+        });
+
+
+
+      }
+
+      vm.openerrorsweet = function (value) {
+        swal({
+          title: "Error",
+          text: value,
+          type: "warning",
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Ok",
+          closeOnConfirm: true
+        },
+          function () {
+            return false;
+          });
+
+      }
+
+      // firebase.database().ref('/users/' + tenantID).once('value').then(function (userdata) {
+      //     $scope.$apply(function () {
+      //         if (userdata.val() !== null) {
+      //             vm.email = userdata.val().email;
+      //             vm.firstname = userdata.val().firstname;
+      //             vm.lastname = userdata.val().lastname;
+      //              vm.address = userdata.val().address;
+      //             vm.contact = userdata.val().contact;
+      //             vm.loader = 0;
+      //         }
+      //     });
+      // });
+      vm.profileSubmit = function (tdProfilectrl) {
         var tenantID = localStorage.getItem('userID');
-        var password = localStorage.getItem('password');
+        //alert($scope.tdProfilectrl.contact); return false;
+
+        // var updatedata = {};
 
 
-        vm.email = '';
-        vm.firstname = '';
-        vm.lastname = '';
-         vm.contact = '';
-        vm.address  = '';
-        vm.password  = password;
-        vm.loader = 1;
-        
+
+        // if($scope.tdProfilectrl.contact === undefined || $scope.tdProfilectrl.contact === ""){
+        //   vm.contact = '';
+        //   updatedata['contact'] = '';
+        // }else{
+        //   updatedata['contact'] = $scope.tdProfilectrl.contact;
+        // }
+        //  if($scope.tdProfilectrl.address === undefined || $scope.tdProfilectrl.address === ""){
+        //   vm.address = '';
+        //   updatedata['address'] = '';
+        // }else{
+        //   updatedata['address'] = $scope.tdProfilectrl.address;
+        // }
+        // if($scope.tdProfilectrl.email === undefined || $scope.tdProfilectrl.email === ""){
+        //   vm.email = '';
+        //   updatedata['email'] = '';
+        // }else{
+        //    updatedata['email'] = $scope.tdProfilectrl.email;
+        // }
+
+        // // alert(JSON.stringify(updatedata)); return false;
+        // firebase.database().ref('users/' + tenantID).update(updatedata).then(function(){
+        //   confirm("Your Information updated!");
+        // });
+        firebase.database().ref('users/' + tenantID).update(vm.userData).then(function () {
+          vm.opensuccesssweet("Profile Updated successfully!");
+        }, function (error) {
+
+          vm.openerrorsweet("Profile Not Updated! Try again!");
+          return false;
+        });
+      };
+
+      vm.changepasswordSubmit = function (passworduser) {
+
         $rootScope.invalid = '';
         $rootScope.success = '';
         $rootScope.error = '';
+        var oldpassword = localStorage.getItem('password');
+        var userEmail = localStorage.getItem('userEmail');
+        var ncpassword = passworduser.ncpassword;
+        var password = passworduser.password;
+        var npassword = passworduser.npassword;
+        var landLordID = localStorage.getItem('userID');
 
-        firebase.database().ref('/users/' + tenantID).once('value').then(function (userdata) {
-            $scope.$apply(function () {
-                if (userdata.val() !== null) {
-                    vm.email = userdata.val().email;
-                    vm.firstname = userdata.val().firstname;
-                    vm.lastname = userdata.val().lastname;
-                     vm.address = userdata.val().address;
-                    vm.contact = userdata.val().contact;
-                    vm.loader = 0;
-                }
+        if (password === oldpassword) {
+
+          if (password === ncpassword) {
+            vm.openerrorsweet("Your old password and new password must be different");
+            return false;
+          }
+
+          if (ncpassword === npassword) {
+
+            var user = firebase.auth().currentUser;
+            var newPassword = ncpassword;
+            user.updatePassword(newPassword).then(function () {
+              localStorage.setItem('password', newPassword);
+              vm.opensuccesssweet("Your password has been updated!");
+              var emailData = '<p>Hello, </p><p>Your password has been changed. If you didn’t change the password then please contact  support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+              // Send Email
+              passworduser.npassword = '';
+              passworduser.password = '';
+              passworduser.ncpassword = '';
+              emailSendingService.sendEmailViaNodeMailer(userEmail, 'Password changed', 'changepassword', emailData);
+
+
+
+            }).catch(function (error) {
+              console.log(error);
+              vm.openerrorsweet("your Passwords not updated please try again.");
+              return false;
             });
-        });
-        vm.profileSubmit = function (tdProfilectrl) {
-          //alert($scope.tdProfilectrl.contact); return false;
- 
-            var updatedata = {};
-            var tenantID = localStorage.getItem('userID');
-          
 
-            if($scope.tdProfilectrl.contact === undefined || $scope.tdProfilectrl.contact === ""){
-              vm.contact = '';
-              updatedata['contact'] = '';
-            }else{
-              updatedata['contact'] = $scope.tdProfilectrl.contact;
-            }
-             if($scope.tdProfilectrl.address === undefined || $scope.tdProfilectrl.address === ""){
-              vm.address = '';
-              updatedata['address'] = '';
-            }else{
-              updatedata['address'] = $scope.tdProfilectrl.address;
-            }
-            if($scope.tdProfilectrl.email === undefined || $scope.tdProfilectrl.email === ""){
-              vm.email = '';
-              updatedata['email'] = '';
-            }else{
-               updatedata['email'] = $scope.tdProfilectrl.email;
-            }
 
-            // alert(JSON.stringify(updatedata)); return false;
-            firebase.database().ref('users/' + tenantID).update(updatedata).then(function(){
-              confirm("Your Information updated!");
-            });
+          } else {
+            vm.openerrorsweet("Passwords don't match.");
+            return false;
+          }
+
+
+        } else {
+          vm.openerrorsweet("Passwords don't match with your current password.");
+          return false;
         }
+      }
+      vm.notificationSubmit = function () {
 
-         vm.changepasswordSubmit = function(passworduser){
+      }
+      //  vm.changepasswordSubmit = function(passworduser){
 
-             $rootScope.invalid = '';
-            $rootScope.success = '';
-            $rootScope.error = '';
-             var oldpassword = localStorage.getItem('password');
-             var userEmail = localStorage.getItem('userEmail');
-             var ncpassword = passworduser.ncpassword ;
-             var password = passworduser.password ;
-             var npassword = passworduser.npassword ;
-              var landLordID = localStorage.getItem('userID');
+      //      $rootScope.invalid = '';
+      //     $rootScope.success = '';
+      //     $rootScope.error = '';
+      //      var oldpassword = localStorage.getItem('password');
+      //      var userEmail = localStorage.getItem('userEmail');
+      //      var ncpassword = passworduser.ncpassword ;
+      //      var password = passworduser.password ;
+      //      var npassword = passworduser.npassword ;
+      //       var landLordID = localStorage.getItem('userID');
 
-            if(password === oldpassword){
+      //     if(password === oldpassword){
 
-                    if(ncpassword === npassword){
-                        
-                          //  alert(JSON.stringify(firebase.auth().currentUser));
-                            var user = firebase.auth().currentUser;
-                            var newPassword = ncpassword;
-                            user.updatePassword(newPassword).then(function() {
-                                console.log("success");
-                                 confirm("Your password has been updated!");
-                                 localStorage.setItem('password', newPassword);
-                             $rootScope.success = 'Your password has been updated';
-                             $rootScope.error = '';  
-                             $rootScope.invalid = '';
-                            }).catch(function(error) {
-                              // An error happened.
-                                $rootScope.invalid = 'regcpwd';         
-                                $rootScope.error = 'your Passwords not updated please try again.';
-                                $rootScope.success = '';
-                            });
+      //             if(ncpassword === npassword){
+
+      //                   //  alert(JSON.stringify(firebase.auth().currentUser));
+      //                     var user = firebase.auth().currentUser;
+      //                     var newPassword = ncpassword;
+      //                     user.updatePassword(newPassword).then(function() {
+
+      //                        var emailData = '<p>Hello, </p><p>Your password has been changed. If you didn’t change the password then please contact  support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+      //                             // Send Email
+      //                               emailSendingService.sendEmailViaNodeMailer(userEmail, 'Password changed', 'changepassword', emailData);
 
 
-                    } else {
-                        $rootScope.invalid = 'regcpwd';         
-                        $rootScope.error = 'your Passwords don’t match with confirm password.';
-                        $rootScope.success = '';
-                    }
+      //                         console.log("success");
+      //                          confirm("Your password has been updated!");
+      //                          localStorage.setItem('password', newPassword);
+      //                      $rootScope.success = 'Your password has been updated';
+      //                      $rootScope.error = '';  
+      //                      $rootScope.invalid = '';
+      //                     }).catch(function(error) {
+      //                       // An error happened.
+      //                         $rootScope.invalid = 'regcpwd';         
+      //                         $rootScope.error = 'your Passwords not updated please try again.';
+      //                         $rootScope.success = '';
+      //                     });
 
 
-            } else {
-                $rootScope.invalid = 'regcpwd';         
-                $rootScope.error = 'your Passwords don’t match with old password.';
-                $rootScope.success = '';
-            }
-        }
-            
-        
+      //             } else {
+      //                 $rootScope.invalid = 'regcpwd';         
+      //                 $rootScope.error = 'your Passwords don’t match with confirm password.';
+      //                 $rootScope.success = '';
+      //             }
+
+
+      //     } else {
+      //         $rootScope.invalid = 'regcpwd';         
+      //         $rootScope.error = 'your Passwords don’t match with old password.';
+      //         $rootScope.success = '';
+      //     }
+      // }
+
+
     }]);
 
 'use strict';
@@ -7090,259 +16652,447 @@ vcancyApp
 //=================================================
 
 vcancyApp
-    .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window','Upload','config','$http', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window,Upload,config,$http) {
-        var vm = this;
+  .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$uibModal', 'emailSendingService',
+    function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $uibModal, emailSendingService) {
+      var vm = this;
+      var landLordID = localStorage.getItem('userID');
+      vm.refId = localStorage.getItem('refId');
+
+      var password = localStorage.getItem('password');
+      var swal = window.swal;
+      vm.userData = {};
+      vm.email = '';
+      vm.firstname = '';
+      vm.lastname = '';
+      vm.loader = 1;
+      vm.contact = '';
+      vm.address = '';
+      vm.notification = 'Enable';
+      vm.success = 0;
+      vm.error = 0;
+      vm.totaluser = 0;
+      vm.companyUsers = [];
+
+      // vm.companylogo = '../assets/pages/img/no_image_found.jpg';
+      $rootScope.invalid = '';
+      $rootScope.success = '';
+      $rootScope.error = '';
+      firebase.database().ref('/users/' + landLordID).once('value').then(function (userdata) {
+
+        $scope.$apply(function () {
+          console.log(userdata.val());
+          vm.userData = userdata.val();
+          // if (userdata.val() !== null) {
+
+          //   if(userdata.val().email != ''){
+          //     vm.email = userdata.val().email;
+          //   }else{
+          //     vm.email = localStorage.getItem('userEmail');
+          //   }
+
+          //     vm.firstname = userdata.val().firstname;
+          //     vm.lastname = userdata.val().lastname;
+          //     vm.address = userdata.val().address;
+          //     vm.contact = userdata.val().contact;
+          //     vm.loader = 1;
+          //     vm.isadded = userdata.val().isadded;
+          //     vm.iscancelshow = userdata.val().iscancelshow;
+          //     vm.iscreditcheck = userdata.val().iscreditcheck;
+          //     vm.iscriminalreport = userdata.val().iscriminalreport;
+          //     vm.isexpiresoon = userdata.val().isexpiresoon;
+          //     vm.ispropertydelete = userdata.val().ispropertydelete;
+          //     vm.isrentalsubmit = userdata.val().isrentalsubmit ;
+          //     vm.isshowingtime = userdata.val().isshowingtime;
+          //     if(userdata.val().profilepic != '' && userdata.val().profilepic != null){
+          //       vm.profilepic = userdata.val().profilepic;
+          //     }
+          //     if(userdata.val().companylogo != '' && userdata.val().companylogo != null){
+          //       vm.companylogo = userdata.val().companylogo;
+          //     }
+          //     vm.companyname = userdata.val().companyname;
+
+
+
+
+          //   }
+        });
+      });
+
+
+      var ref = firebase.database().ref("users");
+      ref.orderByChild("refId").equalTo(landLordID).on("child_added", function (snapshot) {
+        var companyUser = snapshot.val();
+        companyUser.key = snapshot.key;
+        vm.companyUsers.push(companyUser);
+      });
+
+
+      vm.profileSubmit = function () {
         var landLordID = localStorage.getItem('userID');
-        var password = localStorage.getItem('password');
-        
-        vm.email = '';
-        vm.firstname = '';
-        vm.lastname = '';
-        vm.loader = 1;
-        vm.contact = '';
-        vm.address  = '';
-        vm.notification  = 'Enable';
-        vm.success = 0;
-        vm.error = 0;
-        vm.totaluser = 0;
-		        $rootScope.invalid = '';
-            $rootScope.success = '';
-            $rootScope.error = '';
-        //alert(landLordID);
-       /* var commentsRef = firebase.database().ref('users/' + landLordID);
-		      commentsRef.once('value', function(snapshot) {
-		      	 snapshot.forEach(function(childSnapshot) {
-		      	 	alert(childSnapshot.key);
-		      	 	 });
-		      });*/
-        
 
-        firebase.database().ref('/users/' + landLordID).once('value').then(function (userdata) {
-            $scope.$apply(function () {
-                if (userdata.val() !== null) {
-                  //  console.log(userdata.val());
-                    vm.email = userdata.val().email;
-                    vm.firstname = userdata.val().firstname;
-                    vm.lastname = userdata.val().lastname;
-                    vm.address = userdata.val().address;
-                    vm.contact = userdata.val().contact;
-                    vm.loader = 1;
-                    vm.isadded = userdata.val().isadded;
-                    vm.iscancelshow = userdata.val().iscancelshow;
-                    vm.iscreditcheck = userdata.val().iscreditcheck;
-                    vm.iscriminalreport = userdata.val().iscriminalreport;
-                    vm.isexpiresoon = userdata.val().isexpiresoon;
-                    vm.ispropertydelete = userdata.val().ispropertydelete;
-                    vm.isrentalsubmit = userdata.val().isrentalsubmit ;
-                    vm.isshowingtime = userdata.val().isshowingtime;
-                    vm.profilepic = userdata.val().profilepic;
-                    vm.companyname = userdata.val().companyname;
+        // var updatedata = {};
+        // //var tenantID = localStorage.getItem('userID');
+        // if ($scope.ldProfilectrl.contact === undefined || $scope.ldProfilectrl.contact === "") {
+        //   vm.contact = '';
+        //   updatedata['contact'] = '';
+        // } else {
+        //   updatedata['contact'] = $scope.ldProfilectrl.contact;
+        // }
+        // if ($scope.ldProfilectrl.address === undefined || $scope.ldProfilectrl.address === "") {
+        //   vm.address = '';
+        //   updatedata['address'] = '';
+        // } else {
+        //   updatedata['address'] = $scope.ldProfilectrl.address;
+        // }
+        // if ($scope.ldProfilectrl.email === undefined || $scope.ldProfilectrl.email === "") {
+        //   vm.email = '';
+        //   updatedata['email'] = '';
+        // } else {
+        //   updatedata['email'] = $scope.ldProfilectrl.email;
+        // }
+        // if ($scope.ldProfilectrl.companyname === undefined || $scope.ldProfilectrl.companyname === "") {
+        //   vm.companyname = '';
+        //   updatedata['companyname'] = '';
+        // } else {
+        //   updatedata['companyname'] = $scope.ldProfilectrl.companyname;
+        // }
+        //alert(JSON.stringify(updatedata)); return false;
 
-                   
+        firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+          localStorage.setItem('userData', JSON.stringify(vm.userData));
+          vm.opensuccesssweet("Profile Updated successfully!");
+        }, function (error) {
 
+          vm.openerrorsweet("Profile Not Updated! Try again!");
+          return false;
+        });
+      };
 
-                }
-            });
-        }); 
-        
-        
-         var ref = firebase.database().ref("employee");
-                    ref.orderByChild("refId").equalTo(landLordID).on("child_added", function(snapshot) {
-                      console.log(snapshot.key);
-                      vm.totaluser++;
-                    });
+      //update company image
+      $scope.uploadDetailsImages = function (event) {
+        var file = event.target.files[0];
+        AWS.config.update({
+          accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+          secretAccessKey: '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'
+        });
+        AWS.config.region = 'ca-central-1';
 
-                   var setinterval =  setInterval(function(){ if(vm.totaluser != 0){
-                    $("#totaluser").text(vm.totaluser);
-                      console.log(vm.totaluser);
-                      clearInterval(setinterval);
-                   } }, 3000);
+        var bucket = new AWS.S3({
+          params: {
+            Bucket: 'vcancy-final'
+          }
+        });
+        var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+        filename = filename.replace(/\s/g, '');
 
-        vm.profileSubmit = function (ldProfilectrl) {
-        	 var landLordID = localStorage.getItem('userID');
-
-
-             var updatedata = {};
-            //var tenantID = localStorage.getItem('userID');
-            if($scope.ldProfilectrl.contact === undefined || $scope.ldProfilectrl.contact === ""){
-              vm.contact = '';
-              updatedata['contact'] = '';
-            }else{
-              updatedata['contact'] = $scope.ldProfilectrl.contact;
-            }
-             if($scope.ldProfilectrl.address === undefined || $scope.ldProfilectrl.address === ""){
-              vm.address = '';
-              updatedata['address'] = '';
-            }else{
-              updatedata['address'] = $scope.ldProfilectrl.address;
-            }
-            if($scope.ldProfilectrl.email === undefined || $scope.ldProfilectrl.email === ""){
-              vm.email = '';
-              updatedata['email'] = '';
-            }else{
-               updatedata['email'] = $scope.ldProfilectrl.email;
-            }
-            if($scope.ldProfilectrl.companyname === undefined || $scope.ldProfilectrl.companyname === ""){
-              vm.companyname = '';
-              updatedata['companyname'] = '';
-            }else{
-               updatedata['companyname'] = $scope.ldProfilectrl.companyname;
-            }
-            //alert(JSON.stringify(updatedata)); return false;
-
-            firebase.database().ref('users/' + landLordID).update(updatedata).then(function(){
-              //confirm("Your Information updated!");
-             ldProfilectrl.success = "Profile Updated successfully"
-            }, function(error) {
-              // The Promise was rejected.
-              console.error(error);
-              ldProfilectrl.error = "Profile Updated successfully"
-            });
+        if (file.size > 3145728) {
+          swal({
+            title: "Error!",
+            text: 'File size should be 3 MB or less.',
+            type: "error",
+          });
+          return false;
+        } else if (file.type.indexOf('image') === -1) {
+          swal({
+            title: "Error!",
+            text: 'Only files are accepted.',
+            type: "error",
+          });
+          return false;
         }
 
-        vm.changepasswordSubmit = function(passworduser){
+        var params = {
+          Key: 'company-logo/' + filename,
+          ContentType: file.type,
+          Body: file,
+          StorageClass: "STANDARD_IA",
+          ACL: 'public-read'
+        };
 
-            //alert(JSON.stringify(passworduser));
-            $rootScope.invalid = '';
-            $rootScope.success = '';
-            $rootScope.error = '';
-             var oldpassword = localStorage.getItem('password');
-             var userEmail = localStorage.getItem('userEmail');
-             var ncpassword = passworduser.ncpassword ;
-             var password = passworduser.password ;
-             var npassword = passworduser.npassword ;
+        bucket.upload(params).on('httpUploadProgress', function (evt) { })
+          .send(function (err, data) {
+            if (data && data.Location) {
+              $scope.$apply(function () {
+                vm.userData.companylogo = data.Location;
+              });
+              firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+                vm.opensuccesssweet("Profile Updated successfully!");
+              }, function (error) {
+
+                vm.openerrorsweet("Profile Not Updated! Try again!");
+                return false;
+              });
+            }
+          });
+      }
+
+
+
+      vm.changepasswordSubmit = function (passworduser) {
+
+        $rootScope.invalid = '';
+        $rootScope.success = '';
+        $rootScope.error = '';
+        var oldpassword = localStorage.getItem('password');
+        var userEmail = localStorage.getItem('userEmail');
+        var ncpassword = passworduser.ncpassword;
+        var password = passworduser.password;
+        var npassword = passworduser.npassword;
+        var landLordID = localStorage.getItem('userID');
+
+        if (password === oldpassword) {
+
+          if (password === ncpassword) {
+            vm.openerrorsweet("Your old password and new password must be different");
+            return false;
+          }
+
+          if (ncpassword === npassword) {
+
+            var user = firebase.auth().currentUser;
+            var newPassword = ncpassword;
+            user.updatePassword(newPassword).then(function () {
+              localStorage.setItem('password', newPassword);
+              vm.opensuccesssweet("Your password has been updated!");
+              var emailData = '<p>Hello, </p><p>Your password has been changed. If you didn’t change the password then please contact  support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+              // Send Email
+              passworduser.npassword = '';
+              passworduser.password = '';
+              passworduser.ncpassword = '';
+              emailSendingService.sendEmailViaNodeMailer(userEmail, 'Password changed', 'changepassword', emailData);
+
+
+
+            }).catch(function (error) {
+              console.log(error);
+              vm.openerrorsweet("your Passwords not updated please try again.");
+              return false;
+            });
+
+
+          } else {
+            vm.openerrorsweet("Passwords don't match.");
+            return false;
+          }
+
+
+        } else {
+          vm.openerrorsweet("Passwords don't match with your current password.");
+          return false;
+        }
+      }
+
+      vm.profilestore = function () {
+        AWS.config.update({
+          accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+          secretAccessKey: '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'
+        });
+        AWS.config.region = 'ca-central-1';
+
+        var bucket = new AWS.S3({ params: { Bucket: 'vcancy-final' } });
+        var fileChooser = document.getElementById('file');
+        var file = fileChooser.files[0];
+        var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+        filename = filename.replace(/\s/g, '');
+
+        if (file.size > 3145728) {
+          swal({
+            title: "Error!",
+            text: 'File size should be 3 MB or less.',
+            type: "error",
+          });
+          return false;
+        } else if (!(filename.endsWith('.png'))
+          && !(filename.endsWith('.jpg'))
+          && !(filename.endsWith('.jpeg'))) {
+          swal({
+            title: "Error!",
+            text: 'Invalid file type.',
+            type: "error",
+          });
+          return false;
+        }
+
+
+        if (file) {
+          var params = { Key: 'company-logo/' + filename, ContentType: file.type, Body: file, StorageClass: "STANDARD_IA", ACL: 'public-read' };
+          bucket.upload(params).on('httpUploadProgress', function (evt) {
+            console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total) + '%');
+          }).send(function (err, data) {
+            //console.log(data.Location); return false;
+            if (data.Location != '') {
               var landLordID = localStorage.getItem('userID');
-
-            if(password === oldpassword){
-
-                    if(ncpassword === npassword){
-                        
-                          //  alert(JSON.stringify(firebase.auth().currentUser));
-                            var user = firebase.auth().currentUser;
-                            var newPassword = ncpassword;
-                            user.updatePassword(newPassword).then(function() {
-                                console.log("success");
-                                $rootScope.success = 'Your password has been updated!';
-                                confirm("Your password has been updated!");
-                                 localStorage.setItem('password', newPassword);
-                             $rootScope.success = 'Your password has been updated';
-                             $rootScope.error = '';  
-                             $rootScope.invalid = '';
-                            }).catch(function(error) {
-                              // An error happened.
-                                $rootScope.invalid = 'regcpwd';         
-                                $rootScope.error = 'your Passwords not updated please try again.';
-                                $rootScope.success = '';
-                            });
+              var user = firebase.auth().currentUser;
+              if (user) {
+                firebase.database().ref('users/' + landLordID).update({ 'companylogo': data.Location }).then(function () {
 
 
-                    } else {
-                        $rootScope.invalid = 'regcpwd';         
-                        $rootScope.error = "Passwords don't match";
-                        $rootScope.success = '';
-                    }
-
-
-        	} else {
-                $rootScope.invalid = 'regcpwd';         
-                $rootScope.error = "Passwords don't match";
-                $rootScope.success = '';
-            }
-        }
-
-        vm.profilestore = function(){
-           var landLordID = localStorage.getItem('userID');
-          vm.error = 0;
-            //alert("hfgjdfg");
-            function checkFile() {
-              if($('#uploadfile')[0].files[0]) {
-                var _fileName = $('#uploadfile')[0].files[0].name.toLowerCase();        
-                if($('#uploadfile')[0].files[0].size > 3145728) {
-                  return 'File size should be 3 MB or less.'
-                } else if(!(_fileName.endsWith('.png')) 
-                  && !(_fileName.endsWith('.jpg'))
-                  && !(_fileName.endsWith('.jpeg')))  {
-                    return 'Invalid file type.'
-                }
+                  vm.opensuccesssweet("Your Company Logo Picture updated successfully.");
+                }, function (error) {
+                  vm.openerrorsweet("Company Logo Not Added! Try again!");
+                  return false;
+                });
               }
             }
 
-            var fileCheckMsg = checkFile();
-            if(fileCheckMsg) {
-                vm.error = 1;
-                vm.errormessage = "Invalid File Extensions."
-            }
-
-          var appfiles = $('#appfiles').val();
-          var filename = $('#filename').val() === '' ? '' : $('#filename').val();
-            filename = filename.replace(/\s/g,''); 
-
-            var filepath = filename != '' ? "https://vcancy.ca/login/uploads/" + filename : appfiles;
-            console.log(filepath);
-            if(filename != ''){
-             vm.upload(appfiles, filename);
-               var user = firebase.auth().currentUser;
-                  if (user) { 
-                      firebase.database().ref('users/' + landLordID).update({'profilepic':filepath}).then(function(){
-                         vm.success = "Your profile updated successfully.";
-                       }, function(error) {
-                        // The Promise was rejected.
-                        console.error(error);
-                        $rootScope.error = "May Be your session is expire please login again."
-                      });
-                  } else {
-                     $rootScope.error = "May Be your session is expire please login again."
-                  }
-            }
-
-            console.log(filename, filepath, appfiles);
+          });
+        } else {
+          swal({
+            title: "Error!",
+            text: "File Type is Invalid.",
+            type: "error",
+          });
+          return false;
         }
+      }
 
-       
-         vm.newuserSubmit = function(newuser){
 
-          // alert(JSON.stringify(newuser));
-            var landLordID = localStorage.getItem('userID');
-            var firstname = newuser.firstname;
-            var lastname = newuser.lastname;
-            var email = newuser.email;
-            var refId = landLordID;
-            var custome =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      vm.newuserSubmit = function (newuser) {
+        var landLordID = localStorage.getItem('userID');
+        var firstname = newuser.firstname;
+        var lastname = newuser.lastname;
+        var email = newuser.email;
+        // var custome = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        var reguserdbObj = firebase.database();
+        var random = parseInt(Math.random() * 10000);
+        var characterArray = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        var pass = '';
+        for (var i = 0; i < 6; i++) {
+          var num = Math.floor((Math.random() * 60) + 1);
+          pass += characterArray[num];
+        }
+        //console.log(pass);
+        var usertype = 2;
+
+        // var userarray = {
+        //   firstname: firstname,
+        //   lastname: lastname,
+        //   refId: refId,
+        //   email: email
+        // };
+        var reguserObj = $firebaseAuth();
+        reguserObj.$createUserWithEmailAndPassword(email, pass)
+          .then(function (firebaseUser) {
             var reguserdbObj = firebase.database();
-           /* reguserdbObj.ref('users/' + firebaseUser.uid).set({
-            firstname: firstname,
-            lastname: lastname,
-            refId : refId,
-            email : email,
-            });   */  
-            var userarray = { firstname: firstname,
-            lastname: lastname,
-            refId : refId,
-            email : email};
-            reguserdbObj.ref('employee/' + custome).set(userarray, function(error){
-                  if(error != null ){
-                    console.log(error);
-                    $rootScope.invalid = 'regcpwd';         
-                    $rootScope.error = 'User Not added Please Try again.';
-                    $rootScope.success = '';
-                  }else{
-                    console.log('Done');
-                    $rootScope.invalid = 'regcpwd';         
-                    $rootScope.error = '';
-                    $rootScope.success = 'User Added successfully!';
-                                    
-                  }
+            reguserdbObj.ref('users/' + firebaseUser.uid).set({
+              firstname: firstname,
+              lastname: lastname,
+              usertype: usertype,
+              refId: landLordID,
+              email: email,
+              isadded: 1,
+              iscancelshow: 1,
+              iscreditcheck: 1,
+              iscriminalreport: 1,
+              isexpiresoon: 1,
+              ispropertydelete: 1,
+              isrentalsubmit: 1,
+              isshowingtime: 1,
+              companyname: ""
+            });
+            vm.opensuccesssweet("User Added successfully!");
+
+            firebase.auth().signInWithEmailAndPassword(email, pass)
+              .then(function (firebaseUser) {
+
+                var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to on https://vcancy.com/ .</p><p>Your email is ' + email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                // Send Email
+                emailSendingService.sendEmailViaNodeMailer(email, 'A new user account has been added to your portal', 'Welcome', emailData);
+                // Success 
+                firebaseUser.sendEmailVerification().then(function () {
+
+                  var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at ' + email + '.</p><p>To view/edit user details, please log in https://vcancy.com/ and go to “Profile” and click on “Users”</p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+
+                  // Send Email
+                  emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
+
+                  console.log("Email Sent");
+                  $rootScope.success = 'Confirmation email resent';
+                  $rootScope.error = '';
+                  setTimeout(function () { $rootScope.success = '' }, 1000);
+                }).catch(function (error) {
+                  console.log("Error in sending email" + error);
                 });
+              })
+          }).catch(function (error) {
+            //console.log(error);
+            if (error.message) {
+              if (error.message == "The email address is badly formatted.") {
+                $rootScope.error = "Invalid Email.";
+                $rootScope.success = '';
+              } else {
+                $rootScope.error = error.message;
+                setTimeout(function () { $rootScope.error = '' }, 1000);
+                $rootScope.success = '';
+              }
+              //$rootScope.error = error.message;
 
-            
-        }
+            }
 
-        vm.upload = function (file, filename) {
+            if (error.code === "auth/invalid-email") {
+              $rootScope.invalid = 'regemail';
+            } else if (error.code === "auth/weak-password") {
+              $rootScope.invalid = 'regpwd';
+            } else {
+              $rootScope.invalid = '';
+            }
+          });
+
+        // reguserdbObj.ref('employee/' + custome).set(userarray, function (error) {
+        //   if (error != null) {
+
+        //     vm.openerrorsweet("User Not added Please Try again.");
+        //     return false;
+        //   } else {
+        //     vm.opensuccesssweet("User Added successfully!");
+        //   }
+        // });
+
+
+      }
+
+      vm.deleteCompanyUsers = function (val) {
+        swal({
+          title: "Are you sure?",
+          text: "Your will not be able to recover this user again!",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete it!",
+          closeOnConfirm: false
+        },
+          function (isConfirm) {
+            if (isConfirm) {
+              var propertyObj = $firebaseAuth();
+              var propdbObj = firebase.database();
+              propdbObj.ref('users/' + val).set({
+                isDeleted: true,
+              })
+                .then(function () {
+                  var indexOfDeletedUser = vm.companyUsers.find(function (user) {
+                    if (user.key === val) return true;
+                  });
+                  vm.companyUsers.splice(indexOfDeletedUser, 1);
+                  swal({
+                    title: "Success!",
+                    text: "User has been deleted.",
+                    type: "success",
+                    confirmButtonColor: '#009999',
+                    confirmButtonText: "Ok"
+                  });
+                  $state.reload();
+                });
+            }
+          });
+      }
+
+      vm.upload = function (file, filename) {
         file = file.replace("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", "");
         file = file.replace("data:application/pdf;base64,", "");
         file = file.replace(/^data:image\/\w+;base64,/, "");
         file = file.replace("data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,", "");
-         //console.log(file,filename);
+        //console.log(file,filename);
 
         var req = {
           method: 'POST',
@@ -7368,97 +17118,249 @@ vcancyApp
         });
       };
 
-        vm.notificationSubmit = function(notificationuser){
-      //    console.log(notificationuser);
-          var landLordID = localStorage.getItem('userID');
-          if(notificationuser != undefined){
-              var notification = {};
-          
-              if( notificationuser.isadded != undefined){
-                notification['isadded'] = notificationuser.isadded;
-              }else{
-                notification['isadded'] = 0;
-              }
+      vm.notificationSubmit = function (notificationuser) {
+        //    console.log(notificationuser);
+        // if (notificationuser != undefined) {
+        //     var notification = {};
+
+        //     if( notificationuser.isadded != undefined){
+        //       notification['isadded'] = notificationuser.isadded;
+        //     }else{
+        //       notification['isadded'] = 0;
+        //     }
 
 
-              if(notificationuser.isshowingtime != undefined){
-                notification['isshowingtime'] = notificationuser.isshowingtime;
-              }else{
-                notification['isshowingtime'] = 0;
-              }
+        //     if(notificationuser.isshowingtime != undefined){
+        //       notification['isshowingtime'] = notificationuser.isshowingtime;
+        //     }else{
+        //       notification['isshowingtime'] = 0;
+        //     }
 
 
-              if(notificationuser.isrentalsubmit != undefined){
-                notification['isrentalsubmit'] = notificationuser.isrentalsubmit;
-              }else{
-                notification['isrentalsubmit'] = 0;
-              }
-
-
-
-              if(notificationuser.iscancelshow != undefined){
-                notification['iscancelshow'] = notificationuser.iscancelshow;
-              }else{
-                notification['iscancelshow'] = 0;
-              }
-
-
-              if(notificationuser.iscreditcheck != undefined){
-                notification['iscreditcheck'] = notificationuser.iscreditcheck;
-              }else{
-                notification['iscreditcheck'] = 0;
-              }
+        //     if(notificationuser.isrentalsubmit != undefined){
+        //       notification['isrentalsubmit'] = notificationuser.isrentalsubmit;
+        //     }else{
+        //       notification['isrentalsubmit'] = 0;
+        //     }
 
 
 
-              if(notificationuser.iscriminalreport != undefined){
-                notification['iscriminalreport'] = notificationuser.iscriminalreport;
-              }else{
-                notification['iscriminalreport'] = 0;
-              }
+        //     if(notificationuser.iscancelshow != undefined){
+        //       notification['iscancelshow'] = notificationuser.iscancelshow;
+        //     }else{
+        //       notification['iscancelshow'] = 0;
+        //     }
 
 
-              if(notificationuser.isexpiresoon != undefined){
-                notification['isexpiresoon'] = notificationuser.isexpiresoon;
-              }else{
-                notification['isexpiresoon'] = 0;
-              }
+        //     if(notificationuser.iscreditcheck != undefined){
+        //       notification['iscreditcheck'] = notificationuser.iscreditcheck;
+        //     }else{
+        //       notification['iscreditcheck'] = 0;
+        //     }
 
 
 
-              if(notificationuser.ispropertydelete != undefined){
-                notification['ispropertydelete'] = notificationuser.ispropertydelete;
-              }else{
-                notification['ispropertydelete'] = 0;
-              }
+        //     if(notificationuser.iscriminalreport != undefined){
+        //       notification['iscriminalreport'] = notificationuser.iscriminalreport;
+        //     }else{
+        //       notification['iscriminalreport'] = 0;
+        //     }
 
-             if(notification != null){
-                  var user = firebase.auth().currentUser;
-                  if (user) { 
-                      firebase.database().ref('users/' + landLordID).update(notification).then(function(){
-                       // confirm("Your Information updated!");
-                         vm.success = "Your notification updated successfully.";
-                      }, function(error) {
-                        // The Promise was rejected.
-                        console.error(error);
-                        $rootScope.error = "May Be your session is expire please login again."
-                      });
-                  } else {
-                     $rootScope.error = "May Be your session is expire please login again."
-                  }
-              }else{
-                  $rootScope.error = "Please Select Atleast one option."
-              }
-              
-          }else{
-                  $rootScope.error = "Please Select Atleast one option."
-          }
-          
+
+        //     if(notificationuser.isexpiresoon != undefined){
+        //       notification['isexpiresoon'] = notificationuser.isexpiresoon;
+        //     }else{
+        //       notification['isexpiresoon'] = 0;
+        //     }
+
+
+
+        //     if(notificationuser.ispropertydelete != undefined){
+        //       notification['ispropertydelete'] = notificationuser.ispropertydelete;
+        //     }else{
+        //       notification['ispropertydelete'] = 0;
+        //     }
+
+        // if (notification != null) {
+        //   var user = firebase.auth().currentUser;
+        //   if (user) {
+        //     firebase.database().ref('users/' + landLordID).update(notification).then(function () {
+        //       vm.opensuccesssweet("Your notification updated successfully!");
+        //     }, function (error) {
+        //       vm.openerrorsweet("May Be your session is expire please login again.");
+        //       return false;
+        //     });
+        //   } else {
+        //     vm.openerrorsweet("May Be your session is expire please login again.");
+        //     return false;
+        //   }
+        // } else {
+
+        //   vm.openerrorsweet("Please Select Atleast one option.");
+        //   return false;
+        // }
+
+        // } else {
+        //   vm.openerrorsweet("Please Select Atleast one option.");
+        //   return false;
+        // }
+        var landLordID = localStorage.getItem('userID');
+        var user = firebase.auth().currentUser;
+        if (user) {
+          firebase.database().ref('users/' + landLordID).update(vm.userData).then(function () {
+            vm.opensuccesssweet("Your notification updated successfully!");
+          }, function (error) {
+            vm.openerrorsweet("May Be your session is expire please login again.");
+            return false;
+          });
+        } else {
+          vm.openerrorsweet("May Be your session is expire please login again.");
+          return false;
         }
 
+      }
+
+      $scope.items = ['item1', 'item2', 'item3'];
+
+      $scope.open = function (size) {
+
+        var modalInstance = $uibModal.open({
+          templateUrl: 'myModalContent.html',
+          controller: 'ModalInstanceCtrl',
+          size: size,
+
+        });
+
+        modalInstance.result.then(function (selectedItem) {
+          $scope.selected = selectedItem;
+        }, function () {
+        });
+      };
+
+      vm.opensuccesssweet = function (value) {
+        swal({
+          title: "Success!",
+          text: value,
+          type: "success",
+          confirmButtonColor: '#009999',
+          confirmButtonText: "Ok"
+        }, function (isConfirm) {
+          if (isConfirm) {
+            // $state.reload();
+          }
+        });
+      };
+
+      vm.openerrorsweet = function (value) {
+        swal({
+          title: "Error",
+          text: value,
+          type: "warning",
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Ok",
+          closeOnConfirm: true
+        },
+          function () {
+            return false;
+          });
+
+      };
+
+    }]);
+
+vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$modal', '$uibModalInstance', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $modal, $uibModalInstance) {
+  var swal = window.swal;
+  var vm = this;
+  AWS.config.update({
+    accessKeyId: 'AKIAIYONIKRYTFNEPDSA',
+    secretAccessKey: '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'
+  });
+  AWS.config.region = 'ca-central-1';
+
+  $scope.ok = function () {
+
+    var bucket = new AWS.S3({ params: { Bucket: 'vacancy-final' } });
+    var fileChooser = document.getElementById('file321');
+    var file = fileChooser.files[0];
+    var filename = moment().format('YYYYMMDDHHmmss') + file.name;
+    filename = filename.replace(/\s/g, '');
+
+    if (file.size > 3145728) {
+      // alert('File size should be 3 MB or less.');
+      vm.openerrorsweet('File size should be 3 MB or less.');
+      return false;
+    } else if (!(filename.endsWith('.png'))
+      && !(filename.endsWith('.jpg'))
+      && !(filename.endsWith('.jpeg'))) {
+      // alert('Invalid file type.');
+      vm.openerrorsweet("Invalid file type.");
+      return false;
+    }
 
 
-}])
+    if (file) {
+      var params = { Key: 'profile-images/' + filename, ContentType: file.type, Body: file, StorageClass: "STANDARD_IA", ACL: 'public-read' };
+      bucket.upload(params).on('httpUploadProgress', function (evt) {
+        console.log("Uploaded :: " + parseInt((evt.loaded * 100) / evt.total) + '%');
+      }).send(function (err, data) {
+        //console.log(data.Location); return false;
+        if (data.Location != '') {
+          var landLordID = localStorage.getItem('userID');
+          var user = firebase.auth().currentUser;
+          if (user) {
+            firebase.database().ref('users/' + landLordID).update({ 'profilepic': data.Location }).then(function () {
+              vm.opensuccesssweet("Your profile Picture updated successfully.");
+              //$state.reload();
+            }, function (error) {
+
+            });
+          }
+        }
+
+      });
+    } else {
+      vm.openerrorsweet("File Type is Invalid.");
+      return false;
+
+    }
+  };
+
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+
+
+  vm.opensuccesssweet = function (value) {
+    swal({
+      title: "Success!",
+      text: value,
+      type: "success",
+      confirmButtonColor: '#009999',
+      confirmButtonText: "Ok"
+    }, function (isConfirm) {
+      if (isConfirm) {
+        $uibModalInstance.close();
+        $state.reload();
+      }
+    });
+  }
+
+  vm.openerrorsweet = function (value) {
+    swal({
+      title: "Error",
+      text: value,
+      type: "warning",
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Ok",
+      closeOnConfirm: true
+    },
+      function () {
+        return false;
+      });
+  }
+
+}]);
+
 vcancyApp.directive('uiTour', ['$timeout', '$parse', function ($timeout, $parse) {
     return {
         link: function ($scope, $element, $attributes) {
@@ -7540,6 +17442,23 @@ vcancyApp.directive('uiTour', ['$timeout', '$parse', function ($timeout, $parse)
         }
     };
 }]);
+vcancyApp.directive('fileUpload', function () {
+    return {
+        link: function (scope,element) {
+            element.on('change', scope.uploadDetailsImages);
+        },
+        restrict:'A',
+    };
+});
+vcancyApp.filter('availableunit', function () {
+    return function (units, filterBy) {
+        return units.filter(function (unit) {
+            if (unit.status === 'status' || unit.status === 'available' || unit.status === 'availablesoon') {
+                return true;
+            }
+        });
+    };
+});
  var materialAdmin = angular.module('vcancyApp');
 
     // =========================================================================
@@ -7664,3 +17583,2797 @@ materialAdmin.directive('fgLine', function () {
             
         }
     })
+
+/*!
+ * ui-select
+ * http://github.com/angular-ui/ui-select
+ * Version: 0.19.8 - 2017-04-18T05:43:43.673Z
+ * License: MIT
+ */
+
+
+(function () { 
+    "use strict";
+    var KEY = {
+        TAB: 9,
+        ENTER: 13,
+        ESC: 27,
+        SPACE: 32,
+        LEFT: 37,
+        UP: 38,
+        RIGHT: 39,
+        DOWN: 40,
+        SHIFT: 16,
+        CTRL: 17,
+        ALT: 18,
+        PAGE_UP: 33,
+        PAGE_DOWN: 34,
+        HOME: 36,
+        END: 35,
+        BACKSPACE: 8,
+        DELETE: 46,
+        COMMAND: 91,
+    
+        MAP: { 91 : "COMMAND", 8 : "BACKSPACE" , 9 : "TAB" , 13 : "ENTER" , 16 : "SHIFT" , 17 : "CTRL" , 18 : "ALT" , 19 : "PAUSEBREAK" , 20 : "CAPSLOCK" , 27 : "ESC" , 32 : "SPACE" , 33 : "PAGE_UP", 34 : "PAGE_DOWN" , 35 : "END" , 36 : "HOME" , 37 : "LEFT" , 38 : "UP" , 39 : "RIGHT" , 40 : "DOWN" , 43 : "+" , 44 : "PRINTSCREEN" , 45 : "INSERT" , 46 : "DELETE", 48 : "0" , 49 : "1" , 50 : "2" , 51 : "3" , 52 : "4" , 53 : "5" , 54 : "6" , 55 : "7" , 56 : "8" , 57 : "9" , 59 : ";", 61 : "=" , 65 : "A" , 66 : "B" , 67 : "C" , 68 : "D" , 69 : "E" , 70 : "F" , 71 : "G" , 72 : "H" , 73 : "I" , 74 : "J" , 75 : "K" , 76 : "L", 77 : "M" , 78 : "N" , 79 : "O" , 80 : "P" , 81 : "Q" , 82 : "R" , 83 : "S" , 84 : "T" , 85 : "U" , 86 : "V" , 87 : "W" , 88 : "X" , 89 : "Y" , 90 : "Z", 96 : "0" , 97 : "1" , 98 : "2" , 99 : "3" , 100 : "4" , 101 : "5" , 102 : "6" , 103 : "7" , 104 : "8" , 105 : "9", 106 : "*" , 107 : "+" , 109 : "-" , 110 : "." , 111 : "/", 112 : "F1" , 113 : "F2" , 114 : "F3" , 115 : "F4" , 116 : "F5" , 117 : "F6" , 118 : "F7" , 119 : "F8" , 120 : "F9" , 121 : "F10" , 122 : "F11" , 123 : "F12", 144 : "NUMLOCK" , 145 : "SCROLLLOCK" , 186 : ";" , 187 : "=" , 188 : "," , 189 : "-" , 190 : "." , 191 : "/" , 192 : "`" , 219 : "[" , 220 : "\\" , 221 : "]" , 222 : "'"
+        },
+    
+        isControl: function (e) {
+            var k = e.which;
+            switch (k) {
+            case KEY.COMMAND:
+            case KEY.SHIFT:
+            case KEY.CTRL:
+            case KEY.ALT:
+                return true;
+            }
+    
+            if (e.metaKey || e.ctrlKey || e.altKey) return true;
+    
+            return false;
+        },
+        isFunctionKey: function (k) {
+            k = k.which ? k.which : k;
+            return k >= 112 && k <= 123;
+        },
+        isVerticalMovement: function (k){
+          return ~[KEY.UP, KEY.DOWN].indexOf(k);
+        },
+        isHorizontalMovement: function (k){
+          return ~[KEY.LEFT,KEY.RIGHT,KEY.BACKSPACE,KEY.DELETE].indexOf(k);
+        },
+        toSeparator: function (k) {
+          var sep = {ENTER:"\n",TAB:"\t",SPACE:" "}[k];
+          if (sep) return sep;
+          // return undefined for special keys other than enter, tab or space.
+          // no way to use them to cut strings.
+          return KEY[k] ? undefined : k;
+        }
+      };
+    
+    function isNil(value) {
+      return angular.isUndefined(value) || value === null;
+    }
+    
+    /**
+     * Add querySelectorAll() to jqLite.
+     *
+     * jqLite find() is limited to lookups by tag name.
+     * TODO This will change with future versions of AngularJS, to be removed when this happens
+     *
+     * See jqLite.find - why not use querySelectorAll? https://github.com/angular/angular.js/issues/3586
+     * See feat(jqLite): use querySelectorAll instead of getElementsByTagName in jqLite.find https://github.com/angular/angular.js/pull/3598
+     */
+    if (angular.element.prototype.querySelectorAll === undefined) {
+      angular.element.prototype.querySelectorAll = function(selector) {
+        return angular.element(this[0].querySelectorAll(selector));
+      };
+    }
+    
+    /**
+     * Add closest() to jqLite.
+     */
+    if (angular.element.prototype.closest === undefined) {
+      angular.element.prototype.closest = function( selector) {
+        var elem = this[0];
+        var matchesSelector = elem.matches || elem.webkitMatchesSelector || elem.mozMatchesSelector || elem.msMatchesSelector;
+    
+        while (elem) {
+          if (matchesSelector.bind(elem)(selector)) {
+            return elem;
+          } else {
+            elem = elem.parentElement;
+          }
+        }
+        return false;
+      };
+    }
+    
+    var latestId = 0;
+    
+    var uis = angular.module('ui.select', [])
+    
+    .constant('uiSelectConfig', {
+      theme: 'bootstrap',
+      searchEnabled: true,
+      sortable: false,
+      placeholder: '', // Empty by default, like HTML tag <select>
+      refreshDelay: 1000, // In milliseconds
+      closeOnSelect: true,
+      skipFocusser: false,
+      dropdownPosition: 'auto',
+      removeSelected: true,
+      resetSearchInput: true,
+      generateId: function() {
+        return latestId++;
+      },
+      appendToBody: false,
+      spinnerEnabled: false,
+      spinnerClass: 'glyphicon glyphicon-refresh ui-select-spin',
+      backspaceReset: true
+    })
+    
+    // See Rename minErr and make it accessible from outside https://github.com/angular/angular.js/issues/6913
+    .service('uiSelectMinErr', function() {
+      var minErr = angular.$$minErr('ui.select');
+      return function() {
+        var error = minErr.apply(this, arguments);
+        var message = error.message.replace(new RegExp('\nhttp://errors.angularjs.org/.*'), '');
+        return new Error(message);
+      };
+    })
+    
+    // Recreates old behavior of ng-transclude. Used internally.
+    .directive('uisTranscludeAppend', function () {
+      return {
+        link: function (scope, element, attrs, ctrl, transclude) {
+            transclude(scope, function (clone) {
+              element.append(clone);
+            });
+          }
+        };
+    })
+    
+    /**
+     * Highlights text that matches $select.search.
+     *
+     * Taken from AngularUI Bootstrap Typeahead
+     * See https://github.com/angular-ui/bootstrap/blob/0.10.0/src/typeahead/typeahead.js#L340
+     */
+    .filter('highlight', function() {
+      function escapeRegexp(queryToEscape) {
+        return ('' + queryToEscape).replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
+      }
+    
+      return function(matchItem, query) {
+        return query && matchItem ? ('' + matchItem).replace(new RegExp(escapeRegexp(query), 'gi'), '<span class="ui-select-highlight">$&</span>') : matchItem;
+      };
+    })
+    
+    /**
+     * A read-only equivalent of jQuery's offset function: http://api.jquery.com/offset/
+     *
+     * Taken from AngularUI Bootstrap Position:
+     * See https://github.com/angular-ui/bootstrap/blob/master/src/position/position.js#L70
+     */
+    .factory('uisOffset',
+      ['$document', '$window',
+      function ($document, $window) {
+    
+      return function(element) {
+        var boundingClientRect = element[0].getBoundingClientRect();
+        return {
+          width: boundingClientRect.width || element.prop('offsetWidth'),
+          height: boundingClientRect.height || element.prop('offsetHeight'),
+          top: boundingClientRect.top + ($window.pageYOffset || $document[0].documentElement.scrollTop),
+          left: boundingClientRect.left + ($window.pageXOffset || $document[0].documentElement.scrollLeft)
+        };
+      };
+    }]);
+    
+    uis.directive('uiSelectChoices',
+      ['uiSelectConfig', 'uisRepeatParser', 'uiSelectMinErr', '$compile', '$window',
+      function(uiSelectConfig, RepeatParser, uiSelectMinErr, $compile, $window) {
+    
+      return {
+        restrict: 'EA',
+        require: '^uiSelect',
+        replace: true,
+        transclude: true,
+        templateUrl: function(tElement) {
+          // Needed so the uiSelect can detect the transcluded content
+          tElement.addClass('ui-select-choices');
+    
+          // Gets theme attribute from parent (ui-select)
+          var theme = tElement.parent().attr('theme') || uiSelectConfig.theme;
+          return theme + '/choices.tpl.html';
+        },
+    
+        compile: function(tElement, tAttrs) {
+    
+          if (!tAttrs.repeat) throw uiSelectMinErr('repeat', "Expected 'repeat' expression.");
+    
+          // var repeat = RepeatParser.parse(attrs.repeat);
+          var groupByExp = tAttrs.groupBy;
+          var groupFilterExp = tAttrs.groupFilter;
+    
+          if (groupByExp) {
+            var groups = tElement.querySelectorAll('.ui-select-choices-group');
+            if (groups.length !== 1) throw uiSelectMinErr('rows', "Expected 1 .ui-select-choices-group but got '{0}'.", groups.length);
+            groups.attr('ng-repeat', RepeatParser.getGroupNgRepeatExpression());
+          }
+    
+          var parserResult = RepeatParser.parse(tAttrs.repeat);
+    
+          var choices = tElement.querySelectorAll('.ui-select-choices-row');
+          if (choices.length !== 1) {
+            throw uiSelectMinErr('rows', "Expected 1 .ui-select-choices-row but got '{0}'.", choices.length);
+          }
+    
+          choices.attr('ng-repeat', parserResult.repeatExpression(groupByExp))
+                 .attr('ng-if', '$select.open'); //Prevent unnecessary watches when dropdown is closed
+    
+    
+          var rowsInner = tElement.querySelectorAll('.ui-select-choices-row-inner');
+          if (rowsInner.length !== 1) {
+            throw uiSelectMinErr('rows', "Expected 1 .ui-select-choices-row-inner but got '{0}'.", rowsInner.length);
+          }
+          rowsInner.attr('uis-transclude-append', ''); //Adding uisTranscludeAppend directive to row element after choices element has ngRepeat
+    
+          // If IE8 then need to target rowsInner to apply the ng-click attr as choices will not capture the event.
+          var clickTarget = $window.document.addEventListener ? choices : rowsInner;
+          clickTarget.attr('ng-click', '$select.select(' + parserResult.itemName + ',$select.skipFocusser,$event)');
+    
+          return function link(scope, element, attrs, $select) {
+    
+    
+            $select.parseRepeatAttr(attrs.repeat, groupByExp, groupFilterExp); //Result ready at $select.parserResult
+            $select.disableChoiceExpression = attrs.uiDisableChoice;
+            $select.onHighlightCallback = attrs.onHighlight;
+            $select.minimumInputLength = parseInt(attrs.minimumInputLength) || 0;
+            $select.dropdownPosition = attrs.position ? attrs.position.toLowerCase() : uiSelectConfig.dropdownPosition;
+    
+            scope.$watch('$select.search', function(newValue) {
+              if(newValue && !$select.open && $select.multiple) $select.activate(false, true);
+              $select.activeIndex = $select.tagging.isActivated ? -1 : 0;
+              if (!attrs.minimumInputLength || $select.search.length >= attrs.minimumInputLength) {
+                $select.refresh(attrs.refresh);
+              } else {
+                $select.items = [];
+              }
+            });
+    
+            attrs.$observe('refreshDelay', function() {
+              // $eval() is needed otherwise we get a string instead of a number
+              var refreshDelay = scope.$eval(attrs.refreshDelay);
+              $select.refreshDelay = refreshDelay !== undefined ? refreshDelay : uiSelectConfig.refreshDelay;
+            });
+    
+            scope.$watch('$select.open', function(open) {
+              if (open) {
+                tElement.attr('role', 'listbox');
+                $select.refresh(attrs.refresh);
+              } else {
+                element.removeAttr('role');
+              }
+            });
+          };
+        }
+      };
+    }]);
+    
+    /**
+     * Contains ui-select "intelligence".
+     *
+     * The goal is to limit dependency on the DOM whenever possible and
+     * put as much logic in the controller (instead of the link functions) as possible so it can be easily tested.
+     */
+    uis.controller('uiSelectCtrl',
+      ['$scope', '$element', '$timeout', '$filter', '$$uisDebounce', 'uisRepeatParser', 'uiSelectMinErr', 'uiSelectConfig', '$parse', '$injector', '$window',
+      function($scope, $element, $timeout, $filter, $$uisDebounce, RepeatParser, uiSelectMinErr, uiSelectConfig, $parse, $injector, $window) {
+    
+      var ctrl = this;
+    
+      var EMPTY_SEARCH = '';
+    
+      ctrl.placeholder = uiSelectConfig.placeholder;
+      ctrl.searchEnabled = uiSelectConfig.searchEnabled;
+      ctrl.sortable = uiSelectConfig.sortable;
+      ctrl.refreshDelay = uiSelectConfig.refreshDelay;
+      ctrl.paste = uiSelectConfig.paste;
+      ctrl.resetSearchInput = uiSelectConfig.resetSearchInput;
+      ctrl.refreshing = false;
+      ctrl.spinnerEnabled = uiSelectConfig.spinnerEnabled;
+      ctrl.spinnerClass = uiSelectConfig.spinnerClass;
+      ctrl.removeSelected = uiSelectConfig.removeSelected; //If selected item(s) should be removed from dropdown list
+      ctrl.closeOnSelect = true; //Initialized inside uiSelect directive link function
+      ctrl.skipFocusser = false; //Set to true to avoid returning focus to ctrl when item is selected
+      ctrl.search = EMPTY_SEARCH;
+    
+      ctrl.activeIndex = 0; //Dropdown of choices
+      ctrl.items = []; //All available choices
+    
+      ctrl.open = false;
+      ctrl.focus = false;
+      ctrl.disabled = false;
+      ctrl.selected = undefined;
+    
+      ctrl.dropdownPosition = 'auto';
+    
+      ctrl.focusser = undefined; //Reference to input element used to handle focus events
+      ctrl.multiple = undefined; // Initialized inside uiSelect directive link function
+      ctrl.disableChoiceExpression = undefined; // Initialized inside uiSelectChoices directive link function
+      ctrl.tagging = {isActivated: false, fct: undefined};
+      ctrl.taggingTokens = {isActivated: false, tokens: undefined};
+      ctrl.lockChoiceExpression = undefined; // Initialized inside uiSelectMatch directive link function
+      ctrl.clickTriggeredSelect = false;
+      ctrl.$filter = $filter;
+      ctrl.$element = $element;
+    
+      // Use $injector to check for $animate and store a reference to it
+      ctrl.$animate = (function () {
+        try {
+          return $injector.get('$animate');
+        } catch (err) {
+          // $animate does not exist
+          return null;
+        }
+      })();
+    
+      ctrl.searchInput = $element.querySelectorAll('input.ui-select-search');
+      if (ctrl.searchInput.length !== 1) {
+        throw uiSelectMinErr('searchInput', "Expected 1 input.ui-select-search but got '{0}'.", ctrl.searchInput.length);
+      }
+    
+      ctrl.isEmpty = function() {
+        return isNil(ctrl.selected) || ctrl.selected === '' || (ctrl.multiple && ctrl.selected.length === 0);
+      };
+    
+      function _findIndex(collection, predicate, thisArg){
+        if (collection.findIndex){
+          return collection.findIndex(predicate, thisArg);
+        } else {
+          var list = Object(collection);
+          var length = list.length >>> 0;
+          var value;
+    
+          for (var i = 0; i < length; i++) {
+            value = list[i];
+            if (predicate.call(thisArg, value, i, list)) {
+              return i;
+            }
+          }
+          return -1;
+        }
+      }
+    
+      // Most of the time the user does not want to empty the search input when in typeahead mode
+      function _resetSearchInput() {
+        if (ctrl.resetSearchInput) {
+          ctrl.search = EMPTY_SEARCH;
+          //reset activeIndex
+          if (ctrl.selected && ctrl.items.length && !ctrl.multiple) {
+            ctrl.activeIndex = _findIndex(ctrl.items, function(item){
+              return angular.equals(this, item);
+            }, ctrl.selected);
+          }
+        }
+      }
+    
+        function _groupsFilter(groups, groupNames) {
+          var i, j, result = [];
+          for(i = 0; i < groupNames.length ;i++){
+            for(j = 0; j < groups.length ;j++){
+              if(groups[j].name == [groupNames[i]]){
+                result.push(groups[j]);
+              }
+            }
+          }
+          return result;
+        }
+    
+      // When the user clicks on ui-select, displays the dropdown list
+      ctrl.activate = function(initSearchValue, avoidReset) {
+        if (!ctrl.disabled  && !ctrl.open) {
+          if(!avoidReset) _resetSearchInput();
+    
+          $scope.$broadcast('uis:activate');
+          ctrl.open = true;
+          ctrl.activeIndex = ctrl.activeIndex >= ctrl.items.length ? 0 : ctrl.activeIndex;
+          // ensure that the index is set to zero for tagging variants
+          // that where first option is auto-selected
+          if ( ctrl.activeIndex === -1 && ctrl.taggingLabel !== false ) {
+            ctrl.activeIndex = 0;
+          }
+    
+          var container = $element.querySelectorAll('.ui-select-choices-content');
+          var searchInput = $element.querySelectorAll('.ui-select-search');
+          if (ctrl.$animate && ctrl.$animate.on && ctrl.$animate.enabled(container[0])) {
+            var animateHandler = function(elem, phase) {
+              if (phase === 'start' && ctrl.items.length === 0) {
+                // Only focus input after the animation has finished
+                ctrl.$animate.off('removeClass', searchInput[0], animateHandler);
+                $timeout(function () {
+                  ctrl.focusSearchInput(initSearchValue);
+                });
+              } else if (phase === 'close') {
+                // Only focus input after the animation has finished
+                ctrl.$animate.off('enter', container[0], animateHandler);
+                $timeout(function () {
+                  ctrl.focusSearchInput(initSearchValue);
+                });
+              }
+            };
+    
+            if (ctrl.items.length > 0) {
+              ctrl.$animate.on('enter', container[0], animateHandler);
+            } else {
+              ctrl.$animate.on('removeClass', searchInput[0], animateHandler);
+            }
+          } else {
+            $timeout(function () {
+              ctrl.focusSearchInput(initSearchValue);
+              if(!ctrl.tagging.isActivated && ctrl.items.length > 1) {
+                _ensureHighlightVisible();
+              }
+            });
+          }
+        }
+        else if (ctrl.open && !ctrl.searchEnabled) {
+          // Close the selection if we don't have search enabled, and we click on the select again
+          ctrl.close();
+        }
+      };
+    
+      ctrl.focusSearchInput = function (initSearchValue) {
+        ctrl.search = initSearchValue || ctrl.search;
+        ctrl.searchInput[0].focus();
+      };
+    
+      ctrl.findGroupByName = function(name) {
+        return ctrl.groups && ctrl.groups.filter(function(group) {
+          return group.name === name;
+        })[0];
+      };
+    
+      ctrl.parseRepeatAttr = function(repeatAttr, groupByExp, groupFilterExp) {
+        function updateGroups(items) {
+          var groupFn = $scope.$eval(groupByExp);
+          ctrl.groups = [];
+          angular.forEach(items, function(item) {
+            var groupName = angular.isFunction(groupFn) ? groupFn(item) : item[groupFn];
+            var group = ctrl.findGroupByName(groupName);
+            if(group) {
+              group.items.push(item);
+            }
+            else {
+              ctrl.groups.push({name: groupName, items: [item]});
+            }
+          });
+          if(groupFilterExp){
+            var groupFilterFn = $scope.$eval(groupFilterExp);
+            if( angular.isFunction(groupFilterFn)){
+              ctrl.groups = groupFilterFn(ctrl.groups);
+            } else if(angular.isArray(groupFilterFn)){
+              ctrl.groups = _groupsFilter(ctrl.groups, groupFilterFn);
+            }
+          }
+          ctrl.items = [];
+          ctrl.groups.forEach(function(group) {
+            ctrl.items = ctrl.items.concat(group.items);
+          });
+        }
+    
+        function setPlainItems(items) {
+          ctrl.items = items || [];
+        }
+    
+        ctrl.setItemsFn = groupByExp ? updateGroups : setPlainItems;
+    
+        ctrl.parserResult = RepeatParser.parse(repeatAttr);
+    
+        ctrl.isGrouped = !!groupByExp;
+        ctrl.itemProperty = ctrl.parserResult.itemName;
+    
+        //If collection is an Object, convert it to Array
+    
+        var originalSource = ctrl.parserResult.source;
+    
+        //When an object is used as source, we better create an array and use it as 'source'
+        var createArrayFromObject = function(){
+          var origSrc = originalSource($scope);
+          $scope.$uisSource = Object.keys(origSrc).map(function(v){
+            var result = {};
+            result[ctrl.parserResult.keyName] = v;
+            result.value = origSrc[v];
+            return result;
+          });
+        };
+    
+        if (ctrl.parserResult.keyName){ // Check for (key,value) syntax
+          createArrayFromObject();
+          ctrl.parserResult.source = $parse('$uisSource' + ctrl.parserResult.filters);
+          $scope.$watch(originalSource, function(newVal, oldVal){
+            if (newVal !== oldVal) createArrayFromObject();
+          }, true);
+        }
+    
+        ctrl.refreshItems = function (data){
+          data = data || ctrl.parserResult.source($scope);
+          var selectedItems = ctrl.selected;
+          //TODO should implement for single mode removeSelected
+          if (ctrl.isEmpty() || (angular.isArray(selectedItems) && !selectedItems.length) || !ctrl.multiple || !ctrl.removeSelected) {
+            ctrl.setItemsFn(data);
+          }else{
+            if ( data !== undefined && data !== null ) {
+              var filteredItems = data.filter(function(i) {
+                return angular.isArray(selectedItems) ? selectedItems.every(function(selectedItem) {
+                  return !angular.equals(i, selectedItem);
+                }) : !angular.equals(i, selectedItems);
+              });
+              ctrl.setItemsFn(filteredItems);
+            }
+          }
+          if (ctrl.dropdownPosition === 'auto' || ctrl.dropdownPosition === 'up'){
+            $scope.calculateDropdownPos();
+          }
+          $scope.$broadcast('uis:refresh');
+        };
+    
+        // See https://github.com/angular/angular.js/blob/v1.2.15/src/ng/directive/ngRepeat.js#L259
+        $scope.$watchCollection(ctrl.parserResult.source, function(items) {
+          if (items === undefined || items === null) {
+            // If the user specifies undefined or null => reset the collection
+            // Special case: items can be undefined if the user did not initialized the collection on the scope
+            // i.e $scope.addresses = [] is missing
+            ctrl.items = [];
+          } else {
+            if (!angular.isArray(items)) {
+              throw uiSelectMinErr('items', "Expected an array but got '{0}'.", items);
+            } else {
+              //Remove already selected items (ex: while searching)
+              //TODO Should add a test
+              ctrl.refreshItems(items);
+    
+              //update the view value with fresh data from items, if there is a valid model value
+              if(angular.isDefined(ctrl.ngModel.$modelValue)) {
+                ctrl.ngModel.$modelValue = null; //Force scope model value and ngModel value to be out of sync to re-run formatters
+              }
+            }
+          }
+        });
+    
+      };
+    
+      var _refreshDelayPromise;
+    
+      /**
+       * Typeahead mode: lets the user refresh the collection using his own function.
+       *
+       * See Expose $select.search for external / remote filtering https://github.com/angular-ui/ui-select/pull/31
+       */
+      ctrl.refresh = function(refreshAttr) {
+        if (refreshAttr !== undefined) {
+          // Debounce
+          // See https://github.com/angular-ui/bootstrap/blob/0.10.0/src/typeahead/typeahead.js#L155
+          // FYI AngularStrap typeahead does not have debouncing: https://github.com/mgcrea/angular-strap/blob/v2.0.0-rc.4/src/typeahead/typeahead.js#L177
+          if (_refreshDelayPromise) {
+            $timeout.cancel(_refreshDelayPromise);
+          }
+          _refreshDelayPromise = $timeout(function() {
+            if ($scope.$select.search.length >= $scope.$select.minimumInputLength) {
+              var refreshPromise = $scope.$eval(refreshAttr);
+              if (refreshPromise && angular.isFunction(refreshPromise.then) && !ctrl.refreshing) {
+                ctrl.refreshing = true;
+                refreshPromise.finally(function() {
+                  ctrl.refreshing = false;
+                });
+              }
+            }
+          }, ctrl.refreshDelay);
+        }
+      };
+    
+      ctrl.isActive = function(itemScope) {
+        if ( !ctrl.open ) {
+          return false;
+        }
+        var itemIndex = ctrl.items.indexOf(itemScope[ctrl.itemProperty]);
+        var isActive =  itemIndex == ctrl.activeIndex;
+    
+        if ( !isActive || itemIndex < 0 ) {
+          return false;
+        }
+    
+        if (isActive && !angular.isUndefined(ctrl.onHighlightCallback)) {
+          itemScope.$eval(ctrl.onHighlightCallback);
+        }
+    
+        return isActive;
+      };
+    
+      var _isItemSelected = function (item) {
+        return (ctrl.selected && angular.isArray(ctrl.selected) &&
+            ctrl.selected.filter(function (selection) { return angular.equals(selection, item); }).length > 0);
+      };
+    
+      var disabledItems = [];
+    
+      function _updateItemDisabled(item, isDisabled) {
+        var disabledItemIndex = disabledItems.indexOf(item);
+        if (isDisabled && disabledItemIndex === -1) {
+          disabledItems.push(item);
+        }
+    
+        if (!isDisabled && disabledItemIndex > -1) {
+          disabledItems.splice(disabledItemIndex, 1);
+        }
+      }
+    
+      function _isItemDisabled(item) {
+        return disabledItems.indexOf(item) > -1;
+      }
+    
+      ctrl.isDisabled = function(itemScope) {
+    
+        if (!ctrl.open) return;
+    
+        var item = itemScope[ctrl.itemProperty];
+        var itemIndex = ctrl.items.indexOf(item);
+        var isDisabled = false;
+    
+        if (itemIndex >= 0 && (angular.isDefined(ctrl.disableChoiceExpression) || ctrl.multiple)) {
+    
+          if (item.isTag) return false;
+    
+          if (ctrl.multiple) {
+            isDisabled = _isItemSelected(item);
+          }
+    
+          if (!isDisabled && angular.isDefined(ctrl.disableChoiceExpression)) {
+            isDisabled = !!(itemScope.$eval(ctrl.disableChoiceExpression));
+          }
+    
+          _updateItemDisabled(item, isDisabled);
+        }
+    
+        return isDisabled;
+      };
+    
+    
+      // When the user selects an item with ENTER or clicks the dropdown
+      ctrl.select = function(item, skipFocusser, $event) {
+        if (isNil(item) || !_isItemDisabled(item)) {
+    
+          if ( ! ctrl.items && ! ctrl.search && ! ctrl.tagging.isActivated) return;
+    
+          if (!item || !_isItemDisabled(item)) {
+            // if click is made on existing item, prevent from tagging, ctrl.search does not matter
+            ctrl.clickTriggeredSelect = false;
+            if($event && ($event.type === 'click' || $event.type === 'touchend') && item)
+              ctrl.clickTriggeredSelect = true;
+    
+            if(ctrl.tagging.isActivated && ctrl.clickTriggeredSelect === false) {
+              // if taggingLabel is disabled and item is undefined we pull from ctrl.search
+              if ( ctrl.taggingLabel === false ) {
+                if ( ctrl.activeIndex < 0 ) {
+                  if (item === undefined) {
+                    item = ctrl.tagging.fct !== undefined ? ctrl.tagging.fct(ctrl.search) : ctrl.search;
+                  }
+                  if (!item || angular.equals( ctrl.items[0], item ) ) {
+                    return;
+                  }
+                } else {
+                  // keyboard nav happened first, user selected from dropdown
+                  item = ctrl.items[ctrl.activeIndex];
+                }
+              } else {
+                // tagging always operates at index zero, taggingLabel === false pushes
+                // the ctrl.search value without having it injected
+                if ( ctrl.activeIndex === 0 ) {
+                  // ctrl.tagging pushes items to ctrl.items, so we only have empty val
+                  // for `item` if it is a detected duplicate
+                  if ( item === undefined ) return;
+    
+                  // create new item on the fly if we don't already have one;
+                  // use tagging function if we have one
+                  if ( ctrl.tagging.fct !== undefined && typeof item === 'string' ) {
+                    item = ctrl.tagging.fct(item);
+                    if (!item) return;
+                  // if item type is 'string', apply the tagging label
+                  } else if ( typeof item === 'string' ) {
+                    // trim the trailing space
+                    item = item.replace(ctrl.taggingLabel,'').trim();
+                  }
+                }
+              }
+              // search ctrl.selected for dupes potentially caused by tagging and return early if found
+              if (_isItemSelected(item)) {
+                ctrl.close(skipFocusser);
+                return;
+              }
+            }
+            _resetSearchInput();
+            $scope.$broadcast('uis:select', item);
+    
+            if (ctrl.closeOnSelect) {
+              ctrl.close(skipFocusser);
+            }
+          }
+        }
+      };
+    
+      // Closes the dropdown
+      ctrl.close = function(skipFocusser) {
+        if (!ctrl.open) return;
+        if (ctrl.ngModel && ctrl.ngModel.$setTouched) ctrl.ngModel.$setTouched();
+        ctrl.open = false;
+        _resetSearchInput();
+        $scope.$broadcast('uis:close', skipFocusser);
+    
+      };
+    
+      ctrl.setFocus = function(){
+        if (!ctrl.focus) ctrl.focusInput[0].focus();
+      };
+    
+      ctrl.clear = function($event) {
+        ctrl.select(null);
+        $event.stopPropagation();
+        $timeout(function() {
+          ctrl.focusser[0].focus();
+        }, 0, false);
+      };
+    
+      // Toggle dropdown
+      ctrl.toggle = function(e) {
+        if (ctrl.open) {
+          ctrl.close();
+          e.preventDefault();
+          e.stopPropagation();
+        } else {
+          ctrl.activate();
+        }
+      };
+    
+      // Set default function for locked choices - avoids unnecessary
+      // logic if functionality is not being used
+      ctrl.isLocked = function () {
+        return false;
+      };
+    
+      $scope.$watch(function () {
+        return angular.isDefined(ctrl.lockChoiceExpression) && ctrl.lockChoiceExpression !== "";
+      }, _initaliseLockedChoices);
+    
+      function _initaliseLockedChoices(doInitalise) {
+        if(!doInitalise) return;
+    
+        var lockedItems = [];
+    
+        function _updateItemLocked(item, isLocked) {
+          var lockedItemIndex = lockedItems.indexOf(item);
+          if (isLocked && lockedItemIndex === -1) {
+            lockedItems.push(item);
+            }
+    
+          if (!isLocked && lockedItemIndex > -1) {
+            lockedItems.splice(lockedItemIndex, 1);
+          }
+        }
+    
+        function _isItemlocked(item) {
+          return lockedItems.indexOf(item) > -1;
+        }
+    
+        ctrl.isLocked = function (itemScope, itemIndex) {
+          var isLocked = false,
+              item = ctrl.selected[itemIndex];
+    
+          if(item) {
+            if (itemScope) {
+              isLocked = !!(itemScope.$eval(ctrl.lockChoiceExpression));
+              _updateItemLocked(item, isLocked);
+            } else {
+              isLocked = _isItemlocked(item);
+            }
+          }
+    
+          return isLocked;
+        };
+      }
+    
+    
+      var sizeWatch = null;
+      var updaterScheduled = false;
+      ctrl.sizeSearchInput = function() {
+    
+        var input = ctrl.searchInput[0],
+            container = ctrl.$element[0],
+            calculateContainerWidth = function() {
+              // Return the container width only if the search input is visible
+              return container.clientWidth * !!input.offsetParent;
+            },
+            updateIfVisible = function(containerWidth) {
+              if (containerWidth === 0) {
+                return false;
+              }
+              var inputWidth = containerWidth - input.offsetLeft;
+              if (inputWidth < 50) inputWidth = containerWidth;
+              ctrl.searchInput.css('width', inputWidth+'px');
+              return true;
+            };
+    
+        ctrl.searchInput.css('width', '10px');
+        $timeout(function() { //Give tags time to render correctly
+          if (sizeWatch === null && !updateIfVisible(calculateContainerWidth())) {
+            sizeWatch = $scope.$watch(function() {
+              if (!updaterScheduled) {
+                updaterScheduled = true;
+                $scope.$$postDigest(function() {
+                  updaterScheduled = false;
+                  if (updateIfVisible(calculateContainerWidth())) {
+                    sizeWatch();
+                    sizeWatch = null;
+                  }
+                });
+              }
+            }, angular.noop);
+          }
+        });
+      };
+    
+      function _handleDropDownSelection(key) {
+        var processed = true;
+        switch (key) {
+          case KEY.DOWN:
+            if (!ctrl.open && ctrl.multiple) ctrl.activate(false, true); //In case its the search input in 'multiple' mode
+            else if (ctrl.activeIndex < ctrl.items.length - 1) {
+              var idx = ++ctrl.activeIndex;
+              while(_isItemDisabled(ctrl.items[idx]) && idx < ctrl.items.length) {
+                ctrl.activeIndex = ++idx;
+              }
+            }
+            break;
+          case KEY.UP:
+            var minActiveIndex = (ctrl.search.length === 0 && ctrl.tagging.isActivated) ? -1 : 0;
+            if (!ctrl.open && ctrl.multiple) ctrl.activate(false, true); //In case its the search input in 'multiple' mode
+            else if (ctrl.activeIndex > minActiveIndex) {
+              var idxmin = --ctrl.activeIndex;
+              while(_isItemDisabled(ctrl.items[idxmin]) && idxmin > minActiveIndex) {
+                ctrl.activeIndex = --idxmin;
+              }
+            }
+            break;
+          case KEY.TAB:
+            if (!ctrl.multiple || ctrl.open) ctrl.select(ctrl.items[ctrl.activeIndex], true);
+            break;
+          case KEY.ENTER:
+            if(ctrl.open && (ctrl.tagging.isActivated || ctrl.activeIndex >= 0)){
+              ctrl.select(ctrl.items[ctrl.activeIndex], ctrl.skipFocusser); // Make sure at least one dropdown item is highlighted before adding if not in tagging mode
+            } else {
+              ctrl.activate(false, true); //In case its the search input in 'multiple' mode
+            }
+            break;
+          case KEY.ESC:
+            ctrl.close();
+            break;
+          default:
+            processed = false;
+        }
+        return processed;
+      }
+    
+      // Bind to keyboard shortcuts
+      ctrl.searchInput.on('keydown', function(e) {
+    
+        var key = e.which;
+    
+        if (~[KEY.ENTER,KEY.ESC].indexOf(key)){
+          e.preventDefault();
+          e.stopPropagation();
+        }
+    
+        $scope.$apply(function() {
+    
+          var tagged = false;
+    
+          if (ctrl.items.length > 0 || ctrl.tagging.isActivated) {
+            if(!_handleDropDownSelection(key) && !ctrl.searchEnabled) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+            if ( ctrl.taggingTokens.isActivated ) {
+              for (var i = 0; i < ctrl.taggingTokens.tokens.length; i++) {
+                if ( ctrl.taggingTokens.tokens[i] === KEY.MAP[e.keyCode] ) {
+                  // make sure there is a new value to push via tagging
+                  if ( ctrl.search.length > 0 ) {
+                    tagged = true;
+                  }
+                }
+              }
+              if ( tagged ) {
+                $timeout(function() {
+                  ctrl.searchInput.triggerHandler('tagged');
+                  var newItem = ctrl.search.replace(KEY.MAP[e.keyCode],'').trim();
+                  if ( ctrl.tagging.fct ) {
+                    newItem = ctrl.tagging.fct( newItem );
+                  }
+                  if (newItem) ctrl.select(newItem, true);
+                });
+              }
+            }
+          }
+    
+        });
+    
+        if(KEY.isVerticalMovement(key) && ctrl.items.length > 0){
+          _ensureHighlightVisible();
+        }
+    
+        if (key === KEY.ENTER || key === KEY.ESC) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+    
+      });
+    
+      ctrl.searchInput.on('paste', function (e) {
+        var data;
+    
+        if (window.clipboardData && window.clipboardData.getData) { // IE
+          data = window.clipboardData.getData('Text');
+        } else {
+          data = (e.originalEvent || e).clipboardData.getData('text/plain');
+        }
+    
+        // Prepend the current input field text to the paste buffer.
+        data = ctrl.search + data;
+    
+        if (data && data.length > 0) {
+          // If tagging try to split by tokens and add items
+          if (ctrl.taggingTokens.isActivated) {
+            var items = [];
+            for (var i = 0; i < ctrl.taggingTokens.tokens.length; i++) {  // split by first token that is contained in data
+              var separator = KEY.toSeparator(ctrl.taggingTokens.tokens[i]) || ctrl.taggingTokens.tokens[i];
+              if (data.indexOf(separator) > -1) {
+                items = data.split(separator);
+                break;  // only split by one token
+              }
+            }
+            if (items.length === 0) {
+              items = [data];
+            }
+            var oldsearch = ctrl.search;
+            angular.forEach(items, function (item) {
+              var newItem = ctrl.tagging.fct ? ctrl.tagging.fct(item) : item;
+              if (newItem) {
+                ctrl.select(newItem, true);
+              }
+            });
+            ctrl.search = oldsearch || EMPTY_SEARCH;
+            e.preventDefault();
+            e.stopPropagation();
+          } else if (ctrl.paste) {
+            ctrl.paste(data);
+            ctrl.search = EMPTY_SEARCH;
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }
+      });
+    
+      ctrl.searchInput.on('tagged', function() {
+        $timeout(function() {
+          _resetSearchInput();
+        });
+      });
+    
+      // See https://github.com/ivaynberg/select2/blob/3.4.6/select2.js#L1431
+      function _ensureHighlightVisible() {
+        var container = $element.querySelectorAll('.ui-select-choices-content');
+        var choices = container.querySelectorAll('.ui-select-choices-row');
+        if (choices.length < 1) {
+          throw uiSelectMinErr('choices', "Expected multiple .ui-select-choices-row but got '{0}'.", choices.length);
+        }
+    
+        if (ctrl.activeIndex < 0) {
+          return;
+        }
+    
+        var highlighted = choices[ctrl.activeIndex];
+        var posY = highlighted.offsetTop + highlighted.clientHeight - container[0].scrollTop;
+        var height = container[0].offsetHeight;
+    
+        if (posY > height) {
+          container[0].scrollTop += posY - height;
+        } else if (posY < highlighted.clientHeight) {
+          if (ctrl.isGrouped && ctrl.activeIndex === 0)
+            container[0].scrollTop = 0; //To make group header visible when going all the way up
+          else
+            container[0].scrollTop -= highlighted.clientHeight - posY;
+        }
+      }
+    
+      var onResize = $$uisDebounce(function() {
+        ctrl.sizeSearchInput();
+      }, 50);
+    
+      angular.element($window).bind('resize', onResize);
+    
+      $scope.$on('$destroy', function() {
+        ctrl.searchInput.off('keyup keydown tagged blur paste');
+        angular.element($window).off('resize', onResize);
+      });
+    
+      $scope.$watch('$select.activeIndex', function(activeIndex) {
+        if (activeIndex)
+          $element.find('input').attr(
+            'aria-activedescendant',
+            'ui-select-choices-row-' + ctrl.generatedId + '-' + activeIndex);
+      });
+    
+      $scope.$watch('$select.open', function(open) {
+        if (!open)
+          $element.find('input').removeAttr('aria-activedescendant');
+      });
+    }]);
+    
+    uis.directive('uiSelect',
+      ['$document', 'uiSelectConfig', 'uiSelectMinErr', 'uisOffset', '$compile', '$parse', '$timeout',
+      function($document, uiSelectConfig, uiSelectMinErr, uisOffset, $compile, $parse, $timeout) {
+    
+      return {
+        restrict: 'EA',
+        templateUrl: function(tElement, tAttrs) {
+          var theme = tAttrs.theme || uiSelectConfig.theme;
+          return theme + (angular.isDefined(tAttrs.multiple) ? '/select-multiple.tpl.html' : '/select.tpl.html');
+        },
+        replace: true,
+        transclude: true,
+        require: ['uiSelect', '^ngModel'],
+        scope: true,
+    
+        controller: 'uiSelectCtrl',
+        controllerAs: '$select',
+        compile: function(tElement, tAttrs) {
+    
+          // Allow setting ngClass on uiSelect
+          var match = /{(.*)}\s*{(.*)}/.exec(tAttrs.ngClass);
+          if(match) {
+            var combined = '{'+ match[1] +', '+ match[2] +'}';
+            tAttrs.ngClass = combined;
+            tElement.attr('ng-class', combined);
+          }
+    
+          //Multiple or Single depending if multiple attribute presence
+          if (angular.isDefined(tAttrs.multiple))
+            tElement.append('<ui-select-multiple/>').removeAttr('multiple');
+          else
+            tElement.append('<ui-select-single/>');
+    
+          if (tAttrs.inputId)
+            tElement.querySelectorAll('input.ui-select-search')[0].id = tAttrs.inputId;
+    
+          return function(scope, element, attrs, ctrls, transcludeFn) {
+    
+            var $select = ctrls[0];
+            var ngModel = ctrls[1];
+    
+            $select.generatedId = uiSelectConfig.generateId();
+            $select.baseTitle = attrs.title || 'Select box';
+            $select.focusserTitle = $select.baseTitle + ' focus';
+            $select.focusserId = 'focusser-' + $select.generatedId;
+    
+            $select.closeOnSelect = function() {
+              if (angular.isDefined(attrs.closeOnSelect)) {
+                return $parse(attrs.closeOnSelect)();
+              } else {
+                return uiSelectConfig.closeOnSelect;
+              }
+            }();
+    
+            scope.$watch('skipFocusser', function() {
+                var skipFocusser = scope.$eval(attrs.skipFocusser);
+                $select.skipFocusser = skipFocusser !== undefined ? skipFocusser : uiSelectConfig.skipFocusser;
+            });
+    
+            $select.onSelectCallback = $parse(attrs.onSelect);
+            $select.onRemoveCallback = $parse(attrs.onRemove);
+    
+            //Set reference to ngModel from uiSelectCtrl
+            $select.ngModel = ngModel;
+    
+            $select.choiceGrouped = function(group){
+              return $select.isGrouped && group && group.name;
+            };
+    
+            if(attrs.tabindex){
+              attrs.$observe('tabindex', function(value) {
+                $select.focusInput.attr('tabindex', value);
+                element.removeAttr('tabindex');
+              });
+            }
+    
+            scope.$watch(function () { return scope.$eval(attrs.searchEnabled); }, function(newVal) {
+              $select.searchEnabled = newVal !== undefined ? newVal : uiSelectConfig.searchEnabled;
+            });
+    
+            scope.$watch('sortable', function() {
+                var sortable = scope.$eval(attrs.sortable);
+                $select.sortable = sortable !== undefined ? sortable : uiSelectConfig.sortable;
+            });
+    
+            attrs.$observe('backspaceReset', function() {
+              // $eval() is needed otherwise we get a string instead of a boolean
+              var backspaceReset = scope.$eval(attrs.backspaceReset);
+              $select.backspaceReset = backspaceReset !== undefined ? backspaceReset : true;
+            });
+    
+            attrs.$observe('limit', function() {
+              //Limit the number of selections allowed
+              $select.limit = (angular.isDefined(attrs.limit)) ? parseInt(attrs.limit, 10) : undefined;
+            });
+    
+            scope.$watch('removeSelected', function() {
+                var removeSelected = scope.$eval(attrs.removeSelected);
+                $select.removeSelected = removeSelected !== undefined ? removeSelected : uiSelectConfig.removeSelected;
+            });
+    
+            attrs.$observe('disabled', function() {
+              // No need to use $eval() (thanks to ng-disabled) since we already get a boolean instead of a string
+              $select.disabled = attrs.disabled !== undefined ? attrs.disabled : false;
+            });
+    
+            attrs.$observe('resetSearchInput', function() {
+              // $eval() is needed otherwise we get a string instead of a boolean
+              var resetSearchInput = scope.$eval(attrs.resetSearchInput);
+              $select.resetSearchInput = resetSearchInput !== undefined ? resetSearchInput : true;
+            });
+    
+            attrs.$observe('paste', function() {
+              $select.paste = scope.$eval(attrs.paste);
+            });
+    
+            attrs.$observe('tagging', function() {
+              if(attrs.tagging !== undefined)
+              {
+                // $eval() is needed otherwise we get a string instead of a boolean
+                var taggingEval = scope.$eval(attrs.tagging);
+                $select.tagging = {isActivated: true, fct: taggingEval !== true ? taggingEval : undefined};
+              }
+              else
+              {
+                $select.tagging = {isActivated: false, fct: undefined};
+              }
+            });
+    
+            attrs.$observe('taggingLabel', function() {
+              if(attrs.tagging !== undefined )
+              {
+                // check eval for FALSE, in this case, we disable the labels
+                // associated with tagging
+                if ( attrs.taggingLabel === 'false' ) {
+                  $select.taggingLabel = false;
+                }
+                else
+                {
+                  $select.taggingLabel = attrs.taggingLabel !== undefined ? attrs.taggingLabel : '(new)';
+                }
+              }
+            });
+    
+            attrs.$observe('taggingTokens', function() {
+              if (attrs.tagging !== undefined) {
+                var tokens = attrs.taggingTokens !== undefined ? attrs.taggingTokens.split('|') : [',','ENTER'];
+                $select.taggingTokens = {isActivated: true, tokens: tokens };
+              }
+            });
+    
+            attrs.$observe('spinnerEnabled', function() {
+              // $eval() is needed otherwise we get a string instead of a boolean
+              var spinnerEnabled = scope.$eval(attrs.spinnerEnabled);
+              $select.spinnerEnabled = spinnerEnabled !== undefined ? spinnerEnabled : uiSelectConfig.spinnerEnabled;
+            });
+    
+            attrs.$observe('spinnerClass', function() {
+              var spinnerClass = attrs.spinnerClass;
+              $select.spinnerClass = spinnerClass !== undefined ? attrs.spinnerClass : uiSelectConfig.spinnerClass;
+            });
+    
+            //Automatically gets focus when loaded
+            if (angular.isDefined(attrs.autofocus)){
+              $timeout(function(){
+                $select.setFocus();
+              });
+            }
+    
+            //Gets focus based on scope event name (e.g. focus-on='SomeEventName')
+            if (angular.isDefined(attrs.focusOn)){
+              scope.$on(attrs.focusOn, function() {
+                  $timeout(function(){
+                    $select.setFocus();
+                  });
+              });
+            }
+    
+            function onDocumentClick(e) {
+              if (!$select.open) return; //Skip it if dropdown is close
+    
+              var contains = false;
+    
+              if (window.jQuery) {
+                // Firefox 3.6 does not support element.contains()
+                // See Node.contains https://developer.mozilla.org/en-US/docs/Web/API/Node.contains
+                contains = window.jQuery.contains(element[0], e.target);
+              } else {
+                contains = element[0].contains(e.target);
+              }
+    
+              if (!contains && !$select.clickTriggeredSelect) {
+                var skipFocusser;
+                if (!$select.skipFocusser) {
+                  //Will lose focus only with certain targets
+                  var focusableControls = ['input','button','textarea','select'];
+                  var targetController = angular.element(e.target).controller('uiSelect'); //To check if target is other ui-select
+                  skipFocusser = targetController && targetController !== $select; //To check if target is other ui-select
+                  if (!skipFocusser) skipFocusser =  ~focusableControls.indexOf(e.target.tagName.toLowerCase()); //Check if target is input, button or textarea
+                } else {
+                  skipFocusser = true;
+                }
+                $select.close(skipFocusser);
+                scope.$digest();
+              }
+              $select.clickTriggeredSelect = false;
+            }
+    
+            // See Click everywhere but here event http://stackoverflow.com/questions/12931369
+            $document.on('click', onDocumentClick);
+    
+            scope.$on('$destroy', function() {
+              $document.off('click', onDocumentClick);
+            });
+    
+            // Move transcluded elements to their correct position in main template
+            transcludeFn(scope, function(clone) {
+              // See Transclude in AngularJS http://blog.omkarpatil.com/2012/11/transclude-in-angularjs.html
+    
+              // One day jqLite will be replaced by jQuery and we will be able to write:
+              // var transcludedElement = clone.filter('.my-class')
+              // instead of creating a hackish DOM element:
+              var transcluded = angular.element('<div>').append(clone);
+    
+              var transcludedMatch = transcluded.querySelectorAll('.ui-select-match');
+              transcludedMatch.removeAttr('ui-select-match'); //To avoid loop in case directive as attr
+              transcludedMatch.removeAttr('data-ui-select-match'); // Properly handle HTML5 data-attributes
+              if (transcludedMatch.length !== 1) {
+                throw uiSelectMinErr('transcluded', "Expected 1 .ui-select-match but got '{0}'.", transcludedMatch.length);
+              }
+              element.querySelectorAll('.ui-select-match').replaceWith(transcludedMatch);
+    
+              var transcludedChoices = transcluded.querySelectorAll('.ui-select-choices');
+              transcludedChoices.removeAttr('ui-select-choices'); //To avoid loop in case directive as attr
+              transcludedChoices.removeAttr('data-ui-select-choices'); // Properly handle HTML5 data-attributes
+              if (transcludedChoices.length !== 1) {
+                throw uiSelectMinErr('transcluded', "Expected 1 .ui-select-choices but got '{0}'.", transcludedChoices.length);
+              }
+              element.querySelectorAll('.ui-select-choices').replaceWith(transcludedChoices);
+    
+              var transcludedNoChoice = transcluded.querySelectorAll('.ui-select-no-choice');
+              transcludedNoChoice.removeAttr('ui-select-no-choice'); //To avoid loop in case directive as attr
+              transcludedNoChoice.removeAttr('data-ui-select-no-choice'); // Properly handle HTML5 data-attributes
+              if (transcludedNoChoice.length == 1) {
+                element.querySelectorAll('.ui-select-no-choice').replaceWith(transcludedNoChoice);
+              }
+            });
+    
+            // Support for appending the select field to the body when its open
+            var appendToBody = scope.$eval(attrs.appendToBody);
+            if (appendToBody !== undefined ? appendToBody : uiSelectConfig.appendToBody) {
+              scope.$watch('$select.open', function(isOpen) {
+                if (isOpen) {
+                  positionDropdown();
+                } else {
+                  resetDropdown();
+                }
+              });
+    
+              // Move the dropdown back to its original location when the scope is destroyed. Otherwise
+              // it might stick around when the user routes away or the select field is otherwise removed
+              scope.$on('$destroy', function() {
+                resetDropdown();
+              });
+            }
+    
+            // Hold on to a reference to the .ui-select-container element for appendToBody support
+            var placeholder = null,
+                originalWidth = '';
+    
+            function positionDropdown() {
+              // Remember the absolute position of the element
+              var offset = uisOffset(element);
+    
+              // Clone the element into a placeholder element to take its original place in the DOM
+              placeholder = angular.element('<div class="ui-select-placeholder"></div>');
+              placeholder[0].style.width = offset.width + 'px';
+              placeholder[0].style.height = offset.height + 'px';
+              element.after(placeholder);
+    
+              // Remember the original value of the element width inline style, so it can be restored
+              // when the dropdown is closed
+              originalWidth = element[0].style.width;
+    
+              // Now move the actual dropdown element to the end of the body
+              $document.find('body').append(element);
+    
+              element[0].style.position = 'absolute';
+              element[0].style.left = offset.left + 'px';
+              element[0].style.top = offset.top + 'px';
+              element[0].style.width = offset.width + 'px';
+            }
+    
+            function resetDropdown() {
+              if (placeholder === null) {
+                // The dropdown has not actually been display yet, so there's nothing to reset
+                return;
+              }
+    
+              // Move the dropdown element back to its original location in the DOM
+              placeholder.replaceWith(element);
+              placeholder = null;
+    
+              element[0].style.position = '';
+              element[0].style.left = '';
+              element[0].style.top = '';
+              element[0].style.width = originalWidth;
+    
+              // Set focus back on to the moved element
+              $select.setFocus();
+            }
+    
+            // Hold on to a reference to the .ui-select-dropdown element for direction support.
+            var dropdown = null,
+                directionUpClassName = 'direction-up';
+    
+            // Support changing the direction of the dropdown if there isn't enough space to render it.
+            scope.$watch('$select.open', function() {
+    
+              if ($select.dropdownPosition === 'auto' || $select.dropdownPosition === 'up'){
+                scope.calculateDropdownPos();
+              }
+    
+            });
+    
+            var setDropdownPosUp = function(offset, offsetDropdown){
+    
+              offset = offset || uisOffset(element);
+              offsetDropdown = offsetDropdown || uisOffset(dropdown);
+    
+              dropdown[0].style.position = 'absolute';
+              dropdown[0].style.top = (offsetDropdown.height * -1) + 'px';
+              element.addClass(directionUpClassName);
+    
+            };
+    
+            var setDropdownPosDown = function(offset, offsetDropdown){
+    
+              element.removeClass(directionUpClassName);
+    
+              offset = offset || uisOffset(element);
+              offsetDropdown = offsetDropdown || uisOffset(dropdown);
+    
+              dropdown[0].style.position = '';
+              dropdown[0].style.top = '';
+    
+            };
+    
+            var calculateDropdownPosAfterAnimation = function() {
+              // Delay positioning the dropdown until all choices have been added so its height is correct.
+              $timeout(function() {
+                if ($select.dropdownPosition === 'up') {
+                  //Go UP
+                  setDropdownPosUp();
+                } else {
+                  //AUTO
+                  element.removeClass(directionUpClassName);
+    
+                  var offset = uisOffset(element);
+                  var offsetDropdown = uisOffset(dropdown);
+    
+                  //https://code.google.com/p/chromium/issues/detail?id=342307#c4
+                  var scrollTop = $document[0].documentElement.scrollTop || $document[0].body.scrollTop; //To make it cross browser (blink, webkit, IE, Firefox).
+    
+                  // Determine if the direction of the dropdown needs to be changed.
+                  if (offset.top + offset.height + offsetDropdown.height > scrollTop + $document[0].documentElement.clientHeight) {
+                    //Go UP
+                    setDropdownPosUp(offset, offsetDropdown);
+                  }else{
+                    //Go DOWN
+                    setDropdownPosDown(offset, offsetDropdown);
+                  }
+                }
+    
+                // Display the dropdown once it has been positioned.
+                dropdown[0].style.opacity = 1;
+              });
+            };
+    
+            var opened = false;
+            
+            scope.calculateDropdownPos = function() {
+              if ($select.open) {
+                dropdown = angular.element(element).querySelectorAll('.ui-select-dropdown');
+    
+                if (dropdown.length === 0) {
+                  return;
+                }
+    
+               // Hide the dropdown so there is no flicker until $timeout is done executing.
+               if ($select.search === '' && !opened) {
+                  dropdown[0].style.opacity = 0;
+                  opened = true;
+               }
+    
+                if (!uisOffset(dropdown).height && $select.$animate && $select.$animate.on && $select.$animate.enabled(dropdown)) {
+                  var needsCalculated = true;
+    
+                  $select.$animate.on('enter', dropdown, function (elem, phase) {
+                    if (phase === 'close' && needsCalculated) {
+                      calculateDropdownPosAfterAnimation();
+                      needsCalculated = false;
+                    }
+                  });
+                } else {
+                  calculateDropdownPosAfterAnimation();
+                }
+              } else {
+                if (dropdown === null || dropdown.length === 0) {
+                  return;
+                }
+    
+                // Reset the position of the dropdown.
+                dropdown[0].style.opacity = 0;
+                dropdown[0].style.position = '';
+                dropdown[0].style.top = '';
+                element.removeClass(directionUpClassName);
+              }
+            };
+          };
+        }
+      };
+    }]);
+    
+    uis.directive('uiSelectMatch', ['uiSelectConfig', function(uiSelectConfig) {
+      return {
+        restrict: 'EA',
+        require: '^uiSelect',
+        replace: true,
+        transclude: true,
+        templateUrl: function(tElement) {
+          // Needed so the uiSelect can detect the transcluded content
+          tElement.addClass('ui-select-match');
+    
+          var parent = tElement.parent();
+          // Gets theme attribute from parent (ui-select)
+          var theme = getAttribute(parent, 'theme') || uiSelectConfig.theme;
+          var multi = angular.isDefined(getAttribute(parent, 'multiple'));
+    
+          return theme + (multi ? '/match-multiple.tpl.html' : '/match.tpl.html');      
+        },
+        link: function(scope, element, attrs, $select) {
+          $select.lockChoiceExpression = attrs.uiLockChoice;
+          attrs.$observe('placeholder', function(placeholder) {
+            $select.placeholder = placeholder !== undefined ? placeholder : uiSelectConfig.placeholder;
+          });
+    
+          function setAllowClear(allow) {
+            $select.allowClear = (angular.isDefined(allow)) ? (allow === '') ? true : (allow.toLowerCase() === 'true') : false;
+          }
+    
+          attrs.$observe('allowClear', setAllowClear);
+          setAllowClear(attrs.allowClear);
+    
+          if($select.multiple){
+            $select.sizeSearchInput();
+          }
+    
+        }
+      };
+    
+      function getAttribute(elem, attribute) {
+        if (elem[0].hasAttribute(attribute))
+          return elem.attr(attribute);
+    
+        if (elem[0].hasAttribute('data-' + attribute))
+          return elem.attr('data-' + attribute);
+    
+        if (elem[0].hasAttribute('x-' + attribute))
+          return elem.attr('x-' + attribute);
+      }
+    }]);
+    
+    uis.directive('uiSelectMultiple', ['uiSelectMinErr','$timeout', function(uiSelectMinErr, $timeout) {
+      return {
+        restrict: 'EA',
+        require: ['^uiSelect', '^ngModel'],
+    
+        controller: ['$scope','$timeout', function($scope, $timeout){
+    
+          var ctrl = this,
+              $select = $scope.$select,
+              ngModel;
+    
+          if (angular.isUndefined($select.selected))
+            $select.selected = [];
+    
+          //Wait for link fn to inject it
+          $scope.$evalAsync(function(){ ngModel = $scope.ngModel; });
+    
+          ctrl.activeMatchIndex = -1;
+    
+          ctrl.updateModel = function(){
+            ngModel.$setViewValue(Date.now()); //Set timestamp as a unique string to force changes
+            ctrl.refreshComponent();
+          };
+    
+          ctrl.refreshComponent = function(){
+            //Remove already selected items
+            //e.g. When user clicks on a selection, the selected array changes and
+            //the dropdown should remove that item
+            if($select.refreshItems){
+              $select.refreshItems();
+            }
+            if($select.sizeSearchInput){
+              $select.sizeSearchInput();
+            }
+          };
+    
+          // Remove item from multiple select
+          ctrl.removeChoice = function(index){
+    
+            // if the choice is locked, don't remove it
+            if($select.isLocked(null, index)) return false;
+    
+            var removedChoice = $select.selected[index];
+    
+            var locals = {};
+            locals[$select.parserResult.itemName] = removedChoice;
+    
+            $select.selected.splice(index, 1);
+            ctrl.activeMatchIndex = -1;
+            $select.sizeSearchInput();
+    
+            // Give some time for scope propagation.
+            $timeout(function(){
+              $select.onRemoveCallback($scope, {
+                $item: removedChoice,
+                $model: $select.parserResult.modelMapper($scope, locals)
+              });
+            });
+    
+            ctrl.updateModel();
+    
+            return true;
+          };
+    
+          ctrl.getPlaceholder = function(){
+            //Refactor single?
+            if($select.selected && $select.selected.length) return;
+            return $select.placeholder;
+          };
+    
+    
+        }],
+        controllerAs: '$selectMultiple',
+    
+        link: function(scope, element, attrs, ctrls) {
+    
+          var $select = ctrls[0];
+          var ngModel = scope.ngModel = ctrls[1];
+          var $selectMultiple = scope.$selectMultiple;
+    
+          //$select.selected = raw selected objects (ignoring any property binding)
+    
+          $select.multiple = true;
+    
+          //Input that will handle focus
+          $select.focusInput = $select.searchInput;
+    
+          //Properly check for empty if set to multiple
+          ngModel.$isEmpty = function(value) {
+            return !value || value.length === 0;
+          };
+    
+          //From view --> model
+          ngModel.$parsers.unshift(function () {
+            var locals = {},
+                result,
+                resultMultiple = [];
+            for (var j = $select.selected.length - 1; j >= 0; j--) {
+              locals = {};
+              locals[$select.parserResult.itemName] = $select.selected[j];
+              result = $select.parserResult.modelMapper(scope, locals);
+              resultMultiple.unshift(result);
+            }
+            return resultMultiple;
+          });
+    
+          // From model --> view
+          ngModel.$formatters.unshift(function (inputValue) {
+            var data = $select.parserResult && $select.parserResult.source (scope, { $select : {search:''}}), //Overwrite $search
+                locals = {},
+                result;
+            if (!data) return inputValue;
+            var resultMultiple = [];
+            var checkFnMultiple = function(list, value){
+              if (!list || !list.length) return;
+              for (var p = list.length - 1; p >= 0; p--) {
+                locals[$select.parserResult.itemName] = list[p];
+                result = $select.parserResult.modelMapper(scope, locals);
+                if($select.parserResult.trackByExp){
+                    var propsItemNameMatches = /(\w*)\./.exec($select.parserResult.trackByExp);
+                    var matches = /\.([^\s]+)/.exec($select.parserResult.trackByExp);
+                    if(propsItemNameMatches && propsItemNameMatches.length > 0 && propsItemNameMatches[1] == $select.parserResult.itemName){
+                      if(matches && matches.length>0 && result[matches[1]] == value[matches[1]]){
+                          resultMultiple.unshift(list[p]);
+                          return true;
+                      }
+                    }
+                }
+                if (angular.equals(result,value)){
+                  resultMultiple.unshift(list[p]);
+                  return true;
+                }
+              }
+              return false;
+            };
+            if (!inputValue) return resultMultiple; //If ngModel was undefined
+            for (var k = inputValue.length - 1; k >= 0; k--) {
+              //Check model array of currently selected items
+              if (!checkFnMultiple($select.selected, inputValue[k])){
+                //Check model array of all items available
+                if (!checkFnMultiple(data, inputValue[k])){
+                  //If not found on previous lists, just add it directly to resultMultiple
+                  resultMultiple.unshift(inputValue[k]);
+                }
+              }
+            }
+            return resultMultiple;
+          });
+    
+          //Watch for external model changes
+          scope.$watchCollection(function(){ return ngModel.$modelValue; }, function(newValue, oldValue) {
+            if (oldValue != newValue){
+              //update the view value with fresh data from items, if there is a valid model value
+              if(angular.isDefined(ngModel.$modelValue)) {
+                ngModel.$modelValue = null; //Force scope model value and ngModel value to be out of sync to re-run formatters
+              }
+              $selectMultiple.refreshComponent();
+            }
+          });
+    
+          ngModel.$render = function() {
+            // Make sure that model value is array
+            if(!angular.isArray(ngModel.$viewValue)){
+              // Have tolerance for null or undefined values
+              if (isNil(ngModel.$viewValue)){
+                ngModel.$viewValue = [];
+              } else {
+                throw uiSelectMinErr('multiarr', "Expected model value to be array but got '{0}'", ngModel.$viewValue);
+              }
+            }
+            $select.selected = ngModel.$viewValue;
+            $selectMultiple.refreshComponent();
+            scope.$evalAsync(); //To force $digest
+          };
+    
+          scope.$on('uis:select', function (event, item) {
+            if($select.selected.length >= $select.limit) {
+              return;
+            }
+            $select.selected.push(item);
+            var locals = {};
+            locals[$select.parserResult.itemName] = item;
+    
+            $timeout(function(){
+              $select.onSelectCallback(scope, {
+                $item: item,
+                $model: $select.parserResult.modelMapper(scope, locals)
+              });
+            });
+            $selectMultiple.updateModel();
+          });
+    
+          scope.$on('uis:activate', function () {
+            $selectMultiple.activeMatchIndex = -1;
+          });
+    
+          scope.$watch('$select.disabled', function(newValue, oldValue) {
+            // As the search input field may now become visible, it may be necessary to recompute its size
+            if (oldValue && !newValue) $select.sizeSearchInput();
+          });
+    
+          $select.searchInput.on('keydown', function(e) {
+            var key = e.which;
+            scope.$apply(function() {
+              var processed = false;
+              // var tagged = false; //Checkme
+              if(KEY.isHorizontalMovement(key)){
+                processed = _handleMatchSelection(key);
+              }
+              if (processed  && key != KEY.TAB) {
+                //TODO Check si el tab selecciona aun correctamente
+                //Crear test
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            });
+          });
+          function _getCaretPosition(el) {
+            if(angular.isNumber(el.selectionStart)) return el.selectionStart;
+            // selectionStart is not supported in IE8 and we don't want hacky workarounds so we compromise
+            else return el.value.length;
+          }
+          // Handles selected options in "multiple" mode
+          function _handleMatchSelection(key){
+            var caretPosition = _getCaretPosition($select.searchInput[0]),
+                length = $select.selected.length,
+                // none  = -1,
+                first = 0,
+                last  = length-1,
+                curr  = $selectMultiple.activeMatchIndex,
+                next  = $selectMultiple.activeMatchIndex+1,
+                prev  = $selectMultiple.activeMatchIndex-1,
+                newIndex = curr;
+    
+            if(caretPosition > 0 || ($select.search.length && key == KEY.RIGHT)) return false;
+    
+            $select.close();
+    
+            function getNewActiveMatchIndex(){
+              switch(key){
+                case KEY.LEFT:
+                  // Select previous/first item
+                  if(~$selectMultiple.activeMatchIndex) return prev;
+                  // Select last item
+                  else return last;
+                  break;
+                case KEY.RIGHT:
+                  // Open drop-down
+                  if(!~$selectMultiple.activeMatchIndex || curr === last){
+                    $select.activate();
+                    return false;
+                  }
+                  // Select next/last item
+                  else return next;
+                  break;
+                case KEY.BACKSPACE:
+                  // Remove selected item and select previous/first
+                  if(~$selectMultiple.activeMatchIndex){
+                    if($selectMultiple.removeChoice(curr)) {
+                      return prev;
+                    } else {
+                      return curr;
+                    }
+    
+                  } else {
+                    // If nothing yet selected, select last item
+                    return last;
+                  }
+                  break;
+                case KEY.DELETE:
+                  // Remove selected item and select next item
+                  if(~$selectMultiple.activeMatchIndex){
+                    $selectMultiple.removeChoice($selectMultiple.activeMatchIndex);
+                    return curr;
+                  }
+                  else return false;
+              }
+            }
+    
+            newIndex = getNewActiveMatchIndex();
+    
+            if(!$select.selected.length || newIndex === false) $selectMultiple.activeMatchIndex = -1;
+            else $selectMultiple.activeMatchIndex = Math.min(last,Math.max(first,newIndex));
+    
+            return true;
+          }
+    
+          $select.searchInput.on('keyup', function(e) {
+    
+            if ( ! KEY.isVerticalMovement(e.which) ) {
+              scope.$evalAsync( function () {
+                $select.activeIndex = $select.taggingLabel === false ? -1 : 0;
+              });
+            }
+            // Push a "create new" item into array if there is a search string
+            if ( $select.tagging.isActivated && $select.search.length > 0 ) {
+    
+              // return early with these keys
+              if (e.which === KEY.TAB || KEY.isControl(e) || KEY.isFunctionKey(e) || e.which === KEY.ESC || KEY.isVerticalMovement(e.which) ) {
+                return;
+              }
+              // always reset the activeIndex to the first item when tagging
+              $select.activeIndex = $select.taggingLabel === false ? -1 : 0;
+              // taggingLabel === false bypasses all of this
+              if ($select.taggingLabel === false) return;
+    
+              var items = angular.copy( $select.items );
+              var stashArr = angular.copy( $select.items );
+              var newItem;
+              var item;
+              var hasTag = false;
+              var dupeIndex = -1;
+              var tagItems;
+              var tagItem;
+    
+              // case for object tagging via transform `$select.tagging.fct` function
+              if ( $select.tagging.fct !== undefined) {
+                tagItems = $select.$filter('filter')(items,{'isTag': true});
+                if ( tagItems.length > 0 ) {
+                  tagItem = tagItems[0];
+                }
+                // remove the first element, if it has the `isTag` prop we generate a new one with each keyup, shaving the previous
+                if ( items.length > 0 && tagItem ) {
+                  hasTag = true;
+                  items = items.slice(1,items.length);
+                  stashArr = stashArr.slice(1,stashArr.length);
+                }
+                newItem = $select.tagging.fct($select.search);
+                // verify the new tag doesn't match the value of a possible selection choice or an already selected item.
+                if (
+                  stashArr.some(function (origItem) {
+                     return angular.equals(origItem, newItem);
+                  }) ||
+                  $select.selected.some(function (origItem) {
+                    return angular.equals(origItem, newItem);
+                  })
+                ) {
+                  scope.$evalAsync(function () {
+                    $select.activeIndex = 0;
+                    $select.items = items;
+                  });
+                  return;
+                }
+                if (newItem) newItem.isTag = true;
+              // handle newItem string and stripping dupes in tagging string context
+              } else {
+                // find any tagging items already in the $select.items array and store them
+                tagItems = $select.$filter('filter')(items,function (item) {
+                  return item.match($select.taggingLabel);
+                });
+                if ( tagItems.length > 0 ) {
+                  tagItem = tagItems[0];
+                }
+                item = items[0];
+                // remove existing tag item if found (should only ever be one tag item)
+                if ( item !== undefined && items.length > 0 && tagItem ) {
+                  hasTag = true;
+                  items = items.slice(1,items.length);
+                  stashArr = stashArr.slice(1,stashArr.length);
+                }
+                newItem = $select.search+' '+$select.taggingLabel;
+                if ( _findApproxDupe($select.selected, $select.search) > -1 ) {
+                  return;
+                }
+                // verify the the tag doesn't match the value of an existing item from
+                // the searched data set or the items already selected
+                if ( _findCaseInsensitiveDupe(stashArr.concat($select.selected)) ) {
+                  // if there is a tag from prev iteration, strip it / queue the change
+                  // and return early
+                  if ( hasTag ) {
+                    items = stashArr;
+                    scope.$evalAsync( function () {
+                      $select.activeIndex = 0;
+                      $select.items = items;
+                    });
+                  }
+                  return;
+                }
+                if ( _findCaseInsensitiveDupe(stashArr) ) {
+                  // if there is a tag from prev iteration, strip it
+                  if ( hasTag ) {
+                    $select.items = stashArr.slice(1,stashArr.length);
+                  }
+                  return;
+                }
+              }
+              if ( hasTag ) dupeIndex = _findApproxDupe($select.selected, newItem);
+              // dupe found, shave the first item
+              if ( dupeIndex > -1 ) {
+                items = items.slice(dupeIndex+1,items.length-1);
+              } else {
+                items = [];
+                if (newItem) items.push(newItem);
+                items = items.concat(stashArr);
+              }
+              scope.$evalAsync( function () {
+                $select.activeIndex = 0;
+                $select.items = items;
+    
+                if ($select.isGrouped) {
+                  // update item references in groups, so that indexOf will work after angular.copy
+                  var itemsWithoutTag = newItem ? items.slice(1) : items;
+                  $select.setItemsFn(itemsWithoutTag);
+                  if (newItem) {
+                    // add tag item as a new group
+                    $select.items.unshift(newItem);
+                    $select.groups.unshift({name: '', items: [newItem], tagging: true});
+                  }
+                }
+              });
+            }
+          });
+          function _findCaseInsensitiveDupe(arr) {
+            if ( arr === undefined || $select.search === undefined ) {
+              return false;
+            }
+            var hasDupe = arr.filter( function (origItem) {
+              if ( $select.search.toUpperCase() === undefined || origItem === undefined ) {
+                return false;
+              }
+              return origItem.toUpperCase() === $select.search.toUpperCase();
+            }).length > 0;
+    
+            return hasDupe;
+          }
+          function _findApproxDupe(haystack, needle) {
+            var dupeIndex = -1;
+            if(angular.isArray(haystack)) {
+              var tempArr = angular.copy(haystack);
+              for (var i = 0; i <tempArr.length; i++) {
+                // handle the simple string version of tagging
+                if ( $select.tagging.fct === undefined ) {
+                  // search the array for the match
+                  if ( tempArr[i]+' '+$select.taggingLabel === needle ) {
+                  dupeIndex = i;
+                  }
+                // handle the object tagging implementation
+                } else {
+                  var mockObj = tempArr[i];
+                  if (angular.isObject(mockObj)) {
+                    mockObj.isTag = true;
+                  }
+                  if ( angular.equals(mockObj, needle) ) {
+                    dupeIndex = i;
+                  }
+                }
+              }
+            }
+            return dupeIndex;
+          }
+    
+          $select.searchInput.on('blur', function() {
+            $timeout(function() {
+              $selectMultiple.activeMatchIndex = -1;
+            });
+          });
+    
+        }
+      };
+    }]);
+    
+    uis.directive('uiSelectNoChoice',
+        ['uiSelectConfig', function (uiSelectConfig) {
+            return {
+                restrict: 'EA',
+                require: '^uiSelect',
+                replace: true,
+                transclude: true,
+                templateUrl: function (tElement) {
+                    // Needed so the uiSelect can detect the transcluded content
+                    tElement.addClass('ui-select-no-choice');
+          
+                    // Gets theme attribute from parent (ui-select)
+                    var theme = tElement.parent().attr('theme') || uiSelectConfig.theme;
+                    return theme + '/no-choice.tpl.html';
+                }
+            };
+        }]);
+    
+    uis.directive('uiSelectSingle', ['$timeout','$compile', function($timeout, $compile) {
+      return {
+        restrict: 'EA',
+        require: ['^uiSelect', '^ngModel'],
+        link: function(scope, element, attrs, ctrls) {
+    
+          var $select = ctrls[0];
+          var ngModel = ctrls[1];
+    
+          //From view --> model
+          ngModel.$parsers.unshift(function (inputValue) {
+            // Keep original value for undefined and null
+            if (isNil(inputValue)) {
+              return inputValue;
+            }
+    
+            var locals = {},
+                result;
+            locals[$select.parserResult.itemName] = inputValue;
+            result = $select.parserResult.modelMapper(scope, locals);
+            return result;
+          });
+    
+          //From model --> view
+          ngModel.$formatters.unshift(function (inputValue) {
+            // Keep original value for undefined and null
+            if (isNil(inputValue)) {
+              return inputValue;
+            }
+    
+            var data = $select.parserResult && $select.parserResult.source (scope, { $select : {search:''}}), //Overwrite $search
+                locals = {},
+                result;
+            if (data){
+              var checkFnSingle = function(d){
+                locals[$select.parserResult.itemName] = d;
+                result = $select.parserResult.modelMapper(scope, locals);
+                return result === inputValue;
+              };
+              //If possible pass same object stored in $select.selected
+              if ($select.selected && checkFnSingle($select.selected)) {
+                return $select.selected;
+              }
+              for (var i = data.length - 1; i >= 0; i--) {
+                if (checkFnSingle(data[i])) return data[i];
+              }
+            }
+            return inputValue;
+          });
+    
+          //Update viewValue if model change
+          scope.$watch('$select.selected', function(newValue) {
+            if (ngModel.$viewValue !== newValue) {
+              ngModel.$setViewValue(newValue);
+            }
+          });
+    
+          ngModel.$render = function() {
+            $select.selected = ngModel.$viewValue;
+          };
+    
+          scope.$on('uis:select', function (event, item) {
+            $select.selected = item;
+            var locals = {};
+            locals[$select.parserResult.itemName] = item;
+    
+            $timeout(function() {
+              $select.onSelectCallback(scope, {
+                $item: item,
+                $model: isNil(item) ? item : $select.parserResult.modelMapper(scope, locals)
+              });
+            });
+          });
+    
+          scope.$on('uis:close', function (event, skipFocusser) {
+            $timeout(function(){
+              $select.focusser.prop('disabled', false);
+              if (!skipFocusser) $select.focusser[0].focus();
+            },0,false);
+          });
+    
+          scope.$on('uis:activate', function () {
+            focusser.prop('disabled', true); //Will reactivate it on .close()
+          });
+    
+          //Idea from: https://github.com/ivaynberg/select2/blob/79b5bf6db918d7560bdd959109b7bcfb47edaf43/select2.js#L1954
+          var focusser = angular.element("<input ng-disabled='$select.disabled' class='ui-select-focusser ui-select-offscreen' type='text' id='{{ $select.focusserId }}' aria-label='{{ $select.focusserTitle }}' aria-haspopup='true' role='button' />");
+          $compile(focusser)(scope);
+          $select.focusser = focusser;
+    
+          //Input that will handle focus
+          $select.focusInput = focusser;
+    
+          element.parent().append(focusser);
+          focusser.bind("focus", function(){
+            scope.$evalAsync(function(){
+              $select.focus = true;
+            });
+          });
+          focusser.bind("blur", function(){
+            scope.$evalAsync(function(){
+              $select.focus = false;
+            });
+          });
+          focusser.bind("keydown", function(e){
+    
+            if (e.which === KEY.BACKSPACE && $select.backspaceReset !== false) {
+              e.preventDefault();
+              e.stopPropagation();
+              $select.select(undefined);
+              scope.$apply();
+              return;
+            }
+    
+            if (e.which === KEY.TAB || KEY.isControl(e) || KEY.isFunctionKey(e) || e.which === KEY.ESC) {
+              return;
+            }
+    
+            if (e.which == KEY.DOWN  || e.which == KEY.UP || e.which == KEY.ENTER || e.which == KEY.SPACE){
+              e.preventDefault();
+              e.stopPropagation();
+              $select.activate();
+            }
+    
+            scope.$digest();
+          });
+    
+          focusser.bind("keyup input", function(e){
+    
+            if (e.which === KEY.TAB || KEY.isControl(e) || KEY.isFunctionKey(e) || e.which === KEY.ESC || e.which == KEY.ENTER || e.which === KEY.BACKSPACE) {
+              return;
+            }
+    
+            $select.activate(focusser.val()); //User pressed some regular key, so we pass it to the search input
+            focusser.val('');
+            scope.$digest();
+    
+          });
+    
+    
+        }
+      };
+    }]);
+    
+    // Make multiple matches sortable
+    uis.directive('uiSelectSort', ['$timeout', 'uiSelectConfig', 'uiSelectMinErr', function($timeout, uiSelectConfig, uiSelectMinErr) {
+      return {
+        require: ['^^uiSelect', '^ngModel'],
+        link: function(scope, element, attrs, ctrls) {
+          if (scope[attrs.uiSelectSort] === null) {
+            throw uiSelectMinErr('sort', 'Expected a list to sort');
+          }
+    
+          var $select = ctrls[0];
+          var $ngModel = ctrls[1];
+    
+          var options = angular.extend({
+              axis: 'horizontal'
+            },
+            scope.$eval(attrs.uiSelectSortOptions));
+    
+          var axis = options.axis;
+          var draggingClassName = 'dragging';
+          var droppingClassName = 'dropping';
+          var droppingBeforeClassName = 'dropping-before';
+          var droppingAfterClassName = 'dropping-after';
+    
+          scope.$watch(function(){
+            return $select.sortable;
+          }, function(newValue){
+            if (newValue) {
+              element.attr('draggable', true);
+            } else {
+              element.removeAttr('draggable');
+            }
+          });
+    
+          element.on('dragstart', function(event) {
+            element.addClass(draggingClassName);
+    
+            (event.dataTransfer || event.originalEvent.dataTransfer).setData('text', scope.$index.toString());
+          });
+    
+          element.on('dragend', function() {
+            removeClass(draggingClassName);
+          });
+    
+          var move = function(from, to) {
+            /*jshint validthis: true */
+            this.splice(to, 0, this.splice(from, 1)[0]);
+          };
+    
+          var removeClass = function(className) {
+            angular.forEach($select.$element.querySelectorAll('.' + className), function(el){
+              angular.element(el).removeClass(className);
+            });
+          };
+    
+          var dragOverHandler = function(event) {
+            event.preventDefault();
+    
+            var offset = axis === 'vertical' ? event.offsetY || event.layerY || (event.originalEvent ? event.originalEvent.offsetY : 0) : event.offsetX || event.layerX || (event.originalEvent ? event.originalEvent.offsetX : 0);
+    
+            if (offset < (this[axis === 'vertical' ? 'offsetHeight' : 'offsetWidth'] / 2)) {
+              removeClass(droppingAfterClassName);
+              element.addClass(droppingBeforeClassName);
+    
+            } else {
+              removeClass(droppingBeforeClassName);
+              element.addClass(droppingAfterClassName);
+            }
+          };
+    
+          var dropTimeout;
+    
+          var dropHandler = function(event) {
+            event.preventDefault();
+    
+            var droppedItemIndex = parseInt((event.dataTransfer || event.originalEvent.dataTransfer).getData('text'), 10);
+    
+            // prevent event firing multiple times in firefox
+            $timeout.cancel(dropTimeout);
+            dropTimeout = $timeout(function() {
+              _dropHandler(droppedItemIndex);
+            }, 20);
+          };
+    
+          var _dropHandler = function(droppedItemIndex) {
+            var theList = scope.$eval(attrs.uiSelectSort);
+            var itemToMove = theList[droppedItemIndex];
+            var newIndex = null;
+    
+            if (element.hasClass(droppingBeforeClassName)) {
+              if (droppedItemIndex < scope.$index) {
+                newIndex = scope.$index - 1;
+              } else {
+                newIndex = scope.$index;
+              }
+            } else {
+              if (droppedItemIndex < scope.$index) {
+                newIndex = scope.$index;
+              } else {
+                newIndex = scope.$index + 1;
+              }
+            }
+    
+            move.apply(theList, [droppedItemIndex, newIndex]);
+    
+            $ngModel.$setViewValue(Date.now());
+    
+            scope.$apply(function() {
+              scope.$emit('uiSelectSort:change', {
+                array: theList,
+                item: itemToMove,
+                from: droppedItemIndex,
+                to: newIndex
+              });
+            });
+    
+            removeClass(droppingClassName);
+            removeClass(droppingBeforeClassName);
+            removeClass(droppingAfterClassName);
+    
+            element.off('drop', dropHandler);
+          };
+    
+          element.on('dragenter', function() {
+            if (element.hasClass(draggingClassName)) {
+              return;
+            }
+    
+            element.addClass(droppingClassName);
+    
+            element.on('dragover', dragOverHandler);
+            element.on('drop', dropHandler);
+          });
+    
+          element.on('dragleave', function(event) {
+            if (event.target != element) {
+              return;
+            }
+    
+            removeClass(droppingClassName);
+            removeClass(droppingBeforeClassName);
+            removeClass(droppingAfterClassName);
+    
+            element.off('dragover', dragOverHandler);
+            element.off('drop', dropHandler);
+          });
+        }
+      };
+    }]);
+    
+    /**
+     * Debounces functions
+     *
+     * Taken from UI Bootstrap $$debounce source code
+     * See https://github.com/angular-ui/bootstrap/blob/master/src/debounce/debounce.js
+     *
+     */
+    uis.factory('$$uisDebounce', ['$timeout', function($timeout) {
+      return function(callback, debounceTime) {
+        var timeoutPromise;
+    
+        return function() {
+          var self = this;
+          var args = Array.prototype.slice.call(arguments);
+          if (timeoutPromise) {
+            $timeout.cancel(timeoutPromise);
+          }
+    
+          timeoutPromise = $timeout(function() {
+            callback.apply(self, args);
+          }, debounceTime);
+        };
+      };
+    }]);
+    
+    uis.directive('uisOpenClose', ['$parse', '$timeout', function ($parse, $timeout) {
+      return {
+        restrict: 'A',
+        require: 'uiSelect',
+        link: function (scope, element, attrs, $select) {
+          $select.onOpenCloseCallback = $parse(attrs.uisOpenClose);
+    
+          scope.$watch('$select.open', function (isOpen, previousState) {
+            if (isOpen !== previousState) {
+              $timeout(function () {
+                $select.onOpenCloseCallback(scope, {
+                  isOpen: isOpen
+                });
+              });
+            }
+          });
+        }
+      };
+    }]);
+    
+    /**
+     * Parses "repeat" attribute.
+     *
+     * Taken from AngularJS ngRepeat source code
+     * See https://github.com/angular/angular.js/blob/v1.2.15/src/ng/directive/ngRepeat.js#L211
+     *
+     * Original discussion about parsing "repeat" attribute instead of fully relying on ng-repeat:
+     * https://github.com/angular-ui/ui-select/commit/5dd63ad#commitcomment-5504697
+     */
+    
+    uis.service('uisRepeatParser', ['uiSelectMinErr','$parse', function(uiSelectMinErr, $parse) {
+      var self = this;
+    
+      /**
+       * Example:
+       * expression = "address in addresses | filter: {street: $select.search} track by $index"
+       * itemName = "address",
+       * source = "addresses | filter: {street: $select.search}",
+       * trackByExp = "$index",
+       */
+      self.parse = function(expression) {
+    
+    
+        var match;
+        //var isObjectCollection = /\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)/.test(expression);
+        // If an array is used as collection
+    
+        // if (isObjectCollection){
+        // 000000000000000000000000000000111111111000000000000000222222222222220033333333333333333333330000444444444444444444000000000000000055555555555000000000000000000000066666666600000000
+        match = expression.match(/^\s*(?:([\s\S]+?)\s+as\s+)?(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(\s*[\s\S]+?)?(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
+    
+        // 1 Alias
+        // 2 Item
+        // 3 Key on (key,value)
+        // 4 Value on (key,value)
+        // 5 Source expression (including filters)
+        // 6 Track by
+    
+        if (!match) {
+          throw uiSelectMinErr('iexp', "Expected expression in form of '_item_ in _collection_[ track by _id_]' but got '{0}'.",
+                  expression);
+        }
+        
+        var source = match[5], 
+            filters = '';
+    
+        // When using (key,value) ui-select requires filters to be extracted, since the object
+        // is converted to an array for $select.items 
+        // (in which case the filters need to be reapplied)
+        if (match[3]) {
+          // Remove any enclosing parenthesis
+          source = match[5].replace(/(^\()|(\)$)/g, '');
+          // match all after | but not after ||
+          var filterMatch = match[5].match(/^\s*(?:[\s\S]+?)(?:[^\|]|\|\|)+([\s\S]*)\s*$/);
+          if(filterMatch && filterMatch[1].trim()) {
+            filters = filterMatch[1];
+            source = source.replace(filters, '');
+          }      
+        }
+    
+        return {
+          itemName: match[4] || match[2], // (lhs) Left-hand side,
+          keyName: match[3], //for (key, value) syntax
+          source: $parse(source),
+          filters: filters,
+          trackByExp: match[6],
+          modelMapper: $parse(match[1] || match[4] || match[2]),
+          repeatExpression: function (grouped) {
+            var expression = this.itemName + ' in ' + (grouped ? '$group.items' : '$select.items');
+            if (this.trackByExp) {
+              expression += ' track by ' + this.trackByExp;
+            }
+            return expression;
+          } 
+        };
+    
+      };
+    
+      self.getGroupNgRepeatExpression = function() {
+        return '$group in $select.groups track by $group.name';
+      };
+    
+    }]);
+    
+    }());
+    angular.module("ui.select").run(["$templateCache", function($templateCache) {$templateCache.put("bootstrap/choices.tpl.html","<ul class=\"ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu\" ng-show=\"$select.open && $select.items.length > 0\"><li class=\"ui-select-choices-group\" id=\"ui-select-choices-{{ $select.generatedId }}\"><div class=\"divider\" ng-show=\"$select.isGrouped && $index > 0\"></div><div ng-show=\"$select.isGrouped\" class=\"ui-select-choices-group-label dropdown-header\" ng-bind=\"$group.name\"></div><div ng-attr-id=\"ui-select-choices-row-{{ $select.generatedId }}-{{$index}}\" class=\"ui-select-choices-row\" ng-class=\"{active: $select.isActive(this), disabled: $select.isDisabled(this)}\" role=\"option\"><span class=\"ui-select-choices-row-inner\"></span></div></li></ul>");
+    $templateCache.put("bootstrap/match-multiple.tpl.html","<span class=\"ui-select-match\" ><span ng-repeat=\"$item in $select.selected track by $index\"><span class=\"ui-select-match-item btn-default btn-xs\" tabindex=\"-1\" type=\"button\" ng-disabled=\"$select.disabled\" ng-click=\"$selectMultiple.activeMatchIndex = $index;\" ng-class=\"{\'btn-primary\':$selectMultiple.activeMatchIndex === $index, \'select-locked\':$select.isLocked(this, $index)}\" ui-select-sort=\"$select.selected\"><span class=\"close ui-select-match-close\" ng-hide=\"$select.disabled\" ng-click=\"$selectMultiple.removeChoice($index)\">&nbsp;&times;</span> <span uis-transclude-append=\"\"></span></span></span></span>");
+    $templateCache.put("bootstrap/match.tpl.html","<div class=\"ui-select-match\" ng-hide=\"$select.open && $select.searchEnabled\" ng-disabled=\"$select.disabled\" ng-class=\"{\'btn-default-focus\':$select.focus}\"><span tabindex=\"-1\" class=\"btn btn-default form-control ui-select-toggle\" aria-label=\"{{ $select.baseTitle }} activate\" ng-disabled=\"$select.disabled\" ng-click=\"$select.activate()\" style=\"outline: 0;\"><span ng-show=\"$select.isEmpty()\" class=\"ui-select-placeholder text-muted\">{{$select.placeholder}}</span> <span ng-hide=\"$select.isEmpty()\" class=\"ui-select-match-text pull-left\" ng-class=\"{\'ui-select-allow-clear\': $select.allowClear && !$select.isEmpty()}\" ng-transclude=\"\"></span> <i class=\"caret pull-right\" ng-click=\"$select.toggle($event)\"></i> <a ng-show=\"$select.allowClear && !$select.isEmpty() && ($select.disabled !== true)\" aria-label=\"{{ $select.baseTitle }} clear\" style=\"margin-right: 10px\" ng-click=\"$select.clear($event)\" class=\"btn btn-xs btn-link pull-right\"><i class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></i></a></span></div>");
+    $templateCache.put("bootstrap/no-choice.tpl.html","<ul class=\"ui-select-no-choice dropdown-menu\" ng-show=\"$select.items.length == 0\"><li ng-transclude=\"\"></li></ul>");
+    $templateCache.put("bootstrap/select-multiple.tpl.html","<div class=\"ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control\" ng-class=\"{open: $select.open}\"><div><div class=\"ui-select-match\"></div><input type=\"search\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" class=\"ui-select-search input-xs\" placeholder=\"{{$selectMultiple.getPlaceholder()}}\" ng-disabled=\"$select.disabled\" ng-click=\"$select.activate()\" ng-model=\"$select.search\" role=\"combobox\" aria-expanded=\"{{$select.open}}\" aria-label=\"{{$select.baseTitle}}\" ng-class=\"{\'spinner\': $select.refreshing}\" ondrop=\"return false;\"></div><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div>");
+    $templateCache.put("bootstrap/select.tpl.html","<div class=\"ui-select-container ui-select-bootstrap dropdown\" ng-class=\"{open: $select.open}\"><div class=\"ui-select-match\"></div><span ng-show=\"$select.open && $select.refreshing && $select.spinnerEnabled\" class=\"ui-select-refreshing {{$select.spinnerClass}}\"></span> <input type=\"search\" autocomplete=\"off\" tabindex=\"-1\" aria-expanded=\"true\" aria-label=\"{{ $select.baseTitle }}\" aria-owns=\"ui-select-choices-{{ $select.generatedId }}\" class=\"form-control ui-select-search\" ng-class=\"{ \'ui-select-search-hidden\' : !$select.searchEnabled }\" placeholder=\"{{$select.placeholder}}\" ng-model=\"$select.search\" ng-show=\"$select.open\"><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div>");
+    $templateCache.put("select2/choices.tpl.html","<ul tabindex=\"-1\" class=\"ui-select-choices ui-select-choices-content select2-results\"><li class=\"ui-select-choices-group\" ng-class=\"{\'select2-result-with-children\': $select.choiceGrouped($group) }\"><div ng-show=\"$select.choiceGrouped($group)\" class=\"ui-select-choices-group-label select2-result-label\" ng-bind=\"$group.name\"></div><ul id=\"ui-select-choices-{{ $select.generatedId }}\" ng-class=\"{\'select2-result-sub\': $select.choiceGrouped($group), \'select2-result-single\': !$select.choiceGrouped($group) }\"><li role=\"option\" ng-attr-id=\"ui-select-choices-row-{{ $select.generatedId }}-{{$index}}\" class=\"ui-select-choices-row\" ng-class=\"{\'select2-highlighted\': $select.isActive(this), \'select2-disabled\': $select.isDisabled(this)}\"><div class=\"select2-result-label ui-select-choices-row-inner\"></div></li></ul></li></ul>");
+    $templateCache.put("select2/match-multiple.tpl.html","<span class=\"ui-select-match\"><li class=\"ui-select-match-item select2-search-choice\" ng-repeat=\"$item in $select.selected track by $index\" ng-class=\"{\'select2-search-choice-focus\':$selectMultiple.activeMatchIndex === $index, \'select2-locked\':$select.isLocked(this, $index)}\" ui-select-sort=\"$select.selected\"><span uis-transclude-append=\"\"></span> <a href=\"javascript:;\" class=\"ui-select-match-close select2-search-choice-close\" ng-click=\"$selectMultiple.removeChoice($index)\" tabindex=\"-1\"></a></li></span>");
+    $templateCache.put("select2/match.tpl.html","<a class=\"select2-choice ui-select-match\" ng-class=\"{\'select2-default\': $select.isEmpty()}\" ng-click=\"$select.toggle($event)\" aria-label=\"{{ $select.baseTitle }} select\"><span ng-show=\"$select.isEmpty()\" class=\"select2-chosen\">{{$select.placeholder}}</span> <span ng-hide=\"$select.isEmpty()\" class=\"select2-chosen\" ng-transclude=\"\"></span> <abbr ng-if=\"$select.allowClear && !$select.isEmpty()\" class=\"select2-search-choice-close\" ng-click=\"$select.clear($event)\"></abbr> <span class=\"select2-arrow ui-select-toggle\"><b></b></span></a>");
+    $templateCache.put("select2/no-choice.tpl.html","<div class=\"ui-select-no-choice dropdown\" ng-show=\"$select.items.length == 0\"><div class=\"dropdown-content\"><div data-selectable=\"\" ng-transclude=\"\"></div></div></div>");
+    $templateCache.put("select2/select-multiple.tpl.html","<div class=\"ui-select-container ui-select-multiple select2 select2-container select2-container-multi\" ng-class=\"{\'select2-container-active select2-dropdown-open open\': $select.open, \'select2-container-disabled\': $select.disabled}\"><ul class=\"select2-choices\"><span class=\"ui-select-match\"></span><li class=\"select2-search-field\"><input type=\"search\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" role=\"combobox\" aria-expanded=\"true\" aria-owns=\"ui-select-choices-{{ $select.generatedId }}\" aria-label=\"{{ $select.baseTitle }}\" aria-activedescendant=\"ui-select-choices-row-{{ $select.generatedId }}-{{ $select.activeIndex }}\" class=\"select2-input ui-select-search\" placeholder=\"{{$selectMultiple.getPlaceholder()}}\" ng-disabled=\"$select.disabled\" ng-hide=\"$select.disabled\" ng-model=\"$select.search\" ng-click=\"$select.activate()\" style=\"width: 34px;\" ondrop=\"return false;\"></li></ul><div class=\"ui-select-dropdown select2-drop select2-with-searchbox select2-drop-active\" ng-class=\"{\'select2-display-none\': !$select.open || $select.items.length === 0}\"><div class=\"ui-select-choices\"></div></div></div>");
+    $templateCache.put("select2/select.tpl.html","<div class=\"ui-select-container select2 select2-container\" ng-class=\"{\'select2-container-active select2-dropdown-open open\': $select.open, \'select2-container-disabled\': $select.disabled, \'select2-container-active\': $select.focus, \'select2-allowclear\': $select.allowClear && !$select.isEmpty()}\"><div class=\"ui-select-match\"></div><div class=\"ui-select-dropdown select2-drop select2-with-searchbox select2-drop-active\" ng-class=\"{\'select2-display-none\': !$select.open}\"><div class=\"search-container\" ng-class=\"{\'ui-select-search-hidden\':!$select.searchEnabled, \'select2-search\':$select.searchEnabled}\"><input type=\"search\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" ng-class=\"{\'select2-active\': $select.refreshing}\" role=\"combobox\" aria-expanded=\"true\" aria-owns=\"ui-select-choices-{{ $select.generatedId }}\" aria-label=\"{{ $select.baseTitle }}\" class=\"ui-select-search select2-input\" ng-model=\"$select.search\"></div><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div></div>");
+    $templateCache.put("selectize/choices.tpl.html","<div ng-show=\"$select.open\" class=\"ui-select-choices ui-select-dropdown selectize-dropdown\" ng-class=\"{\'single\': !$select.multiple, \'multi\': $select.multiple}\"><div class=\"ui-select-choices-content selectize-dropdown-content\"><div class=\"ui-select-choices-group optgroup\"><div ng-show=\"$select.isGrouped\" class=\"ui-select-choices-group-label optgroup-header\" ng-bind=\"$group.name\"></div><div role=\"option\" class=\"ui-select-choices-row\" ng-class=\"{active: $select.isActive(this), disabled: $select.isDisabled(this)}\"><div class=\"option ui-select-choices-row-inner\" data-selectable=\"\"></div></div></div></div></div>");
+    $templateCache.put("selectize/match-multiple.tpl.html","<div class=\"ui-select-match\" data-value=\"\" ng-repeat=\"$item in $select.selected track by $index\" ng-click=\"$selectMultiple.activeMatchIndex = $index;\" ng-class=\"{\'active\':$selectMultiple.activeMatchIndex === $index}\" ui-select-sort=\"$select.selected\"><span class=\"ui-select-match-item\" ng-class=\"{\'select-locked\':$select.isLocked(this, $index)}\"><span uis-transclude-append=\"\"></span> <span class=\"remove ui-select-match-close\" ng-hide=\"$select.disabled\" ng-click=\"$selectMultiple.removeChoice($index)\">&times;</span></span></div>");
+    $templateCache.put("selectize/match.tpl.html","<div ng-hide=\"$select.searchEnabled && ($select.open || $select.isEmpty())\" class=\"ui-select-match\"><span ng-show=\"!$select.searchEnabled && ($select.isEmpty() || $select.open)\" class=\"ui-select-placeholder text-muted\">{{$select.placeholder}}</span> <span ng-hide=\"$select.isEmpty() || $select.open\" ng-transclude=\"\"></span></div>");
+    $templateCache.put("selectize/no-choice.tpl.html","<div class=\"ui-select-no-choice selectize-dropdown\" ng-show=\"$select.items.length == 0\"><div class=\"selectize-dropdown-content\"><div data-selectable=\"\" ng-transclude=\"\"></div></div></div>");
+    $templateCache.put("selectize/select-multiple.tpl.html","<div class=\"ui-select-container selectize-control multi plugin-remove_button\" ng-class=\"{\'open\': $select.open}\"><div class=\"selectize-input\" ng-class=\"{\'focus\': $select.open, \'disabled\': $select.disabled, \'selectize-focus\' : $select.focus}\" ng-click=\"$select.open && !$select.searchEnabled ? $select.toggle($event) : $select.activate()\"><div class=\"ui-select-match\"></div><input type=\"search\" autocomplete=\"off\" tabindex=\"-1\" class=\"ui-select-search\" ng-class=\"{\'ui-select-search-hidden\':!$select.searchEnabled}\" placeholder=\"{{$selectMultiple.getPlaceholder()}}\" ng-model=\"$select.search\" ng-disabled=\"$select.disabled\" aria-expanded=\"{{$select.open}}\" aria-label=\"{{ $select.baseTitle }}\" ondrop=\"return false;\"></div><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div>");
+    $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container selectize-control single\" ng-class=\"{\'open\': $select.open}\"><div class=\"selectize-input\" ng-class=\"{\'focus\': $select.open, \'disabled\': $select.disabled, \'selectize-focus\' : $select.focus}\" ng-click=\"$select.open && !$select.searchEnabled ? $select.toggle($event) : $select.activate()\"><div class=\"ui-select-match\"></div><input type=\"search\" autocomplete=\"off\" tabindex=\"-1\" class=\"ui-select-search ui-select-toggle\" ng-class=\"{\'ui-select-search-hidden\':!$select.searchEnabled}\" ng-click=\"$select.toggle($event)\" placeholder=\"{{$select.placeholder}}\" ng-model=\"$select.search\" ng-hide=\"!$select.isEmpty() && !$select.open\" ng-disabled=\"$select.disabled\" aria-label=\"{{ $select.baseTitle }}\"></div><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div>");}]);
+
+/*
+*  AngularJs Fullcalendar Wrapper for the JQuery FullCalendar
+*  API @ http://arshaw.com/fullcalendar/
+*
+*  Angular Calendar Directive that takes in the [eventSources] nested array object as the ng-model and watches it deeply changes.
+*       Can also take in multiple event urls as a source object(s) and feed the events per view.
+*       The calendar will watch any eventSource array and update itself when a change is made.
+*
+*/
+
+angular.module('ui.calendar', [])
+
+    .constant('uiCalendarConfig', {
+        calendars : {}
+    })
+    .controller('uiCalendarCtrl', ['$scope', '$locale',
+        function ($scope, $locale) {
+
+            var sources = $scope.eventSources;
+            var extraEventSignature = $scope.calendarWatchEvent ? $scope.calendarWatchEvent : angular.noop;
+
+            var wrapFunctionWithScopeApply = function (functionToWrap) {
+                return function () {
+                    // This may happen outside of angular context, so create one if outside.
+                    if ($scope.$root.$$phase) {
+                        return functionToWrap.apply(this, arguments);
+                    }
+
+                    var args = arguments;
+                    var that = this;
+                    return $scope.$root.$apply(
+                        function () {
+                            return functionToWrap.apply(that, args);
+                        }
+                    );
+                };
+            };
+
+            var eventSerialId = 1;
+            // @return {String} fingerprint of the event object and its properties
+            this.eventFingerprint = function (e) {
+                if (!e._id) {
+                    e._id = eventSerialId++;
+                }
+
+                var extraSignature = extraEventSignature({
+                    event : e
+                }) || '';
+                var start = moment.isMoment(e.start) ? e.start.unix() : (e.start ? moment(e.start).unix() : '');
+                var end = moment.isMoment(e.end) ? e.end.unix() : (e.end ? moment(e.end).unix() : '');
+
+                // This extracts all the information we need from the event. http://jsperf.com/angular-calendar-events-fingerprint/3
+                return [e._id, e.id || '', e.title || '', e.url || '', start, end, e.allDay || '', e.className || '', extraSignature].join('');
+            };
+
+            var sourceSerialId = 1;
+            var sourceEventsSerialId = 1;
+            // @return {String} fingerprint of the source object and its events array
+            this.sourceFingerprint = function (source) {
+                var fp = '' + (source.__id || (source.__id = sourceSerialId++));
+                var events = angular.isObject(source) && source.events;
+
+                if (events) {
+                    fp = fp + '-' + (events.__id || (events.__id = sourceEventsSerialId++));
+                }
+                return fp;
+            };
+
+            // @return {Array} all events from all sources
+            this.allEvents = function () {
+                return Array.prototype.concat.apply(
+                    [],
+                    (sources || []).reduce(
+                        function (previous, source) {
+                            if (angular.isArray(source)) {
+                                previous.push(source);
+                            } else if (angular.isObject(source) && angular.isArray(source.events)) {
+                                var extEvent = Object.keys(source).filter(
+                                    function (key) {
+                                        return (key !== '_id' && key !== 'events');
+                                    }
+                                );
+
+                                source.events.forEach(
+                                    function (event) {
+                                        angular.extend(event, extEvent);
+                                    }
+                                );
+
+                                previous.push(source.events);
+                            }
+                            return previous;
+                        },
+                        []
+                    )
+                );
+            };
+
+            // Track changes in array of objects by assigning id tokens to each element and watching the scope for changes in the tokens
+            // @param {Array|Function} arraySource array of objects to watch
+            // @param tokenFn {Function} that returns the token for a given object
+            // @return {Object}
+            //  subscribe: function(scope, function(newTokens, oldTokens))
+            //    called when source has changed. return false to prevent individual callbacks from firing
+            //  onAdded/Removed/Changed:
+            //    when set to a callback, called each item where a respective change is detected
+            this.changeWatcher = function (arraySource, tokenFn) {
+                var self;
+
+                var getTokens = function () {
+                    return ((angular.isFunction(arraySource) ? arraySource() : arraySource) || []).reduce(
+                        function (rslt, el) {
+                            var token = tokenFn(el);
+                            map[token] = el;
+                            rslt.push(token);
+                            return rslt;
+                        },
+                        []
+                    );
+                };
+
+                // @param {Array} a
+                // @param {Array} b
+                // @return {Array} elements in that are in a but not in b
+                // @example
+                //  subtractAsSets([6, 100, 4, 5], [4, 5, 7]) // [6, 100]
+                var subtractAsSets = function (a, b) {
+                    var obj = (b || []).reduce(
+                        function (rslt, val) {
+                            rslt[val] = true;
+                            return rslt;
+                        },
+                        Object.create(null)
+                    );
+                    return (a || []).filter(
+                        function (val) {
+                            return !obj[val];
+                        }
+                    );
+                };
+
+                // Map objects to tokens and vice-versa
+                var map = {};
+
+                // Compare newTokens to oldTokens and call onAdded, onRemoved, and onChanged handlers for each affected event respectively.
+                var applyChanges = function (newTokens, oldTokens) {
+                    var i;
+                    var token;
+                    var replacedTokens = {};
+                    var removedTokens = subtractAsSets(oldTokens, newTokens);
+                    for (i = 0; i < removedTokens.length; i++) {
+                        var removedToken = removedTokens[i];
+                        var el = map[removedToken];
+                        delete map[removedToken];
+                        var newToken = tokenFn(el);
+                        // if the element wasn't removed but simply got a new token, its old token will be different from the current one
+                        if (newToken === removedToken) {
+                            self.onRemoved(el);
+                        } else {
+                            replacedTokens[newToken] = removedToken;
+                            self.onChanged(el);
+                        }
+                    }
+
+                    var addedTokens = subtractAsSets(newTokens, oldTokens);
+                    for (i = 0; i < addedTokens.length; i++) {
+                        token = addedTokens[i];
+                        if (!replacedTokens[token]) {
+                            self.onAdded(map[token]);
+                        }
+                    }
+                };
+
+                self = {
+                    subscribe : function (scope, onArrayChanged) {
+                        scope.$watch(getTokens, function (newTokens, oldTokens) {
+                            var notify = !(onArrayChanged && onArrayChanged(newTokens, oldTokens) === false);
+                            if (notify) {
+                                applyChanges(newTokens, oldTokens);
+                            }
+                        }, true);
+                    },
+                    onAdded : angular.noop,
+                    onChanged : angular.noop,
+                    onRemoved : angular.noop
+                };
+                return self;
+            };
+
+            this.getFullCalendarConfig = function (calendarSettings, uiCalendarConfig) {
+                var config = {};
+
+                angular.extend(config, uiCalendarConfig);
+                angular.extend(config, calendarSettings);
+
+                angular.forEach(config, function (value, key) {
+                    if (typeof value === 'function') {
+                        config[key] = wrapFunctionWithScopeApply(config[key]);
+                    }
+                });
+
+                return config;
+            };
+
+            this.getLocaleConfig = function (fullCalendarConfig) {
+                if (!fullCalendarConfig.lang || fullCalendarConfig.useNgLocale) {
+                    // Configure to use locale names by default
+                    var tValues = function (data) {
+                        // convert {0: "Jan", 1: "Feb", ...} to ["Jan", "Feb", ...]
+                        return (Object.keys(data) || []).reduce(
+                            function (rslt, el) {
+                                rslt.push(data[el]);
+                                return rslt;
+                            },
+                            []
+                        );
+                    };
+
+                    var dtf = $locale.DATETIME_FORMATS;
+                    return {
+                        monthNames : tValues(dtf.MONTH),
+                        monthNamesShort : tValues(dtf.SHORTMONTH),
+                        dayNames : tValues(dtf.DAY),
+                        dayNamesShort : tValues(dtf.SHORTDAY)
+                    };
+                }
+
+                return {};
+            };
+        }
+    ])
+    .directive('uiCalendar', ['uiCalendarConfig',
+        function (uiCalendarConfig) {
+
+            return {
+                restrict : 'A',
+                scope : {
+                    eventSources : '=ngModel',
+                    calendarWatchEvent : '&'
+                },
+                controller : 'uiCalendarCtrl',
+                link : function (scope, elm, attrs, controller) {
+                    var sources = scope.eventSources;
+                    var sourcesChanged = false;
+                    var calendar;
+                    var eventSourcesWatcher = controller.changeWatcher(sources, controller.sourceFingerprint);
+                    var eventsWatcher = controller.changeWatcher(controller.allEvents, controller.eventFingerprint);
+                    var options = null;
+
+                    function getOptions () {
+                        var calendarSettings = attrs.uiCalendar ? scope.$parent.$eval(attrs.uiCalendar) : {};
+                        var fullCalendarConfig = controller.getFullCalendarConfig(calendarSettings, uiCalendarConfig);
+                        var localeFullCalendarConfig = controller.getLocaleConfig(fullCalendarConfig);
+                        angular.extend(localeFullCalendarConfig, fullCalendarConfig);
+                        options = {
+                            eventSources : sources
+                        };
+                        angular.extend(options, localeFullCalendarConfig);
+                        //remove calendars from options
+                        options.calendars = null;
+
+                        var options2 = {};
+                        for (var o in options) {
+                            if (o !== 'eventSources') {
+                                options2[o] = options[o];
+                            }
+                        }
+                        return JSON.stringify(options2);
+                    }
+
+                    scope.destroyCalendar = function () {
+                        if (calendar && calendar.fullCalendar) {
+                            calendar.fullCalendar('destroy');
+                        }
+                        if (attrs.calendar) {
+                            calendar = uiCalendarConfig.calendars[attrs.calendar] = angular.element(elm).html('');
+                        } else {
+                            calendar = angular.element(elm).html('');
+                        }
+                    };
+
+                    scope.initCalendar = function () {
+                        if (!calendar) {
+                            calendar = angular.element(elm).html('');
+                        }
+                        calendar.fullCalendar(options);
+                        if (attrs.calendar) {
+                            uiCalendarConfig.calendars[attrs.calendar] = calendar;
+                        }
+                    };
+
+                    scope.$on('$destroy', function () {
+                        scope.destroyCalendar();
+                    });
+
+                    eventSourcesWatcher.onAdded = function (source) {
+                        if (calendar && calendar.fullCalendar) {
+                            calendar.fullCalendar(options);
+                            if (attrs.calendar) {
+                                uiCalendarConfig.calendars[attrs.calendar] = calendar;
+                            }
+                            calendar.fullCalendar('addEventSource', source);
+                            sourcesChanged = true;
+                           
+                        }
+                    };
+
+                    eventSourcesWatcher.onRemoved = function (source) {
+                        if (calendar && calendar.fullCalendar) {
+                            calendar.fullCalendar('removeEventSource', source);
+                            sourcesChanged = true;
+                        }
+                    };
+
+                    eventSourcesWatcher.onChanged = function () {
+                        if (calendar && calendar.fullCalendar) {
+                            calendar.fullCalendar('refetchEvents');
+                            sourcesChanged = true;
+                        }
+                    };
+
+                    eventsWatcher.onAdded = function (event) {
+                        calendar.fullCalendar('renderEvent', event, true);
+                    };
+
+                    eventsWatcher.onRemoved = function (event) {
+                        if (calendar && calendar.fullCalendar) {
+                            calendar.fullCalendar('removeEvents', event._id);
+                        }
+                    };
+
+                    eventsWatcher.onChanged = function (event) {
+                        if (calendar && calendar.fullCalendar) {
+                            var clientEvents = calendar.fullCalendar('clientEvents', event._id);
+                            for (var i = 0; i < clientEvents.length; i++) {
+                                var clientEvent = clientEvents[i];
+                                clientEvent = angular.extend(clientEvent, event);
+                                calendar.fullCalendar('updateEvent', clientEvent);
+                            }
+                        }
+                    };
+
+                    eventSourcesWatcher.subscribe(scope);
+                    eventsWatcher.subscribe(scope, function () {
+                        // if (sourcesChanged === true) {
+                        //     sourcesChanged = false;
+                        //     // return false to prevent onAdded/Removed/Changed handlers from firing in this case
+                        //     return false;
+                        // }
+                        return true
+                    });
+
+                    scope.$watch(getOptions, function (newValue, oldValue) {
+                        if (newValue !== oldValue) {
+                            scope.destroyCalendar();
+                            scope.initCalendar();
+                        } else if ((newValue && angular.isUndefined(calendar))) {
+                            scope.initCalendar();
+                        }
+                    });
+                }
+            };
+        }
+    ]
+);
