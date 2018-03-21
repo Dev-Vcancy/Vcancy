@@ -203,7 +203,6 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		// Property Application form - Data of tenant save		
 		vm.tenantapply = function () {
 			//if (localStorage.getItem('userEmailVerified') !== 'false') {
-
 			var userInfo = vm.userInfo ? angular.copy(vm.userInfo) : null;
 			var userDetails = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : userInfo;
 			vm.emailVerifiedError = '';
@@ -226,72 +225,55 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				proposeNewTime = angular.copy(vm.proposeNewTime);
 			}
 			vm.proposeNewTime = {};
-			firebase.database().ref('applyprop/').once("value", function (snap) {
-				let applyProps = snap.val();
-				console.log(applyProps)
-				var applyFound = _.find(applyProps, function (apply, key) {
-					if (apply.tenantID === tenantID && apply.propID === propID && apply.unitID === unitID) {
-						return true;
-					}
-				});
-				if (applyFound) {
-					swal({
-						title:'Error',
-						text:'you have already applied to this property.',
-						type:'error'
-					});
-					return;
-				} else {
-					var applypropObj = $firebaseAuth();
-					var applypropdbObj = firebase.database();
-					var _data = {
-						tenantID: tenantID,
-						propID: propID,
-						address: address,
-						schedulestatus: "scheduled",
-						name: name,
-						phone: phone,
-						dateSlot: dateSlot,
-						fromTimeSlot: fromTimeSlot,
-						toTimeSlot: toTimeSlot,
-						landlordID: landlordID,
-						timeRange: timeRange,
-						unitID: unitID,
-						units: unitID,
-						preScreeningAns: preScreeningAns,
-						proposeNewTime: proposeNewTime
-					}
-					if (!_.isEmpty(_data.proposeNewTime)) {
-						_data.schedulestatus = 'pending';
-						if (_data.proposeNewTime.date1) {
-							_data.proposeNewTime.date1 = moment(_data.proposeNewTime.date1).format('MM/DD/YYYY')
-						}
-						if (_data.proposeNewTime.date2) {
-							_data.proposeNewTime.date2 = moment(_data.proposeNewTime.date2).format('MM/DD/YYYY')
-						}
-						if (_data.proposeNewTime.date3) {
-							_data.proposeNewTime.date3 = moment(_data.proposeNewTime.date3).format('MM/DD/YYYY')
-						}
-					}
-					applypropdbObj.ref('applyprop/').push().set(_data).then(function () {
-						$state.go('applicationThanks');
-						// $rootScope.success = 'Application for property successfully sent!';	
-						console.log('Application for property successfully sent!');
 
-						firebase.database().ref('users/' + landlordID).once("value", function (snapshot) {
-							// Mail to Landlord
-							var emailData = '<p>Hello, </p><p>' + name + ' has requested a viewing at ' + dateSlot + ', ' + timeRange + 'for ' + address + '.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.com/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
-							// Send Email
-							emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name + ' has requested a viewing for ' + address, 'newviewingreq', emailData);
-						});
-
-						// Mail to Tenant
-						var emailData = '<p>Hello ' + vm.registerUser.firstName + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
-						// Send Email
-						emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'Viewing request for ' + address, 'viewingreq', emailData);
-					});
+			var applypropObj = $firebaseAuth();
+			var applypropdbObj = firebase.database();
+			var _data = {
+				tenantID: tenantID,
+				propID: propID,
+				address: address,
+				schedulestatus: "scheduled",
+				name: name,
+				phone: phone,
+				dateSlot: dateSlot,
+				fromTimeSlot: fromTimeSlot,
+				toTimeSlot: toTimeSlot,
+				landlordID: landlordID,
+				timeRange: timeRange,
+				unitID: unitID,
+				units: unitID,
+				preScreeningAns: preScreeningAns,
+				proposeNewTime: proposeNewTime
+			}
+			if (!_.isEmpty(_data.proposeNewTime)) {
+				_data.schedulestatus = 'pending';
+				if (_data.proposeNewTime.date1) {
+					_data.proposeNewTime.date1 = moment(_data.proposeNewTime.date1).format('MM/DD/YYYY')
 				}
-			})
+				if (_data.proposeNewTime.date2) {
+					_data.proposeNewTime.date2 = moment(_data.proposeNewTime.date2).format('MM/DD/YYYY')
+				}
+				if (_data.proposeNewTime.date3) {
+					_data.proposeNewTime.date3 = moment(_data.proposeNewTime.date3).format('MM/DD/YYYY')
+				}
+			}
+			applypropdbObj.ref('applyprop/').push().set(_data).then(function () {
+				$state.go('applicationThanks');
+				// $rootScope.success = 'Application for property successfully sent!';	
+				console.log('Application for property successfully sent!');
+
+				firebase.database().ref('users/' + landlordID).once("value", function (snapshot) {
+					// Mail to Landlord
+					var emailData = '<p>Hello, </p><p>' + name + ' has requested a viewing at ' + dateSlot + ', ' + timeRange + 'for ' + address + '.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.com/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+					// Send Email
+					emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name + ' has requested a viewing for ' + address, 'newviewingreq', emailData);
+				});
+
+				// Mail to Tenant
+				var emailData = '<p>Hello ' + vm.registerUser.firstName + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+				// Send Email
+				emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'Viewing request for ' + address, 'viewingreq', emailData);
+			});
 			// } else {
 			// 	vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'
 			// }

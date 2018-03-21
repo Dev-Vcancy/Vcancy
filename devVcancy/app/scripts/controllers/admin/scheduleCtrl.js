@@ -59,7 +59,7 @@ vcancyApp
 
                 var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordId).once("value", function (snapshot) {
                     vm.getProperties(landlordId);
-                    console.log('propertyschedule', snapshot.val())
+                    //console.log('propertyschedule', snapshot.val())
                     $scope.$apply(function () {
                         vm.success = 0;
                         if (snapshot.val()) {
@@ -133,7 +133,7 @@ vcancyApp
                         vm.mergeListing[list.link].keys.push(key);
                     }
                 });
-                console.log(vm.mergeListing)
+         //       console.log(vm.mergeListing)
             };
 
             vm.clearAll = function ($event) {

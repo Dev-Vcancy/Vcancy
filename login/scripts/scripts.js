@@ -3309,7 +3309,6 @@ vcancyApp
         function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _) {
 
             var vm = this;
-            vm.allUsers ={};
             vm.totalUsers = 0;
             vm.totalProperty = 0;
             vm.totalUnit = 0;
@@ -3319,8 +3318,6 @@ vcancyApp
 
             firebase.database().ref('users/').once("value", function (snapvalue) {
                 var users = snapvalue.val();
-                vm.allUsers = snapvalue.val();
-                console.log(vm.allUsers)
                 $scope.$apply(function () {
                     vm.totalUsers = _.size(users);
                 });
@@ -3328,10 +3325,9 @@ vcancyApp
 
             firebase.database().ref('properties/').once("value", function (snapvalue) {
                 var properties = snapvalue.val();
-                vm.properties = snapvalue.val();
-
                 $scope.$apply(function () {
                     vm.totalProperty = _.size(properties);
+
                     vm.totalUnit = _.reduce(properties, function (previousValue, currentValue, currentIndex) {
                         previousValue += _.size(currentValue.unitlists);
                         return previousValue;
@@ -3359,7 +3355,7 @@ vcancyApp
 
             firebase.database().ref('applyprop/').once("value", function (snapvalue) {
                 var scheduled = snapvalue.val();
-                // console.log(scheduled)
+                console.log(scheduled)
                 $scope.$apply(function () {
                     vm.totalShowingScheduled = _.reduce(scheduled, function (pv, cv, ci) {
                         if (cv.schedulestatus == "scheduled" || cv.schedulestatus == "submitted") {
@@ -3369,62 +3365,7 @@ vcancyApp
                     }, 0);
                 });
             });
-    
-            vm.getListings = function () {
 
-                var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").once("value", function (snapshot) {
-
-                    console.log('propertyschedule', snapshot.val())
-                    $scope.$apply(function () {
-                        vm.success = 0;
-                        if (snapshot.val()) {
-                            vm.listings = snapshot.val();
-                            vm.listings = _.filter(vm.listings, function (schedule, key) {
-                                console.log(schedule.status)
-                                if (schedule.listOnCraigslist == true && (schedule.status == 'Not Listed' || schedule.status == 'Pending')) {
-                                    return true;
-                                }
-                            });
-                            vm.generateMergeListing();
-                            vm.listingsAvailable = 1;
-                        } else {
-                            vm.listingsAvailable = 0;
-                        }
-                        vm.loader = 0;
-                    });
-                });
-            }
-
-            vm.generateMergeListing = function () {
-                vm.mergeListing = {};
-                _.forEach(vm.listings, function (list, key) {
-                    if (!vm.mergeListing[list.link]) {
-                        vm.mergeListing[list.link] = angular.copy(vm.listings[key]);
-                        vm.mergeListing[list.link].fromToDate = [];
-                        var date = '';
-                        if (moment(vm.listings[key].fromDate).format('DD MMM') == moment(vm.listings[key].toDate).format('DD MMM')) {
-                            date = moment(vm.listings[key].fromDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
-                        }
-                        else {
-                            date = moment(vm.listings[key].fromDate).format('DD') + ' to ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
-                        }
-                        vm.mergeListing[list.link].fromToDate.push(date);
-                        vm.mergeListing[list.link].keys = [key];
-                    } else {
-                        var date = '';
-                        if (moment(vm.listings[key].fromDate).format('DD MMM') == moment(vm.listings[key].toDate).format('DD MMM')) {
-                            date = moment(vm.listings[key].fromDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
-                        }
-                        else {
-                            date = moment(vm.listings[key].fromDate).format('DD') + ' to ' + moment(vm.listings[key].toDate).format('DD MMM') + ' ' + vm.listings[key].fromTime + '-' + vm.listings[key].toTime;
-                        }
-                        vm.mergeListing[list.link].fromToDate.push(date);
-                        vm.mergeListing[list.link].keys.push(key);
-                    }
-                });
-                console.log(vm.mergeListing)
-            };
-            vm.getListings();
         }]);
 
 'use strict';
@@ -6795,7 +6736,7 @@ vcancyApp
 
                 var propdbObj = firebase.database().ref('propertiesSchedule/').orderByChild("landlordID").equalTo(landlordId).once("value", function (snapshot) {
                     vm.getProperties(landlordId);
-                    console.log('propertyschedule', snapshot.val())
+                    //console.log('propertyschedule', snapshot.val())
                     $scope.$apply(function () {
                         vm.success = 0;
                         if (snapshot.val()) {
@@ -6869,7 +6810,7 @@ vcancyApp
                         vm.mergeListing[list.link].keys.push(key);
                     }
                 });
-                console.log(vm.mergeListing)
+         //       console.log(vm.mergeListing)
             };
 
             vm.clearAll = function ($event) {
@@ -12486,7 +12427,6 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 		// Property Application form - Data of tenant save		
 		vm.tenantapply = function () {
 			//if (localStorage.getItem('userEmailVerified') !== 'false') {
-
 			var userInfo = vm.userInfo ? angular.copy(vm.userInfo) : null;
 			var userDetails = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : userInfo;
 			vm.emailVerifiedError = '';
@@ -12509,72 +12449,55 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 				proposeNewTime = angular.copy(vm.proposeNewTime);
 			}
 			vm.proposeNewTime = {};
-			firebase.database().ref('applyprop/').once("value", function (snap) {
-				let applyProps = snap.val();
-				console.log(applyProps)
-				var applyFound = _.find(applyProps, function (apply, key) {
-					if (apply.tenantID === tenantID && apply.propID === propID && apply.unitID === unitID) {
-						return true;
-					}
-				});
-				if (applyFound) {
-					swal({
-						title:'Error',
-						text:'you have already applied to this property.',
-						type:'error'
-					});
-					return;
-				} else {
-					var applypropObj = $firebaseAuth();
-					var applypropdbObj = firebase.database();
-					var _data = {
-						tenantID: tenantID,
-						propID: propID,
-						address: address,
-						schedulestatus: "scheduled",
-						name: name,
-						phone: phone,
-						dateSlot: dateSlot,
-						fromTimeSlot: fromTimeSlot,
-						toTimeSlot: toTimeSlot,
-						landlordID: landlordID,
-						timeRange: timeRange,
-						unitID: unitID,
-						units: unitID,
-						preScreeningAns: preScreeningAns,
-						proposeNewTime: proposeNewTime
-					}
-					if (!_.isEmpty(_data.proposeNewTime)) {
-						_data.schedulestatus = 'pending';
-						if (_data.proposeNewTime.date1) {
-							_data.proposeNewTime.date1 = moment(_data.proposeNewTime.date1).format('MM/DD/YYYY')
-						}
-						if (_data.proposeNewTime.date2) {
-							_data.proposeNewTime.date2 = moment(_data.proposeNewTime.date2).format('MM/DD/YYYY')
-						}
-						if (_data.proposeNewTime.date3) {
-							_data.proposeNewTime.date3 = moment(_data.proposeNewTime.date3).format('MM/DD/YYYY')
-						}
-					}
-					applypropdbObj.ref('applyprop/').push().set(_data).then(function () {
-						$state.go('applicationThanks');
-						// $rootScope.success = 'Application for property successfully sent!';	
-						console.log('Application for property successfully sent!');
 
-						firebase.database().ref('users/' + landlordID).once("value", function (snapshot) {
-							// Mail to Landlord
-							var emailData = '<p>Hello, </p><p>' + name + ' has requested a viewing at ' + dateSlot + ', ' + timeRange + 'for ' + address + '.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.com/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
-							// Send Email
-							emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name + ' has requested a viewing for ' + address, 'newviewingreq', emailData);
-						});
-
-						// Mail to Tenant
-						var emailData = '<p>Hello ' + vm.registerUser.firstName + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
-						// Send Email
-						emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'Viewing request for ' + address, 'viewingreq', emailData);
-					});
+			var applypropObj = $firebaseAuth();
+			var applypropdbObj = firebase.database();
+			var _data = {
+				tenantID: tenantID,
+				propID: propID,
+				address: address,
+				schedulestatus: "scheduled",
+				name: name,
+				phone: phone,
+				dateSlot: dateSlot,
+				fromTimeSlot: fromTimeSlot,
+				toTimeSlot: toTimeSlot,
+				landlordID: landlordID,
+				timeRange: timeRange,
+				unitID: unitID,
+				units: unitID,
+				preScreeningAns: preScreeningAns,
+				proposeNewTime: proposeNewTime
+			}
+			if (!_.isEmpty(_data.proposeNewTime)) {
+				_data.schedulestatus = 'pending';
+				if (_data.proposeNewTime.date1) {
+					_data.proposeNewTime.date1 = moment(_data.proposeNewTime.date1).format('MM/DD/YYYY')
 				}
-			})
+				if (_data.proposeNewTime.date2) {
+					_data.proposeNewTime.date2 = moment(_data.proposeNewTime.date2).format('MM/DD/YYYY')
+				}
+				if (_data.proposeNewTime.date3) {
+					_data.proposeNewTime.date3 = moment(_data.proposeNewTime.date3).format('MM/DD/YYYY')
+				}
+			}
+			applypropdbObj.ref('applyprop/').push().set(_data).then(function () {
+				$state.go('applicationThanks');
+				// $rootScope.success = 'Application for property successfully sent!';	
+				console.log('Application for property successfully sent!');
+
+				firebase.database().ref('users/' + landlordID).once("value", function (snapshot) {
+					// Mail to Landlord
+					var emailData = '<p>Hello, </p><p>' + name + ' has requested a viewing at ' + dateSlot + ', ' + timeRange + 'for ' + address + '.</p><p>To accept this invitation and view renter details, please log in at http://vcancy.com/login/  and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+					// Send Email
+					emailSendingService.sendEmailViaNodeMailer(snapshot.val().email, name + ' has requested a viewing for ' + address, 'newviewingreq', emailData);
+				});
+
+				// Mail to Tenant
+				var emailData = '<p>Hello ' + vm.registerUser.firstName + ', </p><p>Your viewing request for ' + address + ' at ' + dateSlot + ', ' + timeRange + ' has been sent.</p><p>To view your requests, please log in at http://vcancy.com/login/ and go to “Schedule”</p><p>If you have any questions or suggestions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+				// Send Email
+				emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'Viewing request for ' + address, 'viewingreq', emailData);
+			});
 			// } else {
 			// 	vm.emailVerifiedError = 'Email not verified yet. Please verify email to schedule a slot.'
 			// }
@@ -14714,7 +14637,6 @@ vcancyApp
 
 			vm.getRentalField = function (key, field) {
 				let data;
-				//console.log(vm.apppropaddressAppl)
 				_.forEach(vm.apppropaddressAppl, function (_value, _key) {
 					if (_value.scheduleID == key) {
 						data = _value;
