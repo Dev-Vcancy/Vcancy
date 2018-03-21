@@ -4,6 +4,7 @@
   "description": "npm install npm@latest -g",
   "main": "index.js",
   "dependencies": {
+    "bower": "^1.8.2",
     "gulp": "^3.9.1",
     "gulp-connect": "^5.0.0",
     "sails": "^0.12.14"
