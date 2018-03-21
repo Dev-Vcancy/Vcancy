@@ -1,5 +1,5 @@
 -/node_modules
--/dis
-/.tmp/*
+-/dist
+-/.tmp
 -/.sass-cache
 -/bower_components
