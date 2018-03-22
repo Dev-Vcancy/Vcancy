@@ -112,7 +112,7 @@ vcancyApp
 				'UDAAPP': false,
 				'TC': true,
 				'TCData': vm.customRentalApplicationCheck.TCData,
-				'companyLogo': userData ? userData.companylogo: '',
+				'companyLogo': userData ? userData.companylogo : '',
 				'companyDetails': vm.companyDetail()
 			}
 
@@ -148,6 +148,7 @@ vcancyApp
 			refreshScreeningQuestions();
 
 			vm.getUsers = function () {
+
 				if (vm.apppropaddressList) {
 					vm.loader = 1;
 					var promises = [];
@@ -188,8 +189,13 @@ vcancyApp
 				var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					if (snapshot.val()) {
 						$scope.$apply(function () {
+
 							vm.apppropaddressList = snapshot.val();
+							_.forEach(vm.apppropaddressList, function (value, key) {
+								value.key = key;
+							});
 							// vm.getUsers();
+							console.log(vm.apppropaddressList)
 							vm.originalPropAddress = angular.copy(snapshot.val());
 							vm.loader = 1;
 							var promises = [];
@@ -208,14 +214,20 @@ vcancyApp
 									if (dataObj.val()) {
 										_.forEach(dataObj.val(), function (_value, _key) {
 											vm.apppropaddressAppl[_key] = _value;
+
 											vm.submittedAppl.push(_value)
-										})
+											_.forEach(vm.apppropaddressList, function (list, key) {
+												if (key === _value.scheduleID) {
+													list.applyedRentalForm = _value;
+													vm.originalPropAddress[key].applyedRentalForm = _value;
+												};
+											});
+										});
 									}
+									vm.getUsers();
 								});
-								vm.getUsers();
 								vm.loader = 0;
 							});
-							console.log(vm.apppropaddressList);
 						});
 					}
 					$scope.$apply(function () {
@@ -452,7 +464,7 @@ vcancyApp
 						}
 					});
 			}
-
+			vm.sortBy = {};
 			vm.opencustomrentalapp = function () {
 				vm.customrentalapp = $uibModal.open({
 					templateUrl: 'customrentalapp.html',
@@ -534,6 +546,20 @@ vcancyApp
 
 			}
 
+			vm.orderBySalary = function (key) {
+				if (vm.sortBy[key] == undefined) {
+					vm.sortBy = {};
+				}
+				vm.sortBy[key] = !vm.sortBy[key];
+				var unsortedArray = angular.copy(vm.apppropaddress);
+				if (vm.sortBy[key]) {
+					var sorted = _.sortBy(unsortedArray, [key]);
+				} else {
+					var sorted = _.reverse(unsortedArray, [key]);
+				}
+
+				vm.apppropaddress = sorted;
+			}
 			vm.tablefilterdata = function (propID = '') {
 				if (propID != '') {
 					vm.propcheck[propID] = !vm.propcheck[propID];

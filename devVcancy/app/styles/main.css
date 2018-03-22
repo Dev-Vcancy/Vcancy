@@ -1412,3 +1412,7 @@ ul.header-inner li a:hover.button:before{
 .icon-size-26 {
   font-size: 26px; 
 }
+
+.cursor-pointer{
+  cursor:pointer;
+}

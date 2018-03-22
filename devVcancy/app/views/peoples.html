@@ -65,7 +65,8 @@
 
 							<div class="row col-sm-12 mt-3">
 								<div class="col-sm-4" ng-if="lappctrl.screeningQuestions">
-									<button class="btn btn-sm bgm-teal  btn-round" ng-disabled="lappctrl.screeningQuestions.length === lappctrl.filters.options.length" ng-click="lappctrl.selectAllQuestions()">Select All Questions</button>
+									<button class="btn btn-sm bgm-teal  btn-round" ng-disabled="lappctrl.screeningQuestions.length === lappctrl.filters.options.length"
+									 ng-click="lappctrl.selectAllQuestions()">Select All Questions</button>
 								</div>
 								<div class="col-sm-4"></div>
 								<div class="col-sm-4 text-right">
@@ -112,7 +113,7 @@
 							<thead>
 								<tr>
 									<th>Rental Application</th>
-									<th >Credit Report</th>
+									<th>Credit Report</th>
 									<th>
 										<!-- <a href="#" ng-click="lappctrl.changeSort('name')"> -->
 										Name
@@ -120,40 +121,57 @@
 											<span ng-show="lappctrl.sortType == 'name' && lappctrl.sortReverse" class="fa fa-caret-up"></span>
 										</a> -->
 									</th>
-									<th>
+									<th class="cursor-pointer" ng-click="lappctrl.orderBySalary('applyedRentalForm.applicantemail')">
+										Email
+										<i ng-if="!lappctrl.sortBy['applyedRentalForm.applicantemail']" class="fa fa-caret-down"></i>
+										<i ng-if="lappctrl.sortBy['applyedRentalForm.applicantemail'] === true" class="fa fa-caret-up"></i>
+									</th>
+									<th class="cursor-pointer" ng-click="lappctrl.orderBySalary('applyedRentalForm.landlordphone')">
+										Phone number
+
+										<i ng-if="!lappctrl.sortBy['applyedRentalForm.landlordphone']" class="fa fa-caret-down"></i>
+										<i ng-if="lappctrl.sortBy['applyedRentalForm.landlordphone'] === true" class="fa fa-caret-up"></i>
+									</th>
+									<th class="cursor-pointer" ng-click="lappctrl.orderBySalary('applyedRentalForm.appgrossmonthlyincome')">
 										<!-- <a href="#" ng-click="lappctrl.changeSort('salary')"> -->
 										Salary
-										<!-- <span ng-show="lappctrl.sortType == 'salary' && !lappctrl.sortReverse" class="fa fa-caret-down"></span>
-											<span ng-show="lappctrl.sortType == 'salary' && lappctrl.sortReverse" class="fa fa-caret-up"></span> -->
-										<!-- </a> -->
+
+										<i ng-if="!lappctrl.sortBy['applyedRentalForm.appgrossmonthlyincome']" class="fa fa-caret-down"></i>
+										<i ng-if="lappctrl.sortBy['applyedRentalForm.appgrossmonthlyincome'] === true" class="fa fa-caret-up"></i>
 									</th>
-									<th>
+									<th class="cursor-pointer" ng-click="lappctrl.orderBySalary('applyedRentalForm.rentamt')">
 										<!-- <a href="#" ng-click="lappctrl.changeSort('rent')"> -->
 										Current Rent
-										<!-- <span ng-show="lappctrl.sortType == 'rent' && !lappctrl.sortReverse" class="fa fa-caret-down"></span>
-											<span ng-show="lappctrl.sortType == 'rent' && lappctrl.sortReverse" class="fa fa-caret-up"></span> -->
+										<i ng-if="!lappctrl.sortBy['applyedRentalForm.rentamt']" class="fa fa-caret-down"></i>
+										<i ng-if="lappctrl.sortBy['applyedRentalForm.rentamt'] === true" class="fa fa-caret-up"></i>
 									</th>
 									<!-- <th>Applicants</th> -->
-									<th>Unit-Property</th>
+									<th class="cursor-pointer" ng-click="lappctrl.orderBySalary('unitID')">
+										Unit-Property
+										<i ng-if="!lappctrl.sortBy['unitID']" class="fa fa-caret-down"></i>
+										<i ng-if="lappctrl.sortBy['unitID'] === true" class="fa fa-caret-up"></i>
+									</th>
 									<th style="min-width: 150px;">Showing Date-Time</th>
-									<th>
+									<th class="cursor-pointer" ng-click="lappctrl.orderBySalary('schedulestatus')">
 										<!-- <a href="#" ng-click="lappctrl.changeSort('status')">  -->
 										Showing Status
-										<!-- <span ng-show="lappctrl.sortType == 'status' && !lappctrl.sortReverse" class="fa fa-caret-down"></span>
-										<span ng-show="lappctrl.sortType == 'status' && lappctrl.sortReverse" class="fa fa-caret-up"></span> -->
+										<i ng-if="!lappctrl.sortBy['schedulestatus']" class="fa fa-caret-down"></i>
+										<i ng-if="lappctrl.sortBy['schedulestatus'] === true" class="fa fa-caret-up"></i>
 									</th>
-									<th ng-repeat="ques in lappctrl.filters.options">
+									<th class="cursor-pointer" ng-repeat="ques in lappctrl.filters.options" ng-click="lappctrl.orderBySalary('preScreeningAns.'+ques.id)">
 										{{ques.label}}
+										<i ng-if="!lappctrl.sortBy['preScreeningAns.'+ques.id]" class="fa fa-caret-down"></i>
+										<i ng-if="lappctrl.sortBy['preScreeningAns.'+ques.id] === true" class="fa fa-caret-up"></i>
 									</th>
 									<th></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="(key, value) in lappctrl.apppropaddress | orderBy:lappctrl.sortType:lappctrl.sortReverse" ng-if="value.schedulestatus != 'pending' && value.schedulestatus != 'removed'">
+								<tr ng-repeat="(key, value) in lappctrl.apppropaddress" ng-if="value.schedulestatus != 'pending' && value.schedulestatus != 'removed'">
 									<td>
 										<span ng-if="value.schedulestatus != 'submitted'">Not Applied</span>
-										<span ng-if="value.schedulestatus == 'submitted' && lappctrl.getApplicationLink(key)">
-											<a href="{{lappctrl.getApplicationLink(key)}}" target="_blank">View Application</a>
+										<span ng-if="value.schedulestatus == 'submitted' && lappctrl.getApplicationLink(value.key)">
+											<a href="{{lappctrl.getApplicationLink(value.key)}}" target="_blank">View Application</a>
 										</span>
 									</td>
 									<td>
@@ -164,15 +182,17 @@
 										</span>
 									</td>
 									<td>{{lappctrl.getUserName(value.tenantID, value)}}</td>
-									<td>{{lappctrl.getRentalField(key, 'appgrossmonthlyincome')}}</td>
-									<td>{{lappctrl.getRentalField(key, 'rentamt')}}</td>
+									<td>{{ value.applyedRentalForm.applicantemail || '-'}}</td>
+									<td>{{value.applyedRentalForm.landlordphone || '-'}} </td>
+									<td>{{value.applyedRentalForm.appgrossmonthlyincome || '-'}}</td>
+									<td>{{value.applyedRentalForm.rentamt}}</td>
 									<!-- <td>{{lappctrl.getRentalField(key, 'applicantsno') + lappctrl.getRentalField(key, 'minorapplicantsno')}}</td> -->
 									<td>{{value.unitID}}-{{value.address}}</td>
 									<td>{{ formatDay(value.dateSlot) }} {{ formatDate(value.dateSlot) }}
 										<br/> {{value.fromTimeSlot}} : {{value.toTimeSlot}}</td>
 									<td>{{value.schedulestatus}}</td>
 									<td ng-repeat="ques in lappctrl.filters.options">
-										<a ng-if="ques.id==='U0G6V8'" tooltip-animation="false" uib-tooltip="{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id]:'-'}}">
+										<a ng-if="ques.id==='U0G6V8'" tooltip-animation="false" uib-tooltip="{{value.preScreeningAns[ques.id]?value:'-' | json}}">
 											{{value.preScreeningAns[ques.id]?value.preScreeningAns[ques.id].substring(0,20):'-'}}
 										</a>
 										<span ng-if="ques.id!=='U0G6V8'">
@@ -181,8 +201,8 @@
 									</td>
 									<td>
 										<button class="btn btn-sm btn-danger btn-round" ng-click="lappctrl.deleteApplyProp(key, value.schedulestatus)">
-											<i  ng-if="value.schedulestatus != 'cancelled'" class="fa fa-ban"></i>
-											<i  ng-if="value.schedulestatus == 'cancelled'" class="fa fa-trash"></i>
+											<i ng-if="value.schedulestatus != 'cancelled'" class="fa fa-ban"></i>
+											<i ng-if="value.schedulestatus == 'cancelled'" class="fa fa-trash"></i>
 										</button>
 									</td>
 								</tr>
