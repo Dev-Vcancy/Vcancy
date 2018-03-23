@@ -307,6 +307,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 								lastname: vm.registerUser.lastName,
 								usertype: 0,
 								email: vm.registerUser.email,
+								phone:vm.registerUser.phone,
 								isadded: 1,
 								iscancelshow: 1,
 								iscreditcheck: 1,

@@ -181,9 +181,9 @@
 											<a href="{{value.creditCheckLink}}" target="_blank">View report</a>
 										</span>
 									</td>
-									<td>{{lappctrl.getUserName(value.tenantID, value)}}</td>
-									<td>{{ value.applyedRentalForm.applicantemail || '-'}}</td>
-									<td>{{value.applyedRentalForm.landlordphone || '-'}} </td>
+									<td>{{lappctrl.getUserName(value.tenantID, value,'firstname')}}</td>
+									<td>{{lappctrl.getUserName(value.tenantID, value,'email')}}</td>
+									<td>{{value.phone || '-'}} </td>
 									<td>{{value.applyedRentalForm.appgrossmonthlyincome || '-'}}</td>
 									<td>{{value.applyedRentalForm.rentamt}}</td>
 									<!-- <td>{{lappctrl.getRentalField(key, 'applicantsno') + lappctrl.getRentalField(key, 'minorapplicantsno')}}</td> -->

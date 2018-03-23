@@ -168,6 +168,7 @@ vcancyApp
 							}
 						});
 						vm.apppropaddress = vm.apppropaddressList;
+						// console.log(vm.apppropaddressList)
 						vm.loader = 0;
 					});
 				}
@@ -237,9 +238,12 @@ vcancyApp
 			};
 
 
-			vm.getUserName = function (id, value) {
+			vm.getUserName = function (id, value, key) {
 				if (!vm.applyPropUsers[id]) {
 					return value.name || '-';
+				}
+				if (key === 'email') {
+					return vm.applyPropUsers[id][key] || '-';
 				}
 				return ((vm.applyPropUsers[id].firstname || '') + ' ' + (vm.applyPropUsers[id].lastname || '')) || '-';
 			}
@@ -626,7 +630,7 @@ vcancyApp
 							vm.submittedappsavail = 0;
 						}
 
-						console.log(vm.submittedappsavail);
+						
 						vm.submitappscols = [
 							{ field: "name", title: "Name", sortable: "name", show: true },
 							{ field: "age", title: "Age", sortable: "age", show: true },
