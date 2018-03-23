@@ -330,7 +330,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 										text: 'User Added successfully!, A verification email has been sent to you. Please verify your account, log in and submit your rental application.',
 										type: "success",
 									});
-									var emailData = '<p>Hello, </p><p>A new user,' + vm.registerUser.firstName + ' ,has been added to on https://vcancy.com/ .</p><p>Your email is ' + vm.registerUser.email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+									var emailData = '<p>Hello, </p><p>You account has been created. Please check your inbox for a verification email and log in using the credentials below.</p><p>Your email is ' + vm.registerUser.email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>Once you log in, please change your password from the profile page. If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 									// Send Email
 									emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'A new user account has been added to your portal', 'Welcome', emailData);
