@@ -196,7 +196,7 @@ vcancyApp
 								value.key = key;
 							});
 							// vm.getUsers();
-							console.log(vm.apppropaddressList)
+							// console.log(vm.apppropaddressList)
 							vm.originalPropAddress = angular.copy(snapshot.val());
 							vm.loader = 1;
 							var promises = [];
@@ -225,6 +225,7 @@ vcancyApp
 											});
 										});
 									}
+									
 									vm.getUsers();
 								});
 								vm.loader = 0;
@@ -322,6 +323,10 @@ vcancyApp
 				vm.filters = {
 					options: []
 				}
+
+				_.forEach(vm.originalPropAddress,function(value,key){
+					value.key = key;
+				});
 				vm.apppropaddress = angular.copy(vm.originalPropAddress);
 			}
 
