@@ -487,6 +487,7 @@ vcancyApp
 			];
 
 			vm.openPrescreeningQuestions = function () {
+				refreshScreeningQuestions();
 				vm.prescreeningQuestion = $uibModal.open({
 					templateUrl: 'prescreeningquestions.html',
 					backdrop: 'static',
