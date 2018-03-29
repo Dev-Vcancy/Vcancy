@@ -2660,7 +2660,7 @@ vcancyApp
 							insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
 							files: [
 								'../assets/pages/css/login-2.min.css',
-								'../styles/cmsdev.css',
+								// '../styles/cmsdev.css',
 								'../assets/pages/scripts/login.min.js',
 							]
 						});
@@ -2752,8 +2752,9 @@ vcancyApp
 								'../assets/layouts/layout2/css/themes/blue.min.css',
 								'../assets/layouts/layout2/css/custom.min.css',
 								'../assets/layouts/layout2/scripts/layout.min.js',
-								'../assets/layouts/global/scripts/quick-nav.min.js',
-								'../styles/cmsdev.css',
+								'../assets/layouts/global/scripts/quick-nav.min.js'
+								// ,
+								// '../styles/cmsdev.css',
 							]
 						});
 					}]
@@ -2951,8 +2952,9 @@ vcancyApp
 								'../assets/layouts/layout2/css/themes/blue.min.css',
 								'../assets/layouts/layout2/css/custom.min.css',
 								'../assets/layouts/layout2/scripts/layout.min.js',
-								'../assets/layouts/global/scripts/quick-nav.min.js',
-								'../styles/cmsdev.css',
+								'../assets/layouts/global/scripts/quick-nav.min.js'
+								// ,
+								// '../styles/cmsdev.css',
 							]
 						});
 					}]
@@ -12531,6 +12533,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 								lastname: vm.registerUser.lastName,
 								usertype: 0,
 								email: vm.registerUser.email,
+								phone:vm.registerUser.phone,
 								isadded: 1,
 								iscancelshow: 1,
 								iscreditcheck: 1,
@@ -12554,7 +12557,7 @@ vcancyApp.controller('applypropCtrl', ['$scope', '$firebaseAuth', '$state', '$ro
 										text: 'User Added successfully!, A verification email has been sent to you. Please verify your account, log in and submit your rental application.',
 										type: "success",
 									});
-									var emailData = '<p>Hello, </p><p>A new user,' + vm.registerUser.firstName + ' ,has been added to on https://vcancy.com/ .</p><p>Your email is ' + vm.registerUser.email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+									var emailData = '<p>Hello, </p><p>You account has been created. Please check your inbox for a verification email and log in using the credentials below.</p><p>Your email is ' + vm.registerUser.email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>Once you log in, please change your password from the profile page. If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
 
 									// Send Email
 									emailSendingService.sendEmailViaNodeMailer(vm.registerUser.email, 'A new user account has been added to your portal', 'Welcome', emailData);
@@ -14418,7 +14421,7 @@ vcancyApp
 				'UDAAPP': false,
 				'TC': true,
 				'TCData': vm.customRentalApplicationCheck.TCData,
-				'companyLogo': userData ? userData.companylogo: '',
+				'companyLogo': userData ? userData.companylogo : '',
 				'companyDetails': vm.companyDetail()
 			}
 
@@ -14454,6 +14457,7 @@ vcancyApp
 			refreshScreeningQuestions();
 
 			vm.getUsers = function () {
+
 				if (vm.apppropaddressList) {
 					vm.loader = 1;
 					var promises = [];
@@ -14473,6 +14477,7 @@ vcancyApp
 							}
 						});
 						vm.apppropaddress = vm.apppropaddressList;
+						// console.log(vm.apppropaddressList)
 						vm.loader = 0;
 					});
 				}
@@ -14494,8 +14499,13 @@ vcancyApp
 				var propdbObj = firebase.database().ref('applyprop/').orderByChild("landlordID").equalTo(landlordID).once("value", function (snapshot) {
 					if (snapshot.val()) {
 						$scope.$apply(function () {
+
 							vm.apppropaddressList = snapshot.val();
+							_.forEach(vm.apppropaddressList, function (value, key) {
+								value.key = key;
+							});
 							// vm.getUsers();
+							// console.log(vm.apppropaddressList)
 							vm.originalPropAddress = angular.copy(snapshot.val());
 							vm.loader = 1;
 							var promises = [];
@@ -14514,14 +14524,21 @@ vcancyApp
 									if (dataObj.val()) {
 										_.forEach(dataObj.val(), function (_value, _key) {
 											vm.apppropaddressAppl[_key] = _value;
+
 											vm.submittedAppl.push(_value)
-										})
+											_.forEach(vm.apppropaddressList, function (list, key) {
+												if (key === _value.scheduleID) {
+													list.applyedRentalForm = _value;
+													vm.originalPropAddress[key].applyedRentalForm = _value;
+												};
+											});
+										});
 									}
+									
+									vm.getUsers();
 								});
-								vm.getUsers();
 								vm.loader = 0;
 							});
-							console.log(vm.apppropaddressList);
 						});
 					}
 					$scope.$apply(function () {
@@ -14531,9 +14548,12 @@ vcancyApp
 			};
 
 
-			vm.getUserName = function (id, value) {
+			vm.getUserName = function (id, value, key) {
 				if (!vm.applyPropUsers[id]) {
 					return value.name || '-';
+				}
+				if (key === 'email') {
+					return vm.applyPropUsers[id][key] || '-';
 				}
 				return ((vm.applyPropUsers[id].firstname || '') + ' ' + (vm.applyPropUsers[id].lastname || '')) || '-';
 			}
@@ -14612,6 +14632,10 @@ vcancyApp
 				vm.filters = {
 					options: []
 				}
+
+				_.forEach(vm.originalPropAddress,function(value,key){
+					value.key = key;
+				});
 				vm.apppropaddress = angular.copy(vm.originalPropAddress);
 			}
 
@@ -14758,7 +14782,7 @@ vcancyApp
 						}
 					});
 			}
-
+			vm.sortBy = {};
 			vm.opencustomrentalapp = function () {
 				vm.customrentalapp = $uibModal.open({
 					templateUrl: 'customrentalapp.html',
@@ -14840,6 +14864,20 @@ vcancyApp
 
 			}
 
+			vm.orderBySalary = function (key) {
+				if (vm.sortBy[key] == undefined) {
+					vm.sortBy = {};
+				}
+				vm.sortBy[key] = !vm.sortBy[key];
+				var unsortedArray = angular.copy(vm.apppropaddress);
+				if (vm.sortBy[key]) {
+					var sorted = _.sortBy(unsortedArray, [key]);
+				} else {
+					var sorted = _.reverse(unsortedArray, [key]);
+				}
+
+				vm.apppropaddress = sorted;
+			}
 			vm.tablefilterdata = function (propID = '') {
 				if (propID != '') {
 					vm.propcheck[propID] = !vm.propcheck[propID];
@@ -14906,7 +14944,7 @@ vcancyApp
 							vm.submittedappsavail = 0;
 						}
 
-						console.log(vm.submittedappsavail);
+						
 						vm.submitappscols = [
 							{ field: "name", title: "Name", sortable: "name", show: true },
 							{ field: "age", title: "Age", sortable: "age", show: true },
@@ -17592,7 +17630,7 @@ materialAdmin.directive('fgLine', function () {
  */
 
 
-(function () { 
+;(function () { 
     "use strict";
     var KEY = {
         TAB: 9,
