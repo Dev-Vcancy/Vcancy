@@ -28,9 +28,9 @@
     <link href="bower_components/chosen/chosen.min.css" rel="stylesheet">
     <!--<link href="bower_components/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet">-->
     <link href="bower_components/Waves/dist/waves.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="bower_components/fullcalendar/dist/fullcalendar.css" />
+    <link href="bower_components/fullcalendar/dist/fullcalendar.css" rel="stylesheet"/>
     <link href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css" />
-    <link media="print" rel="stylesheet" href="bower_components/angularPrint/angularPrint.css">
+    <link href="bower_components/angularPrint/angularPrint.css" rel="stylesheet" media="print">
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -58,6 +58,7 @@
     <link rel="stylesheet" href="styles/select.css">
     <link rel="stylesheet" href="styles/hover-min.css">
     <link rel="stylesheet" href="styles/cmsdev.css">
+    <link rel="stylesheet" href="styles/demo.css">
     <link href="styles/responsive.css" rel="stylesheet" type="text/css" />
     <!-- END THEME GLOBAL STYLES -->
     <!-- BEGIN PAGE LEVEL STYLES -->
@@ -71,7 +72,7 @@
 
     <!-- endbuild -->
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <link href="styles/demo.css" rel="stylesheet">
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109088781-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -108,22 +109,19 @@
     <!-- Add your site or application content here -->
     <data ui-view></data>
 
+
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
-        crossorigin="anonymous"></script>
     <script src="bower_components/angular/angular.min.js"></script>
     <script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
     <script src="bower_components/angular-resource/angular-resource.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="bower_components/angular-loading-bar/src/loading-bar.js"></script>
     <script src="bower_components/oclazyload/dist/ocLazyLoad.min.js"></script>
     <!-- <script src="bower_components/ng-table/dist/ng-table.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
-    <script src="bower_components/angularfire/dist/angularfire.min.js"></script>
+     <script src="bower_components/angularfire/dist/angularfire.min.js"></script>
     <script src="bower_components/angular-nouislider/src/nouislider.min.js"></script>
     <script src="bower_components/bootstrap-sweetalert/lib/sweet-alert.min.js"></script>
     <script type="text/javascript" src="bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
@@ -151,6 +149,11 @@
     <script type="text/javascript" src="bower_components/angularjs-dropdown-multiselect/src/angularjs-dropdown-multiselect.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+
+
     <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
     <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6ajs_bPyHOx-pnSMvxTuNUE4z7MJCrrg&callback=initMap" type="text/javascript"></script> -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6ajs_bPyHOx-pnSMvxTuNUE4z7MJCrrg&libraries=places"></script>
@@ -184,15 +187,13 @@
 
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
+    crossorigin="anonymous"></script>
 
     <!-- END THEME GLOBAL SCRIPTS -->
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
     <!--   <script src="assets/pages/scripts/login.min.js" type="text/javascript"></script> -->
     <!-- END PAGE LEVEL SCRIPTS -->
-
-    <!-- BEGIN THEME LAYOUT SCRIPTS -->
-    <!-- END THEME LAYOUT SCRIPTS -->
-
 
     <!-- App level -->
     <script src="scripts/app.js"></script>

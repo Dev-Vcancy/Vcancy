@@ -343,7 +343,7 @@ vcancyApp
 							insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
 							files: [
 								'../assets/pages/css/login-2.min.css',
-								'../styles/cmsdev.css',
+								// '../styles/cmsdev.css',
 								'../assets/pages/scripts/login.min.js',
 							]
 						});
@@ -435,8 +435,9 @@ vcancyApp
 								'../assets/layouts/layout2/css/themes/blue.min.css',
 								'../assets/layouts/layout2/css/custom.min.css',
 								'../assets/layouts/layout2/scripts/layout.min.js',
-								'../assets/layouts/global/scripts/quick-nav.min.js',
-								'../styles/cmsdev.css',
+								'../assets/layouts/global/scripts/quick-nav.min.js'
+								// ,
+								// '../styles/cmsdev.css',
 							]
 						});
 					}]
@@ -634,8 +635,9 @@ vcancyApp
 								'../assets/layouts/layout2/css/themes/blue.min.css',
 								'../assets/layouts/layout2/css/custom.min.css',
 								'../assets/layouts/layout2/scripts/layout.min.js',
-								'../assets/layouts/global/scripts/quick-nav.min.js',
-								'../styles/cmsdev.css',
+								'../assets/layouts/global/scripts/quick-nav.min.js'
+								// ,
+								// '../styles/cmsdev.css',
 							]
 						});
 					}]
