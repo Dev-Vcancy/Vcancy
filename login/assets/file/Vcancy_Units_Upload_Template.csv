@@ -1,6 +1,0 @@
-Property Address (optional),Unit #*,Sqft*,Bedroom*,Bathroom*,Rent $*,Lease Expiry Date (optional),Description (optional),Status*,Cats ok,Dogs ok,Smoking,Amenities*-furnished,Amenities*-laundry,Amenities*-Parking,Amenities*-Wheelchair Access
-112 Cook Street (example),222,666,2,1,1100,02-Feb-18,Beautiful apartment building at the heart of cook st village. Close to shopping centres.,Available,yes,yes,yes,yes,yes,yes,yes
-112 Cook Street (example) ,223,888,1,0.5,1200,02-Feb-18,Beautiful apartment building at the heart of cook st village. Close to shopping centres.,Available soon,no,no,no,no,no,no,no
-112 Cook Street (example) ,225,777,1,1.5,1200,02-Feb-18,Beautiful apartment building at the heart of cook st village. Close to shopping centres.,Rented,no,no,no,no,no,no,no
-112 Cook Street (example) ,229,959,2,1,1400,02-Feb-18,Beautiful apartment building at the heart of cook st village. Close to shopping centres.,Sold,no,no,no,no,no,no,no
-DELETE THE EXAMPLE ROWS ABOVE BEFORE YOU ENTER  DATA. Note: DATE FORMAT NEEDS TO BE 02-FEB-2018 AND DONÕT USE COMMAS IN NUMBERS,,,,,,,,,,,,,,,

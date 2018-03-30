@@ -30,7 +30,6 @@ var vcancyApp = angular
 		'socialLogin',
 		'angularjs-dropdown-multiselect',
 		'ngSanitize',
-		'ui.select',
 		'ui.calendar'
 	]);
 
