@@ -39,7 +39,7 @@ module.exports.routes = {
   'GET /api/v1/email/test': 'EmailController.test',
   'POST /api/v1/email/sendemail': 'EmailController.sendemail',
   'POST /api/v1/fileupload/upload': 'FileUploadController.upload'
-
+  'POST /api/v1/stipecharge': 'StripepaymentController.paymentcharge',
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

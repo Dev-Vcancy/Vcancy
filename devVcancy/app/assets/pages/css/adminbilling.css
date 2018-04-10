@@ -1,0 +1,233 @@
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    display: none;
+    -webkit-appearance: none;
+}
+
+.table .ng-table-filters {
+    display: none !important;
+}
+
+.admin-billing .btn:not(.btn-sm):not(.btn-lg) {
+    height: 34px;
+    background: #009999;
+    border: 0px;
+}
+
+#billingReports>table>thead>tr.ng-table-sort-header>th {
+    background-color: #3379b7;
+    color: #fff;
+}
+
+#adminBillingReports .control-label {
+    line-height: 30px;
+}
+
+#adminBillingReports input {
+    border: 1px solid #c2cad8;
+    padding: 7px 10px;
+}
+
+#adminBilling h5 {
+    margin: 10px 0px;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+.billin-tab-table {
+    margin-top: 20px;
+}
+
+.sep-select {
+    margin-bottom: 30px;
+}
+
+.payment-button {
+    margin: auto;
+    display: block;
+}
+
+.billing-button {
+    background: #009999;
+    outline: 0px;
+    border: 0px;
+    padding: 7px 30px;
+    color: #fff;
+    margin: auto;
+    display: block;
+}
+
+.cal-button {
+    height: 34px;
+}
+
+span.download-invoice {
+    color: #337ab7;
+    cursor: pointer;
+    margin: 0px 5px;
+}
+
+.rzslider .rz-pointer {
+    border-radius: 30px !important;
+}
+
+.c-border {
+    border: 1px solid #ccc !important;
+}
+
+#admin-payment input,
+#adminBilling form input {
+    padding: 6px 10px;
+}
+
+.custom-input-group-btn {
+    border-radius: 0px !important;
+    height: 34 !important;
+}
+
+.custom-input-group-btn .btn {
+    border-radius: 0px !important;
+    height: 34 !important;
+}
+
+#admin-reports input {
+    border-width: 0px;
+}
+
+#admin-reports .ui-select-match-close {
+    margin-top: 0px !important;
+    margin-left: 0px !important;
+    margin-right: 2px !important;
+}
+
+#admin-reports .ui-select-choices-row:hover {
+    color: #333;
+}
+
+.billing-label {
+    font-size: 11px;
+    font-weight: 400;
+    color: #959595;
+    pointer-events: none;
+    white-space: nowrap;
+    display: block;
+}
+
+.billing-label span {
+    color: #ff0000;
+}
+
+.StripeElement {
+    background-color: white;
+    height: 40px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    -webkit-transition: box-shadow 150ms ease;
+    transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+    box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+    border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+}
+
+@media only screen and (max-width: 600px) {
+    .p-b-30 {
+        padding-bottom: 10px !important;
+    }
+    #adminBillingReports .control-label {
+        line-height: 0;
+    }
+}
+
+#billingReports span.pdf {
+    color: #337ab7;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#invoice {
+    border: 1px solid #ccc;
+    width: 80%;
+    min-width: 800px;
+    max-width: 900px;
+    background: aliceblue;
+    margin: 50px auto;
+    padding: 30px 20px;
+    background: #fcfcfc;
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 9999999999999;
+    transform: translate(-50%, -50%);
+}
+
+#invoice .logo {
+    width: 100px;
+    margin-right: 25px;
+    float: left;
+}
+
+#invoice h1 {
+    margin: 30px 0px 0px 0px;
+    font-weight: 600;
+    color: #18a1ab;
+}
+
+#invoice h3 {
+    margin: 15px 0px 10px 0px;
+    font-size: 16px;
+    color: #888;
+}
+
+#invoice h3 span {
+    font-size: 13px;
+}
+
+#invoice hr {
+    border-color: #18a1ab;
+}
+
+#invoice table.table,
+#invoice table.table th,
+#invoice table.table td {
+    font-size: 12px !important;
+}
+
+#invoice th, #invoice td {
+    text-align: center;
+}
+
+#invoice footer {
+    border-top: 4px double #18a1ab;
+    margin-top: 30px;
+    padding-top: 70px;
+}
+
+#invoice footer p {
+    font-size: 12px;
+    color: #888;
+    margin: 10px 0px;
+}
+
+.credit select.form-control {
+    padding: 6px 10px;
+    height: 34px !important;
+}
+
+.admin-billing textarea.form-control {
+    min-height: 50px;
+    resize: none;
+    padding: 7px 10px;
+}
+

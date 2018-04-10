@@ -10,37 +10,37 @@
 
 
                     <script type="text/ng-template" id="myModalContent.html">
-        <div class="profile_model_popup">
-        <div class="modal-header">
-            <h3 class="modal-title">Update your profile picture</h3>
-        </div>
-        <div class="modal-body">
-             <form  role="form" enctype="multipart/form-data" id="fileUploadForm" method="post">
-    
-                <div class="form-group">
-                    <div class="fileinput fileinput-new" data-provides="fileinput">
-                        <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" /> </div>
-                        <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
-                        <div>
-                            <span class="btn default btn-file">
+                        <div class="profile_model_popup">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Update your profile picture</h3>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form" enctype="multipart/form-data" id="fileUploadForm" method="post">
+
+                                    <div class="form-group">
+                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                                            <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                                <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />                                                </div>
+                                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+                                            <div>
+                                                <span class="btn default btn-file">
                                 <span class="fileinput-new"> Select image </span>
-                                <span class="fileinput-exists"> Change </span>
-                                <input type="file" name="file" id="file321" value="dataFile" required="">
-                             </span>
-                            <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                                <span class="fileinput-exists"> Change </span>
+                                                <input type="file" name="file" id="file321" value="dataFile" required="">
+                                                </span>
+                                                <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" ng-click="ok()">Submit</button>
+                                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+                            </div>
+                            </form>
                         </div>
-                    </div>
-                    
-                </div>
-        </div>
-        <div class="modal-footer">
-            <button  class="btn btn-primary" ng-click="ok()">Submit</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-        </div>
-        </form>
-        </div>
-    </script>
+                    </script>
 
 
 
@@ -80,7 +80,7 @@
                                                                 <span class="sale-num">Company Logo</span>
                                                                 <div id="imgDiv" style="position:relative;width:38%;color:lightgray" class="edit-div-hover">
 
-                                                                    <img src="{{ldProfilectrl.userData.companylogo?ldProfilectrl.userData.companylogo:'https://s3.ca-central-1.amazonaws.com/vcancy-final/public/no_image_found.jpg'}}"
+                                                                    <img src="{{ldProfilectrl.userData.companylogo?ldProfilectrl.userData.companylogo:'../assets/pages/img/no_image_found.jpg'}}"
                                                                         class="img-responsive pic-bordered image" alt="">
                                                                     <div class="middle">
                                                                         <div class="text">
@@ -132,7 +132,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col text-right">
-                                                <a href="https://vcancy.com/faq/" target="_blank" class="btn btn-danger btn-sm btn-round">Delete Account</a>
+                                                <a href="https://vcancy.ca/faq/" target="_blank" class="btn btn-danger btn-sm btn-round">Delete Account</a>
                                             </div>
                                         </div>
                                     </div>
@@ -156,8 +156,7 @@
                                                         <strong>Info!</strong> User can't update. please try again.
                                                     </div>
                                                     <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)"
-                                                        role="form" >
-
+                                                        role="form" unsaved-warning-form>
 
                                                         <div class="col-xs-12 col-sm-6">
                                                             <div ng-class="{ 'has-error' : profileForm.firstName.$invalid && !profileForm.firstName.$pristine }" class="form-group fg-float m-t-30">
@@ -233,7 +232,7 @@
                                                 <div id="tab_3-3" class="tab-pane">
                                                     <h3 class="m-b-20 m-t-10 fw">Change Password</h3>
                                                     <form class="changpass_form_block" ng-submit="ldProfilectrl.changepasswordSubmit(ldProfilectrl.passworduser)" name="pwdForm"
-                                                        enctype="multipart/form-data" role="form">
+                                                        enctype="multipart/form-data" role="form" unsaved-warning-form>
 
                                                         <div class="col-xs-12 col-sm-6 form-group fg-float errorbox fade in">
                                                             <div class="fg-line">
@@ -307,7 +306,7 @@
                                                                 <div class="mt-checkbox-list">
 
                                                                     <label class="mt-checkbox mt-checkbox-outline">
-                                                                        <input type="checkbox" ng-model="ldProfilectrl.userData.isadded" name="isadded" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.isadded ==   1">When new user is added
+                                                                        <input type="checkbox" ng-model="ldProfilectrl.userData.isadded" name="isadded" ng-true-value="1" ng-false-value="0" ng-checked="ldProfilectrl.isadded ==   1">Whem new user is added
                                                                         <span></span>
                                                                     </label>
                                                                     <label class="mt-checkbox mt-checkbox-outline">
@@ -366,7 +365,7 @@
                                                         passwords)
                                                     </h3>
                                                     <form class="changpass_form_block" ng-submit="ldProfilectrl.newuserSubmit(ldProfilectrl.newuser)" name="pwdForm" enctype="multipart/form-data"
-                                                        role="form" >
+                                                        role="form" unsaved-warning-form>
 
                                                         <div class="col-xs-12 col-sm-6 form-group fg-float errorbox fade in">
                                                             <div class="fg-line">
@@ -450,7 +449,7 @@
 
                                                 <div id="tab_3-3" class="tab-pane">
                                                     <h3 class="m-b-20 m-t-10 fw">Craigslist</h3>
-                                                    <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" role="form" >
+                                                    <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" role="form" unsaved-warning-form>
 
 
                                                         <div class="fg-line">
@@ -489,12 +488,12 @@
                                                             <div class="col-xs-12 col-sm-6 form-group ">
                                                                 <div class="fg-line fg-label">
                                                                     {{craigslist.craigslistRenewAds}}
-                                                                    <input type="checkbox" ng-model="ldProfilectrl.userData.craigslistRenewAds"> Renew my ads after 48 hours of posting
+                                                                    <input type="checkbox" ng-model="ldProfilectrl.userData.craigslistRenewAds">                                                                    Renew my ads after 48 hours of posting
                                                                     <i class="fa fa-info-circle" title="This helps you push your listing on the first page of a craigslist search"></i>
                                                                 </div>
                                                                 <div class="fg-line fg-label">
                                                                     {{craigslist.craigslistRemoveAds}}
-                                                                    <input type="checkbox" ng-model="ldProfilectrl.userData.craigslistRemoveAds"> Take ads off after units are rented
+                                                                    <input type="checkbox" ng-model="ldProfilectrl.userData.craigslistRemoveAds">                                                                    Take ads off after units are rented
                                                                 </div>
                                                             </div>
 
@@ -508,14 +507,321 @@
                                         </section>
                                         <section id="section7" ng-if="!ldProfilectrl.refId">
                                             <input type="radio" name="sections" id="option7">
-                                            <label for="option7" class="tablbl"> Billing</label>
+                                            <label for="option7" class="tablbl" ng-click="ldProfilectrl.unitsAllowed = ldProfilectrl.unitsAlreadyAdded"> Billing</label>
                                             <div class="tbgt">
 
-                                                <div id="tab_3-3" class="tab-pane">
+                                                <div id="tab_3-4" class="tab-pane">
                                                     <h3 class="m-b-20 m-t-10 fw">Billing</h3>
-                                                    <form class="personal_form_block" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)"
-                                                        role="form" >
-                                                    </form>
+                                                    <!-- LWS edit start-->
+                                                    <div class="billing-tabs">
+                                                        <ul class="nav nav-tabs" role="tablist" ng-init="tab1 = 1">
+                                                            <li role="presentation" ng-class="tab1==1?'active':''">
+                                                                <a href ng-click="tab1 = 1" data-toggle="tab" aria-expanded="true">Subscription</a>
+                                                            </li>
+                                                            <li role="presentation" ng-class="tab1==2?'active':''">
+                                                                <a href ng-click="tab1 = 2" data-toggle="tab" aria-expanded="true">Billing Info</a>
+                                                            </li>
+                                                            <li role="presentation" ng-class="tab1==3?'active':''">
+                                                                <a href ng-click="tab1 = 3" data-toggle="tab" aria-expanded="true">History</a>
+                                                            </li>
+                                                        </ul>
+                                                        <div class="tab-content">
+                                                            <div role="tabpanel" class="tab-pane active" id="billingSubscription" ng-show="tab1 === 1">
+                                                                <form class="personal_form_block" name="profileSubscriptionForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.billingSubscriptionSubmit()"
+                                                                    role="form" unsaved-warning-form>
+                                                                    <div class="container-fluid">
+                                                                        <div class="row">
+                                                                            <div class="col-md-7">
+                                                                                <h5>Current Payment Plan</h5>
+                                                                                <select class="custom-form-element" ng-model="ldProfilectrl.currentPlan" ng-change="ldProfilectrl.promptOnPlanChange()">
+                                                                                    <option value="Monthly">Month-to-Month</option>
+                                                                                    <option value="Annual">Annual (10% discount)</option>
+                                                                                    <option value="Free">15-day Trial &#x2013; days left / Expired</option>
+                                                                                </select>
+                                                                                <h5>Limit the number of units managed by this
+                                                                                    account
+                                                                                    <br/> <span class="text-info"><small><b>First 5 units added are free</b></small></span></h5>
+                                                                                <rzslider rz-slider-model="ldProfilectrl.unitsAllowed" data-rz-slider-options="ldProfilectrl.rangeSlider.options"></rzslider>
+                                                                                <div class="input-group m-t-20">
+                                                                                    <input type="number" class="form-control c-border" ng-model="ldProfilectrl.unitsAllowed" ng-change="ldProfilectrl.updatePayableAmount()" />
+                                                                                    <span class="input-group-addon">Units</span>
+                                                                                </div>
+                                                                                <p>Price changes are applied after 24 hours
+                                                                                    and new units added would reflect in
+                                                                                    the current billing cycle. </p>
+                                                                                <div class="col-md-12 text-right">
+                                                                                    <button type="submit" class="btn btn-primary btn-md m-t-10 waves-effect">Upgrade your plan</button>
+                                                                                    <button type="submit" class="btn btn-primary btn-md m-t-10 waves-effect" ng-click="tab1 = 2; ldProfilectrl.moveToBillingInfo()">Save</button>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-5">
+                                                                                <div class="billing-tabs">
+                                                                                    <ul class="nav nav-tabs" role="tablist" ng-init="tab2 = 1">
+                                                                                        <li role="presentation" ng-class="tab2==1?'active':''" ng-show="ldProfilectrl.currentPlan !== 'Annual'">
+                                                                                            <a href ng-click="tab2 = 1" data-toggle="tab" aria-expanded="true">Monthly</a>
+                                                                                        </li>
+                                                                                        <li role="presentation" ng-class="tab2==2?'active':''" ng-show="ldProfilectrl.currentPlan === 'Annual'">
+                                                                                            <a href ng-click="tab2 = 2" data-toggle="tab" aria-expanded="true">Annual</a>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                    <div class="tab-content">
+                                                                                        <div role="tabpanel" class="tab-pane active" id="billingSubscriptionMonthly" ng-show="tab2 === 1 || tab2 === 2">
+                                                                                            <div class="">
+                                                                                                <table class="table table-border table-hover" style="border:1px solid #e7ecf1;overflow-x:auto;max-width:100vw">
+                                                                                                    <tbody>
+                                                                                                        <tr class="ng-scope">
+                                                                                                            <td>Units Selected</td>
+                                                                                                            <td>{{ldProfilectrl.unitsAllowed}}</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope">
+                                                                                                            <td>Units Free</td>
+                                                                                                            <td>{{ldProfilectrl.unitsFree}}</td>
+                                                                                                        </tr>
+                                                                                                        <tr ng-if="ldProfilectrl.unitsAlreadyAdded > 0" class="ng-scope b-btm">
+                                                                                                            <td>Already Added
+                                                                                                                Units
+                                                                                                            </td>
+                                                                                                            <td>{{ldProfilectrl.unitsAlreadyAdded}}</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope b-btm" ng-if="ldProfilectrl.unitsAlreadyAdded < ldProfilectrl.unitsAllowed">
+                                                                                                            <td>Additional Billable
+                                                                                                                Units
+                                                                                                            </td>
+                                                                                                            <td>{{ldProfilectrl.unitsAllowed
+                                                                                                                + ldProfilectrl.unitsFree
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded}}</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope">
+                                                                                                            <td>Total Estimated
+                                                                                                                charges
+                                                                                                                <br/>
+                                                                                                                <i>Payment starts {{ldProfilectrl.nextBillingCycleDate}}</i></td>
+                                                                                                            <td>${{(ldProfilectrl.unitsAllowed
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded
+                                                                                                                + ldProfilectrl.unitsFree)
+                                                                                                                * ldProfilectrl.pricePerUnit}}</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope b-btm" ng->
+                                                                                                            <td>Discount ({{ldProfilectrl.discount}})%
+                                                                                                                for annual
+                                                                                                                plan)
+                                                                                                            </td>
+                                                                                                            <td>${{(ldProfilectrl.unitsAllowed
+                                                                                                                + ldProfilectrl.unitsFree
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded)
+                                                                                                                * ldProfilectrl.pricePerUnit
+                                                                                                                * ldProfilectrl.discount/100}}</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope">
+                                                                                                            <td>Total After Discount</td>
+                                                                                                            <td ng-if="ldProfilectrl.unitsAllowed > ldProfilectrl.unitsAlreadyAdded">${{((ldProfilectrl.unitsAllowed
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded
+                                                                                                                + ldProfilectrl.unitsFree)
+                                                                                                                * ldProfilectrl.pricePerUnit)
+                                                                                                                - ((ldProfilectrl.unitsAllowed
+                                                                                                                + ldProfilectrl.unitsFree
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded)
+                                                                                                                * ldProfilectrl.pricePerUnit
+                                                                                                                * ldProfilectrl.discount/100)|
+                                                                                                                number :
+                                                                                                                2}}
+                                                                                                            </td>
+                                                                                                            <td ng-if="ldProfilectrl.unitsAllowed <= ldProfilectrl.unitsAlreadyAdded">$0</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope b-btm">
+                                                                                                            <td>Taxes</td>
+                                                                                                            <td ng-if="ldProfilectrl.unitsAllowed >= ldProfilectrl.unitsAlreadyAdded">${{(((ldProfilectrl.unitsAllowed
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded
+                                                                                                                + ldProfilectrl.unitsFree)
+                                                                                                                * ldProfilectrl.pricePerUnit)
+                                                                                                                - ((ldProfilectrl.unitsAllowed
+                                                                                                                + ldProfilectrl.unitsFree
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded)
+                                                                                                                * ldProfilectrl.pricePerUnit
+                                                                                                                * ldProfilectrl.discount/100))
+                                                                                                                * (ldProfilectrl.taxes/100)|
+                                                                                                                number :
+                                                                                                                2}}
+                                                                                                            </td>
+                                                                                                            <td ng-if="ldProfilectrl.unitsAllowed < ldProfilectrl.unitsAlreadyAdded">$0</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope">
+                                                                                                            <td>Total Due</td>
+                                                                                                            <td ng-if="ldProfilectrl.unitsAllowed >= ldProfilectrl.unitsAlreadyAdded">{{(((ldProfilectrl.unitsAllowed
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded
+                                                                                                                + ldProfilectrl.unitsFree)
+                                                                                                                * ldProfilectrl.pricePerUnit)
+                                                                                                                - ((ldProfilectrl.unitsAllowed
+                                                                                                                + ldProfilectrl.unitsFree
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded)
+                                                                                                                * ldProfilectrl.pricePerUnit
+                                                                                                                * ldProfilectrl.discount/100))
+                                                                                                                - ((((ldProfilectrl.unitsAllowed
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded
+                                                                                                                + ldProfilectrl.unitsFree)
+                                                                                                                * ldProfilectrl.pricePerUnit)
+                                                                                                                - ((ldProfilectrl.unitsAllowed
+                                                                                                                + ldProfilectrl.unitsFree
+                                                                                                                - ldProfilectrl.unitsAlreadyAdded)
+                                                                                                                * ldProfilectrl.pricePerUnit
+                                                                                                                * ldProfilectrl.discount/100))
+                                                                                                                * (ldProfilectrl.taxes/100))
+                                                                                                                | number
+                                                                                                                : 2}}</td>
+                                                                                                            <td ng-if="ldProfilectrl.unitsAllowed < ldProfilectrl.unitsAlreadyAdded">$0</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope">
+                                                                                                            <td colspan="2">
+                                                                                                                <a href="" data-toggle="modal" data-target="#addPaymentMethod">Add payment method</a><br/>
+                                                                                                                <i>Currency set to Canadian $</i>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div role="tabpanel" class="tab-pane" id="Anually" ng-show="false">
+                                                                                            <div class="">
+                                                                                                <table class="table table-border table-hover" style="border:1px solid #e7ecf1;overflow-x:auto;max-width:100vw">
+                                                                                                    <tbody>
+                                                                                                        <tr class="ng-scope">
+                                                                                                            <td>Estimated charges<br/>                                                                                                                <i>Payment starts March 15, 2018</i></td>
+                                                                                                            <td>$15</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope b-btm">
+                                                                                                            <td>Discount (10%
+                                                                                                                for annual
+                                                                                                                plan)
+                                                                                                            </td>
+                                                                                                            <td>$0</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope">
+                                                                                                            <td>Total After Discount</td>
+                                                                                                            <td>$15</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope b-btm">
+                                                                                                            <td>Taxes</td>
+                                                                                                            <td>$2</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope">
+                                                                                                            <td>Total Due</td>
+                                                                                                            <td>$17</td>
+                                                                                                        </tr>
+                                                                                                        <tr class="ng-scope">
+                                                                                                            <td colspan="2">
+                                                                                                                <a href="" data-toggle="modal" data-target="#addPaymentMethod">Add payment method</a><br/>
+                                                                                                                <i>Currency set to Canadian $</i>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div role="tabpanel" class="tab-pane active" id="billingInfo" ng-show="tab1 === 2">
+                                                                <form class="personal_form_block" name="profileBillingInfoForm" enctype="multipart/form-data"
+                                                                    role="form" unsaved-warning-form>
+                                                                    <div class="container-fluid">
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label class="control-block">Payment Plan</label>
+                                                                                    <select class="custom-form-element" ng-model="ldProfilectrl.currentPlan" disabled>
+                                                                                        <option value="Monthly">Month-to-Month</option>
+                                                                                        <option value="Annual">Annual (10% discount)</option>
+                                                                                        <option value="Free">15-day Trial &#x2013; days left / Expired</option>
+                                                                                    </select>
+                                                                                </div>
+
+                                                                                 <div class="row">
+                                                                                    <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                                                                        <div class="fg-line">
+                                                                                            <input required type="text" class="form-control w-100" placeholder="" ng-model="ldProfilectrl.newcard.name" required>
+                                                                                            <label class="fg-label">Name <span class="mandatory">*</span>:</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                                                                        <div class="fg-line">
+                                                                                            <input required type="text" class="form-control w-100" placeholder="" ng-model="ldProfilectrl.newcard.cardno" required>
+                                                                                            <label class="fg-label">Card No. <span class="mandatory">*</span>:</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                                                                        <div class="fg-line">
+                                                                                            <input required type="text" class="form-control w-50" placeholder="" ng-model="ldProfilectrl.newcard.expiry" required>
+                                                                                            <label class="fg-label">Expiry Date <span class="mandatory">*</span>:</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                                                                        <div class="fg-line">
+                                                                                            <input required type="text" class="form-control w-100 phone" placeholder="" ng-model="ldProfilectrl.newcard.cvv" required>
+                                                                                            <label class="fg-label">Cvv <span class="mandatory">*</span>:</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                                                                                        <div class="fg-line">
+                                                                                            <input required type="text" class="form-control w-100 phone" placeholder="" ng-model="ldProfilectrl.amountTobePayed" required>
+                                                                                            <label class="fg-label">Amount <span class="mandatory">*</span>:</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <button type="submit" class="btn btn-primary pull-right btn-md m-t-10 waves-effect" ng-click="ldProfilectrl.addNewCardForPayment()">Submit</button>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-5">
+                                                                                        Default Card
+                                                                                        <span class="default-card"><i class="zmdi zmdi-card zmdi-hc-3x"></i></span>
+                                                                                    </div>
+                                                                                    <div class="col-md-7">
+                                                                                        <span class="billing-info-link" ng-click="ldProfilectrl.showPaymentMethod()"> Add Payment Method</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <ul class="list-group">
+                                                                                    <li class="list-group-item" ng-repeat="card in ldProfilectrl.cards">{{card.name}} &#x2013; {{card.cardnoStr}}
+                                                                                        <i ng-click="ldProfilectrl.removeCard(card)" class="zmdi zmdi-close-circle"></i></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </form>
+                                                            </div>
+                                                            <div role="tabpanel" class="tab-pane active" id="billingHistory" ng-show="tab1 === 3">
+                                                                <div class="table-responsive">
+                                                                    <table ng-Table="ldProfilectrl.tableParams" class="table" show-filter="true">
+                                                                        <tr ng-repeat="info in $data">
+                                                                            <td title="'Date'" sortable="'date'">{{info.date}}</i>
+                                                                            </td>
+                                                                            <td title="'Subscription'" sortable="'subscription'">{{info.subscription}}</i>
+                                                                            </td>
+                                                                            <td title="'Amount'" sortable="'amount'">${{info.amount}}</i>
+                                                                            </td>
+                                                                            <td title="'Status'" sortable="'status'">{{info.status}}</i>
+                                                                            </td>
+                                                                            <td title="'Actions'"><span data-href='{{info.uid}}' class="download-invoice">Download Invoice</span></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <!-- LWS end-->
+                                                    <!--form class="personal_form_block" name="profileForm" enctype="multipart/form-data" ng-submit="ldProfilectrl.profileSubmit(ldProfilectrl)"
+                                                        role="form" unsaved-warning-form>
+                                                        
+                                                    </form-->
                                                 </div>
                                             </div>
                                         </section>
@@ -589,9 +895,54 @@
     </div>
 </div>
 
+<div id="addPaymentMethod" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add new Payment Method <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button></h4>
+            </div>
+            <div class="modal-body">
+                <div class="scroller" style="height:180px" data-always-visible="1" data-rail-visible1="1">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                            <div class="fg-line">
+                                <input required type="text" class="form-control w-100" placeholder="" ng-model="ldProfilectrl.newcard.name" required>
+                                <label class="fg-label">Name <span class="mandatory">*</span>:</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                            <div class="fg-line">
+                                <input required type="text" class="form-control w-100" placeholder="" ng-model="ldProfilectrl.newcard.cardno" required>
+                                <label class="fg-label">Card No. <span class="mandatory">*</span>:</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                            <div class="fg-line">
+                                <input required type="text" class="form-control w-50" placeholder="" ng-model="ldProfilectrl.newcard.expiry" required>
+                                <label class="fg-label">Expiry Date <span class="mandatory">*</span>:</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 form-group fg-float m-t-30">
+                            <div class="fg-line">
+                                <input required type="text" class="form-control w-100 phone" placeholder="" ng-model="ldProfilectrl.newcard.cvv" required>
+                                <label class="fg-label">Cvv <span class="mandatory">*</span>:</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn dark btn-outline">Close</button>
+                <button type="button" data-dismiss="modal" class="btn green" ng-click="ldProfilectrl.addNewCard()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="../assets/pages/scripts/ui-modals.min.js" type="text/javascript"></script>
 <script type="text/javascript">
     Waves.init();
     Waves.attach('.btn');
+
 </script>

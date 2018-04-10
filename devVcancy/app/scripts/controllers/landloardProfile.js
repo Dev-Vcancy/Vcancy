@@ -5,8 +5,8 @@
 //=================================================
 
 vcancyApp
-  .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$uibModal', 'emailSendingService',
-    function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $uibModal, emailSendingService) {
+  .controller('landlordProfilelCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$uibModal', 'emailSendingService', 'NgTableParams',
+    function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $uibModal, emailSendingService, NgTableParams) {
       var vm = this;
       var landLordID = localStorage.getItem('userID');
       vm.refId = localStorage.getItem('refId');
@@ -25,6 +25,69 @@ vcancyApp
       vm.error = 0;
       vm.totaluser = 0;
       vm.companyUsers = [];
+      /* LWS */
+
+      vm.subscriptionValid = true;  // landlord user has purchased a plan
+      vm.subscriptionPlan = "Free";  // purchased plan
+      vm.subscriptionLastPurchasedOnDate = "";  // purchased plan
+      vm.creditcardNumber = "";
+      vm.currentPlan = ""; // selected plan 
+      vm.unitsAllowed = 5;
+      vm.unitsSelected = 5;
+      vm.nextBillingCycleDate = "April 1 2017";
+      vm.unitsAlreadyAdded = 5;
+      vm.discount = 10;
+      vm.taxes = 2;
+      vm.amountTobePayed = 0;
+      vm.unitsFree = -5;
+      vm.pricePerUnit = 0.5;
+      vm.rangeSlider = {
+        value: 0,
+        options: {
+          floor: 0,
+          ceil: 100,
+          step: 1,
+          minLimit: 5,
+          maxLimit: 100,
+          onChange: function(val) {
+            console.log('on change units' + val); // logs 'on change slider-id'
+            vm.updatePayableAmount();
+        }
+        }
+      };
+      vm.newcard = {
+        name: "",
+        cardno: "",
+        cvv: "",
+        expiry: "",
+      };
+      vm.cards = [
+        {
+          name: "Ashish",
+          cardno: "4242 4242 4242 4242",
+          cardnoStr: "**** **** **** **** 4242",
+          cvv: "123",
+          expiry: "20/22",
+        },
+        {
+          name: "Shekhar",
+          cardno: "4242 4242 4242 4444",
+          cardnoStr: "**** **** **** **** 4444",
+          cvv: "223",
+          expiry: "12/23",
+        }
+      ];
+
+      vm.billingHistoryData = [
+        { date: "March 28 2018", subscription: "Monthly", amount: 20, status: "Success", uid: '1' },
+        { date: "March 8 2018", subscription: "Monthly", amount: 20, status: "Cancelled", uid: '2' },
+        { date: "Feb 10 2018", subscription: "Monthly", amount: 20, status: "Failed", uid: '3' },
+        { date: "Jan 18 2018", subscription: "Monthly", amount: 20, status: "Refunded", uid: '4' }
+      ];
+      vm.tableParams = new NgTableParams({}, { dataset: vm.billingHistoryData });
+
+
+      /* LWS end */
 
       // vm.companylogo = '../assets/pages/img/no_image_found.jpg';
       $rootScope.invalid = '';
@@ -33,8 +96,45 @@ vcancyApp
       firebase.database().ref('/users/' + landLordID).once('value').then(function (userdata) {
 
         $scope.$apply(function () {
-          console.log(userdata.val());
+          console.log("landlord", userdata.val());
           vm.userData = userdata.val();
+
+          //fetch data from database
+          // update screen as per database
+          vm.currentPlan = "Free";
+          vm.subscriptionPlan = "Free";
+          vm.subscriptionLastPurchasedOnDate = "March 1 2017";
+          // for free plan
+          if (vm.subscriptionPlan = "Free") {
+
+          }
+
+          vm.subscriptionValid = true;
+          if (vm.subscriptionValid) {
+            // subscription is valid
+            vm.unitsAlreadyAdded = 10;
+            vm.rangeSlider.value = vm.unitsAlreadyAdded;
+            vm.unitsAllowed = 23;
+            vm.pricePerUnit = 0.5;
+            vm.taxes = 2;
+            vm.discount = 10;
+
+          } else {
+            // show popup
+            swal({
+              title: "Error!",
+              text: 'Your Subscription is expired.',
+              type: "error",
+            }, function (isConfirm) {
+              if (isConfirm) {
+                console.log("Your account has been deactivated.");
+              } else {
+                console.log("Your account has been deactivated.");
+              }
+            });
+          }
+
+
           // if (userdata.val() !== null) {
 
           //   if(userdata.val().email != ''){
@@ -179,8 +279,6 @@ vcancyApp
           });
       }
 
-
-
       vm.changepasswordSubmit = function (passworduser) {
 
         $rootScope.invalid = '';
@@ -207,7 +305,7 @@ vcancyApp
             user.updatePassword(newPassword).then(function () {
               localStorage.setItem('password', newPassword);
               vm.opensuccesssweet("Your password has been updated!");
-              var emailData = '<p>Hello, </p><p>Your password has been changed. If you didn’t change the password then please contact  support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+              var emailData = '<p>Hello, </p><p>Your password has been changed. If you didn’t change the password then please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
               // Send Email
               passworduser.npassword = '';
               passworduser.password = '';
@@ -299,7 +397,6 @@ vcancyApp
         }
       }
 
-
       vm.newuserSubmit = function (newuser) {
         var landLordID = localStorage.getItem('userID');
         var firstname = newuser.firstname;
@@ -348,14 +445,14 @@ vcancyApp
             firebase.auth().signInWithEmailAndPassword(email, pass)
               .then(function (firebaseUser) {
 
-                var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to on https://vcancy.com/ .</p><p>Your email is ' + email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to on https://vcancy.ca/ .</p><p>Your email is ' + email + '.</p><p>Your password : <strong>' + pass + '</strong></p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                 // Send Email
                 emailSendingService.sendEmailViaNodeMailer(email, 'A new user account has been added to your portal', 'Welcome', emailData);
                 // Success 
                 firebaseUser.sendEmailVerification().then(function () {
 
-                  var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at ' + email + '.</p><p>To view/edit user details, please log in https://vcancy.com/ and go to “Profile” and click on “Users”</p><p>If you have any questions please email us at support@vcancy.com</p><p>Thanks,</p><p>Team Vcancy</p>';
+                  var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at ' + email + '.</p><p>To view/edit user details, please log in https://vcancy.ca/ and go to “Profile” and click on “Users”</p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                   // Send Email
                   emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
@@ -619,6 +716,133 @@ vcancyApp
 
       };
 
+      /* LWS start */
+
+
+      // landlord subscription form submit 
+      vm.billingSubscriptionSubmit = function () {
+        var userEmail = localStorage.getItem('userEmail');
+        var landLordID = localStorage.getItem('userID');
+        console.log("currentPlan", vm.currentPlan);
+        // set form field with default value
+        // vm.currentPlan = 1222;
+      }
+
+      // landlord Billing info form submit 
+      vm.profileBillingInfoFormSubmit = function () {
+        var userEmail = localStorage.getItem('userEmail');
+        var landLordID = localStorage.getItem('userID');
+        console.log("currentPlan", vm.currentPlan);
+        // set form field with default value
+        // vm.currentPlan = 1222;
+        StripeCheckout.open({
+          key: "pk_test_ZWfxP91JWBFEpJn9yCZKeTzB",
+          address: false,
+          email: localStorage.getItem('userEmail'),
+          amount: 100,
+          currency: 'usd',
+          name: 'Purchase',
+          description: 'Description',
+          panelLabel: 'Checkout',
+          token: "adsadsadsadasd"
+        });
+      }
+
+      vm.promptOnPlanChange = function () {
+        var oldPlan = vm.subscriptionPlan;
+        if (vm.subscriptionValid == true) {
+          swal({
+            title: "Warning!",
+            text: "Are you sure you want to change your plan?",
+            type: "warning",
+            confirmButtonColor: '#009999',
+            confirmButtonText: "Ok",
+            showCancelButton: true,
+            closeOnClickOutside: false,
+            allowEscapeKey: false
+          }, function (isConfirm) {
+            if (isConfirm) {
+              alert("Plan changes beign done");
+            } else {
+              alert("No changes needed");
+            }
+          });
+        }
+      }
+
+      vm.moveToBillingInfo = function () {
+
+      }
+      vm.showPaymentMethod = function () {
+
+      }
+      vm.updatePayableAmount = function () {
+        vm.amountTobePayed = (((vm.unitsAllowed - vm.unitsAlreadyAdded + vm.unitsFree) * vm.pricePerUnit) - ((vm.unitsAllowed + vm.unitsFree - vm.unitsAlreadyAdded) * vm.pricePerUnit * vm.discount / 100)) - ((((vm.unitsAllowed - vm.unitsAlreadyAdded + vm.unitsFree) * vm.pricePerUnit) - ((vm.unitsAllowed + vm.unitsFree - vm.unitsAlreadyAdded) * vm.pricePerUnit * vm.discount / 100)) * (vm.taxes / 100));
+        vm.amountTobePayed = vm.amountTobePayed.toFixed(2);
+        console.log(vm.amountTobePayed);
+        
+      }
+      vm.removeCard = function (selectedCard) {
+        var cards = vm.cards;
+        vm.cards = cards.filter(card => card.cardno != selectedCard.cardno);
+      }
+      vm.addNewCard = function () {
+        vm.cards.push({
+          name: vm.newcard.name,
+          cardno: vm.newcard.cardno,
+          cardnoStr: "**** **** **** " + vm.newcard.cardno.slice(-4),
+          cvv: vm.newcard.cvv,
+          expiry: vm.newcard.expiry,
+        });
+        swal({
+          title: "Success!",
+          text: "Your card added successfully",
+          type: "success",
+          confirmButtonColor: '#009999',
+          confirmButtonText: "Ok"
+        }, function (isConfirm) {
+          // if (isConfirm) {
+          //   $uibModalInstance.close();
+          //   $state.reload();
+          // }
+        });
+        vm.newcard = {
+          name: "",
+          cardno: "",
+          cvv: "",
+          expiry: "",
+        };
+        // vm.profileBillingInfoFormSubmit();
+      }
+      vm.addNewCardForPayment = function () {
+        vm.cards.push({
+          name: vm.newcard.name,
+          cardno: vm.newcard.cardno,
+          cardnoStr: "**** **** **** " + vm.newcard.cardno.slice(-4),
+          cvv: vm.newcard.cvv,
+          expiry: vm.newcard.expiry,
+        });
+        swal({
+          title: "Success!",
+          text: "Your Payment completed Successfully.",
+          type: "success",
+          confirmButtonColor: '#009999',
+          confirmButtonText: "Ok"
+        }, function (isConfirm) {
+          // if (isConfirm) {
+          //   $uibModalInstance.close();
+          // }
+        });
+        vm.newcard = {
+          name: "",
+          cardno: "",
+          cvv: "",
+          expiry: "",
+        };
+        // vm.profileBillingInfoFormSubmit();
+      }
+      /* LWS end */
+
     }]);
 
 vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$modal', '$uibModalInstance', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $modal, $uibModalInstance) {
@@ -711,5 +935,6 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
         return false;
       });
   }
+
 
 }]);

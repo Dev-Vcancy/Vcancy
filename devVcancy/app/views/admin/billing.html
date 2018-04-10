@@ -10,9 +10,442 @@
             <!-- title end -->
 
             <!-- breadcrumb start -->
+            <div class="billing-tabs">
 
-            <!-- breadcrumb end -->
+<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
+<link href="assets/global/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
+<link href="assets/global/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet">
+<section id="main">
+    <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
+    <section class="admin-billing" id="content">
+        <div class="container">
+            <!-- title start -->
+            <h1 class="page-title"> Billing </h1>
+            <!-- title end -->
+            <!-- billing tabs start -->
+            <div class="billing-tabs">
+                <!-- tabs togglers start -->
+                <ul class="nav nav-tabs" role="tablist" ng-init="tab = 1">
+                    <li role="presentation" ng-class="tab==1?'active':''">
+                        <a href ng-click="tab = 1" data-toggle="tab" aria-expanded="true">Billing</a>
+                    </li>
+                    <li role="presentation" ng-class="tab==2?'active':''">
+                        <a href ng-click="tab = 2" data-toggle="tab" aria-expanded="true">Reports</a>
+                    </li>
+                    <li role="presentation" ng-class="tab==3?'active':''">
+                        <a href ng-click="tab = 3" data-toggle="tab" aria-expanded="true">Pricing</a>
+                    </li>
+                </ul>
+                <!-- tabs togglers end -->
+                <div class="tab-content">
+                    <!-- tabs 1 : admin Billing screen -->
+                    <div role="tabpanel" class="tab-pane active" id="adminBilling" ng-show="tab === 1">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-7 col-md-8">
+                                    <form class="changpass_form_block" name="pwdForm" enctype="multipart/form-data" role="form" novalidate>
+                                        <div class="col-xs-12 col-sm-6 form-group m-t-10">
+                                            <label class="billing-label">Select User<span>*</span>:</label>
+                                            <select class="custom-form-element" ng-model="abilling.currentSelectedUser" ng-options="value as (value.userData.firstname + ' ' + value.userData.lastname) for (key, value) in abilling.users"
+                                                ng-change="abilling.switchUser()">
+                                                <option value="">Select User</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 form-group m-t-10">
+                                            <label class="billing-label">Current Payment Plan<span>*</span>:</label>
+                                            <select class="custom-form-element" ng-model="abilling.selectedUserSelectedPlan" ng-disabled="abilling.rangeSlider.options.disabled"
+                                                ng-change="abilling.updatePayableAmount()">
+                                                <option value="">-- Select Payment Plan --</option>
+                                                <option value="Monthly">Month-to-Month</option>
+                                                <option value="Annual">Annual (10% discount)</option>
+                                                <option value="Free">15-day Trial &#x2013; days left / Expired</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12 form-group m-t-10">
+                                            <h5>Limit the number of units managed by this account <br/> <span class="text-info"><b>First 5 units added are free</b></span></h5>
+                                            <rzslider rz-slider-model="abilling.unitsProvidedToUser" data-rz-slider-options="abilling.rangeSlider.options">
+                                            </rzslider>
+                                            <div class="input-group m-t-20">
+                                                <input type="number" class="form-control c-border" ng-model="abilling.unitsProvidedToUser" ng-disabled="abilling.rangeSlider.options.disabled"
+                                                    ng-change="abilling.updatePayableAmount()" min="{{abilling.unitsFree}}" />
+                                                <span class="input-group-addon">Units</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12 form-group m-t-10">
 
-            <!-- four box start -->
+                                            <div class="sep-select">
+                                                <div class="form-group">
+                                                    <label class="billing-label">Select Payment method<span>*</span>:</label>
+                                                    <select class="custom-form-element" ng-model="abilling.paymentMethodSelected" ng-disabled="!abilling.billingRequired">
+                                                    <option value="">--Selec a payment Method--</option>
+                                                    <option value="1">Cheque</option>
+                                                    <option value="2">Online Transfer</option>
+                                                    <option value="3">Bank Draft</option>
+                                                    <option value="4">Credit/Debit Card</option>
+                                                </select>
+                                                </div>
+                                                <div id="admin-payment">
+                                                    <div id="admin-payment">
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label class="billing-label">Add  Payment to account<span>*</span>:</label>
+                                                                    <input type="number" class="form-control c-border" id="amount" placeholder="" ng-model="abilling.selectedUserPayaableAmount"
+                                                                        ng-disabled="!abilling.billingRequired" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <label class="billing-label">Recieved on<span>*</span>:</label>
+                                                                <div class="form-control">
+                                                                    <span class="input-group">
+                                                                        <input type="text" class="form-control c-border" uib-datepicker-popup ng-model="abilling.recieved" is-open="abilling.opened2" datepicker-options="abilling.dateOptions" ng-required="true" close-text="Close" ng-click="abilling.openPicker2()"  ng-disabled="!abilling.billingRequired"  />
+                                                                        <span class="input-group-btn custom-input-group-btn">
+                                                                            <button type="button" class="btn btn-primary cal-button" ng-click="abilling.openPicker2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                                        </span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- payment form based on selection of method -->
+                                                        <div class="cheque" ng-show="abilling.paymentMethodSelected === '1'">
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-6 col-md-6 form-group m-t-10">
+                                                                    <label class="billing-label">Bank Name <span class="mandatory">*</span>:</label>
+                                                                    <input required type="text" class="form-control  c-border" placeholder="" ng-model="abilling.checqueBank" required />
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-6 col-md-6 form-group  m-t-10">
+                                                                    <label class="billing-label">Cheque No. <span class="mandatory">*</span>:</label>
+                                                                    <input required type="text" class="form-control  c-border" placeholder="" ng-model="abilling.checqueNo" required />
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-12 col-md-12 form-group  m-t-10">
+                                                                    <label class="billing-label">Comments. <span class="mandatory">*</span>:</label>
+                                                                    <textarea required class="form-control  c-border" placeholder="" ng-model="abilling.paymentComments"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="online" ng-show="abilling.paymentMethodSelected === '2'">
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-6 col-md-6 form-group  m-t-10">
+                                                                    <label class="billing-label">Bank Name <span class="mandatory">*</span>:</label>
+                                                                    <input required type="text" class="form-control  c-border" placeholder="" ng-model="abilling.bankOnlineName" required />
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-6 col-md-6 form-group  m-t-10">
+                                                                    <label class="billing-label">Bank Account No. <span class="mandatory">*</span>:</label>
+                                                                    <input required type="text" class="form-control  c-border" placeholder="" ng-model="abilling.bankOnlineAccountno" required
+                                                                    />
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-12 col-md-12 form-group  m-t-10">
+                                                                    <label class="billing-label">Comments. <span class="mandatory">*</span>:</label>
+                                                                    <textarea required class="form-control  c-border" placeholder="" ng-model="abilling.paymentComments"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="draft" ng-show="abilling.paymentMethodSelected === '3'">
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-6 col-md-6 form-group  m-t-10">
+                                                                    <label class="billing-label">Bank Name <span class="mandatory">*</span>:</label>
+                                                                    <input required type="text" class="form-control  c-border" placeholder="" ng-model="abilling.bankDraftName" required />
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-6 col-md-6 form-group  m-t-10">
+                                                                    <label class="billing-label">Bank Draft No. <span class="mandatory">*</span>:</label>
+                                                                    <input required type="text" class="form-control  c-border" placeholder="" ng-model="abilling.bankDraftNo" required />
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-12 col-md-12 form-group  m-t-10">
+                                                                    <label class="billing-label">Comments. <span class="mandatory">*</span>:</label>
+                                                                    <textarea required class="form-control  c-border" placeholder="" ng-model="abilling.paymentComments"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="credit" ng-show="abilling.paymentMethodSelected === '4'">
+                                                            <label class="billing-label"><b>Please fill Card Details<span>*</span>:</b> </label>
+                                                            <!--<div id="stripe-credit-card"></div>-->
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-12 col-md-12 form-group  m-t-10">
+                                                                    <label class="billing-label">Card number <span class="mandatory">*</span>:</label>
+                                                                    <input required type="number" class="form-control  c-border" ng-model="abilling.card.cardnumber" required minlength="15"
+                                                                        maxlength="19" ng-blur="abilling.cardnoHandler()" />
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-4 col-md-4 form-group  m-t-10">
+                                                                    <label class="billing-label">Expiry Month <span class="mandatory">*</span>:</label>
+                                                                    <!--<input required type="number" class="form-control  c-border" required minlength="5" maxlength="7"  />-->
+                                                                    <select class="form-control  c-border" name="expiryMonth" ng-change="abilling.cardexpiryHandler()" ng-model="abilling.card.expiryMonth">
+                                                                        <option disabled selected value="">Month</option>
+                                                                        <option value="01">Jan</option>
+                                                                        <option value="02">Feb</option>
+                                                                        <option value="03">Mar</option>
+                                                                        <option value="04">Apr</option>
+                                                                        <option value="05">May</option>
+                                                                        <option value="06">Jun</option>
+                                                                        <option value="07">Jul</option>
+                                                                        <option value="08">Aug</option>
+                                                                        <option value="09">Sep</option>
+                                                                        <option value="10">Oct</option>
+                                                                        <option value="11">Nov</option>
+                                                                        <option value="12">Dec</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-4 col-md-4 form-group  m-t-10">
+                                                                    <label class="billing-label">Expiry Year <span class="mandatory">*</span>:</label>
+                                                                    <select class="form-control  c-border" name="expiryYear" ng-model="abilling.card.expiryYear" ng-change="abilling.cardexpiryHandler()">
+                                                                         <option disabled selected value="">Year</option>
+                                                                         <option ng-repeat="year in abilling.years" value="{{year}}">{{year}}</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-xs-12 col-sm-4 col-md-4 form-group  m-t-10">
+                                                                    <label class="billing-label">CVC <span class="mandatory">*</span>:</label>
+                                                                    <input required type="number" class="form-control  c-border" placeholder="xxx" ng-model="abilling.card.cvc" ng-blur="abilling.cardcvcHandler()"
+                                                                        minlength="3" maxlength="4" required />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <p>Price changes are applied after 24 hours and new units added would reflect
+                                                    in the current billing cycle. </p>
+                                                <div class="text-center">
+                                                    <button class="btn btn-primary cal-button" type="submit" ng-click="abilling.makePayment()">Make Payment</button>
+                                                    <!--button class="btn btn-primary cal-button" type="submit" ng-click="abilling.makePayment()">Save Changes</button-->
+                                                </div>
+                                    </form>
+                                    </div>
+                                    </div>
+                                </div>
+                                <!-- tabs start -->
+                                <div class="col-sm-5 col-md-4">
+                                    <div class="billing-tabs">
+                                        <ul class="nav nav-tabs" role="tablist" ng-init="tab2 = 1">
+                                            <li role="presentation" ng-class="tab2==1?'active':''" ng-show="abilling.selectedUserSelectedPlan != 'Annual'">
+                                                <a href ng-click="tab2 = 1" data-toggle="tab" aria-expanded="true">Monthly</a>
+                                            </li>
+                                            <li role="presentation" ng-class="tab2==1?'active':''" ng-show="abilling.selectedUserSelectedPlan == 'Annual'">
+                                                <a href ng-click="tab2 = 2" data-toggle="tab" aria-expanded="true">Annual</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div role="tabpanel" class="tab-pane active" id="billingMonthly" ng-show="tab2 === 1 || tab2 === 2">
+                                                <div class="">
+                                                    <table class="table table-border table-hover" style="border:1px solid #e7ecf1;overflow-x:auto;max-width:100vw">
+                                                        <tbody>
+                                                            <tr class="ng-scope">
+                                                                <td>Units Selected</td>
+                                                                <td>{{abilling.unitsProvidedToUser}}</td>
+                                                            </tr>
+                                                            <tr class="ng-scope" ng-if="abilling.allowFreeUnits">
+                                                                <td>Units Free</td>
+                                                                <td>{{abilling.currentSelectedUser.userData.freeUnitsAlloted
+                                                                    ? abilling.currentSelectedUser.userData.freeUnitsAlloted
+                                                                    : abilling.unitsFree}}</td>
+                                                            </tr>
+                                                            <tr ng-if="abilling.unitsAlreadyAdded > 0" class="ng-scope b-btm">
+                                                                <td>Already Added Units</td>
+                                                                <td>{{abilling.unitsAlreadyAdded}}</td>
+                                                            </tr>
+                                                            <tr class="ng-scope b-btm" ng-if="abilling.billingRequired">
+                                                                <td>Additional Billable Units</td>
+                                                                <td>{{abilling.selectedbillableUnits}}</td>
+                                                            </tr>
+                                                            <tr class="ng-scope">
+                                                                <td>Estimated charges<br/> <i ng-if="abilling.nextBillingCycleStartDate">Payment starts {{abilling.nextBillingCycleStartDate | date: 'MMMM dd yyyy'}}</i></td>
+                                                                <td>${{abilling.selectedUserEstimatedAmount}}</td>
+                                                            </tr>
+                                                            <tr class="ng-scope b-btm">
+                                                                <td>Discount (10% for annual plan)</td>
+                                                                <td><span ng-if="abilling.selectedUserDiscount > 0">&#x2013;</span>${{abilling.selectedUserDiscount}}</td>
+                                                            </tr>
+                                                            <tr class="ng-scope">
+                                                                <td>Total After Discount</td>
+                                                                <td>${{abilling.selectedUserTotalWithDiscount}}</td>
+                                                            </tr>
+                                                            <tr class="ng-scope b-btm">
+                                                                <td>Taxes</td>
+                                                                <td>${{abilling.selectedUserTaxes}}</td>
+                                                            </tr>
+                                                            <tr class="ng-scope">
+                                                                <td>Total Due</td>
+                                                                <td>${{abilling.selectedUserPayaableAmount}}</td>
+                                                            </tr>
+                                                            <!--<tr class="ng-scope">
+                                                                <td colspan="2">
+                                                                    <i>Currency set to Canadian $</i>
+                                                                </td>
+                                                            </tr>-->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- billing tabs end -->
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- tabs 1 : admin Billing end -->
+                    <!-- tabs 2 : admin Billing reports screen start -->
+                    <div role="tabpanel" class="tab-pane active" id="adminBillingReports" ng-show="tab === 2">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-2 pwd-wrap p-b-30">
+                                    <label class="control-label"><b>Period From</b></label>
+                                </div>
+                                <div class="col-xs-12 col-md-4 pwd-wrap p-b-30">
+                                    <span class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="abilling.fromDate" is-open="abilling.opened" datepicker-options="abilling.dateOptions" ng-required="true" close-text="Close" ng-click="abilling.openPicker()" ng-change="abilling.filterHistoryFromStart()" />
+                                        <span class="input-group-btn custom-input-group-btn">
+                                            <button type="button" class="btn btn-primary cal-button" ng-click="abilling.openPicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="col-xs-12 col-md-2 pwd-wrap p-b-30 text-center">
+                                    <label class="control-label"><b>To</b></label>
+                                </div>
+                                <div class="col-xs-12 col-md-4 pwd-wrap p-b-30">
+                                    <span class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="abilling.endDate" is-open="abilling.opened1" datepicker-options="abilling.dateOptions" ng-required="true" close-text="Close" ng-click="abilling.openPicker1()" />
+                                        <span class="input-group-btn custom-input-group-btn">
+                                            <button type="button" class="btn btn-primary cal-button" ng-click="abilling.openPicker1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="col-xs-12 col-md-2 pwd-wrap p-b-30">
+                                    <label class="control-label"><b>Select Users</b></label>
+                                </div>
+                                <div class="col-xs-12 col-md-4 pwd-wrap p-b-30" id="admin-reports">
+                                    <ui-select multiple sortable="true" ng-model="abilling.selectedUsers" theme="select2" class="m-input m-input--square" title="Choose a person"
+                                        style="min-width:100%;" tagging tagging-label="(custom 'new' label)" on-select="abilling.filterHistoryByName()"
+                                        on-remove="abilling.filterHistoryByName()">
+                                        <ui-select-match placeholder="Select or search a person in the list...">{{$item.userData.firstname}} {{$item.userData.lastname}}</ui-select-match>
+                                        <ui-select-choices repeat="item in abilling.users">
+                                            <div>{{item.userData.firstname + " " + item.userData.lastname}}</div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-xs-12 col-md-4 pwd-wrap p-b-30">
+                                    <button class="btn btn-success" ng-click="abilling.exportAsCsv()">Export Csv</button>
+                                </div>
+                                <div class="col-xs-12 pwd-wrap p-b-30">
+                                    <div class="table-responsive billin-tab-table" id="billingReports">
+                                        <table ng-Table="abilling.tableParams" class="table" show-filter="true">
+                                            <tr ng-repeat="info in $data">
+                                                <td title="'User Name'" sortable="'name'">{{info.firstname}} {{info.lastname}}</i>
+                                                </td>
+                                                <td title="'Invoice Number'" sortable="'invoiceId'">{{info.id}}</i>
+                                                </td>
+                                                <td title="'Invoice Amount'" sortable="'amount'">{{info.amount}} (incl. tax {{info.tax}})</i>
+                                                </td>
+                                                <td title="'# of units'" sortable="'unitsChange'">{{info.unitsChange}}</td>
+                                                <td title="'Subscription Type'" sortable="'plan'">{{info.plan}}</td>
+                                                <td title="'Payment method'" sortable="'payMethod'">{{info.payMethod}}</td>
+                                                <td title="'Actions'">Export <span class="pdf" ng-click="abilling.generatePDFReport(info)">PDF</span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <!-- Invoice template -->
+                                    <div id="editor"></div>
+                                    <div id="invoice">
+                                        <div>
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="invoice-header">
+                                                            <h1><img class="logo" src="images/vcancy_logo.png" /> Vcancy</h1>
+                                                            <h3><b>Automated Tenant Onboarding</b><br/>
+                                                                <span>Ditch phone calls and paper applications<br/>
+                                                                Email: <a href="mailto:support@vcancy.ca">support@vcancy.ca</a></span></h3>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <hr />
+                                                        <p>Dear <b>{{abilling.invoice.username}}</b>,</p>
+                                                        <p><br/></p>
+                                                        <p>Thankyou for using our services. Your order details for purchase
+                                                            on <i>{{abilling.invoice.date}}</i> is as following:
+                                                        </p>
+                                                        <h4 class="text-center">Your order {{abilling.invoice.id}}<br/> <small>Placed on {{abilling.invoice.date}}.</small></h4>
+                                                        <hr />
+                                                        <table class="table text-center">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Amount Payed</th>
+                                                                    <th>Payment Method</th>
+                                                                    <th>Units Purscased</th>
+                                                                    <th>Units Total Available</th>
+                                                                    <th>Subscription</th>
+                                                                    <th>Status</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>{{abilling.invoice.amount}} (incl. tax {{abilling.invoice.tax}})</td>
+                                                                    <td>{{abilling.invoice.paymethod}}</td>
+                                                                    <td>{{abilling.invoice.data.unitsChange}}</td>
+                                                                    <td>{{abilling.invoice.data.unitsTotal}}</td>
+                                                                    <td>{{abilling.invoice.subscription}}</td>
+                                                                    <td>{{abilling.invoice.data.status ? abilling.invoice.data.status
+                                                                        : ""}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <footer>
+                                                            <p><b>Declaration:</b> This is not an invoice but only a confirmation
+                                                                of the receipt of the amount paid against for the service
+                                                                as described above.</p>
+                                                            <p>Subject to terms and conditions mentioned at <a href="https://vcancy.ca">vcancy.ca</a></p>
+                                                            <p><b>NOTE:</b> This is computer generated receipt and does not
+                                                                require physical signature.</p>
+                                                            <p class="text-center"><cite>&#169; 2017 Vcancy.com. All rights reserved</cite></p>
+                                                        </footer>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Invoice template end -->
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- tabs 2 : admin Billing reports screen end -->
+                    <!-- tabs 3 : admin pricing screen reports screen start -->
+                    <div role="tabpanel" class="tab-pane active" id="adminBillingPricing" ng-show="tab === 3">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xs-12 pwd-wrap p-b-30">
+                                    <div class="col-xs-12 col-sm-6 col-md-4 form-group fg-float m-t-30">
+                                        <div class="fg-line fg-toggled">
+                                            <input required type="number" class="form-control w-100 phone" placeholder="" ng-model="abilling.trialDays" required />
+                                            <label class="fg-label">Set Trial days <span class="mandatory">*</span>:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 form-group fg-float m-t-30">
+                                        <div class="fg-line fg-toggled">
+                                            <input required type="number" ng-model="abilling.noFreeUnitPerMonth" class="form-control w-100 phone" placeholder="" required
+                                            />
+                                            <label class="fg-label">Set the # of units that are free <span class="mandatory">*</span>:</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-6 col-md-4 form-group fg-float m-t-30">
+                                        <div class="fg-line fg-toggled">
+                                            <input required type="number" class="form-control w-100 phone" placeholder="" ng-model="abilling.pricePerUnitPerMonth" required
+                                            />
+                                            <label class="fg-label">Set Price Per Unit Per month <span class="mandatory">*</span>:</label>
+                                        </div>
+                                    </div>
+                                    <button type="button" ng-click="abilling.updateAdminBillingPricing()" class="btn btn-primary cal-button pull-right m-t-10">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- tabs 3 : admin pricing screen reports screen end -->
+                </div>
+            </div>
+            <!-- billing tabs end -->
     </section>
 </section>
