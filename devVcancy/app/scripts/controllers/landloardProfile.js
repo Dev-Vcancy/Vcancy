@@ -26,66 +26,110 @@ vcancyApp
       vm.totaluser = 0;
       vm.companyUsers = [];
       /* LWS */
-
+      vm.billingtab = 1;
+      vm.allowFreUnits = true;
+      vm.setasdefault = false;
+      vm.savecardforFuture = false;
+      vm.invoice = {
+        username: "",
+        id: "",
+        amount: "",
+        tax: "",
+        units: "",
+        subscription: "",
+        paymethod: "",
+        data: "",
+        date: ''
+      };
+      vm.currentYear = new Date().getFullYear();
+      vm.years = [];
+      for (var i = 0; i < 15; i++) {
+        vm.years.push(vm.currentYear + i);
+      }
       vm.subscriptionValid = true;  // landlord user has purchased a plan
       vm.subscriptionPlan = "Free";  // purchased plan
+      vm.subscriptionOldPlan = "Free";  // purchased plan
+      vm.userOldPlanInfo = undefined;  // purchased plan
       vm.subscriptionLastPurchasedOnDate = "";  // purchased plan
       vm.creditcardNumber = "";
       vm.currentPlan = ""; // selected plan 
       vm.unitsAllowed = 5;
+      vm.freeUnitsAlloted = 5;
       vm.unitsSelected = 5;
-      vm.nextBillingCycleDate = "April 1 2017";
+      vm.unitsBillable = 5;
+      vm.allowFreeUnits = false;
+      vm.billingRequired = false;
+      vm.discountRequired = false;
+      vm.unitsFreeUnitsAllocated = 5;
+      vm.unitsProvidedToUser = 5;
+      vm.nextBillingCycleDate = '';
+      vm.planExpiryDate = '';
       vm.unitsAlreadyAdded = 5;
       vm.discount = 10;
-      vm.taxes = 2;
+      vm.discountAmount = 0;
+      vm.daysinFreePlan = 15;
+      vm.taxes = 2; // 2 %
+      vm.usertaxes = 0;
+      vm.totalEstimatedCharges = 0;
+      vm.totalAfterDiscount = 0;
       vm.amountTobePayed = 0;
-      vm.unitsFree = -5;
+      vm.additionalBillableUnits = 0;
+      vm.unitsFree = 5;
+      vm.unitsChange = 5;
+      vm.degradePlan = false;
+      vm.degradeInfo = undefined;
       vm.pricePerUnit = 0.5;
       vm.rangeSlider = {
         value: 0,
         options: {
           floor: 0,
-          ceil: 100,
+          ceil: 1000,
           step: 1,
+          disabled: false,
           minLimit: 5,
-          maxLimit: 100,
-          onChange: function(val) {
-            console.log('on change units' + val); // logs 'on change slider-id'
+          maxLimit: 1000,
+          onEnd: function (val) {
             vm.updatePayableAmount();
-        }
+          }
         }
       };
       vm.newcard = {
         name: "",
-        cardno: "",
+        cardnumber: "",
+        cvv: "",
+        expiryMonth: "",
+        expiryYear: "",
+        last4: ''
+      };
+      vm.defaultCard = {
+        name: "",
+        cardnumber: "",
+        cvv: "",
+        expiryMonth: "",
+        expiryYear: ""
+      };
+      vm.selectedCard = {
+        cardnumber: '',
         cvv: "",
         expiry: "",
+        expiryMonth: "",
+        expiryYear: "",
+        id: "",
+        last4: "",
+        name: ""
       };
-      vm.cards = [
-        {
-          name: "Ashish",
-          cardno: "4242 4242 4242 4242",
-          cardnoStr: "**** **** **** **** 4242",
-          cvv: "123",
-          expiry: "20/22",
-        },
-        {
-          name: "Shekhar",
-          cardno: "4242 4242 4242 4444",
-          cardnoStr: "**** **** **** **** 4444",
-          cvv: "223",
-          expiry: "12/23",
-        }
-      ];
+      vm.cards = [];
+      vm.userBillingHistory = [];
+      vm.nextBillingCycleStartDate = '';
+      vm.nextBillingCycleEndDate = '';
 
-      vm.billingHistoryData = [
-        { date: "March 28 2018", subscription: "Monthly", amount: 20, status: "Success", uid: '1' },
-        { date: "March 8 2018", subscription: "Monthly", amount: 20, status: "Cancelled", uid: '2' },
-        { date: "Feb 10 2018", subscription: "Monthly", amount: 20, status: "Failed", uid: '3' },
-        { date: "Jan 18 2018", subscription: "Monthly", amount: 20, status: "Refunded", uid: '4' }
-      ];
-      vm.tableParams = new NgTableParams({}, { dataset: vm.billingHistoryData });
-
+      // fetch billing constants
+      firebase.database().ref('/billing').once('value').then(function (userdata) {
+        // console.log("--biling constants--", userdata.val());
+        vm.unitsFree = userdata.val().freeUnits;
+        vm.daysinFreePlan = userdata.val().days;
+        vm.pricePerUnit = userdata.val().pricePerUnit;
+      });
 
       /* LWS end */
 
@@ -97,80 +141,206 @@ vcancyApp
 
         $scope.$apply(function () {
           console.log("landlord", userdata.val());
+          // fetch user data and store 
           vm.userData = userdata.val();
-
-          //fetch data from database
-          // update screen as per database
-          vm.currentPlan = "Free";
-          vm.subscriptionPlan = "Free";
-          vm.subscriptionLastPurchasedOnDate = "March 1 2017";
-          // for free plan
-          if (vm.subscriptionPlan = "Free") {
-
+          if (vm.userData.cards) {
+            // vm.cards = JSON.parse(vm.userData.cards);
+            var cardsCollection = JSON.parse(vm.userData.cards) ? JSON.parse(vm.userData.cards) : [];
+            cardsCollection.forEach(function (card) {
+              var Tempcard = card;
+              Tempcard.type = Stripe.card.cardType(card.cardnumber);
+              vm.cards.push(Tempcard);
+            });
           }
-
-          vm.subscriptionValid = true;
-          if (vm.subscriptionValid) {
-            // subscription is valid
-            vm.unitsAlreadyAdded = 10;
-            vm.rangeSlider.value = vm.unitsAlreadyAdded;
-            vm.unitsAllowed = 23;
-            vm.pricePerUnit = 0.5;
-            vm.taxes = 2;
-            vm.discount = 10;
-
+          // fetch default card of user
+          if (vm.userData.defaultCard && vm.userData.defaultCard != '') {
+            var userDefaultcard = JSON.parse(vm.userData.defaultCard);
+            vm.defaultCard = {
+              name: userDefaultcard.name,
+              cardnumber: parseInt(userDefaultcard.cardnumber),
+              cvv: "",
+              expiryMonth: userDefaultcard.expiryMonth,
+              expiryYear: userDefaultcard.expiryYear
+            };
           } else {
-            // show popup
-            swal({
-              title: "Error!",
-              text: 'Your Subscription is expired.',
-              type: "error",
-            }, function (isConfirm) {
-              if (isConfirm) {
-                console.log("Your account has been deactivated.");
-              } else {
-                console.log("Your account has been deactivated.");
+            if (vm.cards.length > 0)
+              vm.defaultCard = {
+                name: vm.userData.firstname + ' ' + vm.userData.lastname,
+                cardnumber: parseInt(vm.cards[0].cardnumber),
+                cvv: "",
+                expiryMonth: vm.cards[0].expiryMonth,
+                expiryYear: vm.cards[0].expiryYear,
+              };
+          }
+          /*  change from here */
+
+          /*  check for subscription plan subscribed, if not change plan o free plan,
+              assign free allocated units to current user as per admin settings
+          */
+          if (vm.userData.unitsProvidedToUser && vm.userData.freeUnitsAlloted && vm.userData.unitsProvidedToUser != '' && vm.userData.freeUnitsAlloted != '') {
+            vm.unitsProvidedToUser = vm.userData.unitsProvidedToUser;
+            vm.allowFreeUnits = false;
+            vm.unitsFreeUnitsAllocated = vm.userData.freeUnitsAlloted;
+            vm.unitsAlreadyAdded = vm.userData.unitsProvidedToUser;
+            vm.userBillingHistory = vm.userData.billingHistory ? vm.userData.billingHistory : [];
+            vm.rangeSlider = {
+              value: 5,
+              options: {
+                floor: vm.userData.freeUnitsAlloted,
+                ceil: 1000,
+                step: 1,
+                minLimit: vm.userData.freeUnitsAlloted,
+                maxLimit: 1000,
+                disabled: false,
+                onEnd: function (val) {
+                  vm.updatePayableAmount();
+                }
               }
+            };
+          } else {
+            // allocate free units and subscribe free plan
+            vm.allowFreeUnits = true;
+            vm.unitsProvidedToUser = vm.unitsFree;
+            vm.unitsFreeUnitsAllocated = vm.unitsFree;
+            //set free units being assigned to user
+            firebase.database().ref('users/' + landLordID + "/").update({ freeUnitsAlloted: vm.unitsFreeUnitsAllocated, unitsProvidedToUser: vm.unitsFreeUnitsAllocated }).then(function (snap) {
+              firebase.database().ref('users/' + landLordID + "/").once('value', function (snap) {
+                vm.userData = snap.val();
+                vm.rangeSlider = {
+                  value: 5,
+                  options: {
+                    floor: vm.userData.freeUnitsAlloted,
+                    ceil: 1000,
+                    step: 1,
+                    minLimit: vm.userData.freeUnitsAlloted,
+                    maxLimit: 1000,
+                    disabled: false,
+                    onEnd: function (val) {
+                      vm.updatePayableAmount();
+                    }
+                  }
+                };  // slider initialize
+              }); // get latest data
+            }); // update free units in db
+
+          } // free units allocation done
+
+          // get subscripbed plan if any
+          if (vm.userData.currentPlan && vm.userData.currentPlan != '' && vm.userData.currentPlan != undefined) {
+            vm.subscriptionPlan = vm.userData.currentPlan;
+            vm.currentPlan = vm.userData.currentPlan;
+            vm.subscriptionOldPlan = vm.userData.currentPlan;
+            if (vm.userData.currentPlanInfo && vm.userData.currentPlanInfo != '') {
+              vm.userOldPlanInfo = vm.userData.currentPlanInfo;
+            } else {
+              vm.userOldPlanInfo = JSON.stringify({
+                name: "Free",
+                units: vm.unitsProvidedToUser,
+                days: 15,
+                start: moment(new Date()).toDate(),
+                end: moment(new Date()).add(15, "days").toDate()
+              });
+              vm.subscriptionPlan = "Free";
+              vm.currentPlan = "Free";
+              vm.subscriptionOldPlan = "Free";
+              firebase.database().ref('users/' + landLordID + "/").update({ currentPlanInfo: vm.subscriptionOldPlanInfo, currentPlan: "Free", }).then(function (data) {
+                firebase.database().ref('users/' + landLordID + "/").once('value', function (snap) {
+                  vm.userData = snap.val();
+                });
+              });
+            }
+          }
+          else { // no plan subscribed
+            vm.subscriptionOldPlanInfo = JSON.stringify({
+              name: "Free",
+              units: vm.unitsProvidedToUser,
+              days: 15,
+              start: moment(new Date()).toDate(),
+              end: moment(new Date()).add(15, "days").toDate()
+            });
+            vm.subscriptionPlan = "Free";
+            vm.currentPlan = "Free";
+            vm.subscriptionOldPlan = "Free";
+            firebase.database().ref('users/' + landLordID + "/").update({
+              currentPlanInfo: vm.subscriptionOldPlanInfo,
+              currentPlan: "Free",
+            }).then(function (data) {
+              firebase.database().ref('users/' + landLordID + "/").once('value', function (snap) {
+                vm.userData = snap.val();
+                vm.userOldPlanInfo = vm.userData.currentPlanInfo;
+              });
             });
           }
 
+          // check degraded plan if user has degraded his plan units
+          if (vm.userData.degradeInfo && vm.userData.degradeInfo != '' && vm.userData.degradeInfo != 'Undefined' && vm.userData.degradeInfo != undefined) {
+            // apply degrade info
+            var info = JSON.parse(vm.userData.degradeInfo);
+            console.log(info);
+            if (Date.parse(info.startDate) < Date.now()) {
+              var newPlanInfo = {
+                units: vm.userData.unitsProvidedToUser - info.units,
+                currentPlan: JSON.stringify({
+                  start: info.startDate,
+                  end: info.endDate,
+                  units: 45,
+                  unitsTotal: 100,
+                  plan: info.plan
+                }),
+                degradeInfo: ''
+              };
+              console.log(newPlanInfo);
+              firebase.database().ref('users/' + landLordID + '/').update(newPlanInfo).then(function () {
+              }, function (error) {
+                return false;
+              });
+            }
+          }
 
-          // if (userdata.val() !== null) {
+          if (vm.userData.currentPlanInfo) {
+            var info = JSON.parse(vm.userData.currentPlanInfo);
+            if (Date.parse(info.end) < Date.now()) {
+              vm.subscriptionValid = false;
+              swal({
+                title: "Error",
+                text: "Your subscription has been expired. Please renew your plan now.",
+                type: "warning",
+                confirmButtonColor: '#009999',
+                confirmButtonText: "Ok",
+                showCancelButton: false,
+                closeOnClickOutside: false,
+                allowEscapeKey: true
+              },
+                function (isConfirm) {
+                  if (isConfirm) {
+                    console.log("Your account has been deactivated.");
+                    $scope.$apply(function () {
+                      $scope.tab = 2;
+                      // show billing tab
+                    });
+                     var disableAccount = firebase.database().ref('users/' + landLordID + "/").update({ disable: true }).then(function (snap) {
+                      console.log("Account disabled.");
+                     });
 
-          //   if(userdata.val().email != ''){
-          //     vm.email = userdata.val().email;
-          //   }else{
-          //     vm.email = localStorage.getItem('userEmail');
-          //   }
-
-          //     vm.firstname = userdata.val().firstname;
-          //     vm.lastname = userdata.val().lastname;
-          //     vm.address = userdata.val().address;
-          //     vm.contact = userdata.val().contact;
-          //     vm.loader = 1;
-          //     vm.isadded = userdata.val().isadded;
-          //     vm.iscancelshow = userdata.val().iscancelshow;
-          //     vm.iscreditcheck = userdata.val().iscreditcheck;
-          //     vm.iscriminalreport = userdata.val().iscriminalreport;
-          //     vm.isexpiresoon = userdata.val().isexpiresoon;
-          //     vm.ispropertydelete = userdata.val().ispropertydelete;
-          //     vm.isrentalsubmit = userdata.val().isrentalsubmit ;
-          //     vm.isshowingtime = userdata.val().isshowingtime;
-          //     if(userdata.val().profilepic != '' && userdata.val().profilepic != null){
-          //       vm.profilepic = userdata.val().profilepic;
-          //     }
-          //     if(userdata.val().companylogo != '' && userdata.val().companylogo != null){
-          //       vm.companylogo = userdata.val().companylogo;
-          //     }
-          //     vm.companyname = userdata.val().companyname;
+                  } else {
+                    console.log("Your account has been deactivated.");
+                  }
+                });
+            } else {
+              vm.subscriptionValid = true;
+            }
+          }
 
 
-
-
-          //   }
-        });
+          // refresh slider
+          $scope.$broadcast('reCalcViewDimensions');
+          $scope.$broadcast('rzSliderForceRender');
+          setTimeout(function () {
+            $scope.$broadcast('reCalcViewDimensions');
+            $scope.$broadcast('rzSliderForceRender');
+          }, 1000);
+        }); // scope apply end
       });
-
 
       var ref = firebase.database().ref("users");
       ref.orderByChild("refId").equalTo(landLordID).on("child_added", function (snapshot) {
@@ -178,7 +348,6 @@ vcancyApp
         companyUser.key = snapshot.key;
         vm.companyUsers.push(companyUser);
       });
-
 
       vm.profileSubmit = function () {
         var landLordID = localStorage.getItem('userID');
@@ -215,7 +384,6 @@ vcancyApp
           localStorage.setItem('userData', JSON.stringify(vm.userData));
           vm.opensuccesssweet("Profile Updated successfully!");
         }, function (error) {
-
           vm.openerrorsweet("Profile Not Updated! Try again!");
           return false;
         });
@@ -277,7 +445,7 @@ vcancyApp
               });
             }
           });
-      }
+      };
 
       vm.changepasswordSubmit = function (passworduser) {
 
@@ -305,7 +473,7 @@ vcancyApp
             user.updatePassword(newPassword).then(function () {
               localStorage.setItem('password', newPassword);
               vm.opensuccesssweet("Your password has been updated!");
-              var emailData = '<p>Hello, </p><p>Your password has been changed. If you didn‚Äôt change the password then please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+              var emailData = '<p>Hello, </p><p>Your password has been changed. If you didnít change the password then please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
               // Send Email
               passworduser.npassword = '';
               passworduser.password = '';
@@ -331,7 +499,7 @@ vcancyApp
           vm.openerrorsweet("Passwords don't match with your current password.");
           return false;
         }
-      }
+      };
 
       vm.profilestore = function () {
         AWS.config.update({
@@ -395,7 +563,7 @@ vcancyApp
           });
           return false;
         }
-      }
+      };
 
       vm.newuserSubmit = function (newuser) {
         var landLordID = localStorage.getItem('userID');
@@ -452,7 +620,7 @@ vcancyApp
                 // Success 
                 firebaseUser.sendEmailVerification().then(function () {
 
-                  var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at ' + email + '.</p><p>To view/edit user details, please log in https://vcancy.ca/ and go to ‚ÄúProfile‚Äù and click on ‚ÄúUsers‚Äù</p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                  var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at ' + email + '.</p><p>To view/edit user details, please log in https://vcancy.ca/ and go to ìProfileî and click on ìUsersî</p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                   // Send Email
                   emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
@@ -500,7 +668,7 @@ vcancyApp
         // });
 
 
-      }
+      };
 
       vm.deleteCompanyUsers = function (val) {
         swal({
@@ -535,7 +703,7 @@ vcancyApp
                 });
             }
           });
-      }
+      };
 
       vm.upload = function (file, filename) {
         file = file.replace("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,", "");
@@ -668,7 +836,7 @@ vcancyApp
           return false;
         }
 
-      }
+      };
 
       $scope.items = ['item1', 'item2', 'item3'];
 
@@ -718,133 +886,1270 @@ vcancyApp
 
       /* LWS start */
 
+      vm.moveToBillingInfo = function () {
+        if (vm.billingRequired = true) {
+          // switch tab and allow to pay
+          vm.billingtab = 2;
+        }
+        else {
+          // no billing required
+          vm.openerrorsweet("No payment needed.");
+        }
+      };
 
-      // landlord subscription form submit 
-      vm.billingSubscriptionSubmit = function () {
-        var userEmail = localStorage.getItem('userEmail');
-        var landLordID = localStorage.getItem('userID');
-        console.log("currentPlan", vm.currentPlan);
-        // set form field with default value
-        // vm.currentPlan = 1222;
-      }
+      vm.selectCCard = function (card) {
+        console.log(card);
+        vm.selectedCard.name = card.name;
+        vm.selectedCard.cardnumber = parseInt(card.cardnumber);
+        vm.selectedCard.cvv = '';
+        vm.selectedCard.expiry = card.expiryMonth + "/" + card.expiryYear;
+        vm.selectedCard.expiryMonth = card.expiryMonth;
+        vm.selectedCard.expiryYear = card.expiryYear;
+      };
 
-      // landlord Billing info form submit 
-      vm.profileBillingInfoFormSubmit = function () {
-        var userEmail = localStorage.getItem('userEmail');
-        var landLordID = localStorage.getItem('userID');
-        console.log("currentPlan", vm.currentPlan);
-        // set form field with default value
-        // vm.currentPlan = 1222;
-        StripeCheckout.open({
-          key: "pk_test_ZWfxP91JWBFEpJn9yCZKeTzB",
-          address: false,
-          email: localStorage.getItem('userEmail'),
-          amount: 100,
-          currency: 'usd',
-          name: 'Purchase',
-          description: 'Description',
-          panelLabel: 'Checkout',
-          token: "adsadsadsadasd"
+      vm.removeCard = function (selectedCard) {
+        var cards = vm.cards;
+        vm.cards = cards.filter(card => card.cardnumber != selectedCard.cardnumber);
+        var cardData = { cards: JSON.stringify(vm.cards) };
+        firebase.database().ref('users/' + landLordID + "/").update(cardData).then(function () {
+          vm.opensuccesssweet("Card Deleted successfully!");
+          vm.selectedCard = {
+            cardnumber: '',
+            cvv: "",
+            expiry: "",
+            expiryMonth: "",
+            expiryYear: "",
+            id: "",
+            last4: "",
+            name: ""
+          };
+        }, function (error) {
+          vm.openerrorsweet("Unable to delete card! Try again!");
+          return false;
         });
-      }
+      };
 
-      vm.promptOnPlanChange = function () {
-        var oldPlan = vm.subscriptionPlan;
-        if (vm.subscriptionValid == true) {
+      vm.addNewCard = function () {
+        // add new card in database
+        var findCard = vm.cards.find(card => card.cardnumber == vm.newcard.cardnumber);
+        if (findCard) {
+          vm.openerrorsweet('Card with number: ' + vm.newcard.cardnumber + ' already exists.');
+        } else {
+          var cardToBeAdded = {
+            id: vm.newcard.name + vm.newcard.cardnumber,
+            name: vm.newcard.name,
+            cardnumber: vm.newcard.cardnumber.toString(),
+            cvv: vm.newcard.cvv.toString(),
+            expiryMonth: vm.newcard.expiryMonth,
+            expiryYear: vm.newcard.expiryYear,
+            last4: vm.newcard.cardnumber.toString().slice(-4),
+          };
+          vm.cards.push(cardToBeAdded);
+          vm.selectCCard(cardToBeAdded);
+          vm.newcard = {
+            name: "",
+            cardnumber: "",
+            cvv: "",
+            expiryMonth: "",
+            expiryYear: "",
+            last4: ''
+          };
+          console.log(vm.setasdefault);
+          console.log(JSON.stringify(cardToBeAdded));
+          if (vm.setasdefault) {
+            var cardData = { cards: JSON.stringify(vm.cards), defaultCard: JSON.stringify(cardToBeAdded) };
+            firebase.database().ref('users/' + landLordID + "/").update(cardData).then(function () {
+              vm.opensuccesssweet("Card Added successfully!");
+              vm.defaultCard = cardToBeAdded;
+            }, function (error) {
+              vm.openerrorsweet("Unable to add card! Try again!");
+              return false;
+            });
+          } else {
+            var cardData = { cards: JSON.stringify(vm.cards) };
+            firebase.database().ref('users/' + landLordID + "/").update(cardData).then(function () {
+              vm.opensuccesssweet("Card Added successfully!");
+            }, function (error) {
+              vm.openerrorsweet("Unable to add card! Try again!");
+              return false;
+            });
+          }
+        }
+      };
+
+      vm.cardTypeDetect = function (cardnumber) {
+        var cardno = cardnumber;
+        vm.newcard.type = Stripe.card.cardType(cardno);
+      };
+
+      vm.cardnoHandler = function (cardnumber) {
+        var cardno = cardnumber;
+        if (Stripe.card.validateCardNumber(cardno)) {
+        } else {
           swal({
             title: "Warning!",
-            text: "Are you sure you want to change your plan?",
+            text: "Please enter a valid card no.",
             type: "warning",
             confirmButtonColor: '#009999',
             confirmButtonText: "Ok",
-            showCancelButton: true,
+            showCancelButton: false,
             closeOnClickOutside: false,
-            allowEscapeKey: false
+            allowEscapeKey: true
           }, function (isConfirm) {
             if (isConfirm) {
-              alert("Plan changes beign done");
+              console.log("Plan changes beign done");
             } else {
-              alert("No changes needed");
+              console.log("No changes needed");
             }
+          });
+        }
+      };
+
+      vm.cardexpiryHandler = function (month, year) {
+        var expiryMonth = month;
+        var expiryYear = year;
+        if (expiryMonth != '' && expiryYear != '') {
+          if (Stripe.card.validateExpiry(expiryMonth, expiryYear))
+          { } else {
+            swal({
+              title: "Warning!",
+              text: "Please select correct expiry date.",
+              type: "warning",
+              confirmButtonColor: '#009999',
+              confirmButtonText: "Ok",
+              showCancelButton: false,
+              closeOnClickOutside: false,
+              allowEscapeKey: true
+            }, function (isConfirm) {
+              if (isConfirm) {
+                console.log("Plan changes beign done");
+              } else {
+                console.log("No changes needed");
+              }
+            });
+          }
+        }
+      };
+
+      vm.cardcvcHandler = function (cvc) {
+        var cvc = cvc;
+        if (Stripe.card.validateCVC(cvc))
+        { } else {
+          swal({
+            title: "Warning!",
+            text: "Please enter correct cvv code.",
+            type: "warning",
+            confirmButtonColor: '#009999',
+            confirmButtonText: "Ok",
+            showCancelButton: false,
+            closeOnClickOutside: false,
+            allowEscapeKey: true
+          }, function (isConfirm) {
+            if (isConfirm) {
+              console.log("Plan changes beign done");
+            } else {
+              console.log("No changes needed");
+            }
+          });
+        }
+      };
+
+      vm.downloadInvoice = function (data) {
+        //console.log(data);
+        vm.invoice.username = data.firstname + " " + data.lastname;
+        vm.invoice.date = moment(data.date).format("MMMM DD, YYYY HH:mm A");
+        vm.invoice.id = data.id;
+        vm.invoice.amount = data.amount;
+        vm.invoice.tax = data.tax;
+        vm.invoice.paymethod = data.payMethod;
+        vm.invoice.subscription = data.plan;
+        vm.invoice.data = data;
+        $('#invoice').show(1, function () {
+          var pdf = new jsPDF('p', 'pt', 'letter');
+          pdf.addHTML($('#invoice')[0], function () {
+            pdf.save('Test.pdf');
+            $('#invoice').hide(1);
+          });
+        });
+      };
+
+      // make payment from selected card
+      vm.makePaymentFromSelectedCard = function () {
+        console.log(vm.selectedCard);
+        var expiryMonth, expiryYear;
+        if (vm.selectedCard) {
+          expiryMonth = vm.selectedCard.expiryMonth;
+          expiryYear = vm.selectedCard.expiryYear;
+        } else {
+          expiryMonth = vm.selectedCard.expiry.slice(0, vm.selectedCard.expiry.indexOf("/"));
+          expiryYear = vm.selectedCard.expiry.slice(vm.selectedCard.expiry.indexOf("/") + 1);
+        }
+        swal({
+          title: "Warning!",
+          text: "Are you sure to pay using card [" + vm.selectedCard.cardnumber + "].",
+          type: "warning",
+          confirmButtonColor: '#009999',
+          confirmButtonText: "Ok",
+          showCancelButton: false,
+          closeOnClickOutside: false,
+          allowEscapeKey: true
+        }, function (isConfirm) {
+          if (isConfirm) {
+            // user choses to pay
+            var req = {
+              method: 'POST',
+              url: 'http://localhost:1337/api/v1/stipecharge',
+              // url: config.sailsBaseUrl + 'email/sendemail',
+              headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                "Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+              },
+              data: {
+                user: vm.userData,
+                amount: vm.amountTobePayed,
+                desciption: 'Units payment from landlord ' + localStorage.userEmail,
+                cardno: vm.selectedCard.cardnumber,
+                expiryMonth: expiryMonth,
+                expiryYear: expiryYear,
+                cvc: vm.selectedCard.cvv
+              }
+            };
+            // console.log("req", req);
+            $http(req).then(function (response) {
+              var data = response.data;
+              console.log(data);
+              if (data.err) {
+                // show error regarding transaction
+                swal({
+                  title: "Error!",
+                  text: response.data.err.message,
+                  type: "error",
+                  confirmButtonColor: '#009999',
+                  confirmButtonText: "Ok",
+                  showCancelButton: false,
+                  closeOnClickOutside: true,
+                  allowEscapeKey: true
+                }, function (isConfirm) {
+                  // do nothing
+                });
+              }
+              // handle charge response
+              if (response.data.charge) {
+                // save card in db
+                if (vm.savecardforFuture == true) {
+                  var cardToBeAdded = {
+                    id: vm.defaultCard.name + vm.defaultCard.cardnumber,
+                    name: vm.defaultCard.name,
+                    cardnumber: vm.defaultCard.cardnumber.toString(),
+                    cvv: vm.defaultCard.cvv.toString(),
+                    expiryMonth: vm.defaultCard.expiryMonth,
+                    expiryYear: vm.defaultCard.expiryYear,
+                    last4: vm.defaultCard.cardnumber.toString().slice(-4),
+                  };
+                  vm.cards.push(cardToBeAdded);
+                  var cardData = { cards: JSON.stringify(vm.cards) };
+                  firebase.database().ref('users/' + landLordID + "/").update(cardData).then(function () {
+                    vm.opensuccesssweet("Card saved successfully!");
+                    if (vm.setasdefault == true) {
+                      var defaultCard = { defaultCard: JSON.stringify(cardToBeAdded) };
+                      firebase.database().ref('users/' + landLordID + "/").update(defaultCard).then(function () {
+                      }, function (error) {
+                        return false;
+                      });
+                    }
+                  }, function (error) {
+                    vm.openerrorsweet("Unable to save card! Try again!");
+                    return false;
+                  });
+                }
+                var charge = response.data.charge;
+                console.log(charge);
+                var cdate = new Date();
+                var upgradeOrRenew = JSON.stringify({
+                  start: vm.nextBillingCycleStartDate,
+                  end: vm.nextBillingCycleEndDate,
+                  units: vm.unitsBillable,
+                  unitsTotal: vm.unitsProvidedToUser,
+                  plan: vm.currentPlan
+                });
+                var transaction = {
+                  date: cdate,
+                  amount: '$' + vm.amountTobePayed,
+                  tax: '$' + vm.usertaxes,
+                  id: Date.parse(cdate),
+                  plan: vm.currentPlan,
+                  payMethod: 'Credit/Debit Card',
+                  firstname: vm.userData.firstname,
+                  lastname: vm.userData.lastname,
+                  email: vm.userData.email,
+                  unitsTotal: vm.unitsProvidedToUser,
+                  unitsChange: vm.unitsBillable,
+                  status: "Success",
+                  stripeResponse: JSON.stringify(charge)
+                };
+                vm.userBillingHistory.push(transaction);
+                var billinginfo = angular.copy(vm.userBillingHistory);
+                // update database 
+                var updateUser = firebase.database().ref('users/' + landLordID + '/').update({
+                  currentPlan: vm.currentPlan,
+                  unitsProvidedToUser: vm.unitsProvidedToUser,
+                  unitsAllowed: vm.unitsProvidedToUser,
+                  billingHistory: billinginfo,
+                  nextBillingDate: vm.nextBillingCycleStartDate,
+                  newPaymentApplyFrom: vm.nextBillingCycleStartDate,
+                  currentPlanInfo: upgradeOrRenew,
+                }).then(function () {
+                  swal({
+                    title: "Success!",
+                    text: "Transaction completed successfully.",
+                    type: "success",
+                    confirmButtonColor: '#009999',
+                    confirmButtonText: "Ok"
+                  }, function (isConfirm) {
+                    if (isConfirm) {
+                      $state.reload();
+                    }
+                  });
+                });
+              }
+            }).catch(function (err) {
+              console.log(err)
+            });
+          }
+          else {
+            // do nothing as user cancelled for payment
+          }
+        });
+      } // make payment from selected card end
+
+      // make payment from popup
+      vm.makePaymentFromPopUp = function () {
+        if (Stripe.card.validateCardNumber(vm.defaultCard.cardnumber) && Stripe.card.validateCVC(vm.defaultCard.cvv) && Stripe.card.validateExpiry(vm.defaultCard.expiryMonth, vm.defaultCard.expiryYear)) {
+          // make payment
+          swal({
+            title: "Warning!",
+            text: "Are you sure to pay using card [" + vm.defaultCard.cardnumber + "].",
+            type: "warning",
+            confirmButtonColor: '#009999',
+            confirmButtonText: "Ok",
+            showCancelButton: false,
+            closeOnClickOutside: false,
+            allowEscapeKey: true
+          }, function (isConfirm) {
+            if (isConfirm) {
+              // user choses to pay
+              var req = {
+                method: 'POST',
+                url: 'http://localhost:1337/api/v1/stipecharge',
+                // url: config.sailsBaseUrl + 'email/sendemail',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*',
+                  "Access-Control-Allow-Headers": "Content-Type,Access-Control-Allow-Origin,Access-Control-Allow-Headers",
+                },
+                data: {
+                  user: vm.userData,
+                  amount: vm.amountTobePayed,
+                  desciption: 'Units payment from landlord ' + localStorage.userEmail,
+                  cardno: vm.defaultCard.cardnumber,
+                  expiryMonth: vm.defaultCard.expiryMonth,
+                  expiryYear: vm.defaultCard.expiryYear,
+                  cvc: vm.defaultCard.cvv
+                }
+              };
+              // console.log("req", req);
+              $http(req).then(function (response) {
+                var data = response.data;
+                console.log(data);
+                if (data.err) {
+                  // show error regarding transaction
+                  swal({
+                    title: "Error!",
+                    text: response.data.err.message,
+                    type: "error",
+                    confirmButtonColor: '#009999',
+                    confirmButtonText: "Ok",
+                    showCancelButton: false,
+                    closeOnClickOutside: true,
+                    allowEscapeKey: true
+                  }, function (isConfirm) {
+                    // do nothing
+                  });
+                }
+                // handle charge response
+                if (response.data.charge) {
+                  // save card in db
+                  if (vm.savecardforFuture == true) {
+                    var cardToBeAdded = {
+                      id: vm.defaultCard.name + vm.defaultCard.cardnumber,
+                      name: vm.defaultCard.name,
+                      cardnumber: vm.defaultCard.cardnumber.toString(),
+                      cvv: vm.defaultCard.cvv.toString(),
+                      expiryMonth: vm.defaultCard.expiryMonth,
+                      expiryYear: vm.defaultCard.expiryYear,
+                      last4: vm.defaultCard.cardnumber.toString().slice(-4),
+                    };
+                    vm.cards.push(cardToBeAdded);
+                    var cardData = { cards: JSON.stringify(vm.cards) };
+                    firebase.database().ref('users/' + landLordID + "/").update(cardData).then(function () {
+                      vm.opensuccesssweet("Card saved successfully!");
+                      if (vm.setasdefault == true) {
+                        var defaultCard = { defaultCard: JSON.stringify(cardToBeAdded) };
+                        firebase.database().ref('users/' + landLordID + "/").update(defaultCard).then(function () {
+                        }, function (error) {
+                          return false;
+                        });
+                      }
+                    }, function (error) {
+                      vm.openerrorsweet("Unable to save card! Try again!");
+                      return false;
+                    });
+                  }
+                  var charge = response.data.charge;
+                  console.log(charge);
+                  var cdate = new Date();
+                  var upgradeOrRenew = JSON.stringify({
+                    start: vm.nextBillingCycleStartDate,
+                    end: vm.nextBillingCycleEndDate,
+                    units: vm.unitsBillable,
+                    unitsTotal: vm.unitsProvidedToUser,
+                    plan: vm.currentPlan
+                  });
+                  var transaction = {
+                    date: cdate,
+                    amount: '$' + vm.amountTobePayed,
+                    tax: '$' + vm.usertaxes,
+                    id: Date.parse(cdate),
+                    plan: vm.currentPlan,
+                    payMethod: 'Credit/Debit Card',
+                    firstname: vm.userData.firstname,
+                    lastname: vm.userData.lastname,
+                    email: vm.userData.email,
+                    unitsTotal: vm.unitsProvidedToUser,
+                    unitsChange: vm.unitsBillable,
+                    status: "Success",
+                    stripeResponse: JSON.stringify(charge)
+                  };
+                  vm.userBillingHistory.push(transaction);
+                  var billinginfo = angular.copy(vm.userBillingHistory);
+                  // update database 
+                  var updateUser = firebase.database().ref('users/' + landLordID + '/').update({
+                    currentPlan: vm.currentPlan,
+                    unitsProvidedToUser: vm.unitsProvidedToUser,
+                    unitsAllowed: vm.unitsProvidedToUser,
+                    billingHistory: billinginfo,
+                    nextBillingDate: vm.nextBillingCycleStartDate,
+                    newPaymentApplyFrom: vm.nextBillingCycleEndDate,
+                    currentPlanInfo: upgradeOrRenew,
+                  }).then(function () {
+                    swal({
+                      title: "Success!",
+                      text: "Transaction completed successfully.",
+                      type: "success",
+                      confirmButtonColor: '#009999',
+                      confirmButtonText: "Ok"
+                    }, function (isConfirm) {
+                      if (isConfirm) {
+                        $state.reload();
+                      }
+                    });
+                  });
+                }
+              }).catch(function (err) {
+                console.log(err)
+              });
+            }
+            else {
+              // do nothing as user cancelled for payment
+            }
+
+          });
+        }
+        else {
+          // show error
+          swal({
+            title: "Warning!",
+            text: "Please Fill all necessary fields.",
+            type: "warning",
+            confirmButtonColor: '#009999',
+            confirmButtonText: "Ok",
+            showCancelButton: false,
+            closeOnClickOutside: false,
+            allowEscapeKey: true
+          }, function (isConfirm) {
           });
         }
       }
 
-      vm.moveToBillingInfo = function () {
+      // calculate next cycle date
+      vm.calculateNextCycleDate = function () {
+        var currentPlan = vm.currentPlan, oldPlan = vm.userData.currentPlan, oldPlanInfo = vm.userData.currentPlanInfo;
+        var startdate = '', enddate = '';
 
-      }
-      vm.showPaymentMethod = function () {
+        // check if user have a plan
+        if (oldPlanInfo != '' && oldPlanInfo != undefined) {
+          var userOldPlanInfo = JSON.parse(oldPlanInfo);
+          if (Date.parse(oldPlanInfo.end) < Date.now()) {
+            console.log("Plan subscription is expired.");
+            // check for different plan
+            if (currentPlan != oldPlan) {
+              console.log("Diffrent Plan selected");
+              // check for expiry of old plan
+              if (Date.parse(userOldPlanInfo.end) < Date.now()) {
+                console.log("Plan subscription is expired.");
+                if (currentPlan == "Free") {
+                  startdate = new moment().toDate();
+                  enddate = new moment().add(15, 'day').toDate();
+                } else if (currentPlan == "Monthly") {
+                  startdate = new moment().toDate();
+                  enddate = new moment().add(30, 'day').toDate();
+                }
+                else if (currentPlan == "Annual") {
+                  startdate = new moment().toDate();
+                  enddate = new moment().add(365, 'day').toDate();
+                } else {
+                }
+              }
+              else {
+                console.log("Plan subscription is still valid.");
+                // calculat next cycle date after current plan
+                var oldPlanEndDate = userOldPlanInfo.end;
+                if (currentPlan == "Free") {
+                  startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
+                  enddate = new moment(startdate).add(15, 'day').toDate();
+                } else if (currentPlan == "Monthly") {
+                  startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
+                  enddate = new moment(startdate).add(30, 'day').toDate();
+                }
+                else if (currentPlan == "Annual") {
+                  startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
+                  enddate = new moment(startdate).add(365, 'day').toDate();
+                } else {
+                }
+              }
+            }
+            else {
+              // same plan selected as old
+              if (Date.parse(oldPlanInfo.end) < Date.now()) {
+                console.log("Plan subscription is expired.");
+                if (currentPlan == "Free") {
+                  startdate = new moment().toDate();
+                  enddate = new moment().add(15, 'day').toDate();
+                } else if (currentPlan == "Monthly") {
+                  startdate = new moment().toDate();
+                  enddate = new moment().add(30, 'day').toDate();
+                }
+                else if (currentPlan == "Annual") {
+                  startdate = new moment().toDate();
+                  enddate = new moment().add(365, 'day').toDate();
+                } else {
+                }
+              }
+              else {
+                console.log("Plan subscription is still valid.");
+                // calculat next cycle date after current plan
+                var oldPlanEndDate = oldPlanInfo.end;
+                if (currentPlan == "Free") {
+                  startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
+                  enddate = new moment(startdate).add(15, 'day').toDate();
+                } else if (currentPlan == "Monthly") {
+                  startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
+                  enddate = new moment(startdate).add(30, 'day').toDate();
+                }
+                else if (currentPlan == "Annual") {
+                  startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
+                  enddate = new moment(startdate).add(365, 'day').toDate();
+                } else {
+                }
+              }
+            } // end same plan else
+          } else {
+            var oldPlanEndDate = JSON.parse(oldPlanInfo).end;
+            if (currentPlan == "Free") {
+              startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
+              enddate = new moment(startdate).add(15, 'day').toDate();
+            } else if (currentPlan == "Monthly") {
+              startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
+              enddate = new moment(startdate).add(30, 'day').toDate();
+            }
+            else if (currentPlan == "Annual") {
+              startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
+              enddate = new moment(startdate).add(365, 'day').toDate();
+            } else {
+            }
+          }
+        }
+        else {
+          console.log("User have no plan subscribed.");
+          vm.currentPlan = "Free";
+          vm.unitsProvidedToUser = vm.unitsFree;
+          console.log("Free plan selected, Check for expiry.")
+          if (currentPlan == "Free") {
+            startdate = new moment().toDate();
+            enddate = new moment().add(15, 'day').toDate();
+          } else if (currentPlan == "Monthly") {
+            startdate = new moment().toDate();
+            enddate = new moment().add(30, 'day').toDate();
+          }
+          else if (currentPlan == "Annual") {
+            startdate = new moment().toDate();
+            enddate = new moment().add(365, 'day').toDate();
+          } else {
+          }
+        }
+        vm.nextBillingCycleStartDate = startdate;
+        vm.nextBillingCycleEndDate = enddate;
+      };
 
-      }
+      vm.selecctDefaultCard = function () {
+        vm.selectedCard = {
+          cardnumber: vm.defaultCard.cardnumber,
+          cvv: "",
+          expiry: vm.defaultCard.expiryMonth + '/' + vm.defaultCard.expiryYear,
+          expiryMonth: vm.defaultCard.expiryMonth,
+          expiryYear: vm.defaultCard.expiryYear,
+          id: "",
+          last4: "",
+          name: vm.defaultCard.name
+        };
+      };
+      $scope.$broadcast('reCalcViewDimensions');
+      $scope.$broadcast('rzSliderForceRender');
+
       vm.updatePayableAmount = function () {
-        vm.amountTobePayed = (((vm.unitsAllowed - vm.unitsAlreadyAdded + vm.unitsFree) * vm.pricePerUnit) - ((vm.unitsAllowed + vm.unitsFree - vm.unitsAlreadyAdded) * vm.pricePerUnit * vm.discount / 100)) - ((((vm.unitsAllowed - vm.unitsAlreadyAdded + vm.unitsFree) * vm.pricePerUnit) - ((vm.unitsAllowed + vm.unitsFree - vm.unitsAlreadyAdded) * vm.pricePerUnit * vm.discount / 100)) * (vm.taxes / 100));
-        vm.amountTobePayed = vm.amountTobePayed.toFixed(2);
-        console.log(vm.amountTobePayed);
-        
+        vm.calculateNextCycleDate();
+        // next plan changes dates to be calculated.
+        var billableUnits = 0,
+          estimatedCharge = 0,
+          pricePerUnit = vm.pricePerUnit,
+          freeUnits = vm.userData.freeUnitsAlloted,
+          discount = 0,
+          totalAfterDiscount = 0,
+          taxTodeduct = 0,
+          totalDue = 0,
+          unitsAddedDeleted = 0,
+          unitsAlreadyPaidFor = vm.unitsAlreadyAdded,
+          unitsSelected = vm.unitsProvidedToUser,
+          date = '',
+          oldPlan = vm.userData.currentPlan;
+
+        if (vm.currentPlan != vm.subscriptionOldPlan) {
+          // plan change
+          var oldPlanInfo = JSON.parse(vm.userData.currentPlanInfo);
+          console.log("Another plan selected");
+          // check if old plan is expired
+          if (Date.parse(oldPlanInfo.end) < Date.now()) {
+            console.log("Plan expired. Pay for all units selected.");
+            // like monthly to annual
+            if (vm.currentPlan == "Annual" && vm.subscriptionOldPlan == "Monthly") {
+              console.log("Upgrade from monthly o annual. Billing cyckle will be next month first day.");
+              console.log("Pay for selected units annually");
+              vm.billingRequired = true;
+              vm.discountRequired = true;
+              billableUnits = vm.unitsProvidedToUser - freeUnits;
+              vm.unitsBillable = parseInt(billableUnits);
+              estimatedCharge = billableUnits * vm.pricePerUnit * 12;
+              discount = estimatedCharge * 0.1;
+              vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+              vm.discountAmount = parseFloat(discount.toFixed(2));
+              totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+              vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+              taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+              vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+              payableAmount = vm.totalAfterDiscount + vm.usertaxes;
+              vm.amountTobePayed = parseFloat(payableAmount.toFixed(2));
+            }
+            // free to Annual
+            if (vm.currentPlan == "Annual" && vm.subscriptionOldPlan == "Free") {
+              console.log("Upgrade from free to annual. Billing cyckle will be next month first day.");
+              // Billing cycle date will be next month first day
+              console.log("Pay for selected units annually");
+              vm.billingRequired = true;
+              vm.discountRequired = true;
+              billableUnits = vm.unitsProvidedToUser - freeUnits;
+              vm.unitsBillable = parseInt(billableUnits);
+              estimatedCharge = billableUnits * vm.pricePerUnit * 12;
+              discount = estimatedCharge * 0.1;
+              vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+              vm.discountAmount = parseFloat(discount.toFixed(2));
+              totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+              vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+              taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+              vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+              payableAmount = vm.totalAfterDiscount + vm.usertaxes;
+              vm.amountTobePayed = parseFloat(payableAmount.toFixed(2));
+            }
+            // free to Monthly
+            if (vm.currentPlan == "Monthly" && vm.subscriptionOldPlan == "Free") {
+              console.log("Upgrade from free to monthly. Billing cyckle will be next month first day.");
+              console.log("Pay for selected units for month");
+              // Billing cycle date will be next month first day
+              vm.billingRequired = true;
+              vm.discountRequired = false;
+              billableUnits = vm.unitsProvidedToUser - freeUnits;
+              vm.unitsBillable = parseInt(billableUnits);
+              estimatedCharge = billableUnits * vm.pricePerUnit;
+              discount = 0;
+              vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+              vm.discountAmount = 0;
+              totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+              vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+              taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+              vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+              payableAmount = vm.totalAfterDiscount + vm.usertaxes;
+              vm.amountTobePayed = parseFloat(payableAmount.toFixed(2));
+            }
+            // free to Monthly
+            if (vm.currentPlan == "Monthly" && vm.subscriptionOldPlan == "Annual") {
+              console.log("Upgrade from annual to monthly. Billing cyckle will be next month first day.");
+              console.log("Pay for selected units");
+              // Billing cycle date will be next month first day
+              vm.billingRequired = true;
+              vm.discountRequired = false;
+              billableUnits = vm.unitsProvidedToUser - freeUnits;
+              vm.unitsBillable = parseInt(billableUnits);
+              estimatedCharge = billableUnits * vm.pricePerUnit;
+              discount = 0;
+              vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+              vm.discountAmount = 0;
+              totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+              vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+              taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+              vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+              vm.amountTobePayed = vm.totalAfterDiscount + vm.usertaxes;
+            }
+            if (vm.currentPlan == "Free" && vm.subscriptionOldPlan == "Annual") {
+              console.log("Plan chaged from Annual to Free");
+              swal({
+                title: "Warning!",
+                text: 'Are you sure you want to change your subscription to Free. You will not be able to use more than free units.',
+                type: "warning",
+                showCancelButton: true,
+              }, function (isConfirm) {
+                if (isConfirm) {
+                  vm.billingRequired = false;
+                  vm.discountRequired = false;
+                  vm.unitsBillable = 0;
+                  vm.discountAmount = 0;
+                  vm.totalEstimatedCharges = 0;
+                  vm.totalAfterDiscount = 0;
+                  vm.usertaxes = 0;
+                  vm.amountTobePayed = 0;
+                } else { }
+              });
+            }
+            if (vm.currentPlan == "Free" && vm.subscriptionOldPlan == "Monthly") {
+              console.log("Plan chaged from Monthly to Free");
+              swal({
+                title: "Warning!",
+                text: 'Are you sure you want to change your subscription to Free. You will not be able to use more than free units.',
+                type: "warning",
+                showCancelButton: true,
+              }, function (isConfirm) {
+                if (isConfirm) {
+                  vm.billingRequired = false;
+                  vm.discountRequired = false;
+                  vm.unitsBillable = 0;
+                  vm.discountAmount = 0;
+                  vm.totalEstimatedCharges = 0;
+                  vm.totalAfterDiscount = 0;
+                  vm.usertaxes = 0;
+                  vm.amountTobePayed = 0;
+                } else { }
+              });
+            }
+
+          } else {
+            console.log("Plan is valid");
+            if (vm.currentPlan == "Annual" && vm.subscriptionOldPlan == "Monthly") {
+              console.log("Upgrade from monthly to annual. Billing cycle will be next month first day.");
+              if (unitsSelected > unitsAlreadyPaidFor) {
+                // More units added, Add units and update billing cycle from future
+                console.log("Pay for all units and update plan from month to annual.");
+                // pay for all units except free units
+                vm.billingRequired = true;
+                vm.discountRequired = true;
+                billableUnits = vm.unitsProvidedToUser - freeUnits;
+                vm.unitsBillable = parseInt(billableUnits);
+                estimatedCharge = billableUnits * vm.pricePerUnit * 12;
+                discount = estimatedCharge * 0.1;
+                vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+                vm.discountAmount = parseFloat(discount.toFixed(2));
+                totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+                vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+                taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+                vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+                vm.amountTobePayed = vm.totalAfterDiscount + vm.usertaxes;
+              }
+              else if (unitsSelected == unitsAlreadyPaidFor) {
+                console.log("Same no of units. Charge for units annually. Upgrade plan to annually and update added units.");
+                vm.billingRequired = true;
+                vm.discountRequired = true;
+                billableUnits = vm.unitsProvidedToUser - freeUnits;
+                vm.unitsBillable = parseInt(billableUnits);
+                estimatedCharge = billableUnits * vm.pricePerUnit * 12;
+                discount = estimatedCharge * 0.1;
+                vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+                vm.discountAmount = parseFloat(discount.toFixed(2));
+                totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+                vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+                taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+                vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+                vm.amountTobePayed = vm.totalAfterDiscount + vm.usertaxes;
+              }
+              else {
+                // units decreased save info indb so stat it can be changes in furure when plan is expired
+                console.log("Same plan plan selected and units degraded", "set information for next billing cycle.");
+                vm.billingRequired = false;
+                vm.discountRequired = false;
+                billableUnits = vm.unitsProvidedToUser - freeUnits;
+                vm.unitsBillable = parseInt(billableUnits);
+                estimatedCharge = 0;
+                discount = 0;
+                vm.totalEstimatedCharges = 0;
+                vm.discountAmount = 0;
+                vm.totalAfterDiscount = 0;
+                taxTodeduct = 0;
+                vm.usertaxes = 0;
+                vm.amountTobePayed = 0;
+                swal({
+                  title: "Are you sure!",
+                  text: "Do you really want to decrease number of units for this user?",
+                  type: "warning",
+                  confirmButtonColor: '#009999',
+                  confirmButtonText: "Ok",
+                  showCancelButton: true,
+                  closeOnClickOutside: false,
+                  allowEscapeKey: true
+                }, function (isConfirm) {
+                  if (isConfirm) {
+                    console.log("Degrade in progress");
+                    vm.degradeUserPlan(); // apply degrade changes
+                  } else {
+                    console.log("No changes needed");
+                    $scope.$apply(function () {
+                      vm.unitsProvidedToUser = vm.userData.unitsProvidedToUser;
+                    });
+                    // reset units to old already purchased units
+                  }
+                });
+              }
+            }
+            // free to Annual
+            if (vm.currentPlan == "Annual" && vm.subscriptionOldPlan == "Free") {
+              console.log("Upgrade from free to annual. Billing cyckle will be after free trial plan expire.");
+              // Billing cycle date will be next month first day
+              if (unitsSelected > unitsAlreadyPaidFor) {
+                // More units added, Add units and update billing cycle from future
+                console.log("Pay for all units and update plan from Free to annual.");
+                // pay for all units except free units
+                vm.billingRequired = true;
+                vm.discountRequired = true;
+                billableUnits = vm.unitsProvidedToUser - freeUnits;
+                vm.unitsBillable = parseInt(billableUnits);
+                estimatedCharge = billableUnits * vm.pricePerUnit * 12;
+                discount = estimatedCharge * 0.1;
+                vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+                vm.discountAmount = parseFloat(discount.toFixed(2));
+                totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+                vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+                taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+                vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+                vm.amountTobePayed = vm.totalAfterDiscount + vm.usertaxes;
+              }
+              else if (unitsSelected == unitsAlreadyPaidFor) {
+                console.log("Same no of units. Charge for units annually. Upgrade plan to annually and update added units.");
+                vm.billingRequired = true;
+                vm.discountRequired = true;
+                billableUnits = vm.unitsProvidedToUser - freeUnits;
+                vm.unitsBillable = parseInt(billableUnits);
+                estimatedCharge = billableUnits * vm.pricePerUnit * 12;
+                discount = estimatedCharge * 0.1;
+                vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+                vm.discountAmount = parseFloat(discount.toFixed(2));
+                totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+                vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+                taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+                vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+                vm.amountTobePayed = vm.totalAfterDiscount + vm.usertaxes;
+              }
+              else {
+                // units decreased save info indb so stat it can be changes in furure when plan is expired
+                console.log("Same plan plan selected and units degraded", "set information for next billing cycle.");
+                vm.billingRequired = false;
+                vm.discountRequired = false;
+                billableUnits = vm.unitsProvidedToUser - freeUnits;
+                vm.unitsBillable = parseInt(billableUnits);
+                estimatedCharge = 0;
+                discount = 0;
+                vm.totalEstimatedCharges = 0;
+                vm.discountAmount = 0;
+                vm.totalAfterDiscount = 0;
+                taxTodeduct = 0;
+                vm.usertaxes = 0;
+                vm.amountTobePayed = 0;
+                swal({
+                  title: "Are you sure!",
+                  text: "Do you really want to decrease number of units for this user?",
+                  type: "warning",
+                  confirmButtonColor: '#009999',
+                  confirmButtonText: "Ok",
+                  showCancelButton: true,
+                  closeOnClickOutside: false,
+                  allowEscapeKey: true
+                }, function (isConfirm) {
+                  if (isConfirm) {
+                    console.log("Degrade in progress");
+                    vm.degradeUserPlan(); // apply degrade changes
+                  } else {
+                    console.log("No changes needed");
+                    $scope.$apply(function () {
+                      vm.unitsProvidedToUser = vm.userData.unitsProvidedToUser;
+                    });
+                    // reset units to old already purchased units
+                  }
+                });
+              }
+            }
+            // free to Monthly
+            if (vm.currentPlan == "Monthly" && vm.subscriptionOldPlan == "Free") {
+              console.log("Upgrade from monthly to annual. Billing cyckle will be next month first day.");
+              // Billing cycle date will be next month first day
+              if (unitsSelected > unitsAlreadyPaidFor) {
+                // More units added, Add units and update billing cycle from future
+                console.log("Pay for all units and update plan from Free to Monthly.");
+                // pay for all units except free units
+                vm.billingRequired = true;
+                vm.discountRequired = false;
+                billableUnits = vm.unitsProvidedToUser - freeUnits;
+                vm.unitsBillable = parseInt(billableUnits);
+                estimatedCharge = billableUnits * vm.pricePerUnit;
+                discount = 0;
+                vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+                vm.discountAmount = parseFloat(discount.toFixed(2));
+                totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+                vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+                taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+                vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+                vm.amountTobePayed = vm.totalAfterDiscount + vm.usertaxes;
+              }
+              else if (unitsSelected == unitsAlreadyPaidFor) {
+                console.log("Same no of units. Plan is still valid. No need for Payment");
+                vm.billingRequired = false;
+                vm.discountRequired = false;
+                billableUnits = 0;
+                vm.unitsBillable = parseInt(billableUnits);
+                estimatedCharge = 0;
+                discount = 0;
+                vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+                vm.discountAmount = parseFloat(discount.toFixed(2));
+                totalAfterDiscount = 0;
+                vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+                taxTodeduct = 0;
+                vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+                vm.amountTobePayed = 0;
+              }
+              else {
+                // units decreased save info indb so stat it can be changes in furure when plan is expired
+                console.log("Same plan plan selected and units degraded", "set information for next billing cycle.");
+                vm.billingRequired = false;
+                vm.discountRequired = false;
+                billableUnits = 0;
+                vm.unitsBillable = parseInt(billableUnits);
+                estimatedCharge = 0;
+                discount = 0;
+                vm.totalEstimatedCharges = 0;
+                vm.discountAmount = 0;
+                vm.totalAfterDiscount = 0;
+                taxTodeduct = 0;
+                vm.usertaxes = 0;
+                vm.amountTobePayed = 0;
+                swal({
+                  title: "Are you sure!",
+                  text: "Do you really want to decrease number of units for this user?",
+                  type: "warning",
+                  confirmButtonColor: '#009999',
+                  confirmButtonText: "Ok",
+                  showCancelButton: true,
+                  closeOnClickOutside: false,
+                  allowEscapeKey: true
+                }, function (isConfirm) {
+                  if (isConfirm) {
+                    console.log("Degrade in progress");
+                    vm.degradeUserPlan(); // apply degrade changes
+                  } else {
+                    console.log("No changes needed");
+                    $scope.$apply(function () {
+                      vm.unitsProvidedToUser = vm.userData.unitsProvidedToUser;
+                    });
+                    // reset units to old already purchased units
+                  }
+                });
+              }
+
+            }
+            // from annual to monthly
+            if (vm.currentPlan == "Monthly" && vm.subscriptionOldPlan == "Annual") {
+              console.log("Change from annual subscription to monthly. Billing cycle will be next years first day.");
+              console.log("No need for Payment.");
+              console.log("Change upgrade info in db.");
+            }
+            if (vm.currentPlan == "Free" && vm.subscriptionOldPlan == "Annual") {
+              vm.discountRequired = false;
+              vm.billingRequired = false;
+              vm.discountAmount = 0;
+              vm.totalEstimatedCharges = 0;
+              vm.totalAfterDiscount = 0;
+              vm.usertaxes = 0;
+              vm.amountTobePayed = 0;
+              swal({
+                title: "Are you sure!",
+                text: "Do you really want to Change you plan to Free Trial version?",
+                type: "warning",
+                confirmButtonColor: '#009999',
+                confirmButtonText: "Ok",
+                showCancelButton: false,
+                closeOnClickOutside: false,
+                allowEscapeKey: true
+              }, function (isConfirm) {
+                if (isConfirm) {
+                  console.log("Change plan to free plan after period expire.");
+                } else {
+                  console.log("No changes needed");
+                  // reset units to old already purchased units
+                }
+              });
+            }
+            if (vm.currentPlan == "Free" && vm.subscriptionOldPlan == "Monthly") {
+              vm.discountRequired = false;
+              vm.billingRequired = false;
+              vm.billingRequired = false;
+              vm.discountAmount = 0;
+              vm.totalEstimatedCharges = 0;
+              vm.totalAfterDiscount = 0;
+              vm.usertaxes = 0;
+              vm.amountTobePayed = 0;
+              swal({
+                title: "Are you sure!",
+                text: "Do you really want to Change you plan to Free Trial version?",
+                type: "warning",
+                confirmButtonColor: '#009999',
+                confirmButtonText: "Ok",
+                showCancelButton: false,
+                closeOnClickOutside: false,
+                allowEscapeKey: true
+              }, function (isConfirm) {
+                if (isConfirm) {
+                  console.log("Change plan to free plan after period expire.");
+                } else {
+                  console.log("No changes needed");
+                  // reset units to old already purchased units
+                }
+              });
+            }
+          }
+        }   // plan change end
+        else {
+          // No change in  subscription plan 
+          console.log("Same subscription plan is selected. Pay if extra units are selected. else no payment is required.");
+          // check if current plan expired
+          var oldPlanInfo = JSON.parse(vm.userData.currentPlanInfo);
+          if (Date.parse(oldPlanInfo.end) < Date.now()) { // check plan nvalidity
+            console.log("Plan expired");
+            console.log("Pay for units selected.");
+            vm.billingRequired = true;
+            billableUnits = vm.unitsProvidedToUser - freeUnits;
+            vm.unitsBillable = parseInt(billableUnits);
+            if (vm.currentPlan == "Annual") {
+              vm.discountRequired = true;
+              estimatedCharge = billableUnits * vm.pricePerUnit * 12;
+              discount = estimatedCharge * 0.1; // 10% dicount for annual plan
+              vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+              vm.discountAmount = parseFloat(discount.toFixed(2));
+              totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+              vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+              taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+              vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+              vm.amountTobePayed = vm.totalAfterDiscount + vm.usertaxes;
+            }
+            else if (vm.currentPlan == "Monthly") {
+              vm.discountRequired = false;
+              estimatedCharge = billableUnits * vm.pricePerUnit;
+              discount = 0;
+              vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+              vm.discountAmount = 0;
+              totalAfterDiscount = vm.totalEstimatedCharges;
+              vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+              taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+              vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+              vm.amountTobePayed = vm.totalAfterDiscount + vm.usertaxes;
+            }
+            else {
+              estimatedCharge = 0;
+              discount = 0;
+              vm.totalEstimatedCharges = 0;
+              vm.discountAmount = 0;
+              vm.usertaxes = 0;
+              vm.totalAfterDiscount = 0;
+              vm.amountTobePayed = 0;
+              swal({
+                title: "Warning!",
+                text: 'User cannot have more than free units allowed in free plan? Hence No payment required.',
+                type: "warning",
+                showCancelButton: true,
+              }, function (isConfirm) {
+                vm.unitsProvidedToUser = freeUnits;
+              });
+            }   // free plan extra units selected in free plan
+          }
+          else {
+            console.log("Plan is valid");
+            // check and restrict for free plan
+            if ((unitsSelected > freeUnits) && vm.currentPlan == "Free") {
+              vm.billingRequired = false;
+              estimatedCharge = 0;
+              discount = 0;
+              vm.totalEstimatedCharges = 0;
+              vm.discountAmount = 0;
+              vm.totalAfterDiscount = 0;
+              vm.usertaxes = 0;
+              vm.amountTobePayed = 0;
+              swal({
+                title: "Warning!",
+                text: 'User cannot have more than free units allowed in free plan?',
+                type: "warning",
+                showCancelButton: true,
+              }, function (isConfirm) {
+              });
+              vm.unitsProvidedToUser = freeUnits;
+            }// free plan check end
+            else {
+              if (unitsSelected > unitsAlreadyPaidFor) {
+                // More units added
+                console.log("Same plan plan selected and units added, pay for extra units");
+                // pay for only extra units
+                vm.billingRequired = true;
+                billableUnits = vm.unitsProvidedToUser - unitsAlreadyPaidFor;
+                vm.unitsBillable = parseInt(billableUnits);
+                if (vm.currentPlan == "Annual") {
+                  vm.discountRequired = true;
+                  estimatedCharge = billableUnits * vm.pricePerUnit * 12;
+                  discount = estimatedCharge * 0.1; /// 10% dicount for annual plan
+                  vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+                  vm.discountAmount = parseFloat(discount.toFixed(2));
+                  totalAfterDiscount = vm.totalEstimatedCharges - vm.discountAmount;
+                  vm.totalAfterDiscount = parseFloat(totalAfterDiscount.toFixed(2));
+                  taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+                  vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+                  vm.amountTobePayed = vm.totalAfterDiscount + vm.usertaxes;
+                }
+                else if (vm.currentPlan == "Monthly") {
+                  estimatedCharge = billableUnits * vm.pricePerUnit;
+                  discount = 0;
+                  vm.totalEstimatedCharges = parseFloat(estimatedCharge.toFixed(2));
+                  vm.discountAmount = 0;
+                  vm.totalAfterDiscount = vm.totalEstimatedCharges;
+                  taxTodeduct = vm.totalAfterDiscount * vm.taxes / 100;
+                  vm.usertaxes = parseFloat(taxTodeduct.toFixed(2));
+                  vm.amountTobePayed = vm.totalAfterDiscount + vm.usertaxes;
+                }
+              }
+              else if (unitsSelected == unitsAlreadyPaidFor) {
+                console.log("Same no of units. No changes required.");
+                vm.billingRequired = false;
+                vm.discountAmount = 0;
+                vm.totalEstimatedCharges = 0;
+                vm.totalAfterDiscount = 0;
+                vm.usertaxes = 0;
+                vm.amountTobePayed = 0;
+                // openerrorsweet("No payment needed");
+              }
+              else {
+                // units decreased save info indb so stat it can be changes in furure when plan is expired
+                console.log("Same plan plan selected and units degraded", "set information for next billing cycle.");
+                vm.billingRequired = false;
+                swal({
+                  title: "Are you sure!",
+                  text: "Do you really want to decrease number of units for this user?",
+                  type: "warning",
+                  confirmButtonColor: '#009999',
+                  confirmButtonText: "Ok",
+                  showCancelButton: true,
+                  closeOnClickOutside: false,
+                  allowEscapeKey: true
+                }, function (isConfirm) {
+                  if (isConfirm) {
+                    console.log("Degrade in progress");
+                    vm.degradeUserPlan(); // apply degrade changes
+                  } else {
+                    console.log("No changes needed");
+                    $scope.$apply(function () {
+                      vm.unitsProvidedToUser = vm.userData.unitsProvidedToUser;
+                    });
+                    // reset units to old already purchased units
+                  }
+                });
+              }
+            }
+          }
+        }
       }
-      vm.removeCard = function (selectedCard) {
-        var cards = vm.cards;
-        vm.cards = cards.filter(card => card.cardno != selectedCard.cardno);
+
+      vm.degradeUserPlan = function () {
+        var decreasedUnits = vm.userData.unitsProvidedToUser - vm.unitsProvidedToUser;
+        var oldPlan = vm.userData.currentPlan;
+        // updateplan in database
+        var degradeInfo = JSON.stringify({
+          startDate: vm.nextBillingCycleStartDate,
+          endDate: vm.nextBillingCycleEndDate,
+          units: decreasedUnits,
+          plan: vm.currentPlan
+        });
+        console.log("degrade info", JSON.parse(degradeInfo));
+        firebase.database().ref('users/' + landLordID + '/').update({
+          degradeInfo: degradeInfo
+        }).then(function () {
+          vm.opensuccesssweet("Plan for " + vm.userData.firstname + " " + vm.userData.lastname + " has been degraded.! Settings will b eupdated from " + moment(vm.nextBillingCycleStartDate).format('MMMM DD, YYYY.'));
+          var emailData = '<p>Hello ' + vm.userData.firstname + ' ' + vm.userData.lastname + '</p>' + '<p>Your number of units has been changed from ' + vm.userData.unitsProvidedToUser + ' to ' + vm.unitsProvidedToUser + '. This change will be applied from ' + vm.nextBillingCycleStartDate + '</p>' + 'If you didnít change the units then please contact  <a href="mailto:support@vcancy.ca">support@vcancy.ca</a></p><p>Thanks,</p><p>Team Vcancy</p>';
+          vm.sendEmail(vm.userData.email, "Decreased number of units.", "Degrade Plan", emailData);
+        }, function (error) {
+          vm.openerrorsweet("May Be your session is expire please login again.");
+          return false;
+        });
       }
-      vm.addNewCard = function () {
-        vm.cards.push({
-          name: vm.newcard.name,
-          cardno: vm.newcard.cardno,
-          cardnoStr: "**** **** **** " + vm.newcard.cardno.slice(-4),
-          cvv: vm.newcard.cvv,
-          expiry: vm.newcard.expiry,
-        });
-        swal({
-          title: "Success!",
-          text: "Your card added successfully",
-          type: "success",
-          confirmButtonColor: '#009999',
-          confirmButtonText: "Ok"
-        }, function (isConfirm) {
-          // if (isConfirm) {
-          //   $uibModalInstance.close();
-          //   $state.reload();
-          // }
-        });
-        vm.newcard = {
-          name: "",
-          cardno: "",
-          cvv: "",
-          expiry: "",
-        };
-        // vm.profileBillingInfoFormSubmit();
-      }
-      vm.addNewCardForPayment = function () {
-        vm.cards.push({
-          name: vm.newcard.name,
-          cardno: vm.newcard.cardno,
-          cardnoStr: "**** **** **** " + vm.newcard.cardno.slice(-4),
-          cvv: vm.newcard.cvv,
-          expiry: vm.newcard.expiry,
-        });
-        swal({
-          title: "Success!",
-          text: "Your Payment completed Successfully.",
-          type: "success",
-          confirmButtonColor: '#009999',
-          confirmButtonText: "Ok"
-        }, function (isConfirm) {
-          // if (isConfirm) {
-          //   $uibModalInstance.close();
-          // }
-        });
-        vm.newcard = {
-          name: "",
-          cardno: "",
-          cvv: "",
-          expiry: "",
-        };
-        // vm.profileBillingInfoFormSubmit();
-      }
+
+      vm.sendEmail = function (email, subject, mode, data) {
+        emailSendingService.sendEmailViaNodeMailer(email, subject, mode, data);
+      };
+
+      // firebase.database().ref('/').once('value').then(function (userdata) {
+      //   console.log("--db snapshot--", userdata.val());
+      // });
+
+      // var resetUSer = firebase.database().ref('users/' + landLordID).update({
+      //   currentPlan: '',
+      //   currentPlanInfo: '',
+      //   lastRenewalDate: '',
+      //   registrationDate: '',
+      //   unitsAlreadyAdded: 0,
+      //   upgradeOrRenew: '',
+      //   billingHistory: '',
+      //   unitsAllowed: 15,
+      //   unitsProvidedToUser: 15,
+      //   freeUnitsAlloted: 15
+      // }).then(function () {
+      //   console.log("User records reset.");
+      // }, function (error) {
+      //   console.log("user reset failed.");
+      //   return false;
+      // });
       /* LWS end */
 
     }]);
 
+
+// modal instance controller
 vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', 'Upload', 'config', '$http', '$modal', '$uibModalInstance', function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, Upload, config, $http, $modal, $uibModalInstance) {
   var swal = window.swal;
   var vm = this;
@@ -935,6 +2240,5 @@ vcancyApp.controller('ModalInstanceCtrl', ['$scope', '$firebaseAuth', '$state', 
         return false;
       });
   }
-
 
 }]);

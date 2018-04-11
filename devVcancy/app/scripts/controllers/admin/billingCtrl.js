@@ -1,8 +1,8 @@
 'use strict';
 
 vcancyApp
-    .controller('adminBillingCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_', "NgTableParams", "$http",
-        function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _, NgTableParams, $http) {
+    .controller('adminBillingCtrl', ['$scope', '$firebaseAuth', '$state', '$rootScope', '$stateParams', '$window', '_', "NgTableParams", "$http", "emailSendingService",
+        function ($scope, $firebaseAuth, $state, $rootScope, $stateParams, $window, _, NgTableParams, $http, emailSendingService) {
             var vm = this;
             var adminID = localStorage.getItem('userID');
             vm.userData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
@@ -57,7 +57,7 @@ vcancyApp
                     minLimit: 5,
                     disabled: false,
                     maxLimit: 1000,
-                    onChange: function (val) {
+                    onEnd: function (val) {
                         vm.updatePayableAmount();
                     }
                 }
@@ -326,7 +326,7 @@ vcancyApp
                                 minLimit: data.val().freeUnits,
                                 maxLimit: 1000,
                                 disabled: true,
-                                onChange: function (val) {
+                                onEnd: function (val) {
                                     vm.updatePayableAmount();
                                 }
                             }
@@ -450,17 +450,45 @@ vcancyApp
                         vm.unitsProvidedToUser = user.userData.unitsProvidedToUser;
                         vm.allowFreeUnits = false;
                         vm.selectedUserBillingHistory = vm.currentSelectedUser.userData.billingHistory ? vm.currentSelectedUser.userData.billingHistory : [];
+                        vm.rangeSlider = {
+                            value: 5,
+                            options: {
+                                floor: user.userData.freeUnitsAlloted,
+                                ceil: 1000,
+                                step: 1,
+                                minLimit: user.userData.freeUnitsAlloted,
+                                maxLimit: 1000,
+                                disabled: true,
+                                onEnd: function (val) {
+                                    vm.updatePayableAmount();
+                                }
+                            }
+                        };
                     }
                     else {
                         // if no units are allocated
                         vm.allowFreeUnits = true;
                         vm.unitsProvidedToUser = vm.unitsFree;
                         //set free units being assigned to user
-                        firebase.database().ref('users/' + user._id + "/").update({ freeUnitsAlloted: 5, unitsProvidedToUser: vm.unitsProvidedToUser }).then(function (snap) {
+                        firebase.database().ref('users/' + user._id + "/").update({ freeUnitsAlloted: vm.noFreeUnitPerMonth, unitsProvidedToUser: vm.unitsProvidedToUser }).then(function (snap) {
                             firebase.database().ref('users/' + user._id + "/").once('value', function (snap) {
                                 vm.currentSelectedUser.userData = snap.val();
                                 user.userData = snap.val();
                                 vm.users.find(landlord => landlord._id === user._id).userData = snap.val();
+                                vm.rangeSlider = {
+                                    value: 5,
+                                    options: {
+                                        floor: vm.noFreeUnitPerMonth,
+                                        ceil: 1000,
+                                        step: 1,
+                                        minLimit: vm.noFreeUnitPerMonth,
+                                        maxLimit: 1000,
+                                        disabled: true,
+                                        onEnd: function (val) {
+                                            vm.updatePayableAmount();
+                                        }
+                                    }
+                                };
                             });
                         });
                     }
@@ -523,7 +551,7 @@ vcancyApp
                 // next plan changes dates to be calculated.
                 var billableUnits = 0,
                     estimatedCharge = 0,
-                    pricePerUnit = vm.currentSelectedUser.userData.freeUnitsAlloted,
+                    pricePerUnit = vm.pricePerUnitPerMonth,
                     freeUnits = vm.currentSelectedUser.userData.freeUnitsAlloted ? vm.currentSelectedUser.userData.freeUnitsAlloted : vm.unitsFree,
                     discount = 0,
                     totalAfterDiscount = 0,
@@ -734,7 +762,6 @@ vcancyApp
                                         // reset units to old already purchased units
                                     }
                                 });
-
                             }
                         }
                         // free to Annual
@@ -899,6 +926,11 @@ vcancyApp
                         if (vm.selectedUserSelectedPlan == "Free" && vm.selectedUserOldPlan == "Annual") {
                             vm.discountRequired = false;
                             vm.billingRequired = false;
+                            vm.selectedUserDiscount = 0;
+                            vm.selectedUserEstimatedAmount = 0;
+                            vm.selectedUserTotalWithDiscount = 0;
+                            vm.selectedUserTaxes = 0;
+                            vm.selectedUserPayaableAmount = 0;
                             swal({
                                 title: "Are you sure!",
                                 text: "Do you really want to Change you plan to Free Trial version?",
@@ -920,6 +952,12 @@ vcancyApp
                         if (vm.selectedUserSelectedPlan == "Free" && vm.selectedUserOldPlan == "Monthly") {
                             vm.discountRequired = false;
                             vm.billingRequired = false;
+                            vm.billingRequired = false;
+                            vm.selectedUserDiscount = 0;
+                            vm.selectedUserEstimatedAmount = 0;
+                            vm.selectedUserTotalWithDiscount = 0;
+                            vm.selectedUserTaxes = 0;
+                            vm.selectedUserPayaableAmount = 0;
                             swal({
                                 title: "Are you sure!",
                                 text: "Do you really want to Change you plan to Free Trial version?",
@@ -1048,6 +1086,11 @@ vcancyApp
                             else if (unitsSelected == unitsAlreadyPaidFor) {
                                 console.log("Same no of units. No changes required.");
                                 vm.billingRequired = false;
+                                vm.selectedUserDiscount = 0;
+                                vm.selectedUserEstimatedAmount = 0;
+                                vm.selectedUserTotalWithDiscount = 0;
+                                vm.selectedUserTaxes = 0;
+                                vm.selectedUserPayaableAmount = 0;
                                 // openerrorsweet("No payment needed");
                             }
                             else {
@@ -1087,13 +1130,14 @@ vcancyApp
 
                 // check if user have a plan
                 if (oldPlanInfo != '' || oldPlanInfo != undefined) {
-                    if (Date.parse(oldPlanInfo.end) < Date.now()) {
+                    var userOldPlanInfo = JSON.parse(oldPlanInfo);
+                    if (Date.parse(userOldPlanInfo.end) < Date.now()) {
                         console.log("Plan subscription is expired.");
                         // check for different plan
                         if (currentPlan != oldPlan) {
                             console.log("Diffrent Plan selected");
                             // check for expiry of old plan
-                            if (Date.parse(currentPlanInfo.end) < Date.now()) {
+                            if (Date.parse(userOldPlanInfo.end) < Date.now()) {
                                 console.log("Plan subscription is expired.");
                                 if (currentPlan == "Free") {
                                     startdate = new moment().toDate();
@@ -1111,7 +1155,7 @@ vcancyApp
                             else {
                                 console.log("Plan subscription is still valid.");
                                 // calculat next cycle date after current plan
-                                var oldPlanEndDate = oldPlanInfo.end;
+                                var oldPlanEndDate = userOldPlanInfo.end;
                                 if (currentPlan == "Free") {
                                     startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
                                     enddate = new moment(startdate).add(15, 'day').toDate();
@@ -1162,7 +1206,7 @@ vcancyApp
                             }
                         } // end same plan else
                     } else {
-                        var oldPlanEndDate = oldPlanInfo.end;
+                        var oldPlanEndDate = JSON.parse(oldPlanInfo).end;
                         if (currentPlan == "Free") {
                             startdate = new moment(oldPlanEndDate).add(1, "day").toDate();
                             enddate = new moment(startdate).add(15, 'day').toDate();
@@ -1390,8 +1434,8 @@ vcancyApp
                                         });
                                     var req = {
                                         method: 'POST',
-                                        // url: 'http://localhost:1337/api/v1/stipecharge',
-                                        url: config.sailsBaseUrl + 'stipecharge',
+                                        url: 'http://localhost:1337/api/v1/stipecharge',
+                                        // url: config.sailsBaseUrl + 'email/sendemail',
                                         headers: {
                                             'Content-Type': 'application/json',
                                             'Access-Control-Allow-Origin': '*',
@@ -1527,6 +1571,8 @@ vcancyApp
                                             currentPlanInfo: upgradeOrRenew
                                         }).then(function () {
                                             // reset form
+                                            var emailData = '<p>Hello ' + vm.currentSelectedUser.userData.firstname + ' ' + vm.currentSelectedUser.userData.lastname + '</p>' + '<p>Your subscription has been changed, now your number of units is changed from ' + vm.currentSelectedUser.userData.unitsProvidedToUser + ' to ' + vm.unitsProvidedToUser + '. This change will be applied from ' + vm.nextBillingCycleStartDate + '</p>' + 'If you didn’t change the units then please contact  <a href="mailto:support@vcancy.ca">support@vcancy.ca</a></p><p>Thanks,</p><p>Team Vcancy</p>';
+                                            vm.sendEmail(vm.currentSelectedUser.userData.email, "Decreased number of units.", "Degrade Plan", emailData);
                                             swal({
                                                 title: "Success!",
                                                 text: "Transaction completed successfully.",
@@ -2026,28 +2072,27 @@ vcancyApp
                 }
             }
 
-
-            vm.upgradeUserPlan = function () {
-                // when user have vlalid subscription then save upgrade info and check for it on login.
-                // if found then update plan info on basis of info change startDate, endDate, plan name and units as per plan 
-                var increasedUnits = vm.unitsProvidedToUser - vm.currentSelectedUser.userData.unitsProvidedToUser;
-                var oldPlan = vm.currentSelectedUser.userData.currentPlan;
-                var upgradeInfo = JSON.stringify({
-                    startDate: vm.nextBillingCycleStartDate,
-                    endDate: vm.nextBillingCycleEndDate,
-                    units: increasedUnits,
-                    plan: vm.selectedUserSelectedPlan
-                });
-                console.log("degrade info", JSON.parse(upgradeInfo));
-                // firebase.database().ref('users/' + vm.currentSelectedUser._id + '/').update({
-                //     upgradeInfo: upgradeInfo
-                // }).then(function () {
-                //     vm.opensuccesssweet("Plan for " + vm.currentSelectedUser.userData.firstname + " " + vm.currentSelectedUser.userData.lastname + " has been updated. Settings will be updated from " + vm.nextBillingCycleStartDate);
-                // }, function (error) {
-                //     vm.openerrorsweet("May Be your session is expire please login again.");
-                //     return false;
-                // });
-            }
+            // vm.upgradeUserPlan = function () {
+            //     // when user have vlalid subscription then save upgrade info and check for it on login.
+            //     // if found then update plan info on basis of info change startDate, endDate, plan name and units as per plan 
+            //     var increasedUnits = vm.unitsProvidedToUser - vm.currentSelectedUser.userData.unitsProvidedToUser;
+            //     var oldPlan = vm.currentSelectedUser.userData.currentPlan;
+            //     var upgradeInfo = JSON.stringify({
+            //         startDate: vm.nextBillingCycleStartDate,
+            //         endDate: vm.nextBillingCycleEndDate,
+            //         units: increasedUnits,
+            //         plan: vm.selectedUserSelectedPlan
+            //     });
+            //     console.log("degrade info", JSON.parse(upgradeInfo));
+            //     // firebase.database().ref('users/' + vm.currentSelectedUser._id + '/').update({
+            //     //     upgradeInfo: upgradeInfo
+            //     // }).then(function () {
+            //     //     vm.opensuccesssweet("Plan for " + vm.currentSelectedUser.userData.firstname + " " + vm.currentSelectedUser.userData.lastname + " has been updated. Settings will be updated from " + vm.nextBillingCycleStartDate);
+            //     // }, function (error) {
+            //     //     vm.openerrorsweet("May Be your session is expire please login again.");
+            //     //     return false;
+            //     // });
+            // }
             vm.degradeUserPlan = function () {
                 var decreasedUnits = vm.currentSelectedUser.userData.unitsProvidedToUser - vm.unitsProvidedToUser;
                 var oldPlan = vm.currentSelectedUser.userData.currentPlan;
@@ -2063,6 +2108,8 @@ vcancyApp
                     degradeInfo: degradeInfo
                 }).then(function () {
                     vm.opensuccesssweet("Plan for " + vm.currentSelectedUser.userData.firstname + " " + vm.currentSelectedUser.userData.lastname + " has been degraded.! Settings will b eupdated from " + vm.nextBillingCycleStartDate);
+                    var emailData = '<p>Hello ' + vm.currentSelectedUser.userData.firstname + ' ' + vm.currentSelectedUser.userData.lastname + '</p>' + '<p>Your number of units has been changed from ' + vm.currentSelectedUser.userData.unitsProvidedToUser + ' to ' + vm.unitsProvidedToUser + '. This change will be applied from ' + vm.nextBillingCycleStartDate + '</p>' + 'If you didn’t change the units then please contact  <a href="mailto:support@vcancy.ca">support@vcancy.ca</a></p><p>Thanks,</p><p>Team Vcancy</p>';
+                    vm.sendEmail(vm.currentSelectedUser.userData.email, "Decreased number of units.", "Degrade Plan", emailData);
                 }, function (error) {
                     vm.openerrorsweet("May Be your session is expire please login again.");
                     return false;
@@ -2070,9 +2117,12 @@ vcancyApp
             }
 
 
+            vm.sendEmail = function (email, subject, mode, data) {
+                emailSendingService.sendEmailViaNodeMailer(email, subject, mode, data);
+            };
 
 
-            // clear all landlord users billing history
+            // // clear all landlord users billing history
             // var resetDB = firebase.database().ref('users/').once("value", function (snapshot) {
             //     var user = snapshot;
             //     snapshot.forEach(function (childSnapshot) {

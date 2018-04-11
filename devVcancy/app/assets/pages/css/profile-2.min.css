@@ -1,6 +1,296 @@
-.profile,.profile-classic .profile-image{position:relative}.add-portfolio,.portfolio-block,.portfolio-stat,.portfolio-text,.portfolio-text .portfolio-text-info{overflow:hidden}.page-container-bg-solid .profile{background:#fff;padding:20px}.profile p{color:#636363;font-size:13px}.profile p a{color:#169ef4}.profile label{margin-top:10px}.profile label:first-child{margin-top:0}.profile-classic .profile-edit{top:0;right:0;margin:0;color:#fff;opacity:.6;padding:0 9px;font-size:11px;background:#000;position:absolute;filter:alpha(opacity=60)}.profile-classic .profile-image img{margin-bottom:15px}.profile-classic li{padding:8px 0;font-size:13px;border-top:solid 1px #f5f5f5}.profile-classic li:first-child{border-top:none}.profile-classic li span{color:#666;font-size:13px;margin-right:7px}.profile .tabbable-custom-profile .nav-tabs>li>a{padding:6px 12px}.profile ul.profile-nav{margin-bottom:30px}.profile ul.profile-nav img.pic-bordered{border:1px solid #e1e7ee}.profile ul.profile-nav li{position:relative}.profile ul.profile-nav li a{color:#557386;display:block;font-size:14px;padding:8px 10px;margin-bottom:1px;background:#f0f6fa;border-left:solid 2px #c4d5df}.profile ul.profile-nav li a:hover{color:#169ef4;background:#ecf5fb;text-decoration:none;border-left:solid 2px #169ef4}.profile ul.profile-nav li a.profile-edit:hover{text-decoration:underline}.profile ul.profile-nav a span{top:0;right:0;color:#fff;font-size:16px;padding:7px 13px;position:absolute;background:#169ef4}.profile ul.profile-nav a:hover span{background:#0b94ea}.profile-info h1{color:#383839;font-size:24px;font-weight:400;margin:0 0 10px}.profile-info ul{margin-bottom:15px}.profile-info li{color:#6b6b6b;font-size:13px;margin-right:15px;margin-bottom:5px;padding:0!important}.profile-info li i{color:#b5c1c9;font-size:15px}.profile-info li:hover i{color:#169ef4}.sale-summary ul{margin-top:-10px}.sale-summary li{padding:10px 0;overflow:hidden;border-top:solid 1px #eee}.sale-summary li:first-child{border-top:none}.sale-summary li .sale-info{margin-top:4px;float:left;color:#646464;font-size:14px;text-transform:uppercase}.sale-summary li .sale-num{float:right;color:#169ef4;font-size:20px;font-weight:300}.sale-summary li span i{top:1px;width:13px;height:14px;margin-left:3px;position:relative;display:inline-block}.sale-summary .caption h4{color:#383839;font-size:18px}.sale-summary .caption{border-color:#c9c9c9}.profile .table-advance thead tr th{background:#f0f6fa}.profile .table-bordered,.profile .table-bordered td,.profile .table-bordered th{border-color:#e5eff6}.profile .table-striped tbody>tr:nth-child(2n+1)>td,.profile .table-striped tbody>tr:nth-child(2n+1)>th{background:#fcfcfc}.profile .table-hover tbody tr:hover td,.profile .table-hover tbody tr:hover th{background:#f5fafd}.add-portfolio{margin-bottom:30px;background:#f0f6fa;padding:12px 14px}.add-portfolio span{float:left;display:inline-block;font-weight:300;font-size:22px;margin-top:0}.add-portfolio .btn{margin-left:20px}.portfolio-block{background:#f7f7f7;margin-bottom:15px}.portfolio-text img{float:left;margin-right:15px}.portfolio-btn a{display:block;padding:25px 0;background:#ddd!important}.portfolio-btn a:hover{background:#1d943b!important}.portfolio-btn span{color:#fff;font-size:22px;font-weight:200}.portfolio-info{float:left;color:#616161;font-size:12px;padding:10px 25px;margin-bottom:5px;text-transform:uppercase}.portfolio-info span{color:#16a1f2;display:block;font-size:28px;line-height:28px;margin-top:0;font-weight:200;text-transform:uppercase}.profile-settings{background:#fafafa;padding:15px 8px 0;margin-bottom:5px}.profile-settings p{padding-left:5px;margin-bottom:3px}.profile-settings .controls>.checkbox,.profile-settings .controls>.radio{font-size:12px;margin-top:2px!important}
+.profile,
+.profile-classic .profile-image {
+    position: relative
+}
 
+.add-portfolio,
+.portfolio-block,
+.portfolio-stat,
+.portfolio-text,
+.portfolio-text .portfolio-text-info {
+    overflow: hidden
+}
 
+.page-container-bg-solid .profile {
+    background: #fff;
+    padding: 20px
+}
+
+.profile p {
+    color: #636363;
+    font-size: 13px
+}
+
+.profile p a {
+    color: #169ef4
+}
+
+.profile label {
+    margin-top: 10px
+}
+
+.profile label:first-child {
+    margin-top: 0
+}
+
+.profile-classic .profile-edit {
+    top: 0;
+    right: 0;
+    margin: 0;
+    color: #fff;
+    opacity: .6;
+    padding: 0 9px;
+    font-size: 11px;
+    background: #000;
+    position: absolute;
+    filter: alpha(opacity=60)
+}
+
+.profile-classic .profile-image img {
+    margin-bottom: 15px
+}
+
+.profile-classic li {
+    padding: 8px 0;
+    font-size: 13px;
+    border-top: solid 1px #f5f5f5
+}
+
+.profile-classic li:first-child {
+    border-top: none
+}
+
+.profile-classic li span {
+    color: #666;
+    font-size: 13px;
+    margin-right: 7px
+}
+
+.profile .tabbable-custom-profile .nav-tabs>li>a {
+    padding: 6px 12px
+}
+
+.profile ul.profile-nav {
+    margin-bottom: 30px
+}
+
+.profile ul.profile-nav img.pic-bordered {
+    border: 1px solid #e1e7ee
+}
+
+.profile ul.profile-nav li {
+    position: relative
+}
+
+.profile ul.profile-nav li a {
+    color: #557386;
+    display: block;
+    font-size: 14px;
+    padding: 8px 10px;
+    margin-bottom: 1px;
+    background: #f0f6fa;
+    border-left: solid 2px #c4d5df
+}
+
+.profile ul.profile-nav li a:hover {
+    color: #169ef4;
+    background: #ecf5fb;
+    text-decoration: none;
+    border-left: solid 2px #169ef4
+}
+
+.profile ul.profile-nav li a.profile-edit:hover {
+    text-decoration: underline
+}
+
+.profile ul.profile-nav a span {
+    top: 0;
+    right: 0;
+    color: #fff;
+    font-size: 16px;
+    padding: 7px 13px;
+    position: absolute;
+    background: #169ef4
+}
+
+.profile ul.profile-nav a:hover span {
+    background: #0b94ea
+}
+
+.profile-info h1 {
+    color: #383839;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0 0 10px
+}
+
+.profile-info ul {
+    margin-bottom: 15px
+}
+
+.profile-info li {
+    color: #6b6b6b;
+    font-size: 13px;
+    margin-right: 15px;
+    margin-bottom: 5px;
+    padding: 0!important
+}
+
+.profile-info li i {
+    color: #b5c1c9;
+    font-size: 15px
+}
+
+.profile-info li:hover i {
+    color: #169ef4
+}
+
+.sale-summary ul {
+    margin-top: -10px
+}
+
+.sale-summary li {
+    padding: 10px 0;
+    overflow: hidden;
+    border-top: solid 1px #eee
+}
+
+.sale-summary li:first-child {
+    border-top: none
+}
+
+.sale-summary li .sale-info {
+    margin-top: 4px;
+    float: left;
+    color: #646464;
+    font-size: 14px;
+    text-transform: uppercase
+}
+
+.sale-summary li .sale-num {
+    float: right;
+    color: #169ef4;
+    font-size: 20px;
+    font-weight: 300
+}
+
+.sale-summary li span i {
+    top: 1px;
+    width: 13px;
+    height: 14px;
+    margin-left: 3px;
+    position: relative;
+    display: inline-block
+}
+
+.sale-summary .caption h4 {
+    color: #383839;
+    font-size: 18px
+}
+
+.sale-summary .caption {
+    border-color: #c9c9c9
+}
+
+.profile .table-advance thead tr th {
+    background: #f0f6fa
+}
+
+.profile .table-bordered,
+.profile .table-bordered td,
+.profile .table-bordered th {
+    border-color: #e5eff6
+}
+
+.profile .table-striped tbody>tr:nth-child(2n+1)>td,
+.profile .table-striped tbody>tr:nth-child(2n+1)>th {
+    background: #fcfcfc
+}
+
+.profile .table-hover tbody tr:hover td,
+.profile .table-hover tbody tr:hover th {
+    background: #f5fafd
+}
+
+.add-portfolio {
+    margin-bottom: 30px;
+    background: #f0f6fa;
+    padding: 12px 14px
+}
+
+.add-portfolio span {
+    float: left;
+    display: inline-block;
+    font-weight: 300;
+    font-size: 22px;
+    margin-top: 0
+}
+
+.add-portfolio .btn {
+    margin-left: 20px
+}
+
+.portfolio-block {
+    background: #f7f7f7;
+    margin-bottom: 15px
+}
+
+.portfolio-text img {
+    float: left;
+    margin-right: 15px
+}
+
+.portfolio-btn a {
+    display: block;
+    padding: 25px 0;
+    background: #ddd!important
+}
+
+.portfolio-btn a:hover {
+    background: #1d943b!important
+}
+
+.portfolio-btn span {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 200
+}
+
+.portfolio-info {
+    float: left;
+    color: #616161;
+    font-size: 12px;
+    padding: 10px 25px;
+    margin-bottom: 5px;
+    text-transform: uppercase
+}
+
+.portfolio-info span {
+    color: #16a1f2;
+    display: block;
+    font-size: 28px;
+    line-height: 28px;
+    margin-top: 0;
+    font-weight: 200;
+    text-transform: uppercase
+}
+
+.profile-settings {
+    background: #fafafa;
+    padding: 15px 8px 0;
+    margin-bottom: 5px
+}
+
+.profile-settings p {
+    padding-left: 5px;
+    margin-bottom: 3px
+}
+
+.profile-settings .controls>.checkbox,
+.profile-settings .controls>.radio {
+    font-size: 12px;
+    margin-top: 2px!important
+}
 
 .sale-summary li .sale-info {
     margin-top: 4px;
@@ -9,8 +299,9 @@
     font-size: 14px;
     display: block;
     text-transform: uppercase;
-        line-height: 28px;
+    line-height: 28px;
 }
+
 .sale-summary li .sale-num {
     float: none;
     color: #169ef4;
@@ -18,6 +309,7 @@
     font-weight: 300;
     display: block;
 }
+
 .profile-info li {
     color: #6b6b6b;
     font-size: 13px;
@@ -25,10 +317,27 @@
     margin-bottom: 0px;
     padding: 10px 0px!important;
 }
-.ng-pristine .fg-float .fg-label{top:-20px;}
-.tab-pane .fg-float .fg-label{top:-20px;}
 
-.profile ul.profile-nav li a.profile-edit{top:1px;right:1px;margin:0;color:#fff;border:none;padding:3px 9px;font-size:16px;background:#000;position:absolute;}
+.ng-pristine .fg-float .fg-label {
+    top: -20px;
+}
+
+.tab-pane .fg-float .fg-label {
+    top: -20px;
+}
+
+.profile ul.profile-nav li a.profile-edit {
+    top: 1px;
+    right: 1px;
+    margin: 0;
+    color: #fff;
+    border: none;
+    padding: 3px 9px;
+    font-size: 16px;
+    background: #000;
+    position: absolute;
+}
+
 .portlet-body img.img-responsive.pic-bordered {
     width: 200px;
     border: solid 1px #d3d3d3;
@@ -36,27 +345,40 @@
     margin: 5px 0;
 }
 
-.profile ul.profile-nav a span{background: #009999;}
+.profile ul.profile-nav a span {
+    background: #009999;
+}
+
 .profile ul.profile-nav li a {
     color: #437c7c;
     background: #9ee5e5;
     border-left: solid 2px #009999;
 }
-.sale-summary li .sale-num{color: #009999;}
+
+.sale-summary li .sale-num {
+    color: #009999;
+}
+
 .profile ul.profile-nav img.pic-bordered {
     border: 1px solid #e1e7ee;
     margin: 0 0 5px;
 }
+
 .profile ul.profile-nav a:hover span {
     background: #9ee5e5;
-    color:#009999;
+    color: #009999;
 }
+
 .profile ul.profile-nav li a:hover {
     color: #437c7c;
     background: #ecf5fb;
     text-decoration: none;
     border-left: solid 2px #009999;
 }
+
+
+/* Ashish */
+
 .billing-tabs .nav.nav-tabs {
     display: block;
 }
@@ -87,8 +409,8 @@ td.b-btm {
     padding: 7px 10px !important;
 }
 
-.billing-tabs input[type="number"]::-webkit-inner-spin-button,
-.billing-tabs input[type="number"]::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
     display: none;
     -webkit-appearance: none;
 }
@@ -143,17 +465,164 @@ td.b-btm {
     text-align: right;
 }
 
-#addPaymentMethod.modal.fade .modal-dialog {
+#addPaymentMethod.modal.fade .modal-dialog,
+#addPaymentMethod1.modal.fade .modal-dialog {
     transform: translate(0%, 0%) !important;
 }
 
-#addPaymentMethod.modal .modal-header .modal-title {
+#addPaymentMethod>div>div>div.modal-footer>button.btn.dark.btn-outline.waves-effect,
+#addPaymentMethod1>div>div>div.modal-footer>button.btn.dark.btn-outline.waves-effect {
+    color: #FFF;
+    background-color: #32c5d2;
+    border: 0px;
+}
+
+#addPaymentMethod>div>div,
+#addPaymentMethod1>div>div {
+    border-radius: 4px !important;
+}
+
+#addPaymentMethod>div>div>div.modal-header,
+#addPaymentMethod1>div>div>div.modal-header {
+    border-bottom: 0px;
+}
+
+#addPaymentMethod>div>div>div.modal-footer,
+#addPaymentMethod1>div>div>div.modal-footer {
+    border: 0px;
+}
+
+#addPaymentMethod>div>div>div.modal-body>div>div>div:nth-child(3)>div>input,
+#addPaymentMethod1>div>div>div.modal-body>div>div>div:nth-child(3)>div>input {
+    width: 100% !important;
+}
+
+#addPaymentMethod.modal .modal-header .modal-title,
+#addPaymentMethod1.modal .modal-header .modal-title {
     width: 100%;
-    font-weight:500;
-    margin-top:6px;
+    font-weight: 500;
+    margin-top: 6px;
     color: #1f858e;
 }
 
-#addPaymentMethod.modal .modal-header .close {
+#addPaymentMethod.modal .modal-header .close,
+#addPaymentMethod1.modal .modal-header .close {
     margin-top: 10px !important;
+}
+
+#billingInfo select.form-control,
+#addPaymentMethod.modal select.form-control,
+#addPaymentMethod1.modal select.form-control {
+    height: 34px !important;
+}
+
+img.logos {
+    height: 20px !important;
+    width: auto !important;
+}
+
+.cards-list {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+    .tab-pane {
+        padding: 0px;
+        border: 0px;
+    }
+    .nav>li>a {
+        padding: 10px;
+    }
+    .tabordion .personal_form_block .btn-primary {
+        width: 100%;
+    }
+    #billingSubscription>form>div>div>div.col-md-7>div.col-md-12.text-right>button:nth-child(2) {
+        margin-bottom: 20px;
+    }
+}
+
+#invoice {
+    border: 1px solid #ccc;
+    width: 80%;
+    min-width: 800px;
+    max-width: 900px;
+    background: aliceblue;
+    margin: 50px auto;
+    padding: 30px 20px;
+    background: #fcfcfc;
+    display: none;
+    position: relative;
+    /*top: 50%;
+    left: 50%;
+    z-index: 9999999999999;
+    transform: translate(-50%, -50%);*/
+}
+
+#invoice .logo {
+    width: 100px;
+    margin-right: 25px;
+    float: left;
+}
+
+#invoice h1 {
+    margin: 30px 0px 0px 0px;
+    font-weight: 600;
+    color: #18a1ab;
+}
+
+#invoice h3 {
+    margin: 15px 0px 10px 0px;
+    font-size: 16px;
+    color: #888;
+}
+
+#invoice h3 span {
+    font-size: 13px;
+}
+
+#invoice hr {
+    border-color: #18a1ab;
+}
+
+#invoice table.table,
+#invoice table.table th,
+#invoice table.table td {
+    font-size: 12px !important;
+}
+
+#invoice th, #invoice td {
+    text-align: center;
+}
+
+#invoice footer {
+    border-top: 4px double #18a1ab;
+    margin-top: 30px;
+    padding-top: 70px;
+}
+
+#invoice footer p {
+    font-size: 12px;
+    color: #888;
+    margin: 10px 0px;
+}
+
+.selectDefaultCard {
+    cursor: pointer;
+}
+
+.selectDisabled {
+    -webkit-appearance: none;
+}
+
+.label.label-info.label-sm {
+    float: right;
+    margin-right: 10px;
+}
+
+.fa-cc-visa,
+.fa-cc-mastercard,
+.fa-cc-discover,
+.fa-cc-amex {
+    font-size: 20px;
+    vertical-align: middle;
 }

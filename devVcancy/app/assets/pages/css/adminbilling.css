@@ -165,11 +165,11 @@ span.download-invoice {
     padding: 30px 20px;
     background: #fcfcfc;
     display: none;
-    position: absolute;
+    /*position: absolute;
     top: 50%;
     left: 50%;
     z-index: 9999999999999;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);*/
 }
 
 #invoice .logo {
@@ -231,3 +231,19 @@ span.download-invoice {
     padding: 7px 10px;
 }
 
+
+/*.login .btn,
+.login .btn-default {
+    font-weight: 400 !important;
+    padding: 5px 10px !important;
+    background-color: #ffffff;
+    color: #333
+}
+.login .btn-default{
+    border:1px solid #eee;
+}
+.login .btn-default:hover{
+    border: 1px solid #eee;
+    background-color: #ffffff;
+    color: #333;
+}*/
