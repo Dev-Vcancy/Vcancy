@@ -473,7 +473,7 @@ vcancyApp
             user.updatePassword(newPassword).then(function () {
               localStorage.setItem('password', newPassword);
               vm.opensuccesssweet("Your password has been updated!");
-              var emailData = '<p>Hello, </p><p>Your password has been changed. If you didnít change the password then please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+              var emailData = '<p>Hello, </p><p>Your password has been changed. If you didn‚Äôt change the password then please contact  support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
               // Send Email
               passworduser.npassword = '';
               passworduser.password = '';
@@ -620,7 +620,7 @@ vcancyApp
                 // Success 
                 firebaseUser.sendEmailVerification().then(function () {
 
-                  var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at ' + email + '.</p><p>To view/edit user details, please log in https://vcancy.ca/ and go to ìProfileî and click on ìUsersî</p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
+                  var emailData = '<p>Hello, </p><p>A new user,' + firstname + ' ,has been added to your portal.</p><p>An account confirmation email has been sent to the user at ' + email + '.</p><p>To view/edit user details, please log in https://vcancy.ca/ and go to ‚ÄúProfile‚Äù and click on ‚ÄúUsers‚Äù</p><p>If you have any questions please email us at support@vcancy.ca</p><p>Thanks,</p><p>Team Vcancy</p>';
 
                   // Send Email
                   emailSendingService.sendEmailViaNodeMailer(localStorage.getItem('userEmail'), 'A new user account has been added to your portal', 'Welcome', emailData);
@@ -2111,7 +2111,7 @@ vcancyApp
           degradeInfo: degradeInfo
         }).then(function () {
           vm.opensuccesssweet("Plan for " + vm.userData.firstname + " " + vm.userData.lastname + " has been degraded.! Settings will b eupdated from " + moment(vm.nextBillingCycleStartDate).format('MMMM DD, YYYY.'));
-          var emailData = '<p>Hello ' + vm.userData.firstname + ' ' + vm.userData.lastname + '</p>' + '<p>Your number of units has been changed from ' + vm.userData.unitsProvidedToUser + ' to ' + vm.unitsProvidedToUser + '. This change will be applied from ' + vm.nextBillingCycleStartDate + '</p>' + 'If you didnít change the units then please contact  <a href="mailto:support@vcancy.ca">support@vcancy.ca</a></p><p>Thanks,</p><p>Team Vcancy</p>';
+          var emailData = '<p>Hello ' + vm.userData.firstname + ' ' + vm.userData.lastname + '</p>' + '<p>Your number of units has been changed from ' + vm.userData.unitsProvidedToUser + ' to ' + vm.unitsProvidedToUser + '. This change will be applied from ' + vm.nextBillingCycleStartDate + '</p>' + 'If you didn‚Äôt change the units then please contact  <a href="mailto:support@vcancy.ca">support@vcancy.ca</a></p><p>Thanks,</p><p>Team Vcancy</p>';
           vm.sendEmail(vm.userData.email, "Decreased number of units.", "Degrade Plan", emailData);
         }, function (error) {
           vm.openerrorsweet("May Be your session is expire please login again.");

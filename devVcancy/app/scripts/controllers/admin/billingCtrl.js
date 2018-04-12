@@ -325,7 +325,7 @@ vcancyApp
                                 step: 1,
                                 minLimit: data.val().freeUnits,
                                 maxLimit: 1000,
-                                disabled: true,
+                                disabled: false,
                                 onEnd: function (val) {
                                     vm.updatePayableAmount();
                                 }
@@ -440,6 +440,35 @@ vcancyApp
 
             vm.switchUser = function () {
                 console.log(vm.currentSelectedUser);
+                vm.rangeSlider.options.disabled = true;
+                vm.unitsProvidedToUser = '';
+                vm.paymentMethodSelected = '';
+                vm.billingRequired = false;
+                vm.recieved = new Date();
+                vm.checqueBank = '';
+                vm.checqueNo = '';
+                vm.paymentComments = '';
+                vm.bankOnlineName = '';
+                vm.bankOnlineAccountno = '';
+                vm.paymentComments = '';
+                vm.bankDraftName = '';
+                vm.bankDraftNo = '';
+                vm.card = {
+                    type: '',
+                    cardnumber: "",
+                    expiryMonth: "",
+                    expiryYear: "",
+                    cvc: "",
+                };
+                vm.unitsProvidedToUser = vm.unitsFree;
+                vm.billingRequired = false;
+                vm.selectedUserDiscount = 0;
+                vm.selectedUserEstimatedAmount = 0;
+                vm.selectedUserTotalWithDiscount = 0;
+                vm.selectedUserTaxes = 0;
+                vm.selectedUserPayaableAmount = 0;
+                vm.nextBillingCycleStartDate = undefined;
+                vm.nextBillingCycleEndDate = undefined;
                 localStorage.setItem('userSelected', JSON.stringify(vm.currentSelectedUser));
                 var user = vm.currentSelectedUser;
                 if (user !== '' && user !== undefined) {
@@ -458,7 +487,7 @@ vcancyApp
                                 step: 1,
                                 minLimit: user.userData.freeUnitsAlloted,
                                 maxLimit: 1000,
-                                disabled: true,
+                                disabled: false,
                                 onEnd: function (val) {
                                     vm.updatePayableAmount();
                                 }
@@ -483,7 +512,7 @@ vcancyApp
                                         step: 1,
                                         minLimit: vm.noFreeUnitPerMonth,
                                         maxLimit: 1000,
-                                        disabled: true,
+                                        disabled: false,
                                         onEnd: function (val) {
                                             vm.updatePayableAmount();
                                         }
@@ -558,6 +587,7 @@ vcancyApp
                     taxTodeduct = 0,
                     totalDue = 0,
                     unitsAddedDeleted = 0,
+                    payableAmount = 0,
                     date = '';
                 vm.selectedUserDiscount = 0;
                 vm.selectedUserTaxes = 0;
@@ -645,7 +675,8 @@ vcancyApp
                             vm.selectedUserTotalWithDiscount = parseFloat(totalAfterDiscount.toFixed(2));
                             taxTodeduct = vm.selectedUserTotalWithDiscount * vm.taxes / 100;
                             vm.selectedUserTaxes = parseFloat(taxTodeduct.toFixed(2));
-                            vm.selectedUserPayaableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                            payableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                            vm.selectedUserPayaableAmount = parseFloat(payableAmount.toFixed(2));
                         }
                         if (vm.selectedUserSelectedPlan == "Free" && vm.selectedUserOldPlan == "Annual") {
                             console.log("Plan chaged from Annual to Free");
@@ -708,7 +739,8 @@ vcancyApp
                                 vm.selectedUserTotalWithDiscount = parseFloat(totalAfterDiscount.toFixed(2));
                                 taxTodeduct = vm.selectedUserTotalWithDiscount * vm.taxes / 100;
                                 vm.selectedUserTaxes = parseFloat(taxTodeduct.toFixed(2));
-                                vm.selectedUserPayaableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                payableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                vm.selectedUserPayaableAmount = parseFloat(payableAmount.toFixed(2));
                             }
                             else if (unitsSelected == unitsAlreadyPaidFor) {
                                 console.log("Same no of units. Charge for units annually. Upgrade plan to annually and update added units.");
@@ -724,7 +756,8 @@ vcancyApp
                                 vm.selectedUserTotalWithDiscount = parseFloat(totalAfterDiscount.toFixed(2));
                                 taxTodeduct = vm.selectedUserTotalWithDiscount * vm.taxes / 100;
                                 vm.selectedUserTaxes = parseFloat(taxTodeduct.toFixed(2));
-                                vm.selectedUserPayaableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                payableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                vm.selectedUserPayaableAmount = parseFloat(payableAmount.toFixed(2));
                             }
                             else {
                                 // units decreased save info indb so stat it can be changes in furure when plan is expired
@@ -784,7 +817,8 @@ vcancyApp
                                 vm.selectedUserTotalWithDiscount = parseFloat(totalAfterDiscount.toFixed(2));
                                 taxTodeduct = vm.selectedUserTotalWithDiscount * vm.taxes / 100;
                                 vm.selectedUserTaxes = parseFloat(taxTodeduct.toFixed(2));
-                                vm.selectedUserPayaableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                payableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                vm.selectedUserPayaableAmount = parseFloat(payableAmount.toFixed(2));
                             }
                             else if (unitsSelected == unitsAlreadyPaidFor) {
                                 console.log("Same no of units. Charge for units annually. Upgrade plan to annually and update added units.");
@@ -800,7 +834,8 @@ vcancyApp
                                 vm.selectedUserTotalWithDiscount = parseFloat(totalAfterDiscount.toFixed(2));
                                 taxTodeduct = vm.selectedUserTotalWithDiscount * vm.taxes / 100;
                                 vm.selectedUserTaxes = parseFloat(taxTodeduct.toFixed(2));
-                                vm.selectedUserPayaableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                payableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                vm.selectedUserPayaableAmount = parseFloat(payableAmount.toFixed(2));
                             }
                             else {
                                 // units decreased save info indb so stat it can be changes in furure when plan is expired
@@ -860,7 +895,8 @@ vcancyApp
                                 vm.selectedUserTotalWithDiscount = parseFloat(totalAfterDiscount.toFixed(2));
                                 taxTodeduct = vm.selectedUserTotalWithDiscount * vm.taxes / 100;
                                 vm.selectedUserTaxes = parseFloat(taxTodeduct.toFixed(2));
-                                vm.selectedUserPayaableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                payableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                vm.selectedUserPayaableAmount = parseFloat(payableAmount.toFixed(2));
                             }
                             else if (unitsSelected == unitsAlreadyPaidFor) {
                                 console.log("Same no of units. Plan is still valid. No need for Payment");
@@ -999,7 +1035,8 @@ vcancyApp
                             vm.selectedUserTotalWithDiscount = parseFloat(totalAfterDiscount.toFixed(2));
                             taxTodeduct = vm.selectedUserTotalWithDiscount * vm.taxes / 100;
                             vm.selectedUserTaxes = parseFloat(taxTodeduct.toFixed(2));
-                            vm.selectedUserPayaableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                            payableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                            vm.selectedUserPayaableAmount = parseFloat(payableAmount.toFixed(2));
                         }
                         else if (vm.selectedUserSelectedPlan == "Monthly") {
                             vm.discountRequired = false;
@@ -1011,7 +1048,8 @@ vcancyApp
                             vm.selectedUserTotalWithDiscount = parseFloat(totalAfterDiscount.toFixed(2));
                             taxTodeduct = vm.selectedUserTotalWithDiscount * vm.taxes / 100;
                             vm.selectedUserTaxes = parseFloat(taxTodeduct.toFixed(2));
-                            vm.selectedUserPayaableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                            payableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                            vm.selectedUserPayaableAmount = parseFloat(payableAmount.toFixed(2));
                         }
                         else {
                             estimatedCharge = 0;
@@ -1070,7 +1108,8 @@ vcancyApp
                                     vm.selectedUserTotalWithDiscount = parseFloat(totalAfterDiscount.toFixed(2));
                                     taxTodeduct = vm.selectedUserTotalWithDiscount * vm.taxes / 100;
                                     vm.selectedUserTaxes = parseFloat(taxTodeduct.toFixed(2));
-                                    vm.selectedUserPayaableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                    payableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                    vm.selectedUserPayaableAmount = parseFloat(payableAmount.toFixed(2));
                                 }
                                 else if (vm.selectedUserSelectedPlan == "Monthly") {
                                     estimatedCharge = billableUnits * vm.pricePerUnitPerMonth;
@@ -1080,7 +1119,8 @@ vcancyApp
                                     vm.selectedUserTotalWithDiscount = vm.selectedUserEstimatedAmount;
                                     taxTodeduct = vm.selectedUserTotalWithDiscount * vm.taxes / 100;
                                     vm.selectedUserTaxes = parseFloat(taxTodeduct.toFixed(2));
-                                    vm.selectedUserPayaableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                    payableAmount = vm.selectedUserTotalWithDiscount + vm.selectedUserTaxes;
+                                    vm.selectedUserPayaableAmount = parseFloat(payableAmount.toFixed(2));
                                 }
                             }
                             else if (unitsSelected == unitsAlreadyPaidFor) {
@@ -1571,7 +1611,7 @@ vcancyApp
                                             currentPlanInfo: upgradeOrRenew
                                         }).then(function () {
                                             // reset form
-                                            var emailData = '<p>Hello ' + vm.currentSelectedUser.userData.firstname + ' ' + vm.currentSelectedUser.userData.lastname + '</p>' + '<p>Your subscription has been changed, now your number of units is changed from ' + vm.currentSelectedUser.userData.unitsProvidedToUser + ' to ' + vm.unitsProvidedToUser + '. This change will be applied from ' + vm.nextBillingCycleStartDate + '</p>' + 'If you didn’t change the units then please contact  <a href="mailto:support@vcancy.ca">support@vcancy.ca</a></p><p>Thanks,</p><p>Team Vcancy</p>';
+                                            var emailData = '<p>Hello ' + vm.currentSelectedUser.userData.firstname + ' ' + vm.currentSelectedUser.userData.lastname + '</p>' + '<p>Your subscription has been changed, now your number of units is changed from ' + vm.currentSelectedUser.userData.unitsProvidedToUser + ' to ' + vm.unitsProvidedToUser + '. This change will be applied from ' + vm.nextBillingCycleStartDate + '</p>' + 'If you didnâ€™t change the units then please contact  <a href="mailto:support@vcancy.ca">support@vcancy.ca</a></p><p>Thanks,</p><p>Team Vcancy</p>';
                                             vm.sendEmail(vm.currentSelectedUser.userData.email, "Decreased number of units.", "Degrade Plan", emailData);
                                             swal({
                                                 title: "Success!",
@@ -2108,7 +2148,7 @@ vcancyApp
                     degradeInfo: degradeInfo
                 }).then(function () {
                     vm.opensuccesssweet("Plan for " + vm.currentSelectedUser.userData.firstname + " " + vm.currentSelectedUser.userData.lastname + " has been degraded.! Settings will b eupdated from " + vm.nextBillingCycleStartDate);
-                    var emailData = '<p>Hello ' + vm.currentSelectedUser.userData.firstname + ' ' + vm.currentSelectedUser.userData.lastname + '</p>' + '<p>Your number of units has been changed from ' + vm.currentSelectedUser.userData.unitsProvidedToUser + ' to ' + vm.unitsProvidedToUser + '. This change will be applied from ' + vm.nextBillingCycleStartDate + '</p>' + 'If you didn’t change the units then please contact  <a href="mailto:support@vcancy.ca">support@vcancy.ca</a></p><p>Thanks,</p><p>Team Vcancy</p>';
+                    var emailData = '<p>Hello ' + vm.currentSelectedUser.userData.firstname + ' ' + vm.currentSelectedUser.userData.lastname + '</p>' + '<p>Your number of units has been changed from ' + vm.currentSelectedUser.userData.unitsProvidedToUser + ' to ' + vm.unitsProvidedToUser + '. This change will be applied from ' + vm.nextBillingCycleStartDate + '</p>' + 'If you didnâ€™t change the units then please contact  <a href="mailto:support@vcancy.ca">support@vcancy.ca</a></p><p>Thanks,</p><p>Team Vcancy</p>';
                     vm.sendEmail(vm.currentSelectedUser.userData.email, "Decreased number of units.", "Degrade Plan", emailData);
                 }, function (error) {
                     vm.openerrorsweet("May Be your session is expire please login again.");
