@@ -714,7 +714,8 @@ vcancyApp
 
         var req = {
           method: 'POST',
-          url: config.sailsBaseUrl + 'fileupload/upload',
+          // url: config.sailsBaseUrl + 'fileupload/upload',
+          url: 'http://localhost:1337/api/v1/stipecharge',
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',

@@ -3,20 +3,6 @@
 <link href="assets/global/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet">
 <section id="main">
     <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
-    <section class="new_dashbord" id="content">
-        <div class="container">
-            <!-- title start -->
-            <h1 class="page-title"> Billing </h1>
-            <!-- title end -->
-
-            <!-- breadcrumb start -->
-            <div class="billing-tabs">
-
-<header class="header" data-current-skin={{mactrl.currentSkin}} login-header></header>
-<link href="assets/global/plugins/morris/morris.css" rel="stylesheet" type="text/css" />
-<link href="assets/global/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet">
-<section id="main">
-    <aside id="sidebar" login-sidebar data-ng-class="{ 'toggled': mactrl.sidebarToggle.left === true }"></aside>
     <section class="admin-billing" id="content">
         <div class="container">
             <!-- title start -->
@@ -62,12 +48,12 @@
                                             </select>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 form-group m-t-10">
-                                            <h5>Limit the number of units managed by this account <br/> <span class="text-info"><b>First 5 units added are free</b></span></h5>
+                                            <h5>Limit the number of units managed by this account <br/> <span class="text-info"><b>First {{abilling.currentSelectedUser.userData.freeUnitsAlloted ? abilling.currentSelectedUser.userData.freeUnitsAlloted : abilling.noFreeUnitPerMonth}} units added are free</b></span></h5>
                                             <rzslider rz-slider-model="abilling.unitsProvidedToUser" data-rz-slider-options="abilling.rangeSlider.options">
                                             </rzslider>
                                             <div class="input-group m-t-20">
                                                 <input type="number" class="form-control c-border" ng-model="abilling.unitsProvidedToUser" ng-disabled="abilling.rangeSlider.options.disabled"
-                                                    ng-change="abilling.updatePayableAmount()" min="{{abilling.unitsFree}}" />
+                                                    ng-blur="abilling.updatePayableAmount()" min="{{abilling.unitsFree}}" />
                                                 <span class="input-group-addon">Units</span>
                                             </div>
                                         </div>
